@@ -460,10 +460,10 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.gotYourPeriodData.observe(this){data->
-            if(data==null){
+        viewModel.gotYourPeriodData.observe(this) { data ->
+            if (data == null) {
                 binding.contentMain.lytFemaleHealthGotPeriod.root.gone()
-            }else{
+            } else {
                 binding.contentMain.lytFemaleHealthGotPeriod.apply {
                     root.visible()
                     this.tvPredictedDay.text = data.title ?: ""
@@ -502,13 +502,12 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.removePeriodQuestionWidget.observe(this) {
+        /*viewModel.removePeriodQuestionWidget.observe(this) {
             it.getContent()?.let {
                 healthOverviewAdapter.removeGotPeriodCard()
             }
-        }
-
-        viewModel.femaleHealthData.observe(this) {
+        }*/
+        viewModel.femaleHealthDataLoaded.observe(this) {
             it.getContent()?.let {
                 loadData()
             }
@@ -864,6 +863,7 @@ class SummaryDataFragmentToday :
 
     private fun setFemaleGetStartedUI(data: OHealthOverview.CardTrackFemaleHealth) {
         binding.contentMain.lytFemaleHealthGetStarted.apply {
+            root.visible()
             when (data.state) {
                 FemaleHealthCardState.TRACK -> {
                     this.btnGetStarted.text =

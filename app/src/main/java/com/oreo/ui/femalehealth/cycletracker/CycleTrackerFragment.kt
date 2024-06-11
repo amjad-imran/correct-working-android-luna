@@ -414,7 +414,7 @@ class CycleTrackerFragment :
             } else {
                 tvMoreNight.visible()
                 ivInfo.visible()
-                divider1.root.visible()
+                divider1.root.invisible()
                 tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
             }
 

@@ -1213,6 +1213,7 @@
     <string name="text_ai_content_3">Prepare for your next athletic challenge with Luna AI as your personal coach and nutritionist.</string>
     <string name="text_ai_error_message">Sorry %s, my circuits must be in a twist! Let’s run that by me again.</string>
     <string name="text_got_your_period">Got your period?</string>
+    <string name="text_averages_are_based_on_last_6_cycles">Averages are based on last 6 cycles</string>
 
 
 </resources>

@@ -57,6 +57,7 @@ class FemaleHealthRepositoryImpl(
     override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>> {
         if (LocalDate.parse(selectDate) == LocalDate.now()) {
             return flow {
+                emit(Resource.Loading(true))
                 val type = KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY
                 var resultData: FemaleHealthUserInfoModel? = null
 
@@ -104,6 +105,7 @@ class FemaleHealthRepositoryImpl(
                 }
 
                 if (resultData != null) {
+                    emit(Resource.Loading(false))
                     emit(
                         Resource.Success(
                             BaseApiResponse(
@@ -156,6 +158,7 @@ class FemaleHealthRepositoryImpl(
                     }.collect { resource ->
                         when (resource) {
                             is CacheResult.Success -> {
+                                emit(Resource.Loading(false))
                                 emit(
                                     Resource.Success(
                                         BaseApiResponse(
@@ -172,6 +175,7 @@ class FemaleHealthRepositoryImpl(
                         }
                     }
                 } else {
+                    emit(Resource.Loading(false))
                     emit(
                         Resource.Success(
                             BaseApiResponse(
@@ -217,6 +221,8 @@ class FemaleHealthRepositoryImpl(
 
     override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>> {
         return flow {
+            emit(Resource.Loading(true))
+
             val type = KeyValueDataType.FEMALE_CYCLE_HISTORY
             var resultData: PeriodCycleHistory? = null
 
@@ -266,6 +272,7 @@ class FemaleHealthRepositoryImpl(
             }
 
             if (resultData != null) {
+                emit(Resource.Loading(false))
                 emit(
                     Resource.Success(
                         BaseApiResponse(
@@ -319,6 +326,7 @@ class FemaleHealthRepositoryImpl(
                 }.collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
                             emit(
                                 Resource.Success(
                                     BaseApiResponse(
@@ -349,6 +357,9 @@ class FemaleHealthRepositoryImpl(
         jsonObject: JsonObject, id: Long
     ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info/$id"
             remoteDataSource.updateCycleTrackerInfo(url, jsonObject)
         }
@@ -356,6 +367,7 @@ class FemaleHealthRepositoryImpl(
 
     override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
         return flow {
+            emit(Resource.Loading(true))
             val type = KeyValueDataType.FEMALE_SYMPTOMS_ICON
             var resultData: FemaleHealthIconsModel? = null
 
@@ -404,6 +416,7 @@ class FemaleHealthRepositoryImpl(
             }
 
             if (resultData != null) {
+                emit(Resource.Loading(false))
                 emit(
                     Resource.Success(
                         BaseApiResponse(
@@ -456,6 +469,7 @@ class FemaleHealthRepositoryImpl(
                 }.collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
                             emit(
                                 Resource.Success(
                                     BaseApiResponse(

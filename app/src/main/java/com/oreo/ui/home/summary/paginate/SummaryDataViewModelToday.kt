@@ -118,8 +118,6 @@ class SummaryDataViewModelToday @Inject constructor(
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
-    var removePeriodQuestionWidget = MutableLiveData<Event<Boolean>>()
-
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
 
@@ -145,7 +143,8 @@ class SummaryDataViewModelToday @Inject constructor(
     /**
      * Pair (hasDataLoaded,Female health data)
      */
-    var femaleHealthData = MutableLiveData<Event<Pair<Boolean, FemaleHealthUserInfoModel?>>>()
+    var femaleHealthData: Pair<Boolean, FemaleHealthUserInfoModel?> = Pair(false, null)
+    var femaleHealthDataLoaded = MutableLiveData<Event<Boolean>>()
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -267,18 +266,24 @@ class SummaryDataViewModelToday @Inject constructor(
             var cycleTrackerCardBig: OHealthOverview.CycleTrackerCardBig? = null
             var cycleTrackerCardSmall: OHealthOverview.CycleTrackerCardSmall? = null
 
-            femaleHealthData.value?.peekContent()?.let {
+            femaleHealthData.let {
                 val (hasDataLoaded, femaleData) = it
+                LOGS.d("sdfjhksdjfhk"," here in block")
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
+                        LOGS.d("sdfjhksdjfhk"," female data is null")
                         if (gender.equals("male", true).not()) {
+
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
+
+                            LOGS.d("sdfjhksdjfhk","lastShownDays $lastShownDays -${localDataStore.getFMHWalkthroughShownStatus()}")
 
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
                             ) {
+                                LOGS.d("sdfjhksdjfhk"," SHow track card")
                                 trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
                                     FemaleHealthCardState.TRACK
                                 )
@@ -302,7 +307,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )*/
                             } else {
                                 if (femaleData.isOvulation || femaleData.isPeriod) {
-                                    cycleTrackerCardBig =  OHealthOverview.CycleTrackerCardBig(
+                                    cycleTrackerCardBig = OHealthOverview.CycleTrackerCardBig(
                                         convertToPeriodBigCardModel(
                                             femaleData
                                         )
@@ -1500,7 +1505,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         resource.data?.data.let {
                             LOGS.d("sdfjhksdjfhk", "female data $it")
 
-                            femaleHealthData.postValue(Event(Pair(true, it)))
+                            femaleHealthData = Pair(true, it)
+                            femaleHealthDataLoaded.postValue(Event(true))
                         }
                     }
                 }
@@ -1513,7 +1519,7 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch {
             if (status.not()) {
                 femaleHealthRepository.saveGotPeriodClicked()
-                removePeriodQuestionWidget.postValue(Event(true))
+                gotYourPeriodData.postValue(null)
                 return@launch
             }
 
@@ -1551,7 +1557,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
                             femaleHealthRepository.saveGotPeriodClicked()
-                            removePeriodQuestionWidget.postValue(Event(true))
+                            gotYourPeriodData.postValue(null)
                             getPeriodData()
                         }
                     }

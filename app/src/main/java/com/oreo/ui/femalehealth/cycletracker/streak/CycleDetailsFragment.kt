@@ -67,6 +67,8 @@ class CycleDetailsFragment :
             R.drawable.ic_ct_streak_info
         )
 
+        binding.lytInsight.tvLabel.gone()
+
         binding.lytInsight.lytCycleLength.apply {
             ivMore.gone()
             tvHeader.text = getString(R.string.text_cycle_length)
