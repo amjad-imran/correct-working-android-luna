@@ -68,6 +68,12 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
                         if (day.date > viewModel.todayDate || day.date < calendarStart) {
+
+                            val (state, selected) = viewModel.getCurrentState(day.date)
+                            if (state is DayState.Period) {
+                                viewModel.onCalendarDateClicked(day.date)
+                            }
+
                             return@setOnClickListener
                         }
 
