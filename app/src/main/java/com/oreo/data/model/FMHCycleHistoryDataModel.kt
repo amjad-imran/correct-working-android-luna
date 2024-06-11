@@ -10,6 +10,14 @@ data class PeriodCycleHistory(
     val cycleHistory: List<FMHCycleHistoryDataModel>? = null,
     @SerializedName("user_default")
     val userDefault: CycleDetailsDefault? = null,
+    val avg: CycleAverage? = null
+)
+
+data class CycleAverage(
+    @SerializedName("cycle_length_avg")
+    val cycleLengthAvg: Int? = null,
+    @SerializedName("period_length_avg")
+    val periodLengthAvg: Int? = null
 )
 
 data class CycleDetailsDefault(

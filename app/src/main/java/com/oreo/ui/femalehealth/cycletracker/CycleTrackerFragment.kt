@@ -302,22 +302,28 @@ class CycleTrackerFragment :
             if (it.isNullOrEmpty()) {
                 binding.lytCycleHistory.root.gone()
                 binding.dividerInsight.root.gone()
-                binding.lytInsight.root.gone()
             } else {
                 if (viewModel.femaleHealthData.value?.currentDay == null) {
                     binding.lytCycleHistory.root.gone()
                     binding.dividerInsight.root.gone()
-                    binding.lytInsight.root.gone()
                 } else {
                     binding.lytCycleHistory.root.visible()
                     cycleHistoryAdapter.setData(it.take(3))
-                    val first = it.first()
-
-                    initInsightUI(first.cycleLength ?: 0, first.periodLength ?: 0)
                 }
             }
             initCalender()
         }
+        viewModel.avgInsightData.observe(this) {
+
+            if (it == null) {
+                binding.dividerInsight.root.gone()
+                binding.lytInsight.root.gone()
+            } else {
+                initInsightUI(it.second, it.first)
+            }
+
+        }
+
         viewModel.cyclePredictionData.observe(this) {
             if (it == null) {
                 binding.dividerPrediction.root.gone()

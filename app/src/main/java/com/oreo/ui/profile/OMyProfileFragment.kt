@@ -43,6 +43,13 @@ class OMyProfileFragment :
 //            R.drawable.ic_default_profile_image
 //        )
 
+
+        if (user?.userInfo?.gender.equals("male", true)) {
+            binding.rowCycleTracker.gone()
+        } else {
+            binding.rowCycleTracker.visible()
+        }
+
     }
 
 

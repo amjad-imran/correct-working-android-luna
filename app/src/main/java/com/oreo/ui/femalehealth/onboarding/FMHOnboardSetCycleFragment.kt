@@ -46,7 +46,7 @@ class FMHOnboardSetCycleFragment :
             mViewModel.onNextPress.value = Event(true)
         }
         binding.lytBottomControls.bNotSure.setOnClickListener {
-            mViewModel.onNextPress.value = Event(true)
+            mViewModel.onNotSurePress.value = Event(true)
         }
     }
 

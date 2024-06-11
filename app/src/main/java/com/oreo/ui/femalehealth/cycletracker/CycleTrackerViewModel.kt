@@ -49,6 +49,9 @@ class CycleTrackerViewModel @Inject constructor(
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
+    private val _avgInsightData = MutableLiveData<Pair<Int, Int>?>()
+    val avgInsightData: LiveData<Pair<Int, Int>?> get() = _avgInsightData
+
     private val _cyclePredictionData = MutableLiveData<TempPrediction?>()
     val cyclePredictionData: LiveData<TempPrediction?> get() = _cyclePredictionData
 
@@ -226,6 +229,17 @@ class CycleTrackerViewModel @Inject constructor(
                             healthDataDateList = resource.value
                             _cycleHistoryData.postValue(cycleData.cycleHistory)
 
+
+                            if (cycleData.avg == null) {
+                                _avgInsightData.postValue(null)
+                            } else {
+                                _avgInsightData.postValue(
+                                    Pair(
+                                        cycleData.avg.periodLengthAvg ?: 0,
+                                        cycleData.avg.cycleLengthAvg ?: 0
+                                    )
+                                )
+                            }
                         }
                     }
 
