@@ -18,6 +18,7 @@ import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -397,7 +398,19 @@ class CycleTrackerFragment :
                 tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
             }
 
+            tvDescription.setVisibilityByCondition(data.message.isNullOrEmpty().not())
             tvDescription.text = data.message
+
+            if (data.pendingNights == null) {
+                tvMoreNight.gone()
+                ivInfo.gone()
+                divider1.root.gone()
+            } else {
+                tvMoreNight.visible()
+                ivInfo.visible()
+                divider1.root.visible()
+                tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
+            }
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))
 

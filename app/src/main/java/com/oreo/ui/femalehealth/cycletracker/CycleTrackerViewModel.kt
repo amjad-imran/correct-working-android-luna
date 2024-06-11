@@ -121,22 +121,37 @@ class CycleTrackerViewModel @Inject constructor(
             return
         }
 
-
         data?.temp?.let { list ->
             val tempVariance = calculateTempVariance(list)
-            _cyclePredictionData.postValue(
-                TempPrediction(
-                    tempVariation = tempVariance,
-                    message = data.tempNudge,
-                    tempData = list,
-                    pendingNights = data.pendingNights
+            if (hasNonNullData(list)) {
+                _cyclePredictionData.postValue(
+                    TempPrediction(
+                        tempVariation = tempVariance,
+                        message = data.tempNudge,
+                        tempData = list,
+                        pendingNights = data.pendingNights
+                    )
                 )
-            )
+            } else {
+                _cyclePredictionData.postValue(
+                    null
+                )
+            }
         } ?: run {
             _cyclePredictionData.postValue(
                 null
             )
         }
+    }
+
+    private fun hasNonNullData(list: List<TempPeriodData>): Boolean {
+        var isNonNull = false
+        list.forEach {
+            if (it.temperature != null) {
+                isNonNull = true
+            }
+        }
+        return isNonNull
     }
 
     private fun calculateTempVariance(list: List<TempPeriodData>): Float? {

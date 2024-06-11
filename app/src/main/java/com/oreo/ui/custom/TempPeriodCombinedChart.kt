@@ -15,29 +15,18 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.gson.Gson
 import com.noisefit.luna.R
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 
 class TempPeriodCombinedChart : View {
@@ -96,11 +85,13 @@ class TempPeriodCombinedChart : View {
 
     //    private val toolTipList = ArrayList<Triple<Float, String, Item>>()
     lateinit var bgLine: Paint
+    lateinit var bgLineDotted: Paint
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
     private var vibrationUtils: VibrationUtils? = null
     lateinit var activeBarPaint: Paint
     lateinit var inActiveBarPaintI: Paint
+    lateinit var bgLineVertical: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -184,6 +175,17 @@ class TempPeriodCombinedChart : View {
         bgLine = Paint().apply {
             this.color = Color.parseColor("#19ffffff")
         }
+        bgLineVertical = Paint().apply {
+            this.color = Color.parseColor("#b3ffffff")
+        }
+
+        bgLineDotted = Paint().apply {
+            this.color = Color.parseColor("#b3ffffff")
+            this.style = Paint.Style.STROKE
+            this.setAlpha(80)
+            this.strokeWidth = dip2px(2f).toFloat()
+            this.setPathEffect(DashPathEffect(floatArrayOf(2f, 2f), 0f))
+        }
 
         overlayLinePaint = Paint()
         overlayLinePaint.color = Color.parseColor("#939aa3")
@@ -243,7 +245,6 @@ class TempPeriodCombinedChart : View {
     }
 
     fun updateData(data: TempPeriodCombineModel) {
-        LOGS.d("dskjfhksdjfhdsfkj $data")
         combineModel = data
         list.clear()
         data?.items?.let {
@@ -341,6 +342,20 @@ class TempPeriodCombinedChart : View {
                 }, axisY
             )
         }
+
+        val axisYZero =
+            mHeight - bottomWith - (getCalculatedMax(0f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                max
+            ) - 0)
+
+        canvas.drawLine(
+            leftWith,
+            axisYZero,
+            mWith - rightWith,
+            axisYZero,
+            bgLineDotted
+        )
+
         /*
                 val maxPos =
                     mHeight - bottomWith - (getCalculatedMax(max) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
@@ -630,6 +645,10 @@ class TempPeriodCombinedChart : View {
                         x
                     )
                 }
+
+                canvas.drawLine(x, topWith, x, mHeight - bottomWith, bgLineVertical)
+
+
                 val text = DateFormats.formatDate(
                     current.date,
                     DateFormats.dateFormat3(),

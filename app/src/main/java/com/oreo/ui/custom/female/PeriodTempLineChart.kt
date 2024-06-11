@@ -57,6 +57,7 @@ class PeriodTempLineChart : View {
     private var gridColor = 0
 
     private var hCount = 0
+    lateinit var bgLineDotted: Paint
 
     var max: Float = 0.0f
     private var xMin = 0.0f
@@ -125,6 +126,7 @@ class PeriodTempLineChart : View {
     private var showXAxis = true
     private var titleWidth = 0f
     lateinit var bgLine: Paint
+    lateinit var bgLineVertical: Paint
 
     private val fillPath = Path()
     lateinit var chartLineFillPaint: Paint
@@ -216,6 +218,16 @@ class PeriodTempLineChart : View {
 
         bgLine = Paint().apply {
             this.color = Color.parseColor("#19ffffff")
+        }
+        bgLineDotted = Paint().apply {
+            this.color = Color.parseColor("#b3ffffff")
+            this.style = Paint.Style.STROKE
+            this.setAlpha(80)
+            this.strokeWidth = dip2px(2f).toFloat()
+            this.setPathEffect(DashPathEffect(floatArrayOf(2f, 2f), 0f))
+        }
+        bgLineVertical = Paint().apply {
+            this.color = Color.parseColor("#b3ffffff")
         }
 
         val shaderNormal: Shader = LinearGradient(
@@ -521,6 +533,19 @@ class PeriodTempLineChart : View {
                 }, axisY
             )
         }
+
+        val axisYZero =
+            mHeight - bottomWith - (getCalculatedMax(0f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                max
+            ) - 0)
+
+        canvas.drawLine(
+            leftWith,
+            axisYZero,
+            mWith - rightWith,
+            axisYZero,
+            bgLineDotted
+        )
     }
 
     private fun drawHorizontalTextWithLine(
@@ -745,7 +770,7 @@ class PeriodTempLineChart : View {
         if (moveOffSet == 0f && showXAxis) {
             val dayText = list[position].day
 
-            canvas.drawLine(x, topWith, x, mHeight - bottomWith, chartLinePaint)
+            canvas.drawLine(x, topWith, x, mHeight - bottomWith, bgLineVertical)
 
 
             xTextPaint2.color = xTextColor
