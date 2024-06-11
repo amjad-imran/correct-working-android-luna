@@ -4,6 +4,7 @@ import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
@@ -71,8 +72,9 @@ class ChatGptViewModel
         _chatGptOverview.value = (messages)
     }
 
+    //TODO optimize
     fun addReceivedMessage(message: String, streaming: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -81,7 +83,7 @@ class ChatGptViewModel
                 messages.removeLast()
             }
             messages.add(ChatGptOverview.ReceivedMessage(message))
-            _chatGptOverview.postValue(messages)
+            _chatGptOverview.value = (messages)
         }
     }
 
@@ -119,9 +121,12 @@ class ChatGptViewModel
                 Request.Builder()
                     .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt").apply {
                         userToken?.let {
-                            addHeader("access-token", "Bearer ${userToken.access_token}")
+                            this.addHeader("access-token", "Bearer ${userToken.access_token}")
+                            this.addHeader("wearable-type", "ring")
                         }
                     }.build()
+
+            LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
             val okSse = OkSse()
             val sse = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
@@ -136,19 +141,21 @@ class ChatGptViewModel
                     message: String?
                 ) {
                     // When a message is received
-                    LOGS.d("streammmmmm onMessage()")
-
+                    LOGS.d("streammmmmm onMessage() $message")
+                    if (message != null) {
+                        responseBuilder.append(message)
+                    }
+                    addReceivedMessage(responseBuilder.toString(), true)
                 }
 
                 override fun onComment(sse: ServerSentEvent?, comment: String?) {
                     // When a comment is received
                     LOGS.d("streammmmmm onComment() $comment")
-                    responseBuilder.append(comment)
-                    addReceivedMessage(responseBuilder.toString(), true)
+
                 }
 
                 override fun onRetryTime(sse: ServerSentEvent?, milliseconds: Long): Boolean {
-                    LOGS.d("streammmmmm onRetryTime()")
+                    LOGS.d("streammmmmm onRetryTime() $sse")
 
                     return false; // True to use the new retry time received by SSE
                 }
@@ -158,7 +165,7 @@ class ChatGptViewModel
                     throwable: Throwable?,
                     response: Response?
                 ): Boolean {
-                    LOGS.d("streammmmmm onRetryError()")
+                    LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
                     addErrorState(
                         String.format(

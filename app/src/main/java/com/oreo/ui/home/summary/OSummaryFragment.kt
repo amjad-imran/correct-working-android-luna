@@ -145,6 +145,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
 
+        binding.lytHeader.root.setOnClickListener {
+            navigate(R.id.chatGptFragment)
+        }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
