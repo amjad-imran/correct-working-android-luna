@@ -45,6 +45,7 @@ class ChatGptViewModel
     var threadId: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
+    private val sourcePattern = "【\\d+:\\d+†[^]]+】"
 
 
     var lastApi: Pair<Int, String>? = null
@@ -116,7 +117,6 @@ class ChatGptViewModel
         viewModelScope.launch(Dispatchers.IO) {
 
             val userToken = localDataStore.getUserToken()
-            val pattern = "【\\d+:\\d+†[^]]+】"
 
 
             val request: Request =
@@ -143,21 +143,17 @@ class ChatGptViewModel
                     message: String?
                 ) {
                     // When a message is received
-                    LOGS.d("streammmmmm onMessage() $message")
+                    //LOGS.d("streammmmmm onMessage() $message")
                     var msg = message
-                    msg = msg?.removeSuffix("\"")
-                    msg = msg?.removePrefix("\"")
-
-
-
-
 
                     if (msg != null) {
+                        msg = cleanServerResponse(msg)
                         responseBuilder.append(msg)
                     }
 
-                    addReceivedMessage(responseBuilder.toString().replace("\\n", "\n")
-                        .replace(Regex(pattern),""), true)
+                    addReceivedMessage(
+                        responseBuilder.toString(), true
+                    )
                 }
 
                 override fun onComment(sse: ServerSentEvent?, comment: String?) {
@@ -207,6 +203,11 @@ class ChatGptViewModel
         }
 
 
+    }
+
+    private fun cleanServerResponse(msg: String): String {
+        return msg.removeSuffix("\"").removePrefix("\"").replace("\\n", "\n")
+            .replace(Regex(sourcePattern), "")
     }
 
     fun askQuestion(prompt: String) {
