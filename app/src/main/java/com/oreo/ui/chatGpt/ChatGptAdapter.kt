@@ -17,6 +17,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import io.noties.markwon.Markwon
+import io.noties.markwon.SoftBreakAddsNewLinePlugin
 
 
 class ChatGptAdapter :
@@ -173,9 +174,13 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             binding.apply {
                 tvMessage.visible()
 
-                val markwon = Markwon.builder(this.tvMessage.context)
-                    /*.usePlugin(ImagesPlugin.create())*/
-                    .build()
+
+                val markwon = Markwon.create(this.tvMessage.context)
+
+              /*  val markwon = Markwon.builder(this.tvMessage.context)
+                    .usePlugin(SoftBreakAddsNewLinePlugin.create())
+                    *//*.usePlugin(ImagesPlugin.create())*//*
+                    .build()*/
 
                 markwon.setMarkdown(tvMessage, data.message)
                 logo.visible()
