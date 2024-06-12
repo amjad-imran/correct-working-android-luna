@@ -145,10 +145,12 @@ class ChatGptViewModel
                     var msg = message
                     msg = msg?.removeSuffix("\"")
                     msg = msg?.removePrefix("\"")
+
+
                     if (msg != null) {
                         responseBuilder.append(msg)
                     }
-                    addReceivedMessage(responseBuilder.toString(), true)
+                    addReceivedMessage(responseBuilder.toString().replace("\\n", "\n"), true)
                 }
 
                 override fun onComment(sse: ServerSentEvent?, comment: String?) {
@@ -170,7 +172,7 @@ class ChatGptViewModel
                 ): Boolean {
                     LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
-                    if (response != null) {
+                    if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
                             String.format(
                                 resourceProvider.getString(R.string.text_ai_error_message),

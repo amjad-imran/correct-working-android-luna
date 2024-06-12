@@ -132,7 +132,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.chatGptOverview.observe(this) {
             it?.let {
                 mAdapter.items = it
-                binding.rv.scrollToPosition(it.size - 1)
+                binding.rv.smoothScrollToPosition(it.size - 1)
             }
         }
     }
