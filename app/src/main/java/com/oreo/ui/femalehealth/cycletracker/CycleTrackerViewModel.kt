@@ -58,6 +58,9 @@ class CycleTrackerViewModel @Inject constructor(
     private val _symptomList = MutableLiveData<ArrayList<Pair<String, String>>>()
     val symptomList: LiveData<ArrayList<Pair<String, String>>> get() = _symptomList
 
+    private val _navigateToBack = MutableLiveData<Event<Boolean>>()
+    val navigateToBack: LiveData<Event<Boolean>> get() = _navigateToBack
+
 
     var healthDataDateList = HashMap<LocalDate, DayState>()
 
@@ -205,6 +208,11 @@ class CycleTrackerViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            if (it.cycleHistory.isNullOrEmpty()) {
+
+                                _navigateToBack.postValue(Event(true))
+                                return@collect
+                            }
                             generateHealthData(it)
                         }
                     }

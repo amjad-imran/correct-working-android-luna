@@ -367,6 +367,12 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     }
 
     override fun subscribeObservers() {
+        viewModel.navigateToBack.observe(this) {
+            it.getContent()?.let {
+                navigate(R.id.navigation_oreo_home)
+            }
+        }
+
         viewModel.openDayLogBottomSheet.observe(this) {
             it?.getContent()?.let {
                 showCalenderDayLog(viewModel.selectedDate)

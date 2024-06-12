@@ -277,6 +277,12 @@ class CycleTrackerFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.navigateToBack.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
+            }
+        }
+
         viewModel.notifyDateChange.observe(this) {
             it.getContent()?.let {
                 try {

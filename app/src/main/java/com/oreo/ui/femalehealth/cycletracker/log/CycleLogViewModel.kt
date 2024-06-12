@@ -51,6 +51,9 @@ class CycleLogViewModel @Inject constructor(
     val logPeriodData: LiveData<Event<Boolean>>
         get() = _logPeriodData
 
+    private val _navigateToBack = MutableLiveData<Event<Boolean>>()
+    val navigateToBack: LiveData<Event<Boolean>> get() = _navigateToBack
+
     var lastDateInteraction: List<LocalDate>? = null
 
 
@@ -93,6 +96,12 @@ class CycleLogViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            if (it.cycleHistory.isNullOrEmpty()) {
+                                _navigateToBack.postValue(Event(true))
+                                return@collect
+                            }
+
                             generateHealthData(it)
                         }
                     }
