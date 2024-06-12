@@ -116,6 +116,8 @@ class ChatGptViewModel
         viewModelScope.launch(Dispatchers.IO) {
 
             val userToken = localDataStore.getUserToken()
+            val pattern = "【\\d+:\\d+†[^]]+】"
+
 
             val request: Request =
                 Request.Builder()
@@ -126,12 +128,12 @@ class ChatGptViewModel
                         }
                     }.build()
 
-            LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
+            //LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
             val okSse = OkSse()
             val sse = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
                     // When the channel is opened
-                    LOGS.d("streammmmmm onOpen()")
+                    //LOGS.d("streammmmmm onOpen()")
                 }
 
                 override fun onMessage(
@@ -147,20 +149,25 @@ class ChatGptViewModel
                     msg = msg?.removePrefix("\"")
 
 
+
+
+
                     if (msg != null) {
                         responseBuilder.append(msg)
                     }
-                    addReceivedMessage(responseBuilder.toString().replace("\\n", "\n"), true)
+
+                    addReceivedMessage(responseBuilder.toString().replace("\\n", "\n")
+                        .replace(Regex(pattern),""), true)
                 }
 
                 override fun onComment(sse: ServerSentEvent?, comment: String?) {
                     // When a comment is received
-                    LOGS.d("streammmmmm onComment() $comment")
+                    //LOGS.d("streammmmmm onComment() $comment")
 
                 }
 
                 override fun onRetryTime(sse: ServerSentEvent?, milliseconds: Long): Boolean {
-                    LOGS.d("streammmmmm onRetryTime() $sse")
+                    //LOGS.d("streammmmmm onRetryTime() $sse")
 
                     return false; // True to use the new retry time received by SSE
                 }
@@ -170,7 +177,7 @@ class ChatGptViewModel
                     throwable: Throwable?,
                     response: Response?
                 ): Boolean {
-                    LOGS.d("streammmmmm onRetryError() $response")
+                    //LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
                     if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
@@ -184,12 +191,13 @@ class ChatGptViewModel
                 }
 
                 override fun onClosed(sse: ServerSentEvent?) {
-                    LOGS.d("streammmmmm onClosed()")
+                    //LOGS.d("streammmmmm onClosed()")
+                    fetchInProgress.postValue(false)
                     sse?.close()
                 }
 
                 override fun onPreRetry(sse: ServerSentEvent?, originalRequest: Request): Request {
-                    LOGS.d("streammmmmm onPreRetry()")
+                    //LOGS.d("streammmmmm onPreRetry()")
                     return originalRequest
                 }
 
