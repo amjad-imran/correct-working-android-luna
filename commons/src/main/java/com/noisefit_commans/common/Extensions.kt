@@ -27,6 +27,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -369,6 +371,16 @@ fun TextView.setCompoundDrawable(
 ) {
     this.setCompoundDrawablesWithIntrinsicBounds(drawable1, drawable2, drawable3, drawable4)
 }
+val LocalDate.yearMonth: YearMonth
+    get() = YearMonth.of(year, month)
+
+val YearMonth.nextMonth: YearMonth
+    get() = this.plusMonths(1)
+
+val YearMonth.previousMonth: YearMonth
+    get() = this.minusMonths(1)
+fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
+
 
 
 //fun <T> T.upToNDecimal(upTo: Int): String {

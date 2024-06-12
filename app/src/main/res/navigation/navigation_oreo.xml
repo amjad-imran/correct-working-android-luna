@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -712,11 +711,155 @@
     <fragment
         android:id="@+id/notificationSettingFragment"
         android:name="com.noisefit.ui.settings.options.NotificationSettingFragment"
-        android:label="fragment_notification_setting"/>
+        android:label="fragment_notification_setting" />
+    <fragment
+        android:id="@+id/femaleHealthSplashFragment"
+        android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
+        android:label="fragment_female_splash">
+        <action
+            android:id="@+id/action_fmhSplashFragment_to_fragmentFemaleOnboarding"
+            app:destination="@id/femaleHealthOnboardingFragment"
+            app:popUpTo="@id/femaleHealthSplashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/femaleHealthOnboardingFragment"
+        android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
+        android:label="fragment_female_onboarding">
+        <action
+            android:id="@+id/action_femaleHealthOnboardingFragment_to_fmhOnboardingAllDoneFragment"
+            app:destination="@id/fmhOnboardingAllDoneFragment"
+            app:popUpTo="@id/femaleHealthOnboardingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_femaleHealthOnboardingFragment_to_fragmentCycleTracker"
+            app:destination="@id/fragmentCycleTracker"
+            app:popUpTo="@id/femaleHealthOnboardingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentCycleTracker"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerFragment"
+        android:label="FragmentCycleTracker" />
+    <fragment
+        android:id="@+id/cycleInsightDetails"
+        android:name="com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightDetailsFragment"
+        android:label="FragmentCycleInsightDetails">
+        <argument
+            android:name="launchMode"
+            app:argType="com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode" />
+    </fragment>
+    <fragment
+        android:id="@+id/cycleTrackerHistory"
+        android:name="com.oreo.ui.femalehealth.cycletracker.history.CycleTrackerHistoryFragment"
+        android:label="FragmentCycleHistory" />
+    <fragment
+        android:id="@+id/cycleSkinTemperature"
+        android:name="com.oreo.ui.femalehealth.cycletracker.FMHSkinTemperatureFragment"
+        android:label="FragmentSkinTemperature" />
+    <fragment
+        android:id="@+id/cycleLogFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment"
+        android:label="CycleLogFragment">
+        <action
+            android:id="@+id/action_cycleLogFragment_to_calenderDayLogBottomSheet"
+            app:destination="@id/calenderDayLogBottomSheet" />
+        <argument
+            android:name="selectedLogDate"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetCycleLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.bottom.BottomSheetCycleLog"
+        android:label="BottomSheetCycleLog">
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
+        <argument
+            android:name="firstPeriodDate"
+            app:argType="string" />
+        <argument
+            android:name="periodEndDate"
+            app:argType="string"
+            app:nullable="true" />
+
+    </dialog>
+
+    <fragment
+        android:id="@+id/fmhOnboardingAllDoneFragment"
+        android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingAllDoneFragment"
+        android:label="FMHOnboardingAllDoneFragment">
+        <action
+            android:id="@+id/action_fmhOnboardingAllDoneFragment_to_fragmentCycleTracker"
+            app:destination="@id/fragmentCycleTracker"
+            app:popUpTo="@id/fmhOnboardingAllDoneFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/cycleTrackStressInfoFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackStressInfoFragment"
+        android:label="CycleTrackStressInfo" />
+    <fragment
+        android:id="@+id/cycleTrackerSettingFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.settings.CycleTrackerSettingsFragment"
+        android:label="CycleTrackSetting">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/cycleTrackerDurationLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.settings.BottomSheetCTPeriodDuration"
+        android:label="CycleTrackerDuration">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <fragment
+        android:id="@+id/cycleDetailsFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment"
+        android:label="cycleDetailsFragment">
+        <argument
+            android:name="cycle"
+            app:argType="com.oreo.data.model.FMHCycleHistoryDataModel" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialogComingSoon"
+        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetComingSoon"
+        android:label="ComingSoon" />
+    <dialog
+        android:id="@+id/dialogCtOvulationInfo"
+        android:name="com.oreo.ui.femalehealth.cycletracker.history.BottomSheetCTOvulationInfo"
+        android:label="CycleTrackerOvulationInfo">
+        <argument
+            android:name="launchMode"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/calenderDayLogBottomSheet"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.bottom.CalenderDayLogBottomSheet"
+        android:label="CalenderDayLogBottomSheet">
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
+        <argument
+            android:name="firstPeriodDate"
+            app:argType="string" />
+        <argument
+            android:name="lastPeriodDate"
+            app:argType="string" />
+    </dialog>
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"
-        android:label="fragment_chat_gpt" >
+        android:label="fragment_chat_gpt">
         <action
             android:id="@+id/action_chatGptFragment_self"
             app:destination="@id/chatGptFragment"

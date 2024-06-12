@@ -45,6 +45,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -82,12 +83,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onDestroy() {
         super.onDestroy()
         LOGS.d(TAG, "App killed on destroy")
-       /* if (viewModel.sessionManager.connectStateRing.value != null)
-            NotificationUtil.sendForcePushNotification(
-                this,
-                getString(R.string.text_open_luna_ring_app),
-                getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
-            )*/
+        /* if (viewModel.sessionManager.connectStateRing.value != null)
+             NotificationUtil.sendForcePushNotification(
+                 this,
+                 getString(R.string.text_open_luna_ring_app),
+                 getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+             )*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,6 +190,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.layoutRetry.root.gone()
             viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
         }
+        binding.lytAddWorkoutSelector.tvLogPeriod.setOnClickListener {
+            onLogPeriodClicked()
+        }
+        binding.lytAddWorkoutSelector.ivLogPeriod.setOnClickListener {
+            onLogPeriodClicked()
+        }
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
             if (viewModel.isActivityWorkAdd)
@@ -247,6 +254,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
           }*/
     }
 
+    private fun onLogPeriodClicked() {
+        binding.blurViewSelector.gone()
+        val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate)
+        navController?.navigate(frag, bundle)
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         handleIntent(intent)
@@ -272,9 +285,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         binding.blurViewSelector.visible()
 
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
+        animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvLogPeriod, 400f)
+
 
         val rotate =
             ObjectAnimator.ofFloat(
@@ -331,6 +347,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
         animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
         animateItemsDown(binding.lytAddWorkoutSelector.tvRecordWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvLogPeriod)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivLogPeriod)
 
         val alpha =
             ObjectAnimator.ofFloat(

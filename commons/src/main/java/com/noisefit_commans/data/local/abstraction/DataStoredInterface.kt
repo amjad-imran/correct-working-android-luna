@@ -442,9 +442,19 @@ interface DataStoredInterface {
 
     fun getStressWalkthroughShownStatus(): Boolean
 
+    fun getFMHWalkthroughShownStatus(): Boolean
+    fun setFMHWalkthroughShown(isShown: Boolean)
+
+    fun getFMHWalkthroughRemindLaterDays(): Long
+    fun setFMHRemindLater()
+
     fun saveSleepSyncedForDate(date: String)
     fun isSleepSyncedForDate(date: String): Boolean
 
     fun isAiChatSplashShown(): Boolean
     fun setAiChatSplashShown()
+
+
+    fun getGotPeriodClickedStatus(): Boolean
+    fun saveGotPeriodClicked()
 }

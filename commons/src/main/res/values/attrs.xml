@@ -41,6 +41,7 @@
     <declare-styleable name="WheelPicker">
         <attr name="wheel_selected_item_position" format="integer" />
         <attr name="android:textSize" />
+        <attr name="textSizeSuffix" format="dimension" />
         <attr name="android:textColor" />
         <attr name="wheel_same_width" format="boolean" />
         <attr name="wheel_maximum_width_text" format="string" />

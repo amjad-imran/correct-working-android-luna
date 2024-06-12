@@ -25,6 +25,8 @@ import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.data.response.WatchTokenResponse
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -33,11 +35,16 @@ import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.FemaleTempResponse
+import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -57,22 +64,19 @@ interface NetworkService {
     //App APIs
     @POST
     suspend fun checkAppVersion(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<VersionCheckResponse>
 
     @POST
     suspend fun checkAppVersionV2(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<UpdateResponseV2>
 
 
     //Auth APIs
     @POST
     suspend fun loginUser(
-        @Url url: String,
-        @Body login: LoginRequest
+        @Url url: String, @Body login: LoginRequest
     ): BaseApiResponse<RegistrationResponse>
 
 
@@ -85,14 +89,12 @@ interface NetworkService {
 
     @POST
     suspend fun sendOtp(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<SendOtpResponse>
 
     @POST
     suspend fun verifyOtp(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<UserResponse>
 
     @POST("/users/v3/international/create")
@@ -133,20 +135,17 @@ interface NetworkService {
     //User APIs
     @POST
     suspend fun setUserDevice(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<UpdateDeviceResponse>
 
     @POST
     suspend fun updatePushToken(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<MessageResponse>
 
     @POST
     suspend fun updateUserProfile(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<User>
 
     @GET
@@ -155,41 +154,34 @@ interface NetworkService {
     @Multipart
     @POST
     suspend fun uploadUserImage(
-        @Url url: String,
-        @Part image: MultipartBody.Part?
+        @Url url: String, @Part image: MultipartBody.Part?
     ): BaseApiResponseImage
 
     //Device APIs
     @GET
     suspend fun getDeviceList(
-        @Url url: String,
-        @Query("wearable_type") device: String
+        @Url url: String, @Query("wearable_type") device: String
     ): BaseApiResponse<DeviceListResponse>
 
     @GET
     suspend fun getDeviceFeatures(
-        @Url url: String,
-        @Query("device_id") deviceId: Int,
-        @Query("platform") platform: String
+        @Url url: String, @Query("device_id") deviceId: Int, @Query("platform") platform: String
     ): BaseApiResponse<DeviceFeatureResponse>
 
     @POST
     suspend fun checkForUpdates(
-        @Url url: String,
-        @Body requestObject: JsonObject
+        @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponseData<UpdateResponse>
 
     //HistoryData APIs ring
     @POST
     suspend fun postOreoCombinedHistoryData(
-        @Url url: String,
-        @Body requestObject: OreoUserDataPost
+        @Url url: String, @Body requestObject: OreoUserDataPost
     ): BaseApiResponse<VersionCheckResponse>
 
     @POST
     suspend fun postOreoSleepHistoryData(
-        @Url url: String,
-        @Body requestObject: OreoUserDataPost
+        @Url url: String, @Body requestObject: OreoUserDataPost
     ): BaseApiResponse<VersionCheckResponse>
 
 
@@ -231,14 +223,12 @@ interface NetworkService {
 
     @POST
     suspend fun checkWatchTokenExist(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<WatchTokenResponse>
 
     @POST
     suspend fun removeWatchTokenFromServer(
-        @Url url: String,
-        @Body jsonObject: JsonObject
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>
 
     @GET
@@ -272,8 +262,7 @@ interface NetworkService {
 
     @GET
     suspend fun getRecentWorkoutList(
-        @Url url: String,
-        @Query("today") today: Boolean
+        @Url url: String, @Query("today") today: Boolean
     ): BaseApiResponse<List<OActivityListModal>>
 
     @GET
@@ -305,8 +294,7 @@ interface NetworkService {
 
     @POST
     suspend fun addRecordedWorkout(
-        @Url url: String,
-        @Body requestObject: JsonObject
+        @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponse<List<AddWorkoutResponse>>
 
     @GET
@@ -335,14 +323,12 @@ interface NetworkService {
 
     @GET
     suspend fun getContributorsDetails(
-        @Url url: String,
-        @Query("type") contributorType: String
+        @Url url: String, @Query("type") contributorType: String
     ): BaseApiResponse<OContributorResponseModal>
 
     @POST
     suspend fun savePairingErrorLogs(
-        @Url url: String,
-        @Body requestObject: JsonObject
+        @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
 
     @GET
@@ -367,8 +353,7 @@ interface NetworkService {
 
     @POST
     suspend fun addNapServer(
-        @Url url: String,
-        @Body napRequest: OreoNapNetworkEntity
+        @Url url: String, @Body napRequest: OreoNapNetworkEntity
     ): BaseApiResponse<List<OreoNapDetailsDataModel>>
 
 
@@ -398,6 +383,74 @@ interface NetworkService {
     /**
      * ===================================
      */
+
+
+    /*
+    * Female health service start
+    * */
+    @POST
+    suspend fun submitFemaleHealthInfo(
+        @Url url: String, @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
+    @POST
+    suspend fun saveLogSymptom(
+        @Url url: String, @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getFemaleHealthInfo(
+        @Url url: String, @Query("date") selectDate: String
+    ): BaseApiResponse<FemaleHealthUserInfoModel?>
+
+    @POST
+    suspend fun logPeriod(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getPeriodLengthList(
+        @Url url: String, @Query("date") selectDate: String
+    ): BaseApiResponse<PeriodLengthListResponse>
+
+    @GET
+    suspend fun getPeriodDurationList(
+        @Url url: String, @Query("date") selectDate: String
+    ): BaseApiResponse<PeriodLengthListResponse>
+
+    @GET
+    suspend fun getPeriodCycleHistory(
+        @Url url: String,
+    ): BaseApiResponse<PeriodCycleHistory>
+
+    //todo response model will update, once receive actual api from backend
+    @GET
+    suspend fun getCycleStreakInfo(
+        @Url url: String,
+    ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
+
+    @GET
+    suspend fun getFemaleHealthIcons(
+        @Url url: String
+    ): BaseApiResponse<FemaleHealthIconsModel>
+
+    @GET
+    suspend fun getFemaleHealthTempData(
+        @Url url: String, @Query("date") date: String
+    ): BaseApiResponse<FemaleTempResponse>
+
+    @POST
+    suspend fun setPeriodConfirm(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getCycleTrackerInfo(@Url url: String): BaseApiResponse<FemaleCycleTrackInfoModel?>?
+
+    @PUT
+    suspend fun updateCycleTrackerInfo(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
 
     /**
      * ---------------------------------------------------------------------------------

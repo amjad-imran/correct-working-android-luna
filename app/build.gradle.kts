@@ -208,7 +208,8 @@ dependencies {
 
     implementation(AndroidX.libraries)
 
-    implementation(CalenderView.calendarView)
+//    implementation(CalenderView.calendarView)
+    implementation(CalenderView.calendarViewWeek)
 //    implementation(CleverTap.sdk)
 
     implementation(Exoplayer.core)
@@ -244,7 +245,7 @@ dependencies {
     implementation(Hilt.android)
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.4.0")
+    implementation("com.google.android.material:material:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("androidx.test:core-ktx:1.4.0")

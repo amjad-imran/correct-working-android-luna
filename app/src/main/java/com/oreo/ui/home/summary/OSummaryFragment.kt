@@ -26,7 +26,9 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -144,10 +146,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
-
-        binding.lytHeader.root.setOnClickListener {
-            navigate(R.id.chatGptFragment)
-        }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
 

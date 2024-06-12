@@ -20,6 +20,49 @@
             android:visibility="gone"
             tools:visibility="visible" />-->
 
+        <!--<include
+            android:id="@+id/lytGotYourPeriod"
+            layout="@layout/list_period_confirmation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="visible"
+            tools:visibility="visible" />
+        <include
+            android:id="@+id/lytTrackFmHealth"
+            layout="@layout/card_track_fm_health"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="visible"
+            tools:visibility="visible" />-->
+
+        <!--        <include-->
+        <!--            android:id="@+id/lytCyclePredict"-->
+        <!--            layout="@layout/list_cycle_tracker_prediction"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="@dimen/side_margin"-->
+        <!--            android:layout_marginTop="@dimen/dimen_24dp"-->
+        <!--            android:layout_marginEnd="@dimen/side_margin"-->
+        <!--            android:visibility="visible"-->
+        <!--            tools:visibility="visible" />-->
+
+        <!--        <include-->
+        <!--            android:id="@+id/lytCycleOngoing"-->
+        <!--            layout="@layout/list_cycle_tracker_ongoing"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="@dimen/side_margin"-->
+        <!--            android:layout_marginTop="@dimen/dimen_24dp"-->
+        <!--            android:layout_marginEnd="@dimen/side_margin"-->
+        <!--            android:visibility="visible"-->
+        <!--            tools:visibility="visible" />-->
+
         <include
             android:id="@+id/lytConnectHelp"
             layout="@layout/layout_trouble_connecting_ring"
@@ -106,6 +149,25 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+        <include
+            android:id="@+id/lytFemaleHealthGetStarted"
+            layout="@layout/card_track_fm_health"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visiblity="visible" />
+        <include
+            android:id="@+id/lytFemaleHealthGotPeriod"
+            layout="@layout/list_dash_got_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visiblity="visible" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHealthData"
             android:layout_width="match_parent"
@@ -124,6 +186,26 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+
+        <include
+            android:id="@+id/lytFemaleHealthCardBig"
+            layout="@layout/list_cycle_tracker_ongoing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/lytFemaleHealthCardSmall"
+            layout="@layout/list_cycle_tracker_prediction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/lytSleepAvg"

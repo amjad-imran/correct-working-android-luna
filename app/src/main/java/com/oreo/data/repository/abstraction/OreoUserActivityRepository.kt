@@ -8,6 +8,7 @@ import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -17,12 +18,15 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
-import com.oreo.data.model.health.Nap
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
 
@@ -118,4 +122,5 @@ interface OreoUserActivityRepository {
         dayType: String,
         filterType: String
     ): Flow<Resource<BaseApiResponse<List<StressResultData>>>>
+
 }

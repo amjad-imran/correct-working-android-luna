@@ -6,12 +6,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.databinding.ActivityHistoryCalendarBinding
 import com.noisefit.luna.databinding.CalendarDayBinding
 import com.noisefit.luna.databinding.CalendarHeaderBinding
@@ -84,7 +84,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 selectedDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
             )
-           /* if (deviceType == "watch") {
+            if (deviceType == "watch") {
                 selectedPreviousDates = arrayListOf(
                     parsedDate.minusDays(1),
                     parsedDate.minusDays(2),
@@ -110,7 +110,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 parsedDate.minusDays(12),
                 parsedDate.minusDays(13),
                     parsedDate.minusDays(14)
-            )*/
+            )
 
             parsedDate
         }
@@ -130,7 +130,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
 
             init {
                 binding.root.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    if (day.position == DayPosition.MonthDate) {
 
                         //day.date
 
@@ -146,7 +146,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
             }
         }
 
-        binding.calendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
@@ -154,7 +154,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 val dayLayoutMain = container.binding.dayLayoutMain
                 textView.text = day.date.dayOfMonth.toString()
 
-                if (day.owner == DayOwner.THIS_MONTH) {
+                if (day.position == DayPosition.MonthDate) {
                     dayLayoutMain.visible()
 
                     when (day.date) {
@@ -194,7 +194,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
                 container.textView.text =
-                    "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.year}"
+                    "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.yearMonth.year}"
             }
         }
 

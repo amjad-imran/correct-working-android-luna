@@ -14,7 +14,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,10 +43,21 @@ class OMyProfileFragment :
 //            R.drawable.ic_default_profile_image
 //        )
 
+
+        if (user?.userInfo?.gender.equals("male", true)) {
+            binding.rowCycleTracker.gone()
+        } else {
+            binding.rowCycleTracker.visible()
+        }
+
     }
 
 
     override fun initListener() {
+        binding.rowCycleTracker.setOnClickListener {
+            viewModel.getCycleTrackerInfo()
+//            navigate(R.id.cycleTrackerStreakFragment)
+        }
 
         binding.rowSettings.setOnClickListener {
             navigate(R.id.settingsFragment)
@@ -143,6 +153,20 @@ class OMyProfileFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.cycleTrackInfo.observe(this) {
+            it?.getContent()?.let {
+                navigate(R.id.cycleTrackerSettingFragment, Bundle().apply {
+                    this.putParcelable("data", it)
+                })
+            }
+        }
+        viewModel.showFemaleHealthSplash.observe(this) {
+            it?.getContent()?.let {
+                if (it) {
+                    navigate(R.id.femaleHealthSplashFragment)
+                }
+            }
+        }
 
         viewModel.logoutSuccess().observe(viewLifecycleOwner) {
             if (it) {

@@ -155,6 +155,12 @@ class SummaryDataFragment :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {}
+                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
+                }
+
+                OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
+                OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
+                is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {}
             }
         }
 

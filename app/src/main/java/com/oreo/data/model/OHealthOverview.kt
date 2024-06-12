@@ -104,7 +104,52 @@ sealed class OHealthOverview {
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
 
+    class CycleTrackerCardSmall(
+        val data: PeriodCard1
+    ) : OHealthOverview()
+
+    class CycleTrackerCardBig(
+        val data: PeriodCard2
+    ) : OHealthOverview()
+
+    class GotYourPeriod(
+        val title: String? = null
+    ) : OHealthOverview()
+
+    class CardTrackFemaleHealth(
+        val state: FemaleHealthCardState
+    ) : OHealthOverview()
+
 }
+
+enum class FemaleHealthCardState {
+    TRACK, LOG
+}
+
+
+data class PeriodCard1(
+    val title: String,
+    val days: Int,
+    val nudge: String,
+    val currentCycleDay: Int,
+    val totalCycleDay: Int,
+    val bottomText: String,
+    val predictionDate: String,
+    val background: Int
+)
+
+data class PeriodCard2(
+    val title: String,
+    val days: Int,
+    val subTitle: String,
+    val nudge: String,
+    val currentCycleDay: Int,
+    val totalCycleDay: Int,
+    val temperatureVariation: Float? = null,
+    val predictionString: String,
+    val predictionDate: String,
+    val background: Int
+)
 
 data class DashAlert(
     val message: String,

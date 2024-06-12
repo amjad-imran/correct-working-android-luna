@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
@@ -11,6 +12,7 @@ import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -34,22 +36,27 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
-import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.dataConverter.OreoStressDataConvertor
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
+import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.OtaUpdateModel
+import com.oreo.data.model.PeriodCard1
+import com.oreo.data.model.PeriodCard2
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -57,13 +64,17 @@ import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.SleepHourlyBreakup
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -79,7 +90,9 @@ class SummaryDataViewModelToday @Inject constructor(
     private val syncRepository: OreoSyncRepository,
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
+    val femaleHealthRepository: FemaleHealthRepository,
     val updateRepository: UpdateRepository,
+    val resourceProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
@@ -113,7 +126,13 @@ class SummaryDataViewModelToday @Inject constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
+    val cycleTrackerCardBigData = MutableLiveData<OHealthOverview.CycleTrackerCardBig?>()
+    val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
+    val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
+    val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
+
     var user: User? = null
+    var gender: String? = null
     var registerDate: Int = -1
     var shouldShowStressCard = false
     var stressBeta = false
@@ -121,6 +140,11 @@ class SummaryDataViewModelToday @Inject constructor(
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
     var serverUserHealthData: ServerUserHealthData? = null
 
+    /**
+     * Pair (hasDataLoaded,Female health data)
+     */
+    var femaleHealthData: Pair<Boolean, FemaleHealthUserInfoModel?> = Pair(false, null)
+    var femaleHealthDataLoaded = MutableLiveData<Event<Boolean>>()
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -236,6 +260,113 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
+
+            var gotYourPeriodCard: OHealthOverview.GotYourPeriod? = null
+            var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
+            var cycleTrackerCardBig: OHealthOverview.CycleTrackerCardBig? = null
+            var cycleTrackerCardSmall: OHealthOverview.CycleTrackerCardSmall? = null
+
+            femaleHealthData.let {
+                val (hasDataLoaded, femaleData) = it
+                LOGS.d("sdfjhksdjfhk"," here in block")
+
+                if (hasDataLoaded) {
+                    if (femaleData == null) {
+                        LOGS.d("sdfjhksdjfhk"," female data is null")
+                        if (gender.equals("male", true).not()) {
+
+                            val lastShownDays =
+                                localDataStore.getFMHWalkthroughRemindLaterDays()
+
+                            LOGS.d("sdfjhksdjfhk","lastShownDays $lastShownDays -${localDataStore.getFMHWalkthroughShownStatus()}")
+
+                            if (localDataStore.getFMHWalkthroughShownStatus()
+                                    .not() && lastShownDays > 7
+                            ) {
+                                LOGS.d("sdfjhksdjfhk"," SHow track card")
+                                trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                                    FemaleHealthCardState.TRACK
+                                )
+                                /*userActivities.add(
+                                    OHealthOverview.CardTrackFemaleHealth(
+                                        FemaleHealthCardState.TRACK
+                                    )
+                                )*/
+                            }
+                        }
+                    } else {
+                        if (femaleData.isTrackPregnancy != true) {
+                            if (femaleData.currentDay == null) {
+                                trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                                    FemaleHealthCardState.LOG
+                                )
+                                /*userActivities.add(
+                                    OHealthOverview.CardTrackFemaleHealth(
+                                        FemaleHealthCardState.LOG
+                                    )
+                                )*/
+                            } else {
+                                if (femaleData.isOvulation || femaleData.isPeriod) {
+                                    cycleTrackerCardBig = OHealthOverview.CycleTrackerCardBig(
+                                        convertToPeriodBigCardModel(
+                                            femaleData
+                                        )
+                                    )
+                                    /*userActivities.add(
+                                        OHealthOverview.CycleTrackerCardBig(
+                                            convertToPeriodBigCardModel(
+                                                femaleData
+                                            )
+                                        )
+                                    )*/
+                                } else {
+                                    cycleTrackerCardSmall = OHealthOverview.CycleTrackerCardSmall(
+                                        convertToPeriodSmallCardModel(
+                                            femaleData
+                                        )
+                                    )
+                                    /*userActivities.add(
+                                        OHealthOverview.CycleTrackerCardSmall(
+                                            convertToPeriodSmallCardModel(
+                                                femaleData
+                                            )
+                                        )
+                                    )*/
+                                }
+
+                                val isCardShownForToday =
+                                    femaleHealthRepository.getGotPeriodClickedStatus()
+                                if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
+
+                                    val periodCurrentDay = femaleData.currentDay
+                                    val dayMessage = if (periodCurrentDay == null) {
+                                        null
+                                    } else {
+                                        "Today's your predicted ${
+                                            ApplicationUtils.getOrdinalWord(
+                                                periodCurrentDay
+                                            )
+                                        } day."
+                                    }
+                                    /*userActivities.add(
+                                        OHealthOverview.GotYourPeriod(
+                                            dayMessage
+                                        )
+                                    )*/
+                                    gotYourPeriodCard = OHealthOverview.GotYourPeriod(
+                                        dayMessage
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+            //userActivities.add(OHealthOverview.GotYourPeriod(""))
+
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {
@@ -558,10 +689,160 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             })
 
+            cycleTrackerCardBigData.postValue(cycleTrackerCardBig)
+            cycleTrackerCardSmallData.postValue(cycleTrackerCardSmall)
+            trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
+            gotYourPeriodData.postValue(gotYourPeriodCard)
+
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
         }
+    }
+
+    private fun calculateDaysLeft(dateString: String): Long {
+        val targetDate = LocalDate.parse(dateString)
+        val today = LocalDate.now()
+        return ChronoUnit.DAYS.between(today, targetDate)
+    }
+
+    private fun convertToPeriodBigCardModel(data: FemaleHealthUserInfoModel): PeriodCard2 {
+        val tempVariance = calculateTempVariance(data.temp)
+
+        if (data.isPeriod) {
+            return PeriodCard2(
+                title = if (data.otaLog) "Period" else "Predicted period",
+                subTitle = "Day ${data.currentDay}",
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                temperatureVariation = tempVariance,
+                predictionDate = DateFormats.formatDateTime(
+                    data.nextPeriodDate,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
+                ),
+                days = 11,
+                predictionString = "Period Date",
+                background = R.drawable.back_card_period_big
+            )
+
+        } else {
+            return PeriodCard2(
+                title = "Ovulation",
+                subTitle = "Day ${data.currentDay}",
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                temperatureVariation = tempVariance,
+                predictionDate = DateFormats.formatDateTime(
+                    data.ovulationDate,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
+                ),
+                days = 11,
+                predictionString = "Ovulation date",
+                background = R.drawable.back_card_ovulation_big
+            )
+        }
+    }
+
+    private fun calculateTempVariance(list: List<TempPeriodData>?): Float? {
+        if (list == null) {
+            return null
+        }
+
+        if (list.size < 4) {
+            return null
+        }
+
+        try {
+            val first = list[0].temperature
+            val second = list[1].temperature
+            val third = list[2].temperature
+            val fourth = list[3].temperature
+
+            if (first == null || second == null || third == null || fourth == null) {
+                return null
+            }
+
+            val variation = first - ((second + third + fourth) / 2)
+            return variation
+        } catch (exp: Exception) {
+            return null
+        }
+    }
+
+    private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
+
+        val daysUntilOvulation = if (data.ovulationDate != null) {
+            calculateDaysLeft(data.ovulationDate)
+        } else {
+            null
+        }
+        val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
+
+        if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
+            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
+            return PeriodCard1(
+                title = "Ovulation in",
+                days = daysUntilOvulation.toInt(),
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                bottomText = "Ovulation date",
+                predictionDate = DateFormats.formatDateTime(
+                    data.ovulationDate,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
+                ),/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
+                background = R.drawable.back_card_ovulation_small
+            )
+        } else {
+            return PeriodCard1(
+                title = "Period in",
+                days = daysUntilNextPeriod.toInt(),
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                bottomText = "Period date",
+                predictionDate = DateFormats.formatDateTime(
+                    data.nextPeriodDate,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
+                ),
+                background = R.drawable.back_card_period_small
+            )
+        }
+
+
+        /*
+
+                val title: String
+                val bottomText: String
+                val predictionDate: String
+                val nextDay: Int
+                if (daysUntilOvulation < daysUntilNextPeriod) {
+                    title = "Ovulation in"
+                    bottomText = "Predicted period:"
+                    predictionDate = data.nextPeriodDate
+                    nextDay = daysUntilNextPeriod.toInt()
+                } else {
+                    title = "Period in"
+                    bottomText = "Predicted ovulation:"
+                    predictionDate = data.ovulationDate
+                    nextDay = daysUntilOvulation.toInt()
+                }
+
+                return PeriodCard1(
+                    title = title,
+                    days = nextDay,
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = bottomText,
+                    predictionDate = predictionDate
+                )*/
     }
 
     fun getStressStatus(value: Int?): String {
@@ -1185,6 +1466,106 @@ class SummaryDataViewModelToday @Inject constructor(
     fun isChatSplashShown(): Boolean {
 //        return false
         return localDataStore.isAiChatSplashShown()
+    }
+
+    fun getPeriodData() {
+        LOGS.d("sdfjhksdjfhk", "getPeriodData called")
+        viewModelScope.launch(Dispatchers.IO) {
+            if (date == null) return@launch
+            gender = localDataStore.getUser()?.userInfo?.gender
+            if (gender.equals("male", true)) return@launch
+
+            femaleHealthRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getPeriodData()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            LOGS.d("sdfjhksdjfhk", "female data $it")
+
+                            femaleHealthData = Pair(true, it)
+                            femaleHealthDataLoaded.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun onGotPeriodClicked(status: Boolean) {
+        viewModelScope.launch {
+            if (status.not()) {
+                femaleHealthRepository.saveGotPeriodClicked()
+                gotYourPeriodData.postValue(null)
+                return@launch
+            }
+
+            val requestObject = JsonObject().apply {
+                this.addProperty("date", DateFormats.getTodaysDateString(10))
+                this.addProperty("confirm", true)
+            }
+
+            femaleHealthRepository.setPeriodConfirm(requestObject).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        onGotPeriodClicked(status)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            femaleHealthRepository.saveGotPeriodClicked()
+                            gotYourPeriodData.postValue(null)
+                            getPeriodData()
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
 

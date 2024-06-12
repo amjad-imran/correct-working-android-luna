@@ -198,6 +198,7 @@ object MoEngageLunaAppEvents {
     const val luna_activity_add_workout_add_click = "luna_activity_add_workout_add_click"
     const val luna_activity_add_workout_record_click = "luna_activity_add_workout_record_click"
 
+    const val sleep_recorded = "sleep_recorded"
     const val luna_homepage_low_battery_click = "luna_homepage_low_battery_click"
     const val luna_homepage_stress_click = "luna_homepage_stress_click"
     const val luna_stress_visit = "luna_stress_visit"
@@ -210,8 +211,6 @@ object MoEngageLunaAppEvents {
     const val luna_non_active_stress_page_visit = "luna_non_active_stress_page_visit"
     const val luna_stress_i_button_click = "luna_stress_i_button_click"
     const val luna_stress_i_page_visit = "luna_stress_i_page_visit"
-
-    const val sleep_recorded = "sleep_recorded"
 
 
 }

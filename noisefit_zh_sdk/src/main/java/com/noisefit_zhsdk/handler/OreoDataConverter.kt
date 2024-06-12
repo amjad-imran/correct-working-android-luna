@@ -714,7 +714,7 @@ constructor(
                 calories = p1.reportCal,
                 heartRateAvg = p1.reportAvgHeart,
                 endTime = DateFormats.timeFormat().format(endCalendar.time),
-                date = DateFormats.dateFormat.format(startCalendar.time),
+                date = DateFormats.dateFormatOld().format(startCalendar.time),
                 time = DateFormats.formatDateTime(
                     startCalendar.time,
                     DateFormats.dateTimeFormatISO()

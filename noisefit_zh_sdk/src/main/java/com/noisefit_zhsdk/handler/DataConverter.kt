@@ -548,7 +548,7 @@ constructor(
         sleepData.sleepScore = bean.sleepScore
         sleepData.date = DateFormats.convertTimestampToDate(
             bean.endSleepTimestamp * 1000,
-            DateFormats.dateFormat
+            DateFormats.dateFormatOld()
         )
 
         sleepData.total = bean.sleepDuration
@@ -624,7 +624,7 @@ constructor(
             if (measureData.measureData > 0) {
                 val date = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.dateFormat
+                    DateFormats.dateFormatOld()
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
@@ -654,7 +654,7 @@ constructor(
             if (measureData.measureData > 0) {
                 val date = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.dateFormat
+                    DateFormats.dateFormatOld()
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
@@ -685,7 +685,7 @@ constructor(
             startDayTimeStamp =
                 DateFormats.addMinuteToTimeStamp(startDayTimeStamp!!, bean.pressureFrequency)
             if (measureData > 0) {
-                val date = DateFormats.dateFormat.format(startDayTimeStamp)
+                val date = DateFormats.dateFormatOld().format(startDayTimeStamp)
                 val time = DateFormats.timeFormat().format(startDayTimeStamp)
 
                 val syncDate = DateFormats.convertDateTimeToTimeStamp(date, time)
@@ -707,7 +707,7 @@ constructor(
             if (measureData.measureData > 0) {
                 val date = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.dateFormat
+                    DateFormats.dateFormatOld()
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
@@ -747,7 +747,7 @@ constructor(
                     val heartRate = HeartRate()
                     heartRate.resetData = true
                     heartRate.averageHeartRate = item
-                    heartRate.date = DateFormats.dateFormat.format(startDayTimeStamp)
+                    heartRate.date = DateFormats.dateFormatOld().format(startDayTimeStamp)
                     heartRate.time = time
                     heartRate.timeStamp =
                         DateFormats.convertDateTimeToTimeStamp(heartRate.date!!, time)
@@ -766,7 +766,7 @@ constructor(
         LOGS.d("getStepsData $dailyBean")
         val dailyStepData = StepsData(
             date = DateFormats.getCurrentDate(
-                DateFormats.dateFormat
+                DateFormats.dateFormatOld()
 
             )
         )
@@ -801,7 +801,7 @@ constructor(
             date = DateFormats.getConvertToDateFormat(
                 dailyBean.date,
                 DateFormats.dateFormat3(),
-                DateFormats.dateFormat
+                DateFormats.dateFormatOld()
             )
         )
 
@@ -834,7 +834,7 @@ constructor(
             date = DateFormats.getConvertToDateFormat(
                 dailyBean.date,
                 DateFormats.dateFormat3(),
-                DateFormats.dateFormat
+                DateFormats.dateFormatOld()
             )
         )
 

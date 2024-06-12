@@ -26,6 +26,7 @@ import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
+import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -46,9 +47,11 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.repository.implementation.FemaleHealthRepositoryImpl
 import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
@@ -371,6 +374,22 @@ object AppModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideFemaleHealthRepository(
+        remoteDataSource: NetworkService,
+        localDataSource: DataStoredInterface,
+        keyValueDataSource: KeyValueDataSource,
+        gson: Gson,
+    ): FemaleHealthRepository {
+        return FemaleHealthRepositoryImpl(
+            remoteDataSource,
+            localDataSource,
+            keyValueDataSource,
+            gson
+        )
+    }
+
 
     @Singleton
     @Provides
@@ -422,6 +441,12 @@ object AppModule {
     @Provides
     fun provideOreoDayTimeDataConvertor(): OreoDayTimeDataConvertor {
         return OreoDayTimeDataConvertor()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFemaleHealthDataConvertor(): FemaleHealthDataConvertor {
+        return FemaleHealthDataConvertor()
     }
 
     @Singleton
