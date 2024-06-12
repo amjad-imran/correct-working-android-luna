@@ -30,7 +30,7 @@ class FMHSkinTemperatureFragment :
 
         binding.lytToolbar.apply {
             tvTitle.text = getString(R.string.text_skin_temperature_variation)
-            view1.visible()
+            view1.invisible()
             ivAddFriend.invisible()
             view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         }
