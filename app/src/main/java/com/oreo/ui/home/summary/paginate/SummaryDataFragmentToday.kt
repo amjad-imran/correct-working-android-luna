@@ -927,8 +927,10 @@ class SummaryDataFragmentToday :
             this.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
             this.tvDesc.text = data.data.nudge
             this.tvValue.text = if (data.data.temperatureVariation == null) {
+                tvUnit.text = ""
                 "-"
             } else {
+                tvUnit.text = "°F"
                 if (data.data.temperatureVariation > 0) {
                     "+${data.data.temperatureVariation}"
                 } else {
