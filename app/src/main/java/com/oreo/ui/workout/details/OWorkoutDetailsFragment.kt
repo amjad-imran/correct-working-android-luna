@@ -414,7 +414,7 @@ class OWorkoutDetailsFragment :
         if (it.calories != null && it.calories > 0) {
             activityList.add(
                 OWDActivityData(
-                    "Calories",
+                    getString(R.string.text_calories_burned),
                     it.calories.toString(),
                     "kcal",
                 )

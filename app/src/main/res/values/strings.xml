@@ -982,6 +982,7 @@
     <string name="text_restart_device">Restart device</string>
     <string name="text_pair_a_new_ring">Pair a new ring</string>
     <string name="text_active_calories">Active calories</string>
+    <string name="text_calories_burned">Calories Burned</string>
     <string name="text_inactive_time">Inactive time</string>
     <string name="text_trouble_connecting_your_ring">Trouble connecting your ring?</string>
     <string name="text_get_help">Get help</string>

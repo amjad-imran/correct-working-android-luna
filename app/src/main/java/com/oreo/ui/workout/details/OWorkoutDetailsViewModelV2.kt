@@ -157,7 +157,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
-                        context.getString(R.string.text_active_calories),
+                        context.getString(R.string.text_calories_burned),
                         it.calories.toString(),
                         "kcal",
                     )

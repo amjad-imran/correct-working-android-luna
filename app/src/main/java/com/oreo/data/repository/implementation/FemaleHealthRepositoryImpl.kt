@@ -40,6 +40,7 @@ class FemaleHealthRepositoryImpl(
 ) : FemaleHealthRepository {
     override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/symptom"
             remoteDataSource.saveLogSymptom(url, jsonObject)
 
