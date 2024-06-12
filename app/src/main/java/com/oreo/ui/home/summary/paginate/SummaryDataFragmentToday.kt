@@ -484,6 +484,7 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytFemaleHealthGetStarted.root.gone()
             } else {
                 setFemaleGetStartedUI(it)
+                viewModel.sessionManager.canLogPeriod = false
             }
         }
 
@@ -492,6 +493,7 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytFemaleHealthCardBig.root.gone()
             } else {
                 setBigCardUi(it)
+                viewModel.sessionManager.canLogPeriod = true
             }
         }
         viewModel.cycleTrackerCardSmallData.observe(this) {
@@ -499,6 +501,7 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytFemaleHealthCardSmall.root.gone()
             } else {
                 setSmallCardUi(it)
+                viewModel.sessionManager.canLogPeriod = true
             }
         }
 

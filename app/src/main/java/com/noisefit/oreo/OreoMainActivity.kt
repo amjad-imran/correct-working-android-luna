@@ -288,8 +288,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)
-        animateItemsUp(binding.lytAddWorkoutSelector.tvLogPeriod, 400f)
+
+        if (viewModel.shouldShowFemaleHealthCta()) {
+            binding.lytAddWorkoutSelector.ivLogPeriod.visible()
+            binding.lytAddWorkoutSelector.tvLogPeriod.visible()
+            animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)
+            animateItemsUp(binding.lytAddWorkoutSelector.tvLogPeriod, 400f)
+        } else {
+            binding.lytAddWorkoutSelector.ivLogPeriod.gone()
+            binding.lytAddWorkoutSelector.tvLogPeriod.gone()
+        }
 
 
         val rotate =

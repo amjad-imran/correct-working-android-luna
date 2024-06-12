@@ -158,7 +158,7 @@ constructor(
         LOGS.d("RESET_DATES shouldResetMasterDates")
         val todayDate = DateFormats.getCurrentDateOreoFormat()
 
-        if(userHealthData.contains(todayDate)) return false
+        if (userHealthData.contains(todayDate)) return false
 
         //if (todayDate.equals(dateSetOn, true)) return false
 
@@ -845,5 +845,13 @@ constructor(
                 sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
             }
         }
+    }
+
+    fun shouldShowFemaleHealthCta(): Boolean {
+        val genderCondition = !sessionManager.gender.equals("male", true)
+        if (genderCondition) {
+            return sessionManager.canLogPeriod
+        }
+        return false
     }
 }

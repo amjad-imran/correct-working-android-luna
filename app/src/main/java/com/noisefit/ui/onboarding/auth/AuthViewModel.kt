@@ -187,6 +187,7 @@ class AuthViewModel @Inject constructor(
 
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateGender(it.user?.userInfo?.gender)
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
 
                             localDataStore.updateUserToken(it.token)
@@ -322,6 +323,7 @@ class AuthViewModel @Inject constructor(
                                     if (it.user != null) {
                                         localDataStore.saveUserInfo(it.user!!)
                                         sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateGender(it.user?.userInfo?.gender)
                                         sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
                                         ringDataStore.setUpdateUserDeviceStatus(false)
@@ -336,6 +338,7 @@ class AuthViewModel @Inject constructor(
                                     } else {
                                         localDataStore.saveUserInfo(user)
                                         sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateGender(it.user?.userInfo?.gender)
                                         sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
                                         ringDataStore.setUpdateUserDeviceStatus(false)
@@ -520,6 +523,7 @@ class AuthViewModel @Inject constructor(
 
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateGender(it.user?.userInfo?.gender)
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)
@@ -593,6 +597,7 @@ class AuthViewModel @Inject constructor(
                         resource.data?.data?.let {
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateGender(it.user?.userInfo?.gender)
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)

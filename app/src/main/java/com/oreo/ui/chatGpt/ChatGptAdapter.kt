@@ -13,6 +13,7 @@ import com.noisefit.luna.databinding.ItemChatMessageRetryBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
 import com.noisefit.luna.databinding.ItemChatMessageThinkingBinding
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
@@ -143,8 +144,11 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.SentMessage,
             position: Int
         ) {
-
-            binding.logo.loadImage(binding.logo.context, data.userImage)
+            binding.logo.loadImageWithCache(
+                binding.logo.context,
+                data.userImage,
+                R.drawable.ic_default_profile_image
+            )
             binding.tvMessage.text = data.message
         }
     }
@@ -177,9 +181,9 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
                 val markwon = Markwon.create(this.tvMessage.context)
 
-              /*  val markwon = Markwon.builder(this.tvMessage.context)
-                    .usePlugin(SoftBreakAddsNewLinePlugin.create())
-                    *//*.usePlugin(ImagesPlugin.create())*//*
+                /*  val markwon = Markwon.builder(this.tvMessage.context)
+                      .usePlugin(SoftBreakAddsNewLinePlugin.create())
+                      *//*.usePlugin(ImagesPlugin.create())*//*
                     .build()*/
 
                 markwon.setMarkdown(tvMessage, data.message)

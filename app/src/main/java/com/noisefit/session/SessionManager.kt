@@ -123,12 +123,15 @@ class SessionManager
     val versionCheckData = MutableLiveData<VersionCheckResponse>()
 
     var unit: Units = Units.METRIC
+    var gender: String? = null
+    var canLogPeriod = false
     var notificationSettings = 1
 
     init {
         GlobalScope.launch(Dispatchers.IO) {
             val user = localDataStore.getUser()
             unit = user?.userGoals?.getUnit() ?: Units.METRIC
+            gender = user?.userInfo?.gender
             notificationSettings = user?.notificationsEnabledLuna ?: 1
 
         }
@@ -677,6 +680,10 @@ class SessionManager
 
     fun updateUnit(unit: Units) {
         this.unit = unit
+    }
+
+    fun updateGender(gender: String?) {
+        this.gender = gender
     }
 
     fun updateNotificationSettings(value: Int) {

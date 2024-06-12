@@ -630,6 +630,7 @@ class ProfileEditViewModel
                         resource.data?.data?.let {
                             authenticationRepository.saveUserInfo(it)
                             sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateGender(it.userInfo?.gender)
                             sessionManager.updateNotificationSettings(
                                 it.notificationsEnabledLuna ?: 1
                             )
