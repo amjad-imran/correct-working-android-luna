@@ -12,7 +12,6 @@
             style="@style/ModalStyleDialog10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:fillViewport="true"
             android:paddingTop="8dp">
 
@@ -38,6 +37,7 @@
                     android:layout_marginStart="16dp"
                     android:padding="@dimen/dimen_8dp"
                     android:src="@drawable/ic_back_cal_log"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@id/tvTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvTitle" />
@@ -78,6 +78,7 @@
                     android:layout_marginEnd="16dp"
                     android:padding="@dimen/dimen_8dp"
                     android:src="@drawable/ic_right_cal_log"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@id/tvTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvTitle" />
