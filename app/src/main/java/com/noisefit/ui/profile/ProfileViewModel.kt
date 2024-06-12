@@ -118,20 +118,24 @@ constructor(
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
                     }
+
                     is Resource.Loading -> {
                         setLoading(resource.loading)
                     }
+
                     is Resource.NetworkError -> {
                         setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                override fun yes() {
-                                    logoutUser()
-                                }
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        logoutUser()
+                                    }
 
-                                override fun no() {}
-                            }
+                                    override fun no() {}
+                                }
                         })
                     }
+
                     is Resource.Success -> {
                         resource.data?.let {
                             repository.logoutUserLocally().collect {
@@ -157,20 +161,24 @@ constructor(
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
                     }
+
                     is Resource.Loading -> {
                         setLoading(resource.loading)
                     }
+
                     is Resource.NetworkError -> {
                         setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                override fun yes() {
-                                    deleteUser()
-                                }
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        deleteUser()
+                                    }
 
-                                override fun no() {}
-                            }
+                                    override fun no() {}
+                                }
                         })
                     }
+
                     is Resource.Success -> {
                         resource.data?.let {
                             repository.logoutUserLocally().collect {
@@ -189,7 +197,6 @@ constructor(
     }
 
 
-
     fun getUserData() {
         _user.value = (userRepository.getUser())
     }
@@ -202,6 +209,7 @@ constructor(
             capitalize(model)
         } else capitalize(manufacturer) + " " + model
     }
+
     private fun capitalize(str: String): String {
         if (TextUtils.isEmpty(str)) {
             return str
@@ -257,10 +265,14 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            if(it == null){
+                            if (it == null) {
                                 _showFemaleHealthSplash.postValue(Event(true))
-                            }else{
-                                _cycleTrackInfo.postValue(Event(it))
+                            } else {
+                                if (it.periodDate.isNullOrEmpty()) {
+                                    _showFemaleHealthSplash.postValue(Event(true))
+                                } else {
+                                    _cycleTrackInfo.postValue(Event(it))
+                                }
                             }
 
                         }

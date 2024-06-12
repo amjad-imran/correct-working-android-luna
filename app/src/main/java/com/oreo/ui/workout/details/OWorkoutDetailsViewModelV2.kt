@@ -247,7 +247,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             return Triple(distance, if (sessionManager.isMetric()) "km" else "mi", "Total Distance")
 
         } else if (data.calories != null && data.calories > 0L) {
-            return Triple(data.calories.toString(), "Kcal", "Total Calories")
+            return Triple(data.calories.toString(), "Kcal", "Calories Burned")
         }
 
         return Triple("", "", "")

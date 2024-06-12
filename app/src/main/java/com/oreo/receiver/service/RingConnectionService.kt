@@ -631,7 +631,7 @@ constructor() : LifecycleService() {
         val lastSyncTime = ringDataStore.getLastPeriodicDataSyncTime()
         val difference = kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime)
         LOGS.d(TAG, "Periodic sync difference $difference")
-        if (difference > 21600 * 1000L) {
+        if (difference > 1800 * 1000L) {//30 min
             setPeriodicInfo()
             ringDataStore.setLastPeriodicDataSyncTime(DateFormats.getTimeStamp())
         }
