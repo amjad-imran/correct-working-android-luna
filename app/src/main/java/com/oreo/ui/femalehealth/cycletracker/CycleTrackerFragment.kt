@@ -222,7 +222,9 @@ class CycleTrackerFragment :
             navigateUpSafe()
         }
         binding.lytPrediction.root.setOnClickListener {
-            navigate(R.id.cycleSkinTemperature)
+            navigate(R.id.cycleSkinTemperature, Bundle().apply {
+                this.putString("selectedDate", viewModel.selectedDate.value.toString())
+            })
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
             navigate(R.id.cycleInsightDetails, Bundle().apply {

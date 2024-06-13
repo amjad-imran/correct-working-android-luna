@@ -756,7 +756,11 @@
     <fragment
         android:id="@+id/cycleSkinTemperature"
         android:name="com.oreo.ui.femalehealth.cycletracker.FMHSkinTemperatureFragment"
-        android:label="FragmentSkinTemperature" />
+        android:label="FragmentSkinTemperature" >
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/cycleLogFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment"

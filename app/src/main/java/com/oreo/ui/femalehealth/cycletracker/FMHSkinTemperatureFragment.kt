@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHSkinTemperatureBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -13,7 +14,9 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.PeriodTempChartModel
+import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.ui.custom.female.ScrollListenerPeriodTemp
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +27,12 @@ import java.time.format.DateTimeFormatter
 class FMHSkinTemperatureFragment :
     BaseFragment<FragmentFMHSkinTemperatureBinding>(FragmentFMHSkinTemperatureBinding::inflate) {
     private val viewModel: SkinTemperatureViewModel by viewModels()
+    private val args: FMHSkinTemperatureFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.selectedDate = args.selectedDate
 
         binding.lytToolbar.apply {
             tvTitle.text = getString(R.string.text_skin_temperature_variation)
@@ -38,6 +44,25 @@ class FMHSkinTemperatureFragment :
 
 
         binding.lytSkinTemp.vGraph.setOnChartScrollChangedListener(graphListener)
+    }
+
+    private fun setPredictionUI(data: FemaleTempResponse) {
+        if (data.pendingNights == null) {
+            binding.lytPrediction.apply {
+                tvMoreNight.gone()
+                divider1.root.gone()
+                ivInfo.gone()
+            }
+        } else {
+            binding.lytPrediction.apply {
+                tvMoreNight.visible()
+                divider1.root.visible()
+                ivInfo.invisible()
+                tvMoreNight.text =
+                    "Data for ${data.pendingNights} more nights is required"
+            }
+        }
+
     }
 
     private val graphListener = object : ScrollListenerPeriodTemp {
@@ -70,10 +95,11 @@ class FMHSkinTemperatureFragment :
     private fun updateGraph(temp: List<TempPeriodData>) {
 
         binding.lytSkinTemp.vGraph.visible()
-        val moveToPos = -1
+        val moveToPos = viewModel.getSelectedPosition(temp)
 
         //val tempList = viewModel.getDummyTempList()
         val topGraphData = viewModel.getPrefixAndSuffixList(temp)
+        LOGS.d("dsjkfhksjdfhksfdj $moveToPos")
 
 
         temp.getOrNull(0)?.let {
@@ -127,20 +153,25 @@ class FMHSkinTemperatureFragment :
         }
     }
 
-    private fun updateUI() {
-
-
-    }
-
     override fun subscribeObservers() {
         viewModel.cycleHistoryData.observe(this) {
             viewModel.getTempData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
+            val days = viewModel.getNextPeriodDays()
+            if (days == null) {
+                binding.lytPrediction.tvValue.text = "-"
+                binding.lytPrediction.tvUnit.gone()
+            } else {
+                binding.lytPrediction.tvValue.text = days
+                binding.lytPrediction.tvUnit.visible()
+            }
+
         }
 
         viewModel.tempData.observe(this) {
-
             binding.tvDescription.text = it.nudge?.message
             updateGraph(it.temp ?: ArrayList())
+            setPredictionUI(it)
         }
 
         viewModel.getMessages().observe(this) {

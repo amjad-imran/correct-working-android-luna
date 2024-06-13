@@ -31,6 +31,7 @@ import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.joda.time.Days
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -45,6 +46,7 @@ class SkinTemperatureViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val tempData = MutableLiveData<FemaleTempResponse>()
+    var selectedDate: String? = null
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
@@ -199,26 +201,27 @@ class SkinTemperatureViewModel @Inject constructor(
         }
 
         //list.reverse()
-        val lastDateFromList = dataList.first().date
+        val lastDateFromList = dataList.last().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
-            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
+            DateFormats.dateFormat3(), DateFormats.dateOnly()
         )
-        val currentDateFromList = dataList.last().date
+        val currentDateFromList = dataList.first().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
             DateFormats.addDateFormat3(currentDate, 14)!!,
-            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
+            DateFormats.dateFormat3(), DateFormats.dateOnly()
         )
 
         val suffix = java.util.ArrayList<PeriodTempChartModel>()
         suffixDatesList.forEach {
             val chartModel = PeriodTempChartModel()
+
             chartModel.month = ""
             chartModel.date = ""
-            chartModel.day = ""
+            chartModel.day = it
             chartModel.value = null
             suffix.add(chartModel)
         }
@@ -230,7 +233,7 @@ class SkinTemperatureViewModel @Inject constructor(
             val chartModel = PeriodTempChartModel()
             chartModel.month = ""
             chartModel.date = ""
-            chartModel.day = ""
+            chartModel.day = it
             chartModel.value = null
             prefix.add(chartModel)
         }
@@ -243,13 +246,13 @@ class SkinTemperatureViewModel @Inject constructor(
         val sections = ArrayList<Section>()
         getPeriodSection(dataList.last().date, dataList.first().date)?.forEach {
             sections.add(it)
-           /* LOGS.d(
-                "sdfsdfsdf -> ${dataList.last().date}, ${dataList.first().date} ${
-                    Gson().toJson(
-                        it
-                    )
-                }"
-            )*/
+            /* LOGS.d(
+                 "sdfsdfsdf -> ${dataList.last().date}, ${dataList.first().date} ${
+                     Gson().toJson(
+                         it
+                     )
+                 }"
+             )*/
         }
 
         return Triple(max, Triple(list, suffix, prefix), sections)
@@ -444,5 +447,28 @@ class SkinTemperatureViewModel @Inject constructor(
                 -2.5f
             )
         )
+    }
+
+    fun getNextPeriodDays(): String? {
+        try {
+            val firstCycle = cycleHistoryData.value?.firstOrNull() ?: return null
+            val todayData = LocalDate.now()
+            val nextPeriodDate = LocalDate.parse(firstCycle.nextPeriodDate)
+
+            val daysBetween = ChronoUnit.DAYS.between(nextPeriodDate, todayData)
+            return "${abs(daysBetween)}"
+        } catch (exp: Exception) {
+            return null
+        }
+    }
+
+    fun getSelectedPosition(temp: List<TempPeriodData>): Int {
+        val index = temp.indexOfFirst {
+            it.date.equals(selectedDate, true)
+        }
+        if (index == -1) {
+            return -1
+        }
+        return 15 + index
     }
 }
