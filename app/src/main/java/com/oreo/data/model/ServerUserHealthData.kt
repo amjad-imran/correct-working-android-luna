@@ -24,7 +24,7 @@ data class ServerUserHealthResponse(
 
     @SerializedName("stress_beta")
     val stressBeta: Boolean? = null,
-    @SerializedName("enable_ai_2")
+    @SerializedName("enable_ai2")
     val enableAi: Boolean? = null,
 
     @SerializedName("temp_base")
