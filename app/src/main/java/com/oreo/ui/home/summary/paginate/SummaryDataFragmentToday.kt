@@ -892,11 +892,13 @@ class SummaryDataFragmentToday :
             }
             this.tvRemindMeLater.setOnClickListener {
                 viewModel.localDataStore.setFMHRemindLater()
-                healthOverviewAdapter.removeCycleGetStartedCard()
+                viewModel.trackFemaleHealthCardData.postValue(null)
+                //healthOverviewAdapter.removeCycleGetStartedCard()
             }
             this.ivCross.setOnClickListener {
                 viewModel.localDataStore.setFMHRemindLater()
-                healthOverviewAdapter.removeCycleGetStartedCard()
+                viewModel.trackFemaleHealthCardData.postValue(null)
+                //healthOverviewAdapter.removeCycleGetStartedCard()
             }
         }
     }

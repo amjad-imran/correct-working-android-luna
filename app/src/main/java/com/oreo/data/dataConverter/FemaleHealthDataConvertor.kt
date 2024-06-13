@@ -23,8 +23,8 @@ class FemaleHealthDataConvertor @Inject constructor() {
         return flow {
             emit(FemaleHealthGeneratorResult.Loading(true))
 
-            val mainPeriodLength = 5
-            val mainCycleLength = 28
+            val mainPeriodLength = cycleData?.userDefault?.periodLength ?: 4
+            val mainCycleLength = cycleData?.userDefault?.cycleLength ?: 28
 
             val healthDataDateList = HashMap<LocalDate, DayState>()
 

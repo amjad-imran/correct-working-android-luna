@@ -11,6 +11,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Typeface;
+import android.graphics.fonts.Font;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -23,6 +24,7 @@ import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit_commans.R;
 
@@ -119,6 +121,10 @@ public class WheelPickerPeriod extends View implements Runnable {
         if (colorStateList == null) {
             colorStateList = ColorStateList.valueOf(Color.BLACK);
         }
+
+        Typeface fontGilroy =
+                ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+
         this.textColor = colorStateList.getColorForState(View.EMPTY_STATE_SET, Color.BLACK);
         this.textColorSelected = colorStateList.getColorForState(View.SELECTED_STATE_SET, Color.BLACK);
 
@@ -140,12 +146,14 @@ public class WheelPickerPeriod extends View implements Runnable {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColorFilter(new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN));
         textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTypeface(fontGilroy);
 
         selectedTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.LINEAR_TEXT_FLAG);
         selectedTextPaint.setTextSize(textSize);
         selectedTextPaint.setTextAlign(Paint.Align.CENTER);
         selectedTextPaint.setColorFilter(new PorterDuffColorFilter(textColorSelected, PorterDuff.Mode.SRC_IN));
         selectedTextPaint.setStyle(Paint.Style.FILL);
+        selectedTextPaint.setTypeface(fontGilroy);
 
 
         suffixTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.LINEAR_TEXT_FLAG);
@@ -153,6 +161,8 @@ public class WheelPickerPeriod extends View implements Runnable {
         suffixTextPaint.setTextAlign(Paint.Align.CENTER);
         suffixTextPaint.setColorFilter(new PorterDuffColorFilter(textColorSelected, PorterDuff.Mode.SRC_IN));
         suffixTextPaint.setStyle(Paint.Style.FILL);
+        suffixTextPaint.setTypeface(fontGilroy);
+
 
         // Correct sizes of text
         computeTextSize();
