@@ -707,7 +707,7 @@ class PeriodTempLineChart : View {
                     //path.lineTo(x1, y1)
                     path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
 
-                    if (current.phase == CyclePhase.FOLLECULAR) {
+                    if (current.phase == CyclePhase.FOLLECULAR && next.phase == CyclePhase.FOLLECULAR) {
                         chartLinePaint.color = Color.parseColor("#ff9252")
                         chartLineFillPaint.setShader(lGFollecular)
                     } else {

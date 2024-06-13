@@ -378,10 +378,13 @@ class CycleTrackerViewModel @Inject constructor(
         var minValue = 2.5f
         var maxValue = -2.5f
 
-        items.add(ItemTemp(null, 0, ""))
+        items.add(ItemTemp(null, phase = CyclePhase.FOLLECULAR,0, ""))
 
         tempData.forEachIndexed { index, i ->
-            items.add(ItemTemp(i.temperature, index + 1, i.date))
+            val phase = getCurrentPhase(i.date)//TODO calculate on the bases of data
+
+
+            items.add(ItemTemp(i.temperature, phase,index + 1, i.date))
 
             i.temperature?.let { temp ->
                 if (temp < minValue) {
@@ -402,6 +405,35 @@ class CycleTrackerViewModel @Inject constructor(
         return TempPeriodCombineModel(
             sections = sections, items = items, maxValue
         )
+    }
+
+    private fun getCurrentPhase(date: String): CyclePhase {
+        val localDate = LocalDate.parse(date)
+
+        var phase: CyclePhase? = null
+
+        cycleHistoryData.value?.forEach {
+            val periodStart = LocalDate.parse(it.periodDate)
+            val periodEnd = periodStart.plusDays(it.periodLength?.toLong() ?: 0L)
+            val ovDate = if (it.ovulationStartDate != null) {
+                LocalDate.parse(it.ovulationStartDate)
+            } else {
+                null
+            }
+
+            if (localDate in periodStart..periodEnd) {
+                phase = if (ovDate != null && localDate > ovDate) {
+                    CyclePhase.LUTEAL
+                } else {
+                    CyclePhase.FOLLECULAR
+                }
+            }
+
+            if (phase != null) {
+                return@forEach
+            }
+        }
+        return phase ?: CyclePhase.LUTEAL
     }
 
     private fun getPeriodSection(startDate: String, endDate: String): List<Section>? {

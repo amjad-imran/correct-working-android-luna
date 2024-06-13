@@ -99,7 +99,6 @@ class FMHSkinTemperatureFragment :
 
         //val tempList = viewModel.getDummyTempList()
         val topGraphData = viewModel.getPrefixAndSuffixList(temp)
-        LOGS.d("dsjkfhksjdfhksfdj $moveToPos")
 
 
         temp.getOrNull(0)?.let {

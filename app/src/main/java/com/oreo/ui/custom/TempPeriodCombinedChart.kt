@@ -25,6 +25,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.femalehealth.cycletracker.CyclePhase
 import com.oreo.ui.heartrate.OnHRClickAction
 import kotlin.math.abs
 
@@ -92,6 +93,9 @@ class TempPeriodCombinedChart : View {
     lateinit var activeBarPaint: Paint
     lateinit var inActiveBarPaintI: Paint
     lateinit var bgLineVertical: Paint
+
+    private var lGFollecular: LinearGradient? = null
+    private var lGLuteal: LinearGradient? = null
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -267,6 +271,26 @@ class TempPeriodCombinedChart : View {
             0f,
             mHeight - bottomWith,
             Color.parseColor("#99ff9252"),
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
+
+        lGFollecular = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight - bottomWith,
+            Color.parseColor("#99ff9252"),
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
+
+        lGLuteal = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight - bottomWith,
+            Color.parseColor("#99a38cff"),
             Color.TRANSPARENT,
             Shader.TileMode.CLAMP
         )
@@ -625,11 +649,19 @@ class TempPeriodCombinedChart : View {
 
                         path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
 
+                        if (current.phase == CyclePhase.FOLLECULAR && next.phase == CyclePhase.FOLLECULAR) {
+                            chartLinePaint.color = Color.parseColor("#ff9252")
+                            chartLineFillPaint.setShader(lGFollecular)
+                        } else {
+                            chartLinePaint.color = Color.parseColor("#a38cff")
+                            chartLineFillPaint.setShader(lGLuteal)
+                        }
+
                         fillPath.addPath(path)
                         fillPath.lineTo(x1, yLineZero)
                         fillPath.lineTo(x, yLineZero)
 
-                        chartLineFillPaint.setShader(linearGradient)
+                        //chartLineFillPaint.setShader(linearGradient)
                         canvas.drawPath(fillPath, chartLineFillPaint)
                         fillPath.reset()
                         canvas.drawPath(path, chartLinePaint)

@@ -53,6 +53,8 @@ class SkinTemperatureViewModel @Inject constructor(
 
     var healthDataDateList = HashMap<LocalDate, DayState>()
 
+    var phases = HashMap<LocalDate, CyclePhase>()
+
     init {
         getCycleHistoryData()
     }
@@ -88,7 +90,6 @@ class SkinTemperatureViewModel @Inject constructor(
 
                             generateHealthData(it)
 
-
                         }
                     }
                 }
@@ -99,7 +100,7 @@ class SkinTemperatureViewModel @Inject constructor(
     private fun generateHealthData(cycleData: PeriodCycleHistory) {
         viewModelScope.launch {
 
-            femaleHealthDataConvertor.convertHealthData(cycleData, true)
+            femaleHealthDataConvertor.convertHealthData(cycleData, false)
                 .collect { resource ->
 
                     when (resource) {
@@ -171,7 +172,7 @@ class SkinTemperatureViewModel @Inject constructor(
         var max = 0.0f
         dataList.forEach {
 
-            val phase = CyclePhase.FOLLECULAR//TODO calculate on the bases of data
+            val phase = getCurrentPhase(it.date)//TODO calculate on the bases of data
 
             val chartModel = PeriodTempChartModel(
                 phase = phase
@@ -256,6 +257,35 @@ class SkinTemperatureViewModel @Inject constructor(
         }
 
         return Triple(max, Triple(list, suffix, prefix), sections)
+    }
+
+    private fun getCurrentPhase(date: String): CyclePhase {
+        val localDate = LocalDate.parse(date)
+
+        var phase: CyclePhase? = null
+
+        cycleHistoryData.value?.forEach {
+            val periodStart = LocalDate.parse(it.periodDate)
+            val periodEnd = periodStart.plusDays(it.periodLength?.toLong() ?: 0L)
+            val ovDate = if (it.ovulationStartDate != null) {
+                LocalDate.parse(it.ovulationStartDate)
+            } else {
+                null
+            }
+
+            if (localDate in periodStart..periodEnd) {
+                phase = if (ovDate != null && localDate > ovDate) {
+                    CyclePhase.LUTEAL
+                } else {
+                    CyclePhase.FOLLECULAR
+                }
+            }
+
+            if (phase != null) {
+                return@forEach
+            }
+        }
+        return phase ?: CyclePhase.LUTEAL
     }
 
     private fun getPeriodSection(startDate: String, endDate: String): List<Section>? {
