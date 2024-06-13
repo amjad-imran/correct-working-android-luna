@@ -345,9 +345,11 @@ class CycleTrackerFragment :
         viewModel.femaleHealthData.observe(this) {
             if (it?.currentDay == null) {
                 binding.lytTrackerTop.groupPeriodData.invisible()
+
                 binding.lytTrackerTop.layoutGetStarted.visible()
-                /* binding.dividerInsight.root.gone()
-                 binding.lytInsight.root.gone()*/
+
+                binding.dividerInsight.root.gone()
+                binding.lytInsight.root.gone()
                 binding.dividerCues.root.gone()
                 binding.lytCues.root.gone()
 
@@ -356,6 +358,16 @@ class CycleTrackerFragment :
             } else {
                 binding.lytTrackerTop.groupPeriodData.visible()
                 binding.lytTrackerTop.layoutGetStarted.gone()
+
+
+                if (viewModel.avgInsightData.value == null) {
+                    binding.dividerInsight.root.gone()
+                    binding.lytInsight.root.gone()
+                } else {
+                    binding.dividerInsight.root.visible()
+                    binding.lytInsight.root.visible()
+                }
+
                 setNudgesViewPager(it.nudges)
                 setTopData(it)
 
@@ -369,7 +381,6 @@ class CycleTrackerFragment :
                 }
 
             }
-
         }
 
         viewModel.getMessages().observe(this) {

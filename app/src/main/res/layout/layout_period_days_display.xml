@@ -155,6 +155,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="8sp"
+                android:gravity="center_horizontal"
+                android:layout_marginHorizontal="@dimen/side_margin"
                 android:text="@string/text_log_your_period_to_get_started_next" />
 
             <Button
