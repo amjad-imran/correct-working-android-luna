@@ -289,7 +289,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
 
-        if (viewModel.shouldShowFemaleHealthCta()) {
+        val lastDestination = navController?.currentDestination
+        if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.ivLogPeriod.visible()
             binding.lytAddWorkoutSelector.tvLogPeriod.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)

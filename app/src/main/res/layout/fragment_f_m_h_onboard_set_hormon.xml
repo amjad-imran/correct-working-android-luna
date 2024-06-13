@@ -26,7 +26,7 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:text="@string/text_select_from_the_provided_options"
+            android:text="@string/text_contraceptives_message"
             android:textColor="@color/white_60"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

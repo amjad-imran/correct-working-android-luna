@@ -80,9 +80,9 @@ class FMHOnboardGoalFragment :
         binding.lytTrackCycle.tvTitle.text = getString(R.string.text_tracking_my_cycle)
         binding.lytTrackCycle.tvDescription.text = getString(R.string.text_tracking_privacy_desc)
         binding.lytConceive.tvTitle.text = getString(R.string.text_trying_to_conceive)
-        binding.lytConceive.tvDescription.text = getString(R.string.text_tracking_privacy_desc)
+        binding.lytConceive.tvDescription.text = getString(R.string.text_tracking_privacy_desc_2)
         binding.lytPregnancy.tvTitle.text = getString(R.string.text_tracking_my_pregnancy)
-        binding.lytPregnancy.tvDescription.text = getString(R.string.text_tracking_privacy_desc)
+        binding.lytPregnancy.tvDescription.text = getString(R.string.text_tracking_privacy_desc_3)
 
         mViewModel.goalTypeSelected?.let {
             updateBackground(it)

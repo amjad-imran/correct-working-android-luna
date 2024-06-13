@@ -1138,14 +1138,16 @@
     <string name="text_tracking_my_cycle">Tracking my cycle</string>
     <string name="text_trying_to_conceive">Trying to conceive</string>
     <string name="text_tracking_my_pregnancy">Tracking my pregnancy</string>
-    <string name="text_tracking_privacy_desc">Your privacy is our priority. We use top-notch security measures to protect your data.</string>
+    <string name="text_tracking_privacy_desc">Be prepared for your next period and learn more about your body with statistics on previous cycles.</string>
+    <string name="text_tracking_privacy_desc_2">Find out your fertility window and when you are likely to ovulate.</string>
+    <string name="text_tracking_privacy_desc_3">Monitor your body weight changes and log your well-being during your pregnancy.</string>
     <string name="text_not_sure">Not Sure</string>
     <string name="text_how_long_does_your_period_usually_last">How long does your period usually last?</string>
-    <string name="text_how_long_does_your_cycle_usually_last">How long does your cycle usually last?</string>
-    <string name="text_are_you_diagnosed_with_any_of_these_conditions">Are you diagnosed with any of these conditions?</string>
-    <string name="text_select_from_the_provided_options">Select from the provided options</string>
-    <string name="text_do_you_use_hormonal_contraceptives_or_other_hormones">Do you use hormonal contraceptives or other hormones?</string>
-    <string name="text_when_was_the_first_day_of_your_last_period">When was the first day of your last period?</string>
+    <string name="text_how_long_does_your_cycle_usually_last">How long is your typical cycle?</string>
+    <string name="text_are_you_diagnosed_with_any_of_these_conditions">Are you diagnosed with any of the following conditions?</string>
+    <string name="text_select_from_the_provided_options">Please select if you have any ongoing health conditions diagnosed by a healthcare provider</string>
+    <string name="text_do_you_use_hormonal_contraceptives_or_other_hormones">Do you use any form of hormonal contraception?</string>
+    <string name="text_when_was_the_first_day_of_your_last_period">When did your last period start?</string>
     <string name="text_onboard_all_done_desc">You are all set to get personalised insights for your reproductive journey, from predicting your next period to tracking ovulation, so you can plan ahead.</string>
     <string name="text_cycle_insights">Cycle insights</string>
     <string name="text_abnormal">Abnormal</string>
@@ -1167,7 +1169,8 @@
     <string name="text_cycle_log">Cycle Log</string>
     <string name="text_log_period">Log Period</string>
     <string name="text_calender">Calender</string>
-    <string name="text_period_last_sub_message">Your privacy is our priority. We use top-notch security measures to protect your data.</string>
+    <string name="text_period_last_sub_message">Period length is measured from the first to the last day of bleeding. If you’re irregular or not sure, tab ‘Not sure’</string>
+    <string name="text_cycle_last_sub_message">Your cycle starts on the first day of your period and ends the day before your next period. If you’re irregular or not sure, tab ‘Not sure’</string>
     <string name="text_days">days</string>
     <string name="text_abnormal_length">Abnormal length</string>
     <string name="text_introduction_to_cycle_tracking">Introduction to cycle tracking</string>
@@ -1215,6 +1218,7 @@
     <string name="text_ai_error_message">Sorry %s, my circuits must be in a twist! Let’s run that by me again.</string>
     <string name="text_got_your_period">Got your period?</string>
     <string name="text_averages_are_based_on_last_6_cycles">Averages are based on last 6 cycles</string>
+    <string name="text_contraceptives_message">Hormones, like any other contraceptives, may affect your natural temperature variation.</string>
 
 
 </resources>
