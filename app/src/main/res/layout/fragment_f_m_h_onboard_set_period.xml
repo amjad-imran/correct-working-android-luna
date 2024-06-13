@@ -34,7 +34,7 @@
 
         <View
             android:id="@+id/backView"
-            style="@style/ModalStyleNew"
+            android:background="@drawable/back_modal_new_fmh"
             android:layout_width="0dp"
             android:layout_height="317dp"
             android:layout_marginStart="@dimen/side_margin"

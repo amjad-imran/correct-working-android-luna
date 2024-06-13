@@ -109,7 +109,8 @@ class FMHOnboardingFragment :
         if (current != 0) {
             binding.vpFmhOnboard.setCurrentItem(current - 1, true)
         } else {
-            activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+            navigateUpSafe()
+            //activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         }
     }
 

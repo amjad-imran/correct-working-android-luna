@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/cycle_tracker_bg"
     tools:context="com.oreo.ui.femalehealth.cycletracker.CycleTrackerFragment">
 
     <include
@@ -27,6 +28,7 @@
 
             <include
                 android:id="@+id/lytTrackerTop"
+                android:layout_marginTop="24dp"
                 layout="@layout/layout_period_days_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

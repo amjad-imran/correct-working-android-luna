@@ -178,9 +178,10 @@
                     android:id="@+id/rvSymptoms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="24dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:clipToPadding="false"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toTopOf="@id/btnSave"
@@ -192,7 +193,7 @@
 
                 <Button
                     android:id="@+id/btnSave"
-                    style="@style/SecondaryFMHButtonStyle"
+                    style="@style/PrimaryButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="24dp"
