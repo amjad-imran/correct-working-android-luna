@@ -257,6 +257,7 @@ class SummaryDataViewModelToday @Inject constructor(
     fun parseHealthData(healthData: ServerUserHealthData, trendsData: TrendsData?) {
 
         viewModelScope.launch(Dispatchers.IO) {
+            sessionManager.canLogPeriod = false
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()

@@ -177,6 +177,26 @@ class CycleLogViewModel @Inject constructor(
     }
 
 
+    fun removePeriodAfterToday(date: LocalDate) {
+
+        var loopDate = date
+        var isNextPeriodDay: Boolean
+
+        val daysToNotify = mutableListOf<LocalDate>()
+
+        do {
+            daysToNotify.add(loopDate)
+            healthDataDateList[loopDate] = DayState.Default
+            daysInteractedWith[loopDate] = false
+            val nextDay = loopDate.plusDays(1)
+            isNextPeriodDay = healthDataDateList[nextDay] is DayState.Period
+            loopDate = nextDay
+        } while (isNextPeriodDay)
+
+        notifyDateChanged.value = Event(daysToNotify)
+
+    }
+
     /**
      * Stores local date and a boolean->true if added, false if in removed list
      */
@@ -379,5 +399,6 @@ class CycleLogViewModel @Inject constructor(
     fun getCurrentCyclePeriodDate(): String {
         return cycleHistoryData.value?.cycleHistory?.firstOrNull()?.periodDate ?: ""
     }
+
 
 }

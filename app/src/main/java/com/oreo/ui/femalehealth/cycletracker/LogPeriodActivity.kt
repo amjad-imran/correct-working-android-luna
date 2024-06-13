@@ -68,25 +68,20 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
                         if (day.date > viewModel.todayDate || day.date < calendarStart) {
+                            return@setOnClickListener
+                        }
 
+                        if (day.date == viewModel.todayDate) {
                             val (state, selected) = viewModel.getCurrentState(day.date)
                             if (state is DayState.Period) {
+                                viewModel.removePeriodAfterToday(day.date)
+                            } else {
                                 viewModel.onCalendarDateClicked(day.date)
                             }
-
                             return@setOnClickListener
                         }
 
                         viewModel.onCalendarDateClicked(day.date)
-
-
-                        if (day.date <= LocalDate.now()) {
-//                            val intent = Intent()
-//                            intent.putExtra("selected_date", "${day.date}")
-//                            setResult(RESULT_OK, intent)
-//                            finish()
-                        }
-
                     }
                 }
             }
@@ -110,14 +105,14 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                                     binding.tvDay.context, R.color.color_bubble_gum_pink
                                 )
                             )
-                            if (this.day.date > viewModel.todayDate) {
+                          /*  if (this.day.date > viewModel.todayDate) {
                                 binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
                                 //binding.dayBack.alpha = 0.5f
-                            } else {
+                            } else {*/
                                 //binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
                                 binding.dayBack.setImageResource(R.drawable.ic_check_mark_period)
                                 //binding.dayBack.alpha = 1f
-                            }
+                            /*}*/
 
                         }
 
