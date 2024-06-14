@@ -189,8 +189,8 @@ public class WheelPickerPeriod extends View implements Runnable {
     private void computeTextSize() {
         textMaxWidth = textMaxHeight = 0;
         if (adapter != null && adapter.getSize() != 0) {
-            if (hasSameWidth) {
-                textMaxWidth = (int) textPaint.measureText(String.valueOf(adapter.getData().get(0)));
+            /*if (hasSameWidth) {
+                textMaxWidth = (int) textPaint.measureText(String.valueOf(adapter.getData().get(0).getData()));
             } else if (isPosInRange(textMaxWidthPosition)) {
                 textMaxWidth = (int) textPaint.measureText
                         (String.valueOf(adapter.getData().get(textMaxWidthPosition)));
@@ -202,7 +202,9 @@ public class WheelPickerPeriod extends View implements Runnable {
                     int width = (int) textPaint.measureText(text);
                     textMaxWidth = Math.max(textMaxWidth, width);
                 }
-            }
+            }*/
+
+            textMaxWidth = (int) textPaint.measureText("100");
         }
 
         Paint.FontMetrics metrics = textPaint.getFontMetrics();
@@ -346,9 +348,10 @@ public class WheelPickerPeriod extends View implements Runnable {
                     scrollOffsetY % itemHeight;
 
             if (hasAtmospheric) {
-                int alpha = (int) ((drawnCenterY - Math.abs(drawnCenterY - mDrawnItemCenterY)) * 1.0F / drawnCenterY * 255);
+                int alpha = (int) (Math.pow((drawnCenterY - Math.abs(drawnCenterY - mDrawnItemCenterY)) * 1.0F / drawnCenterY, 2) * 255);
                 alpha = alpha < 0 ? 0 : alpha;
                 textPaint.setAlpha(alpha);
+                suffixTextPaint.setAlpha(alpha);
             }
 
             int iconTop = 0;
@@ -358,49 +361,30 @@ public class WheelPickerPeriod extends View implements Runnable {
 //			}
 
             // Judges need to draw different color for current item or not
-            if (textColor != textColorSelected) {
-                canvas.save();
-                canvas.clipRect(rectCurrentItem, Region.Op.DIFFERENCE);
+
+            canvas.save();
+            canvas.clipRect(rectItem);
 
 //				if (icon != null) {
 //					canvas.drawBitmap(icon, rectIcon.left, iconTop, textPaint);
 //				}
 
-                canvas.drawText(data, rectText.centerX(), mDrawnItemCenterY, textPaint);
-                canvas.restore();
 
-                canvas.save();
-                canvas.clipRect(rectCurrentItem);
+            float textStartMain = (float) getWidth() / 2;
 
-//				if (icon != null) {
-//					canvas.drawBitmap(icon, rectIcon.left, iconTop, selectedTextPaint);
-//				}
-                canvas.drawText(data, rectText.centerX(), mDrawnItemCenterY, selectedTextPaint);
-                if (drawnDataPos == selectedItemPosition) {
+            canvas.drawText(data, rectText.centerX(), mDrawnItemCenterY, textPaint);
+            //if (drawnDataPos == selectedItemPosition) {
 
-                    float textWidth = textPaint.measureText(data);
-                    float textStart = rectText.centerX() + textWidth;
-                    canvas.drawText("days", textStart, mDrawnItemCenterY, suffixTextPaint);
-                }
-                canvas.restore();
-            } else {
-                canvas.save();
-                canvas.clipRect(rectItem);
+            if (!data.isEmpty()) {
+                float textWidth = textPaint.measureText(data);
+                float textStart = rectText.centerX() + textWidth;
 
-//				if (icon != null) {
-//					canvas.drawBitmap(icon, rectIcon.left, iconTop, textPaint);
-//				}
-
-                canvas.drawText(data, rectText.centerX(), mDrawnItemCenterY, textPaint);
-                if (drawnDataPos == selectedItemPosition) {
-
-                    float textWidth = textPaint.measureText(data);
-                    float textStart = rectText.centerX() + textWidth;
-
-                    canvas.drawText("days", textStart, mDrawnItemCenterY, suffixTextPaint);
-                }
-                canvas.restore();
+                canvas.drawText("days", textStart, mDrawnItemCenterY, suffixTextPaint);
             }
+
+
+            //}
+            canvas.restore();
 
             if (DEBUG) {
                 canvas.save();

@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
@@ -70,6 +71,7 @@ class CycleTrackerFragment :
     }
 
     private fun initCalender() {
+
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = CalenderCycleTrackerDayBinding.bind(view)
             lateinit var day: WeekDay
@@ -147,13 +149,6 @@ class CycleTrackerFragment :
             }
         }
 
-        binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
-            viewModel.onWeekScrolled(weekDays.days.get(0).date)
-
-            /* val selectedWeekDate = weekDays.days.get(0).date
-             viewModel.getDataForDate(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))*/
-        }
-
         binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
             object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
@@ -172,6 +167,7 @@ class CycleTrackerFragment :
             viewModel.selectedDate.value ?: LocalDate.now()
         )
 
+        viewModel.isCalendarSetupDone = true
     }
 
     private fun setRecycler() {
@@ -181,9 +177,22 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
+
+        binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
+            viewModel.onWeekScrolled(weekDays.days.get(0).date)
+
+            /* val selectedWeekDate = weekDays.days.get(0).date
+             viewModel.getDataForDate(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))*/
+        }
+
+
         binding.toolbar.viewBackCalendar.setOnClickListener {
             val (frag, bundle) = CycleLogFragment.getStartData(null)
             navigate(frag, bundle)
+        }
+
+        binding.toolbar.icInfo.setOnClickListener {
+            navigate(R.id.cycleTrackStressInfoFragment)
         }
 
         binding.lytTrackerTop.tvPhase.setOnClickListener {
@@ -426,7 +435,8 @@ class CycleTrackerFragment :
             if (data.pendingNights == null) {
                 tvMoreNight.text = ""
             } else {
-                tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
+                tvMoreNight.text =
+                    "Data for 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
             }
 
             tvDescription.setVisibilityByCondition(data.message.isNullOrEmpty().not())
@@ -440,7 +450,8 @@ class CycleTrackerFragment :
                 tvMoreNight.visible()
                 ivInfo.invisible()
                 divider1.root.visible()
-                tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
+                tvMoreNight.text =
+                    "Data for 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
             }
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))

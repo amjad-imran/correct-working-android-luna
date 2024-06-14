@@ -502,6 +502,8 @@ class FemaleHealthRepositoryImpl(
 
     override suspend fun setPeriodConfirm(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/confirm"
             remoteDataSource.setPeriodConfirm(url, jsonObject)
         }

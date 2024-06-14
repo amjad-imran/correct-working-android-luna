@@ -116,7 +116,7 @@ class PeriodLineChart : View {
 
     //    private int maxValue;
     //    private int minValue;
-    private var avgValue = 0
+    private var avgValue: Int? = null
 
     lateinit var normalBarPaint: Paint
 
@@ -296,7 +296,9 @@ class PeriodLineChart : View {
         suffixList: List<PeriodChartModel>,
         currentPos: Int,
         normalMin: Int,
-        normalMax: Int
+        normalMax: Int,
+        averageValue: Int? = null,
+        buffer:Int
     ) {
         list!!.clear()
         list.addAll(prefixList)
@@ -338,20 +340,22 @@ class PeriodLineChart : View {
             count += 1
         }
 
-        max += 5
-        xMin = if (xMin < 5) {
+        max += buffer
+        xMin = if (xMin < buffer) {
             0
         } else {
-            xMin - 5
+            xMin - buffer
         }
 
-        if (noneZeroValueCount <= datas.size / 2) {
+        avgValue = averageValue
+
+        /*if (noneZeroValueCount <= datas.size / 2) {
             avgValue = 0
         } else {
             if (count != 0) {
                 avgValue = sum / count
             }
-        }
+        }*/
 
         if (currentPos != -1) {
             mCurrentPos = currentPos
@@ -482,20 +486,39 @@ class PeriodLineChart : View {
     }
 
 
+    fun calculateYAxisValues(min: Int, max: Int): List<Int> {
+        val yAxisValues = mutableListOf<Int>()
+
+        var newMin = min - 10
+        if (newMin < 0) {
+            newMin = 0
+        }
+        val newMax = max + 10
+        var currentVal = newMin
+
+        while (currentVal < newMax) {
+            if (currentVal % 5 == 0) {
+                yAxisValues.add(currentVal)
+            }
+            currentVal++
+        }
+
+        return yAxisValues
+    }
+
     private fun drawLeft(canvas: Canvas) {
-        val avgStr = avgValue.toString()
 
         xTextPaint!!.color = xTextColor
 
         var currentVal = xMin
-        val valueToPlot = ArrayList<Int>()
+        val valueToPlot = calculateYAxisValues(xMin, max)//ArrayList<Int>()
 
-        while (currentVal < max) {
+        /*while (currentVal < max) {
             if (currentVal % 5 == 0) {
                 valueToPlot.add(currentVal)
             }
             currentVal++
-        }
+        }*/
 
         val marginEnd = dip2px(8f)
         val lineSpacing = dip2px(4f)
@@ -504,35 +527,44 @@ class PeriodLineChart : View {
         valueToPlot.forEach {
             val y =
                 mHeight - bottomWith - (it - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-            canvas.drawLine(leftWith, y, mWith.toFloat(), y, gridPaint!!)
-            xTextPaint!!.getTextBounds(it.toString(), 0, it.toString().length, xTextBounds)
 
-            canvas.drawText(
-                it.toString(),
-                mWith.toFloat() - xTextBounds!!.width() - marginEnd,
-                y + xTextBounds!!.height() + lineSpacing,
-                xTextPaint!!
-            )
+
+            if (y < (mHeight - bottomWith)) {
+                canvas.drawLine(leftWith, y, mWith.toFloat(), y, gridPaint!!)
+                xTextPaint!!.getTextBounds(it.toString(), 0, it.toString().length, xTextBounds)
+
+                canvas.drawText(
+                    it.toString(),
+                    mWith.toFloat() - xTextBounds!!.width() - marginEnd,
+                    y + xTextBounds!!.height() + lineSpacing,
+                    xTextPaint!!
+                )
+            }
         }
 
 
         //FOr average value
-        /* val avg =
-             mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+        if (avgValue != null) {
+            val avgStr = avgValue.toString() + " days"
+            val avg =
+                mHeight - bottomWith - (avgValue!! - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-         if (avgValue > 0) {
-             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
-         }
+            if (avgValue!! > 0) {
+                canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
+            }
 
-         if (showAvgValueText && avgValue > 0) {
-             xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-             canvas.drawText(
-                 avgStr,
-                 leftWith + dip2px(5f),
-                 avg - xTextBounds!!.height(),
-                 xTextPaint!!
-             )
-         }*/
+            xTextPaint!!.setColor(Color.parseColor("#ffffff"))
+
+            xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
+            val dim = xTextPaint!!.measureText(avgStr)
+            canvas.drawText(
+                avgStr,
+                mWith - dim - dip2px(8f),
+                avg + xTextBounds!!.height() + dip2px(6f),
+                xTextPaint!!
+            )
+        }
+
     }
 
     private fun drawContent(canvas: Canvas) {

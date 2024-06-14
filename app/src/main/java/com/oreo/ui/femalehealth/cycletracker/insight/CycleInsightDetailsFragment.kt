@@ -105,7 +105,9 @@ class CycleInsightDetailsFragment :
                     topGraphData.second,
                     moveToPos,
                     normalMin,
-                    normalMax
+                    normalMax,
+                    it.avg,
+                    if (viewModel.launchMode == CycleInsightLaunchMode.CYCLE_LENGTH) 10 else 5
                 )
             }
 

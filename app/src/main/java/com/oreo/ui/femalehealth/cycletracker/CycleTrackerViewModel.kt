@@ -39,6 +39,7 @@ class CycleTrackerViewModel @Inject constructor(
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
 ) : BaseViewModel() {
 
+    var isCalendarSetupDone: Boolean = false
     var todayDate = LocalDate.now()
     var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
     var lastPeriodDate: LocalDate? = null
@@ -67,12 +68,19 @@ class CycleTrackerViewModel @Inject constructor(
 
     var healthDataDateList = HashMap<LocalDate, DayState>()
 
+    var lastDataLoadedFor: String? = null
 
     fun getDataForDate(date: String) {
+
+        if (date.equals(lastDataLoadedFor)) return
+
+        lastDataLoadedFor = date
+
         viewModelScope.launch {
             femaleHealthRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
+                        lastDataLoadedFor = null
                         sendMessage(resource.message)
                     }
 
@@ -81,6 +89,7 @@ class CycleTrackerViewModel @Inject constructor(
                     }
 
                     is Resource.NetworkError -> {
+                        lastDataLoadedFor = null
                         setApiErrors(resource.response.apply {
                             this.uiComponentType as UIComponentType.RetryApiDialog
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
@@ -98,6 +107,7 @@ class CycleTrackerViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
+                            lastDataLoadedFor = null
                             _femaleHealthData.postValue(it)
 
                             val symList = ArrayList<Pair<String, String>>()
@@ -340,6 +350,7 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     fun onWeekScrolled(date: LocalDate) {
+
         if (date > selectedDate.value) {
             val days = abs(ChronoUnit.DAYS.between(date, selectedDate.value))
             val diff = days % 7
@@ -381,12 +392,12 @@ class CycleTrackerViewModel @Inject constructor(
         var minValue = 2.5f
         var maxValue = -2.5f
 
-        items.add(ItemTemp(null, phase = CyclePhase.FOLLECULAR,0, ""))
+        items.add(ItemTemp(null, phase = CyclePhase.FOLLECULAR, 0, ""))
 
         tempData.forEachIndexed { index, i ->
             val phase = getCurrentPhase(i.date)
 
-            items.add(ItemTemp(i.temperature, phase,index + 1, i.date))
+            items.add(ItemTemp(i.temperature, phase, index + 1, i.date))
 
             i.temperature?.let { temp ->
                 if (temp < minValue) {
@@ -416,7 +427,7 @@ class CycleTrackerViewModel @Inject constructor(
 
         cycleHistoryData.value?.cycleHistory?.forEach {
             val periodStart = LocalDate.parse(it.periodDate)
-            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong()?:1).minusDays(1)
+            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong() ?: 1).minusDays(1)
             val ovDate = if (it.ovulationStartDate != null) {
                 LocalDate.parse(it.ovulationStartDate)
             } else {
@@ -526,7 +537,8 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     fun isPastCycle(selectedDateLocal: LocalDate): Boolean {
-        val periodDate = cycleHistoryData.value?.cycleHistory?.firstOrNull()?.periodDate ?: return false
+        val periodDate =
+            cycleHistoryData.value?.cycleHistory?.firstOrNull()?.periodDate ?: return false
         val periodDateLocal = LocalDate.parse(periodDate)
         return selectedDateLocal < periodDateLocal
     }
