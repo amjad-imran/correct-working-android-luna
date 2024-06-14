@@ -15,6 +15,7 @@ import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -40,6 +41,12 @@ class ChatGptViewModel
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
+
+    private val _scrollToBottom = MutableLiveData<Event<Boolean>>()
+    val scrollToBottom: LiveData<Event<Boolean>>
+        get() = _scrollToBottom
+
+
 
     var assistantId: String? = null
     var threadId: String? = null
@@ -71,6 +78,7 @@ class ChatGptViewModel
         }
         messages.add(ChatGptOverview.ThinkingMessage())
         _chatGptOverview.value = (messages)
+        _scrollToBottom.postValue(Event(true))
     }
 
     //TODO optimize

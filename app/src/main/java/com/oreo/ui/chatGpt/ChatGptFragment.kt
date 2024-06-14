@@ -128,11 +128,15 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 uiController.onApiErrorReceived(response)
             }
         }
+        viewModel.scrollToBottom.observe(this) {
+            it.getContent()?.let {
+                binding.rv.smoothScrollToPosition(mAdapter.getItemCount() - 1)
+            }
+        }
 
         viewModel.chatGptOverview.observe(this) {
             it?.let {
                 mAdapter.items = it
-                binding.rv.smoothScrollToPosition(it.size - 1)
             }
         }
     }
