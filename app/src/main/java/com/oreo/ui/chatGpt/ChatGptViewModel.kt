@@ -340,7 +340,7 @@ class ChatGptViewModel
         viewModelScope.launch(Dispatchers.IO) {
             val userName = localDataStore.getUser()?.firstName
             val initMessage =
-                "Hello $userName. my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
+                "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
 
             addReceivedMessage(initMessage, false)
         }
