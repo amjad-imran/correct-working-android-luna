@@ -605,10 +605,10 @@ class PeriodTempLineChart : View {
             /*}*/
 
             val sectionStartX =
-                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (15 + section.start) * unitHLenth
+                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (1 + section.start) * unitHLenth
 
             val sectionEndX =
-                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (15 + section.end) * unitHLenth
+                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (1 + section.end) * unitHLenth
 
             rectF.left = sectionStartX/*section.start * unitHLenth + leftWit*/
             rectF.top = topWith

@@ -53,7 +53,7 @@ class CycleInsightDetailsFragment :
             ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#ff84d5"))
             when (viewModel.launchMode) {
                 CycleInsightLaunchMode.CYCLE_LENGTH -> {
-                    tvDays.text = "<21, >25 days"
+                    tvDays.text = "<21, >35 days"
                 }
 
                 CycleInsightLaunchMode.PERIOD_DURATION -> {

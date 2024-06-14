@@ -245,7 +245,9 @@ class SkinTemperatureViewModel @Inject constructor(
          * Generate Sections
          */
         val sections = ArrayList<Section>()
-        getPeriodSection(dataList.last().date, dataList.first().date)?.forEach {
+        val startDate = LocalDate.parse(lastDateFromList).minusDays(14)
+        val endDate = LocalDate.parse(currentDateFromList).plusDays(14)
+        getPeriodSection(startDate.toString(), endDate.toString())?.forEach {
             sections.add(it)
             /* LOGS.d(
                  "sdfsdfsdf -> ${dataList.last().date}, ${dataList.first().date} ${
