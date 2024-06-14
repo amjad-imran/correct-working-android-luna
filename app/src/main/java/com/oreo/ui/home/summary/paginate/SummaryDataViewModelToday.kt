@@ -723,7 +723,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat3(),
                     DateFormats.dateFormat7()
                 ),
-                days = 11,
+                days = data.currentDay ?: 0,
                 predictionString = "Period Date",
                 background = R.drawable.back_card_period_big
             )
@@ -741,7 +741,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat3(),
                     DateFormats.dateFormat7()
                 ),
-                days = 11,
+                days = data.currentDay ?: 0,
                 predictionString = "Ovulation date",
                 background = R.drawable.back_card_ovulation_big
             )
