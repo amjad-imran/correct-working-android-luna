@@ -274,6 +274,7 @@ object AppModule {
         oreoGFitWorkoutDataImpl: OreoGFitWorkoutDataImpl,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
+        keyValueDataSource: KeyValueDataSource,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -298,6 +299,7 @@ object AppModule {
             oreoAutoSportDataImpl,
             oreoRecordedWorkoutDataImpl,
             oreoGFitWorkoutDataImpl,
+            keyValueDataSource
         )
 
 

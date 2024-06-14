@@ -8,13 +8,16 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -24,6 +27,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
@@ -157,8 +161,10 @@ class CycleTrackerFragment :
             }
 
         val currentMonth = YearMonth.now()
+        val calendarStart = viewModel.getCalendarStart()
+
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
-            currentMonth.minusMonths(2).atStartOfMonth(),//TODO change to first period date
+            calendarStart.yearMonth.atStartOfMonth(),
             currentMonth.plusYears(2).atEndOfMonth(),
             DayOfWeek.MONDAY,
         )
@@ -307,7 +313,7 @@ class CycleTrackerFragment :
         }
 
         viewModel.cycleHistoryData.observe(this) {
-            if (it.isNullOrEmpty()) {
+            if (it?.cycleHistory.isNullOrEmpty()) {
                 binding.lytCycleHistory.root.gone()
                 binding.dividerInsight.root.gone()
             } else {
@@ -316,7 +322,7 @@ class CycleTrackerFragment :
                     binding.dividerInsight.root.gone()
                 } else {
                     binding.lytCycleHistory.root.visible()
-                    cycleHistoryAdapter.setData(it.take(3))
+                    cycleHistoryAdapter.setData(it?.cycleHistory!!.take(3))
                 }
             }
             initCalender()
@@ -371,12 +377,12 @@ class CycleTrackerFragment :
                 setNudgesViewPager(it.nudges)
                 setTopData(it)
 
-                if (viewModel.cycleHistoryData.value.isNullOrEmpty()) {
+                if (viewModel.cycleHistoryData.value?.cycleHistory.isNullOrEmpty()) {
                     binding.lytCycleHistory.root.gone()
                 } else {
                     binding.lytCycleHistory.root.visible()
                     cycleHistoryAdapter.setData(
-                        viewModel.cycleHistoryData.value?.take(3) ?: ArrayList()
+                        viewModel.cycleHistoryData.value?.cycleHistory?.take(3) ?: ArrayList()
                     )
                 }
 

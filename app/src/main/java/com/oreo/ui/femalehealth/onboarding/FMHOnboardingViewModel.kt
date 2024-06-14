@@ -246,7 +246,7 @@ class FMHOnboardingViewModel @Inject constructor(
                             goalTypeSelected = null
                             selectedDiagnoseListData.clear()
                             selectedHormoneListData.clear()
-                            selectedPEndDate = null
+                            selectedPStartDate = null
                             selectedPEndDate = null
                         }
                     }
@@ -264,6 +264,15 @@ class FMHOnboardingViewModel @Inject constructor(
         if (pDays != 0 && selectedPStartDate != null && selectedPEndDate != null) {
             selectedPEndDate = selectedPStartDate!!.plusDays(pDays.toLong() - 1)
         }
+    }
+
+    fun resetData() {
+        goalTypeSelected = null
+        selectedDiagnoseListData.clear()
+        selectedHormoneListData.clear()
+        selectedPStartDate = null
+        selectedPEndDate = null
+
     }
 
 }

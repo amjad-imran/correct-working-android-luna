@@ -4,12 +4,15 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
 import com.oreo.data.model.FMHCycleHistoryDataModel
@@ -46,8 +49,8 @@ class CycleTrackerViewModel @Inject constructor(
     private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel?>()
     val femaleHealthData: LiveData<FemaleHealthUserInfoModel?> get() = _femaleHealthData
 
-    private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
-    val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
+    private val _cycleHistoryData = MutableLiveData<PeriodCycleHistory?>()
+    val cycleHistoryData: LiveData<PeriodCycleHistory?> get() = _cycleHistoryData
 
     private val _avgInsightData = MutableLiveData<Pair<Int, Int>?>()
     val avgInsightData: LiveData<Pair<Int, Int>?> get() = _avgInsightData
@@ -235,7 +238,7 @@ class CycleTrackerViewModel @Inject constructor(
                         is FemaleHealthGeneratorResult.Success -> {
                             healthDataDateList.clear()
                             healthDataDateList = resource.value
-                            _cycleHistoryData.postValue(cycleData.cycleHistory)
+                            _cycleHistoryData.postValue(cycleData)
 
 
                             if (cycleData.avg == null) {
@@ -322,7 +325,7 @@ class CycleTrackerViewModel @Inject constructor(
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
         val isDateSelected = date == selectedDate.value
 
-        val history = cycleHistoryData.value
+        val history = cycleHistoryData.value?.cycleHistory
         if (history.isNullOrEmpty()) {
             return Pair(DayState.Default, isDateSelected)
         }
@@ -381,8 +384,7 @@ class CycleTrackerViewModel @Inject constructor(
         items.add(ItemTemp(null, phase = CyclePhase.FOLLECULAR,0, ""))
 
         tempData.forEachIndexed { index, i ->
-            val phase = getCurrentPhase(i.date)//TODO calculate on the bases of data
-
+            val phase = getCurrentPhase(i.date)
 
             items.add(ItemTemp(i.temperature, phase,index + 1, i.date))
 
@@ -412,14 +414,15 @@ class CycleTrackerViewModel @Inject constructor(
 
         var phase: CyclePhase? = null
 
-        cycleHistoryData.value?.forEach {
+        cycleHistoryData.value?.cycleHistory?.forEach {
             val periodStart = LocalDate.parse(it.periodDate)
-            val periodEnd = periodStart.plusDays(it.periodLength?.toLong() ?: 0L)
+            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong()?:1).minusDays(1)
             val ovDate = if (it.ovulationStartDate != null) {
                 LocalDate.parse(it.ovulationStartDate)
             } else {
                 null
             }
+
 
             if (localDate in periodStart..periodEnd) {
                 phase = if (ovDate != null && localDate > ovDate) {
@@ -438,7 +441,7 @@ class CycleTrackerViewModel @Inject constructor(
 
     private fun getPeriodSection(startDate: String, endDate: String): List<Section>? {
 
-        val history = cycleHistoryData.value
+        val history = cycleHistoryData.value?.cycleHistory
         if (history.isNullOrEmpty()) return null
         val sections = ArrayList<Section>()
 
@@ -523,7 +526,7 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     fun isPastCycle(selectedDateLocal: LocalDate): Boolean {
-        val periodDate = cycleHistoryData.value?.firstOrNull()?.periodDate ?: return false
+        val periodDate = cycleHistoryData.value?.cycleHistory?.firstOrNull()?.periodDate ?: return false
         val periodDateLocal = LocalDate.parse(periodDate)
         return selectedDateLocal < periodDateLocal
     }
@@ -531,6 +534,13 @@ class CycleTrackerViewModel @Inject constructor(
     fun isPastCycleLogic2(selectedDateLocal: LocalDate): Boolean {
         val periodDateLocal = lastPeriodDate ?: return false
         return selectedDateLocal < periodDateLocal
+    }
+
+    fun getCalendarStart(): LocalDate {
+        val periodDate = cycleHistoryData.value?.userDefault?.calendarStart ?: run {
+            cycleHistoryData.value?.userDefault?.firstPeriodDate ?: "2024-03-01"
+        }
+        return LocalDate.parse(periodDate)
     }
 
 }

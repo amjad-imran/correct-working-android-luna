@@ -266,7 +266,7 @@ class SkinTemperatureViewModel @Inject constructor(
 
         cycleHistoryData.value?.forEach {
             val periodStart = LocalDate.parse(it.periodDate)
-            val periodEnd = periodStart.plusDays(it.periodLength?.toLong() ?: 0L)
+            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong()?:1).minusDays(1)
             val ovDate = if (it.ovulationStartDate != null) {
                 LocalDate.parse(it.ovulationStartDate)
             } else {

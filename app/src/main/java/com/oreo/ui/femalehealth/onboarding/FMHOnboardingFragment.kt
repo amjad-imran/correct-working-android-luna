@@ -24,6 +24,7 @@ class FMHOnboardingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+        mViewModel.resetData()
         setViewpager()
     }
 

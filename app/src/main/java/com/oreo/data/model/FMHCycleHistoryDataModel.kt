@@ -21,7 +21,7 @@ data class CycleAverage(
 )
 
 data class CycleDetailsDefault(
-    @SerializedName("calendar_date")
+    @SerializedName("calendar_start")
     val calendarStart: String? = null,
     @SerializedName("first_period_date")
     val firstPeriodDate: String? = null,

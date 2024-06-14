@@ -3,6 +3,8 @@ package com.oreo.data.repository.implementation
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
@@ -79,6 +81,7 @@ class OreoSyncRepositoryImpl(
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
     private val oreoGFitWorkoutDataImpl: OreoGFitWorkoutDataImpl,
+    private val keyValueDataSource: KeyValueDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoSyncRepository {
 
@@ -450,7 +453,9 @@ class OreoSyncRepositoryImpl(
             )
         )
         data.sleepData?.let {
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
             sleepDataImpl.updateServerSyncData(it, todayTimeStampForSleep)
+
         }
 
     }
