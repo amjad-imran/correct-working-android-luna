@@ -46,6 +46,7 @@ class OreoMyDeviceFragment :
     BaseFragment<FragmentOreoMyDeviceBinding>(FragmentOreoMyDeviceBinding::inflate) {
     private val mViewModel: OMyDeviceViewModel by viewModels()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private var isActivelyRequestFwLog = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,6 +105,7 @@ class OreoMyDeviceFragment :
         }
         binding.rowShareFirmwareLogs.setOnClickListener {
             if (mViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                isActivelyRequestFwLog = true
                 mViewModel.setLoading(true)
                 mViewModel.sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
             } else {
@@ -190,6 +192,7 @@ class OreoMyDeviceFragment :
         }
 
         mViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+            if (!isActivelyRequestFwLog) return@observe
             when (state) {
                 0/*START*/ -> mViewModel.setLoading(true)
 
@@ -212,6 +215,7 @@ class OreoMyDeviceFragment :
                         } else {
                             context.showShortToast("No logs")
                         }
+                        isActivelyRequestFwLog = false
                     }
                 }
             }
