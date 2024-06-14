@@ -870,7 +870,7 @@ class OreoReadinessFragment :
 
                 val deviation = it.avg_temp.value - baselineAvg
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format("%.1f °F", deviation)
+                    String.format("%.1f°F (%.2f)",it.avg_temp.value, deviation)
             } else {
                 binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
@@ -891,8 +891,7 @@ class OreoReadinessFragment :
                     val deviation = todayAvg - baselineAvg
 
                     binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                        String.format("%.1f °F", deviation)
-
+                        String.format("%.1f°F (%.2f)",todayAvg, deviation)
 
                 } else {
                     binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"

@@ -73,7 +73,13 @@ class BodyTempScoreDetailFragment :
                     DateFormats.dateFormat7()
                 )
             }"
-            binding.tvDeviationValue.text = "${it.deviation}°"
+
+            binding.tvDeviationValue.text = if (it.data == 0.0f) {
+                "-"
+            } else {
+                String.format("%.1f°F (%.2f)", it.data, it.deviation)
+            }
+            //"${it.deviation}°"
         }
 //        binding.tvBaseline.text = "${if (it.trendData?.base == null) "-" else it.trendData.base}°"
 
@@ -268,7 +274,12 @@ class BodyTempScoreDetailFragment :
                         DateFormats.dateFormat7()
                     )
                 }"
-                binding.tvDeviationValue.text = "${chartModel.valueFloat}°"
+
+                binding.tvDeviationValue.text = if (chartModel.valueFloat2 == 0.0f) {
+                    "-"
+                } else {
+                    String.format("%.1f°F (%.2f)", chartModel.valueFloat2, chartModel.valueFloat)
+                }
             }
         }
     }
