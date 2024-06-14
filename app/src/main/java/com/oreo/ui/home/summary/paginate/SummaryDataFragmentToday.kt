@@ -23,6 +23,7 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -33,9 +34,11 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
@@ -60,6 +63,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -703,12 +707,29 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytConnectHelp.root.visible()
                 val logsSync = mainViewModel.shouldSyncAutoLogs()
                 if (logsSync) {
-                    context?.let { ctx ->
-                        val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                    if (mainViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                        mainViewModel.sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
+                    } else {
+                        context?.let { ctx ->
+                            val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                        }
                     }
                 }
             } else {
                 binding.contentMain.lytConnectHelp.root.gone()
+            }
+        }
+
+        mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+            when (state) {
+                2/*END*/ -> {
+                    mainViewModel.viewModelScope.launch {
+                        delay(1000)
+                        context?.let { ctx ->
+                            val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                        }
+                    }
+                }
             }
         }
 

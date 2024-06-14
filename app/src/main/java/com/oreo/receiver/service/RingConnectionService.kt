@@ -1599,6 +1599,10 @@ constructor() : LifecycleService() {
         override fun onQueryDataReceived(queryCallback: QueryCallback) {
 
             when (queryCallback) {
+                is QueryCallback.UpdateFirmwareLogStatus -> {
+                    sessionManager.firmwareLogsStatus.postValue(queryCallback.fwLogStatus)
+                }
+
                 is QueryCallback.BatteryAlertObtained -> {
                     batteryNotificationUtils.handleBatteryNotification(
                         queryCallback.batteryLevel

@@ -35,7 +35,7 @@ object ZhBleLogUtils {
 
         bleZhLogger = ZhLoggerBuilder(context)
             .setIsWriteLog(isWriteLog)
-            .setExpiredDay(7)
+            .setExpiredDay(3)
             .setFileDirPath(getDirPath(context, isRelease, ZH_BLE_LOG_DIR_NAME))
             .setPrefixFlag(ZH_BLE_LOG_PREFIX_NAME)
             .setSuffixFlag(ZH_BLE_LOG_SUFFIX_NAME)
@@ -43,7 +43,7 @@ object ZhBleLogUtils {
 
         behaviorLogger = ZhLoggerBuilder(context)
             .setIsWriteLog(isWriteLog)
-            .setExpiredDay(7)
+            .setExpiredDay(3)
             .setFileDirPath(getDirPath(context, isRelease, ZH_BEHAVIOR_LOG_DIR_NAME))
             .setPrefixFlag(ZH_BEHAVIOR_LOG_PREFIX_NAME)
             .setSuffixFlag(ZH_BEHAVIOR_LOG_SUFFIX_NAME)
@@ -97,7 +97,7 @@ object ZhBleLogUtils {
                 }.zip"
                 FileUtils.createFileByDeleteOldFile(zipFilePath)
                 val files = FileUtils.listFilesInDirWithFilter(
-                    dir, { pathname -> //取文件夹内所有文件
+                    dir, { pathname -> //取文件夹内所有log文件
                         pathname != null && pathname.absolutePath.endsWith(ZH_BLE_LOG_SUFFIX_NAME)
                     }, false
                 )
@@ -107,7 +107,7 @@ object ZhBleLogUtils {
                             NoisefitApplication.context!!.applicationContext,
                             isRelease,
                             ZH_BEHAVIOR_LOG_DIR_NAME
-                        ), { pathname -> //取文件夹内所有文件
+                        ), { pathname -> //取文件夹内所有log文件
                             pathname != null && pathname.absolutePath.endsWith(
                                 ZH_BLE_LOG_SUFFIX_NAME
                             )

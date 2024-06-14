@@ -228,7 +228,7 @@ constructor(
                     delay(200)
                 }
 
-                val logsSync = shouldSyncAutoLogs()
+                /*val logsSync = shouldSyncAutoLogs()
                 var isLogQuerySent = false
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
@@ -237,7 +237,7 @@ constructor(
                 }
                 if (BuildConfig.DEBUG && !isLogQuerySent) {
                     sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
-                }
+                }*/
 
                 AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
