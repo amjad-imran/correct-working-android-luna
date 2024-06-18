@@ -4,18 +4,15 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
-import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
@@ -37,6 +34,7 @@ import kotlin.math.abs
 class CycleTrackerViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
+    val localDataStore: DataStoredInterface,
 ) : BaseViewModel() {
 
     var isCalendarSetupDone: Boolean = false

@@ -22,7 +22,6 @@ import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
@@ -49,6 +48,13 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
             return Intent(context, LogPeriodActivity::class.java).apply {
             }
         }
+    }
+
+    private fun showCalenderDayLog(date: LocalDate) {
+        if (binding.btnLog.visibility != View.VISIBLE) {
+            binding.btnLog.visible()
+        }
+        viewModel.onCalendarDateClicked(date)
     }
 
     private fun initCalendar() {
@@ -81,7 +87,9 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                             return@setOnClickListener
                         }
 
-                        viewModel.onCalendarDateClicked(day.date)
+
+                        showCalenderDayLog(day.date)
+
                     }
                 }
             }

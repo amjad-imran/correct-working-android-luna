@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.onboarding
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetPeriodBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.enable
@@ -42,9 +43,14 @@ class FMHOnboardSetPeriodFragment :
     }
 
     override fun initListener() {
-        binding.lytBottomControls.bNext.setOnClickListener {
-            mViewModel.onNextPress.value = Event(true)
+
+        binding.lytBottomControls.bNext.apply {
+            this.text = getString(R.string.text_confirm)
+            setOnClickListener {
+                mViewModel.onNextPress.value = Event(true)
+            }
         }
+
         binding.lytBottomControls.bNotSure.setOnClickListener {
             mViewModel.onNotSurePress.value = Event(true)
         }

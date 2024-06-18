@@ -1,15 +1,14 @@
 package com.oreo.ui.femalehealth.onboarding
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetCycleBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.wheel.WheelAdapterPeriod
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,8 +41,11 @@ class FMHOnboardSetCycleFragment :
 
 
     override fun initListener() {
-        binding.lytBottomControls.bNext.setOnClickListener {
-            mViewModel.onNextPress.value = Event(true)
+        binding.lytBottomControls.bNext.apply {
+            this.text = getString(R.string.text_confirm)
+            setOnClickListener {
+                mViewModel.onNextPress.value = Event(true)
+            }
         }
         binding.lytBottomControls.bNotSure.setOnClickListener {
             mViewModel.onNotSurePress.value = Event(true)

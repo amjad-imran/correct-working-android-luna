@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.yearMonth
@@ -17,7 +16,6 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -25,10 +23,8 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
-import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
@@ -436,7 +432,7 @@ class CycleTrackerFragment :
                 tvMoreNight.text = ""
             } else {
                 tvMoreNight.text =
-                    "Data for 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
+                    "Temperature data for upcoming 3 cycles is required" //"Data for ${data.pendingNights} more nights is required"
             }
 
             tvDescription.setVisibilityByCondition(data.message.isNullOrEmpty().not())
@@ -495,13 +491,34 @@ class CycleTrackerFragment :
             }
 
             if (data.isPeriod || data.isOvulation) {
+
                 if (data.isPeriod) {
+                    var isLateFor = false
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
-                        tvStateDay.text = "Day ${data.currentDay}"
+                        tvCurrentState.text = if (data.otaLog) {
+                            binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
+                            "Period"
+                        } else {
+//                            val isCardShownForToday = viewModel.localDataStore.getGotPeriodClickedStatus()
+                            binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
+//                            if (isCardShownForToday) {
+//                                isLateFor = true
+//                                "Period late for"
+//                            } else {
+                                "Predicted period"
+//                            }
+
+                        }
+
+                        tvStateDay.text = if (isLateFor) {
+                            "1 day"
+                        } else {
+                            "Days ${data.currentDay}"
+                        }
                     }
+
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
                 } else {
                     if (selectedDate.equals(data.ovulationDate)) {
@@ -513,8 +530,10 @@ class CycleTrackerFragment :
                         }
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_high)
                     }
+                    binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
                 }
             } else {
+                binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
                 val daysUntilOvulation = if (data.ovulationDate != null) {
                     viewModel.calculateDaysLeft(data.ovulationDate, selectedDate)
                 } else {

@@ -335,8 +335,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )*/
                                 }
 
-                                val isCardShownForToday =
-                                    femaleHealthRepository.getGotPeriodClickedStatus()
+                                val isCardShownForToday = femaleHealthRepository.getGotPeriodClickedStatus()
+                                LOGS.d("ASDsadsad $isCardShownForToday")
                                 if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
 
                                     val periodCurrentDay = femaleData.currentDay

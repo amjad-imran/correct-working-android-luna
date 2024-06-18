@@ -1218,7 +1218,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 if (data.data.temperatureVariation > 0) {
                     "+${data.data.temperatureVariation}"
                 } else {
-                    "-${data.data.temperatureVariation}"
+                    "${data.data.temperatureVariation}"
                 }
             }
             binding.imv.setBackgroundResource(data.data.background)

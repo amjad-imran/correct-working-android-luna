@@ -1153,12 +1153,13 @@
     <string name="text_abnormal">Abnormal</string>
     <string name="text_cycle_history">Cycle history</string>
     <string name="text_ovulation">ovulation</string>
+    <string name="text_fertile_days">fertile days</string>
     <string name="text_period">period</string>
-    <string name="text_skin_temperature_variation">Skin temperature variation</string>
+    <string name="text_ovulation_temperature_variation">Ovulation temperature variation</string>
     <string name="text_cycle_prediction">Cycle prediction</string>
     <string name="text_normal_length">Normal length</string>
     <string name="text_period_duration">Period duration</string>
-    <string name="text_next_estimated_date_for_period_start_will_be_in">Next Estimated Date for period start will be in</string>
+    <string name="text_next_estimated_date_for_period_start_will_be_in">Next estimated date for period start will be in</string>
     <string name="text_follicular">follicular</string>
     <string name="text_luteal">luteal</string>
     <string name="text_cycle_tracker">Cycle tracker</string>

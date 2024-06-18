@@ -35,7 +35,7 @@ class FMHSkinTemperatureFragment :
         viewModel.selectedDate = args.selectedDate
 
         binding.lytToolbar.apply {
-            tvTitle.text = getString(R.string.text_skin_temperature_variation)
+            tvTitle.text = getString(R.string.text_ovulation_temperature_variation)
             view1.invisible()
             ivAddFriend.invisible()
             view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
@@ -124,7 +124,7 @@ class FMHSkinTemperatureFragment :
                     binding.tvDate.context, R.color.color_period
                 )
             )
-            lytOvulation.tvText.text = getText(R.string.text_ovulation)
+            lytOvulation.tvText.text = getText(R.string.text_fertile_days)
             lytOvulation.viewColor.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
                     binding.tvDate.context, R.color.color_ovulation
