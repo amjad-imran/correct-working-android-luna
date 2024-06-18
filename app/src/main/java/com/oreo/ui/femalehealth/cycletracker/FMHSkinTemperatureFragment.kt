@@ -57,7 +57,7 @@ class FMHSkinTemperatureFragment :
             binding.lytPrediction.apply {
                 tvMoreNight.visible()
                 divider1.root.visible()
-                ivInfo.invisible()
+                ivInfo.visible()
                 tvMoreNight.text ="Data for 3 cycles is required"
                     //"Data for ${data.pendingNights} more nights is required"
             }
@@ -147,6 +147,13 @@ class FMHSkinTemperatureFragment :
     }
 
     override fun initListener() {
+        binding.lytPrediction.ivInfo.setOnClickListener {
+            navigate(
+                R.id.dialogCtOvulationInfo, Bundle().apply {
+                    this.putString("launchMode", "Ovulation Graph Details")
+                }
+            )
+        }
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -168,6 +175,11 @@ class FMHSkinTemperatureFragment :
         }
 
         viewModel.tempData.observe(this) {
+            if(it.nudge == null){
+                binding.tvDescription.gone()
+            }else{
+                binding.tvDescription.visible()
+            }
             binding.tvDescription.text = it.nudge?.message
             updateGraph(it.temp ?: ArrayList())
             setPredictionUI(it)

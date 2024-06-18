@@ -939,7 +939,7 @@ class SummaryDataFragmentToday :
                 if (data.data.temperatureVariation > 0) {
                     "+${data.data.temperatureVariation}"
                 } else {
-                    "-${data.data.temperatureVariation}"
+                    "${data.data.temperatureVariation}"
                 }
             }
             this.imv.setBackgroundResource(data.data.background)

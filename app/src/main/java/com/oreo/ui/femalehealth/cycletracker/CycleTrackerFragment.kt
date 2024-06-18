@@ -174,6 +174,13 @@ class CycleTrackerFragment :
 
     override fun initListener() {
 
+        binding.lytPrediction.vCard.ivInfo.setOnClickListener {
+            navigate(
+                R.id.dialogCtOvulationInfo, Bundle().apply {
+                    this.putString("launchMode", "Ovulation Graph")
+                }
+            )
+        }
         binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
             viewModel.onWeekScrolled(weekDays.days.get(0).date)
 
@@ -444,10 +451,10 @@ class CycleTrackerFragment :
                 divider1.root.gone()
             } else {
                 tvMoreNight.visible()
-                ivInfo.invisible()
+                ivInfo.visible()
                 divider1.root.visible()
                 tvMoreNight.text =
-                    "Data for 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
+                    "Temperature data for upcoming 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
             }
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))
