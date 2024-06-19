@@ -58,7 +58,7 @@ class FMHSkinTemperatureFragment :
                 tvMoreNight.visible()
                 divider1.root.visible()
                 ivInfo.visible()
-                tvMoreNight.text ="Data for 3 cycles is required"
+                tvMoreNight.text ="Temperature data for upcoming 3 cycles is required"
                     //"Data for ${data.pendingNights} more nights is required"
             }
         }

@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toStartOf="@+id/ivInfo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivInfo"
-            tools:text="Data for 56 more nights is required" />
+            tools:text="Temperature data for upcoming 3 cycles is required" />
 
         <ImageView
             android:id="@+id/ivInfo"
