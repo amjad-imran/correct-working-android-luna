@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.yearMonth
@@ -23,6 +24,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
@@ -32,6 +34,7 @@ import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
+import com.oreo.ui.workout.details.NudgeBgColor
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
@@ -386,8 +389,10 @@ class CycleTrackerFragment :
                     binding.lytInsight.root.visible()
                 }
 
-                setNudgesViewPager(it.nudges)
+
+
                 setTopData(it)
+                setNudgesViewPager(it.nudges, it)
 
                 if (viewModel.cycleHistoryData.value?.cycleHistory.isNullOrEmpty()) {
                     binding.lytCycleHistory.root.gone()
@@ -478,7 +483,7 @@ class CycleTrackerFragment :
                 btnLog.isEnabled = true
             }
 
-            var isPastDate = viewModel.isPastCycle(selectedDateLocal)
+            val isPastDate = viewModel.isPastCycle(selectedDateLocal)
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
             tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"
@@ -500,7 +505,6 @@ class CycleTrackerFragment :
             if (data.isPeriod || data.isOvulation) {
 
                 if (data.isPeriod) {
-                    var isLateFor = false
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
@@ -508,22 +512,12 @@ class CycleTrackerFragment :
                             binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
                             "Period"
                         } else {
-//                            val isCardShownForToday = viewModel.localDataStore.getGotPeriodClickedStatus()
                             binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
-//                            if (isCardShownForToday) {
-//                                isLateFor = true
-//                                "Period late for"
-//                            } else {
-                                "Predicted period"
-//                            }
+                            "Predicted period"
 
                         }
 
-                        tvStateDay.text = if (isLateFor) {
-                            "1 day"
-                        } else {
-                            "Days ${data.currentDay}"
-                        }
+                        tvStateDay.text = "Days ${data.currentDay}"
                     }
 
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
@@ -588,7 +582,10 @@ class CycleTrackerFragment :
         binding.lytTrackerTop.tvStateDay.text = "Day $currentDay"
     }
 
-    private fun setNudgesViewPager(data: List<Nudges>?) {
+    private fun setNudgesViewPager(
+        data: List<Nudges>?,
+        femaleHealthUserInfoModel: FemaleHealthUserInfoModel
+    ) {
 
         if (data.isNullOrEmpty()) {
             binding.dividerCues.root.gone()
@@ -598,9 +595,24 @@ class CycleTrackerFragment :
             binding.dividerCues.root.visible()
             binding.lytCues.root.visible()
         }
+
+        var nudgeBgColor = NudgeBgColor.NONE
+        if (femaleHealthUserInfoModel.isPeriod) {
+            nudgeBgColor = NudgeBgColor.PERIOD_HIGH
+        } else if (femaleHealthUserInfoModel.isOvulation) {
+            nudgeBgColor = NudgeBgColor.OVULATION_HIGH
+        }
+
+        val currentState = binding.lytTrackerTop.tvCurrentState.text.toString()
+        if (currentState.equals("Period in",true)) {
+            nudgeBgColor = NudgeBgColor.PERIOD_LOW
+        }else if (currentState.equals("Ovulation in",true)) {
+            nudgeBgColor = NudgeBgColor.OVULATION_LOW
+        }
+
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it))
+            fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor))
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytCues.vpBannerSlider.apply {

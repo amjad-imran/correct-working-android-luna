@@ -35,7 +35,7 @@ class BottomSheetCTOvulationInfo :
             )
         }else if (args.launchMode == "Ovulation Graph") {
             binding.tvTitle.gone()
-            binding.tvDesc.text = "The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles."
+            binding.tvDesc.text = getString(R.string.text_ovulation_graph_bottom)
             binding.tvTitle.setTextColor(
                 ContextCompat.getColor(
                     binding.tvTitle.context,
@@ -44,7 +44,7 @@ class BottomSheetCTOvulationInfo :
             )
         }else if (args.launchMode == "Ovulation Graph Details") {
             binding.tvTitle.gone()
-            binding.tvDesc.text = "The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles. "
+            binding.tvDesc.text = getString(R.string.text_ovulation_graph_detail_bottom)
             binding.tvTitle.setTextColor(
                 ContextCompat.getColor(
                     binding.tvTitle.context,

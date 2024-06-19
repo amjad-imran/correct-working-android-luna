@@ -7,9 +7,20 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="12dp"
-        android:background="@drawable/ic_nudge_readiness"
         android:layout_marginBottom="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="0dp"
+            android:id="@+id/bgImv"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ic_nudge_readiness"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
 
         <TextView
             android:id="@+id/tvTitle"
@@ -34,6 +45,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
             android:lineSpacingExtra="6sp"
+            android:paddingBottom="12dp"
             android:textColor="@color/white_48"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

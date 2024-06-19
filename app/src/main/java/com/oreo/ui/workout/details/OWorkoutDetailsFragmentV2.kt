@@ -388,7 +388,7 @@ class OWorkoutDetailsFragmentV2 :
         }
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it))
+            fragments.add(WorkoutNudgeFragment.newInstance(it,NudgeBgColor.NONE))
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytTop.lytCues.vpBannerSlider.apply {

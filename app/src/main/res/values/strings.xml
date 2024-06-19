@@ -1220,6 +1220,7 @@
     <string name="text_got_your_period">Got your period?</string>
     <string name="text_averages_are_based_on_last_6_cycles">Averages are based on last 6 cycles</string>
     <string name="text_contraceptives_message">Hormones, like any other contraceptives, may affect your natural temperature variation.</string>
-
+    <string name="text_ovulation_graph_bottom">The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles.\n\nAfter gathering data for three cycles, we predict your cycle phase based on temperature variations.</string>
+    <string name="text_ovulation_graph_detail_bottom">The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles.\n\nAfter gathering data for three cycles, we predict your cycle phase based on temperature variations.\n\nThe Luna ring compares 3 continuous nights temperature with current night temperature to calculate variation. In the first part of the cycle, the follicular phase, the skin temperature may be cooler. In the second part of the cycle, the luteal phase, skin temperature typically rises.</string>
 
 </resources>

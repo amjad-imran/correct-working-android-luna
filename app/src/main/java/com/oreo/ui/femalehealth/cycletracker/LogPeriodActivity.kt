@@ -28,7 +28,6 @@ import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
 
 @AndroidEntryPoint
@@ -50,11 +49,10 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
         }
     }
 
-    private fun showCalenderDayLog(date: LocalDate) {
+    private fun showBtnLog() {
         if (binding.btnLog.visibility != View.VISIBLE) {
             binding.btnLog.visible()
         }
-        viewModel.onCalendarDateClicked(date)
     }
 
     private fun initCalendar() {
@@ -77,6 +75,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                             return@setOnClickListener
                         }
 
+                        showBtnLog()
                         if (day.date == viewModel.todayDate) {
                             val (state, selected) = viewModel.getCurrentState(day.date)
                             if (state is DayState.Period) {
@@ -87,9 +86,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                             return@setOnClickListener
                         }
 
-
-                        showCalenderDayLog(day.date)
-
+                        viewModel.onCalendarDateClicked(day.date)
                     }
                 }
             }

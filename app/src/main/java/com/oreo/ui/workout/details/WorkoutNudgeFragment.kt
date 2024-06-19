@@ -11,6 +11,7 @@ import com.oreo.data.model.health.Nudges
 import dagger.hilt.android.AndroidEntryPoint
 
 const val WORKOUT_NUDGE = "WORKOUT_NUDGE"
+const val NUDGE_BG_KEY = "NUDGE_BG_KEY"
 
 @AndroidEntryPoint
 class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
@@ -18,14 +19,15 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
 ) {
 
     private var bannerData: Nudges? = null
+    private var nudgeBgColor: String? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges) =
+        fun newInstance(data: Nudges, nudgeBgColor: NudgeBgColor) =
             WorkoutNudgeFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(WORKOUT_NUDGE, data)
-
+                    putString(NUDGE_BG_KEY, nudgeBgColor.name)
                 }
             }
     }
@@ -34,6 +36,7 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
         super.onCreate(savedInstanceState)
         arguments?.let {
             bannerData = it.getParcelable(WORKOUT_NUDGE)
+            nudgeBgColor = it.getString(NUDGE_BG_KEY)
         }
     }
 
@@ -43,7 +46,28 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
     }
 
     private fun setUi(bannerData: Nudges?) {
-        binding.rootView.setBackgroundResource(R.drawable.ic_nudge_activity)
+        when (nudgeBgColor) {
+            NudgeBgColor.OVULATION_HIGH.name -> {
+                binding.bgImv.setBackgroundResource(R.drawable.bg_ovulation_main)
+            }
+
+            NudgeBgColor.OVULATION_LOW.name -> {
+                binding.bgImv.setBackgroundResource(R.drawable.bg_ovulation_low)
+            }
+
+            NudgeBgColor.PERIOD_LOW.name -> {
+                binding.bgImv.setBackgroundResource(R.drawable.bg_period_low)
+            }
+
+            NudgeBgColor.PERIOD_HIGH.name -> {
+                binding.bgImv.setBackgroundResource(R.drawable.bg_period_main)
+            }
+
+            else -> {
+                binding.bgImv.setBackgroundResource(R.drawable.ic_nudge_activity)
+            }
+        }
+
         binding.tvTitle.text = bannerData?.label
         if (bannerData?.label.isNullOrEmpty()) {
             binding.tvTitle.gone()
@@ -62,4 +86,12 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
     }
 
 
+}
+
+enum class NudgeBgColor {
+    NONE,
+    PERIOD_HIGH,
+    PERIOD_LOW,
+    OVULATION_HIGH,
+    OVULATION_LOW
 }
