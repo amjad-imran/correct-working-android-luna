@@ -47,19 +47,11 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
 
     private fun setUi(bannerData: Nudges?) {
         when (nudgeBgColor) {
-            NudgeBgColor.OVULATION_HIGH.name -> {
+            NudgeBgColor.OVULATION_HIGH.name, NudgeBgColor.OVULATION_LOW.name -> {
                 binding.bgImv.setBackgroundResource(R.drawable.bg_ovulation_main)
             }
 
-            NudgeBgColor.OVULATION_LOW.name -> {
-                binding.bgImv.setBackgroundResource(R.drawable.bg_ovulation_low)
-            }
-
-            NudgeBgColor.PERIOD_LOW.name -> {
-                binding.bgImv.setBackgroundResource(R.drawable.bg_period_low)
-            }
-
-            NudgeBgColor.PERIOD_HIGH.name -> {
+            NudgeBgColor.PERIOD_HIGH.name, NudgeBgColor.PERIOD_LOW.name -> {
                 binding.bgImv.setBackgroundResource(R.drawable.bg_period_main)
             }
 
