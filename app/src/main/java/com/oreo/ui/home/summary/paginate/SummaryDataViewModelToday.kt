@@ -753,7 +753,7 @@ class SummaryDataViewModelToday @Inject constructor(
             return null
         }
 
-        return list.getOrNull(0)?.temperature ?: 0f
+        return list.getOrNull(0)?.temperature ?: null
 //        if (list.size < 4) {
 //            return null
 //        }

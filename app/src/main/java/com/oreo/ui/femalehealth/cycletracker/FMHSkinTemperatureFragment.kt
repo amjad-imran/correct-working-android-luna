@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHSkinTemperatureBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -100,10 +101,14 @@ class FMHSkinTemperatureFragment :
         //val tempList = viewModel.getDummyTempList()
         val topGraphData = viewModel.getPrefixAndSuffixList(temp)
 
+        LOGS.d("sdalsadkljsdkal ${Gson().toJson(temp)}")
 
-        temp.getOrNull(0)?.let {
-            updateTopUi(it.date, it.temperature)
+        temp.forEach {
+            if( viewModel.selectedDate == it.date){
+                updateTopUi(it.date, it.temperature)
+            }
         }
+     
 
         binding.lytSkinTemp.vGraph.updateData(
             topGraphData.second.first,
