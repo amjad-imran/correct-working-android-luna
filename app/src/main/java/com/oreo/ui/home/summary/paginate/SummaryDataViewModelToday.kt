@@ -753,25 +753,26 @@ class SummaryDataViewModelToday @Inject constructor(
             return null
         }
 
-        if (list.size < 4) {
-            return null
-        }
-
-        try {
-            val first = list[0].temperature
-            val second = list[1].temperature
-            val third = list[2].temperature
-            val fourth = list[3].temperature
-
-            if (first == null || second == null || third == null || fourth == null) {
-                return null
-            }
-
-            val variation = first - ((second + third + fourth) / 2)
-            return variation
-        } catch (exp: Exception) {
-            return null
-        }
+        return list.getOrNull(0)?.temperature ?: 0f
+//        if (list.size < 4) {
+//            return null
+//        }
+//
+//        try {
+//            val first = list[0].temperature
+//            val second = list[1].temperature
+//            val third = list[2].temperature
+//            val fourth = list[3].temperature
+//
+//            if (first == null || second == null || third == null || fourth == null) {
+//                return null
+//            }
+//
+//            val variation = first - ((second + third + fourth) / 2)
+//            return variation
+//        } catch (exp: Exception) {
+//            return null
+//        }
     }
 
     private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
