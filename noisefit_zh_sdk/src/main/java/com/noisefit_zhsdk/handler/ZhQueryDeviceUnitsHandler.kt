@@ -1148,13 +1148,18 @@ constructor(
     private fun initLogListener() {
         CallBackUtils.firmwareLogStateCallBack = object : FirmwareLogStateCallBack {
             override fun onFirmwareLogState(state: Int) {
-                if (state == FirmwareLogStateCallBack.FirmwareLogState.START.state) {
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.UpdateFirmwareLogStatus(
+                        state
+                    )
+                )
+                /*if (state == FirmwareLogStateCallBack.FirmwareLogState.START.state) {
 
                 } else if (state == FirmwareLogStateCallBack.FirmwareLogState.UPLOADING.state) {
 
                 } else if (state == FirmwareLogStateCallBack.FirmwareLogState.END.state) {
 
-                }
+                }*/
             }
 
             override fun onFirmwareLogFilePath(filePath: String?) {

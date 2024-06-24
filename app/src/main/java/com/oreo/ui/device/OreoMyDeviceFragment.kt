@@ -35,16 +35,18 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.internal.ThreadUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class OreoMyDeviceFragment :
     BaseFragment<FragmentOreoMyDeviceBinding>(FragmentOreoMyDeviceBinding::inflate) {
     private val mViewModel: OMyDeviceViewModel by viewModels()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private var isActivelyRequestFwLog = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,17 +104,21 @@ class OreoMyDeviceFragment :
                 })
         }
         binding.rowShareFirmwareLogs.setOnClickListener {
-
-
-            if (mViewModel.firmwareLogFile?.exists() == true) {
-                context?.let { ctx ->
-                    ShareUtil.shareFile(
-                        ctx,
-                        FileLogsUtils.geFirmwareLogsUri(mViewModel.firmwareLogFile!!.path, ctx)
-                    )
-                }
+            if (mViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                isActivelyRequestFwLog = true
+                mViewModel.setLoading(true)
+                mViewModel.sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
             } else {
-                context.showShortToast("No logs")
+                if (mViewModel.firmwareLogFile?.exists() == true) {
+                    context?.let { ctx ->
+                        ShareUtil.shareFile(
+                            ctx,
+                            FileLogsUtils.geFirmwareLogsUri(mViewModel.firmwareLogFile!!.path, ctx)
+                        )
+                    }
+                } else {
+                    context.showShortToast("No logs")
+                }
             }
         }
 
@@ -183,8 +189,38 @@ class OreoMyDeviceFragment :
             if (mViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
                 setStateConnected((mViewModel.sessionManager.connectStateRing.value as ConnectState.ConnectSuccess).noiseFitDevice)
             }
-
         }
+
+        mViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+            if (!isActivelyRequestFwLog) return@observe
+            when (state) {
+                0/*START*/ -> mViewModel.setLoading(true)
+
+                1/*UPLOADING*/ -> mViewModel.setLoading(true)
+
+                2/*END*/ -> {
+                    mViewModel.viewModelScope.launch {
+                        delay(1000)
+                        mViewModel.setLoading(false)
+                        if (mViewModel.firmwareLogFile?.exists() == true) {
+                            context?.let { ctx ->
+                                ShareUtil.shareFile(
+                                    ctx,
+                                    FileLogsUtils.geFirmwareLogsUri(
+                                        mViewModel.firmwareLogFile!!.path,
+                                        ctx
+                                    )
+                                )
+                            }
+                        } else {
+                            context.showShortToast("No logs")
+                        }
+                        isActivelyRequestFwLog = false
+                    }
+                }
+            }
+        }
+
 
 
         mViewModel.getLoading().observe(this) {

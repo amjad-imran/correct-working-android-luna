@@ -107,6 +107,8 @@ class SessionManager
     var batteryPercentRing = MutableLiveData(0)
     var isRingCharging = MutableLiveData(false)
 
+    var firmwareLogsStatus = MutableLiveData(-1)
+
     var reloadTodayData = MutableLiveData<Event<Boolean>>()
 
 

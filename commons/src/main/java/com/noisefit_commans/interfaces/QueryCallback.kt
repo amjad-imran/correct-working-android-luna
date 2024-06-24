@@ -76,4 +76,5 @@ sealed class QueryCallback {
     class SOSContactObtained(var sosContact: SOSContact) : QueryCallback()
 
     class SleepReminderObtained(var sleepReminder: SleepReminder) : QueryCallback()
+    class UpdateFirmwareLogStatus(var fwLogStatus: Int) : QueryCallback()
 }
