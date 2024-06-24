@@ -18,6 +18,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
 import com.oreo.data.model.PeriodChartModel
 import com.oreo.ui.custom.ScrollListenerPeriod
@@ -486,7 +487,7 @@ class PeriodLineChart : View {
     }
 
 
-    fun calculateYAxisValues(min: Int, max: Int): List<Int> {
+   /* fun calculateYAxisValues(min: Int, max: Int): List<Int> {
         val yAxisValues = mutableListOf<Int>()
 
         var newMin = min - 10
@@ -501,6 +502,21 @@ class PeriodLineChart : View {
                 yAxisValues.add(currentVal)
             }
             currentVal++
+        }
+
+        return yAxisValues
+    }*/
+
+    fun calculateYAxisValues(min: Int, max: Int): List<Int> {
+        val yAxisValues = mutableListOf<Int>()
+
+        var currentVal = min
+
+        val step = (max - min) / 5
+
+        for (i in 0 until 6) {
+            yAxisValues.add(currentVal)
+            currentVal += step
         }
 
         return yAxisValues
