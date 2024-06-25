@@ -637,7 +637,7 @@ class OreoActivityFragment :
             binding.lytWorkouts.tvEmptyMsg.gone()
             binding.lytWorkouts.ivViewAll.visible()
         } else {
-            binding.lytWorkouts.ivViewAll.invisible()
+            binding.lytWorkouts.ivViewAll.visible()
             binding.lytWorkouts.rvWorkouts.gone()
             binding.lytWorkouts.tvEmptyMsg.visible()
         }
@@ -795,6 +795,9 @@ class OreoActivityFragment :
         }
 
         binding.lytWorkouts.ivViewAll.setOnClickListener {
+            navigate(R.id.oActivityListFragment)
+        }
+        binding.lytWorkouts.textView66.setOnClickListener {
             navigate(R.id.oActivityListFragment)
         }
 
