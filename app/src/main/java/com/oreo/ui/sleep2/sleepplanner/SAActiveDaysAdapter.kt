@@ -20,6 +20,7 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
                 binding.ivItem.setBackgroundResource(R.drawable.circle_select_sa)
             } else
                 binding.ivItem.setBackgroundResource(R.drawable.circle_unselect_sa)
+            binding.tvHour.text=data.name
             binding.ivItem.setOnClickListener {
                 mListener.onItemClick(data, bindingAdapterPosition)
                 notifyDataSetChanged()
