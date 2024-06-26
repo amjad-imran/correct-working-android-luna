@@ -4,6 +4,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@drawable/ic_bg_hm_page"
         android:layout_height="match_parent">
 
         <include
