@@ -825,7 +825,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val navListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
-                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.navigation_oreo_sleep -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.sleepDashFragment -> {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
@@ -921,7 +921,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onBackPressed() {
         navController?.let {
             when (it.currentDestination?.id) {
-                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.navigation_oreo_sleep -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.sleepDashFragment -> {
 
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
@@ -984,9 +984,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
 
                 val lastDestination = navController?.currentDestination
-                if (lastDestination?.id != R.id.navigation_oreo_sleep) {
-                    navController?.popBackStack(R.id.navigation_oreo_sleep, true)
-                    navController?.navigate(R.id.navigation_oreo_sleep)
+                if (lastDestination?.id != R.id.sleepDashFragment) {
+                    navController?.popBackStack(R.id.sleepDashFragment, true)
+                    navController?.navigate(R.id.sleepDashFragment)
                 }
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_sleep_click)
 

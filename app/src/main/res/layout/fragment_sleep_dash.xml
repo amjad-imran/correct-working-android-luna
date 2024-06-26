@@ -1,0 +1,87 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.oreo.ui.sleep2.SleepDashFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="64dp" />
+
+    <com.kizitonwose.calendar.view.WeekCalendarView
+        android:id="@+id/vCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        app:cv_daySize="seventhWidth"
+        app:cv_dayViewResource="@layout/calender_sleep_day"
+        app:cv_orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vCalendar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- top Layout -->
+            <include
+                android:id="@+id/lytScore"
+                layout="@layout/layout_sleep_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin" />
+
+            <!-- Nudges //TODO -->
+
+
+            <!-- Sleep Contributors //TODO -->
+
+
+            <!-- Health Monitor//TODO -->
+
+
+            <!-- Sleep stage analysis//TODO -->
+
+
+            <!-- Night time movements//TODO -->
+
+            <!-- Sleep summary//TODO -->
+
+            <!-- Nap Details//TODO -->
+
+
+            <!-- Trends //TODO -->
+            <include
+                android:id="@+id/lytSleepTrends"
+                layout="@layout/layout_sleep_trends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="64dp" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

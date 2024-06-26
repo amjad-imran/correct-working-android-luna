@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvNoData"
+        style="@style/S28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="--" />
+
+    <TextView
+        android:id="@+id/tvHour"
+        style="@style/S28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="7" />
+
+    <TextView
+        android:id="@+id/textHour"
+        style="@style/S18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/text_hr"
+        android:textColor="@color/white_60" />
+
+    <TextView
+        android:id="@+id/tvMin"
+        style="@style/S28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        tools:text="7" />
+
+    <TextView
+        android:id="@+id/textMin"
+        style="@style/S18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/text_min"
+        android:textColor="@color/white_60" />
+
+
+</LinearLayout>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.oreo.ui.custom.progress.CircularProgressBar
+        android:id="@+id/circularProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:archWidth="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvScore"
+        style="@style/S18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
+        tools:text="82" />
+
+    <TextView
+        android:id="@+id/tvScoreStatus"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvScore"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="@+id/tvScore"
+        app:layout_constraintTop_toBottomOf="@+id/tvScore"
+        tools:text="Optimal"
+        tools:textColor="#29cc74" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_info_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView112"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/text_sleep_needed"
+        android:textColor="@color/white_50"
+        app:layout_constraintEnd_toStartOf="@+id/view35"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view35" />
+
+    <include
+        android:id="@+id/lytSleepNeeded"
+        layout="@layout/layout_hour_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@id/textView112"
+        app:layout_constraintEnd_toEndOf="@+id/textView112"
+        app:layout_constraintTop_toBottomOf="@id/textView112" />
+
+    <View
+        android:id="@+id/view35"
+        android:layout_width="1dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/white_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circularProgressBar" />
+
+
+    <TextView
+        android:id="@+id/textView111"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/text_sleep_duration"
+        android:textColor="@color/white_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toEndOf="@+id/view35"
+        app:layout_constraintTop_toTopOf="@+id/view35" />
+    <include
+        android:id="@+id/lytSleepActual"
+        layout="@layout/layout_hour_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@id/textView111"
+        app:layout_constraintEnd_toEndOf="@+id/textView111"
+        app:layout_constraintTop_toBottomOf="@id/textView111" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

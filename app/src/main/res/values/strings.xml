@@ -1222,5 +1222,9 @@
     <string name="text_contraceptives_message">Hormones, like any other contraceptives, may affect your natural temperature variation.</string>
     <string name="text_ovulation_graph_bottom">The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles.\n\nAfter gathering data for three cycles, we predict your cycle phase based on temperature variations.</string>
     <string name="text_ovulation_graph_detail_bottom">The current period prediction relies on your most recent logged period and your average cycle length. Our algorithm learns the pattern of your menstrual cycle using continuous data of your skin temperature over three cycles.\n\nAfter gathering data for three cycles, we predict your cycle phase based on temperature variations.\n\nThe Luna ring compares 3 continuous nights temperature with current night temperature to calculate variation. In the first part of the cycle, the follicular phase, the skin temperature may be cooler. In the second part of the cycle, the luteal phase, skin temperature typically rises.</string>
+    <string name="text_sleep_needed">Sleep needed</string>
+    <string name="text_trends">Trends</string>
+    <string name="text_last_7_days">Last 7 days</string>
+    <string name="text_sleep_performance">Sleep performance</string>
 
 </resources>
