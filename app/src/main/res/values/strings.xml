@@ -1226,5 +1226,6 @@
     <string name="text_trends">Trends</string>
     <string name="text_last_7_days">Last 7 days</string>
     <string name="text_sleep_performance">Sleep performance</string>
+    <string name="text_desc_msg">These metrics are assessed while you sleep at night. Measuring during this time decreases noise in your data to present more accurate metrics to you</string>
 
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -885,4 +884,9 @@
         android:id="@+id/sleepDashFragment"
         android:name="com.oreo.ui.sleep2.SleepDashFragment"
         android:label="fragment_sleep_dash" />
+    <fragment
+        android:id="@+id/healthMonitorInternal"
+        android:name="com.oreo.ui.internal.OHMInternalFragment"
+        android:label="fragment_health_monitor_internal" />
+
 </navigation>

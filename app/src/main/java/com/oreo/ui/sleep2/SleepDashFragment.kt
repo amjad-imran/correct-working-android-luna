@@ -80,7 +80,9 @@ class SleepDashFragment :
 
 
     override fun initListener() {
-
+        binding.toolbar.viewBackCalendar.setOnClickListener {
+            navigate(R.id.healthMonitorInternal)
+        }
     }
 
     override fun subscribeObservers() {
