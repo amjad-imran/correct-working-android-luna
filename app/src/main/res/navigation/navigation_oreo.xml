@@ -892,5 +892,9 @@
         android:id="@+id/sleepPlannerFragment"
         android:name="com.oreo.ui.sleep2.sleepplanner.SleepPlannerFragment"
         android:label="fragment_sleep_planner" />
+    <fragment
+        android:id="@+id/setAlarmFragment"
+        android:name="com.oreo.ui.sleep2.sleepplanner.SetAlarmFragment"
+        android:label="fragment_set_alarm" />
 
 </navigation>

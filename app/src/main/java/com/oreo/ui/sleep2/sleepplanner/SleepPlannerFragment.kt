@@ -25,9 +25,9 @@ class SleepPlannerFragment :
         binding.lytSetupGoal.tvTitle.text = getString(R.string.text_setup_your_goal)
         binding.lytSetupAlarm.tvTitle.text = getString(R.string.text_setup_alarm)
 
-        binding.lytLegend1.tvTitle.text=getString(R.string.text_extra_sleep_need)
+        binding.lytLegend1.tvTitle.text = getString(R.string.text_extra_sleep_need)
         binding.lytLegend1.ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#a477ff"))
-        binding.lytLegend2.tvTitle.text=getString(R.string.text_avg_sleep_duration)
+        binding.lytLegend2.tvTitle.text = getString(R.string.text_avg_sleep_duration)
         binding.lytLegend2.ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#c5a8ed"))
     }
 
@@ -42,7 +42,7 @@ class SleepPlannerFragment :
             //
         }
         binding.lytSetupAlarm.ivMore.setOnClickListener {
-            //
+            navigate(R.id.setAlarmFragment)
         }
 
 
