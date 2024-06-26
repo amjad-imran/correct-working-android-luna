@@ -888,5 +888,9 @@
         android:id="@+id/healthMonitorInternal"
         android:name="com.oreo.ui.internal.OHMInternalFragment"
         android:label="fragment_health_monitor_internal" />
+    <fragment
+        android:id="@+id/sleepPlannerFragment"
+        android:name="com.oreo.ui.sleep2.sleepplanner.SleepPlannerFragment"
+        android:label="fragment_sleep_planner" />
 
 </navigation>

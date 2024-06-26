@@ -1,0 +1,29 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivColorBox"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="#a477ff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize1dp" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/text_extra_sleep_need"
+            android:textColor="@color/white_60"
+            app:layout_constraintBottom_toBottomOf="@id/ivColorBox"
+            app:layout_constraintStart_toEndOf="@id/ivColorBox"
+            app:layout_constraintTop_toTopOf="@id/ivColorBox" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

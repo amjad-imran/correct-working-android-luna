@@ -2,22 +2,16 @@ package com.oreo.ui.sleep2
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
 import com.moengage.core.internal.utils.getRandomInt
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.oreo.ui.femalehealth.cycletracker.DayState
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -55,7 +49,7 @@ class SleepDashFragment :
                 bind.exSevenDayText.text =
                     DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
 
-                bind.circularProgressBar.setProgress(getRandomInt(20,100))
+                bind.circularProgressBar.setProgress(getRandomInt(20, 100))
 
             }
         }
@@ -82,6 +76,9 @@ class SleepDashFragment :
     override fun initListener() {
         binding.toolbar.viewBackCalendar.setOnClickListener {
             navigate(R.id.healthMonitorInternal)
+        }
+        binding.lytScore.ivInfo.setOnClickListener {
+            navigate(R.id.sleepPlannerFragment)
         }
     }
 
