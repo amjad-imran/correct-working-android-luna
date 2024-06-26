@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemHmInternalBinding
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OHMDataModel
 
 class OHMInternalAdapter(val listener: HMItemClickListener) :
@@ -17,6 +19,16 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
         fun bind(resultData: OHMDataModel) {
             binding.ivIcon.loadImage(binding.ivIcon.context, resultData.icon)
             binding.tvTitle.text = resultData.title
+            if (resultData.value != null) {
+                binding.lytWithHmValue.root.visible()
+                binding.ivForward.gone()
+                binding.lytWithHmValue.tvValue.text = resultData.value
+                binding.lytWithHmValue.tvUnit.text = resultData.unit
+                binding.lytWithHmValue.tvRangeValue.text = resultData.rangeValue
+            } else {
+                binding.lytWithHmValue.root.gone()
+                binding.ivForward.visible()
+            }
             binding.ivForward.setOnClickListener {
                 listener.onItemClick(resultData, bindingAdapterPosition)
             }

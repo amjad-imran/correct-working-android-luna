@@ -1,0 +1,55 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvValue"
+            style="@style/H3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toStartOf="@id/tvUnit"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="14.3" />
+
+        <TextView
+            android:id="@+id/tvUnit"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_60"
+            app:layout_constraintBottom_toBottomOf="@id/tvValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="rpm" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="110dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/back_hm_range"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvValue" />
+
+        <TextView
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_hm_tick"
+            android:drawablePadding="4dp"
+            android:textColor="#29cc74"
+            android:padding="4dp"
+            android:id="@+id/tvRangeValue"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1"
+            tools:text="wihtin 56 - 58"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
