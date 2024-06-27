@@ -7,6 +7,8 @@ import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,14 +34,26 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
         mAdapter.setData(viewModel.getAlarmData())
         binding.lytTopView.lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_sleep)
-        binding.lytTopView.lytBedTime.tvTitle.text=getString(R.string.text_bedtime)
+        binding.lytTopView.lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
 
         binding.lytTopView.lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_sleep)
-        binding.lytTopView.lytWakeupTime.tvTitle.text=getString(R.string.text_wakeup)
-        binding.lytAlarmTime.tvHour.text="4"
-        binding.lytAlarmTime.tvMin.text="30"
-        binding.lytAlarmTime.tvHour.paint.setShader(viewModel.setViewGradient(binding,4.toString()))
-        binding.lytAlarmTime.tvMin.paint.setShader(viewModel.setViewGradient(binding,30.toString()))
+        binding.lytTopView.lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
+        binding.lytAlarmTime.tvHour.text = "4"
+        binding.lytAlarmTime.tvMin.text = "30"
+        binding.lytAlarmTime.tvHour.paint.setShader(
+            viewModel.setViewGradient(
+                binding,
+                4.toString()
+            )
+        )
+        binding.lytAlarmTime.tvMin.paint.setShader(
+            viewModel.setViewGradient(
+                binding,
+                30.toString()
+            )
+        )
+
+
     }
 
     override fun initListener() {
@@ -48,6 +62,13 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
         binding.btnSave.setOnClickListener {
             //
+        }
+        binding.lytAlarmSound.switchMain.setOnCheckedChangeListener { compoundButton, b ->
+            if (b) {
+                binding.lytAlarmSound.lytSoundView.root.visible()
+            } else {
+                binding.lytAlarmSound.lytSoundView.root.gone()
+            }
         }
 
     }

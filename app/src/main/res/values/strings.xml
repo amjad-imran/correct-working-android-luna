@@ -1240,5 +1240,6 @@
     <string name="text_active_days">Active days</string>
     <string name="text_bedtime">Bedtime</string>
     <string name="text_wakeup">Wake up</string>
+    <string name="text_sounds_and_volume">Sounds and volume</string>
 
 </resources>

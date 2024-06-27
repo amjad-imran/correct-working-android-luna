@@ -1,0 +1,62 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_sounds_and_volume"
+            android:textColor="@color/white_64"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_hm_forward"
+            android:drawableTint="#88b0ff"
+            android:textColor="#88b0ff"
+            app:layout_constraintBottom_toBottomOf="@id/textView1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView1"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="Helios" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/ic_volume_up"
+            android:id="@+id/ivLowVol"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView1"
+            tools:ignore="ContentDescription" />
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            app:layout_constraintTop_toTopOf="@id/ivLowVol"
+            app:layout_constraintBottom_toBottomOf="@id/ivLowVol"
+            app:layout_constraintStart_toEndOf="@id/ivLowVol"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:thumb="@null"
+            app:layout_constraintEnd_toStartOf="@id/ivHighVol"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/ic_volume_upto"
+            android:id="@+id/ivHighVol"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView1"
+            tools:ignore="ContentDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
