@@ -145,7 +145,7 @@ class SleepPlannerFragment :
             //
         }
         binding.lytSetupGoal.ivMore.setOnClickListener {
-            //
+            navigate(R.id.dialogSaGoal)
         }
         binding.lytSetupAlarm.ivMore.setOnClickListener {
             navigate(R.id.setAlarmFragment)
