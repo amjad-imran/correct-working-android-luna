@@ -1226,5 +1226,11 @@
     <string name="text_trends">Trends</string>
     <string name="text_last_7_days">Last 7 days</string>
     <string name="text_sleep_performance">Sleep performance</string>
+    <string name="text_hour_vs_need">Hour vs need</string>
+    <string name="text_restorative_sleep">Restorative sleep</string>
+    <string name="text_deep">deep</string>
+    <string name="text_rem">rem</string>
+    <string name="text_need">need</string>
+    <string name="text_hours">hours</string>
 
 </resources>
