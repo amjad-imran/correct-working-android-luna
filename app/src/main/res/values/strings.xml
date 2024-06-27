@@ -1241,5 +1241,6 @@
     <string name="text_bedtime">Bedtime</string>
     <string name="text_wakeup">Wake up</string>
     <string name="text_sounds_and_volume">Sounds and volume</string>
+    <string name="text_alarm_set_for">Alarm set for</string>
 
 </resources>
