@@ -26,7 +26,7 @@
             android:textColor="@color/white_60"
             app:layout_constraintBottom_toBottomOf="@id/tvHour"
             app:layout_constraintStart_toEndOf="@id/tvHour"
-            tools:text="hr" />
+            android:text="@string/text_hr" />
 
         <TextView
             android:id="@+id/tvMin"
@@ -49,7 +49,7 @@
             android:textColor="@color/white_60"
             app:layout_constraintBottom_toBottomOf="@id/tvMin"
             app:layout_constraintStart_toEndOf="@id/tvMin"
-            tools:text="min" />
+            android:text="@string/text_min" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
