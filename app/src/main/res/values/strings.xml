@@ -1232,5 +1232,20 @@
     <string name="text_rem">rem</string>
     <string name="text_need">need</string>
     <string name="text_hours">hours</string>
+    <string name="text_desc_msg">These metrics are assessed while you sleep at night. Measuring during this time decreases noise in your data to present more accurate metrics to you</string>
+    <string name="text_extra_sleep_need">Extra sleep need</string>
+    <string name="text_your_ideal_time_in_bed_for_tonight_is">Your ideal time in bed for tonight is</string>
+    <string name="text_breathing_exercise">Breathing exercise</string>
+    <string name="text_sleep_planner">Sleep planner</string>
+    <string name="text_setup_your_goal">Set up your goal</string>
+    <string name="text_setup_alarm">Set up alarm</string>
+    <string name="text_avg_sleep_duration">Avg sleep duration</string>
+    <string name="text_alarm_sounds">Alarm sounds</string>
+    <string name="text_save_the_alarm">Save the alarm</string>
+    <string name="text_set_alarm">Set alarm</string>
+    <string name="text_active_days">Active days</string>
+    <string name="text_bedtime">Bedtime</string>
+    <string name="text_wakeup">Wake up</string>
+    <string name="text_sounds_and_volume">Sounds and volume</string>
 
 </resources>

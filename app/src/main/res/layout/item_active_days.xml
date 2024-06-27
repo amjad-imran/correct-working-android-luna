@@ -1,0 +1,35 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivItem"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/circle_unselect_sa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            app:strokeColor="#2effffff"
+            app:strokeWidth="1dp"
+            tools:ignore="ContentDescription" />
+
+
+        <TextView
+            android:id="@+id/tvHour"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/ivItem"
+            app:layout_constraintEnd_toEndOf="@id/ivItem"
+            app:layout_constraintStart_toStartOf="@id/ivItem"
+            app:layout_constraintTop_toTopOf="@id/ivItem"
+            tools:text="4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

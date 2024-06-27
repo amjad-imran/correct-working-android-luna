@@ -1,0 +1,55 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvHour"
+            style="@style/H1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="4" />
+
+        <TextView
+            android:id="@+id/tvHourUnit"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/white_60"
+            app:layout_constraintBottom_toBottomOf="@id/tvHour"
+            app:layout_constraintStart_toEndOf="@id/tvHour"
+            android:text="@string/text_hr" />
+
+        <TextView
+            android:id="@+id/tvMin"
+            style="@style/H1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="28sp"
+            app:layout_constraintStart_toEndOf="@id/tvHourUnit"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="30" />
+
+        <TextView
+            android:id="@+id/tvMinUnit"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/white_60"
+            app:layout_constraintBottom_toBottomOf="@id/tvMin"
+            app:layout_constraintStart_toEndOf="@id/tvMin"
+            android:text="@string/text_min" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
