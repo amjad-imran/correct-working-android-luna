@@ -31,6 +31,15 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             adapter = mAdapter
         }
         mAdapter.setData(viewModel.getAlarmData())
+        binding.lytTopView.lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_sleep)
+        binding.lytTopView.lytBedTime.tvTitle.text=getString(R.string.text_bedtime)
+
+        binding.lytTopView.lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_sleep)
+        binding.lytTopView.lytWakeupTime.tvTitle.text=getString(R.string.text_wakeup)
+        binding.lytAlarmTime.tvHour.text="4"
+        binding.lytAlarmTime.tvMin.text="30"
+        binding.lytAlarmTime.tvHour.paint.setShader(viewModel.setViewGradient(binding,4.toString()))
+        binding.lytAlarmTime.tvMin.paint.setShader(viewModel.setViewGradient(binding,30.toString()))
     }
 
     override fun initListener() {
