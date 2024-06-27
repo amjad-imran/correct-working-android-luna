@@ -11,7 +11,6 @@ import com.oreo.data.model.FHFlowIconsModel
 class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     RecyclerView.Adapter<SAActiveDaysAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<SAActiveDayDataModel>()
-    var lastSelectedPos = -1
 
     inner class ViewHolder(val binding: ItemActiveDaysBinding) :
         RecyclerView.ViewHolder(binding.root) {
