@@ -896,5 +896,9 @@
         android:id="@+id/setAlarmFragment"
         android:name="com.oreo.ui.sleep2.sleepplanner.SetAlarmFragment"
         android:label="fragment_set_alarm" />
+    <dialog
+        android:id="@+id/dialogSaGoal"
+        android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetSetYourGoal"
+        android:label="SetYourGoal" />
 
 </navigation>

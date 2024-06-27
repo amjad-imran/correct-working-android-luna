@@ -4,8 +4,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/ic_sp_screen_back"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_sp_screen_back">
 
         <include
             android:id="@+id/lytToolbar"
@@ -126,6 +126,29 @@
                     app:layout_constraintTop_toBottomOf="@id/lytSetupGoal" />
 
                 <include
+                    android:id="@+id/lytBedTime"
+                    layout="@layout/layout_alarm_set_for_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lytSetupAlarm" />
+                <include
+                    android:id="@+id/lytWakeupTime"
+                    layout="@layout/layout_alarm_set_for_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lytBedTime" />
+
+                <include
                     layout="@layout/layout_sp_breathe_exercise_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +159,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lytSetupAlarm" />
+                    app:layout_constraintTop_toBottomOf="@id/lytWakeupTime" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
