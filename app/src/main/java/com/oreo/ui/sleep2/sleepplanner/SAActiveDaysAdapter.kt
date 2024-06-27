@@ -58,8 +58,6 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
         mDataSet.forEachIndexed { index, dataModel ->
             if (index == position) {
                 dataModel.isSelected = !data.isSelected
-            } else {
-                dataModel.isSelected = false
             }
         }
         notifyDataSetChanged()

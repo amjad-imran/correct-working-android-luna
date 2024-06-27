@@ -15,7 +15,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     private val mAdapter: SAActiveDaysAdapter by lazy {
         SAActiveDaysAdapter(object : OnActiveDayItemClick {
             override fun onItemClick(data: SAActiveDayDataModel, position: Int) {
-
+                mAdapter.updateItem(data, position)
             }
         })
     }
