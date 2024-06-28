@@ -1250,5 +1250,6 @@
     <string name="text_alarm_set_for">Alarm set for</string>
     <string name="text_goal_saved">Goal saved</string>
     <string name="text_set_up_your_goal">Set up your goal</string>
+    <string name="text_set_up_alarm">Set up alarm</string>
 
 </resources>
