@@ -84,17 +84,36 @@
                 android:layout_marginEnd="@dimen/side_margin" />
 
 
-            <!-- Sleep stage analysis//TODO -->
+            <include
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSleeps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                tools:itemCount="3"
+                tools:listitem="@layout/row_multi_sleep" />
+
+            <include
+                android:id="@+id/lytSSAnalysis"
+                layout="@layout/layout_sleep_stage_analysis_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" />
 
 
-            <!-- Night time movements//TODO -->
+            <include
+                android:id="@+id/lytNaps"
+                layout="@layout/layout_sleep_naps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-            <!-- Sleep summary//TODO -->
-
-            <!-- Nap Details//TODO -->
-
-
-            <!-- Trends //TODO -->
             <include
                 android:id="@+id/lytSleepTrends"
                 layout="@layout/layout_sleep_trends"
