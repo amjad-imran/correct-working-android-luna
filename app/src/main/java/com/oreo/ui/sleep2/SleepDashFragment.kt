@@ -3,7 +3,9 @@ package com.oreo.ui.sleep2
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.kizitonwose.calendar.core.WeekDay
@@ -16,25 +18,53 @@ import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
 import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
+import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.noisefit_commans.ui.custom.SleepStageAction
+import com.noisefit_commans.ui.custom.ToolTipEntry
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.OHMDataModel
+import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
+import com.oreo.data.model.health.SleepHourlyBreakup
+import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.ui.home.summary.DashNapAdapter
+import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.readiness.OreoReadinessBannerFragment
+import com.oreo.ui.sleep.OreoSleepStageAnalysisAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SleepDashFragment :
     BaseFragment<FragmentSleepDashBinding>(FragmentSleepDashBinding::inflate) {
 
     private val viewModel: SleepDashViewModel by viewModels()
+    private var sleepDayGraphView: SleepGraphViewOreo? = null
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
+
+    private val mSleepStageAdapter: OreoSleepStageAnalysisAdapter by lazy {
+        OreoSleepStageAnalysisAdapter()
+    }
+
+    private val multiSleepAdapter: MultiSleepAdapter by lazy {
+        MultiSleepAdapter(object : MultiSleepAction {
+            override fun onSleepClicked() {
+
+            }
+        })
+    }
 
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
@@ -55,7 +85,16 @@ class SleepDashFragment :
         with(binding.lytSleepContributor.rvHm) {
             adapter = mAdapter
         }
+        with(binding.lytSSAnalysis.rvSleepStage) {
+            adapter = mSleepStageAdapter
+        }
+        with(binding.rvSleeps) {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = multiSleepAdapter
+        }
         mAdapter.setData(getHealthMonitorData())
+
+        multiSleepAdapter.setData(arrayListOf("", "", ""))
     }
 
     fun getHealthMonitorData(): ArrayList<OHMDataModel> {
@@ -251,5 +290,142 @@ class SleepDashFragment :
     override fun subscribeObservers() {
 
     }
+
+    private fun setNapData(naps: List<Nap>?, date: String) {
+        val filteredNaps = naps?.filter { !it.isNextDayNap }
+
+        if (filteredNaps.isNullOrEmpty()) {
+            binding.lytNaps.root.gone()
+            return
+        } else {
+            binding.lytNaps.root.visible()
+        }
+
+        binding.lytNaps.lytNap.rvNap.layoutManager =
+            LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(filteredNaps, date, true).apply {
+
+            this.setOnNapSelectedListener(object : OnNapSelectedAction {
+                override fun onNapSelected(napId: String) {
+                    navigate(R.id.napDetails, bundleOf("napId" to napId))
+                }
+            })
+        }
+    }
+
+    private fun initSleepAnalysisGraph(hourlyBreakup: List<SleepHourlyBreakup>?) {
+
+        sleepDayGraphView = SleepGraphViewOreo(requireContext())
+        sleepDayGraphView?.setClickListener(object : SleepStageAction {
+            override fun onValueSelected(data: ToolTipEntry) {
+                setInteractionDate(data)
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (onGoing) {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.visible()
+                    binding.lytSSAnalysis.lytTotalSleep.root.gone()
+                } else {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.gone()
+                    binding.lytSSAnalysis.lytTotalSleep.root.visible()
+                }
+            }
+        })
+
+        if (hourlyBreakup.isNullOrEmpty()) {
+            sleepDayGraphView?.enableInteractiveMode(false)
+        } else {
+            sleepDayGraphView?.enableInteractiveMode(true)
+        }
+
+        sleepDayGraphView?.setVibrationUtil(vibrationUtils)
+
+
+        binding.lytSSAnalysis.flSleepGraph.removeAllViews()
+        binding.lytSSAnalysis.flSleepGraph.addView(sleepDayGraphView)
+
+        val sleepData =
+            viewModel.getHourlySleepBreakup(hourlyBreakup)//viewModel.getHourlySleepData()
+        sleepDayGraphView?.init(false)
+
+        sleepDayGraphView?.setData(sleepData.second)
+        sleepDayGraphView?.setData(
+            sleepData.first
+        )
+        sleepDayGraphView?.invalidate()
+
+    }
+
+    fun setInteractionDate(data: ToolTipEntry) {
+        binding.lytSSAnalysis.lytSleepInteraction.apply {
+
+            if (data.type.equals("deep", true)) {
+                this.tvSleepType.text = getString(R.string.text_deep_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#a882ff"))
+
+            } else if (data.type.equals("light", true)) {
+                this.tvSleepType.text = getString(R.string.text_light_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cc9cfb"))
+
+            } else if (data.type.equals("rem", true)) {
+                this.tvSleepType.text = getString(R.string.text_rem_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cbade8"))
+
+            } else if (data.type.equals("awake", true)) {
+                this.tvSleepType.text = getString(R.string.text_awake)
+                this.tvSleepType.setTextColor(Color.parseColor("#e5dafa"))
+            }
+
+            val startTime = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
+            )
+            val startTimeUnit = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_unit()
+            )
+            val endTime = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
+            )
+            val endTimeUnit = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_unit()
+            )
+
+            this.tvStartTime.text = startTime
+            this.tvStartUnit.text = startTimeUnit.lowercase()
+            this.tvEndTime.text = endTime
+            this.tvEndUnit.text = endTimeUnit.lowercase()
+
+        }
+    }
+
+    private fun showNightTimeMovementGraph(
+        nightMovementBreakUp: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
+
+        val nightTimeMovementGraph = NightTimeGraphViewOreo(requireContext())
+        binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.removeAllViews()
+        binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.addView(nightTimeMovementGraph)
+
+        val sleepData =
+            viewModel.getMovementBreakup(nightMovementBreakUp, sleepStartTime, sleepEndTime)
+        nightTimeMovementGraph.init(false)
+
+        nightTimeMovementGraph.setData(sleepData.second)
+        nightTimeMovementGraph.setData(
+            sleepData.first
+        )
+        nightTimeMovementGraph.invalidate()
+
+    }
+
 
 }
