@@ -152,6 +152,7 @@
                     layout="@layout/layout_sp_breathe_exercise_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/lytBreathExercise"
                     android:layout_marginStart="@dimen/side_margin"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="@dimen/side_margin"

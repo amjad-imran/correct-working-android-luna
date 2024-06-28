@@ -150,6 +150,9 @@ class SleepPlannerFragment :
         binding.lytSetupAlarm.ivMore.setOnClickListener {
             navigate(R.id.setAlarmFragment)
         }
+        binding.lytBreathExercise.root.setOnClickListener {
+            navigate(R.id.fragmentBreathExercise)
+        }
 
 
     }
