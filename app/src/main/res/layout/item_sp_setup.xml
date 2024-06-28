@@ -30,5 +30,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:drawableEnd="@drawable/ic_sa_frwrd_arrow"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:textColor="#88b0ff"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="Achieve 100% goal"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

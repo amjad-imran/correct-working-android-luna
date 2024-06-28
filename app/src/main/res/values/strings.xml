@@ -1250,5 +1250,7 @@
     <string name="text_alarm_set_for">Alarm set for</string>
     <string name="text_sleep_summary">Sleep summary</string>
     <string name="text_vs_previous_30_days">vs previous 30 days</string>
+    <string name="text_goal_saved">Goal saved</string>
+    <string name="text_set_up_your_goal">Set up your goal</string>
 
 </resources>

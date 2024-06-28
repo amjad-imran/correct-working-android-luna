@@ -900,5 +900,8 @@
         android:id="@+id/dialogSaGoal"
         android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetSetYourGoal"
         android:label="SetYourGoal" />
-
+    <fragment
+        android:id="@+id/fragmentBreathExercise"
+        android:name="com.oreo.ui.sleep2.sleepplanner.BreathingExerciseFragment"
+        android:label="breathing_exercise" />
 </navigation>

@@ -5,6 +5,8 @@ import android.view.View
 import com.noisefit.data.model.SAGoalDataModel
 import com.noisefit.luna.databinding.BottomSheetGoalBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SA_GOAL = "SA_GOAL"
@@ -18,7 +20,7 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
         SAGoalAdapter(object : OnGoalItemClick {
             override fun onItemClick(data: SAGoalDataModel, position: Int) {
                 goalAdapter.updateItem(data, position)
-
+                binding.lytSetGoalView.btnSave.isEnabled = true
             }
         })
     }
@@ -26,13 +28,12 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        binding.lytSetGoalView.btnSave.isEnabled = false
         setRecycler()
     }
 
     private fun setRecycler() {
-        with(binding.rvFlow) {
+        with(binding.lytSetGoalView.rvFlow) {
             adapter = goalAdapter
         }
         goalAdapter.setData(prepareData())
@@ -40,7 +41,12 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
 
 
     override fun initListener() {
-        binding.btnSave.setOnClickListener {
+        binding.lytSetGoalView.btnSave.setOnClickListener {
+
+            binding.lytSetGoalView.root.gone()
+            binding.lytGoalSetDone.root.visible()
+        }
+        binding.lytGoalSetDone.btnSave.setOnClickListener {
             navigateUpSafe()
         }
 
