@@ -45,13 +45,43 @@
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginEnd="@dimen/side_margin" />
 
-            <!-- Nudges //TODO -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/nudgesSleep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingStart="@dimen/side_margin"
+                android:paddingEnd="@dimen/side_margin" />
 
+            <include
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
 
-            <!-- Sleep Contributors //TODO -->
+            <include
+                android:id="@+id/lytSleepContributor"
+                layout="@layout/layout_sleep_contributors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin" />
 
+            <include
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
 
-            <!-- Health Monitor//TODO -->
+            <include
+                android:id="@+id/lytHealthMonitor"
+                layout="@layout/layout_sleep_health_monitor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin" />
 
 
             <!-- Sleep stage analysis//TODO -->

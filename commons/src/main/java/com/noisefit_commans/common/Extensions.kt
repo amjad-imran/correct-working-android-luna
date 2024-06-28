@@ -10,11 +10,13 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Shader
 import android.util.TypedValue
 import android.widget.TextView
 import com.google.gson.Gson
@@ -381,6 +383,28 @@ val YearMonth.previousMonth: YearMonth
     get() = this.minusMonths(1)
 fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 
+
+
+fun TextView.setTextGradient(
+    textColor: Int,
+    startGradColor: Int,
+    endGradColor: Int
+) {
+    this.setTextColor(textColor)
+    val textShader: Shader = LinearGradient(
+        0f,
+        this.paint.measureText(this.text.toString()),
+        0f,
+        0f,
+        intArrayOf(
+            endGradColor,
+            startGradColor
+        ),
+        floatArrayOf(0f, 1f),
+        Shader.TileMode.CLAMP
+    )
+    this.paint.shader = textShader
+}
 
 
 //fun <T> T.upToNDecimal(upTo: Int): String {
