@@ -110,11 +110,12 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
 //        setupInAppCallbacks()
     }
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
-    }
+
+
 
     fun setDefaultLanguage(context: Context) {
         val locale = Locale(Locale.ENGLISH.language)

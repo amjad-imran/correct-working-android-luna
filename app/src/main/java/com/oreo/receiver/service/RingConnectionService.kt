@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -37,6 +38,7 @@ import com.noisefit.util.SportUtils
 import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
+import com.noisefit.util.notif.NotificationUtil.NOTIFICATION_ID_MAIN_OREO
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit.watch.DeviceQueryHandler
@@ -215,7 +217,17 @@ constructor() : LifecycleService() {
         try {
             mLastNotification?.let {
                 LOGS.i(TAG, "onStartCommand executed posting last notification")
-                startForeground(NotificationUtil.NOTIFICATION_ID_MAIN_OREO, it)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    startForeground(
+                        NOTIFICATION_ID_MAIN_OREO,
+                        it,
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                }else {
+                    startForeground(
+                        NOTIFICATION_ID_MAIN_OREO,
+                        it)
+                }
             }
 
 
@@ -239,10 +251,20 @@ constructor() : LifecycleService() {
                          * need testing
                          */
                         mLastNotification = NotificationUtil.getNotification(this)
-                        startForeground(
-                            NotificationUtil.NOTIFICATION_ID_MAIN_OREO,
-                            mLastNotification
-                        )
+
+                        mLastNotification?.let {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                startForeground(
+                                    NOTIFICATION_ID_MAIN_OREO,
+                                    it,
+                                    ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                            }else {
+                                startForeground(
+                                    NOTIFICATION_ID_MAIN_OREO,
+                                    it)
+                            }
+                        }
+
                         stopService(device)
                     }
 
@@ -275,7 +297,16 @@ constructor() : LifecycleService() {
             if (ringDataStore.getRingDevice() == null) {
                 mLastNotification = NotificationUtil.getNotification(this)
                 mLastNotification?.let {
-                    startForeground(NotificationUtil.NOTIFICATION_ID_MAIN_OREO, it)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it,
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                    }else {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it)
+                    }
                 }
                 isStopServiceCalled = true
                 stopSelf()
@@ -288,7 +319,17 @@ constructor() : LifecycleService() {
                 mLastNotification = NotificationUtil.getNotification(this)
 
                 mLastNotification?.let {
-                    startForeground(NotificationUtil.NOTIFICATION_ID_MAIN_OREO, it)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it,
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                    }else {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it)
+                    }
+
                 }
             }
 
@@ -1368,7 +1409,17 @@ constructor() : LifecycleService() {
                 )
                 mLastNotification = notification
                 mLastNotification?.let {
-                    startForeground(NotificationUtil.NOTIFICATION_ID_MAIN_OREO, it)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it,
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                    }else {
+                        startForeground(
+                            NOTIFICATION_ID_MAIN_OREO,
+                            it)
+                    }
+
                 }
             }
 

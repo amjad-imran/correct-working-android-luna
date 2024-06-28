@@ -1,7 +1,7 @@
-import AndroidX.implementation
+
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.androidApplication)
     kotlin("android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
@@ -26,7 +26,7 @@ android {
         versionName = Android.versionName
 
         multiDexEnabled = true
-        testInstrumentationRunner = AndroidXTest.instrumentationRunner
+       // testInstrumentationRunner = AndroidXTest.instrumentationRunner
 
     }
 
@@ -168,6 +168,7 @@ android {
             java.srcDir("src/test/res")
         }
     }
+    namespace = "com.noisefit.luna"
 
     applicationVariants.all {
         val variant = this
@@ -206,122 +207,127 @@ android {
 //}
 dependencies {
 
-    implementation(AndroidX.libraries)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.multidex)
+    implementation(libs.androidx.localbroadcastmanager)
+    implementation(libs.androidx.vectordrawable)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.camera)
+    implementation(libs.androidx.camera.lifestyle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.lifecycle.extensions)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.androidx.concurrent.futures.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.legacy.support)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.paging.runtime)
 
 //    implementation(CalenderView.calendarView)
-    implementation(CalenderView.calendarViewWeek)
+    implementation(libs.view)
 //    implementation(CleverTap.sdk)
 
-    implementation(Exoplayer.core)
-    implementation(Exoplayer.dash)
-    implementation(Exoplayer.ui)
+    implementation(libs.exoplayer.core)
+    implementation(libs.exoplayer.dash)
+    implementation(libs.exoplayer.ui)
 
-    implementation(Fb.sdk)
-    implementation(Firebase.analytics)
-    implementation(Firebase.config)
-    implementation(Firebase.crashlytics)
-    implementation(Firebase.messagining)
+    implementation(libs.facebook.android.sdk)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.messaging.ktx)
+    implementation(platform(libs.firebase.bom))
 
+    implementation(libs.androidx.paging.common.ktx)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.curlloggerinterceptor)
 
-//    //Custom Calendar for Activity
-    implementation(platform(Firebase.bom))
-    implementation("androidx.paging:paging-common-ktx:3.1.1")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
-    implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
-
-    implementation("io.noties.markwon:core:4.6.2")
+    implementation(libs.core)
     //implementation("io.noties.markwon:image:4.6.2")
 
-    implementation(Glide.glide)
-    implementation("com.github.yalantis:ucrop:2.2.6")
+    implementation(libs.glide)
+    implementation(libs.ucrop)
+    implementation(libs.gson)
+    //  implementation(libs.play.core.ktx)
+    implementation(libs.android.material)
+    implementation(libs.material.collapsingtoolbarlayout)
+    implementation(libs.review.ktx)
+//    implementation(Google.playCore)
 
-    implementation(Google.gson)
-    implementation(Google.playCore)
-    implementation(Google.material)
-    implementation(Google.collapsingToolbarLayout)
 
-    implementation(PinView.PinView)
+    implementation(libs.goodiebag.pinview)
 
-    implementation(Hilt.android)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.6.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.intuit.sdp:sdp-android:1.1.0")
-    implementation("androidx.test:core-ktx:1.4.0")
-
-    implementation("com.google.android.gms:play-services-fitness:21.1.0")
-
-    implementation("com.github.heremaps:oksse:0.9.0")
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.legacy.support)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material.v161)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.sdp.android)
 
 
 
-    kapt(Hilt.compiler)
-    kapt(Hilt.hiltCompiler)
+    implementation(libs.oksse)
 
-    implementation(Kotlinx.androidCore)
-    implementation(Kotlinx.coroutinesCore)
+    kapt(libs.android.material)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
 
 //    implementation(InstallReferral.installReferrer)
+    implementation(libs.play.service.auth)
+    implementation(libs.play.service.auth.api)
+    implementation(libs.play.service.fitness)
+    implementation(libs.play.service.location)
+    implementation(libs.play.service.maps)
 
-    implementation(PlayService.playServiceAuth)
-    implementation(PlayService.playServicePhone)
-    implementation(PlayService.playServiceFitness)
-    implementation(PlayService.playServiceLocation)
-    implementation(PlayService.playServiceMaps)
 
-    implementation(Lottie.library)
+    implementation(libs.lottie)
+    implementation(libs.swipe.refresh.library.core)
 
-    implementation(SwipeRefresh.swipeRefreshLibraryCore)
-
-    implementation(Timber.timber)
-    implementation(Retrofit.retrofit)
-    implementation(Retrofit.converter)
-    implementation(Retrofit.okttp3Interceptor)
+    implementation(libs.timber)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.logging.interceptor)
 
     /*implementation(Retrofit.brcypt)*/
 
-    kapt(Room.Compiler)
-    implementation(Room.ktx)
-    implementation(RxPermissions.rxPermission)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    implementation(libs.tbruyelle.rxpermissions)
     implementation(project(Modules.commons))
 //    implementation(project(Modules.oreo))
     implementation(project(Modules.mpChartLib))
-
-    implementation(WatchDog.watchDog)
     implementation(project(Modules.noisefit_zh_sdk))
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
-    implementation(AndroidX.lifecycleProcess)
+    implementation(libs.anrwatchdog)
 
-    implementation(PlayService.playServiceAdmob)
+    implementation(platform(libs.kotlin.bom))
 
-    implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("net.danlew:android.joda:2.12.1")
+    implementation(libs.androidx.lifecycle.process)
 
-    implementation("com.github.Dimezis:BlurView:version-2.0.3")
 
-    implementation("com.github.bmarrdev:android-DecoView-charting:v1.2")
-    implementation("com.github.alirezat775:carousel-view:1.1.1")
 
-    testImplementation("org.mockito:mockito-core:3.10.0")
-    androidTestImplementation("org.mockito:mockito-android:3.10.0")
-    /*implementation(Test.testCore)*/
-    testImplementation(Test.junit)
-    testImplementation(Test.googleTruth)
-    testImplementation(Test.androidXArchCore)
-    testImplementation(Test.textCoroutines)
-    kaptTest(Test.hiltCompiler)
-    kaptTest(Test.androidxHiltCompiler)
-    kaptAndroidTest(Test.hiltCompiler)
-    kaptAndroidTest(Test.androidxHiltCompiler)
+    implementation(libs.flexbox)
+    implementation(libs.android.joda)
 
-    androidTestImplementation(InstrumentTest.androidJUnit)
-    androidTestImplementation(InstrumentTest.truth)
-    androidTestImplementation(InstrumentTest.jUnit)
-    androidTestImplementation(InstrumentTest.archCore)
-    androidTestImplementation(InstrumentTest.hiltTesting)
-    implementation(Test.androidxTestRunner)
+    implementation(libs.blurview)
+
+    implementation(libs.android.decoview.charting)
+    implementation(libs.carousel.view)
+
+
+
     //moengage
     implementation(moengage.core)
     implementation(moengage.inapp)

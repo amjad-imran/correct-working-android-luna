@@ -88,7 +88,7 @@ class PercentageBar : View {
         width = w
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         initPaint()
         drawBgLines(canvas)

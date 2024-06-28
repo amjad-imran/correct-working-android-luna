@@ -14,13 +14,18 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
 
-    implementation 'com.google.protobuf:protobuf-java:3.20.1'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation libs.protobuf
+    implementation libs.androidx.localbroadcastmanager
+
     //utils
-    implementation 'com.blankj:utilcodex:1.31.1'
+    implementation libs.utilcodex.v1311
 
     implementation (project(Modules.commons))
 //    implementation project(path: ':commons')
 
 
+}
+
+android {
+    namespace 'com.noisefit_zhsdk'
 }

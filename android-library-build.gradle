@@ -16,7 +16,7 @@ android {
         versionCode Android.versionCode
         versionName Android.versionName
         multiDexEnabled = true
-        testInstrumentationRunner = AndroidXTest.instrumentationRunner
+//        testInstrumentationRunner = AndroidXTest.instrumentationRunner
     }
 
     buildTypes {
@@ -53,15 +53,15 @@ android {
 
 dependencies{
 
+    implementation libs.timber
+    implementation libs.androidx.localbroadcastmanager
+    implementation libs.play.service.location
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
 
-    implementation Timber.timber
-    implementation AndroidX.localBroadcastManager
-    implementation PlayService.playServiceLocation
-    implementation Hilt.android
-    kapt Hilt.compiler
+    implementation libs.androidx.core.ktx
+    implementation libs.kotlin.stdlib
+    implementation libs.gson
 
-    implementation AndroidX.coreKtx
-    implementation Kotlin.kotlinStandardLibrary
-    implementation Google.gson
 
 }

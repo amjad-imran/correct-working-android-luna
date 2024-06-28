@@ -1,10 +1,12 @@
 package com.noisefit.receiver.workManager
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.annotation.NonNull
 import androidx.core.app.NotificationCompat
@@ -56,7 +58,7 @@ class RescueServiceInBgWorker
         return Result.success()
     }
 
-
+    @SuppressLint("RestrictedApi")
     override fun getForegroundInfoAsync(): ListenableFuture<ForegroundInfo> {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -90,7 +92,11 @@ class RescueServiceInBgWorker
             .build()
 
         val future: SettableFuture<ForegroundInfo> = SettableFuture.create()
-        future.set(ForegroundInfo(420, notification))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(420, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(420, notification)
+        }
         return future
     }
 
