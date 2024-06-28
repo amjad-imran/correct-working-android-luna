@@ -34,11 +34,9 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
@@ -64,7 +62,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -395,6 +392,13 @@ class SummaryDataFragmentToday :
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }*/
+
+        binding.contentMain.lytSplanner.lytSetAlarm.ivAlarmMore.setOnClickListener {
+            navigate(R.id.setAlarmFragment)
+        }
+        binding.contentMain.lytSplanner.lytBreathe.ivPlay.setOnClickListener {
+            navigate(R.id.fragmentBreathExercise)
+        }
 
         binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
@@ -838,12 +842,12 @@ class SummaryDataFragmentToday :
         mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
             when (state) {
                 2/*END*/ -> {
-                   /* mainViewModel.viewModelScope.launch {
-                        delay(1000)
-                        context?.let { ctx ->
-                            val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
-                        }
-                    }*/
+                    /* mainViewModel.viewModelScope.launch {
+                         delay(1000)
+                         context?.let { ctx ->
+                             val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                         }
+                     }*/
                 }
             }
         }
