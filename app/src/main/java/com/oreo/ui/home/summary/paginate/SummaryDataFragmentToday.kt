@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -130,6 +131,48 @@ class SummaryDataFragmentToday :
         viewModel.date = date
 
         viewModel.getPeriodData()
+        initSleepPlanerUi()
+    }
+
+    private fun initSleepPlanerUi() {
+
+        binding.contentMain.lytSplanner.apply {
+            lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
+
+            lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
+            lytBedTime.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.imvBack.context,
+                    R.color.white_64
+                )
+            )
+            lytBedTime.tvTimeUnit.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.imvBack.context,
+                    R.color.white
+                )
+            )
+            lytBedTime.tvTime.text = "11:00"
+            lytBedTime.tvTimeUnit.text = "pm"
+
+            lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
+
+            lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
+            lytWakeupTime.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.imvBack.context,
+                    com.noisefit_commans.R.color.white_64
+                )
+            )
+            lytWakeupTime.tvTimeUnit.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.imvBack.context,
+                    R.color.white
+                )
+            )
+            lytWakeupTime.tvTime.text = "7:30"
+            lytWakeupTime.tvTimeUnit.text = "am"
+        }
     }
 
     private fun setNapsPager() {
