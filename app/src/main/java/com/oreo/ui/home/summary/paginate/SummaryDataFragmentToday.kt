@@ -142,13 +142,13 @@ class SummaryDataFragmentToday :
             lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
             lytBedTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.imvBack.context,
+                    binding.contentMain.lytSplanner.root.context,
                     R.color.white_64
                 )
             )
             lytBedTime.tvTimeUnit.setTextColor(
                 ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.imvBack.context,
+                    binding.contentMain.lytSplanner.root.context,
                     R.color.white
                 )
             )
@@ -160,13 +160,13 @@ class SummaryDataFragmentToday :
             lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
             lytWakeupTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.imvBack.context,
+                    binding.contentMain.lytSplanner.root.context,
                     com.noisefit_commans.R.color.white_64
                 )
             )
             lytWakeupTime.tvTimeUnit.setTextColor(
                 ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.imvBack.context,
+                    binding.contentMain.lytSplanner.root.context,
                     R.color.white
                 )
             )
