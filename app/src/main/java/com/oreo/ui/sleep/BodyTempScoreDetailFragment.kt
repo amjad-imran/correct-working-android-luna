@@ -74,10 +74,20 @@ class BodyTempScoreDetailFragment :
                 )
             }"
 
+
+
             binding.tvDeviationValue.text = if (it.data == 0.0f) {
                 "-"
             } else {
-                String.format("%.1f°F (%.2f)", it.data, it.deviation)
+                val deviationString = StringBuilder().apply {
+                    if ((it.deviation ?: 0f) > 0) {
+                        this.append("+")
+                    }
+                    this.append(String.format("%.2f", it.deviation))
+                }
+
+
+                String.format("%.1f°F (%s)", it.data, deviationString)
             }
             //"${it.deviation}°"
         }
@@ -278,7 +288,15 @@ class BodyTempScoreDetailFragment :
                 binding.tvDeviationValue.text = if (chartModel.valueFloat2 == 0.0f) {
                     "-"
                 } else {
-                    String.format("%.1f°F (%.2f)", chartModel.valueFloat2, chartModel.valueFloat)
+                    val deviationString = StringBuilder().apply {
+                        if ((chartModel.valueFloat) > 0) {
+                            this.append("+")
+                        }
+                        this.append(String.format("%.2f", chartModel.valueFloat))
+                    }
+
+
+                    String.format("%.1f°F (%s)", chartModel.valueFloat2, deviationString)
                 }
             }
         }

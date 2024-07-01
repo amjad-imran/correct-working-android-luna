@@ -869,8 +869,15 @@ class OreoReadinessFragment :
             if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
 
                 val deviation = it.avg_temp.value - baselineAvg
+                val deviationString = StringBuilder().apply {
+                    if (deviation > 0) {
+                        this.append("+")
+                    }
+                    this.append(String.format("%.2f",deviation))
+                }
+
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format("%.1f°F (%.2f)",it.avg_temp.value, deviation)
+                    String.format("%.1f°F (%s)",it.avg_temp.value, deviationString)
             } else {
                 binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
