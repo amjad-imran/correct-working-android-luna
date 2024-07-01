@@ -119,7 +119,7 @@ class LocationService : Service() {
             startForeground(
                 NOTIFICATION_ID,
                 notification.build(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
         }else {
             startForeground(
                 NOTIFICATION_ID,
