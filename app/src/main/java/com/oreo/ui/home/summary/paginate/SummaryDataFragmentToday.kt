@@ -349,9 +349,9 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        /*binding.contentMain.lytHeartRate.root.setOnClickListener {
+        binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
-        }*/
+        }
 
         binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
@@ -795,12 +795,12 @@ class SummaryDataFragmentToday :
         mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
             when (state) {
                 2/*END*/ -> {
-                   /* mainViewModel.viewModelScope.launch {
-                        delay(1000)
-                        context?.let { ctx ->
-                            val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
-                        }
-                    }*/
+                    /* mainViewModel.viewModelScope.launch {
+                         delay(1000)
+                         context?.let { ctx ->
+                             val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                         }
+                     }*/
                 }
             }
         }
