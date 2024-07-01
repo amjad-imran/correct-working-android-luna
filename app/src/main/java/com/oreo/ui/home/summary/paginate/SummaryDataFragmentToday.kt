@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -33,11 +34,9 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
@@ -63,7 +62,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -130,6 +128,48 @@ class SummaryDataFragmentToday :
         viewModel.date = date
 
         viewModel.getPeriodData()
+        initSleepPlanerUi()
+    }
+
+    private fun initSleepPlanerUi() {
+
+        binding.contentMain.lytSplanner.apply {
+            lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
+
+            lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
+            lytBedTime.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.root.context,
+                    R.color.white_64
+                )
+            )
+            lytBedTime.tvTimeUnit.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.root.context,
+                    R.color.white
+                )
+            )
+            lytBedTime.tvTime.text = "11:00"
+            lytBedTime.tvTimeUnit.text = "pm"
+
+            lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
+
+            lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
+            lytWakeupTime.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.root.context,
+                    com.noisefit_commans.R.color.white_64
+                )
+            )
+            lytWakeupTime.tvTimeUnit.setTextColor(
+                ContextCompat.getColor(
+                    binding.contentMain.lytSplanner.root.context,
+                    R.color.white
+                )
+            )
+            lytWakeupTime.tvTime.text = "7:30"
+            lytWakeupTime.tvTimeUnit.text = "am"
+        }
     }
 
     private fun setNapsPager() {
@@ -352,6 +392,13 @@ class SummaryDataFragmentToday :
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }*/
+
+        binding.contentMain.lytSplanner.lytSetAlarm.ivAlarmMore.setOnClickListener {
+            navigate(R.id.setAlarmFragment)
+        }
+        binding.contentMain.lytSplanner.lytBreathe.ivPlay.setOnClickListener {
+            navigate(R.id.fragmentBreathExercise)
+        }
 
         binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
@@ -795,12 +842,12 @@ class SummaryDataFragmentToday :
         mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
             when (state) {
                 2/*END*/ -> {
-                   /* mainViewModel.viewModelScope.launch {
-                        delay(1000)
-                        context?.let { ctx ->
-                            val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
-                        }
-                    }*/
+                    /* mainViewModel.viewModelScope.launch {
+                         delay(1000)
+                         context?.let { ctx ->
+                             val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+                         }
+                     }*/
                 }
             }
         }
