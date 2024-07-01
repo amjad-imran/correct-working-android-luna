@@ -31,6 +31,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
@@ -38,6 +39,8 @@ import com.oreo.ui.readiness.OreoReadinessBannerFragment
 import com.oreo.ui.sleep.OreoSleepStageAnalysisAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -285,6 +288,21 @@ class SleepDashFragment :
         binding.lytScore.ivInfo.setOnClickListener {
             navigate(R.id.sleepPlannerFragment)
         }
+
+
+        binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            navigate(frag, bundle)
+        }
+        binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            navigate(frag, bundle)
+        }
+        binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            navigate(frag, bundle)
+        }
+
     }
 
     override fun subscribeObservers() {

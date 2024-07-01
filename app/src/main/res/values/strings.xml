@@ -1252,5 +1252,10 @@
     <string name="text_vs_previous_30_days">vs previous 30 days</string>
     <string name="text_goal_saved">Goal saved</string>
     <string name="text_set_up_your_goal">Set up your goal</string>
+    <string name="text_day">Day</string>
+    <string name="text_week">Week</string>
+    <string name="text_month">Month</string>
+    <string name="learn_more">Learn more</string>
+    <string name="text_trends_view">Trends view</string>
 
 </resources>
