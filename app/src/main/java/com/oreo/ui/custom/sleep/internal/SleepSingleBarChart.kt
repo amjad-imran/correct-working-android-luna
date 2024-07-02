@@ -11,33 +11,26 @@ import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
-import com.noisefit_commans.utils.LOGS
 
 
-class SleepRestorativeChartInternal constructor(context: Context?, attrs: AttributeSet?) :
+class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
 
     lateinit var xAxisPaint: Paint
     lateinit var xLinePaint: Paint
+    lateinit var xTextPaint: Paint
     lateinit var gridLinePaint: Paint
-    lateinit var barPaintDeep: Paint
-    lateinit var barPaintRem: Paint
+    lateinit var barPaint: Paint
     lateinit var selectedDayPaint: Paint
     lateinit var barPaintTop: Paint
     lateinit var barTextPaint: Paint
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
+    private val endPadding = dip2px(30f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
 
-    var mMax = 0
-
-
-    /**
-     * Pair(deep,rem)
-     */
-    private val dataSet = ArrayList<Pair<Int?, Int?>>()
+    private val dataSet = ArrayList<Int?>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -65,14 +58,16 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         xLinePaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
         }
+        xTextPaint = Paint().apply {
+            this.color = Color.parseColor("#20FFFFFF")
+            this.typeface = fontGilroy
+            this.textSize = dip2px(12f).toFloat()
+        }
         gridLinePaint = Paint().apply {
             this.color = Color.parseColor("#07ffffff")
         }
-        barPaintDeep = Paint().apply {
-            this.color = Color.parseColor("#c3a3e3")
-        }
-        barPaintRem = Paint().apply {
-            this.color = Color.parseColor("#7858cc")
+        barPaint = Paint().apply {
+            this.color = Color.parseColor("#465c8a")
         }
         barPaintTop = Paint().apply {
             this.color = Color.parseColor("#ffffff")
@@ -105,28 +100,28 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         super.onDraw(canvas)
 
         drawBackGrid(canvas)
+        drawYAxis(canvas)
         drawXAxis(canvas)
         drawContent(canvas)
     }
 
     private fun drawContent(canvas: Canvas) {
 
-        val stepWidth = width / 7
+        val stepWidth = (width - endPadding) / 7
         val barWidth = stepWidth / 2
         var start = 0f
         val rectRadius = dip2px(1f).toFloat()
-        val padding = dip2px(1f).toFloat()
-        val paddingHorizontal = dip2px(4f)
 
 
         dataSet.forEachIndexed { index, it ->
 
 
             if (index + 1 == mSelectedPosition) {
+                val padding = dip2px(4f)
                 val rectFSelected = RectF(
-                    start + paddingHorizontal,
+                    start + padding,
                     topHeight.toFloat(),
-                    start + stepWidth - paddingHorizontal,
+                    start + stepWidth - padding,
                     height.toFloat() - bottomHeight
                 )
 
@@ -138,49 +133,35 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             }
 
 
-            val sum = (it.first ?: 0) + (it.second ?: 0)
-            if (sum != 0) {
+            if (it != null) {
 
-                val top = getYAxisValue(sum)
-                val remEnd = getYAxisValue(it.second ?: 0)
+                val top = getYAxisValue(it)
 
-
-                if(it.second!=0){
-                    val rectFRem = RectF(
-                        start + barWidth / 2,
-                        remEnd + padding,
-                        start + barWidth + barWidth / 2,
-                        height.toFloat() - bottomHeight
-                    )
+                val rectF = RectF(
+                    start + barWidth / 2,
+                    top,
+                    start + barWidth + barWidth / 2,
+                    height.toFloat() - bottomHeight
+                )
 
 
-                    canvas.drawRoundRect(
-                        rectFRem,
-                        rectRadius,
-                        rectRadius,
-                        barPaintDeep
-                    )
-                }
+                canvas.drawRoundRect(
+                    rectF,
+                    rectRadius,
+                    rectRadius,
+                    barPaint
+                )
 
-                if(it.first!=0){
-                    val rectFDeep = RectF(
-                        start + barWidth / 2,
-                        top,
-                        start + barWidth + barWidth / 2,
-                        remEnd - padding
-                    )
+                rectF.bottom = rectF.top + dip2px(2f)
 
-                    canvas.drawRoundRect(
-                        rectFDeep,
-                        rectRadius,
-                        rectRadius,
-                        barPaintRem
-                    )
-                }
+                canvas.drawRoundRect(
+                    rectF,
+                    rectRadius,
+                    rectRadius,
+                    barPaintTop
+                )
 
-                val (hour, minute) = getFormattedSleepDuration(sum)
-
-                val text = String.format("%d:%02d", hour, minute)
+                val text = "$it%"
                 val xTextBounds = Rect()
                 barTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
                 val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
@@ -193,15 +174,17 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    fun getYAxisValue(value: Int): Float {
         val availableHeight = height - bottomHeight - topHeight
-        return topHeight + availableHeight - (availableHeight * percent / 100)
+        return topHeight + availableHeight - (availableHeight * value.toFloat() / 100)
     }
 
     private fun drawBackGrid(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = width / 7
+        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+
+        val stepWidth = availableWidth / 7
         var start = 0f
         for (i in 0..7) {
             canvas.drawLine(
@@ -213,41 +196,31 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             )
             start += stepWidth
         }
+    }
 
-        canvas.drawLine(0f, getYAxisValue(0), width.toFloat(), getYAxisValue(0), xLinePaint)
+    private fun drawYAxis(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
+
+        val text0 = "0%"
+
+
+
+        //canvas.drawText("0%", width - xTextPaint.measureText(text0), )
+        canvas.drawLine(0f, getYAxisValue(0), availableWidth, getYAxisValue(0), xLinePaint)
 
         gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+        canvas.drawLine(0f, getYAxisValue(25), availableWidth, getYAxisValue(25), gridLinePaint)
+        canvas.drawLine(0f, getYAxisValue(50), availableWidth, getYAxisValue(50), gridLinePaint)
+        canvas.drawLine(0f, getYAxisValue(75), availableWidth, getYAxisValue(75), gridLinePaint)
 
-        val heightStep = mMax / 4
-        var heightStart = heightStep
-        for (i in 1 until 5) {
-            canvas.drawLine(
-                0f,
-                getYAxisValue(heightStart),
-                width.toFloat(),
-                getYAxisValue(heightStart),
-                gridLinePaint
-            )
-            if (i == 4) {
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(heightStart),
-                    width.toFloat(),
-                    getYAxisValue(heightStart),
-                    gridLinePaint
-                )
-            }
-
-            heightStart += heightStep
-        }
-
+        gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+        canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)
 
     }
 
     private fun drawXAxis(canvas: Canvas) {
 
-        val stepWidth = width / 7
+        val stepWidth = (width - endPadding) / 7
 
         val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         var start = 0
@@ -268,28 +241,10 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    /**
-     * array list of values -> Pair(deep minutes, rem minutes)
-     * selected position
-     */
-    fun setDataSet(list: List<Pair<Int?, Int?>>, selectedPosition: Int) {
+    fun setDataSet(list: List<Int?>, selectedPosition: Int) {
         dataSet.clear()
         dataSet.addAll(list)
         mSelectedPosition = selectedPosition
-
-        mMax = 0
-        list.forEach {
-            val sum = (it.first ?: 0) + (it.second ?: 0)
-            if (sum > mMax) {
-                mMax = sum
-            }
-        }
-
-        mMax += ((0.2) * mMax).toInt()
-
-        LOGS.d("dfjhsdkjfhskdf Max - > $mMax")
-
-
         invalidate()
     }
 
