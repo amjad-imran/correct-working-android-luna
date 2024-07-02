@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,15 +26,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
+        <com.oreo.ui.custom.TabLayoutCustom
             android:id="@+id/tabLayout"
-            layout="@layout/layout_tabs_dash"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_height="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lytHeader"
-            tools:visibility="visible" />
-
+            lineChart:bgBottomColor="@android:color/transparent"
+            lineChart:bgColor="@android:color/transparent"
+            lineChart:bgLeftColor="@android:color/transparent"
+            lineChart:bgRightColor="@android:color/transparent"
+            lineChart:bgTopColor="@android:color/transparent"
+            lineChart:bottomWith="30dp"
+            lineChart:centerLineColor="@color/white_80"
+            lineChart:centerLineWidth="3dp"
+            lineChart:chartLineColor="@color/sleep_chart_line_color"
+            lineChart:chartLineWidth="2dp"
+            lineChart:fillColorEnd="@color/sleep_fill_end_color"
+            lineChart:fillColorStart="@color/sleep_fill_start_color"
+            lineChart:gridColor="@color/white_12"
+            lineChart:hCount="11"
+            lineChart:innerCircleColor="#e9d4ff"
+            lineChart:innerCircleRadius="4dp"
+            lineChart:leftWith="0dp"
+            lineChart:outCircleColor="#66aa5bff"
+            lineChart:outCircleRadius="1dp"
+            lineChart:rightWith="0dp"
+            lineChart:scaleColor="#ff000000"
+            lineChart:scaleLenth="4dp"
+            lineChart:scaleNodeColor="#FFFFFF"
+            lineChart:scaleNodeRadius="6dp"
+            lineChart:showGrid="true"
+            lineChart:topWith="40dp"
+            lineChart:vCount="2"
+            lineChart:xLineColor="#80FFFFFF"
+            lineChart:xMax="130"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="16sp"
+            lineChart:yLineColor="#00FFFFFF"
+            lineChart:yTextSize="12sp"
+            />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerHeartRate"

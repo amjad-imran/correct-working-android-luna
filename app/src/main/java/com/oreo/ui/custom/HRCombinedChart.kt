@@ -770,9 +770,12 @@ class HRCombinedChart : View {
             val startTime = DateFormats.getMidnightDateTime()
             val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
             val startDateTime = LocalDateTime.parse(startTime, formatter)
+            val formatterDisplayStart = DateTimeFormat.forPattern("h:mm")
+            val startTimeRep = startDateTime.plusMinutes((list.size - i - 1) * 30).toString(formatterDisplayStart).lowercase()
+
             var updatedTime = startDateTime.plusMinutes((list.size - i) * 30)
             val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
-            val time = updatedTime.toString(formatterDisplay).lowercase()
+            val time = "$startTimeRep - ${updatedTime.toString(formatterDisplay).lowercase()}"
             toolTipList.add(Triple(x, time ?: "", current.value))
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {

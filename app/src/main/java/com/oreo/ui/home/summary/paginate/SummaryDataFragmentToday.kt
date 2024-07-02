@@ -348,7 +348,6 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
-
         binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }
@@ -425,9 +424,9 @@ class SummaryDataFragmentToday :
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
         }
-        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
+        /*binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
-        }
+        }*/
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_score_click)
