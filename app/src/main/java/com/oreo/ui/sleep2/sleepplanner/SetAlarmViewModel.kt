@@ -21,6 +21,8 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
 
     lateinit var picker: MaterialTimePicker
     lateinit var calendar: Calendar
+    var selectedAlarmDays = ArrayList<String>()
+    var alarmSound:String?= null
     var alarmTimeUpdate = MutableLiveData<Event<Pair<AlarmDataModel, Int>>>()
     fun getAlarmData(): ArrayList<SAActiveDayDataModel> {
         val listData = ArrayList<SAActiveDayDataModel>()
@@ -56,5 +58,9 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
 
     fun insert(newAlarm: AlarmDataModel, type: Int) {
         alarmTimeUpdate.postValue(Event(Pair(newAlarm, type)))
+    }
+
+    fun saveAlarm() {
+        //write code for save alarm
     }
 }

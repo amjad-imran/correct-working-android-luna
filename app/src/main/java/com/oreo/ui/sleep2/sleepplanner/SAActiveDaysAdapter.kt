@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemActiveDaysBinding
-import com.oreo.data.model.FHFlowIconsModel
 
 class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     RecyclerView.Adapter<SAActiveDaysAdapter.ViewHolder>() {
@@ -19,7 +18,7 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
                 binding.ivItem.setBackgroundResource(R.drawable.circle_select_sa)
             } else
                 binding.ivItem.setBackgroundResource(R.drawable.circle_unselect_sa)
-            binding.tvHour.text=data.name
+            binding.tvHour.text = data.name
             binding.ivItem.setOnClickListener {
                 mListener.onItemClick(data, bindingAdapterPosition)
                 notifyDataSetChanged()
@@ -53,6 +52,7 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
         }
         notifyDataSetChanged()
     }
+
     fun updateItem(data: SAActiveDayDataModel, position: Int) {
         mDataSet.forEachIndexed { index, dataModel ->
             if (index == position) {
@@ -60,6 +60,16 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
             }
         }
         notifyDataSetChanged()
+    }
+
+    fun getSelectedValue(): ArrayList<String> {
+        val listData = ArrayList<String>()
+        mDataSet.forEach {
+            if (it.isSelected) {
+                listData.add(it.name)
+            }
+        }
+        return listData
     }
 
 

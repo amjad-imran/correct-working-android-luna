@@ -126,11 +126,13 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             navigateUpSafe()
         }
         binding.btnSave.setOnClickListener {
-            //
+            viewModel.selectedAlarmDays = mAdapter.getSelectedValue()
+            viewModel.saveAlarm()
         }
         binding.lytAlarmSound.lytSoundView.tvSoundName.setOnClickListener {
             setFragmentResultListener(ALARM_SOUND) { _, bundle ->
                 val data = bundle.getString("soundName")
+                viewModel.alarmSound = data
                 binding.lytAlarmSound.lytSoundView.tvSoundName.text = data
             }
             navigate(R.id.dialogAlarmSound)
