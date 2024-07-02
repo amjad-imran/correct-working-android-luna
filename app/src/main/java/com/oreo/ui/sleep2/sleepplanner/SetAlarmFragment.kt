@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.sleepplanner
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -69,7 +70,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     * 0-bedtime
     * 1-wakeup time
     * */
-    fun showTimePicker(alarm: AlarmDataModel? = null, type: Int) {
+    private fun showTimePicker(alarm: AlarmDataModel? = null, type: Int) {
         viewModel.picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(12)
@@ -126,6 +127,13 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
         binding.btnSave.setOnClickListener {
             //
+        }
+        binding.lytAlarmSound.lytSoundView.tvSoundName.setOnClickListener {
+            setFragmentResultListener(ALARM_SOUND) { _, bundle ->
+                val data = bundle.getString("soundName")
+                binding.lytAlarmSound.lytSoundView.tvSoundName.text = data
+            }
+            navigate(R.id.dialogAlarmSound)
         }
         binding.lytAlarmSound.switchMain.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {

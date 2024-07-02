@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -908,9 +907,14 @@
     <fragment
         android:id="@+id/sleepInternalDetailsFragment"
         android:name="com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment"
-        android:label="fragment_sleep_internal_details" >
+        android:label="fragment_sleep_internal_details">
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
     </fragment>
+    <dialog
+        android:id="@+id/dialogAlarmSound"
+        android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetAlarmSound"
+        android:label="AlarmSound" />
+
 </navigation>

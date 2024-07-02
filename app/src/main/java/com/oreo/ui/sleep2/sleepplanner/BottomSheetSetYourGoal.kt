@@ -49,6 +49,9 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
         binding.lytGoalSetDone.btnSave.setOnClickListener {
             navigateUpSafe()
         }
+        binding.lytSetGoalView.btnCancel.setOnClickListener {
+            navigateUpSafe()
+        }
 
 
         /*binding.ivLogAdd.setOnClickListener {
