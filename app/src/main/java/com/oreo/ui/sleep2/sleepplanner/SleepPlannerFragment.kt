@@ -55,7 +55,7 @@ class SleepPlannerFragment :
         binding.lytLegend2.ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#c5a8ed"))
 
         //type-0-set alarm, 1-multiple alarm
-        updateSetAlarmView(1)
+        updateSetAlarmView(0)
     }
 
     private fun updateSetAlarmView(type: Int) {

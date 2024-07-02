@@ -393,7 +393,7 @@ class SummaryDataFragmentToday :
             navigate(R.id.fragmentHeartRateDetails)
         }*/
 
-        binding.contentMain.lytSplanner.lytSetAlarm.ivAlarmMore.setOnClickListener {
+        binding.contentMain.lytSplanner.ivMore.setOnClickListener {
             navigate(R.id.setAlarmFragment)
         }
         binding.contentMain.lytSplanner.lytBreathe.ivPlay.setOnClickListener {
