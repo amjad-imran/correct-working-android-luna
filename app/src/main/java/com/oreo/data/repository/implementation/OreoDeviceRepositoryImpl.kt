@@ -8,6 +8,7 @@ import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,14 @@ class OreoDeviceRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/message/polling"
             remoteDataSource.pollForAnswer(url, jsonObject)
+
+        }
+    }
+
+    override suspend fun getChatHistory(): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat-history"
+            remoteDataSource.getChatHistory(url)
 
         }
     }

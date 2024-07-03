@@ -41,6 +41,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
+import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
@@ -381,6 +382,11 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponse<ChatGptResponse>
+
+    @GET
+    suspend fun getChatHistory(
+        @Url url: String,
+    ): BaseApiResponse<List<ChatHistoryItem>?>
 
     /**
      * ===================================

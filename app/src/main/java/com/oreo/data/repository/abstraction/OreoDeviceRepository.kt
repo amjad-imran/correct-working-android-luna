@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.ai.ChatHistoryItem
 import kotlinx.coroutines.flow.Flow
 
 interface OreoDeviceRepository {
@@ -13,4 +14,6 @@ interface OreoDeviceRepository {
     suspend fun askQuestionToChatGpt(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>>
 
     suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>>
+
+    suspend fun getChatHistory(): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>>
 }

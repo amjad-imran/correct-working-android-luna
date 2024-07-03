@@ -232,14 +232,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
              }
          })*/
 
-        binding.lytHeader.profileView1.setOnLongClickListener {
-            if (BuildConfig.DEBUG) {
-                navigate(R.id.chatGptFragment)
-                //navigate(R.id.logsDisplayFragment)
-            }
-            return@setOnLongClickListener true
-        }
-
 
         /* //handle device intro
          if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {

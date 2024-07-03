@@ -319,7 +319,7 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
                     if (viewModel.isChatSplashShown()) {
-                        navigate(R.id.chatGptFragment)
+                        navigate(R.id.chatHistoryFragment)
                     } else {
                         navigate(R.id.chatSplashFragment)
                     }
