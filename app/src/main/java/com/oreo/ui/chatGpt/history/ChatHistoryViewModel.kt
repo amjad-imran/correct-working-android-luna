@@ -7,6 +7,8 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,6 +62,44 @@ class ChatHistoryViewModel @Inject constructor(
     }
 
     private fun generateData(data: List<ChatHistoryItem>) {
-        _chatHistory.postValue(data)
+
+        val result = ArrayList<ChatHistoryItem>()
+        val datesSet = HashSet<String>()
+
+        data.forEach {
+            it.date ?: return@forEach
+
+            val date = DateFormats.formatDateTime(
+                it.date, DateFormats.dateFormat3(),
+                DateFormats.dateFormat6()
+            )
+
+            if (date.isEmpty()) return@forEach
+
+            if (!datesSet.contains(date)) {
+                datesSet.add(date)
+                result.add(ChatHistoryItem(isHeader = true, date = date))
+            }
+
+            result.add(it.apply {
+                isHeader = false
+            })
+        }
+        _chatHistory.postValue(result)
+    }
+
+    fun deleteChatHistory(threadId: String) {
+        val oldData = _chatHistory.value as? ArrayList<ChatHistoryItem>
+        val index = oldData?.indexOfFirst {
+            it.threadId.equals(threadId)
+        }
+
+        if (index != null && index != -1) {
+            oldData.removeAt(index)
+        }
+
+        if (oldData != null) {
+            _chatHistory.postValue(oldData)
+        }
     }
 }

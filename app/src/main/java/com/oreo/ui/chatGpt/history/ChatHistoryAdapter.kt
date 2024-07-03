@@ -15,22 +15,22 @@ class ChatHistoryAdapter(
 
     inner class ViewHolderHeader(val binding: RowChatHistoryHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(data: ChatHistoryItem) {
-
+            binding.tvDate.text = data.date
         }
     }
 
     inner class ViewHolderThread(val binding: RowChatHistoryThreadBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(data: ChatHistoryItem) {
 
             binding.tvHeadline.text = data.title
             binding.tvMessage.text = data.message
 
             binding.root.setOnClickListener {
-                listener.onThreadClicked(data.threadId)
+                data.threadId?.let {
+                    listener.onThreadClicked(it)
+                }
             }
         }
     }
@@ -46,10 +46,10 @@ class ChatHistoryAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemViewType == ChaHistoryViewType.DATA.type) {
-            (holder as ViewHolderThread).bind(mDataSet[position])
-        } else {
+        if (holder.itemViewType == ChaHistoryViewType.HEADER.type) {
             (holder as ViewHolderHeader).bind(mDataSet[position])
+        } else {
+            (holder as ViewHolderThread).bind(mDataSet[position])
         }
     }
 
@@ -67,6 +67,19 @@ class ChatHistoryAdapter(
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()
+    }
+
+    fun removeItem(pos: Int) {
+        mDataSet.removeAt(pos)
+        notifyItemRemoved(pos)
+    }
+
+    fun getThreadId(pos: Int): String? {
+        return try {
+            mDataSet[pos].threadId
+        } catch (exp: Exception) {
+            null
+        }
     }
 }
 

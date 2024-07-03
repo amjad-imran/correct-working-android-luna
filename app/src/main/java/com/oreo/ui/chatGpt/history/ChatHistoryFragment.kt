@@ -1,16 +1,19 @@
 package com.oreo.ui.chatGpt.history
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatHistoryBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.oreo.ui.chatGpt.ChatGptAdapter
+import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,7 +46,7 @@ class ChatHistoryFragment :
 
     override fun subscribeObservers() {
 
-        viewModel.chatHistory.observe(this){
+        viewModel.chatHistory.observe(this) {
             mAdapter.setDataSet(it)
         }
 
@@ -52,12 +55,14 @@ class ChatHistoryFragment :
                 context.showShortToast(message)
             }
         }
+
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }
         }
-        viewModel.getLoading().observe(viewLifecycleOwner) {
+
+        viewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar.root.visible()
             } else {
@@ -68,8 +73,33 @@ class ChatHistoryFragment :
 
     private fun setRecycler() {
         with(binding.rv) {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
+        }
+        setSwipeHelper()
+    }
+
+    private fun setSwipeHelper(){
+        object : SwipeHelper(requireContext(), binding.rv) {
+            override fun instantiateUnderlayButton(
+                viewHolder: RecyclerView.ViewHolder?,
+                underlayButtons: MutableList<UnderlayButton>?
+            ) {
+                if (viewHolder is ChatHistoryAdapter.ViewHolderThread) {
+                    underlayButtons?.add(
+                        UnderlayButton("Delete", 0, Color.parseColor("#FF0000"),
+                            object : UnderlayButtonClickListener {
+                                override fun onClick(pos: Int) {
+                                    LOGS.d("sdkjfhksjdhfkjsdf $pos")
+                                    val threadId = mAdapter.getThreadId(pos)
+                                    threadId?.let{
+                                        viewModel.deleteChatHistory(it)
+                                    }
+                                }
+                            })
+                    )
+                }
+            }
         }
     }
 }
