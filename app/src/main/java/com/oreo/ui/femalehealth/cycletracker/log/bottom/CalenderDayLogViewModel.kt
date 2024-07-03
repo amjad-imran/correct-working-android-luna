@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class CalenderDayLogViewModel
 @Inject
 constructor(
-    val femaleHealthRepository: FemaleHealthRepository
+    val femaleHealthRepository: FemaleHealthRepository,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
 //    var hmOfIcons = HashMap<LocalDate, Pair<ArrayList<FHSymptomsIconsModel>?, ArrayList<FHFlowIconsModel>?>>()

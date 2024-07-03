@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.yearMonth
@@ -24,7 +23,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
@@ -61,6 +60,7 @@ class CycleTrackerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_page_visit)
         setRecycler()
     }
 
@@ -193,11 +193,13 @@ class CycleTrackerFragment :
 
 
         binding.toolbar.viewBackCalendar.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_calendar_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(null)
             navigate(frag, bundle)
         }
 
         binding.toolbar.icInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_page_visit)
             navigate(R.id.cycleTrackStressInfoFragment)
         }
 
@@ -211,6 +213,7 @@ class CycleTrackerFragment :
             if (launchMode.isNotEmpty()) {
                 setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_phase_page_visit)
                 navigate(
                     R.id.dialogCtOvulationInfo, Bundle().apply {
                         this.putString("launchMode", launchMode)
@@ -228,6 +231,7 @@ class CycleTrackerFragment :
             if (launchMode.isNotEmpty()) {
                 setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_phase_page_visit)
                 navigate(
                     R.id.dialogCtOvulationInfo, Bundle().apply {
                         this.putString("launchMode", launchMode)
@@ -248,11 +252,13 @@ class CycleTrackerFragment :
             })
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_cycle_length_page_visit)
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.CYCLE_LENGTH)
             })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_period_duration_page_visit)
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.PERIOD_DURATION)
             })
@@ -261,6 +267,7 @@ class CycleTrackerFragment :
             navigate(R.id.cycleTrackerHistory)
         }
         binding.lytTrackerTop.btnLog.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
@@ -604,9 +611,9 @@ class CycleTrackerFragment :
         }
 
         val currentState = binding.lytTrackerTop.tvCurrentState.text.toString()
-        if (currentState.equals("Period in",true)) {
+        if (currentState.equals("Period in", true)) {
             nudgeBgColor = NudgeBgColor.PERIOD_LOW
-        }else if (currentState.equals("Ovulation in",true)) {
+        } else if (currentState.equals("Ovulation in", true)) {
             nudgeBgColor = NudgeBgColor.OVULATION_LOW
         }
 
