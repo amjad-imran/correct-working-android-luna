@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.PeriodTempChartModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.TempPeriodData
@@ -33,6 +34,7 @@ class FMHSkinTemperatureFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_temperature_page_visit)
         viewModel.selectedDate = args.selectedDate
 
         binding.lytToolbar.apply {
@@ -59,8 +61,8 @@ class FMHSkinTemperatureFragment :
                 tvMoreNight.visible()
                 divider1.root.visible()
                 ivInfo.visible()
-                tvMoreNight.text ="Temperature data for upcoming 3 cycles is required"
-                    //"Data for ${data.pendingNights} more nights is required"
+                tvMoreNight.text = "Temperature data for upcoming 3 cycles is required"
+                //"Data for ${data.pendingNights} more nights is required"
             }
         }
 
@@ -104,11 +106,11 @@ class FMHSkinTemperatureFragment :
         LOGS.d("sdalsadkljsdkal ${Gson().toJson(temp)}")
 
         temp.forEach {
-            if( viewModel.selectedDate == it.date){
+            if (viewModel.selectedDate == it.date) {
                 updateTopUi(it.date, it.temperature)
             }
         }
-     
+
 
         binding.lytSkinTemp.vGraph.updateData(
             topGraphData.second.first,
@@ -153,6 +155,7 @@ class FMHSkinTemperatureFragment :
 
     override fun initListener() {
         binding.lytPrediction.ivInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_temperature_visit)
             navigate(
                 R.id.dialogCtOvulationInfo, Bundle().apply {
                     this.putString("launchMode", "Ovulation Graph Details")
@@ -180,9 +183,9 @@ class FMHSkinTemperatureFragment :
         }
 
         viewModel.tempData.observe(this) {
-            if(it.nudge == null){
+            if (it.nudge == null) {
                 binding.tvDescription.gone()
-            }else{
+            } else {
                 binding.tvDescription.visible()
             }
             binding.tvDescription.text = it.nudge?.message
