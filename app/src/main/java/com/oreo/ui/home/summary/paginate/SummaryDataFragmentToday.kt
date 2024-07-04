@@ -318,8 +318,10 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
+
                     if (viewModel.isChatSplashShown()) {
-                        navigate(R.id.chatHistoryFragment)
+                        mainViewModel.getChatHistoryToday()
+//                        navigate(R.id.chatHistoryFragment)
                     } else {
                         navigate(R.id.chatSplashFragment)
                     }

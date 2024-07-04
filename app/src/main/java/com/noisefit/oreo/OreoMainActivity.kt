@@ -45,6 +45,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
@@ -590,6 +591,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.showChatUi.observe(this) {
+            it.getContent()?.let { threadId ->
+                val (frag, bundle) = ChatGptFragment.getStartData(threadId)
+                navController?.navigate(frag, bundle)
+            }
+        }
 
         viewModel.sessionManager.customSuccessToast.observe(this) {
             it.getContent()?.let {

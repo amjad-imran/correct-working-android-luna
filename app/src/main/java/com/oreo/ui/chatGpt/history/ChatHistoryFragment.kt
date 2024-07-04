@@ -12,7 +12,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,6 +47,9 @@ class ChatHistoryFragment :
 
         viewModel.chatHistory.observe(this) {
             mAdapter.setDataSet(it)
+            if (it.isEmpty()) {
+                navigateUpSafe()
+            }
         }
 
         viewModel.getMessages().observe(this) {
@@ -79,21 +81,21 @@ class ChatHistoryFragment :
         setSwipeHelper()
     }
 
-    private fun setSwipeHelper(){
+    private fun setSwipeHelper() {
         object : SwipeHelper(requireContext(), binding.rv) {
             override fun instantiateUnderlayButton(
-                viewHolder: RecyclerView.ViewHolder?,
-                underlayButtons: MutableList<UnderlayButton>?
+                viewHolder: RecyclerView.ViewHolder?, underlayButtons: MutableList<UnderlayButton>?
             ) {
                 if (viewHolder is ChatHistoryAdapter.ViewHolderThread) {
                     underlayButtons?.add(
-                        UnderlayButton("Delete", 0, Color.parseColor("#FF0000"),
+                        UnderlayButton("Delete",
+                            0,
+                            Color.parseColor("#FF0000"),
                             object : UnderlayButtonClickListener {
                                 override fun onClick(pos: Int) {
-                                    LOGS.d("sdkjfhksjdhfkjsdf $pos")
                                     val threadId = mAdapter.getThreadId(pos)
-                                    threadId?.let{
-                                        viewModel.deleteChatHistory(it)
+                                    threadId?.let {
+                                        viewModel.deleteChatHistoryServer(it)
                                     }
                                 }
                             })

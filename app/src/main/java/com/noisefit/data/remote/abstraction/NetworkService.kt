@@ -51,6 +51,7 @@ import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -385,8 +386,20 @@ interface NetworkService {
 
     @GET
     suspend fun getChatHistory(
-        @Url url: String,
+        @Url url: String
     ): BaseApiResponse<List<ChatHistoryItem>?>
+
+    @GET
+    suspend fun getChatHistoryByDate(
+        @Url url: String,
+        @Query("date") date: String?
+    ): BaseApiResponse<List<ChatHistoryItem>?>
+
+    @DELETE
+    suspend fun deleteChatHistory(
+        @Url url: String,
+        @Query("thread_id") threadId: String
+    ): BaseApiResponse<Any?>
 
     /**
      * ===================================

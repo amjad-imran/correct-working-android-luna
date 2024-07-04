@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
@@ -19,6 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
+    companion object {
+        fun getStartData(threadId: String?): Pair<Int, Bundle?> {
+            return Pair(R.id.chatGptFragment, Bundle().apply {
+                putString("threadId", threadId ?: "")
+            })
+        }
+    }
 
 
     private val viewModel: ChatGptViewModel by viewModels()
@@ -64,8 +72,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
+        binding.ivHistory.setOnClickListener {
+            navigate(R.id.chatHistoryFragment)
+        }
+
         binding.lytChatBox.btnNewChat.setOnClickListener {
-            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf())
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf(""))
         }
 
         binding.lytChatBox.btnSendMessage.setOnClickListener {
