@@ -99,6 +99,7 @@ class OHeartRateDataFragment :
                     } else {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                        binding.lytHeartRate.tvSubtitle1.text = ""
                     }
                     if (item.maxValue != 0 && item.minValue != 0) {
                         binding.lytHeartRate.tvSubtitle2.visible()

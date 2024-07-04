@@ -793,18 +793,18 @@ class SummaryDataFragmentToday :
             }
         }
 
-        mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+       /* mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
             when (state) {
-                2/*END*/ -> {
-                    /* mainViewModel.viewModelScope.launch {
+                2*//*END*//* -> {
+                    *//* mainViewModel.viewModelScope.launch {
                          delay(1000)
                          context?.let { ctx ->
                              val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
                          }
-                     }*/
+                     }*//*
                 }
             }
-        }
+        }*/
 
         viewModel.stateDashRingBattery.observe(viewLifecycleOwner) {
             if (it.first) {
