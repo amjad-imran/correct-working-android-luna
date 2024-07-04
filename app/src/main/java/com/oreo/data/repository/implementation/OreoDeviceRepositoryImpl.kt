@@ -57,7 +57,6 @@ class OreoDeviceRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/date-history"
             remoteDataSource.getChatHistoryByDate(url, date)
-
         }
     }
 
@@ -65,7 +64,20 @@ class OreoDeviceRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/delete"
             remoteDataSource.deleteChatHistory(url, threadId)
+        }
+    }
 
+    override suspend fun generateThreadId(): Flow<Resource<BaseApiResponse<Any?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/new-chat"
+            remoteDataSource.generateThreadId(url)
+        }
+    }
+
+    override suspend fun loadMessagesByThreadId(threadId:String): Flow<Resource<BaseApiResponse<Any?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat?thread_id=$threadId"
+            remoteDataSource.loadMessagesByThreadId(url)
         }
     }
 }

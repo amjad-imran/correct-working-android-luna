@@ -16,6 +16,13 @@ interface OreoDeviceRepository {
     suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>>
 
     suspend fun getChatHistory(): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>>
+
     suspend fun getChatHistoryByDate(date: String?): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>>
+
     suspend fun deleteChatHistory(threadId: String): Flow<Resource<BaseApiResponse<Any?>?>>
+
+    suspend fun generateThreadId(): Flow<Resource<BaseApiResponse<Any?>?>>
+
+    suspend fun loadMessagesByThreadId(threadId:String): Flow<Resource<BaseApiResponse<Any?>?>>
+
 }

@@ -13,8 +13,11 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
@@ -45,8 +48,6 @@ class ChatGptViewModel
     private val _scrollToBottom = MutableLiveData<Event<Boolean>>()
     val scrollToBottom: LiveData<Event<Boolean>>
         get() = _scrollToBottom
-
-
 
     var assistantId: String? = null
     var threadId: String? = null
@@ -81,7 +82,6 @@ class ChatGptViewModel
         _scrollToBottom.postValue(Event(true))
     }
 
-    //TODO optimize
     fun addReceivedMessage(message: String, streaming: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
             val messages = _chatGptOverview.value ?: ArrayList()
@@ -115,6 +115,49 @@ class ChatGptViewModel
         }
     }
 
+    fun generateThreadId() {
+        viewModelScope.launch {
+            oreoDeviceRepository.generateThreadId().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        generateThreadId()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            threadId= ""//TODO set new thread ID here
+                            sendInitMessage()
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
@@ -126,10 +169,10 @@ class ChatGptViewModel
 
             val userToken = localDataStore.getUserToken()
 
-
             val request: Request =
                 Request.Builder()
-                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt").apply {
+                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt,thread_id=$threadId")
+                    .apply {
                         userToken?.let {
                             this.addHeader("access-token", "Bearer ${userToken.access_token}")
                             this.addHeader("wearable-type", "ring")
@@ -181,7 +224,7 @@ class ChatGptViewModel
                     throwable: Throwable?,
                     response: Response?
                 ): Boolean {
-                    //LOGS.d("streammmmmm onRetryError() $response")
+                    LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
                     if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
@@ -218,123 +261,6 @@ class ChatGptViewModel
             .replace(Regex(sourcePattern), "")
     }
 
-    fun askQuestion(prompt: String) {
-        fetchInProgress.value = true
-        lastApi = Pair(1, prompt)
-
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("message", prompt)
-        if (assistantId != null && threadId != null) {
-            jsonObject.addProperty("assistant_id", assistantId)
-            jsonObject.addProperty("thread_id", threadId)
-        }
-
-        viewModelScope.launch {
-            oreoDeviceRepository.askQuestionToChatGpt(jsonObject).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        fetchInProgress.value = false
-                        addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
-                        )
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        fetchInProgress.value = false
-                        addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
-                        )
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            if (it.assistant_id != null && it.thread_id != null && it.run_id != null) {
-                                assistantId = it.assistant_id
-                                threadId = it.thread_id
-                                callAfterSomeTime(it.assistant_id, it.thread_id, it.run_id)
-                            } else {
-                                fetchInProgress.value = false
-                                addErrorState(
-                                    String.format(
-                                        resourceProvider.getString(R.string.text_ai_error_message),
-                                        userName ?: ""
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun callAfterSomeTime(assistantId: String, threadId: String, runId: String) {
-        Handler().postDelayed({
-            pollAnswer(assistantId, threadId, runId)
-        }, 2000)
-    }
-
-    fun pollAnswer(assistantId: String, threadId: String, runId: String) {
-
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("assistant_id", assistantId)
-        jsonObject.addProperty("thread_id", threadId)
-        jsonObject.addProperty("run_id", runId)
-        jsonObject.addProperty("cancel_run", false)
-
-        viewModelScope.launch {
-            oreoDeviceRepository.pollForAnswer(jsonObject).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        fetchInProgress.value = false
-                        addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
-                        )
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        fetchInProgress.value = false
-                        addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
-                        )
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            if (it.status.equals("completed", true) && it.reply != null) {
-                                fetchInProgress.value = false
-                                addReceivedMessage(it.reply, true)
-                            } else {
-                                callAfterSomeTime(assistantId, threadId, runId)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     fun sendInitMessage() {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -346,55 +272,43 @@ class ChatGptViewModel
         }
 
         return
-        /* fetchInProgress.value = true
-         addReceivedMessage("", true)
+    }
 
-         val jsonObject = JsonObject()
-         jsonObject.addProperty("message", "Hi")
+    fun loadMessagesByThreadId(threadId: String) {
+        viewModelScope.launch {
+            oreoDeviceRepository.loadMessagesByThreadId(threadId).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-         viewModelScope.launch {
-             oreoDeviceRepository.askQuestionToChatGpt(jsonObject).collect { resource ->
-                 when (resource) {
-                     is Resource.GenericError -> {
-                         sendMessage(resource.message)
-                         fetchInProgress.value = false
-                     }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                     is Resource.Loading -> {
-                         //setLoading(resource.loading)
-                     }
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        generateThreadId()
+                                    }
 
-                     is Resource.NetworkError -> {
-                         setApiErrors(resource.response.apply {
-                             this.uiComponentType as UIComponentType.RetryApiDialog
-                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                 object : BinaryActionCallback {
-                                     override fun yes() {
-                                         sendInitMessage()
-                                     }
+                                    override fun no() {
 
-                                     override fun no() {
+                                    }
+                                }
+                        })
+                    }
 
-                                     }
-                                 }
-                         })
-
-                     }
-
-                     is Resource.Success -> {
-                         resource.data?.data?.let {
-                             if (it.assistant_id != null && it.thread_id != null && it.run_id != null) {
-                                 assistantId = it.assistant_id
-                                 threadId = it.thread_id
-                                 callAfterSomeTime(it.assistant_id, it.thread_id, it.run_id)
-                             } else {
-                                 fetchInProgress.value = false
-                                 sendMessage("Something went wrong")
-                             }
-                         }
-                     }
-                 }
-             }
-         }*/
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            //TODO parse and load messages
+                        }
+                    }
+                }
+            }
+        }
     }
 }

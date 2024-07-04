@@ -891,8 +891,8 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            //TODO check for thread id else empty
-                            showChatUi.postValue(Event(""))
+                            val threadId = it.firstOrNull()?.threadId
+                            showChatUi.postValue(Event(threadId ?: ""))
                         }
                     }
                 }

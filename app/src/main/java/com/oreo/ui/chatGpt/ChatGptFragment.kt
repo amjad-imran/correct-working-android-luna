@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
@@ -14,6 +15,7 @@ import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
 
     private val viewModel: ChatGptViewModel by viewModels()
+    private val args: ChatGptFragmentArgs by navArgs()
 
     private val mAdapter: ChatGptAdapter by lazy {
         ChatGptAdapter()
@@ -40,7 +43,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
-        viewModel.sendInitMessage()
+        viewModel.threadId = args.threadId
+
+        if (viewModel.threadId.isNullOrEmpty()) {
+            viewModel.generateThreadId()
+        } else {
+            viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+        }
     }
 
     private fun setAdapter() {
@@ -142,6 +151,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 uiController.onApiErrorReceived(response)
             }
         }
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
         viewModel.scrollToBottom.observe(this) {
             it.getContent()?.let {
                 binding.rv.smoothScrollToPosition(mAdapter.getItemCount() - 1)

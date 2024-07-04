@@ -401,6 +401,16 @@ interface NetworkService {
         @Query("thread_id") threadId: String
     ): BaseApiResponse<Any?>
 
+    @GET
+    suspend fun generateThreadId(
+        @Url url: String
+    ): BaseApiResponse<Any?>
+
+    @GET
+    suspend fun loadMessagesByThreadId(
+        @Url url: String
+    ): BaseApiResponse<Any?>
+
     /**
      * ===================================
      */
