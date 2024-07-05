@@ -269,22 +269,25 @@ class SummaryDataViewModelToday @Inject constructor(
 
             femaleHealthData.let {
                 val (hasDataLoaded, femaleData) = it
-                LOGS.d("sdfjhksdjfhk"," here in block")
+                LOGS.d("sdfjhksdjfhk", " here in block")
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
-                        LOGS.d("sdfjhksdjfhk"," female data is null")
+                        LOGS.d("sdfjhksdjfhk", " female data is null")
                         if (gender.equals("male", true).not()) {
 
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
 
-                            LOGS.d("sdfjhksdjfhk","lastShownDays $lastShownDays -${localDataStore.getFMHWalkthroughShownStatus()}")
+                            LOGS.d(
+                                "sdfjhksdjfhk",
+                                "lastShownDays $lastShownDays -${localDataStore.getFMHWalkthroughShownStatus()}"
+                            )
 
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
                             ) {
-                                LOGS.d("sdfjhksdjfhk"," SHow track card")
+                                LOGS.d("sdfjhksdjfhk", " SHow track card")
                                 trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
                                     FemaleHealthCardState.TRACK
                                 )
@@ -335,7 +338,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )*/
                                 }
 
-                                val isCardShownForToday = femaleHealthRepository.getGotPeriodClickedStatus()
+                                val isCardShownForToday =
+                                    femaleHealthRepository.getGotPeriodClickedStatus()
                                 LOGS.d("ASDsadsad $isCardShownForToday")
                                 if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
 
@@ -355,7 +359,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         )
                                     )*/
                                     gotYourPeriodCard = OHealthOverview.GotYourPeriod(
-                                        dayMessage
+                                        dayMessage,
+                                        femaleData.currentDay
                                     )
                                 }
                             }
@@ -711,9 +716,11 @@ class SummaryDataViewModelToday @Inject constructor(
         val tempVariance = calculateTempVariance(data.temp)
 
         if (data.isPeriod) {
+            val isNoClicked = data.confirmedPeriod != null
+
             return PeriodCard2(
-                title = if (data.otaLog) "Period" else "Predicted period",
-                subTitle = "Day ${data.currentDay}",
+                title = if (data.otaLog) "Period" else if (isNoClicked) "Period late for" else "Predicted period",
+                subTitle = if (data.otaLog) "Day ${data.currentDay}" else if (isNoClicked) "${data.currentDay} day" else "Day ${data.currentDay}",
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -1514,17 +1521,18 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    fun onGotPeriodClicked(status: Boolean) {
+    fun onGotPeriodClicked(status: Boolean, currentDay: Int) {
         viewModelScope.launch {
-            if (status.not()) {
+            /*if (status.not()) {
                 femaleHealthRepository.saveGotPeriodClicked()
                 gotYourPeriodData.postValue(null)
                 return@launch
-            }
+            }*/
 
             val requestObject = JsonObject().apply {
                 this.addProperty("date", DateFormats.getTodaysDateString(10))
-                this.addProperty("confirm", true)
+                this.addProperty("confirm", status)
+                this.addProperty("day", currentDay)
             }
 
             femaleHealthRepository.setPeriodConfirm(requestObject).collect { resource ->
@@ -1543,7 +1551,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        onGotPeriodClicked(status)
+                                        onGotPeriodClicked(status,currentDay)
                                     }
 
                                     override fun no() {

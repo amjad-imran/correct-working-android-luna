@@ -340,7 +340,7 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {
-                    viewModel.onGotPeriodClicked(type.status)
+                    //viewModel.onGotPeriodClicked(type.status)
                 }
             }
         }
@@ -473,10 +473,10 @@ class SummaryDataFragmentToday :
                     this.tvPredictedDay.text = data.title ?: ""
 
                     this.bYes.setOnClickListener {
-                        viewModel.onGotPeriodClicked(true)
+                        viewModel.onGotPeriodClicked(true, data.currentDay)
                     }
                     this.bNo.setOnClickListener {
-                        viewModel.onGotPeriodClicked(false)
+                        viewModel.onGotPeriodClicked(false, data.currentDay)
                     }
                 }
             }
@@ -792,9 +792,9 @@ class SummaryDataFragmentToday :
             }
         }
 
-       /* mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
-            when (state) {
-                2*//*END*//* -> {
+        /* mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+             when (state) {
+                 2*//*END*//* -> {
                     *//* mainViewModel.viewModelScope.launch {
                          delay(1000)
                          context?.let { ctx ->

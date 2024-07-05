@@ -494,7 +494,6 @@ class CycleTrackerFragment :
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
             tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"
-            tvCurrentState.text = "Current state here"
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
@@ -515,16 +514,26 @@ class CycleTrackerFragment :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
+                        val isNoClicked = data.confirmedPeriod != null
+
                         tvCurrentState.text = if (data.otaLog) {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
                             "Period"
+                        } else if (isNoClicked) {
+                            "Period late for"
                         } else {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
                             "Predicted period"
-
                         }
 
-                        tvStateDay.text = "Days ${data.currentDay}"
+                        tvStateDay.text =
+                            if (data.otaLog) {
+                                "Days ${data.currentDay}"
+                            } else if (isNoClicked) {
+                                "${data.currentDay} day"
+                            } else {
+                                "Days ${data.currentDay}"
+                            }
                     }
 
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)

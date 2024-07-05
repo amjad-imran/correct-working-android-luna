@@ -38,7 +38,7 @@ class ChatGptViewModel
 ) : BaseViewModel() {
 
     private var userImage: String? = null
-    private var userName: String? = nullMain
+    private var userName: String? = null
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
