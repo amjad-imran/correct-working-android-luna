@@ -3,6 +3,7 @@ package com.oreo.ui.chatGpt.history
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +25,12 @@ class ChatHistoryFragment :
     private val mAdapter: ChatHistoryAdapter by lazy {
         ChatHistoryAdapter(object : ChatHistoryInteraction {
             override fun onThreadClicked(threadId: String) {
-                val (frag, bundle) = ChatGptFragment.getStartData(threadId)
-                navigate(frag, bundle)
+
+                navigate(
+                    ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
+                        threadId
+                    )
+                )
             }
         })
     }
@@ -92,7 +97,11 @@ class ChatHistoryFragment :
                     underlayButtons?.add(
                         UnderlayButton("Delete",
                             0,
-                            Color.parseColor("#FF0000"),
+                            Color.parseColor("#ff3358"),
+                            ResourcesCompat.getFont(
+                                requireContext(),
+                                com.noisefit_commans.R.font.gilroy_medium
+                            ),
                             object : UnderlayButtonClickListener {
                                 override fun onClick(pos: Int) {
                                     val threadId = mAdapter.getThreadId(pos)

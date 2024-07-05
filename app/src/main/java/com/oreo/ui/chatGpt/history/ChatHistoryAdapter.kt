@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowChatHistoryHeaderBinding
 import com.noisefit.luna.databinding.RowChatHistoryThreadBinding
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ai.ChatHistoryItem
 
 
@@ -16,7 +17,12 @@ class ChatHistoryAdapter(
     inner class ViewHolderHeader(val binding: RowChatHistoryHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ChatHistoryItem) {
-            binding.tvDate.text = data.date
+
+             val date = DateFormats.formatDateTime(
+                 data.date, DateFormats.dateFormat3(),
+                DateFormats.dateFormat6()
+            )
+            binding.tvDate.text = date
         }
     }
 

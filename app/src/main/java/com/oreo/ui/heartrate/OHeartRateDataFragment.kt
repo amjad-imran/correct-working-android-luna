@@ -169,13 +169,11 @@ class OHeartRateDataFragment :
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+            binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
         } else {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
         }
-        binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
-
-
     }
 
     private fun initHeartRateGraph(

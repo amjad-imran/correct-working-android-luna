@@ -68,12 +68,6 @@ class ChatHistoryViewModel @Inject constructor(
         data.forEach {
             it.date ?: return@forEach
 
-            /* val date = DateFormats.formatDateTime(
-                 it.date, DateFormats.dateFormat3(),
-                 DateFormats.dateFormat6()
-             )*/
-
-
             if (!datesSet.contains(it.date)) {
                 datesSet.add(it.date!!)
                 result.add(ChatHistoryItem(isHeader = true, date = it.date))
