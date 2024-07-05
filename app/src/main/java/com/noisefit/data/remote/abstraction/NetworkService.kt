@@ -42,6 +42,8 @@ import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.ai.ChatHistoryItem
+import com.oreo.data.model.ai.ChatMessagesResponse
+import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
@@ -404,12 +406,12 @@ interface NetworkService {
     @GET
     suspend fun generateThreadId(
         @Url url: String
-    ): BaseApiResponse<Any?>
+    ): BaseApiResponse<ThreadIdResponse?>
 
     @GET
     suspend fun loadMessagesByThreadId(
         @Url url: String
-    ): BaseApiResponse<Any?>
+    ): BaseApiResponse<ChatMessagesResponse>
 
     /**
      * ===================================

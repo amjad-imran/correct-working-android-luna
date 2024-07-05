@@ -1,11 +1,9 @@
 package com.oreo.ui.chatGpt
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
@@ -17,10 +15,10 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
+import com.oreo.data.model.ai.ChatMessage
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +38,7 @@ class ChatGptViewModel
 ) : BaseViewModel() {
 
     private var userImage: String? = null
-    private var userName: String? = null
+    private var userName: String? = nullMain
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
@@ -57,11 +55,15 @@ class ChatGptViewModel
 
 
     var lastApi: Pair<Int, String>? = null
+    private lateinit var initMessage: String
 
     init {
         val user = localDataStore.getUser()
         userImage = user?.imageUrl
         userName = user?.firstName
+
+        initMessage =
+            "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
 
 
@@ -145,9 +147,11 @@ class ChatGptViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            it.threadId?.let { id ->
+                                threadId = id
+                                sendInitMessage()
+                            }
 
-                            threadId= ""//TODO set new thread ID here
-                            sendInitMessage()
                         }
                     }
                 }
@@ -156,7 +160,6 @@ class ChatGptViewModel
 
 
     }
-
 
 
     fun askQuestionStream(prompt: String) {
@@ -171,7 +174,7 @@ class ChatGptViewModel
 
             val request: Request =
                 Request.Builder()
-                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt,thread_id=$threadId")
+                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt&thread_id=$threadId")
                     .apply {
                         userToken?.let {
                             this.addHeader("access-token", "Bearer ${userToken.access_token}")
@@ -179,7 +182,7 @@ class ChatGptViewModel
                         }
                     }.build()
 
-            //LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
+            LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
             val okSse = OkSse()
             val sse = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
@@ -262,15 +265,9 @@ class ChatGptViewModel
     }
 
     fun sendInitMessage() {
-
         viewModelScope.launch(Dispatchers.IO) {
-            val userName = localDataStore.getUser()?.firstName
-            val initMessage =
-                "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
-
             addReceivedMessage(initMessage, false)
         }
-
         return
     }
 
@@ -292,7 +289,7 @@ class ChatGptViewModel
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        generateThreadId()
+                                        loadMessagesByThreadId(threadId)
                                     }
 
                                     override fun no() {
@@ -304,11 +301,31 @@ class ChatGptViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            //TODO parse and load messages
+                            generateMessages(it.chatHistory)
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun generateMessages(messages: List<ChatMessage>?) {
+        setLoading(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val tempMessage = ArrayList<ChatGptOverview>()
+            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage))
+
+            messages?.forEach {
+                if (it.sender.equals("assistant", true)) {
+                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
+                } else if (it.sender.equals("user", true)) {
+                    tempMessage.add(ChatGptOverview.SentMessage(it.message ?: "", userImage))
+                }
+            }
+
+            setLoading(false)
+            _chatGptOverview.postValue(tempMessage)
+            _scrollToBottom.postValue(Event(true))
         }
     }
 }

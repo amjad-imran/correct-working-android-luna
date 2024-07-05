@@ -51,8 +51,8 @@ class ChatHistoryViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
-                            generateData(it)
+                        resource.data?.let {
+                            generateData(it.data?:ArrayList())
                         }
                     }
                 }
@@ -149,7 +149,7 @@ class ChatHistoryViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.let {
                             deleteChatHistory(threadId)
                         }
                     }

@@ -41,9 +41,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.threadId = args.threadId
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
-        viewModel.threadId = args.threadId
 
         if (viewModel.threadId.isNullOrEmpty()) {
             viewModel.generateThreadId()
@@ -83,7 +83,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     override fun initListener() {
 
         binding.ivHistory.setOnClickListener {
-            navigate(R.id.chatHistoryFragment)
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
         }
 
         binding.lytChatBox.btnNewChat.setOnClickListener {

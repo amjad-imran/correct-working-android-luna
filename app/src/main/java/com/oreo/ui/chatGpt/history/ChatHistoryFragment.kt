@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,8 @@ class ChatHistoryFragment :
     private val mAdapter: ChatHistoryAdapter by lazy {
         ChatHistoryAdapter(object : ChatHistoryInteraction {
             override fun onThreadClicked(threadId: String) {
-                navigate(R.id.chatGptFragment)
+                val (frag, bundle) = ChatGptFragment.getStartData(threadId)
+                navigate(frag, bundle)
             }
         })
     }
