@@ -879,7 +879,10 @@ class OreoReadinessFragment :
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
                     String.format("%.1f°F (%s)",it.avg_temp.value, deviationString)
             } else {
-                binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
+                binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                    String.format("%.1f°F",it.avg_temp.value)
+
+                //binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
 
 
