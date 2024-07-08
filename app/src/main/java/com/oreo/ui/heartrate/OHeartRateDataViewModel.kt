@@ -3,6 +3,7 @@ package com.oreo.ui.heartrate
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.ui.BaseViewModel
@@ -54,30 +55,34 @@ class OHeartRateDataViewModel @Inject constructor(
         val dataList = ArrayList<LearnMoreDataModel>()
         dataList.add(
             LearnMoreDataModel(
-                label = "3 mins read",
-                msg = "General heart rate terms",
-                img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                title = "General heart rate terms",
+                msg = "2 min read",
+                img = R.drawable.img_hr_article_1,
+                type = 1
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 mins read",
-                msg = "What’s a normal heart rate for my age?",
-                img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                title = "Normal heart rate for my age",
+                msg = "2 min read",
+                img = R.drawable.img_hr_article_2,
+                type = 2
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 mins read",
-                msg = "What are heart rate zones and how do they work?",
-                img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                title = "What are heart rate zones ?",
+                msg = "2 min read",
+                img = R.drawable.img_hr_article_3,
+                type = 3
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 mins read",
-                msg = "Understanding Sleeping Heart Rate",
-                img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                title = "Heart rate during sleep",
+                msg = "2 min read",
+                img = R.drawable.img_hr_article_4,
+                type = 4
             )
         )
         return dataList

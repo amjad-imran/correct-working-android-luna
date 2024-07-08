@@ -40,9 +40,23 @@ class OHeartRateDataFragment :
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
         OHRLearnMoreAdapter(object : OnItemClickListener {
             override fun onItemClick(item: LearnMoreDataModel) {
-                navigate(R.id.fragmentLearMoreDetails, Bundle().apply {
-                    this.putParcelable("data", item)
-                })
+                when (item.type) {
+                    1 -> {
+                        navigate(R.id.hrArticle1Fragment)
+                    }
+
+                    2 -> {
+                        navigate(R.id.hrArticle2Fragment)
+                    }
+
+                    3 -> {
+                        navigate(R.id.hrArticle3Fragment)
+                    }
+
+                    4 -> {
+                        navigate(R.id.hrArticle4Fragment)
+                    }
+                }
             }
 
         })

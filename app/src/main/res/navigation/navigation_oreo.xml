@@ -685,15 +685,6 @@
             app:destination="@id/bottomSheetDayTimeActivity" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentLearMoreDetails"
-        android:name="com.oreo.ui.heartrate.LearnMoreDetailsFragment"
-        android:label="LearnMoreDetails">
-
-        <argument
-            android:name="data"
-            app:argType="com.oreo.data.model.LearnMoreDataModel" />
-    </fragment>
-    <fragment
         android:id="@+id/fragmentHrInfo"
         android:name="com.oreo.ui.heartrate.OHRInfoFragment"
         android:label="HR info fragment" />
@@ -899,4 +890,20 @@
             app:popUpTo="@id/chatHistoryFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/hrArticle1Fragment"
+        android:name="com.oreo.ui.heartrate.article.HrArticle1Fragment"
+        android:label="fragment_hr_article1"/>
+    <fragment
+        android:id="@+id/hrArticle2Fragment"
+        android:name="com.oreo.ui.heartrate.article.HrArticle2Fragment"
+        android:label="fragment_hr_article2"/>
+    <fragment
+        android:id="@+id/hrArticle3Fragment"
+        android:name="com.oreo.ui.heartrate.article.HrArticle3Fragment"
+        android:label="fragment_hr_article3" />
+    <fragment
+        android:id="@+id/hrArticle4Fragment"
+        android:name="com.oreo.ui.heartrate.article.HrArticle4Fragment"
+        android:label="fragment_hr_article4" />
 </navigation>
