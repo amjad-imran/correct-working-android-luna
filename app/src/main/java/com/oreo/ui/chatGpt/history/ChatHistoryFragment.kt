@@ -9,18 +9,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatHistoryBinding
+import com.noisefit_commans.common.MarginItemDecoration
+import com.noisefit_commans.common.MarginTopItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatHistoryFragment :
     BaseFragment<FragmentChatHistoryBinding>(FragmentChatHistoryBinding::inflate) {
     val viewModel: ChatHistoryViewModel by viewModels()
+
+    @Inject
+    lateinit var screenUtils: ScreenUtils
 
     private val mAdapter: ChatHistoryAdapter by lazy {
         ChatHistoryAdapter(object : ChatHistoryInteraction {
@@ -84,6 +91,8 @@ class ChatHistoryFragment :
         with(binding.rv) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
+            val marginItemDecoration = MarginTopItemDecoration(screenUtils.dpToPx2(8, this.context))
+            addItemDecoration(marginItemDecoration)
         }
         setSwipeHelper()
     }
