@@ -316,7 +316,7 @@ object DateFormats {
         val amPm = if (hours < 12) "AM" else "PM"
         val formattedHours = if (hours % 12 == 0) 12 else hours % 12
 
-        return String.format("%02d:%02d %s", formattedHours, remainingMinutes, amPm)
+        return String.format(locale = Locale.US,"%02d:%02d %s", formattedHours, remainingMinutes, amPm)
 
     }
 

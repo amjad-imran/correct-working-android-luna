@@ -72,6 +72,6 @@ object AppConversionUtils {
     }
 
     fun round(value: Double): String {
-        return String.format("%.2f", value)
+        return String.format(locale = Locale.US,"%.2f", value)
     }
 }

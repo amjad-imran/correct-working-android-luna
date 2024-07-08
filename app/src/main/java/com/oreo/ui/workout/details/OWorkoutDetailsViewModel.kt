@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -181,10 +182,10 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
 
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat().parse(String.format("%02d:%02d", startHr, startMin))
+        calendar.time = DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", startHr, startMin))
         val endTimeCalendar = Calendar.getInstance()
         endTimeCalendar.time =
-            DateFormats.timeFormat().parse(String.format("%02d:%02d", endHr, endMin))
+            DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", endHr, endMin))
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {

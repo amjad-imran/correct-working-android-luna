@@ -186,11 +186,11 @@ fun Bitmap.convertCorner(radius: Float): Bitmap {
 }
 
 fun Float.upToNDecimal(upTo: Int): String {
-    return String.format("%.${upTo}f", this)
+    return String.format(locale = Locale.US,"%.${upTo}f", this)
 }
 
 fun Double.upToNDecimal(upTo: Int): String {
-    return String.format("%.${upTo}f", this)
+    return String.format(locale = Locale.US,"%.${upTo}f", this)
 }
 
 fun Double.roundDownDecimal(): String {

@@ -40,6 +40,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -440,9 +441,9 @@ class CycleTrackerFragment :
                 tvUnit.gone()
             } else {
                 tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
-                    "+${String.format("%.1f", data.tempVariation)}"
+                    "+${String.format(locale = Locale.US,"%.1f", data.tempVariation)}"
                 } else {
-                    "-${String.format("%.1f", abs(data.tempVariation))}"
+                    "-${String.format(locale = Locale.US,"%.1f", abs(data.tempVariation))}"
                 }
                 tvUnit.visible()
             }

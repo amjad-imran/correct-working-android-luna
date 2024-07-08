@@ -22,6 +22,7 @@ import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.scoredetails.OSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -83,11 +84,11 @@ class BodyTempScoreDetailFragment :
                     if ((it.deviation ?: 0f) > 0) {
                         this.append("+")
                     }
-                    this.append(String.format("%.2f", it.deviation))
+                    this.append(String.format(locale = Locale.US,"%.2f", it.deviation))
                 }
 
 
-                String.format("%.1f°F (%s)", it.data, deviationString)
+                String.format(locale = Locale.US,"%.1f°F (%s)", it.data, deviationString)
             }
             //"${it.deviation}°"
         }
@@ -292,11 +293,11 @@ class BodyTempScoreDetailFragment :
                         if ((chartModel.valueFloat) > 0) {
                             this.append("+")
                         }
-                        this.append(String.format("%.2f", chartModel.valueFloat))
+                        this.append(String.format(locale = Locale.US,"%.2f", chartModel.valueFloat))
                     }
 
 
-                    String.format("%.1f°F (%s)", chartModel.valueFloat2, deviationString)
+                    String.format(locale = Locale.US,"%.1f°F (%s)", chartModel.valueFloat2, deviationString)
                 }
             }
         }
@@ -353,7 +354,7 @@ class BodyTempScoreDetailFragment :
                     binding.lytScoreOverview.tvScoreMsg.visible()
                     mViewModel.isProgressEqual = true
                 }
-                val compPro = "${String.format("%.1f", difference)} °F"
+                val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
                 binding.lytScoreOverview.tvTrendProg.text = compPro
             }
         }

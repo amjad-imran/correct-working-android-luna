@@ -34,6 +34,7 @@ import com.oreo.data.model.NapOverlayData
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.SleepOverlayData
 import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -218,7 +219,7 @@ class OreoOnlineDataMapper
             }
             var dayBreakup: OreoSleepNetworkEntity.OreoDayBreakup? = null
             val avgTemp =
-                String.format("%.1f", sleepOverlayData.tempBreakup.averageWithoutZeroFloat())
+                String.format(locale = Locale.US,"%.1f", sleepOverlayData.tempBreakup.averageWithoutZeroFloat())
 
             dayBreakup = OreoSleepNetworkEntity.OreoDayBreakup(
                 totalDeep = sleepData.deep,
@@ -263,7 +264,7 @@ class OreoOnlineDataMapper
 
     suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
         val overlayData = getNapOverlayData(nap)
-        val avgTemp = String.format("%.1f", overlayData.tempBreakup.averageWithoutZeroFloat())
+        val avgTemp = String.format(locale = Locale.US,"%.1f", overlayData.tempBreakup.averageWithoutZeroFloat())
 
         val napObject = OreoNapNetworkObjEntity(
             startTime = nap.startTime ?: "",
