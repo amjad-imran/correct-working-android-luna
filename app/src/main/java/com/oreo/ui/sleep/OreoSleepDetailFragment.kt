@@ -97,11 +97,17 @@ class OreoSleepDetailFragment :
     }
 
     private fun handleEvent(title: String) {
-        var eventName =""
+        var eventName = ""
         when (title) {
-            "Sleep duration" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_duration_click
-            "Efficiency" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_efficiency_click
-            "Restfulness" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_restfulness_click
+            "Sleep duration" -> eventName =
+                MoEngageLunaAppEvents.luna_sleep_contributor_duration_click
+
+            "Efficiency" -> eventName =
+                MoEngageLunaAppEvents.luna_sleep_contributor_efficiency_click
+
+            "Restfulness" -> eventName =
+                MoEngageLunaAppEvents.luna_sleep_contributor_restfulness_click
+
             "REM sleep" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_remsleep_click
             "Deep sleep" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_deepsleep_click
             "Latency" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_latency_click
@@ -389,7 +395,7 @@ class OreoSleepDetailFragment :
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
 
 //        viewModel.maxHrv = heartRateData?.hrv?.max
-        viewModel.avgHrv=heartRateData?.hrv?.avg
+        viewModel.avgHrv = heartRateData?.hrv?.avg
         setHrvAvg()
         if (heartRateData?.hrv?.max == null || heartRateData.hrv?.max == 0 || heartRateData.hrv?.max == 255) {
             binding.lytHRVariability.tvSubtitle2.text = ""
@@ -464,7 +470,7 @@ class OreoSleepDetailFragment :
                             if (value > 0) "$value" else "-"
 
                     } else {
-                       setHrvAvg()
+                        setHrvAvg()
                     }
                 }
 
@@ -539,11 +545,11 @@ class OreoSleepDetailFragment :
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
                 if (onGoing) {
-                    binding.lytSSAnalysis.lytSleepInteraction.root.visible()
-                    binding.lytSSAnalysis.lytTotalSleep.root.gone()
+                    nullableBinding?.lytSSAnalysis?.lytSleepInteraction?.root?.visible()
+                    nullableBinding?.lytSSAnalysis?.lytTotalSleep?.root?.gone()
                 } else {
-                    binding.lytSSAnalysis.lytSleepInteraction.root.gone()
-                    binding.lytSSAnalysis.lytTotalSleep.root.visible()
+                    nullableBinding?.lytSSAnalysis?.lytSleepInteraction?.root?.gone()
+                    nullableBinding?.lytSSAnalysis?.lytTotalSleep?.root?.visible()
                 }
             }
         })
@@ -873,17 +879,17 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
-       /* viewModel.sessionManager.syncCompleted.observe(this) {
-            it?.getContent()?.let { syncDataStatus ->
-                when (syncDataStatus) {
-                    SyncEvents.ServerSyncSuccess -> {
-                        mainViewModel.reloadTodaysData()
-                    }
+        /* viewModel.sessionManager.syncCompleted.observe(this) {
+             it?.getContent()?.let { syncDataStatus ->
+                 when (syncDataStatus) {
+                     SyncEvents.ServerSyncSuccess -> {
+                         mainViewModel.reloadTodaysData()
+                     }
 
-                    else -> {}
-                }
-            }
-        }*/
+                     else -> {}
+                 }
+             }
+         }*/
 
 
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
