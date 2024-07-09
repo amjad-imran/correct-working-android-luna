@@ -529,11 +529,11 @@ class CycleTrackerFragment :
 
                         tvStateDay.text =
                             if (data.otaLog) {
-                                "Days ${data.currentDay}"
+                                "Day ${data.currentDay}"
                             } else if (isNoClicked) {
                                 "${data.currentDay} day"
                             } else {
-                                "Days ${data.currentDay}"
+                                "Day ${data.currentDay}"
                             }
                     }
 
