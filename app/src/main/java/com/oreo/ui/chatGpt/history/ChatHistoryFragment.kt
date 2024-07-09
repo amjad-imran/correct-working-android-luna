@@ -104,8 +104,8 @@ class ChatHistoryFragment :
             ) {
                 if (viewHolder is ChatHistoryAdapter.ViewHolderThread) {
                     underlayButtons?.add(
-                        UnderlayButton("Delete",
-                            0,
+                        UnderlayButton("",
+                            R.drawable.ic_delete_ai_chat,
                             Color.parseColor("#ff3358"),
                             ResourcesCompat.getFont(
                                 requireContext(),

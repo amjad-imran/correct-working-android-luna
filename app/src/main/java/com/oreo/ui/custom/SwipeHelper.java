@@ -1,6 +1,8 @@
 package com.oreo.ui.custom;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.noisefit.NoiseFitApplicationMain;
 import com.noisefit_commans.NoisefitApplication;
 import com.noisefit_commans.utils.LOGS;
 
@@ -175,7 +178,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         float dButtonWidth = (-1) * dX / buffer.size();
 
         for (UnderlayButton button : buffer) {
-            float left = right - dButtonWidth;
+            float left = right - dButtonWidth + dpToPx(6f);
             button.onDraw(c, new RectF(left, itemView.getTop(), right, itemView.getBottom()), pos);
 
             right = left;
@@ -228,16 +231,24 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
             // Draw Text
             p.setColor(Color.WHITE);
-            p.setTextSize(dpToPx(12f));
+            //p.setTextSize(dpToPx(12f));
 
-            Rect r = new Rect();
-            float cHeight = rect.height();
-            float cWidth = rect.width();
-            p.setTextAlign(Paint.Align.LEFT);
-            p.getTextBounds(text, 0, text.length(), r);
-            float x = cWidth / 2f - r.width() / 2f - r.left;
-            float y = cHeight / 2f + r.height() / 2f - r.bottom;
-            c.drawText(text, rect.left + x, rect.top + y, p);
+            Bitmap bm = BitmapFactory.decodeResource(NoiseFitApplicationMain.Companion.getContext().getResources(),
+                    imageResId);
+
+            float width = bm.getWidth() / 2;
+            float height = bm.getHeight() / 2;
+
+            c.drawBitmap(bm, rect.left + (rect.width() / 2) - width, rect.top + (rect.height() / 2) - height, p);
+
+            //Rect r = new Rect();
+            //float cHeight = rect.height();
+            //float cWidth = rect.width();
+            //p.setTextAlign(Paint.Align.LEFT);
+            //p.getTextBounds(text, 0, text.length(), r);
+            //float x = cWidth / 2f - r.width() / 2f - r.left;
+            //float y = cHeight / 2f + r.height() / 2f - r.bottom;
+            //c.drawText(text, rect.left + x, rect.top + y, p);
 
             clickRegion = rect;
             this.pos = pos;
