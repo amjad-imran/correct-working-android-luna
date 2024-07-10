@@ -71,7 +71,7 @@ konfetti-xml = "2.0.2"
 konfetti-core = "2.0.2"
 imagepicker = "2.1"
 scan-plus = "2.1.0.300"
-dagger-hilt = "2.51"
+dagger-hilt = "2.50"
 hilt-compiler = "1.2.0"
 event-bus = "3.3.0"
 gson = "2.11.0"
@@ -84,7 +84,7 @@ exoplayer = "2.19.1"
 color-picker-view = "2.2.4"
 kizitonwose-calendar-view = "1.0.4"
 apache = "4.4"
-androidx-lifecycle = "2.8.0"
+androidx-lifecycle = "2.8.3"
 multidex = "2.0.1"
 localbroadcastmanager = "1.1.0"
 vectordrawable = "1.2.0"
@@ -133,15 +133,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 elvishew-xlog = { group = "com.elvishew", name = "xlog", version.ref = "elvishewXlog" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 material-v161 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
