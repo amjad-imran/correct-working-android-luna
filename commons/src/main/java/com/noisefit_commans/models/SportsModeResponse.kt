@@ -7,6 +7,7 @@ import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.util.Locale
 
 private const val MILES_VALUE = 1.61f
 
@@ -96,7 +97,7 @@ class SportsModeResponse(
         val secs = duration!! % 60
 
         // Output like "00:00:00"
-        return String.format("%02d:%02d:%02d", hrs, mins, secs)
+        return String.format(locale = Locale.US,"%02d:%02d:%02d", hrs, mins, secs)
     }
 
     /**
@@ -110,9 +111,9 @@ class SportsModeResponse(
 
 
         if(hrs==0L){
-            return String.format("%02dm %02ds", mins, secs)
+            return String.format(locale = Locale.US,"%02dm %02ds", mins, secs)
         }else{
-            return String.format("%02dh %02dm %02ds", hrs, mins, secs)
+            return String.format(locale = Locale.US,"%02dh %02dm %02ds", hrs, mins, secs)
         }
     }
 
@@ -145,7 +146,7 @@ class SportsModeResponse(
         /*if(device && (device.type != Constants.DEVICES_TYPE.noise_ultra && device.type != Constants.DEVICES_TYPE.colorfit_nav_plus && device.type != Constants.DEVICES_TYPE.colorfit_pulse)){
             return distance.toFixed(2);
         }*/
-        return String.format("%.2f", distance)
+        return String.format(locale = Locale.US,"%.2f", distance)
     }
 
     fun getFormattedActivityName(): String {

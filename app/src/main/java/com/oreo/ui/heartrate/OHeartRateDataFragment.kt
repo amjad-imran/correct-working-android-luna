@@ -40,9 +40,23 @@ class OHeartRateDataFragment :
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
         OHRLearnMoreAdapter(object : OnItemClickListener {
             override fun onItemClick(item: LearnMoreDataModel) {
-                navigate(R.id.fragmentLearMoreDetails, Bundle().apply {
-                    this.putParcelable("data", item)
-                })
+                when (item.type) {
+                    1 -> {
+                        navigate(R.id.hrArticle1Fragment)
+                    }
+
+                    2 -> {
+                        navigate(R.id.hrArticle2Fragment)
+                    }
+
+                    3 -> {
+                        navigate(R.id.hrArticle3Fragment)
+                    }
+
+                    4 -> {
+                        navigate(R.id.hrArticle4Fragment)
+                    }
+                }
             }
 
         })
@@ -99,6 +113,7 @@ class OHeartRateDataFragment :
                     } else {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                        binding.lytHeartRate.tvSubtitle1.text = ""
                     }
                     if (item.maxValue != 0 && item.minValue != 0) {
                         binding.lytHeartRate.tvSubtitle2.visible()
@@ -168,13 +183,11 @@ class OHeartRateDataFragment :
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+            binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
         } else {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
         }
-        binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
-
-
     }
 
     private fun initHeartRateGraph(

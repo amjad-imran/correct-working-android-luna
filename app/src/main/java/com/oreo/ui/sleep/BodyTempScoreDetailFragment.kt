@@ -22,6 +22,7 @@ import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.scoredetails.OSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -74,10 +75,20 @@ class BodyTempScoreDetailFragment :
                 )
             }"
 
+
+
             binding.tvDeviationValue.text = if (it.data == 0.0f) {
                 "-"
             } else {
-                String.format("%.1f°F (%.2f)", it.data, it.deviation)
+                val deviationString = StringBuilder().apply {
+                    if ((it.deviation ?: 0f) > 0) {
+                        this.append("+")
+                    }
+                    this.append(String.format(locale = Locale.US,"%.2f", it.deviation))
+                }
+
+
+                String.format(locale = Locale.US,"%.1f°F (%s)", it.data, deviationString)
             }
             //"${it.deviation}°"
         }
@@ -278,7 +289,15 @@ class BodyTempScoreDetailFragment :
                 binding.tvDeviationValue.text = if (chartModel.valueFloat2 == 0.0f) {
                     "-"
                 } else {
-                    String.format("%.1f°F (%.2f)", chartModel.valueFloat2, chartModel.valueFloat)
+                    val deviationString = StringBuilder().apply {
+                        if ((chartModel.valueFloat) > 0) {
+                            this.append("+")
+                        }
+                        this.append(String.format(locale = Locale.US,"%.2f", chartModel.valueFloat))
+                    }
+
+
+                    String.format(locale = Locale.US,"%.1f°F (%s)", chartModel.valueFloat2, deviationString)
                 }
             }
         }
@@ -335,7 +354,7 @@ class BodyTempScoreDetailFragment :
                     binding.lytScoreOverview.tvScoreMsg.visible()
                     mViewModel.isProgressEqual = true
                 }
-                val compPro = "${String.format("%.1f", difference)} °F"
+                val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
                 binding.lytScoreOverview.tvTrendProg.text = compPro
             }
         }

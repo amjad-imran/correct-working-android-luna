@@ -188,11 +188,11 @@ fun Bitmap.convertCorner(radius: Float): Bitmap {
 }
 
 fun Float.upToNDecimal(upTo: Int): String {
-    return String.format("%.${upTo}f", this)
+    return String.format(locale = Locale.US,"%.${upTo}f", this)
 }
 
 fun Double.upToNDecimal(upTo: Int): String {
-    return String.format("%.${upTo}f", this)
+    return String.format(locale = Locale.US,"%.${upTo}f", this)
 }
 
 fun Double.roundDownDecimal(): String {
@@ -202,24 +202,24 @@ fun Double.roundDownDecimal(): String {
 }
 
 fun Double.ceilRound(): Int {
-    return DecimalFormat("#").apply {
+    return DecimalFormat("#",DecimalFormatSymbols(Locale.US)).apply {
         roundingMode = RoundingMode.CEILING
     }.format(this).toInt()
 }
 
 fun Double.roundUpDecimal(): String {
-    val df = DecimalFormat("0.00")
+    val df = DecimalFormat("0.00",DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.UP
     return df.format(this)
 }
 
 fun Double.roundToNearestDecimal(): String {
-    val df = DecimalFormat("0.00")
+    val df = DecimalFormat("0.00",DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }
 fun Double.roundToNearestSingleDecimal(): String {
-    val df = DecimalFormat("0.0")
+    val df = DecimalFormat("0.0",DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }
@@ -254,13 +254,13 @@ fun String.copyToClipBoard() {
 
 //no change in values
 fun Float.roundToNearestDecimalFloor(): String {
-    val df = DecimalFormat("0.0")
+    val df = DecimalFormat("0.0",DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.FLOOR
     return df.format(this)
 }
 
 fun Float.roundToNearestDecimalFlooor(uptoValue: Float): String {
-    val df = DecimalFormat("#.##")
+    val df = DecimalFormat("#.##",DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_UP
     return df.format(uptoValue)
 }

@@ -14,8 +14,8 @@ class OHRLearnMoreAdapter(val mListener: OnItemClickListener) :
     inner class ViewHolder(val binding: OreoHrLearnMoreItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: LearnMoreDataModel) {
-            binding.tvTitle.text = resultData.msg
-            binding.textView2.text = resultData.label
+            binding.tvTitle.text = resultData.title
+            binding.textView2.text = resultData.msg
             binding.imageView1.loadImage(binding.imageView1.context, resultData.img)
 
             binding.root.setOnClickListener {

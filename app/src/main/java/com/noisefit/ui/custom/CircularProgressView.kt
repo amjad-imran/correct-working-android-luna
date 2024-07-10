@@ -65,9 +65,9 @@ class CircularProgressView(
     }
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         setSpace()
-        canvas?.let {
+        canvas.let {
             drawBackgroundArc(it)
             drawInnerArc(it)
         }

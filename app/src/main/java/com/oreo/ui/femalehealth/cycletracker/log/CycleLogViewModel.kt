@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CycleLogViewModel @Inject constructor(
     val femaleHealthRepository: FemaleHealthRepository,
-    val femaleHealthDataConvertor: FemaleHealthDataConvertor
+    val femaleHealthDataConvertor: FemaleHealthDataConvertor,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var selectedDate: LocalDate = LocalDate.now()

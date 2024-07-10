@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -35,6 +36,7 @@ class CycleTrackerViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
     val localDataStore: DataStoredInterface,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var isCalendarSetupDone: Boolean = false

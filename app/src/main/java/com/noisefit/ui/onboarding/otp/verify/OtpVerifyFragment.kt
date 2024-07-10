@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
@@ -81,10 +82,10 @@ class OtpVerifyFragment :
 
     private fun setBroadCastReceiver() {
         otpBroadcastReceiver = OtpBroadcastReceiver()
-        activity?.registerReceiver(
-            otpBroadcastReceiver,
-            IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+        ContextCompat.registerReceiver(requireContext(),otpBroadcastReceiver,  IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+            ContextCompat.RECEIVER_EXPORTED
         )
+
         otpBroadcastReceiver?.setListener(object : OTPReceiveListener {
             override fun onOTPReceived(otp: String?) {
                 LOGS.d("OTP Received $otp")

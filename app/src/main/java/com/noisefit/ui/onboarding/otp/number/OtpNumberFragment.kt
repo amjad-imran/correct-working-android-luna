@@ -9,10 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import com.google.android.gms.auth.api.credentials.Credential
-import com.google.android.gms.auth.api.credentials.Credentials
-import com.google.android.gms.auth.api.credentials.CredentialsOptions
-import com.google.android.gms.auth.api.credentials.HintRequest
+
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOtpNumberBinding
 import com.noisefit.ui.onboarding.auth.AuthViewModel
@@ -201,35 +198,35 @@ class OtpNumberFragment :
         }
     }
 
-    private fun phoneSelection() {
-
-        val hintRequest = HintRequest.Builder()
-            .setPhoneNumberIdentifierSupported(true)
-            .build()
-        val options = CredentialsOptions.Builder()
-            .forceEnableSaveDialog()
-            .build()
-        val credentialsClient = Credentials.getClient(requireContext(), options)
-        val intent = credentialsClient.getHintPickerIntent(hintRequest)
-        try {
-            startIntentSenderForResult(
-                intent.intentSender,
-                CREDENTIAL_PICKER_REQUEST, null, 0, 0, 0, Bundle()
-            )
-        } catch (e: IntentSender.SendIntentException) {
-            e.printStackTrace()
-        }
-    }
+//    private fun phoneSelection() {
+//
+//        val hintRequest = HintRequest.Builder()
+//            .setPhoneNumberIdentifierSupported(true)
+//            .build()
+//        val options = CredentialsOptions.Builder()
+//            .forceEnableSaveDialog()
+//            .build()
+//        val credentialsClient = Credentials.getClient(requireContext(), options)
+//        val intent = credentialsClient.getHintPickerIntent(hintRequest)
+//        try {
+//            startIntentSenderForResult(
+//                intent.intentSender,
+//                CREDENTIAL_PICKER_REQUEST, null, 0, 0, 0, Bundle()
+//            )
+//        } catch (e: IntentSender.SendIntentException) {
+//            e.printStackTrace()
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CREDENTIAL_PICKER_REQUEST && resultCode == RESULT_OK) {
-            val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
-
-            credential?.apply {
-                binding.etMobileNumber.setText(credential.id.replace("+91", ""))
-            }
-        }
+//        if (requestCode == CREDENTIAL_PICKER_REQUEST && resultCode == RESULT_OK) {
+//            val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
+//
+//            credential?.apply {
+//                binding.etMobileNumber.setText(credential.id.replace("+91", ""))
+//            }
+//        }
     }
 
 }

@@ -44,6 +44,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -869,10 +870,20 @@ class OreoReadinessFragment :
             if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
 
                 val deviation = it.avg_temp.value - baselineAvg
+                val deviationString = StringBuilder().apply {
+                    if (deviation > 0) {
+                        this.append("+")
+                    }
+                    this.append(String.format(locale = Locale.US,"%.2f",deviation))
+                }
+
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format("%.1f°F (%.2f)",it.avg_temp.value, deviation)
+                    String.format(locale = Locale.US,"%.1f°F (%s)",it.avg_temp.value, deviationString)
             } else {
-                binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
+                binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                    String.format(locale = Locale.US,"%.1f°F",it.avg_temp.value)
+
+                //binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
 
 
@@ -891,7 +902,7 @@ class OreoReadinessFragment :
                     val deviation = todayAvg - baselineAvg
 
                     binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                        String.format("%.1f°F (%.2f)",todayAvg, deviation)
+                        String.format(locale = Locale.US,"%.1f°F (%.2f)",todayAvg, deviation)
 
                 } else {
                     binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"

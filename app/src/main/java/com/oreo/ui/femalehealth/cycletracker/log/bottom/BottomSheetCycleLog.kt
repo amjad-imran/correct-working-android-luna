@@ -13,6 +13,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
 import com.oreo.ui.femalehealth.cycletracker.CycleSymptomsAdapter
@@ -35,6 +37,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     private val flowAdapter: CycleLogAdapter by lazy {
         CycleLogAdapter(object : OnLogItemClick {
             override fun onItemClick(data: FHFlowIconsModel, position: Int) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_flow_click)
                 flowAdapter.updateItem(data, position)
 
             }
@@ -43,6 +46,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     private val symptomsAdapter: CycleSymptomsAdapter by lazy {
         CycleSymptomsAdapter(object : OnSymptomsItemClick {
             override fun onItemClick(data: FHSymptomsIconsModel, position: Int) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_symtoms_click)
                 symptomsAdapter.updateItem(data, position)
             }
         })
@@ -90,6 +94,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
             val flowType = flowAdapter.getSelectedValue()
             val symptoms = symptomsAdapter.getData()
             val date = viewModel.selectedDate.value.toString()
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_period_click)
             viewModel.saveSymptom(date, symptoms, flowType)
         }
 

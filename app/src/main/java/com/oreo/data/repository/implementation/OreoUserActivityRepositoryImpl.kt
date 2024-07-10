@@ -77,6 +77,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
+import java.util.Locale
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1316,7 +1317,7 @@ class OreoUserActivityRepositoryImpl(
         val hours: Int = totalMinutes / 60
         val minutes: Int = totalMinutes % 60
 
-        return String.format("%d:%02d", hours, minutes)
+        return String.format(locale = Locale.US,"%d:%02d", hours, minutes)
 
     }
 

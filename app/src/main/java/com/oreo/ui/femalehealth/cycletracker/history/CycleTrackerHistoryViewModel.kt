@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleTrackerHistoryViewModel @Inject constructor(
-    private val femaleHealthRepository: FemaleHealthRepository
+    private val femaleHealthRepository: FemaleHealthRepository,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     val cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>>()

@@ -32,7 +32,10 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0)
 
             val time =
-                DateFormats.convertTimestampToDate(resultData.startTime, DateFormats.time12Meridian())
+                DateFormats.convertTimestampToDate(
+                    resultData.startTime,
+                    DateFormats.time12Meridian()
+                )
                     .lowercase()
             val timeArray = time.split(" ")
             if (timeArray.isNotEmpty() && timeArray.size == 2) {
@@ -122,7 +125,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         try {
             mDataSet.removeAt(position)
             notifyItemRemoved(position)
-        } catch (exp: ArrayIndexOutOfBoundsException) {
+        } catch (exp: Exception) {
             exp.printStackTrace()
             //CASE : when Swap is in progress
         }

@@ -1,6 +1,7 @@
 package com.noisefit_commans.utils
 
 import java.security.MessageDigest
+import java.util.Locale
 import javax.inject.Inject
 
 class EncryptUtils
@@ -14,7 +15,7 @@ constructor() {
             val bytes: ByteArray = digest.digest()
             val sb = StringBuilder()
             for (i in bytes.indices) {
-                sb.append(String.format("%02X", bytes[i]))
+                sb.append(String.format(locale = Locale.US,"%02X", bytes[i]))
             }
             sb.toString().lowercase()
         } catch (exc: Exception) {

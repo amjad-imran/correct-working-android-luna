@@ -119,7 +119,7 @@ class ChatSplashFragment :
         val current = binding.vpImageSlider.currentItem
         if (current == (stressSplashDescriptionAdapter.itemCount - 1)) {
             localDataStore.setAiChatSplashShown()
-            navigate(ChatSplashFragmentDirections.actionChatSplashFragmentToChatGptFragment())
+            navigate(ChatSplashFragmentDirections.actionChatSplashFragmentToChatGptFragment(""))
         } else {
             binding.vpImageSlider.setCurrentItem(current + 1, true)
         }

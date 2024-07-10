@@ -20,6 +20,8 @@ data class FemaleHealthUserInfoModel(
     val nudges: ArrayList<Nudges>? = null,
     @SerializedName("current_day")
     val currentDay: Int? = null,
+    @SerializedName("confirmed_period")
+    val confirmedPeriod: Boolean? = null,
     @SerializedName("cycle_length")
     val cycleLength: Int? = null,
     @SerializedName("period_length")

@@ -134,8 +134,27 @@ class CalenderDayLogBottomSheet :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
-                        tvStateDay.text = "Day ${data.currentDay}"
+                        //tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
+
+                        val isNoClicked = data.confirmedPeriod != null
+                        tvCurrentState.text = if (data.otaLog) {
+                            "Period"
+                        } else if (isNoClicked) {
+                            "Period late for"
+                        } else {
+                            "Predicted period"
+                        }
+
+                        //tvStateDay.text = "Day ${data.currentDay}"
+
+                        tvStateDay.text =
+                            if (data.otaLog) {
+                                "Day ${data.currentDay}"
+                            } else if (isNoClicked) {
+                                "${data.currentDay} day"
+                            } else {
+                                "Day ${data.currentDay}"
+                            }
                     }
 
                 } else {

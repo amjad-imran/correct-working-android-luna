@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.yearMonth
@@ -24,7 +23,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
@@ -41,6 +40,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -61,6 +61,7 @@ class CycleTrackerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_page_visit)
         setRecycler()
     }
 
@@ -193,11 +194,13 @@ class CycleTrackerFragment :
 
 
         binding.toolbar.viewBackCalendar.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_calendar_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(null)
             navigate(frag, bundle)
         }
 
         binding.toolbar.icInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_page_visit)
             navigate(R.id.cycleTrackStressInfoFragment)
         }
 
@@ -211,6 +214,7 @@ class CycleTrackerFragment :
             if (launchMode.isNotEmpty()) {
                 setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_phase_page_visit)
                 navigate(
                     R.id.dialogCtOvulationInfo, Bundle().apply {
                         this.putString("launchMode", launchMode)
@@ -228,6 +232,7 @@ class CycleTrackerFragment :
             if (launchMode.isNotEmpty()) {
                 setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_phase_page_visit)
                 navigate(
                     R.id.dialogCtOvulationInfo, Bundle().apply {
                         this.putString("launchMode", launchMode)
@@ -248,11 +253,13 @@ class CycleTrackerFragment :
             })
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_cycle_length_page_visit)
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.CYCLE_LENGTH)
             })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_period_duration_page_visit)
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.PERIOD_DURATION)
             })
@@ -261,6 +268,7 @@ class CycleTrackerFragment :
             navigate(R.id.cycleTrackerHistory)
         }
         binding.lytTrackerTop.btnLog.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
@@ -433,9 +441,9 @@ class CycleTrackerFragment :
                 tvUnit.gone()
             } else {
                 tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
-                    "+${String.format("%.1f", data.tempVariation)}"
+                    "+${String.format(locale = Locale.US,"%.1f", data.tempVariation)}"
                 } else {
-                    "-${String.format("%.1f", abs(data.tempVariation))}"
+                    "-${String.format(locale = Locale.US,"%.1f", abs(data.tempVariation))}"
                 }
                 tvUnit.visible()
             }
@@ -487,7 +495,6 @@ class CycleTrackerFragment :
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
             tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"
-            tvCurrentState.text = "Current state here"
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
@@ -508,16 +515,26 @@ class CycleTrackerFragment :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
+                        val isNoClicked = data.confirmedPeriod != null
+
                         tvCurrentState.text = if (data.otaLog) {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
                             "Period"
+                        } else if (isNoClicked) {
+                            "Period late for"
                         } else {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
                             "Predicted period"
-
                         }
 
-                        tvStateDay.text = "Days ${data.currentDay}"
+                        tvStateDay.text =
+                            if (data.otaLog) {
+                                "Day ${data.currentDay}"
+                            } else if (isNoClicked) {
+                                "${data.currentDay} day"
+                            } else {
+                                "Day ${data.currentDay}"
+                            }
                     }
 
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
@@ -604,9 +621,9 @@ class CycleTrackerFragment :
         }
 
         val currentState = binding.lytTrackerTop.tvCurrentState.text.toString()
-        if (currentState.equals("Period in",true)) {
+        if (currentState.equals("Period in", true)) {
             nudgeBgColor = NudgeBgColor.PERIOD_LOW
-        }else if (currentState.equals("Ovulation in",true)) {
+        } else if (currentState.equals("Ovulation in", true)) {
             nudgeBgColor = NudgeBgColor.OVULATION_LOW
         }
 

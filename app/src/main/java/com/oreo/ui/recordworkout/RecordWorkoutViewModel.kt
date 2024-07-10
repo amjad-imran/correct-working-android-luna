@@ -20,6 +20,7 @@ import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -64,9 +65,9 @@ class RecordWorkoutViewModel @Inject constructor(
         val seconds = workoutDuration % 60
 
         val timeString = if (hours == 0L) {
-            String.format("%02d:%02d", minutes, seconds)
+            String.format(locale = Locale.US,"%02d:%02d", minutes, seconds)
         } else {
-            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            String.format(locale = Locale.US,"%02d:%02d:%02d", hours, minutes, seconds)
         }
         displayTimer.postValue(timeString)
     }

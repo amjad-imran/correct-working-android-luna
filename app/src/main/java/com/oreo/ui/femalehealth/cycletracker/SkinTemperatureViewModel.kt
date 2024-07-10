@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -43,6 +44,7 @@ import kotlin.math.abs
 class SkinTemperatureViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     val tempData = MutableLiveData<FemaleTempResponse>()

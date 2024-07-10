@@ -104,6 +104,7 @@ class HRCombinedChart : View {
     private var lastSentValuePos: Int? = null
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
+    private var isNoDataState = true
 
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
 
@@ -260,6 +261,7 @@ class HRCombinedChart : View {
     }
 
     fun updateData(datas: HRCombineModel?, yAxisCount: Int, minYAxis: Int, maxYAxis: Int) {
+        isNoDataState = true
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
@@ -281,6 +283,15 @@ class HRCombinedChart : View {
         } else if (maxYAxis < 200) {
             max = 200
         }
+
+
+        list.forEach {
+            if (it.value > 0) {
+                isNoDataState = false
+                return@forEach
+            }
+        }
+
         postInvalidate()
     }
 
@@ -481,6 +492,18 @@ class HRCombinedChart : View {
             val xAxis3 =
                 mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
+            if (isNoDataState) {
+                val text = "No data"
+                val textStart = (mWith - leftWith) / 2 - xTextPaint.measureText(text) / 2
+                xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
+                canvas.drawText(
+                    text,
+                    textStart,
+                    xAxis3 + xTextBounds!!.height() / 2,
+                    xTextPaint
+                )
+            }
+
             drawHorizontalTextWithLine(canvas, yaxisData[2].toString(), xAxis3)
             val xAxis4 =
                 mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
@@ -505,6 +528,18 @@ class HRCombinedChart : View {
             drawHorizontalTextWithLine(canvas, yaxisData[0].toString(), min, false, true)
 
             val xAxis2 = (max + min) / 2
+
+            if (isNoDataState) {
+                val text = "No data"
+                val textStart = (mWith - leftWith) / 2 - xTextPaint.measureText(text) / 2
+                xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
+                canvas.drawText(
+                    text,
+                    textStart,
+                    xAxis2 + xTextBounds!!.height() / 2,
+                    xTextPaint
+                )
+            }
 
             drawHorizontalTextWithLine(canvas, yaxisData[1].toString(), xAxis2)
         }
@@ -770,9 +805,14 @@ class HRCombinedChart : View {
             val startTime = DateFormats.getMidnightDateTime()
             val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
             val startDateTime = LocalDateTime.parse(startTime, formatter)
+            val formatterDisplayStart = DateTimeFormat.forPattern("h:mm a")
+            val startTimeRep =
+                startDateTime.plusMinutes((list.size - i - 1) * 30).toString(formatterDisplayStart)
+                    .lowercase()
+
             var updatedTime = startDateTime.plusMinutes((list.size - i) * 30)
             val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
-            val time = updatedTime.toString(formatterDisplay).lowercase()
+            val time = "$startTimeRep - ${updatedTime.toString(formatterDisplay).lowercase()}"
             toolTipList.add(Triple(x, time ?: "", current.value))
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {

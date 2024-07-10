@@ -2,6 +2,7 @@ package com.oreo.receiver.workManager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.Looper
 import androidx.hilt.work.HiltWorker
@@ -703,7 +704,12 @@ constructor(
 
     private fun createForegroundInfo(title: String): ForegroundInfo {
         val notification = NotificationUtil.createDataSyncNotification(context, title)
-        return ForegroundInfo(1, notification)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(1, notification)
+        }
+
     }
 
     private fun getTimeFormat(): String {

@@ -116,13 +116,13 @@ object DistanceUtil {
 
     fun convertKmValueToMi(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * KM_TO_MI)
     }
 
     fun convertCmsToInch(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * CM_TO_INCH)
     }
 
@@ -138,37 +138,37 @@ object DistanceUtil {
 
     fun convertKgToLbs(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * KG_TO_LBS)
     }
 
     fun convertMiToKm(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * MI_TO_KM)
     }
 
     fun convertMeterToKm(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat("#.#")
+        val df = DecimalFormat("#.#",DecimalFormatSymbols(Locale.US))
         return df.format(value * ME_TO_KM)
     }
 
     fun convertMeterToMiles(value: Int): String {
-        val df = DecimalFormat("#.#")
+        val df = DecimalFormat("#.#",DecimalFormatSymbols(Locale.US))
         return df.format(metersToMiles(value.toDouble()))
     }
 
 
     fun convertInchToCms(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * INCH_TO_CM)
     }
 
     fun convertLbsToKg(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))
         return df.format(value * LBS_TO_KG)
     }
 
