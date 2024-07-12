@@ -4,9 +4,18 @@ import android.os.Bundle
 import android.view.View
 import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.custom.SleepGraphInteractionListener
+import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SleepBarChartFragment :
     BaseFragment<FragmentSleepBarChartBinding>(FragmentSleepBarChartBinding::inflate) {
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
     companion object {
         @JvmStatic
@@ -32,6 +41,18 @@ class SleepBarChartFragment :
             ),
             4
         )
+        binding.graphBar.setVibrationUtil(vibrationUtils)
+
+        binding.graphBar.setClickListener(object : SleepSingleBarAction {
+            override fun onValueSelected(position: Int) {
+
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+
+            }
+
+        })
     }
 
 

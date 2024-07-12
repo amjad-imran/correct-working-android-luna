@@ -5,16 +5,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
-import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
-import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
