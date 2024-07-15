@@ -39,8 +39,8 @@ class SleepInternalDetailsFragment :
 
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
-        fragments.add(SleepBarChartFragment.newInstance())
-        fragments.add(SleepBarChartFragment.newInstance())
+        fragments.add(SleepMultiLineChartFragment.newInstance())
+        fragments.add(SleepMultiBarChartFragment.newInstance())
         fragments.add(SleepBarChartFragment.newInstance())
 
         val sleepBannerAdapter =

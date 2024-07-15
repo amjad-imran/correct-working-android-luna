@@ -15,34 +15,38 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.luna.R
+import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
-import com.oreo.ui.custom.Item
-import com.oreo.ui.heartrate.OnHRClickAction
 
 
-class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
+class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
 
     lateinit var xAxisPaint: Paint
     lateinit var xLinePaint: Paint
-    lateinit var xTextPaint: Paint
     lateinit var gridLinePaint: Paint
-    lateinit var barPaint: Paint
-    lateinit var barPaintInteracting: Paint
+    lateinit var circlePaint: Paint
+    lateinit var circlePaintI: Paint
     lateinit var selectedDayPaint: Paint
-    lateinit var barPaintTop: Paint
-    lateinit var barPaintTopInteracting: Paint
-    lateinit var barTextPaint: Paint
-    lateinit var barTextPaintI: Paint
+    lateinit var textPaintHour: Paint
+    lateinit var textPaintHourI: Paint
+    lateinit var textPaintNeed: Paint
+    lateinit var textPaintNeedI: Paint
+
+    lateinit var linePaintHour: Paint
+    lateinit var linePaintHourI: Paint
+    lateinit var linePaintNeed: Paint
+    lateinit var linePaintNeedI: Paint
+
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
-    private val endPadding = dip2px(30f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
 
-    private val dataSet = ArrayList<Int?>()
-    private var mSelectedPosition: Int? = null
+    var mMax = 0
 
     private var isInteracting = false
     private var vibrationUtils: VibrationUtils? = null
@@ -54,6 +58,14 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private var lastSentValuePos: Int? = null
 
+    private val endPadding = dip2px(30f)
+
+
+    /**
+     * Pair(deep,rem)
+     */
+    private val dataSet = ArrayList<Pair<Int?, Int?>>()
+    private var mSelectedPosition: Int? = null
 
     init {
         init(attrs)
@@ -70,42 +82,57 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             this.textSize = dip2px(12f).toFloat()
         }
 
-        barTextPaint = Paint().apply {
+        textPaintHour = Paint().apply {
             this.color = Color.parseColor("#96ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
-        barTextPaintI = Paint().apply {
-            this.color = Color.parseColor("#40ffffff")
+        textPaintHourI = Paint().apply {
+            this.color = Color.parseColor("#20FFFFFF")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
+        }
+        textPaintNeed = Paint().apply {
+            this.color = Color.parseColor("#ffffff")
+            this.typeface = fontGilroy
+            this.textSize = dip2px(12f).toFloat()
+        }
+        textPaintNeedI = Paint().apply {
+            this.color = Color.parseColor("#20FFFFFF")
+            this.typeface = fontGilroy
+            this.textSize = dip2px(12f).toFloat()
+        }
+
+        linePaintHour = Paint().apply {
+            this.color = Color.parseColor("#465c8a")
+            strokeWidth = dip2px(2f).toFloat()
+        }
+        linePaintHourI = Paint().apply {
+            this.color = Color.parseColor("#66465c8a")
+            strokeWidth = dip2px(2f).toFloat()
+        }
+        linePaintNeed = Paint().apply {
+            this.color = Color.parseColor("#7858cc")
+            strokeWidth = dip2px(2f).toFloat()
+        }
+        linePaintNeedI = Paint().apply {
+            this.color = Color.parseColor("#667858cc")
+            strokeWidth = dip2px(2f).toFloat()
         }
 
 
         xLinePaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
         }
-        xTextPaint = Paint().apply {
-            this.color = Color.parseColor("#20FFFFFF")
-            this.typeface = fontGilroy
-            this.textSize = dip2px(12f).toFloat()
-        }
         gridLinePaint = Paint().apply {
             this.color = Color.parseColor("#07ffffff")
         }
-        barPaint = Paint().apply {
-            this.color = Color.parseColor("#465c8a")
-        }
-        barPaintInteracting = Paint().apply {
-            this.color = Color.parseColor("#66465c8a")
-        }
-        barPaintTop = Paint().apply {
+        circlePaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
         }
-        barPaintTopInteracting = Paint().apply {
+        circlePaintI = Paint().apply {
             this.color = Color.parseColor("#66ffffff")
         }
-
         selectedDayPaint = Paint()
     }
 
@@ -133,17 +160,20 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         super.onDraw(canvas)
 
         drawBackGrid(canvas)
-        drawYAxis(canvas)
         drawXAxis(canvas)
+        drawYAxis(canvas)
         drawContent(canvas)
     }
 
     private fun drawContent(canvas: Canvas) {
 
         val stepWidth = (width - endPadding) / 7
-        val barWidth = stepWidth / 2
         var start = 0f
-        val rectRadius = dip2px(1f).toFloat()
+        val circleRadius = dip2px(2f).toFloat()
+        val circleRadiusBig = dip2px(4f).toFloat()
+        val paddingHorizontal = dip2px(4f)
+        val textPadding = dip2px(6f)
+        val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
 
@@ -163,97 +193,137 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
 
             if (index + 1 == mSelectedPosition) {
-                val padding = dip2px(4f)
                 val rectFSelected = RectF(
-                    start + padding,
+                    start + paddingHorizontal,
                     topHeight.toFloat(),
-                    start + stepWidth - padding,
+                    start + stepWidth - paddingHorizontal,
                     height.toFloat() - bottomHeight
                 )
 
                 canvas.drawRect(
-                    rectFSelected, selectedDayPaint
+                    rectFSelected,
+                    selectedDayPaint
                 )
 
             }
 
+            val isSelectedPosition = selectedPosition == index
 
-            if (it != null) {
-
-                val top = getYAxisValue(it)
-                val isSelectedPosition = selectedPosition == index
+            if (it.first != null) {
+                val actualPos = getYAxisValue(it.first ?: 0)
 
                 dataPosition[index] = Pair(start, start + stepWidth)
 
-                val rectF = RectF(
-                    start + barWidth / 2,
-                    top,
-                    start + barWidth + barWidth / 2,
-                    height.toFloat() - bottomHeight
-                )
 
-                canvas.drawRoundRect(
-                    rectF, rectRadius, rectRadius, if (isInteracting && isSelectedPosition.not()) {
-                        barPaintInteracting
-                    } else barPaint
-                )
+                if (index + 1 < maxDataSize && dataSet[index + 1].first != null) {
+                    val nextElement = dataSet[index + 1]
 
-                val rectFTop = RectF().apply {
-                    this.left = rectF.left
-                    this.right = rectF.right
-                    this.top = rectF.top
-                    this.bottom = rectF.top + dip2px(2f)
-                }
-
-                canvas.drawRoundRect(
-                    rectFTop,
-                    rectRadius,
-                    rectRadius,
-                    if (isInteracting && isSelectedPosition.not()) {
-                        barPaintTopInteracting
-                    } else barPaintTop
-                )
-
-                if (isSelectedPosition && isInteracting) {
-
-                    val center = rectFTop.left + (rectFTop.right - rectFTop.left) / 2
-
-                    canvas.drawRect(
-                        RectF(center - 2f, topHeight.toFloat(), center + 2f, rectFTop.top),
-                        barPaintTop
+                    val actualPosNext = getYAxisValue(nextElement.first ?: 0)
+                    canvas.drawLine(
+                        start + stepWidth / 2,
+                        actualPos,
+                        start + stepWidth + stepWidth / 2,
+                        actualPosNext,
+                        if (isInteracting) linePaintHourI else linePaintHour
                     )
-
-                    val widthHalf = dip2px(6f)
-                    val rectFTopI = RectF().apply {
-                        this.left = center - widthHalf
-                        this.right = center + widthHalf
-                        this.top = topHeight.toFloat()
-                        this.bottom = topHeight.toFloat() + dip2px(2f)
-                    }
-
-                    canvas.drawRect(rectFTopI, barPaintTop)
                 }
 
+                canvas.drawCircle(
+                    start + stepWidth / 2,
+                    actualPos,
+                    if (isInteracting && isSelectedPosition) circleRadiusBig else circleRadius,
+                    if (isInteracting && isSelectedPosition.not()) circlePaintI else circlePaint
+                )
 
                 if (isSelectedPosition.not()) {
-                    val text = "$it%"
+                    val (hour, minute) = getFormattedSleepDuration(it.first ?: 0)
+
+                    val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
                     if (isInteracting) {
-                        barTextPaintI.getTextBounds(text, 0, text.length, xTextBounds)
+                        textPaintHourI.getTextBounds(text, 0, text.length, xTextBounds)
                     } else {
-                        barTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
-
+                        textPaintHour.getTextBounds(text, 0, text.length, xTextBounds)
                     }
                     val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
                     canvas.drawText(
                         text,
                         textStart,
-                        top - xTextBounds.height(),
-                        if (isInteracting) barTextPaintI else barTextPaint
+                        actualPos + xTextBounds.height() + textPadding,
+                        if (isInteracting) textPaintHourI else textPaintHour
+                    )
+                }
+            }
+
+            if (it.second != null) {
+                val needPos = getYAxisValue(it.second ?: 0)
+
+                if (index + 1 < maxDataSize && dataSet[index + 1].second != null) {
+                    val nextElement = dataSet[index + 1]
+
+                    val actualPosNext = getYAxisValue(nextElement.second ?: 0)
+                    canvas.drawLine(
+                        start + stepWidth / 2,
+                        needPos,
+                        start + stepWidth + stepWidth / 2,
+                        actualPosNext,
+                        if (isInteracting) linePaintNeedI else linePaintNeed
                     )
                 }
 
+                canvas.drawCircle(
+                    start + stepWidth / 2,
+                    needPos,
+                    if (isInteracting && isSelectedPosition) circleRadiusBig else circleRadius,
+                    if (isInteracting && isSelectedPosition.not()) circlePaintI else circlePaint
+                )
+
+
+                if (isSelectedPosition.not()) {
+                    val (hour, minute) = getFormattedSleepDuration(it.second ?: 0)
+
+                    val text = String.format("%d:%02d", hour, minute)
+                    val xTextBounds = Rect()
+                    if (isInteracting) {
+                        textPaintNeedI.getTextBounds(text, 0, text.length, xTextBounds)
+                    } else {
+                        textPaintNeed.getTextBounds(text, 0, text.length, xTextBounds)
+                    }
+                    val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+                    canvas.drawText(
+                        text,
+                        textStart,
+                        needPos - textPadding,
+                        if (isInteracting) textPaintNeedI else textPaintNeed
+                    )
+                }
             }
+
+            if (isSelectedPosition && isInteracting) {
+                val center = start + stepWidth / 2
+
+                canvas.drawRect(
+                    RectF(
+                        center - 2f,
+                        topHeight.toFloat(),
+                        center + 2f,
+                        height.toFloat() - bottomHeight
+                    ),
+                    circlePaint
+                )
+
+                val widthHalf = dip2px(6f)
+                val rectFTopI = RectF().apply {
+                    this.left = center - widthHalf
+                    this.right = center + widthHalf
+                    this.top = topHeight.toFloat()
+                    this.bottom = topHeight.toFloat() + dip2px(2f)
+                }
+
+                canvas.drawRect(rectFTopI, circlePaint)
+            }
+
+
             start += stepWidth
         }
     }
@@ -273,24 +343,56 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         return position.keys.single()
     }
 
-    fun getYAxisValue(value: Int): Float {
+    private fun getYAxisValue(value: Int): Float {
+        val percent = (value.toFloat() / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
-        return topHeight + availableHeight - (availableHeight * value.toFloat() / 100)
+        return topHeight + availableHeight - (availableHeight * percent / 100)
     }
 
     private fun drawBackGrid(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
 
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-
-        val stepWidth = availableWidth / 7
+        val stepWidth = width / 7
         var start = 0f
         for (i in 0..7) {
             canvas.drawLine(
-                start, topHeight.toFloat(), start, height.toFloat() - bottomHeight, gridLinePaint
+                start,
+                topHeight.toFloat(),
+                start,
+                height.toFloat() - bottomHeight,
+                gridLinePaint
             )
             start += stepWidth
         }
+
+        canvas.drawLine(0f, getYAxisValue(0), width.toFloat(), getYAxisValue(0), xLinePaint)
+
+        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+
+        val heightStep = mMax / 4
+        var heightStart = heightStep
+        for (i in 1 until 5) {
+            canvas.drawLine(
+                0f,
+                getYAxisValue(heightStart),
+                width.toFloat(),
+                getYAxisValue(heightStart),
+                gridLinePaint
+            )
+            if (i == 4) {
+                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(heightStart),
+                    width.toFloat(),
+                    getYAxisValue(heightStart),
+                    gridLinePaint
+                )
+            }
+
+            heightStart += heightStep
+        }
+
+
     }
 
     private fun drawYAxis(canvas: Canvas) {
@@ -354,7 +456,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private fun drawXAxis(canvas: Canvas) {
 
-        val stepWidth = (width - endPadding) / 7
+        val stepWidth = width / 7
 
         val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         var start = 0
@@ -375,14 +477,33 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    fun setDataSet(list: List<Int?>, selectedPosition: Int) {
+    /**
+     * array list of values -> Pair(actual sleep minutes, need minutes)
+     * selected position
+     */
+    fun setDataSet(list: List<Pair<Int?, Int?>>, selectedPosition: Int) {
         dataPosition.clear()
         dataSet.clear()
         dataSet.addAll(list)
         mSelectedPosition = selectedPosition
+
+        mMax = 0
+        list.forEach {
+
+            var max = it.first ?: 0
+            if ((it.second ?: 0) > max) {
+                max = it.second ?: 0
+            }
+
+            if (max > mMax) {
+                mMax = max
+            }
+        }
+
+        mMax += ((0.2) * mMax).toInt()
+
         invalidate()
     }
-
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
@@ -417,7 +538,6 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         return false
     }
 
-
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         isInteracting = true
@@ -436,12 +556,4 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     }
 
 
-}
-
-interface SleepSingleBarAction {
-    fun onValueSelected(
-        position: Int,
-    )
-
-    fun isInteractionOnGoing(onGoing: Boolean)
 }
