@@ -1,0 +1,50 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/viewTop"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/back_modal_new"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            tools:src="@drawable/ic_sleep"
+            app:layout_constraintBottom_toBottomOf="@id/viewTop"
+            app:layout_constraintStart_toStartOf="@id/viewTop"
+            app:layout_constraintTop_toTopOf="@id/viewTop" />
+
+        <TextView
+            android:id="@+id/tvType"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/viewTop"
+            app:layout_constraintEnd_toStartOf="@id/ivDropDown"
+            app:layout_constraintStart_toEndOf="@id/ivType"
+            android:textColor="@color/white_80"
+            app:layout_constraintTop_toTopOf="@id/viewTop"
+            android:text="@string/text_sleep_duration" />
+
+        <ImageView
+            android:id="@+id/ivDropDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/side_margin"
+            android:src="@drawable/ic_o_dropdown"
+            app:layout_constraintBottom_toBottomOf="@id/viewTop"
+            app:layout_constraintEnd_toEndOf="@id/viewTop"
+            android:rotation="180"
+            app:layout_constraintTop_toTopOf="@id/viewTop" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

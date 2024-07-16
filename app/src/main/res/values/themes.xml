@@ -36,8 +36,6 @@
     </style>
 
 
-
-
     <style name="ModalStyle10">
         <item name="android:background">@drawable/back_modal_new</item>
     </style>
@@ -229,6 +227,7 @@
         <item name="android:background">@drawable/btn_secondary_nap_bg_selector</item>
         <item name="android:textColor">@drawable/btn_secondary_color_selector</item>
     </style>
+
     <style name="SecondaryFMHButtonStyle" parent="ThemeOverlay.Material3.Button.TextButton">
         <item name="shapeAppearance">@style/ButtonAppearance</item>
         <item name="android:layout_width">wrap_content</item>
@@ -362,9 +361,11 @@
     <style name="ShapeAppearanceOverlay.App.CornerSize20dp" parent="">
         <item name="cornerSize">20dp</item>
     </style>
+
     <style name="ShapeAppearanceOverlay.App.CornerSize2dp" parent="">
         <item name="cornerSize">2dp</item>
     </style>
+
     <style name="ShapeAppearanceOverlay.App.CornerSize1dp" parent="">
         <item name="cornerSize">1dp</item>
     </style>
@@ -455,5 +456,10 @@
 
     <style name="Theme.NoiseFit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+<!--        <item name="android:windowBackground">@drawable/custom_alert_rounded_corner</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
 </resources>

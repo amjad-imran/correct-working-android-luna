@@ -916,5 +916,9 @@
         android:id="@+id/dialogAlarmSound"
         android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetAlarmSound"
         android:label="AlarmSound" />
+    <fragment
+        android:id="@+id/dropDownFragment"
+        android:name="com.oreo.ui.sleep2.ODropDownFragment"
+        android:label="DropDownFragment" />
 
 </navigation>
