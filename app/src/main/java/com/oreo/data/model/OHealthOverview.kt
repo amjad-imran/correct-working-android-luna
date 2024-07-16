@@ -113,7 +113,8 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class GotYourPeriod(
-        val title: String? = null
+        val title: String? = null,
+        val currentDay: Int
     ) : OHealthOverview()
 
     class CardTrackFemaleHealth(

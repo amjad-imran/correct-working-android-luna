@@ -9,6 +9,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.femalehealth.cycletracker.OnHistoryItemClickListener
 import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
@@ -32,6 +33,7 @@ class CycleTrackerHistoryFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_cycle_history_page_visit)
         setRecycler()
         viewModel.getCycleHistoryData()
     }

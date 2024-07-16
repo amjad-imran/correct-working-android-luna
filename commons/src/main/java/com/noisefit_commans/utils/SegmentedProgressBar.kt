@@ -144,13 +144,13 @@ class SegmentedProgressBar : View, Runnable, ViewPager.OnPageChangeListener {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         segments.forEachIndexed { index, segment ->
             val drawingComponents = getDrawingComponents(segment, index)
             drawingComponents.first.forEachIndexed { drawingIndex, rectangle ->
-                canvas?.drawRoundRect(
+                canvas.drawRoundRect(
                     rectangle,
                     radius.toFloat(),
                     radius.toFloat(),

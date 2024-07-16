@@ -5,23 +5,35 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
+    companion object {
+        fun getStartData(threadId: String?): Pair<Int, Bundle?> {
+            return Pair(R.id.chatGptFragment, Bundle().apply {
+                putString("threadId", threadId ?: "")
+            })
+        }
+    }
 
 
     private val viewModel: ChatGptViewModel by viewModels()
+    private val args: ChatGptFragmentArgs by navArgs()
 
     private val mAdapter: ChatGptAdapter by lazy {
         ChatGptAdapter()
@@ -29,9 +41,15 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.threadId = args.threadId
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
-        viewModel.sendInitMessage()
+
+        if (viewModel.threadId.isNullOrEmpty()) {
+            viewModel.generateThreadId()
+        } else {
+            viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+        }
     }
 
     private fun setAdapter() {
@@ -64,8 +82,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
+        binding.ivHistory.setOnClickListener {
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
+        }
+
         binding.lytChatBox.btnNewChat.setOnClickListener {
-            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf())
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf(""))
         }
 
         binding.lytChatBox.btnSendMessage.setOnClickListener {
@@ -104,6 +126,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.askQuestionStream(message)
 
             //viewModel.askQuestion(message)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_message_submit)
         }
 
     }
@@ -128,6 +151,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 uiController.onApiErrorReceived(response)
             }
         }
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
         viewModel.scrollToBottom.observe(this) {
             it.getContent()?.let {
                 binding.rv.smoothScrollToPosition(mAdapter.getItemCount() - 1)

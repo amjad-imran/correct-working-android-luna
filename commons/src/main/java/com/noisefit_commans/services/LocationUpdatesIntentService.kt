@@ -40,7 +40,7 @@ class LocationUpdatesIntentService : IntentService(TAG) {
                 val action = intent.action
                 if (ACTION_PROCESS_UPDATES == action) {
                     val result = extractResult(intent)
-                    val locations = result.locations ?: return
+                    val locations = result?.locations ?: return
                     val mLocationDataModels = java.util.ArrayList<LocationDataModel>()
                     for (mLocation in locations) {
                         if (mLocation.accuracy <= DistanceUtil.kDefaultMinimumAcceptableAccuracy) {

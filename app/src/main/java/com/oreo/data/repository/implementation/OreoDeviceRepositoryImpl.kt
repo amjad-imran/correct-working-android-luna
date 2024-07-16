@@ -8,6 +8,9 @@ import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.ai.ChatHistoryItem
+import com.oreo.data.model.ai.ChatMessagesResponse
+import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +44,42 @@ class OreoDeviceRepositoryImpl(
             val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/message/polling"
             remoteDataSource.pollForAnswer(url, jsonObject)
 
+        }
+    }
+
+    override suspend fun getChatHistory(): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat-history"
+            remoteDataSource.getChatHistory(url)
+
+        }
+    }
+
+    override suspend fun getChatHistoryByDate(date: String?): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/date-history"
+            remoteDataSource.getChatHistoryByDate(url, date)
+        }
+    }
+
+    override suspend fun deleteChatHistory(threadId: String): Flow<Resource<BaseApiResponse<Any?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/delete"
+            remoteDataSource.deleteChatHistory(url, threadId)
+        }
+    }
+
+    override suspend fun generateThreadId(): Flow<Resource<BaseApiResponse<ThreadIdResponse?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/new-chat"
+            remoteDataSource.generateThreadId(url)
+        }
+    }
+
+    override suspend fun loadMessagesByThreadId(threadId:String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat?thread_id=$threadId"
+            remoteDataSource.loadMessagesByThreadId(url)
         }
     }
 }

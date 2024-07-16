@@ -31,11 +31,9 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
-import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
-import com.oreo.ui.readiness.OreoReadinessBannerFragment
 import com.oreo.ui.sleep.OreoSleepStageAnalysisAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
@@ -230,6 +228,14 @@ class SleepDashFragment :
                 Pair(150, 10),
                 Pair(180, 0),
             ),
+            4
+        )
+
+
+        val data = viewModel.generateSleepTimeData()
+
+        binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
+            data,
             4
         )
     }

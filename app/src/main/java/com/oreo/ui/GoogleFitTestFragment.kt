@@ -53,7 +53,7 @@ class GoogleFitTestFragment :
                 .requestScopes(Fitness.SCOPE_ACTIVITY_READ)
                 .build()
 
-            val account = GoogleSignIn.getLastSignedInAccount(context)
+            val account = context?.let { it1 -> GoogleSignIn.getLastSignedInAccount(it1) }
 
             if (account == null) {
                 // User is not signed in, request sign-in
@@ -84,7 +84,7 @@ class GoogleFitTestFragment :
                 .setTimeRange(1696918645 , System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .build()
 
-            val lastSignIn = GoogleSignIn.getLastSignedInAccount(context)
+            val lastSignIn = context?.let { it1 -> GoogleSignIn.getLastSignedInAccount(it1) }
 
             Fitness.getHistoryClient(
                 requireActivity(),
@@ -114,7 +114,7 @@ class GoogleFitTestFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 22) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
             if (result!!.isSuccess) {
                 context.showShortToast("Sign in Success")
                 // User signed in, you can now access fitness data

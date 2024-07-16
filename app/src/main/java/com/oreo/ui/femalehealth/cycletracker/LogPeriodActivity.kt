@@ -24,6 +24,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
     private val viewModel: CycleLogViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_period_calendar_view)
         viewModel.shouldGenerateFutureData = false
         viewModel.getCycleHistoryData()
     }
@@ -179,6 +181,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
         }
 
         binding.btnLog.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_period_calendar_save_click)
             viewModel.savePeriodLog()
         }
     }

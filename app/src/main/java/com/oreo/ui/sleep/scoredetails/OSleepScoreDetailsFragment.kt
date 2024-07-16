@@ -30,6 +30,7 @@ import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.ui.custom.ScrollListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import kotlin.math.roundToInt
 
 private const val DAY_TYPE = "DAY_TYPE"
@@ -858,7 +859,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${String.format("%.1f", difference)} °F"
+                        val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name) {
                         tryCatch {

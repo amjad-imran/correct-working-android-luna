@@ -1,0 +1,233 @@
+[versions]
+androidDecoviewCharting = "v1.2"
+androidJoda = "2.12.1"
+appcompat = "1.7.0"
+balloon = "1.5.2"
+blurview = "version-2.0.3"
+carouselView = "1.1.1"
+chatapi = "overseas_1.0.014"
+circleimageview = "3.1.0"
+circleindicator = "2.1.6"
+core = "4.6.2"
+coreTesting = "2.2.0"
+curlloggerinterceptor = "0.1"
+desugar_jdk_libs = "2.0.4"
+elvishewXlog = "1.10.1"
+agp = "8.4.1"
+flexbox = "3.0.0"
+gradle = "8.4.1"
+hiltAndroidCompiler = "2.51"
+kotlin = "1.9.22"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+kotlinBom = "1.8.22"
+lifecycleRuntimeKtx = "2.8.0"
+activityCompose = "1.9.0"
+composeBom = "2024.05.00"
+materialVersion = "1.6.1"
+mockitoAndroid = "3.10.0"
+mockitoCore = "5.6.0"
+navigationFragmentKtx = "2.7.7"
+navigationUiKtx = "2.7.7"
+anrwatchdog = "1.4.0"
+oksse = "0.9.0"
+pagingCommonKtx = "3.3.0"
+runner = "1.5.2"
+sdpAndroid = "1.1.0"
+tensorflowLite = "2.6.0"
+tensorflowLiteGpu = "2.6.0"
+ticker = "2.0.4"
+timber = "5.0.1"
+ramseth001-text-drawable = "1.1.3"
+swipe-refresh-library-core = "1.7.2.4"
+truth = "1.4.2"
+ucrop = "2.2.6"
+utilcodex = "1.31.0"
+utilcodexVersion = "1.31.1"
+varunest-sparkbutton = "1.0.6"
+tankery-circularSeekBar = "1.3.2"
+tbruyelle-rxpermissions = "0.12"
+rxjava3 = "3.0.1"
+room = "2.6.1"
+retrofit = "2.11.0"
+jbcrypt = "0.4"
+retrofit-logging-interceptor = "4.12.0"
+budiyev-scanner = "2.1.0"
+protobuf = "3.22.3"
+play-service-fitness = "21.2.0"
+play-service-maps = "18.2.0"
+play-service-location = "21.3.0"
+play-service-auth = "21.2.0"
+google-services = "4.4.2"
+google-services-phone-api = "18.0.2"
+play-service-ads = "23.1.0"
+goodiebag-pinview = "1.4"
+maps-utils = "0.5"
+lottie = "5.2.0"
+coroutines = "1.8.0"
+konfetti-xml = "2.0.2"
+konfetti-core = "2.0.2"
+imagepicker = "2.1"
+scan-plus = "2.1.0.300"
+dagger-hilt = "2.50"
+hilt-compiler = "1.2.0"
+event-bus = "3.3.0"
+gson = "2.11.0"
+play-core = "1.8.1"
+material = "1.5.0"
+glide = "4.15.1"
+firebase-bom = "33.0.0"
+fb-sdk = "12.3.0"
+exoplayer = "2.19.1"
+color-picker-view = "2.2.4"
+kizitonwose-calendar-view = "1.0.4"
+apache = "4.4"
+androidx-lifecycle = "2.8.3"
+multidex = "2.0.1"
+localbroadcastmanager = "1.1.0"
+vectordrawable = "1.2.0"
+camerax = "1.3.3"
+camerax-view = "1.3.3"
+lifecycle-extensions = "2.2.0"
+hilt-work = "1.2.0"
+view = "2.0.2"
+work-runtime-ktx = "2.9.0"
+concurrent-futures-ktx = "1.1.0"
+fragment-ktx = "1.7.1"
+constraintlayout = "2.1.4"
+viewpager2 = "1.1.0"
+legacy-support-v4 = "1.0.0"
+lifecycle-process = "2.8.0"
+paging-runtime = "3.3.0"
+protobuf-gradle-plugin = "0.9.4"
+navigation-safe-args-gradle-plugin = "2.7.7"
+hilt-android-gradle-plugin = "2.51.1"
+firebase-crashlytics-gradle = "3.0.1"
+reviewKtx = "2.0.1"
+
+
+[libraries]
+android-decoview-charting = { module = "com.github.bmarrdev:android-DecoView-charting", version.ref = "androidDecoviewCharting" }
+android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingCommonKtx" }
+androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
+anrwatchdog = { group = "com.github.anrwatchdog", name = "anrwatchdog", version.ref = "anrwatchdog" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
+blurview = { module = "com.github.Dimezis:BlurView", version.ref = "blurview" }
+carousel-view = { module = "com.github.alirezat775:carousel-view", version.ref = "carouselView" }
+chatapi = { module = "com.github.artillerymans:ChatApi", version.ref = "chatapi" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
+core = { module = "io.noties.markwon:core", version.ref = "core" }
+curlloggerinterceptor = { module = "com.github.grapesnberries:curlloggerinterceptor", version.ref = "curlloggerinterceptor" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidCompiler" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+elvishew-xlog = { group = "com.elvishew", name = "xlog", version.ref = "elvishewXlog" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
+material-v161 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockitoAndroid" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+oksse = { module = "com.github.heremaps:oksse", version.ref = "oksse" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
+ticker = { module = "com.robinhood.ticker:ticker", version.ref = "ticker" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+ramseth001-text-drawable = { group = "com.github.ramseth001", name = "TextDrawable", version.ref = "ramseth001-text-drawable" }
+swipe-refresh-library-core = { group = "com.github.dkzwm", name = "srl-core", version.ref = "swipe-refresh-library-core" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
+utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
+utilcodex-v1311 = { module = "com.blankj:utilcodex", version.ref = "utilcodexVersion" }
+varunest-sparkbutton = { group = "com.github.varunest", name = "sparkbutton", version.ref = "varunest-sparkbutton" }
+tankery-circularSeekBar = { group = "me.tankery.lib", name = "circularSeekBar", version.ref = "tankery-circularSeekBar" }
+tbruyelle-rxpermissions = { group = "com.github.tbruyelle", name = "rxpermissions", version.ref = "tbruyelle-rxpermissions" }
+rxjava3-rxkotlin = { group = "io.reactivex.rxjava3", name = "rxkotlin", version.ref = "rxjava3" }
+rxjava3-rxandroid = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxjava3" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+retrofit-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "retrofit-logging-interceptor" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+budiyev-code-scanner = { group = "com.github.yuriy-budiyev", name = "code-scanner", version.ref = "budiyev-scanner" }
+protobuf = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+play-service-fitness = { group = "com.google.android.gms", name = "play-services-fitness", version.ref = "play-service-fitness" }
+play-service-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-service-maps" }
+play-service-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-service-location" }
+play-service-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-service-auth" }
+google-service = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
+play-service-auth-api = { group = "com.google.android.gms", name = "play-services-auth-api-phone", version.ref = "google-services-phone-api" }
+goodiebag-pinview = { group = "com.github.GoodieBag", name = "Pinview", version.ref = "goodiebag-pinview" }
+maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "maps-utils" }
+lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+konfetti-xml = { group = "nl.dionsegijn", name = "konfetti-xml", version.ref = "konfetti-xml" }
+konfetti-core = { group = "nl.dionsegijn", name = "konfetti-core", version.ref = "konfetti-core" }
+imagepicker = { group = "com.github.dhaval2404", name = "imagepicker", version.ref = "imagepicker" }
+scan-plus = { group = "com.huawei.hms", name = "scanplus", version.ref = "scan-plus" }
+dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger-hilt" }
+hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt-compiler" }
+greenrobot-eventbus = { group = "org.greenrobot", name = "eventbus", version.ref = "event-bus" }
+greenrobot-greendao = { group = "org.greenrobot", name = "greendao", version.ref = "event-bus" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+material-collapsingtoolbarlayout = { group = "com.hendraanggrian.material", name = "collapsingtoolbarlayout-subtitle", version.ref = "material" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-ktx" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx"}
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+facebook-android-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", version.ref = "fb-sdk" }
+exoplayer-core = { group = "com.google.android.exoplayer", name = "exoplayer-core", version.ref = "exoplayer" }
+exoplayer-dash = { group = "com.google.android.exoplayer", name = "exoplayer-dash", version.ref = "exoplayer" }
+exoplayer-ui = { group = "com.google.android.exoplayer", name = "exoplayer-ui", version.ref = "exoplayer" }
+color-picker-view = { group = "com.github.skydoves", name = "colorpickerview", version.ref = "color-picker-view" }
+kizitonwose-calendar-view = { group = "com.github.kizitonwose", name = "CalendarView", version.ref = "kizitonwose-calendar-view" }
+apache = { group = "org.apache.commons", name = "commons-collections4", version.ref = "apache" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+androidx-localbroadcastmanager = { group = "androidx.localbroadcastmanager", name = "localbroadcastmanager", version.ref = "localbroadcastmanager" }
+androidx-vectordrawable = { group = "androidx.vectordrawable", name = "vectordrawable", version.ref = "vectordrawable" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-camera = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+androidx-camera-lifestyle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax-view" }
+androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt-work" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-runtime-ktx" }
+androidx-concurrent-futures-ktx = { group = "androidx.concurrent", name = "concurrent-futures-ktx", version.ref = "concurrent-futures-ktx" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+androidx-legacy-support = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle-process" }
+androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging-runtime" }
+googleProtobufGradlePlugin = { group = "com.google.protobuf", name = "protobuf-gradle-plugin", version.ref = "protobuf-gradle-plugin" }
+androidxNavigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation-safe-args-gradle-plugin" }
+googleDaggerHiltAndroidGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt-android-gradle-plugin" }
+googleFirebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
+review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "reviewKtx" }
+view = { module = "com.kizitonwose.calendar:view", version.ref = "view" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+

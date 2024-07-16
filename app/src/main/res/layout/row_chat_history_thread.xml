@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_new_10"
+        android:padding="12dp">
+
+
+        <ImageView
+            android:id="@+id/imageView26"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_arrow_right_cal" />
+
+        <TextView
+            android:id="@+id/tvHeadline"
+            style="@style/S14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="24dp"
+            tools:text="Topic Headline" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            style="@style/S14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvHeadline"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="24dp"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/white_48"
+            tools:text="Lorem ipsum dolor sit amet, consecteturert adipiscing elit, sed do eiusmod." />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

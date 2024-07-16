@@ -95,17 +95,14 @@
     volatile <fields>;
 }
 
-#insider
--keep class com.useinsider.insider.Insider { *; }
--keep interface com.useinsider.insider.InsiderCallback { *; }
--keep class com.useinsider.insider.InsiderUser { *; }
--keep class com.useinsider.insider.InsiderProduct { *; }
--keep class com.useinsider.insider.InsiderEvent { *; }
--keep class com.useinsider.insider.InsiderCallbackType { *; }
--keep class com.useinsider.insider.InsiderGender { *; }
--keep class com.useinsider.insider.InsiderIdentifiers { *; }
-
--keep interface com.useinsider.insider.RecommendationEngine$SmartRecommendation { *; }
--keep interface com.useinsider.insider.MessageCenterData { *; }
--keep class com.useinsider.insider.ContentOptimizerDataType { *; }
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
 -keep class org.openudid.** { *; }
+
+-dontwarn com.huawei.agconnect.AGConnectOptions
+-dontwarn com.huawei.agconnect.AGConnectOptionsBuilder
+-dontwarn com.huawei.hms.aaid.HmsInstanceId
+-dontwarn com.huawei.hms.api.HuaweiApiAvailability
+-dontwarn com.huawei.hms.push.HmsMessageService
+-dontwarn com.huawei.hms.push.RemoteMessage

@@ -358,8 +358,9 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
+
                     if (viewModel.isChatSplashShown()) {
-                        navigate(R.id.chatGptFragment)
+                        mainViewModel.getChatHistoryToday()
                     } else {
                         navigate(R.id.chatSplashFragment)
                     }
@@ -379,7 +380,7 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {
-                    viewModel.onGotPeriodClicked(type.status)
+                    //viewModel.onGotPeriodClicked(type.status)
                 }
             }
         }
@@ -388,10 +389,9 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
-
-        /*binding.contentMain.lytHeartRate.root.setOnClickListener {
+        binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
-        }*/
+        }
 
         binding.contentMain.lytSplanner.ivMore.setOnClickListener {
             navigate(R.id.setAlarmFragment)
@@ -472,9 +472,9 @@ class SummaryDataFragmentToday :
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
         }
-        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
+        /*binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
-        }
+        }*/
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_score_click)
@@ -520,10 +520,10 @@ class SummaryDataFragmentToday :
                     this.tvPredictedDay.text = data.title ?: ""
 
                     this.bYes.setOnClickListener {
-                        viewModel.onGotPeriodClicked(true)
+                        viewModel.onGotPeriodClicked(true, data.currentDay)
                     }
                     this.bNo.setOnClickListener {
-                        viewModel.onGotPeriodClicked(false)
+                        viewModel.onGotPeriodClicked(false, data.currentDay)
                     }
                 }
             }
@@ -839,18 +839,18 @@ class SummaryDataFragmentToday :
             }
         }
 
-        mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
-            when (state) {
-                2/*END*/ -> {
-                    /* mainViewModel.viewModelScope.launch {
+        /* mainViewModel.sessionManager.firmwareLogsStatus.observe(this) { state ->
+             when (state) {
+                 2*//*END*//* -> {
+                    *//* mainViewModel.viewModelScope.launch {
                          delay(1000)
                          context?.let { ctx ->
                              val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
                          }
-                     }*/
+                     }*//*
                 }
             }
-        }
+        }*/
 
         viewModel.stateDashRingBattery.observe(viewLifecycleOwner) {
             if (it.first) {

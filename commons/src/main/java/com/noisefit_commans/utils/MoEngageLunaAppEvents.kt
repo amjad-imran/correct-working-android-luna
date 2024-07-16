@@ -212,5 +212,24 @@ object MoEngageLunaAppEvents {
     const val luna_stress_i_button_click = "luna_stress_i_button_click"
     const val luna_stress_i_page_visit = "luna_stress_i_page_visit"
 
+    const val luna_cycle_tracking_page_visit = "luna_cycle_tracking_page_visit"
+    const val luna_cycle_tracking_calendar_button_click = "luna_cycle_tracking_calendar_button_click"
+    const val luna_cycle_temperature_page_visit = "luna_cycle_temperature_page_visit"
+    const val luna_cycle_cycle_length_page_visit = "luna_cycle_cycle_length_page_visit"
+    const val luna_cycle_period_duration_page_visit = "luna_cycle_period_duration_page_visit"
+    const val luna_cycle_cycle_history_page_visit = "luna_cycle_cycle_history_page_visit"
+    const val luna_cycle_i_phase_page_visit = "luna_cycle_i_phase_page_visit"
+    const val luna_cycle_i_page_visit = "luna_cycle_i_page_visit"
+    const val luna_cycle_i_temperature_visit = "luna_cycle_i_temperature_visit"
+    const val luna_cycle_log_button_click = "luna_cycle_log_button_click"
+    const val luna_cycle_log_period_click = "luna_cycle_log_period_click"
+    const val luna_cycle_log_flow_click = "luna_cycle_log_flow_click"
+    const val luna_cycle_log_symtoms_click = "luna_cycle_log_symtoms_click"
+    const val luna_cycle_log_period_calendar_view = "luna_cycle_log_period_calendar_view"
+    const val luna_cycle_log_period_calendar_save_click = "luna_cycle_log_period_calendar_save_click"
+    const val luna_cycle_save_click = "luna_cycle_save_click"
+    const val luna_ai_page_visit = "luna_ai_page_visit"
+    const val luna_ai_message_submit = "luna_ai_message_submit"
+
 
 }

@@ -48,6 +48,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 import javax.inject.Inject
 
 private const val maxLatLngPadding = 180
@@ -213,8 +214,8 @@ class OWorkoutDetailsFragmentV2 :
         } else {
             val (hour, minute, seconds) = ApplicationUtils.getFormattedDuration(it.durationSeconds)
             binding.lytTop.lytActivityItem.tvDurationValue.text =
-                String.format("%02d:%02d", hour, minute)
-            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format(":%02d", seconds)
+                String.format(locale = Locale.US,"%02d:%02d", hour, minute)
+            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format(locale = Locale.US,":%02d", seconds)
         }
 
         //binding.lytTop.lytActivityItem.tvDurationValue.paintText()

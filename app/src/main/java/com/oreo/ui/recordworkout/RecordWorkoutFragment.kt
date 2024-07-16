@@ -637,15 +637,17 @@ class RecordWorkoutFragment :
                 LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
 
                     try {
-                        startIntentSenderForResult(
-                            exception.status.resolution?.intentSender,
-                            REQUEST_CHECK_SETTINGS,
-                            null,
-                            0,
-                            0,
-                            0,
-                            null
-                        )
+                        exception.status.resolution?.intentSender?.let {
+                            startIntentSenderForResult(
+                                it,
+                                REQUEST_CHECK_SETTINGS,
+                                null,
+                                0,
+                                0,
+                                0,
+                                null
+                            )
+                        }
                     } catch (exp: Exception) {
                         //CASE : For handling Fragment not attached to Activity
                     }

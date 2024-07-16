@@ -59,7 +59,9 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -755,7 +757,7 @@ constructor(
             sportsModeResponse.distance = p1.reportDistance
 
             if (p1.reportDistance.toInt() != 0 && duration != 0) {
-                val df = DecimalFormat("#.#")
+                val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.US))
                 val speed = p1.reportFastSpeed
                 sportsModeResponse.speed = df.format(speed)?.toFloat()
             } else {

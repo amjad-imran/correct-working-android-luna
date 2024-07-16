@@ -169,13 +169,13 @@ class SummaryDataFragment :
 
     override fun initListener() {
 
-        binding.lytHeartRate.bInfo.setOnClickListener {
+       /* binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
-        }
-       /* binding.lytHeartRate.root.setOnClickListener {
-            navigate(R.id.fragmentHeartRateDetails)
         }*/
 
+        binding.lytHeartRate.root.setOnClickListener {
+            navigate(R.id.fragmentHeartRateDetails)
+        }
     }
 
     override fun subscribeObservers() {

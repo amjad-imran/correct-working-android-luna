@@ -41,6 +41,9 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
+import com.oreo.data.model.ai.ChatHistoryItem
+import com.oreo.data.model.ai.ChatMessagesResponse
+import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
@@ -50,6 +53,7 @@ import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -381,6 +385,33 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponse<ChatGptResponse>
+
+    @GET
+    suspend fun getChatHistory(
+        @Url url: String
+    ): BaseApiResponse<List<ChatHistoryItem>?>
+
+    @GET
+    suspend fun getChatHistoryByDate(
+        @Url url: String,
+        @Query("date") date: String?
+    ): BaseApiResponse<List<ChatHistoryItem>?>
+
+    @DELETE
+    suspend fun deleteChatHistory(
+        @Url url: String,
+        @Query("thread_id") threadId: String
+    ): BaseApiResponse<Any?>
+
+    @GET
+    suspend fun generateThreadId(
+        @Url url: String
+    ): BaseApiResponse<ThreadIdResponse?>
+
+    @GET
+    suspend fun loadMessagesByThreadId(
+        @Url url: String
+    ): BaseApiResponse<ChatMessagesResponse>
 
     /**
      * ===================================

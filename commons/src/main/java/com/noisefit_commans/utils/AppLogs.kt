@@ -26,6 +26,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.util.Locale
 
 
 private const val LogsFolder = "appLogs"
@@ -48,9 +49,10 @@ object AppLogs {
     fun sendAppLogs(event: LogEvents, subEvent: SubEvent) {
         scope.launch(backgroundDispatcher) {
             cleanLogFilesIfNecessary()
-            LOGS.d(TAG, "Saving Event :  ${String.format("%02X %02X", event.code, subEvent.code)}")
+            LOGS.d(TAG, "Saving Event :  ${String.format(locale = Locale.US,"%02X %02X", event.code, subEvent.code)}")
             val exception = "Exception = ${
                 String.format(
+                    locale = Locale.US,
                     "%02X %02X",
                     event.code,
                     subEvent.code

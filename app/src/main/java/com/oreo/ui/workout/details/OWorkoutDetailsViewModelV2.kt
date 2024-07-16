@@ -36,6 +36,7 @@ import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
 import java.time.Period
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -298,10 +299,10 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat().parse(String.format("%02d:%02d", startHr, startMin))
+        calendar.time = DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", startHr, startMin))
         val endTimeCalendar = Calendar.getInstance()
         endTimeCalendar.time =
-            DateFormats.timeFormat().parse(String.format("%02d:%02d", endHr, endMin))
+            DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", endHr, endMin))
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {

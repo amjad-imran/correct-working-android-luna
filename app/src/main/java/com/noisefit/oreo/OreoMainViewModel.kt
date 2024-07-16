@@ -36,6 +36,7 @@ import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
@@ -65,7 +66,8 @@ constructor(
     val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
     val locationDataSource: LocationDataSource,
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    val oreoDeviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 
 
@@ -89,6 +91,8 @@ constructor(
     var enableAi: Boolean = false
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
+
+    var showChatUi = MutableLiveData<Event<String>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
@@ -854,4 +858,48 @@ constructor(
         }
         return false
     }
+
+    fun getChatHistoryToday() {
+        viewModelScope.launch {
+            oreoDeviceRepository.getChatHistoryByDate(
+                DateFormats.getTodaysDateString(10)
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getChatHistoryToday()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val threadId = it.firstOrNull()?.threadId
+                            showChatUi.postValue(Event(threadId ?: ""))
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 }

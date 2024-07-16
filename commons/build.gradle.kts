@@ -1,5 +1,3 @@
-import AndroidX.implementation
-
 apply {
     from("$rootDir/android-library-build.gradle")
 }
@@ -15,57 +13,63 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    namespace = "com.noisefit_commans"
 }
 
 
 
 
 dependencies {
-    "implementation"(AndroidX.navigationFragmentKtx)
-    "implementation"(AndroidX.navigationUiKtx)
-    "implementation"(AndroidX.multidex)
-    "implementation"(XLog.log)
-    "implementation"(Retrofit.retrofit)
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    kapt(Room.Compiler)
-    "implementation"(Room.ktx)
-    "implementation"(Maps.mapUtils)
-    "implementation"("net.danlew:android.joda:2.12.1")
-    "implementation"(project(Modules.mpChartLib))
 
-    "implementation"("com.github.yalantis:ucrop:2.2.6")
-    "implementation"(Lottie.library)
-    "implementation"(Glide.glide)
-    "implementation"(project(Modules.mpChartLib))
-    "implementation"(AndroidX.workRuntimeKtx)
+    implementation(libs.androidx.multidex)
+    implementation(libs.elvishew.xlog)
+    implementation(libs.retrofit)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.maps.utils)
 
 
-    "implementation"(Timber.timber)
-    "implementation"(Retrofit.retrofit)
-    "implementation"(Retrofit.converter)
-    "implementation"(Retrofit.okttp3Interceptor)
 
-    "implementation"(Maps.mapUtils)
-    "implementation"(Google.material)
-    "implementation"(PlayService.playServiceAuth)
-    "implementation"(PlayService.playServicePhone)
-    "implementation"(PlayService.playServiceFitness)
-    "implementation"(PlayService.playServiceLocation)
-    "implementation"(PlayService.playServiceMaps)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.android.joda)
+    implementation(project(Modules.mpChartLib))
+    implementation(libs.ucrop)
+    implementation(libs.lottie)
+    implementation(libs.glide)
 
-    "implementation"(Fb.sdk)
-    "implementation"(Firebase.analytics)
-    "implementation"(Firebase.config)
-    "implementation"(Firebase.crashlytics)
-    "implementation"(Firebase.messagining)
+    implementation(libs.androidx.work.runtime.ktx)
 
-    "implementation"(SeekBar.circularSeekBar)
+    implementation(libs.timber)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.logging.interceptor)
+    implementation(libs.retrofit.converter.gson)
 
-    "implementation"(Konfetti.konfetti)
-    "implementation"(Konfetti.konfettiCore)
+    implementation(libs.maps.utils)
+    implementation(libs.android.material)
 
-//    //Custom Calendar for Activity
-    "implementation"(platform(Firebase.bom))
+    implementation(libs.play.service.auth)
+    implementation(libs.play.service.auth.api)
+    implementation(libs.play.service.fitness)
+    implementation(libs.play.service.location)
+    implementation(libs.play.service.maps)
+
+
+    implementation(libs.facebook.android.sdk)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.messaging.ktx)
+    implementation(platform(libs.firebase.bom))
+
+    implementation(libs.tankery.circularSeekBar)
+
+    implementation(libs.konfetti.xml)
+    implementation(libs.konfetti.core)
+
+
 
 
 }
