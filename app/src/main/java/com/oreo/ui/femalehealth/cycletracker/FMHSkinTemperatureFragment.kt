@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.PeriodTempChartModel
@@ -24,6 +25,7 @@ import com.oreo.ui.custom.female.ScrollListenerPeriodTemp
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class FMHSkinTemperatureFragment :
@@ -85,12 +87,15 @@ class FMHSkinTemperatureFragment :
 
         binding.tvDate.text = LocalDate.parse(date)
             .format(DateTimeFormatter.ofPattern("EEE, dd MMM"))
+        val unit = if (viewModel.sessionManager.isMetric()) "C" else "F"
+
         binding.tvValue.text = if (value == null) {
             "-"
         } else if (value == 0.0f) {
-            "0°F"
+            "0°$unit"
         } else {
-            if (value > 0.0f) "+${value}" else "${value}°F"
+            val formattedValue = String.format(locale = Locale.US, "%.1f", value)
+            if (value > 0.0f) "+${formattedValue}" else "${formattedValue}°$unit"
         }
     }
 
@@ -103,11 +108,16 @@ class FMHSkinTemperatureFragment :
         //val tempList = viewModel.getDummyTempList()
         val topGraphData = viewModel.getPrefixAndSuffixList(temp)
 
-        LOGS.d("sdalsadkljsdkal ${Gson().toJson(temp)}")
-
         temp.forEach {
             if (viewModel.selectedDate == it.date) {
-                updateTopUi(it.date, it.temperature)
+                val convertedTemp = if (it.temperature == null || it.temperature == 0.0f) {
+                    it.temperature
+                } else {
+                    if (viewModel.sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
+                        32 + it.temperature
+                    ) else it.temperature
+                }
+                updateTopUi(it.date, convertedTemp)
             }
         }
 

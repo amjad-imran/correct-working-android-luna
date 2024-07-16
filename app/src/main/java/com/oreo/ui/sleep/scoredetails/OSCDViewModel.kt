@@ -11,6 +11,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
@@ -319,7 +320,13 @@ class OSCDViewModel @Inject constructor(
 
             val chartModel = ChartModel()
             chartModel.date = it.date
-            chartModel.valueFloat2 = it.data
+            chartModel.valueFloat2 =
+                if (it.data != 0.0f) {
+                    if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(it.data) else it.data
+                } else {
+                    it.data
+                }
+
             chartModel.index =
                 DateFormats.parseDate(
                     it.date,
@@ -327,8 +334,10 @@ class OSCDViewModel @Inject constructor(
                     DateFormats.dateFormatDay()
                 )
 
-
-            chartModel.valueFloat = it.deviation ?: 0.0f
+            chartModel.valueFloat =
+                if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
+                    32 + (it.deviation ?: 0.0f)
+                ) else it.deviation ?: 0.0f
 
             list.add(chartModel)
         }

@@ -26,6 +26,10 @@ object AppConversionUtils {
         return (celsius * 9 / 5) + 32
     }
 
+    fun fahrenheitToCelsius(fahrenheit: Float): Float {
+        return ((fahrenheit - 32) * 5) / 9
+    }
+
     /**
      * 体表温度算法（华氏度）Body surface temperature algorithm (Fahrenheit)
      *
@@ -72,6 +76,6 @@ object AppConversionUtils {
     }
 
     fun round(value: Double): String {
-        return String.format(locale = Locale.US,"%.2f", value)
+        return String.format(locale = Locale.US, "%.2f", value)
     }
 }

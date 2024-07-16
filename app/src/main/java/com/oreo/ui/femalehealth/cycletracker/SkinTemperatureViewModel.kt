@@ -11,6 +11,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
@@ -172,9 +173,10 @@ class SkinTemperatureViewModel @Inject constructor(
 
         val list = ArrayList<PeriodTempChartModel>()
         var max = 0.0f
+        val isMetric = sessionManager.isMetric()
         dataList.forEach {
 
-            val phase = getCurrentPhase(it.date)//TODO calculate on the bases of data
+            val phase = getCurrentPhase(it.date)
 
             val chartModel = PeriodTempChartModel(
                 phase = phase
@@ -191,12 +193,20 @@ class SkinTemperatureViewModel @Inject constructor(
 
             chartModel.month = month
             chartModel.day = day
-            chartModel.value = it.temperature
+
+            val convertedTemp = if (it.temperature == null || it.temperature == 0.0f) {
+                it.temperature
+            } else {
+                if (isMetric) AppConversionUtils.fahrenheitToCelsius(32 + it.temperature) else it.temperature
+            }
+
+            chartModel.value =
+                convertedTemp
 
             list.add(chartModel)
             dateList.add(it.date)
 
-            val currentVal = abs(it.temperature ?: 0f)
+            val currentVal = abs(convertedTemp ?: 0f)
             if (currentVal > max) {
                 max = currentVal
             }
@@ -270,7 +280,7 @@ class SkinTemperatureViewModel @Inject constructor(
 
         cycleHistoryData.value?.forEach {
             val periodStart = LocalDate.parse(it.periodDate)
-            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong()?:1).minusDays(1)
+            val periodEnd = periodStart.plusDays(it.cycleLength?.toLong() ?: 1).minusDays(1)
             val ovDate = if (it.ovulationStartDate != null) {
                 LocalDate.parse(it.ovulationStartDate)
             } else {

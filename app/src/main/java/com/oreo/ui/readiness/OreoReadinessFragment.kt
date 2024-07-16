@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -677,17 +678,17 @@ class OreoReadinessFragment :
     }
 
     override fun subscribeObservers() {
-       /* mainViewModel.sessionManager.syncCompleted.observe(this) {
-            it?.getContent()?.let { syncDataStatus ->
-                when (syncDataStatus) {
-                    SyncEvents.ServerSyncSuccess -> {
-                        mainViewModel.reloadTodaysData()
-                    }
+        /* mainViewModel.sessionManager.syncCompleted.observe(this) {
+             it?.getContent()?.let { syncDataStatus ->
+                 when (syncDataStatus) {
+                     SyncEvents.ServerSyncSuccess -> {
+                         mainViewModel.reloadTodaysData()
+                     }
 
-                    else -> {}
-                }
-            }
-        }*/
+                     else -> {}
+                 }
+             }
+         }*/
 
         mainViewModel.readinessHistoryResponse.observe(this) {
 
@@ -874,14 +875,45 @@ class OreoReadinessFragment :
                     if (deviation > 0) {
                         this.append("+")
                     }
-                    this.append(String.format(locale = Locale.US,"%.2f",deviation))
+                    this.append(
+                        String.format(
+                            locale = Locale.US, "%.2f", if (mViewModel.sessionManager.isMetric()) {
+                                AppConversionUtils.fahrenheitToCelsius(32 + deviation)
+                            } else {
+                                deviation
+                            }
+                        )
+                    )
                 }
 
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format(locale = Locale.US,"%.1f°F (%s)",it.avg_temp.value, deviationString)
+                    if (mViewModel.sessionManager.isMetric()) {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°C (%s)",
+                            AppConversionUtils.fahrenheitToCelsius(it.avg_temp.value),
+                            deviationString
+                        )
+                    } else {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°F (%s)",
+                            it.avg_temp.value,
+                            deviationString
+                        )
+                    }
             } else {
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format(locale = Locale.US,"%.1f°F",it.avg_temp.value)
+                    if (mViewModel.sessionManager.isMetric()) {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°C",
+                            AppConversionUtils.fahrenheitToCelsius(it.avg_temp.value)
+                        )
+
+                    } else {
+                        String.format(locale = Locale.US, "%.1f°F", it.avg_temp.value)
+                    }
 
                 //binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
@@ -902,7 +934,7 @@ class OreoReadinessFragment :
                     val deviation = todayAvg - baselineAvg
 
                     binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                        String.format(locale = Locale.US,"%.1f°F (%.2f)",todayAvg, deviation)
+                        String.format(locale = Locale.US, "%.1f°F (%.2f)", todayAvg, deviation)
 
                 } else {
                     binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
