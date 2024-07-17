@@ -8,6 +8,9 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.ui.heartrate.OHRLearnMoreAdapter
+import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +20,15 @@ class SleepInternalDetailsFragment :
 
     private val viewModel: SleepInternalDetailsViewModel by viewModels()
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
+
+    private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
+        OHRLearnMoreAdapter(object : OnItemClickListener {
+            override fun onItemClick(item: LearnMoreDataModel) {
+
+            }
+
+        })
+    }
 
     companion object {
         fun getStartData(launchMode: SleepInternalLaunchState): Pair<Int, Bundle?> {
@@ -34,6 +46,15 @@ class SleepInternalDetailsFragment :
         binding.tvTrendName.text = viewModel.getTitle()
 
         setGraphPagerView()
+        setRecycler()
+    }
+
+    private fun setRecycler() {
+        with(binding.lytLearnMore.rvLearnMode){
+            isNestedScrollingEnabled=false
+            adapter=learnMoreAdapter
+        }
+        learnMoreAdapter.setData(viewModel.getLearnMoreData())
     }
 
 

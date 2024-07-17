@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             tools:src="@drawable/ic_sleep"
+            android:alpha=".4"
             app:layout_constraintBottom_toBottomOf="@id/viewTop"
             app:layout_constraintStart_toStartOf="@id/viewTop"
             app:layout_constraintTop_toTopOf="@id/viewTop" />
@@ -33,6 +34,7 @@
             app:layout_constraintEnd_toStartOf="@id/ivDropDown"
             app:layout_constraintStart_toEndOf="@id/ivType"
             android:textColor="@color/white_80"
+            android:alpha=".4"
             app:layout_constraintTop_toTopOf="@id/viewTop"
             android:text="@string/text_sleep_duration" />
 
@@ -45,6 +47,7 @@
             app:layout_constraintBottom_toBottomOf="@id/viewTop"
             app:layout_constraintEnd_toEndOf="@id/viewTop"
             android:rotation="180"
+            android:alpha=".4"
             app:layout_constraintTop_toTopOf="@id/viewTop" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
