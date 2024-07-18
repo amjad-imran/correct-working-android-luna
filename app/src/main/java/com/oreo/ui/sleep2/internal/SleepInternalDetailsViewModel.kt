@@ -24,11 +24,31 @@ class SleepInternalDetailsViewModel @Inject constructor(
         _selectedPeriod.postValue(selectedPeriod)
     }
 
-    fun getTitle(): String {
+    private val _titleUpdate =
+        MutableLiveData<String>()
+    val titleUpdate: LiveData<String> = _titleUpdate
+
+
+    private fun getTitle(): String {
         return when (selectedLaunchMode) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> resourcesProvider.getString(R.string.text_restorative_sleep)
+            SleepInternalLaunchState.SLEEP_TIME -> resourcesProvider.getString(R.string.text_sleep_time)
+            SleepInternalLaunchState.HOUR_VS_NEED -> resourcesProvider.getString(R.string.text_hour_vs_need)
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> resourcesProvider.getString(R.string.text_sleep_performance)
+            SleepInternalLaunchState.EFFICIENCY -> resourcesProvider.getString(R.string.text_efficiency)
+            SleepInternalLaunchState.REM_SLEEP -> resourcesProvider.getString(R.string.text_rem_sleep)
+            SleepInternalLaunchState.DEEP_SLEEP -> resourcesProvider.getString(R.string.text_deep_sleep)
+            SleepInternalLaunchState.LATENCY -> resourcesProvider.getString(R.string.text_latency)
+            SleepInternalLaunchState.RESTFULNESS -> resourcesProvider.getString(R.string.text_restfulness)
+            SleepInternalLaunchState.SLEEP_DURATION -> resourcesProvider.getString(R.string.text_sleep_duration)
+
         }
     }
+
+    fun updateTitle() {
+        _titleUpdate.postValue(getTitle())
+    }
+
     fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
         val dataList = ArrayList<LearnMoreDataModel>()
         dataList.add(
@@ -64,6 +84,37 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
         )
         return dataList
+    }
+
+    fun updateTrendsName(trendsName: String?) {
+        when (trendsName?.lowercase()?.replace(" ","_")) {
+            SleepInternalLaunchState.RESTORATIVE_SLEEP.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.RESTORATIVE_SLEEP
+
+            SleepInternalLaunchState.SLEEP_PERFORMANCE.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.SLEEP_PERFORMANCE
+
+            SleepInternalLaunchState.DEEP_SLEEP.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.DEEP_SLEEP
+
+            SleepInternalLaunchState.EFFICIENCY.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.EFFICIENCY
+
+            SleepInternalLaunchState.LATENCY.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.LATENCY
+
+            SleepInternalLaunchState.RESTFULNESS.name.lowercase() -> selectedLaunchMode =
+                SleepInternalLaunchState.RESTFULNESS
+
+            SleepInternalLaunchState.REM_SLEEP.name.lowercase() ->
+                selectedLaunchMode = SleepInternalLaunchState.REM_SLEEP
+
+            SleepInternalLaunchState.SLEEP_TIME.name.lowercase() ->
+                selectedLaunchMode = SleepInternalLaunchState.SLEEP_TIME
+            SleepInternalLaunchState.SLEEP_DURATION.name.lowercase() ->
+                selectedLaunchMode = SleepInternalLaunchState.SLEEP_DURATION
+
+        }
     }
 
 

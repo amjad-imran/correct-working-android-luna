@@ -17,7 +17,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout7"
+        android:id="@+id/lytSpinnerView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="@dimen/side_margin"
@@ -63,12 +63,12 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="@dimen/_24sdp"
         android:layout_marginEnd="@dimen/side_margin"
+        android:layout_marginBottom="@dimen/_24sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
+        app:layout_constraintTop_toBottomOf="@+id/lytSpinnerView">
 
         <LinearLayout
             android:layout_width="match_parent"

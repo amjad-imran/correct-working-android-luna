@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentODropDownBinding
@@ -17,7 +18,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ODropDownDataModel
 import com.oreo.ui.internal.ODropDownAdapter
-import com.oreo.ui.internal.OHMInternalViewModel
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SLEEP_DROP_DOWN_ITEM = "SLEEP_DROP_DOWN_ITEM"
@@ -25,7 +26,8 @@ const val SLEEP_DROP_DOWN_ITEM = "SLEEP_DROP_DOWN_ITEM"
 @AndroidEntryPoint
 class ODropDownFragment :
     BaseFragment<FragmentODropDownBinding>(FragmentODropDownBinding::inflate) {
-    private val viewModel: OHMInternalViewModel by viewModels()
+    private val viewModel: ODropDownViewModel by viewModels()
+    private val args: ODropDownFragmentArgs by navArgs()
     var alert: AlertDialog? = null
     val mDDAdapter by lazy {
         ODropDownAdapter(object : ODropDownAdapter.ODDItemClickListener {
@@ -43,8 +45,17 @@ class ODropDownFragment :
         })
     }
 
+    companion object {
+        fun getStartData(launchMode: SleepInternalLaunchState): Pair<Int, Bundle?> {
+            return Pair(R.id.dropDownFragment, Bundle().apply {
+                putSerializable("launchMode", launchMode)
+            })
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.selectedLaunchMode = args.launchMode
         sleepDurationDropDown()
 
     }
@@ -65,6 +76,8 @@ class ODropDownFragment :
             null,
             false
         )
+        layoutAlertBinding.lytTopView.tvType.text = viewModel.getTitle().first
+        layoutAlertBinding.lytTopView.ivType.setImageResource(viewModel.getTitle().second)
 
         with(layoutAlertBinding.lytContentView.rvDropdown) {
             adapter = mDDAdapter
@@ -122,13 +135,13 @@ class ODropDownFragment :
         layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
             ContextCompat.getColor(
                 layoutAlertBinding.lytTopView.ivDropDown.context,
-                R.color.daytime_inactive_un_selected_color
+                R.color.color_dd_separator
             )
         )
         layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
             ContextCompat.getColor(
                 layoutAlertBinding.lytTopView.ivDropDown.context,
-                R.color.daytime_inactive_un_selected_color
+                R.color.color_dd_separator
             )
         )
 
@@ -167,13 +180,13 @@ class ODropDownFragment :
                 layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
                 layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
 
@@ -202,7 +215,7 @@ class ODropDownFragment :
                 layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
                 layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
@@ -214,7 +227,7 @@ class ODropDownFragment :
                 layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
             }
@@ -242,13 +255,13 @@ class ODropDownFragment :
                 layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
                 layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutAlertBinding.lytTopView.ivDropDown.context,
-                        R.color.daytime_inactive_un_selected_color
+                        R.color.color_dd_separator
                     )
                 )
                 layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(

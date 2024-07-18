@@ -2,14 +2,11 @@ package com.oreo.ui.internal
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHMInternalBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OHMDataModel
-import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,11 +16,7 @@ class OHMInternalFragment :
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-                setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
-                    val data = bundle.getString("itemName")
-                    LOGS.d("Selected DD item $data")
-                }
-                navigate(R.id.dropDownFragment)
+
             }
         })
     }

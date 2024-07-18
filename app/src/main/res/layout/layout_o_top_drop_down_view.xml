@@ -43,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/side_margin"
-            android:src="@drawable/ic_o_dropdown"
+            android:src="@drawable/ic_dd_arrow_up"
             app:layout_constraintBottom_toBottomOf="@id/viewTop"
             app:layout_constraintEnd_toEndOf="@id/viewTop"
-            android:rotation="180"
+            android:rotation="0"
             android:alpha=".4"
             app:layout_constraintTop_toTopOf="@id/viewTop" />
     </androidx.constraintlayout.widget.ConstraintLayout>

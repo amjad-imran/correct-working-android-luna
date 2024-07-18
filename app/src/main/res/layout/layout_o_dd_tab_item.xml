@@ -26,6 +26,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="16dp"
             android:id="@+id/divider1"
-            android:background="@color/white"/>
+            android:background="@color/color_dd_separator"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

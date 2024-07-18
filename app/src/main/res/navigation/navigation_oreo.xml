@@ -919,7 +919,11 @@
     <fragment
         android:id="@+id/dropDownFragment"
         android:name="com.oreo.ui.sleep2.ODropDownFragment"
-        android:label="DropDownFragment" />
+        android:label="DropDownFragment" >
+        <argument
+            android:name="launchMode"
+            app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
+    </fragment>
 
     <fragment
         android:id="@+id/chatHistoryFragment"
