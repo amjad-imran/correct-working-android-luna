@@ -230,6 +230,7 @@
     <color name="color_future_dates">#26ffffff</color>
     <color name="color_bubble_gum_pink">#ff5bc7</color>
     <color name="color_dd_separator">#424C56</color>
+    <color name="color_trends_warning">#d79d58</color>
 
 
 </resources>

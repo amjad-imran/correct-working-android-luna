@@ -6,6 +6,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.OSleepTrendsDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,22 +26,63 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     private val _titleUpdate =
-        MutableLiveData<String>()
-    val titleUpdate: LiveData<String> = _titleUpdate
+        MutableLiveData<Pair<String, Int>>()
+    val titleUpdate: LiveData<Pair<String, Int>> = _titleUpdate
 
 
-    private fun getTitle(): String {
+    private fun getTitle(): Pair<String, Int> {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.RESTORATIVE_SLEEP -> resourcesProvider.getString(R.string.text_restorative_sleep)
-            SleepInternalLaunchState.SLEEP_TIME -> resourcesProvider.getString(R.string.text_sleep_time)
-            SleepInternalLaunchState.HOUR_VS_NEED -> resourcesProvider.getString(R.string.text_hour_vs_need)
-            SleepInternalLaunchState.SLEEP_PERFORMANCE -> resourcesProvider.getString(R.string.text_sleep_performance)
-            SleepInternalLaunchState.EFFICIENCY -> resourcesProvider.getString(R.string.text_efficiency)
-            SleepInternalLaunchState.REM_SLEEP -> resourcesProvider.getString(R.string.text_rem_sleep)
-            SleepInternalLaunchState.DEEP_SLEEP -> resourcesProvider.getString(R.string.text_deep_sleep)
-            SleepInternalLaunchState.LATENCY -> resourcesProvider.getString(R.string.text_latency)
-            SleepInternalLaunchState.RESTFULNESS -> resourcesProvider.getString(R.string.text_restfulness)
-            SleepInternalLaunchState.SLEEP_DURATION -> resourcesProvider.getString(R.string.text_sleep_duration)
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                Pair(
+                    resourcesProvider.getString(R.string.text_restorative_sleep),
+                    R.drawable.ic_sleep_restroactive_sp
+                )
+            }
+
+            SleepInternalLaunchState.SLEEP_TIME -> Pair(
+                resourcesProvider.getString(R.string.text_sleep_time),
+                R.drawable.ic_sleep_time
+            )
+
+            SleepInternalLaunchState.HOUR_VS_NEED -> Pair(
+                resourcesProvider.getString(R.string.text_hour_vs_need),
+                R.drawable.ic_sleep_snooz
+            )
+
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(
+                resourcesProvider.getString(R.string.text_sleep_performance),
+                R.drawable.ic_sleep_performance
+            )
+
+            SleepInternalLaunchState.EFFICIENCY -> Pair(
+                resourcesProvider.getString(R.string.text_efficiency),
+                R.drawable.ic_sleep_efficieny
+            )
+
+            SleepInternalLaunchState.REM_SLEEP -> Pair(
+                resourcesProvider.getString(R.string.text_rem_sleep),
+                R.drawable.ic_sleep_rem_sp
+            )
+
+            SleepInternalLaunchState.DEEP_SLEEP -> Pair(
+                resourcesProvider.getString(R.string.text_deep_sleep),
+                R.drawable.ic_sleep_deep_sp
+            )
+
+            SleepInternalLaunchState.LATENCY -> Pair(
+                resourcesProvider.getString(R.string.text_latency),
+                R.drawable.ic_sleep_latency
+            )
+
+            SleepInternalLaunchState.RESTFULNESS -> Pair(
+                resourcesProvider.getString(R.string.text_restfulness),
+                R.drawable.ic_sleep_restfulness
+            )
+
+            SleepInternalLaunchState.SLEEP_DURATION -> Pair(
+                resourcesProvider.getString(R.string.text_sleep_duration),
+                R.drawable.ic_clock_off_sleep
+            )
 
         }
     }
@@ -87,7 +129,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun updateTrendsName(trendsName: String?) {
-        when (trendsName?.lowercase()?.replace(" ","_")) {
+        when (trendsName?.lowercase()?.replace(" ", "_")) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP.name.lowercase() -> selectedLaunchMode =
                 SleepInternalLaunchState.RESTORATIVE_SLEEP
 
@@ -111,10 +153,71 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             SleepInternalLaunchState.SLEEP_TIME.name.lowercase() ->
                 selectedLaunchMode = SleepInternalLaunchState.SLEEP_TIME
+
             SleepInternalLaunchState.SLEEP_DURATION.name.lowercase() ->
                 selectedLaunchMode = SleepInternalLaunchState.SLEEP_DURATION
 
         }
+    }
+
+    fun trendsDummyData(): OSleepTrendsDataModel? {
+        return OSleepTrendsDataModel(
+            trendType = selectedLaunchMode,
+            dayDate = "Monday  30 May, 2024",
+            dspValue = "40",
+            isShowOptimal = false,
+            isShowHighlight = true,
+            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
+        )
+
+    }
+
+    fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
+        var abr = ""
+        if (trendType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
+            abr = "% - average"
+        } else if (trendType == SleepInternalLaunchState.RESTFULNESS)
+            abr = "times - average"
+
+        return abr
+
+    }
+
+    fun getHighlightBackType(type: Int): Pair<Int, Int> {
+        /*
+        * 0-up
+        * 1-warning
+        * 2-red alert
+        * */
+        val background: Int
+        val textColor: Int
+        when (type) {
+            0 -> {
+                background = R.drawable.back_hm_range
+                textColor = R.color.edit_text_color
+            }
+
+            1 -> {
+                background = R.drawable.back_hm_warning_range
+                textColor = R.color.color_trends_warning
+            }
+
+            else -> {
+                background = R.drawable.back_hm_down_range
+                textColor = R.color.oreo_contributor_warning
+            }
+        }
+        return Pair(background, textColor)
+    }
+
+    fun returnTrendsArrow(type: SleepInternalLaunchState): Int {
+        val icon: Int = when (type) {
+            SleepInternalLaunchState.SLEEP_PERFORMANCE, SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> R.drawable.ic_trend_up
+            SleepInternalLaunchState.EFFICIENCY, SleepInternalLaunchState.RESTFULNESS, SleepInternalLaunchState.LATENCY, SleepInternalLaunchState.SLEEP_DURATION -> R.drawable.ic_hm_tick
+            else -> 0
+        }
+        return icon
+
     }
 
 

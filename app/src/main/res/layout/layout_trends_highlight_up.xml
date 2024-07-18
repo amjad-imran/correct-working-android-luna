@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/main"
+    android:background="@drawable/back_hm_range"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivTick"
+        android:layout_marginStart="4dp"
+        app:layout_constraintTop_toTopOf="@id/tvRangeValue"
+        app:layout_constraintBottom_toBottomOf="@id/tvRangeValue"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_trend_up"/>
+
+    <TextView
+        android:id="@+id/tvRangeValue"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivTick"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompatTextViewDrawableXml"
+        tools:text="wihtin 56 - 58" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

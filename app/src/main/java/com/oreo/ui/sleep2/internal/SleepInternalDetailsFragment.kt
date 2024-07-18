@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.OSleepTrendsDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
@@ -51,19 +52,96 @@ class SleepInternalDetailsFragment :
         viewModel.updateTitle()
         setGraphPagerView()
         setRecycler()
-        showTopContent()
+        showTopContent(viewModel.trendsDummyData())
     }
 
-    private fun showTopContent() {
-        if (viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+    private fun showTopContent(data: OSleepTrendsDataModel?) {
+        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
             binding.lytTopView.lytTopMultipleView.root.visible()
             binding.lytTopView.lytTopSingleView.root.gone()
-        }
-        else{
+        } else {
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
-
         }
+        if (data != null) {
+            if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
+                binding.lytTopView.lytTopMultipleView.tvDateTime.text = data.dayDate
+                binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                    lytNeed.tvHour.text = "8"
+                    lytNeed.tvMin.text = "28"
+                    lytNeed.lytTrendsHighlight.tvRangeValue.text = "5%"
+                    lytNeed.tvDesc.text = "avg hours"
+                }
+                binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                    lytHours.tvHour.text = "3"
+                    lytHours.tvMin.text = "28"
+                    lytHours.lytTrendsHighlight.tvRangeValue.text = "15%"
+                    lytHours.tvDesc.text = "avg need"
+                }
+            } else {
+                if (data.trendType == SleepInternalLaunchState.RESTFULNESS || data.trendType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
+                    //show single post fix
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
+                    binding.lytTopView.lytTopSingleView.lytTopHourView.root.gone()
+
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        data.dspValue
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        viewModel.getPostFixAbr(data.trendType)
+
+                } else {
+                    //show hour/minute post fix
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.root.gone()
+                    binding.lytTopView.lytTopSingleView.lytTopHourView.root.visible()
+                    val hour = 8
+                    val min = 19
+                    binding.lytTopView.lytTopSingleView.lytTopHourView.apply {
+                        if (hour > 0 && min > 0) {
+                            tvHour.visible()
+                            tvUnitHr.visible()
+                            tvMin.visible()
+                            tvUnitMin.visible()
+                        } else if (hour <= 0 && min > 0) {
+                            tvHour.gone()
+                            tvMin.gone()
+                            tvMin.visible()
+                            tvUnitMin.visible()
+                        }
+                        tvHour.text = hour.toString()
+                        tvMin.text = min.toString()
+                    }
+                }
+
+                binding.lytTopView.lytTopSingleView.apply {
+                    tvDateTime.text = data.dayDate
+                    tvDesc.text = data.description
+                    if (data.isShowHighlight) {
+                        val colors = viewModel.getHighlightBackType(0)
+                        lytHighlightTrends.main.setBackgroundResource(colors.first)
+                        lytHighlightTrends.tvRangeValue.setTextColor(colors.second)
+                        val icons = viewModel.returnTrendsArrow(data.trendType)
+                        if (icons == 0) {
+                            lytHighlightTrends.ivTick.gone()
+                        } else {
+                            lytHighlightTrends.ivTick.visible()
+                            lytHighlightTrends.ivTick.setImageResource(icons)
+                        }
+                        lytHighlightTrends.root.visible()
+                        lytHighlightTrends.tvRangeValue.visible()
+                        lytHighlightTrends.tvRangeValue.text = "14% from yesterday"
+                    } else {
+                        lytHighlightTrends.root.gone()
+                        lytHighlightTrends.root.gone()
+                    }
+                }
+            }
+        }
+        else{
+            defaultDataView()
+        }
+    }
+
+    private fun defaultDataView() {
     }
 
     private fun setRecycler() {
@@ -174,7 +252,9 @@ class SleepInternalDetailsFragment :
             setPeriodUiState(it)
         }
         viewModel.titleUpdate.observe(this) {
-            binding.tvTrendName.text = it
+            binding.tvTrendName.text = it.first
+            binding.ivTrendsIcon.setImageResource(it.second)
+            showTopContent(viewModel.trendsDummyData())
         }
 
     }

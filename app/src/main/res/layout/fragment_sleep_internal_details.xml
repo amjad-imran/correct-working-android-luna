@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ImageView
-            android:id="@+id/ivMain"
+            android:id="@+id/ivTrendsIcon"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="16dp"
@@ -43,9 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivMain"
-            app:layout_constraintStart_toEndOf="@+id/ivMain"
-            app:layout_constraintTop_toTopOf="@+id/ivMain"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTrendsIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivTrendsIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivTrendsIcon"
             tools:text="Restorative sleep" />
 
         <ImageView
