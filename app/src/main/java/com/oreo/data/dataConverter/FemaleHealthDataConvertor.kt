@@ -103,21 +103,6 @@ class FemaleHealthDataConvertor @Inject constructor() {
                         current
                     )
 
-
-                    val ovDay = (mainCycleLength - 13)
-
-                    if (currentDay == ovDay) {
-                        healthDataDateList[current] = DayState.OvulationDay
-                        current = current.plusDays(1)
-                        continue
-                    }
-
-                    if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                        healthDataDateList[current] = DayState.Fertile
-                        current = current.plusDays(1)
-                        continue
-                    }
-
                     if (currentDay == 1) {
                         healthDataDateList[current] = DayState.Period(PeriodPos.START)
                         current = current.plusDays(1)
@@ -133,6 +118,23 @@ class FemaleHealthDataConvertor @Inject constructor() {
                         current = current.plusDays(1)
                         continue
                     }
+
+
+                    val ovDay = (mainCycleLength - 13)
+
+                    if (currentDay == ovDay) {
+                        healthDataDateList[current] = DayState.OvulationDay
+                        current = current.plusDays(1)
+                        continue
+                    }
+
+                    if (currentDay in (ovDay - 5)..(ovDay + 1)) {
+                        healthDataDateList[current] = DayState.Fertile
+                        current = current.plusDays(1)
+                        continue
+                    }
+
+
 
                     current = current.plusDays(1)
 
