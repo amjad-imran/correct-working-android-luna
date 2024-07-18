@@ -5,11 +5,13 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.addHeaderLenient
 
 @AndroidEntryPoint
 class SleepInternalDetailsFragment :
@@ -44,11 +46,24 @@ class SleepInternalDetailsFragment :
         fragments.add(SleepBarChartFragment.newInstance())
 
         val sleepBannerAdapter =
-            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+            InternalSleepVPAdapter(childFragmentManager, lifecycle)
 
         binding.graphPager.adapter = sleepBannerAdapter
+        binding.graphPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
 
-        binding.graphPager.setCurrentItem(sleepBannerAdapter.itemCount - 1, true)
+        sleepBannerAdapter.setDataSet(fragments)
+
+        binding.graphPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val total = sleepBannerAdapter.itemCount
+
+                if (position == (total - 1)) {
+                    sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
+                }
+            }
+        })
+
     }
 
     override fun initListener() {

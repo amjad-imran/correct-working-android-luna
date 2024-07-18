@@ -1,5 +1,7 @@
 package com.oreo.ui.custom.sleep.internal
 
+import android.R.attr.startX
+import android.R.attr.startY
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -15,7 +17,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
@@ -56,6 +57,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
     //HashMap<Position,Pair<StartX,EndX>>
     private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    private val yAxisRange = ArrayList<Pair<Int, String>>()
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
@@ -192,7 +194,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
         dataSet.forEachIndexed { index, it ->
 
 
-            if (index + 1 == mSelectedPosition) {
+            if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
                     topHeight.toFloat(),
@@ -350,8 +352,9 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun drawBackGrid(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = width / 7
+        val stepWidth = (availableWidth) / 7
         var start = 0f
         for (i in 0..7) {
             canvas.drawLine(
@@ -363,100 +366,130 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             )
             start += stepWidth
         }
-
-        canvas.drawLine(0f, getYAxisValue(0), width.toFloat(), getYAxisValue(0), xLinePaint)
-
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-
-        val heightStep = mMax / 4
-        var heightStart = heightStep
-        for (i in 1 until 5) {
-            canvas.drawLine(
-                0f,
-                getYAxisValue(heightStart),
-                width.toFloat(),
-                getYAxisValue(heightStart),
-                gridLinePaint
-            )
-            if (i == 4) {
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(heightStart),
-                    width.toFloat(),
-                    getYAxisValue(heightStart),
-                    gridLinePaint
-                )
-            }
-
-            heightStart += heightStep
-        }
-
-
     }
 
     private fun drawYAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
 
-        val text0 = "0%"
-        val text25 = "25%"
-        val text50 = "50%"
-        val text75 = "75%"
-        val text100 = "100%"
 
         val textBounds = Rect()
 
-        xAxisPaint.getTextBounds(text0, 0, text0.length, textBounds)
-        canvas.drawText(text0, width - textBounds.width().toFloat(), getYAxisValue(0), xAxisPaint)
+        yAxisRange.forEachIndexed { index, value ->
 
-        xAxisPaint.getTextBounds(text25, 0, text25.length, textBounds)
-        canvas.drawText(
-            text25,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(25) + textBounds.height() / 2,
-            xAxisPaint
-        )
+            val text = value.second
+            xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
 
-        xAxisPaint.getTextBounds(text50, 0, text50.length, textBounds)
-        canvas.drawText(
-            text50,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(50) + textBounds.height() / 2,
-            xAxisPaint
-        )
+            if (index == 0) {
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first),
+                    xAxisPaint
+                )
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    xLinePaint
+                )
+            } else if (index == yAxisRange.size - 1) {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height(),
+                    xAxisPaint
+                )
+                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            } else {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    xAxisPaint
+                )
+                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            }
 
-        xAxisPaint.getTextBounds(text75, 0, text75.length, textBounds)
-        canvas.drawText(
-            text75,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(75) + textBounds.height() / 2,
-            xAxisPaint
-        )
+        }
 
-        xAxisPaint.getTextBounds(text100, 0, text100.length, textBounds)
-        canvas.drawText(
-            text100,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(100) + textBounds.height(),
-            xAxisPaint
-        )
 
-        //canvas.drawText("0%", width - xTextPaint.measureText(text0), )
-        canvas.drawLine(0f, getYAxisValue(0), availableWidth, getYAxisValue(0), xLinePaint)
+        /* val text0 = "0%"
+         val text25 = "25%"
+         val text50 = "50%"
+         val text75 = "75%"
+         val text100 = "100%"
 
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-        canvas.drawLine(0f, getYAxisValue(25), availableWidth, getYAxisValue(25), gridLinePaint)
-        canvas.drawLine(0f, getYAxisValue(50), availableWidth, getYAxisValue(50), gridLinePaint)
-        canvas.drawLine(0f, getYAxisValue(75), availableWidth, getYAxisValue(75), gridLinePaint)
+         val textBounds = Rect()
 
-        gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-        canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)
+         xAxisPaint.getTextBounds(text0, 0, text0.length, textBounds)
+         canvas.drawText(text0, width - textBounds.width().toFloat(), getYAxisValue(0), xAxisPaint)
+
+         xAxisPaint.getTextBounds(text25, 0, text25.length, textBounds)
+         canvas.drawText(
+             text25,
+             width - textBounds.width().toFloat(),
+             getYAxisValue(25) + textBounds.height() / 2,
+             xAxisPaint
+         )
+
+         xAxisPaint.getTextBounds(text50, 0, text50.length, textBounds)
+         canvas.drawText(
+             text50,
+             width - textBounds.width().toFloat(),
+             getYAxisValue(50) + textBounds.height() / 2,
+             xAxisPaint
+         )
+
+         xAxisPaint.getTextBounds(text75, 0, text75.length, textBounds)
+         canvas.drawText(
+             text75,
+             width - textBounds.width().toFloat(),
+             getYAxisValue(75) + textBounds.height() / 2,
+             xAxisPaint
+         )
+
+         xAxisPaint.getTextBounds(text100, 0, text100.length, textBounds)
+         canvas.drawText(
+             text100,
+             width - textBounds.width().toFloat(),
+             getYAxisValue(100) + textBounds.height(),
+             xAxisPaint
+         )
+
+         //canvas.drawText("0%", width - xTextPaint.measureText(text0), )
+         canvas.drawLine(0f, getYAxisValue(0), availableWidth, getYAxisValue(0), xLinePaint)
+
+         gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+         canvas.drawLine(0f, getYAxisValue(25), availableWidth, getYAxisValue(25), gridLinePaint)
+         canvas.drawLine(0f, getYAxisValue(50), availableWidth, getYAxisValue(50), gridLinePaint)
+         canvas.drawLine(0f, getYAxisValue(75), availableWidth, getYAxisValue(75), gridLinePaint)
+
+         gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+         canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)*/
 
     }
 
     private fun drawXAxis(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = width / 7
+        val stepWidth = availableWidth / 7
 
         val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         var start = 0
@@ -468,7 +501,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
             val textStart = start + (stepWidth / 2 - textWidth / 2)
             canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
-            start += stepWidth
+            start += stepWidth.toInt()
         }
     }
 
@@ -481,35 +514,33 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
      * array list of values -> Pair(actual sleep minutes, need minutes)
      * selected position
      */
-    fun setDataSet(list: List<Pair<Int?, Int?>>, selectedPosition: Int) {
+    fun setDataSet(
+        list: List<Pair<Int?, Int?>>,
+        yAxisRange: List<Pair<Int, String>>,
+        maxValue: Int,
+        selectedPosition: Int
+    ) {
         dataPosition.clear()
+
+        this.yAxisRange.clear()
+        this.yAxisRange.addAll(yAxisRange)
+
         dataSet.clear()
         dataSet.addAll(list)
+
         mSelectedPosition = selectedPosition
-
-        mMax = 0
-        list.forEach {
-
-            var max = it.first ?: 0
-            if ((it.second ?: 0) > max) {
-                max = it.second ?: 0
-            }
-
-            if (max > mMax) {
-                mMax = max
-            }
-        }
-
-        mMax += ((0.2) * mMax).toInt()
-
+        mMax = maxValue
         invalidate()
     }
+
+    var startX: Float? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
         parent.requestDisallowInterceptTouchEvent(true)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                startX = event.x
                 touchX = event.x
                 handler.postDelayed(
                     mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
@@ -521,6 +552,12 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 if (isInteracting) {
                     touchX = event.x
                     invalidate()
+                } else {
+                    val dx = event.x - startX!!
+                    if (Math.abs(dx) > 0) {
+                        handler.removeCallbacks(mLongPressed)
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
                 }
                 return true
             }
@@ -537,6 +574,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
         return false
     }
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {

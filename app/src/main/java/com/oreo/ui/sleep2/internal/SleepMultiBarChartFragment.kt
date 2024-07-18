@@ -30,17 +30,24 @@ class SleepMultiBarChartFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dataList = arrayListOf(
+            Pair(60, 40),
+            Pair(80, 50),
+            Pair(90, 60),
+            Pair(100, 40),
+            Pair(120, 20),
+            Pair(150, 10),
+            Pair(180, 0),
+        )
+        val maxValue = getMaxValue(dataList)
+        val yAxisRange = getYAxisRange(maxValue)
+
+
         binding.graphBar.setDataSet(
-            arrayListOf(
-                Pair(60, 40),
-                Pair(80, 50),
-                Pair(90, 60),
-                Pair(100, 40),
-                Pair(120, 20),
-                Pair(150, 10),
-                Pair(180, 0),
-            ),
-            4
+            dataList,
+            yAxisRange,
+            yAxisRange.last().first,
+            -1
         )
 
 
@@ -56,6 +63,44 @@ class SleepMultiBarChartFragment :
             }
 
         })
+    }
+
+    private fun getMaxValue(list: List<Pair<Int?, Int?>>): Int {
+        var mMax = 0
+        list.forEach {
+            val sum = (it.first ?: 0) + (it.second ?: 0)
+            if (sum > mMax) {
+                mMax = sum
+            }
+        }
+
+        mMax += ((0.2) * mMax).toInt()
+
+        return mMax
+    }
+
+
+    private fun getYAxisRange(maxValue: Any): List<Pair<Int, String>> {
+        return when (maxValue) {
+            in 0..360 -> {
+                arrayListOf(
+                    Pair(0, "0"),
+                    Pair(120, "2"),
+                    Pair(240, "4"),
+                    Pair(360, "6"),
+                )
+            }
+
+            else -> {
+                arrayListOf(
+                    Pair(0, "0"),
+                    Pair(180, "3"),
+                    Pair(360, "6"),
+                    Pair(540, "9"),
+                    Pair(720, "12")
+                )
+            }
+        }
     }
 
 

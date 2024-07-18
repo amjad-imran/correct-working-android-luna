@@ -1,8 +1,11 @@
 package com.oreo.ui.custom.sleep.internal
 
+import android.R.attr.startX
+import android.R.attr.startY
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
@@ -16,6 +19,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.Item
 import com.oreo.ui.heartrate.OnHRClickAction
@@ -34,6 +38,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     lateinit var barPaintTop: Paint
     lateinit var barPaintTopInteracting: Paint
     lateinit var barTextPaint: Paint
+    lateinit var avgBackPaint: Paint
+    lateinit var avgTextPaint: Paint
+    lateinit var avgLinePaint: Paint
     lateinit var barTextPaintI: Paint
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
@@ -53,6 +60,10 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     //HashMap<Position,Pair<StartX,EndX>>
     private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private var lastSentValuePos: Int? = null
+
+    private val yAxisRange = ArrayList<Pair<Int, String>>()
+    var mMax = 0
+    var mAverage: Pair<Int, String>? = null
 
 
     init {
@@ -75,6 +86,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
+        avgBackPaint = Paint().apply {
+            this.color = Color.parseColor("#28ffffff")
+        }
         barTextPaintI = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
             this.typeface = fontGilroy
@@ -89,6 +103,17 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             this.color = Color.parseColor("#20FFFFFF")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
+        }
+        avgTextPaint = Paint().apply {
+            this.color = Color.parseColor("#ffffff")
+            this.typeface = fontGilroy
+            this.textSize = dip2px(9f).toFloat()
+        }
+
+        avgLinePaint = Paint().apply {
+            this.color = Color.parseColor("#FFFFFF")
+            this.style = Paint.Style.STROKE
+            pathEffect = DashPathEffect(floatArrayOf(6f, 6f), 0f)
         }
         gridLinePaint = Paint().apply {
             this.color = Color.parseColor("#07ffffff")
@@ -296,60 +321,101 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private fun drawYAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
 
-        val text0 = "0%"
-        val text25 = "25%"
-        val text50 = "50%"
-        val text75 = "75%"
-        val text100 = "100%"
-
         val textBounds = Rect()
 
-        xAxisPaint.getTextBounds(text0, 0, text0.length, textBounds)
-        canvas.drawText(text0, width - textBounds.width().toFloat(), getYAxisValue(0), xAxisPaint)
+        yAxisRange.forEachIndexed { index, value ->
 
-        xAxisPaint.getTextBounds(text25, 0, text25.length, textBounds)
-        canvas.drawText(
-            text25,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(25) + textBounds.height() / 2,
-            xAxisPaint
-        )
+            val text = value.second
+            xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
 
-        xAxisPaint.getTextBounds(text50, 0, text50.length, textBounds)
-        canvas.drawText(
-            text50,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(50) + textBounds.height() / 2,
-            xAxisPaint
-        )
+            if (index == 0) {
+                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first),
+                    xAxisPaint
+                )
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    xLinePaint
+                )
+            } else if (index == yAxisRange.size - 1) {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height(),
+                    xAxisPaint
+                )
 
-        xAxisPaint.getTextBounds(text75, 0, text75.length, textBounds)
-        canvas.drawText(
-            text75,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(75) + textBounds.height() / 2,
-            xAxisPaint
-        )
+                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
 
-        xAxisPaint.getTextBounds(text100, 0, text100.length, textBounds)
-        canvas.drawText(
-            text100,
-            width - textBounds.width().toFloat(),
-            getYAxisValue(100) + textBounds.height(),
-            xAxisPaint
-        )
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            } else {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    xAxisPaint
+                )
 
-        //canvas.drawText("0%", width - xTextPaint.measureText(text0), )
-        canvas.drawLine(0f, getYAxisValue(0), availableWidth, getYAxisValue(0), xLinePaint)
+                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
 
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-        canvas.drawLine(0f, getYAxisValue(25), availableWidth, getYAxisValue(25), gridLinePaint)
-        canvas.drawLine(0f, getYAxisValue(50), availableWidth, getYAxisValue(50), gridLinePaint)
-        canvas.drawLine(0f, getYAxisValue(75), availableWidth, getYAxisValue(75), gridLinePaint)
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            }
+        }
 
-        gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-        canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)
+        if (mAverage != null) {
+            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
+            val textX = width - textBounds.width().toFloat()
+            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
+
+
+            canvas.drawRoundRect(
+                RectF(
+                    textX - dip2px(3f),
+                    textY - textBounds.height() - dip2px(3f),
+                    textX + textBounds.width() + dip2px(3f),
+                    textY + dip2px(3f)
+                ),
+                dip2px(2f).toFloat(),
+                dip2px(2f).toFloat(),
+                avgBackPaint
+            )
+
+            canvas.drawText(
+                mAverage!!.second,
+                textX,
+                textY,
+                avgTextPaint
+            )
+
+            canvas.drawLine(
+                0f,
+                getYAxisValue(mAverage!!.first),
+                availableWidth,
+                getYAxisValue(mAverage!!.first),
+                avgLinePaint
+            )
+        }
     }
 
     private fun drawXAxis(canvas: Canvas) {
@@ -375,21 +441,37 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    fun setDataSet(list: List<Int?>, selectedPosition: Int) {
+    fun setDataSet(
+        list: List<Int?>,
+        yAxisRange: List<Pair<Int, String>>,
+        maxValue: Int,
+        avgValue: Pair<Int, String>,
+        selectedPosition: Int
+    ) {
         dataPosition.clear()
         dataSet.clear()
         dataSet.addAll(list)
         mSelectedPosition = selectedPosition
+
+
+        this.yAxisRange.clear()
+        this.yAxisRange.addAll(yAxisRange)
+        mAverage = avgValue
+        mMax = maxValue
+
         invalidate()
     }
 
 
+    var startX: Float? = null
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
         parent.requestDisallowInterceptTouchEvent(true)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchX = event.x
+                startX = event.x
+
                 handler.postDelayed(
                     mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
                 )
@@ -400,6 +482,12 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 if (isInteracting) {
                     touchX = event.x
                     invalidate()
+                } else {
+                    val dx = event.x - startX!!
+                    if (Math.abs(dx) > 0) {
+                        handler.removeCallbacks(mLongPressed)
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
                 }
                 return true
             }

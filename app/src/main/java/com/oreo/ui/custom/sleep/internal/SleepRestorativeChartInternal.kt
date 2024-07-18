@@ -1,5 +1,7 @@
 package com.oreo.ui.custom.sleep.internal
 
+import android.R.attr.startX
+import android.R.attr.startY
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -51,6 +53,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     //HashMap<Position,Pair<StartX,EndX>>
     private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private var lastSentValuePos: Int? = null
+    private val yAxisRange = ArrayList<Pair<Int, String>>()
 
 
     /**
@@ -283,8 +286,9 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun drawBackGrid(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = width / 7
+        val stepWidth = availableWidth / 7
         var start = 0f
         for (i in 0..7) {
             canvas.drawLine(
@@ -296,40 +300,69 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             )
             start += stepWidth
         }
-
-        canvas.drawLine(0f, getYAxisValue(0), width.toFloat(), getYAxisValue(0), xLinePaint)
-
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-
-        val heightStep = mMax / 4
-        var heightStart = heightStep
-        for (i in 1 until 5) {
-            canvas.drawLine(
-                0f,
-                getYAxisValue(heightStart),
-                width.toFloat(),
-                getYAxisValue(heightStart),
-                gridLinePaint
-            )
-            if (i == 4) {
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(heightStart),
-                    width.toFloat(),
-                    getYAxisValue(heightStart),
-                    gridLinePaint
-                )
-            }
-
-            heightStart += heightStep
-        }
-
-
     }
 
     private fun drawYAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
+
+        val textBounds = Rect()
+
+        yAxisRange.forEachIndexed { index, value ->
+
+            val text = value.second
+            xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+
+            if (index == 0) {
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first),
+                    xAxisPaint
+                )
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    xLinePaint
+                )
+            } else if (index == yAxisRange.size - 1) {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height(),
+                    xAxisPaint
+                )
+                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            } else {
+                xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
+                canvas.drawText(
+                    text,
+                    width - textBounds.width().toFloat(),
+                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    xAxisPaint
+                )
+                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+                canvas.drawLine(
+                    0f,
+                    getYAxisValue(value.first),
+                    availableWidth,
+                    getYAxisValue(value.first),
+                    gridLinePaint
+                )
+            }
+
+        }
+
+        /*
 
         val text0 = "0%"
         val text25 = "25%"
@@ -383,14 +416,15 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         canvas.drawLine(0f, getYAxisValue(75), availableWidth, getYAxisValue(75), gridLinePaint)
 
         gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-        canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)
+        canvas.drawLine(0f, getYAxisValue(100), availableWidth, getYAxisValue(100), gridLinePaint)*/
 
     }
 
 
     private fun drawXAxis(canvas: Canvas) {
+        val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = width / 7
+        val stepWidth = availableWidth / 7
 
         val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         var start = 0
@@ -402,7 +436,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
             val textStart = start + (stepWidth / 2 - textWidth / 2)
             canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
-            start += stepWidth
+            start += stepWidth.toInt()
         }
     }
 
@@ -415,23 +449,26 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
      * array list of values -> Pair(deep minutes, rem minutes)
      * selected position
      */
-    fun setDataSet(list: List<Pair<Int?, Int?>>, selectedPosition: Int) {
+    fun setDataSet(
+        list: List<Pair<Int?, Int?>>,
+        yAxisRange: List<Pair<Int, String>>,
+        maxValue: Int,
+        selectedPosition: Int
+    ) {
         dataPosition.clear()
         dataSet.clear()
         dataSet.addAll(list)
         mSelectedPosition = selectedPosition
 
-        mMax = 0
-        list.forEach {
-            val sum = (it.first ?: 0) + (it.second ?: 0)
-            if (sum > mMax) {
-                mMax = sum
-            }
-        }
+        this.yAxisRange.clear()
+        this.yAxisRange.addAll(yAxisRange)
 
-        mMax += ((0.2) * mMax).toInt()
+        mMax = maxValue
+
         invalidate()
     }
+
+    var startX: Float? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
@@ -439,6 +476,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchX = event.x
+                startX = event.x
                 handler.postDelayed(
                     mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
                 )
@@ -449,6 +487,12 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 if (isInteracting) {
                     touchX = event.x
                     invalidate()
+                } else {
+                    val dx = event.x - startX!!
+                    if (Math.abs(dx) > 0) {
+                        handler.removeCallbacks(mLongPressed)
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
                 }
                 return true
             }
