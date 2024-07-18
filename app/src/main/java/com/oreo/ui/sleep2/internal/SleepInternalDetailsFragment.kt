@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
+import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
@@ -66,6 +67,7 @@ class SleepInternalDetailsFragment :
 
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
+        fragments.add(SleepSingleLineChartFragment.newInstance())
         fragments.add(SleepMultiLineChartFragment.newInstance())
         fragments.add(SleepMultiBarChartFragment.newInstance())
         fragments.add(SleepBarChartFragment.newInstance())
