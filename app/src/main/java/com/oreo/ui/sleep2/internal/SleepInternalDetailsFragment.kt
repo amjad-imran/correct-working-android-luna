@@ -9,6 +9,8 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
@@ -46,11 +48,22 @@ class SleepInternalDetailsFragment :
         viewModel.selectedLaunchMode = args.launchMode
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
-//        binding.tvTrendName.text = viewModel.getTitle()
         viewModel.updateTitle()
-
         setGraphPagerView()
         setRecycler()
+        showTopContent()
+    }
+
+    private fun showTopContent() {
+        if (viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+            binding.lytTopView.lytTopMultipleView.root.visible()
+            binding.lytTopView.lytTopSingleView.root.gone()
+        }
+        else{
+            binding.lytTopView.lytTopSingleView.root.visible()
+            binding.lytTopView.lytTopMultipleView.root.gone()
+
+        }
     }
 
     private fun setRecycler() {

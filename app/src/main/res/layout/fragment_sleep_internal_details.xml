@@ -77,7 +77,7 @@
 
             <include
                 android:id="@+id/lytTopView"
-                layout="@layout/layout_internal_top_view"
+                layout="@layout/layout_trends_top_parent_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
