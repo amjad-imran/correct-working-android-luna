@@ -229,6 +229,7 @@
     <color name="color_follicular_info">#ff9252</color>
     <color name="color_future_dates">#26ffffff</color>
     <color name="color_bubble_gum_pink">#ff5bc7</color>
+    <color name="color_dd_separator">#424C56</color>
 
 
 </resources>

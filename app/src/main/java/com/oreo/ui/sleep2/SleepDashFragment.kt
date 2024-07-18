@@ -297,15 +297,19 @@ class SleepDashFragment :
 
 
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_PERFORMANCE)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.HOUR_VS_NEED)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+            navigate(frag, bundle)
+        }
+        binding.lytSleepTrends.lytSleepTime.root.setOnClickListener {
+            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
             navigate(frag, bundle)
         }
 
