@@ -631,8 +631,10 @@ class OreoReadinessFragment :
 
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
 
-            val baselineAvg =
-                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            val baselineAvg = mViewModel.baseTemp
+                ?: (mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
+
+            /*mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE*/
             if (baselineAvg == mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
                 mViewModel.contributorInfo.value?.temperature_readiness_top?.let { content ->
                     navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
@@ -866,8 +868,11 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-            val baselineAvg =
-                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+
+            mViewModel.baseTemp = it.base_temp
+
+            val baselineAvg = it.base_temp
+                ?: (mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
             if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
 
                 val deviation = it.avg_temp.value - baselineAvg
@@ -921,9 +926,9 @@ class OreoReadinessFragment :
 
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg =
-                    mainViewModel.temperatureBaseLine
-                        ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+                val baselineAvg = it.base_temp
+                    ?: (mainViewModel.temperatureBaseLine
+                        ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
 
                 binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
                 binding.lytRScoreData.lytSec3.tvPercentValue.visible()
