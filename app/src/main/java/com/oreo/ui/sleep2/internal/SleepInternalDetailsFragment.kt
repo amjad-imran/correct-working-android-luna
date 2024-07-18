@@ -70,8 +70,7 @@ class SleepInternalDetailsFragment :
         fragments.add(SleepMultiBarChartFragment.newInstance())
         fragments.add(SleepBarChartFragment.newInstance())
 
-        val sleepBannerAdapter =
-            InternalSleepVPAdapter(childFragmentManager, lifecycle)
+        val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
 
         binding.graphPager.adapter = sleepBannerAdapter
         binding.graphPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
