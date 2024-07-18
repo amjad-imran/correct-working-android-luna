@@ -2,19 +2,20 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
+import com.noisefit.luna.databinding.FragmentSleepMultiLineChartBinding
+import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.custom.SleepGraphInteractionListener
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.ArrayList
 import javax.inject.Inject
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class SleepBarChartFragment :
-    BaseFragment<FragmentSleepBarChartBinding>(FragmentSleepBarChartBinding::inflate) {
+class SleepSingleLineChartFragment :
+    BaseFragment<FragmentSleepSingleLineChartBinding>(FragmentSleepSingleLineChartBinding::inflate) {
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
@@ -22,7 +23,7 @@ class SleepBarChartFragment :
     companion object {
         @JvmStatic
         fun newInstance() =
-            SleepBarChartFragment().apply {
+            SleepSingleLineChartFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
@@ -31,27 +32,31 @@ class SleepBarChartFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Value in minutes
         val dataList = arrayListOf(
-            20,
-            30,
-            null,
-            50,
-            100,
-            70,
-            null
+            10, 30, 20, 70, 10, 50, 90,
+            10, 70, 80, 90, null, 10, 20,
+            60, 10, 10, 50, 90, 10, 20,
+            8, 70, 20, 10, 50, 90, 20,
+            60, 70, 80, 90, 10, 50, 90,
+            10, 50, 90, 90, 10, 10, 20,
         )
         val maxValue = getMaxValue(dataList)
-        val avgValue = getAvgValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)
+        val xAxisRange = getXAxisRange()
+        val avgValue = getAvgValue(dataList)
 
 
         binding.graphBar.setDataSet(
             dataList,
             yAxisRange,
+            xAxisRange,
             yAxisRange.last().first,
             avgValue,
             -1
         )
+
+
         binding.graphBar.setVibrationUtil(vibrationUtils)
 
         binding.graphBar.setClickListener(object : SleepSingleBarAction {
@@ -66,9 +71,13 @@ class SleepBarChartFragment :
         })
     }
 
-    private fun getAvgValue(list: List<Int?>): Pair<Int, String> {
+    private fun getAvgValue(list: ArrayList<Int?>): Pair<Int, String> {
         val avg = list.filterNotNull().average().roundToInt()
         return Pair(avg, "$avg%")
+    }
+
+    private fun getXAxisRange(): List<String> {
+        return arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
     }
 
     private fun getMaxValue(list: List<Int?>): Int {
@@ -76,7 +85,7 @@ class SleepBarChartFragment :
     }
 
 
-    private fun getYAxisRange(maxValue: Any): List<Pair<Int, String>> {
+    fun getYAxisRange(maxValue: Int): List<Pair<Int, String>> {
         return arrayListOf(
             Pair(0, "0%"),
             Pair(25, "25%"),
