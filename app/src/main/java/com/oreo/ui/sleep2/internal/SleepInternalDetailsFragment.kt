@@ -55,10 +55,10 @@ class SleepInternalDetailsFragment :
         viewModel.updateTitle()
         setGraphPagerView()
         setRecycler()
-        showTopContent(viewModel.trendsDummyData())
+        showTopContent()
     }
 
-    private fun showTopContent(data: OSleepTrendsDataModel?) {
+    private fun showTopContent() {
         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
             binding.lytTopView.lytTopMultipleView.root.visible()
             binding.lytTopView.lytTopSingleView.root.gone()
@@ -66,9 +66,19 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
+        val data=viewModel.trendsDummyData()
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
-                binding.lytTopView.lytTopMultipleView.tvDateTime.text = data.dayDate
+                val dayDate:String = when (viewModel.selectedPeriod.value) {
+                    InternalSelectedPeriod.DAY -> data.dayDate
+                    InternalSelectedPeriod.WEEK -> {
+                        "23 April - 30 May, 2024"
+                    }
+                    else -> {
+                        "July  2024"
+                    }
+                }
+                binding.lytTopView.lytTopMultipleView.tvDateTime.text=dayDate
                 binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                     lytNeed.tvHour.text = "8"
                     lytNeed.tvMin.text = "28"
@@ -116,7 +126,16 @@ class SleepInternalDetailsFragment :
                 }
 
                 binding.lytTopView.lytTopSingleView.apply {
-                    tvDateTime.text = data.dayDate
+                    val dayDate:String = when (viewModel.selectedPeriod.value) {
+                        InternalSelectedPeriod.DAY -> data.dayDate
+                        InternalSelectedPeriod.WEEK -> {
+                            "23 April - 30 May, 2024"
+                        }
+                        else -> {
+                            "July  2024"
+                        }
+                    }
+                    tvDateTime.text = dayDate
                     tvDesc.text = data.description
                     if (data.isShowHighlight) {
                         val colors = viewModel.getHighlightBackType(0)
@@ -131,6 +150,7 @@ class SleepInternalDetailsFragment :
                         }
                         lytHighlightTrends.root.visible()
                         lytHighlightTrends.tvRangeValue.visible()
+
                         lytHighlightTrends.tvRangeValue.text = "14% from yesterday"
                     } else {
                         lytHighlightTrends.root.gone()
@@ -246,14 +266,18 @@ class SleepInternalDetailsFragment :
         }
         binding.lytSelector.tvDay.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
+
+
         }
 
         binding.lytSelector.tvWeek.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
+
         }
 
         binding.lytSelector.tvMonth.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
+
         }
 
         binding.toolbar.backBtn.setOnClickListener {
@@ -266,11 +290,12 @@ class SleepInternalDetailsFragment :
 
         viewModel.selectedPeriod.observe(this) {
             setPeriodUiState(it)
+            showTopContent()
         }
         viewModel.titleUpdate.observe(this) {
             binding.tvTrendName.text = it.first
             binding.ivTrendsIcon.setImageResource(it.second)
-            showTopContent(viewModel.trendsDummyData())
+            showTopContent()
         }
 
     }
@@ -304,5 +329,8 @@ class SleepInternalDetailsFragment :
 
 enum class SleepInternalLaunchState {
     RESTORATIVE_SLEEP, SLEEP_PERFORMANCE, HOUR_VS_NEED, SLEEP_TIME, EFFICIENCY, REM_SLEEP, DEEP_SLEEP, SLEEP_DURATION, LATENCY, RESTFULNESS
+}
+enum class ViewType{
+    DAY,WEEK,MONTH
 }
 
