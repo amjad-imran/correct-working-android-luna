@@ -55,10 +55,11 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
+    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    private val dataPosition = ArrayList<Pair<Int, Float>>()
     private var lastSentValuePos: Int? = null
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
@@ -166,8 +167,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private fun drawContent(canvas: Canvas) {
 
         val availableWidth = (width - endPadding).toFloat()
-        val stepWidth = availableWidth / 7
-        val barWidth = stepWidth / 2
+        dataStepWidth = availableWidth / 7
+        val barWidth = dataStepWidth / 2
         var start = 0f
         val rectRadius = dip2px(1f).toFloat()
 
@@ -206,7 +207,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 val rectFSelected = RectF(
                     start + padding,
                     topHeight.toFloat(),
-                    start + stepWidth - padding,
+                    start + dataStepWidth - padding,
                     height.toFloat() - bottomHeight
                 )
 
@@ -222,7 +223,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 val top = getYAxisValue(it)
                 val isSelectedPosition = selectedPosition == index
 
-                dataPosition[index] = Pair(start, start + stepWidth)
+                dataPosition.add(Pair(index, start))
+
 
                 val rectF = RectF(
                     start + barWidth / 2,
@@ -283,7 +285,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                         barTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
 
                     }
-                    val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+                    val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
                     canvas.drawText(
                         text,
                         textStart,
@@ -293,7 +295,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 }
 
             }
-            start += stepWidth
+            start += dataStepWidth
         }
     }
 
@@ -304,12 +306,13 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private fun getSelectedPosition(): Int? {
         if (isInteracting.not()) return null
-        val position = dataPosition.filterValues {
-            touchX > it.first && touchX < it.second
+        dataPosition.forEach {
+            val endPos = it.second + dataStepWidth
+            if (touchX < endPos) {
+                return it.first
+            }
         }
-        if (position.isEmpty()) return null
-
-        return position.keys.single()
+        return null
     }
 
     fun getYAxisValue(value: Int): Float {

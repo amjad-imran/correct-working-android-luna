@@ -57,10 +57,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
     private var startX: Float? = null
+    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    //private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    private val dataPosition = ArrayList<Pair<Int, Float>>()
+
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     private val xAxisRange = ArrayList<String>()
     private var lastSentValuePos: Int? = null
@@ -252,7 +255,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private fun drawContent(canvas: Canvas) {
 
         val availableWidth = (width - endPadding).toFloat()
-        val stepWidth = availableWidth / dataSet.size
+        dataStepWidth = availableWidth / dataSet.size
         var start = 0f
         val circleRadiusBig = dip2px(4f).toFloat()
         val paddingHorizontal = dip2px(4f)
@@ -290,7 +293,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
                     topHeight.toFloat(),
-                    start + stepWidth - paddingHorizontal,
+                    start + dataStepWidth - paddingHorizontal,
                     height.toFloat() - bottomHeight
                 )
 
@@ -305,24 +308,24 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 val isSelectedPosition = selectedPosition == index
                 val actualPos = getYAxisValue(it ?: 0)
 
-                dataPosition[index] = Pair(start, start + stepWidth)
-
+                //dataPosition[index] = Pair(start, start + stepWidth)
+                dataPosition.add(Pair(index, start))
 
                 if (index + 1 < maxDataSize && dataSet[index + 1] != null) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement ?: 0)
                     canvas.drawLine(
-                        start + stepWidth / 2,
+                        start + dataStepWidth / 2,
                         actualPos,
-                        start + stepWidth + stepWidth / 2,
+                        start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
                         if (isInteracting) linePaintI else linePaint
                     )
                 }
 
                 if (isSelectedPosition && isInteracting) {
-                    val center = start + stepWidth / 2
+                    val center = start + dataStepWidth / 2
 
                     canvas.drawRect(
                         RectF(
@@ -345,14 +348,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     canvas.drawRect(rectFTopI, circlePaint)
 
                     canvas.drawCircle(
-                        start + stepWidth / 2,
+                        start + dataStepWidth / 2,
                         actualPos,
                         circleRadiusBig,
                         circlePaint
                     )
                 }
             }
-            start += stepWidth
+            start += dataStepWidth
         }
 
     }
@@ -403,19 +406,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private fun getSelectedPosition(): Int? {
         if (isInteracting.not()) return null
 
-        val position = dataPosition.filterValues {
-            touchX > it.first && touchX < it.second
-        }
-
-
         dataPosition.forEach {
-            //touchX
-
-
+            val endPos = it.second + dataStepWidth
+            if (touchX < endPos) {
+                return it.first
+            }
         }
-
-
-        return position.keys.single()
+        return null
     }
 
     private fun getYAxisValue(value: Int): Float {
