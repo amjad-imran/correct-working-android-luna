@@ -95,7 +95,10 @@ class ODropDownFragment :
             updateView(layoutAlertBinding, 2)
         }
         builder.setView(layoutAlertBinding.root)
-        builder.setCancelable(false)
+        builder.setCancelable(true)
+        builder.setOnCancelListener {
+            navigateUpSafe()
+        }
         alert = builder.create()
         alert?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         alert?.show()
