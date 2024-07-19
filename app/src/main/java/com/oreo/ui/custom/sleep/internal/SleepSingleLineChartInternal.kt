@@ -95,6 +95,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
             strokeWidth = dip2px(2f).toFloat()
+            this.typeface = fontGilroy
+            this.textSize = dip2px(12f).toFloat()
         }
 
         avgTextPaint = Paint().apply {
@@ -192,11 +194,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun drawOverlay(canvas: Canvas) {
         if (isInteracting) return
+        if (dataSet.isEmpty()) return
 
         val availableWidth = width.toFloat() - endPadding
 
         val stepWidth = availableWidth / xAxisRange.size
         var start = 0
+        val paddingText = dip2px(4f)
+
+        val textBounds = Rect()
 
         xAxisRange.forEachIndexed { index, value ->
 
@@ -206,6 +212,18 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             val pos = getYAxisValue(avgValue)
             val end = start.toFloat() + stepWidth
+
+
+            val text = "$avgValue%"
+            xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+
+            canvas.drawText(
+                text,
+                start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                pos - paddingText,
+                xOverlayLinePaint
+            )
+
             canvas.drawLine(
                 start.toFloat(),
                 pos,
@@ -220,7 +238,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             path.moveTo(start.toFloat(), pos)
             path.lineTo(end, pos)
             path.lineTo(end, pos + dip2px(50f).toFloat())
-            path.lineTo(start.toFloat(), pos+ dip2px(50f).toFloat())
+            path.lineTo(start.toFloat(), pos + dip2px(50f).toFloat())
 
             avgLineFillPaint.setShader(linearGradient)
 
@@ -233,7 +251,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun drawContent(canvas: Canvas) {
 
-        val stepWidth = (width - endPadding) / dataSet.size
+        val availableWidth = (width - endPadding).toFloat()
+        val stepWidth = availableWidth / dataSet.size
         var start = 0f
         val circleRadiusBig = dip2px(4f).toFloat()
         val paddingHorizontal = dip2px(4f)
@@ -251,6 +270,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     lastSentValuePos = selectedPosition
                 }
             }
+        }
+
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
         }
 
         dataSet.forEachIndexed { index, it ->
@@ -370,10 +402,18 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun getSelectedPosition(): Int? {
         if (isInteracting.not()) return null
+
         val position = dataPosition.filterValues {
             touchX > it.first && touchX < it.second
         }
-        if (position.isEmpty()) return null
+
+
+        dataPosition.forEach {
+            //touchX
+
+
+        }
+
 
         return position.keys.single()
     }
@@ -471,11 +511,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val stepWidth = availableWidth / xAxisRange.size
         var start = 0
         val xTextBounds = Rect()
+        val textY = height - dip2px(12f).toFloat()
+
         xAxisRange.forEach {
             val textWidth = xAxisPaint.measureText(it)
             xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
+            canvas.drawText(it, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }

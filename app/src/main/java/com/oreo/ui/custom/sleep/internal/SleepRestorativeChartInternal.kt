@@ -140,7 +140,9 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     private fun drawContent(canvas: Canvas) {
 
-        val stepWidth = (width - endPadding) / 7
+        val availableWidth = (width - endPadding).toFloat()
+        val stepWidth = availableWidth / 7
+
         val barWidth = stepWidth / 2
         var start = 0f
         val rectRadius = dip2px(1f).toFloat()
@@ -159,6 +161,19 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     lastSentValuePos = selectedPosition
                 }
             }
+        }
+
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
         }
 
 

@@ -168,8 +168,9 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun drawContent(canvas: Canvas) {
+        val availableWidth = (width - endPadding).toFloat()
 
-        val stepWidth = (width - endPadding) / 7
+        val stepWidth = availableWidth / 7
         var start = 0f
         val circleRadius = dip2px(2f).toFloat()
         val circleRadiusBig = dip2px(4f).toFloat()
@@ -189,6 +190,19 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                     lastSentValuePos = selectedPosition
                 }
             }
+        }
+
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
         }
 
         dataSet.forEachIndexed { index, it ->
