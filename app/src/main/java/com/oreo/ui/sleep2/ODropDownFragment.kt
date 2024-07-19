@@ -56,139 +56,129 @@ class ODropDownFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.selectedLaunchMode = args.launchMode
-        sleepDurationDropDown()
+        initUi()
+
 
     }
 
+    private fun initUi() {
+        binding.lytTopView.tvType.text = viewModel.getTitle().first
+        binding.lytTopView.ivType.setImageResource(viewModel.getTitle().second)
+
+        with(binding.lytContentView.rvDropdown) {
+            adapter = mDDAdapter
+        }
+        defaultView()
+    }
+
     override fun initListener() {
+
+        binding.lytContentView.lytTab1.root.setOnClickListener {
+            updateView( 0)
+        }
+        binding.lytContentView.lytTab2.root.setOnClickListener {
+            updateView( 1)
+        }
+        binding.lytContentView.lytTab3.root.setOnClickListener {
+            updateView( 2)
+        }
+        binding.main.setOnClickListener {
+            navigateUpSafe()
+        }
+
 
     }
 
     override fun subscribeObservers() {
     }
 
-    private fun sleepDurationDropDown() {
-        val builder =
-            MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
-        val layoutAlertBinding: LayoutSleepDurationDropDownBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(requireContext()),
-            R.layout.layout_sleep_duration_drop_down,
-            null,
-            false
-        )
-        layoutAlertBinding.lytTopView.tvType.text = viewModel.getTitle().first
-        layoutAlertBinding.lytTopView.ivType.setImageResource(viewModel.getTitle().second)
 
-        with(layoutAlertBinding.lytContentView.rvDropdown) {
-            adapter = mDDAdapter
-        }
-        defaultView(layoutAlertBinding)
-
-
-        layoutAlertBinding.lytContentView.lytTab1.root.setOnClickListener {
-            updateView(layoutAlertBinding, 0)
-        }
-        layoutAlertBinding.lytContentView.lytTab2.root.setOnClickListener {
-            updateView(layoutAlertBinding, 1)
-        }
-        layoutAlertBinding.lytContentView.lytTab3.root.setOnClickListener {
-            updateView(layoutAlertBinding, 2)
-        }
-        builder.setView(layoutAlertBinding.root)
-        builder.setCancelable(true)
-        builder.setOnCancelListener {
-            navigateUpSafe()
-        }
-        alert = builder.create()
-        alert?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        alert?.show()
-    }
 
     private fun defaultView(
-        layoutAlertBinding: LayoutSleepDurationDropDownBinding
+
     ) {
         mDDAdapter.setData(viewModel.fetchDropDownData().first)
-        layoutAlertBinding.lytContentView.lytTab1.tvTitle.text = getString(R.string.text_sleep)
-        layoutAlertBinding.lytContentView.lytTab1.tvTitle.setTextColor(
+        binding.lytContentView.lytTab1.tvTitle.text = getString(R.string.text_sleep)
+        binding.lytContentView.lytTab1.tvTitle.setTextColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.white
             )
         )
-        layoutAlertBinding.lytContentView.lytTab2.tvTitle.text = getString(R.string.text_activity)
-        layoutAlertBinding.lytContentView.lytTab2.tvTitle.setTextColor(
+        binding.lytContentView.lytTab2.tvTitle.text = getString(R.string.text_activity)
+        binding.lytContentView.lytTab2.tvTitle.setTextColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.white_40
             )
         )
-        layoutAlertBinding.lytContentView.lytTab3.tvTitle.text = getString(R.string.text_readiness)
-        layoutAlertBinding.lytContentView.lytTab3.tvTitle.setTextColor(
+        binding.lytContentView.lytTab3.tvTitle.text = getString(R.string.text_readiness)
+        binding.lytContentView.lytTab3.tvTitle.setTextColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.white_40
             )
         )
-        layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
+        binding.lytContentView.lytTab1.divider1.setBackgroundColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.white
             )
         )
-        layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
+        binding.lytContentView.lytTab2.divider1.setBackgroundColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.color_dd_separator
             )
         )
-        layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
+        binding.lytContentView.lytTab3.divider1.setBackgroundColor(
             ContextCompat.getColor(
-                layoutAlertBinding.lytTopView.ivDropDown.context,
+                binding.lytTopView.ivDropDown.context,
                 R.color.color_dd_separator
             )
         )
 
     }
 
-    private fun updateView(layoutAlertBinding: LayoutSleepDurationDropDownBinding, type: Int) {
+    private fun updateView( type: Int) {
 
         when (type) {
             0 -> {
                 mDDAdapter.setData(viewModel.fetchDropDownData().first)
-                layoutAlertBinding.lytContentView.lytTab1.tvTitle.setTextColor(
+                binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.tvTitle.setTextColor(
+                binding.lytContentView.lytTab2.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white_40
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.tvTitle.setTextColor(
+                binding.lytContentView.lytTab3.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white_40
                     )
                 )
 
-                layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab1.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         com.noisefit_commans.R.color.white_80
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab2.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab3.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
@@ -197,39 +187,39 @@ class ODropDownFragment :
 
             1 -> {
                 mDDAdapter.setData(viewModel.fetchDropDownData().second)
-                layoutAlertBinding.lytContentView.lytTab1.tvTitle.setTextColor(
+                binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         com.noisefit_commans.R.color.white_40
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.tvTitle.setTextColor(
+                binding.lytContentView.lytTab2.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.tvTitle.setTextColor(
+                binding.lytContentView.lytTab3.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white_40
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab1.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab2.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         com.noisefit_commans.R.color.white_80
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab3.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
@@ -237,39 +227,39 @@ class ODropDownFragment :
 
             else -> {
                 mDDAdapter.setData(viewModel.fetchDropDownData().third)
-                layoutAlertBinding.lytContentView.lytTab1.tvTitle.setTextColor(
+                binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         com.noisefit_commans.R.color.white_40
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.tvTitle.setTextColor(
+                binding.lytContentView.lytTab2.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white_40
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.tvTitle.setTextColor(
+                binding.lytContentView.lytTab3.tvTitle.setTextColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.white
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab1.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab1.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab2.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab2.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         R.color.color_dd_separator
                     )
                 )
-                layoutAlertBinding.lytContentView.lytTab3.divider1.setBackgroundColor(
+                binding.lytContentView.lytTab3.divider1.setBackgroundColor(
                     ContextCompat.getColor(
-                        layoutAlertBinding.lytTopView.ivDropDown.context,
+                        binding.lytTopView.ivDropDown.context,
                         com.noisefit_commans.R.color.white_80
                     )
                 )
