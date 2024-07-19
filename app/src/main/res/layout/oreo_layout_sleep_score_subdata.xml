@@ -64,6 +64,7 @@
         <include
             android:id="@+id/lytSleepScoreBanner"
             layout="@layout/oreo_layout_score_banner"
+            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

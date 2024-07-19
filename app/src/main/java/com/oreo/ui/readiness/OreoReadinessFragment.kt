@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -630,8 +631,10 @@ class OreoReadinessFragment :
 
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
 
-            val baselineAvg =
-                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            val baselineAvg = mViewModel.baseTemp
+                ?: (mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
+
+            /*mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE*/
             if (baselineAvg == mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
                 mViewModel.contributorInfo.value?.temperature_readiness_top?.let { content ->
                     navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
@@ -677,17 +680,17 @@ class OreoReadinessFragment :
     }
 
     override fun subscribeObservers() {
-       /* mainViewModel.sessionManager.syncCompleted.observe(this) {
-            it?.getContent()?.let { syncDataStatus ->
-                when (syncDataStatus) {
-                    SyncEvents.ServerSyncSuccess -> {
-                        mainViewModel.reloadTodaysData()
-                    }
+        /* mainViewModel.sessionManager.syncCompleted.observe(this) {
+             it?.getContent()?.let { syncDataStatus ->
+                 when (syncDataStatus) {
+                     SyncEvents.ServerSyncSuccess -> {
+                         mainViewModel.reloadTodaysData()
+                     }
 
-                    else -> {}
-                }
-            }
-        }*/
+                     else -> {}
+                 }
+             }
+         }*/
 
         mainViewModel.readinessHistoryResponse.observe(this) {
 
@@ -865,8 +868,11 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-            val baselineAvg =
-                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+
+            mViewModel.baseTemp = it.base_temp
+
+            val baselineAvg = it.base_temp
+                ?: (mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
             if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
 
                 val deviation = it.avg_temp.value - baselineAvg
@@ -874,14 +880,45 @@ class OreoReadinessFragment :
                     if (deviation > 0) {
                         this.append("+")
                     }
-                    this.append(String.format(locale = Locale.US,"%.2f",deviation))
+                    this.append(
+                        String.format(
+                            locale = Locale.US, "%.2f", if (mViewModel.sessionManager.isMetric()) {
+                                AppConversionUtils.fahrenheitToCelsius(32 + deviation)
+                            } else {
+                                deviation
+                            }
+                        )
+                    )
                 }
 
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format(locale = Locale.US,"%.1f°F (%s)",it.avg_temp.value, deviationString)
+                    if (mViewModel.sessionManager.isMetric()) {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°C (%s)",
+                            AppConversionUtils.fahrenheitToCelsius(it.avg_temp.value),
+                            deviationString
+                        )
+                    } else {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°F (%s)",
+                            it.avg_temp.value,
+                            deviationString
+                        )
+                    }
             } else {
                 binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format(locale = Locale.US,"%.1f°F",it.avg_temp.value)
+                    if (mViewModel.sessionManager.isMetric()) {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°C",
+                            AppConversionUtils.fahrenheitToCelsius(it.avg_temp.value)
+                        )
+
+                    } else {
+                        String.format(locale = Locale.US, "%.1f°F", it.avg_temp.value)
+                    }
 
                 //binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
             }
@@ -889,9 +926,9 @@ class OreoReadinessFragment :
 
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg =
-                    mainViewModel.temperatureBaseLine
-                        ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+                val baselineAvg = it.base_temp
+                    ?: (mainViewModel.temperatureBaseLine
+                        ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
 
                 binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
                 binding.lytRScoreData.lytSec3.tvPercentValue.visible()
@@ -902,7 +939,7 @@ class OreoReadinessFragment :
                     val deviation = todayAvg - baselineAvg
 
                     binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                        String.format(locale = Locale.US,"%.1f°F (%.2f)",todayAvg, deviation)
+                        String.format(locale = Locale.US, "%.1f°F (%.2f)", todayAvg, deviation)
 
                 } else {
                     binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"

@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
@@ -84,11 +85,28 @@ class BodyTempScoreDetailFragment :
                     if ((it.deviation ?: 0f) > 0) {
                         this.append("+")
                     }
-                    this.append(String.format(locale = Locale.US,"%.2f", it.deviation))
+                    this.append(
+                        String.format(
+                            locale = Locale.US, "%.2f", if (mViewModel.sessionManager.isMetric()) {
+                                AppConversionUtils.fahrenheitToCelsius(32 + (it.deviation ?: 0f))
+                            } else {
+                                it.deviation
+                            }
+                        )
+                    )
                 }
 
+                if (mViewModel.sessionManager.isMetric()) {
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f°C (%s)",
+                        AppConversionUtils.fahrenheitToCelsius(it.data),
+                        deviationString
+                    )
+                } else {
+                    String.format(locale = Locale.US, "%.1f°F (%s)", it.data, deviationString)
+                }
 
-                String.format(locale = Locale.US,"%.1f°F (%s)", it.data, deviationString)
             }
             //"${it.deviation}°"
         }
@@ -293,11 +311,30 @@ class BodyTempScoreDetailFragment :
                         if ((chartModel.valueFloat) > 0) {
                             this.append("+")
                         }
-                        this.append(String.format(locale = Locale.US,"%.2f", chartModel.valueFloat))
+                        this.append(
+                            String.format(
+                                locale = Locale.US,
+                                "%.2f",
+                                chartModel.valueFloat
+                            )
+                        )
                     }
 
-
-                    String.format(locale = Locale.US,"%.1f°F (%s)", chartModel.valueFloat2, deviationString)
+                    if(mViewModel.sessionManager.isMetric()){
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°C (%s)",
+                            chartModel.valueFloat2,
+                            deviationString
+                        )
+                    }else{
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f°F (%s)",
+                            chartModel.valueFloat2,
+                            deviationString
+                        )
+                    }
                 }
             }
         }
@@ -354,7 +391,7 @@ class BodyTempScoreDetailFragment :
                     binding.lytScoreOverview.tvScoreMsg.visible()
                     mViewModel.isProgressEqual = true
                 }
-                val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
+                val compPro = "${String.format(locale = Locale.US, "%.1f", difference)} °F"
                 binding.lytScoreOverview.tvTrendProg.text = compPro
             }
         }
