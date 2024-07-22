@@ -48,10 +48,11 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
     private val endPadding = dip2px(30f)
+    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    private val dataPosition = ArrayList<Pair<Int, Float>>()
     private var lastSentValuePos: Int? = null
     private val yAxisRange = ArrayList<Pair<Int, String>>()
 
@@ -140,8 +141,10 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     private fun drawContent(canvas: Canvas) {
 
-        val stepWidth = (width - endPadding) / 7
-        val barWidth = stepWidth / 2
+        val availableWidth = (width - endPadding).toFloat()
+        dataStepWidth = availableWidth / 7
+
+        val barWidth = dataStepWidth / 2
         var start = 0f
         val rectRadius = dip2px(1f).toFloat()
         val padding = dip2px(1f).toFloat()
@@ -161,15 +164,27 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             }
         }
 
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
+        }
+
 
         dataSet.forEachIndexed { index, it ->
-
 
             if (index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
                     topHeight.toFloat(),
-                    start + stepWidth - paddingHorizontal,
+                    start + dataStepWidth - paddingHorizontal,
                     height.toFloat() - bottomHeight
                 )
 
@@ -177,9 +192,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     rectFSelected,
                     selectedDayPaint
                 )
-
             }
-
 
             val sum = (it.first ?: 0) + (it.second ?: 0)
             if (sum != 0) {
@@ -187,10 +200,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 val top = getYAxisValue(sum)
                 val isSelectedPosition = selectedPosition == index
 
-
                 val remEnd = getYAxisValue(it.second ?: 0)
-                dataPosition[index] = Pair(start, start + stepWidth)
-
+                dataPosition.add(Pair(index, start))
 
                 var topRectF: RectF? = null
                 if (it.second != 0) {
@@ -254,12 +265,12 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
                     barTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
-                    val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+                    val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
                     canvas.drawText(text, textStart, top - xTextBounds.height(), barTextPaint)
                 }
             }
 
-            start += stepWidth
+            start += dataStepWidth
 
         }
 
@@ -271,12 +282,13 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     private fun getSelectedPosition(): Int? {
         if (isInteracting.not()) return null
-        val position = dataPosition.filterValues {
-            touchX > it.first && touchX < it.second
+        dataPosition.forEach {
+            val endPos = it.second + dataStepWidth
+            if (touchX < endPos) {
+                return it.first
+            }
         }
-        if (position.isEmpty()) return null
-
-        return position.keys.single()
+        return null
     }
 
     private fun getYAxisValue(value: Int): Float {

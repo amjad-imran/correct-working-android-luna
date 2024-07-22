@@ -97,7 +97,8 @@
             style="@style/H6"
             android:layout_width="0dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
-
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="@id/ivInfo"

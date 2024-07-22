@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FMHCycleHistoryDataModel
@@ -440,20 +441,28 @@ class CycleTrackerFragment :
                 tvValue.text = "-"
                 tvUnit.gone()
             } else {
-                tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
-                    "+${String.format(locale = Locale.US,"%.1f", data.tempVariation)}"
+                val tempVariation = if (viewModel.sessionManager.isMetric()) {
+                    tvUnit.text = "°C"
+                    AppConversionUtils.fahrenheitToCelsius(32 + data.tempVariation)
                 } else {
-                    "-${String.format(locale = Locale.US,"%.1f", abs(data.tempVariation))}"
+                    tvUnit.text = "°F"
+                    data.tempVariation
+                }
+
+                tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
+                    "+${String.format(locale = Locale.US, "%.1f", tempVariation)}"
+                } else {
+                    "-${String.format(locale = Locale.US, "%.1f", abs(tempVariation))}"
                 }
                 tvUnit.visible()
             }
 
-            if (data.pendingNights == null) {
-                tvMoreNight.text = ""
-            } else {
-                tvMoreNight.text =
-                    "Temperature data for upcoming 3 cycles is required" //"Data for ${data.pendingNights} more nights is required"
-            }
+            /* if (data.pendingNights == null) {
+                 tvMoreNight.text = ""
+             } else {
+                 tvMoreNight.text =
+                     "Temperature data for upcoming 3 cycles is required" //"Data for ${data.pendingNights} more nights is required"
+             }*/
 
             tvDescription.setVisibilityByCondition(data.message.isNullOrEmpty().not())
             tvDescription.text = data.message

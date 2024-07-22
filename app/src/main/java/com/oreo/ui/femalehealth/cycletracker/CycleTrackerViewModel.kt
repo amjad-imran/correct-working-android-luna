@@ -11,6 +11,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
@@ -384,9 +385,15 @@ class CycleTrackerViewModel @Inject constructor(
         tempData.forEachIndexed { index, i ->
             val phase = getCurrentPhase(i.date)
 
-            items.add(ItemTemp(i.temperature, phase, index + 1, i.date))
+            val convertedTemp = if (sessionManager.isMetric() && i.temperature != null) {
+                AppConversionUtils.fahrenheitToCelsius(32 + i.temperature)
+            } else {
+                i.temperature
+            }
 
-            i.temperature?.let { temp ->
+            items.add(ItemTemp(convertedTemp, phase, index + 1, i.date))
+
+            convertedTemp?.let { temp ->
                 if (temp < minValue) {
                     minValue = temp
                 }

@@ -2,15 +2,14 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.luna.databinding.FragmentSleepMultiLineChartBinding
+import com.moengage.core.internal.utils.getRandomInt
 import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.math.max
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -35,12 +34,19 @@ class SleepSingleLineChartFragment :
         //Value in minutes
         val dataList = arrayListOf(
             10, 30, 20, 70, 10, 50, 90,
-            10, 70, 80, 90, null, 10, 20,
-            60, 10, 10, 50, 90, 10, 20,
+            10, 70, 80, 90, null, null, null,
+            null, null, null, 50, 90, 10, 20,
             8, 70, 20, 10, 50, 90, 20,
             60, 70, 80, 90, 10, 50, 90,
             10, 50, 90, 90, 10, 10, 20,
         )
+
+        //31+29+30+31+30+31+30
+        /*val dataList = ArrayList<Int?>()
+        for (i in 0 until 182) {
+            dataList.add(getRandomInt(20, 80))
+        }*/
+
         val maxValue = getMaxValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)
         val xAxisRange = getXAxisRange()
@@ -77,7 +83,8 @@ class SleepSingleLineChartFragment :
     }
 
     private fun getXAxisRange(): List<String> {
-        return arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
+        return arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
+        //return arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
     }
 
     private fun getMaxValue(list: List<Int?>): Int {

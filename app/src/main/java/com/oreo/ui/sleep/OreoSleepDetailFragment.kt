@@ -164,11 +164,11 @@ class OreoSleepDetailFragment :
 
         binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
 
-        if ((oxy?.avg ?: 0) < 95) {
+        /*if ((oxy?.avg ?: 0) < 95) {
             binding.lytAverageBloodOxygen.root.visible()
             binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
             return
-        }
+        }*/
         binding.lytAverageBloodOxygen.root.visible()
         binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
 

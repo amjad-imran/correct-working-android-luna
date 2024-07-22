@@ -40,6 +40,7 @@ data class OreoReadinessModel(
     val respiration: UnitDataModel? = null,
     val temperature: UnitDataModelFloat? = null,
     val avg_temp: UnitDataModelTemp? = null,
+    val base_temp: Float? = null,
     val temperatureBreakUp: UnitDataModelArrayFloat? = null,
     @SerializedName("readiness_nap_score_impact")
     val readinessNapScoreImpact: Int? = null,

@@ -46,6 +46,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
+    var dataStepWidth = 0F
 
     var mMax = 0
 
@@ -56,7 +57,8 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    private val dataPosition = HashMap<Int, Pair<Float, Float>>()
+    private val dataPosition = ArrayList<Pair<Int, Float>>()
+
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     private var lastSentValuePos: Int? = null
 
@@ -168,8 +170,10 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun drawContent(canvas: Canvas) {
+        val availableWidth = (width - endPadding).toFloat()
 
-        val stepWidth = (width - endPadding) / 7
+        dataStepWidth = availableWidth / 7
+
         var start = 0f
         val circleRadius = dip2px(2f).toFloat()
         val circleRadiusBig = dip2px(4f).toFloat()
@@ -191,6 +195,19 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             }
         }
 
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
+        }
+
         dataSet.forEachIndexed { index, it ->
 
 
@@ -198,7 +215,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
                     topHeight.toFloat(),
-                    start + stepWidth - paddingHorizontal,
+                    start + dataStepWidth - paddingHorizontal,
                     height.toFloat() - bottomHeight
                 )
 
@@ -214,24 +231,23 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             if (it.first != null) {
                 val actualPos = getYAxisValue(it.first ?: 0)
 
-                dataPosition[index] = Pair(start, start + stepWidth)
-
+                dataPosition.add(Pair(index, start))
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].first != null) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.first ?: 0)
                     canvas.drawLine(
-                        start + stepWidth / 2,
+                        start + dataStepWidth / 2,
                         actualPos,
-                        start + stepWidth + stepWidth / 2,
+                        start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
                         if (isInteracting) linePaintHourI else linePaintHour
                     )
                 }
 
                 canvas.drawCircle(
-                    start + stepWidth / 2,
+                    start + dataStepWidth / 2,
                     actualPos,
                     if (isInteracting && isSelectedPosition) circleRadiusBig else circleRadius,
                     if (isInteracting && isSelectedPosition.not()) circlePaintI else circlePaint
@@ -247,7 +263,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                     } else {
                         textPaintHour.getTextBounds(text, 0, text.length, xTextBounds)
                     }
-                    val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+                    val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
                     canvas.drawText(
                         text,
                         textStart,
@@ -265,16 +281,16 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
                     val actualPosNext = getYAxisValue(nextElement.second ?: 0)
                     canvas.drawLine(
-                        start + stepWidth / 2,
+                        start + dataStepWidth / 2,
                         needPos,
-                        start + stepWidth + stepWidth / 2,
+                        start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
                         if (isInteracting) linePaintNeedI else linePaintNeed
                     )
                 }
 
                 canvas.drawCircle(
-                    start + stepWidth / 2,
+                    start + dataStepWidth / 2,
                     needPos,
                     if (isInteracting && isSelectedPosition) circleRadiusBig else circleRadius,
                     if (isInteracting && isSelectedPosition.not()) circlePaintI else circlePaint
@@ -291,7 +307,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                     } else {
                         textPaintNeed.getTextBounds(text, 0, text.length, xTextBounds)
                     }
-                    val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+                    val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
                     canvas.drawText(
                         text,
                         textStart,
@@ -302,7 +318,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             }
 
             if (isSelectedPosition && isInteracting) {
-                val center = start + stepWidth / 2
+                val center = start + dataStepWidth / 2
 
                 canvas.drawRect(
                     RectF(
@@ -325,8 +341,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawRect(rectFTopI, circlePaint)
             }
 
-
-            start += stepWidth
+            start += dataStepWidth
         }
     }
 
@@ -337,12 +352,14 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun getSelectedPosition(): Int? {
         if (isInteracting.not()) return null
-        val position = dataPosition.filterValues {
-            touchX > it.first && touchX < it.second
-        }
-        if (position.isEmpty()) return null
 
-        return position.keys.single()
+        dataPosition.forEach {
+            val endPos = it.second + dataStepWidth
+            if (touchX < endPos) {
+                return it.first
+            }
+        }
+        return null
     }
 
     private fun getYAxisValue(value: Int): Float {

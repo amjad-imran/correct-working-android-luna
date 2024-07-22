@@ -33,8 +33,8 @@ class SleepMultiBarChartFragment :
         val dataList = arrayListOf(
             Pair(60, 40),
             Pair(80, 50),
-            Pair(90, 60),
-            Pair(100, 40),
+            Pair(null, null),
+            Pair(null, null),
             Pair(120, 20),
             Pair(150, 10),
             Pair(180, 0),
