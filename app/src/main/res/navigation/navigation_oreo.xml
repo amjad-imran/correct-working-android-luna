@@ -951,4 +951,12 @@
         android:id="@+id/hrArticle4Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle4Fragment"
         android:label="fragment_hr_article4" />
+    <fragment
+        android:id="@+id/skinTempInternalDetailsFragment"
+        android:name="com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment"
+        android:label="fragment_skin_temp_internal_details">
+        <argument
+            android:name="launchMode"
+            app:argType="com.oreo.ui.sleep2.internal.SkinTempInternalLaunchState" />
+    </fragment>
 </navigation>

@@ -330,7 +330,4 @@ class SleepInternalDetailsFragment :
 enum class SleepInternalLaunchState {
     RESTORATIVE_SLEEP, SLEEP_PERFORMANCE, HOUR_VS_NEED, SLEEP_TIME, EFFICIENCY, REM_SLEEP, DEEP_SLEEP, SLEEP_DURATION, LATENCY, RESTFULNESS
 }
-enum class ViewType{
-    DAY,WEEK,MONTH
-}
 

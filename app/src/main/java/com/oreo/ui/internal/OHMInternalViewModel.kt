@@ -4,6 +4,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.ODropDownDataModel
 import com.oreo.data.model.OHMDataModel
+import com.oreo.ui.sleep2.internal.SkinTempInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -28,6 +29,17 @@ class OHMInternalViewModel @Inject constructor() : BaseViewModel() {
         return listData
     }
 
+    fun getLaunchType(title: String): SkinTempInternalLaunchState {
+        val launchMode:SkinTempInternalLaunchState = when {
+            title.lowercase()=="Respiratory rate".lowercase() -> SkinTempInternalLaunchState.RESPIRATORY_RATE
+            title.lowercase()=="Resting heart rate".lowercase() -> SkinTempInternalLaunchState.RESTING_HEART_RATE
+            title.lowercase()=="Blood oxygen".lowercase() -> SkinTempInternalLaunchState.BLOOD_OXYGEN
+            title.lowercase()=="HRV".lowercase() -> SkinTempInternalLaunchState.HRV
+            else -> SkinTempInternalLaunchState.SKIN_TEMPERATURE
+        }
+        return launchMode
+
+    }
 
 
 }

@@ -7,6 +7,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHMInternalBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.OHMDataModel
+import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,7 +17,11 @@ class OHMInternalFragment :
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-
+                val launchType = viewModel.getLaunchType(resultData.title)
+                val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
+                    launchType
+                )
+                navigate(frag, bundle)
             }
         })
     }

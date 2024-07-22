@@ -1316,6 +1316,10 @@
     <string name="text_efficiency">Efficiency</string>
     <string name="text_latency">Latency</string>
     <string name="text_restfulness">Restfulness</string>
+    <string name="text_deviation">Deviation</string>
+    <string name="text_absolute">Absolute</string>
+    <string name="text_resting_heart_rate">Resting heart rate</string>
+    <string name="text_hrv">HRV</string>
 
 
 </resources>

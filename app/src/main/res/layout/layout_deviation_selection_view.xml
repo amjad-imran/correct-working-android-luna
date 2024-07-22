@@ -1,0 +1,28 @@
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/back_deviation_unselected"
+    android:orientation="horizontal"
+    android:weightSum="2"
+    android:layout_height="40dp">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/back_deviation_selected"
+        android:layout_height="match_parent"
+        style="@style/H6"
+        android:id="@+id/tvDeviation"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/text_deviation"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        style="@style/H6"
+        android:id="@+id/tvAbsolute"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/text_absolute"/>
+
+
+</LinearLayout>
+</layout>
