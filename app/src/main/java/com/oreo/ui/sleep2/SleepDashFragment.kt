@@ -12,7 +12,6 @@ import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
-import com.moengage.core.internal.utils.getRandomInt
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
@@ -23,6 +22,7 @@ import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepStageAction
 import com.noisefit_commans.ui.custom.ToolTipEntry
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.VibrationUtils
@@ -31,6 +31,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.sleep.SleepDay
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
@@ -43,7 +44,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
+import java.time.temporal.WeekFields
+import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class SleepDashFragment :
@@ -79,7 +85,8 @@ class SleepDashFragment :
         super.onViewCreated(view, savedInstanceState)
         initCalender()
         setRecycler()
-        initTempUi()
+
+        //viewModel.getSleepData("2024-07-15", "2024-07-21")
     }
 
     private fun setRecycler() {
@@ -130,8 +137,7 @@ class SleepDashFragment :
             fragments.add(OreoSleepBannerFragment.newInstance(it))
         }
 
-        val sleepBannerAdapter =
-            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
 
         binding.nudgesSleep.apply {
             clipToPadding = false
@@ -146,64 +152,10 @@ class SleepDashFragment :
 
     private fun initTempUi() {
 
-
-        setNudgesView(
-            arrayListOf(
-                Nudges(
-                    label = "Sleep data is needed",
-                    message = "Wear your luna ring when you go to bed to track your sleep. Make sure to charge your ring to avoid missing out valuable insights."
-                ),
-                Nudges(
-                    label = "Sleep data is needed 2",
-                    message = "Wear your luna ring when you go to bed to track your sleep. Make sure to charge your ring to avoid missing out valuable insights."
-                )
-            )
-        )
-
-        binding.lytScore.tvScore.text = "80"
-        binding.lytScore.tvScoreStatus.text = "Optimal"
-        binding.lytScore.tvScoreStatus.setTextColor(Color.parseColor("#29cc74"))
-
-        binding.lytScore.lytSleepActual.apply {
-            tvNoData.gone()
-            tvHour.text = "7"
-            tvMin.text = "30"
-
-            tvHour.setTextGradient(
-                requireActivity().getColor(R.color.white),
-                Color.parseColor("#aef8be"),
-                Color.parseColor("#2fce77")
-            )
-            tvMin.setTextGradient(
-                requireActivity().getColor(R.color.white),
-                Color.parseColor("#aef8be"),
-                Color.parseColor("#2fce77")
-            )
-        }
-
-        binding.lytScore.lytSleepNeeded.apply {
-            tvNoData.gone()
-            tvHour.text = "8"
-            tvMin.text = "30"
-
-
-        }
-
-
-
-        binding.lytScore.circularProgressBar.setProgress(80)
-
         binding.lytSleepTrends.lytSleepPerformance.graphPerformance.setDataSet(
             arrayListOf(
-                20,
-                30,
-                null,
-                50,
-                100,
-                70,
-                null
-            ),
-            4
+                20, 30, null, 50, 100, 70, null
+            ), 4
         )
 
         binding.lytSleepTrends.lytHourVsNeed.graphHourVsNeed.setDataSet(
@@ -215,8 +167,7 @@ class SleepDashFragment :
                 Pair(120, 130),
                 Pair(150, 180),
                 Pair(180, 200),
-            ),
-            4
+            ), 4
         )
         binding.lytSleepTrends.lytRestorativeSleep.graphRestorative.setDataSet(
             arrayListOf(
@@ -227,16 +178,14 @@ class SleepDashFragment :
                 Pair(120, 20),
                 Pair(150, 10),
                 Pair(180, 0),
-            ),
-            4
+            ), 4
         )
 
 
         val data = viewModel.generateSleepTimeData()
 
         binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
-            data,
-            4
+            data, 4
         )
     }
 
@@ -249,9 +198,13 @@ class SleepDashFragment :
 
             init {
                 view.setOnClickListener {
-                    /*if (viewModel.selectedDate.value != day.date) {
+                    if (day.date > dateToday) {
+                        return@setOnClickListener
+                    }
+
+                    if (viewModel.selectedDate.value != day.date) {
                         viewModel.updateSelectedDate(day.date)
-                    }*/
+                    }
                 }
             }
 
@@ -263,31 +216,57 @@ class SleepDashFragment :
                 bind.exSevenDayText.text =
                     DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
 
-                bind.circularProgressBar.setProgress(getRandomInt(20, 100))
+
+                val score = viewModel.sleepData[day.date]?.sleepScore?.value
+                if (score == null) {
+                    bind.circularProgressBar.setProgress(0)
+                    bind.exSevenDayText.alpha = 0.5f
+                } else {
+                    bind.circularProgressBar.setProgress(score)
+                    bind.exSevenDayText.alpha = 1f
+                }
+
+                if (day.date == viewModel.selectedDate.value) {
+                    bind.vSelected.visible()
+                } else {
+                    bind.vSelected.invisible()
+                }
+
+                if (day.date > dateToday) {
+                    bind.exSevenDayText.alpha = 0.5f
+                } else {
+                    bind.exSevenDayText.alpha = 1f
+                }
 
             }
         }
 
-        binding.vCalendar.dayBinder =
-            object : WeekDayBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
-            }
+        binding.vCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
+        }
 
         val currentMonth = YearMonth.now()
+        val lastDayOfWeek: LocalDate =
+            LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
         binding.vCalendar.setup(
-            currentMonth.atStartOfMonth(),
-            currentMonth.atEndOfMonth(),
+            currentMonth.atStartOfMonth(),//todo change to start of data
+            lastDayOfWeek,
             DayOfWeek.MONDAY,
         )
         binding.vCalendar.scrollToDate(
-            LocalDate.now()
+            viewModel.selectedDate.value ?: LocalDate.now()
         )
     }
 
 
     override fun initListener() {
+
+        binding.vCalendar.weekScrollListener = { weekDays ->
+            viewModel.onWeekScrolled(weekDays.days.get(0).date)
+        }
+
         binding.toolbar.viewBackCalendar.setOnClickListener {
             navigate(R.id.healthMonitorInternal)
         }
@@ -316,6 +295,143 @@ class SleepDashFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.trendsData.observe(this) {
+
+            //sleep performance
+            binding.lytSleepTrends.lytSleepPerformance.graphPerformance.setDataSet(
+                arrayListOf(
+                    20, 30, null, 50, 100, 70, null
+                ), 4
+            )
+
+            //Hour vs Need
+            binding.lytSleepTrends.lytHourVsNeed.graphHourVsNeed.setDataSet(
+                arrayListOf(
+                    Pair(60, 100),
+                    Pair(null, null),
+                    Pair(90, 100),
+                    Pair(null, null),
+                    Pair(120, 130),
+                    Pair(150, 180),
+                    Pair(180, 200),
+                ), 4
+            )
+
+            //Restorative Sleep
+            binding.lytSleepTrends.lytRestorativeSleep.graphRestorative.setDataSet(
+                arrayListOf(
+                    Pair(60, 40),
+                    Pair(80, 50),
+                    Pair(90, 60),
+                    Pair(100, 40),
+                    Pair(120, 20),
+                    Pair(150, 10),
+                    Pair(180, 0),
+                ), 4
+            )
+
+
+            //Sleep Time
+            val data = viewModel.generateSleepTimeData()
+            binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
+                data, 4
+            )
+
+        }
+
+        viewModel.sleepDayData.observe(this) {
+            updateSleepUi(it)
+        }
+
+        viewModel.notifyDateChange.observe(this) {
+            it.getContent()?.let {
+                try {
+                    binding.vCalendar.notifyDateChanged(
+                        it
+                    )
+                } catch (exp: Exception) {
+                }
+            }
+        }
+
+        viewModel.selectedDate.observe(this) {
+            try {
+                binding.vCalendar.notifyDateChanged(it)
+            } catch (exp: Exception) {
+            }
+
+            binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
+
+            viewModel.getDataForDate(it)
+        }
+    }
+
+    private fun updateSleepUi(data: SleepDay?) {
+
+        var hasNoData = false
+        if (data?.sleepScore?.value == null) {
+            hasNoData = true
+        }
+
+        binding.lytScore.tvScore.text =
+            if (hasNoData) "--" else "${data?.sleepScore?.value}"
+
+        binding.lytScore.tvScoreStatus.apply {
+            if (hasNoData) {
+                gone()
+            } else {
+                visible()
+                text = "${data?.sleepScore?.text}"
+                setTextColor(Color.parseColor("#29cc74"))
+            }
+        }
+
+        binding.lytScore.lytSleepActual.apply {
+            if (data?.sleepScore?.value == null) {
+                tvNoData.visible()
+
+                tvHour.gone()
+                tvMin.gone()
+                textHour.gone()
+                textMin.gone()
+            } else {
+                tvNoData.gone()
+
+                tvHour.visible()
+                tvMin.visible()
+                textHour.visible()
+                textMin.visible()
+
+                tvHour.text = ""
+                tvMin.text = ""
+
+                tvHour.setTextGradient(
+                    requireActivity().getColor(R.color.white),
+                    Color.parseColor("#aef8be"),
+                    Color.parseColor("#2fce77")
+                )
+                tvMin.setTextGradient(
+                    requireActivity().getColor(R.color.white),
+                    Color.parseColor("#aef8be"),
+                    Color.parseColor("#2fce77")
+                )
+            }
+
+
+        }
+
+        binding.lytScore.lytSleepNeeded.apply {
+            tvNoData.gone()
+            tvHour.text = "-"
+            tvMin.text = "-"
+        }
+
+        binding.lytScore.circularProgressBar.setProgress(data?.sleepScore?.value ?: 0)
+
+        setNudgesView(data?.nudges)
+
+        setNapData(data?.naps, data?.date ?: "")
 
     }
 
@@ -405,24 +521,16 @@ class SleepDashFragment :
             }
 
             val startTime = DateFormats.formatDate(
-                data.startTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.timeFormat12_2()
+                data.startTime, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_2()
             )
             val startTimeUnit = DateFormats.formatDate(
-                data.startTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.timeFormat12_unit()
+                data.startTime, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_unit()
             )
             val endTime = DateFormats.formatDate(
-                data.endTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.timeFormat12_2()
+                data.endTime, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_2()
             )
             val endTimeUnit = DateFormats.formatDate(
-                data.endTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.timeFormat12_unit()
+                data.endTime, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_unit()
             )
 
             this.tvStartTime.text = startTime
