@@ -33,6 +33,7 @@ import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.PeriodCycleHistory
@@ -50,8 +51,6 @@ import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -60,7 +59,6 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Query
-import retrofit2.http.Streaming
 import retrofit2.http.Url
 
 
@@ -369,6 +367,14 @@ interface NetworkService {
         @Query("type") dayType: String,
         @Query("filter_type") filterType: String
     ): BaseApiResponse<List<StressResultData>>
+
+    @GET
+    suspend fun getSleepTrendsInternalPageData(
+        @Url url: String,
+        @Query("startDate") selectDate: String,
+        @Query("endDate") dayType: String,
+        @Query("filter_type") filterType: String
+    ): BaseApiResponse<OSleepInternalTrendsDataModel>
 
 
     /**

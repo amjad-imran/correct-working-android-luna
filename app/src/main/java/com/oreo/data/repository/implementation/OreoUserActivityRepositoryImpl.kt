@@ -43,7 +43,6 @@ import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -51,9 +50,9 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
-import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
@@ -62,9 +61,6 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
-import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
-import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
-import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -282,7 +278,7 @@ class OreoUserActivityRepositoryImpl(
                             enableAi = response.enableAi
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setStressBetaState(response.stressBeta)
-                            ringDataStore.setEnableAiState(response.enableAi?:false)
+                            ringDataStore.setEnableAiState(response.enableAi ?: false)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -1317,7 +1313,7 @@ class OreoUserActivityRepositoryImpl(
         val hours: Int = totalMinutes / 60
         val minutes: Int = totalMinutes % 60
 
-        return String.format(locale = Locale.US,"%d:%02d", hours, minutes)
+        return String.format(locale = Locale.US, "%d:%02d", hours, minutes)
 
     }
 
@@ -1885,6 +1881,19 @@ class OreoUserActivityRepositoryImpl(
             val url =
                 "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
             remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
+        }
+    }
+
+    //todo endpoint, response, request format will change, once define
+    override suspend fun getSleepInternalTrendsPagesData(
+        startDate: String,
+        endDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, filterType)
         }
     }
 }
