@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -78,11 +79,15 @@ class SkinTempInternalDetailsFragment :
             binding.lytDeviation.tvDeviation.setBackgroundResource(R.drawable.back_deviation_selected)
             binding.lytDeviation.tvAbsolute.setBackgroundResource(0)
             binding.lytSelector.root.gone()
+            viewModel.isDeviationSelected = true
+            showTopContent()
         }
         binding.lytDeviation.tvAbsolute.setOnClickListener {
             binding.lytDeviation.tvAbsolute.setBackgroundResource(R.drawable.back_deviation_selected)
             binding.lytDeviation.tvDeviation.setBackgroundResource(0)
             binding.lytSelector.root.visible()
+            viewModel.isDeviationSelected = false
+            showTopContent()
         }
 
     }
@@ -116,14 +121,68 @@ class SkinTempInternalDetailsFragment :
     override fun subscribeObservers() {
         viewModel.selectedPeriod.observe(this) {
             setPeriodUiState(it)
-//            showTopContent()
+            showTopContent()
         }
         viewModel.titleUpdate.observe(this) {
             binding.tvTrendName.text = it.first
             binding.ivTrendsIcon.setImageResource(it.second)
-//            showTopContent()
+            showTopContent()
         }
 
+    }
+
+    private fun showTopContent() {
+        binding.lytTopView.lytTopSingleView.root.visible()
+        binding.lytTopView.lytTopMultipleView.root.gone()
+        val data = viewModel.hmDummyData()
+        if (data != null) {
+            //show single post fix
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
+            binding.lytTopView.lytTopSingleView.lytTopHourView.root.gone()
+
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
+                data.dspValue
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                viewModel.getPostFixAbr(data.trendType)
+
+            binding.lytTopView.lytTopSingleView.apply {
+                if (viewModel.isDeviationSelected) {
+                    binding.lytTopView.lytTopSingleView.tvDateTime.text = data.dayDate
+                } else {
+                    val dayDate: String = when (viewModel.selectedPeriod.value) {
+                        InternalSelectedPeriod.DAY -> data.dayDate
+                        InternalSelectedPeriod.WEEK -> {
+                            "23 April - 30 May, 2024"
+                        }
+
+                        else -> {
+                            "July  2024"
+                        }
+                    }
+                    tvDateTime.text = dayDate
+                }
+                tvDesc.text = data.description
+                if (data.isShowHighlight) {
+                    val colors = viewModel.getHighlightBackType(0)
+                    lytHighlightTrends.main.setBackgroundResource(colors.first)
+                    val textColor=ContextCompat.getColor(binding.lytTopView.lytTopSingleView.tvDesc.context,colors.second)
+                    lytHighlightTrends.tvRangeValue.setTextColor(textColor)
+                    val icons = viewModel.returnTrendsArrow(data.trendType)
+
+                    lytHighlightTrends.ivTick.visible()
+                    lytHighlightTrends.ivTick.setImageResource(icons)
+                    lytHighlightTrends.root.visible()
+                    lytHighlightTrends.tvRangeValue.visible()
+
+                    lytHighlightTrends.tvRangeValue.text = "14% from yesterday"
+                } else {
+                    lytHighlightTrends.root.gone()
+                    lytHighlightTrends.root.gone()
+                }
+            }
+        } else {
+//            defaultDataView()
+        }
     }
 
     private fun setRecycler() {

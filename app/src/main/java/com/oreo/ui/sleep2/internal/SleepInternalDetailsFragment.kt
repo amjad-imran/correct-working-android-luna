@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -97,7 +98,7 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
                     binding.lytTopView.lytTopSingleView.lytTopHourView.root.gone()
 
-                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
                         data.dspValue
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
                         viewModel.getPostFixAbr(data.trendType)
@@ -140,7 +141,8 @@ class SleepInternalDetailsFragment :
                     if (data.isShowHighlight) {
                         val colors = viewModel.getHighlightBackType(0)
                         lytHighlightTrends.main.setBackgroundResource(colors.first)
-                        lytHighlightTrends.tvRangeValue.setTextColor(colors.second)
+                        val textColor= ContextCompat.getColor(binding.lytTopView.lytTopSingleView.tvDesc.context,colors.second)
+                        lytHighlightTrends.tvRangeValue.setTextColor(textColor)
                         val icons = viewModel.returnTrendsArrow(data.trendType)
                         if (icons == 0) {
                             lytHighlightTrends.ivTick.gone()
