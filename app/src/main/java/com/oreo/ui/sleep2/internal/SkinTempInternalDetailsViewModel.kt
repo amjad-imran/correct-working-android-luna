@@ -6,7 +6,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.OSleepTrendsDataModel
+import com.oreo.data.model.OHealthMonTrendsDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,9 +16,10 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     lateinit var selectedLaunchMode: SkinTempInternalLaunchState
+    var isDeviationSelected:Boolean=true
 
     private val _selectedPeriod =
-        MutableLiveData<InternalSelectedPeriod>(InternalSelectedPeriod.DAY)
+        MutableLiveData(InternalSelectedPeriod.DAY)
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
     fun setSelectedPeriod(selectedPeriod: InternalSelectedPeriod) {
@@ -123,13 +124,14 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         }
     }
 
-    fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
-        var abr = ""
-        if (trendType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
-            abr = "% - average"
-        } else if (trendType == SleepInternalLaunchState.RESTFULNESS)
-            abr = "times - average"
-
+    fun getPostFixAbr(trendType: SkinTempInternalLaunchState): String {
+        val abr: String = when (trendType) {
+            SkinTempInternalLaunchState.SKIN_TEMPERATURE -> "°F - average"
+            SkinTempInternalLaunchState.HRV -> "ms - average"
+            SkinTempInternalLaunchState.RESPIRATORY_RATE -> "rpm - average"
+            SkinTempInternalLaunchState.RESTING_HEART_RATE -> "bpm - average"
+            SkinTempInternalLaunchState.BLOOD_OXYGEN -> "% - average"
+        }
         return abr
 
     }
@@ -145,7 +147,7 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         when (type) {
             0 -> {
                 background = R.drawable.back_hm_range
-                textColor = R.color.edit_text_color
+                textColor = R.color.white
             }
 
             1 -> {
@@ -161,14 +163,29 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         return Pair(background, textColor)
     }
 
-    fun returnTrendsArrow(type: SleepInternalLaunchState): Int {
+    fun returnTrendsArrow(type: SkinTempInternalLaunchState): Int {
         val icon: Int = when (type) {
-            SleepInternalLaunchState.SLEEP_PERFORMANCE, SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> R.drawable.ic_trend_up
-            SleepInternalLaunchState.EFFICIENCY, SleepInternalLaunchState.RESTFULNESS, SleepInternalLaunchState.LATENCY, SleepInternalLaunchState.SLEEP_DURATION -> R.drawable.ic_hm_tick
+            SkinTempInternalLaunchState.RESPIRATORY_RATE,
+            SkinTempInternalLaunchState.HRV,
+            SkinTempInternalLaunchState.RESTING_HEART_RATE,
+            SkinTempInternalLaunchState.BLOOD_OXYGEN,
+                SkinTempInternalLaunchState.SKIN_TEMPERATURE
+            -> R.drawable.ic_hm_tick
             else -> 0
         }
         return icon
 
+    }
+
+    fun hmDummyData(): OHealthMonTrendsDataModel {
+        return OHealthMonTrendsDataModel(
+            trendType = selectedLaunchMode,
+            dayDate = "Monday  30 May, 2024",
+            dspValue = "40",
+            isShowOptimal = false,
+            isShowHighlight = true,
+            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
+        )
     }
 
 
