@@ -29,7 +29,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -42,7 +41,7 @@ class SleepDashViewModel @Inject constructor(
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
-    var trendsData = MutableLiveData<String>()
+    var trendsData = MutableLiveData<SleepTrendsData>()
     val selectedMultiSleep = MutableLiveData<MultiSleep?>()
 
 
@@ -94,21 +93,61 @@ class SleepDashViewModel @Inject constructor(
 
                             _sleepDayData.postValue(sleepData[selectedDate.value])
 
-                            trendsData.postValue("")
+
+                            val notifyDates = ArrayList<LocalDate>()
+                            var weekStart = LocalDate.parse(startDate)
+                            notifyDates.add(weekStart)
+
+                            val weekEnd = LocalDate.parse(endDate)
 
 
-                            var notifyDate = LocalDate.parse(startDate)
-                            val endDateNotify = LocalDate.parse(endDate)
-                            while (notifyDate <= endDateNotify) {
-                                notifyDateChange.value = Event(notifyDate)
-                                notifyDate = notifyDate.plusDays(1)
+                            while (weekStart <= weekEnd) {
+                                notifyDateChange.value = Event(weekStart)
+                                weekStart = weekStart.plusDays(1)
+                                notifyDates.add(weekStart)
                             }
+
+                            trendsData.postValue(generateTrendsData(notifyDates))
 
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun generateTrendsData(notifyDates: ArrayList<LocalDate>): SleepTrendsData {
+
+        val sleepPerformance = ArrayList<Int?>()
+        val hourVsNeed = ArrayList<Pair<Int?, Int?>>()
+        val restorative = ArrayList<Pair<Int?, Int?>>()
+        notifyDates.forEach {
+            val dayData = sleepData[it]
+
+            if (dayData != null) {
+                sleepPerformance.add(dayData.efficiency?.value)//todo change to sleep performance
+
+                val sleepDuration: Int? = ((dayData.sleepDuration?.value ?: 0) / 60).takeIf { it != 0 }
+                hourVsNeed.add(Pair(sleepDuration, 60))//todo sleep need pending from backend
+
+                val rem: Int? = ((dayData.remSleep?.value ?: 0) / 60).takeIf { it != 0 }
+                val deep: Int? = ((dayData.deepSleep?.value ?: 0) / 60).takeIf { it != 0 }
+                restorative.add(Pair(rem, deep))
+            } else {
+                sleepPerformance.add(null)
+                hourVsNeed.add(Pair(null, null))
+                restorative.add(Pair(null, null))
+            }
+
+        }
+
+        return SleepTrendsData(
+            sleepPerformance = sleepPerformance,
+            hourVsNeed = hourVsNeed,
+            restorative = restorative,
+            sleepTime = generateSleepTimeData(notifyDates),
+            selectedPosition = 4
+        )
     }
 
     fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?):
@@ -191,10 +230,10 @@ class SleepDashViewModel @Inject constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun generateSleepTimeData(): List<SleepTimeModel> {
+    private fun generateSleepTimeData(notifyDates: ArrayList<LocalDate>): List<SleepTimeModel> {
 
         //Sleep start and end times
-        val sleepArray = arrayListOf(
+       /* val sleepArray = arrayListOf(
             Triple("2024-06-30 22:00:00", "2024-07-01 06:00:00", "2024-07-01"),
             Triple("2024-07-01 23:00:00", "2024-07-02 07:00:00", "2024-07-02"),
             Triple(null, null, "2024-07-03"),
@@ -202,16 +241,18 @@ class SleepDashViewModel @Inject constructor(
             Triple("2024-07-04 21:30:00", "2024-07-05 06:30:00", "2024-07-05"),
             Triple("2024-07-05 22:10:00", "2024-07-06 07:30:00", "2024-07-06"),
             Triple("2024-07-06 23:20:00", "2024-07-07 08:30:00", "2024-07-07")
-        )
+        )*/
+
 
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         var minValue: Long? = null
-        sleepArray.forEach {
-            if (it.first != null) {
-                val currentDay = LocalDate.parse(it.third).atStartOfDay()
+        notifyDates.forEach {
+            val dayData = sleepData[it]
+            if (dayData?.masterSleepStart != null) {
+                val currentDay = LocalDate.parse(dayData.date).atStartOfDay()
 
-                val sleepStartTime = LocalDateTime.parse(it.first, dateTimeFormatter)
+                val sleepStartTime = LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
 
                 val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
                 val newStartTime = if (difference < 0) {
@@ -230,12 +271,13 @@ class SleepDashViewModel @Inject constructor(
 
 
         val result = ArrayList<SleepTimeModel>()
-        sleepArray.forEach {
+        notifyDates.forEach {
+            val dayData = sleepData[it]
 
-            if (it.first != null) {
-                val currentDay = LocalDate.parse(it.third).atStartOfDay()
-                val sleepStartTime = LocalDateTime.parse(it.first, dateTimeFormatter)
-                val sleepEndTime = LocalDateTime.parse(it.second, dateTimeFormatter)
+            if (dayData?.masterSleepStart != null) {
+                val currentDay = LocalDate.parse(dayData.date).atStartOfDay()
+                val sleepStartTime = LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
+                val sleepEndTime = LocalDateTime.parse(dayData.masterSleepEnd, dateTimeFormatter)
 
                 val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
                 val newStartTime = if (difference < 0) {
@@ -478,3 +520,11 @@ enum class SleepContributor(val displayName: String, val icon: Int) {
     RESTFULNESS("Restfulness", R.drawable.ic_sleep_restfulness),
     TIMING("Timing", R.drawable.ic_sleep_timing)
 }
+
+data class SleepTrendsData(
+    val sleepPerformance: List<Int?>,
+    val hourVsNeed: List<Pair<Int?, Int?>>,
+    val restorative: List<Pair<Int?, Int?>>,
+    val sleepTime: List<SleepTimeModel>,
+    val selectedPosition: Int
+)

@@ -23,6 +23,12 @@ data class SleepDay(
     @SerializedName("deep_sleep")
     var deepSleep: CommonDataModel? = null,
 
+    @SerializedName("master_sleep_start")
+    var masterSleepStart: String? = null,
+
+    @SerializedName("master_sleep_end")
+    var masterSleepEnd: String? = null,
+
     var latency: CommonDataModel? = null,
 
     var efficiency: CommonDataModel? = null,
@@ -42,8 +48,8 @@ data class SleepDay(
     )
 
 data class MultiSleep(
-    val start_time:String?=null,
-    val end_time:String?=null,
+    val start_time: String? = null,
+    val end_time: String? = null,
     var hourly: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,
 )

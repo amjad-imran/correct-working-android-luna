@@ -84,8 +84,6 @@ class SleepDashFragment :
         super.onViewCreated(view, savedInstanceState)
         initCalender()
         setRecycler()
-
-        //viewModel.getSleepData("2024-07-15", "2024-07-21")
     }
 
     private fun setRecycler() {
@@ -99,73 +97,6 @@ class SleepDashFragment :
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = multiSleepAdapter
         }
-
-    }
-
-    private fun setNudgesView(data: List<Nudges>?) {
-
-        if (data.isNullOrEmpty()) {
-            binding.nudgesSleep.gone()
-            return
-        } else {
-            binding.nudgesSleep.visible()
-        }
-
-        val fragments = ArrayList<OreoSleepBannerFragment>()
-        data.forEach {
-            fragments.add(OreoSleepBannerFragment.newInstance(it))
-        }
-
-        val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
-
-        binding.nudgesSleep.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 3
-            setPageTransformer(CompositePageTransformer().apply {
-                addTransformer(MarginPageTransformer(20))
-            })
-            adapter = sleepBannerAdapter
-        }
-    }
-
-    private fun initTempUi() {
-
-        binding.lytSleepTrends.lytSleepPerformance.graphPerformance.setDataSet(
-            arrayListOf(
-                20, 30, null, 50, 100, 70, null
-            ), 4
-        )
-
-        binding.lytSleepTrends.lytHourVsNeed.graphHourVsNeed.setDataSet(
-            arrayListOf(
-                Pair(60, 100),
-                Pair(null, null),
-                Pair(90, 100),
-                Pair(null, null),
-                Pair(120, 130),
-                Pair(150, 180),
-                Pair(180, 200),
-            ), 4
-        )
-        binding.lytSleepTrends.lytRestorativeSleep.graphRestorative.setDataSet(
-            arrayListOf(
-                Pair(60, 40),
-                Pair(80, 50),
-                Pair(90, 60),
-                Pair(100, 40),
-                Pair(120, 20),
-                Pair(150, 10),
-                Pair(180, 0),
-            ), 4
-        )
-
-
-        val data = viewModel.generateSleepTimeData()
-
-        binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
-            data, 4
-        )
     }
 
     private fun initCalender() {
@@ -302,42 +233,22 @@ class SleepDashFragment :
 
             //sleep performance
             binding.lytSleepTrends.lytSleepPerformance.graphPerformance.setDataSet(
-                arrayListOf(
-                    20, 30, null, 50, 100, 70, null
-                ), 4
+                it.sleepPerformance, it.selectedPosition
             )
 
             //Hour vs Need
             binding.lytSleepTrends.lytHourVsNeed.graphHourVsNeed.setDataSet(
-                arrayListOf(
-                    Pair(60, 100),
-                    Pair(null, null),
-                    Pair(90, 100),
-                    Pair(null, null),
-                    Pair(120, 130),
-                    Pair(150, 180),
-                    Pair(180, 200),
-                ), 4
+                it.hourVsNeed, it.selectedPosition
             )
 
             //Restorative Sleep
             binding.lytSleepTrends.lytRestorativeSleep.graphRestorative.setDataSet(
-                arrayListOf(
-                    Pair(60, 40),
-                    Pair(80, 50),
-                    Pair(90, 60),
-                    Pair(100, 40),
-                    Pair(120, 20),
-                    Pair(150, 10),
-                    Pair(180, 0),
-                ), 4
+                it.restorative, it.selectedPosition
             )
 
-
             //Sleep Time
-            val data = viewModel.generateSleepTimeData()
             binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
-                data, 4
+                it.sleepTime, it.selectedPosition
             )
 
         }
@@ -582,6 +493,33 @@ class SleepDashFragment :
         )
         nightTimeMovementGraph.invalidate()
 
+    }
+
+    private fun setNudgesView(data: List<Nudges>?) {
+
+        if (data.isNullOrEmpty()) {
+            binding.nudgesSleep.gone()
+            return
+        } else {
+            binding.nudgesSleep.visible()
+        }
+
+        val fragments = ArrayList<OreoSleepBannerFragment>()
+        data.forEach {
+            fragments.add(OreoSleepBannerFragment.newInstance(it))
+        }
+
+        val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+
+        binding.nudgesSleep.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(20))
+            })
+            adapter = sleepBannerAdapter
+        }
     }
 
 
