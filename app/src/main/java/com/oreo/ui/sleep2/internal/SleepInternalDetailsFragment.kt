@@ -10,19 +10,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
-import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.OSleepTrendsDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
-import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.addHeaderLenient
+import kotlin.math.min
 
 @AndroidEntryPoint
 class SleepInternalDetailsFragment :
@@ -56,7 +55,8 @@ class SleepInternalDetailsFragment :
         viewModel.updateTitle()
         setGraphPagerView()
         setRecycler()
-        showTopContent()
+//        showTopContent()
+        viewModel.getTrendsInternalDetailsData()
     }
 
     private fun showTopContent() {
@@ -67,30 +67,71 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
-        val data=viewModel.trendsDummyData()
+        val data = viewModel.pageData
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
-                val dayDate:String = when (viewModel.selectedPeriod.value) {
-                    InternalSelectedPeriod.DAY -> data.dayDate
+                /*val dayDate: String = when (viewModel.selectedPeriod.value) {
+                    InternalSelectedPeriod.DAY -> data.dayDate.toString()
                     InternalSelectedPeriod.WEEK -> {
                         "23 April - 30 May, 2024"
                     }
+
                     else -> {
                         "July  2024"
                     }
-                }
-                binding.lytTopView.lytTopMultipleView.tvDateTime.text=dayDate
+                }*/
+                binding.lytTopView.lytTopMultipleView.tvDateTime.text = data.dayDate
                 binding.lytTopView.lytTopMultipleView.lytContentView.apply {
-                    lytNeed.tvHour.text = "8"
-                    lytNeed.tvMin.text = "28"
-                    lytNeed.lytTrendsHighlight.tvRangeValue.text = "5%"
-                    lytNeed.tvDesc.text = "avg hours"
+
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                        data.dspValue2?: 0
+                    )
+                    if (hour>0){
+                        lytNeed.tvHour.visible()
+                        lytNeed.tvUnitHr.visible()
+                    }
+                    else{
+                        lytNeed.tvUnitHr.gone()
+                        lytNeed.tvHour.gone()
+                    }
+                    lytNeed.tvHour.text = hour.toString()
+                    if (minute >0){
+                        lytNeed.tvMin.visible()
+                        lytNeed.tvUnitMin.visible()
+                    }
+                    else{
+                        lytNeed.tvMin.gone()
+                        lytNeed.tvUnitMin.gone()
+                    }
+                    lytNeed.tvMin.text = minute.toString()
+                    lytNeed.lytTrendsHighlight.tvRangeValue.text = "5%"//todo will discuss
+                    lytNeed.tvDesc.text = getString(R.string.text_avg_need)
                 }
                 binding.lytTopView.lytTopMultipleView.lytContentView.apply {
-                    lytHours.tvHour.text = "3"
-                    lytHours.tvMin.text = "28"
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                        data.dspValue?: 0
+                    )
+                    if (hour>0){
+                        lytHours.tvHour.visible()
+                        lytHours.tvUnitHr.visible()
+                    }
+                    else{
+                        lytHours.tvUnitHr.gone()
+                        lytHours.tvHour.gone()
+                    }
+                    lytHours.tvHour.text = hour.toString()
+                    if (minute >0){
+                        lytHours.tvMin.visible()
+                        lytHours.tvUnitMin.visible()
+                    }
+                    else{
+                        lytHours.tvMin.gone()
+                        lytHours.tvUnitMin.gone()
+                    }
+                    lytHours.tvHour.text = hour.toString()
+                    lytHours.tvMin.text = minute.toString()
                     lytHours.lytTrendsHighlight.tvRangeValue.text = "15%"
-                    lytHours.tvDesc.text = "avg need"
+                    lytHours.tvDesc.text = getString(R.string.text_avg_hours)
                 }
             } else {
                 if (data.trendType == SleepInternalLaunchState.RESTFULNESS || data.trendType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
@@ -99,7 +140,7 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopSingleView.lytTopHourView.root.gone()
 
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
-                        data.dspValue
+                        data.dspValue.toString()
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
                         viewModel.getPostFixAbr(data.trendType)
 
@@ -107,41 +148,52 @@ class SleepInternalDetailsFragment :
                     //show hour/minute post fix
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.root.gone()
                     binding.lytTopView.lytTopSingleView.lytTopHourView.root.visible()
-                    val hour = 8
-                    val min = 19
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                        data.dspValue?: 0
+                    )
                     binding.lytTopView.lytTopSingleView.lytTopHourView.apply {
-                        if (hour > 0 && min > 0) {
+                        if (hour > 0) {
                             tvHour.visible()
                             tvUnitHr.visible()
-                            tvMin.visible()
-                            tvUnitMin.visible()
-                        } else if (hour <= 0 && min > 0) {
+                        }
+                        else{
                             tvHour.gone()
-                            tvMin.gone()
+                            tvUnitHr.gone()
+                        }
+                        tvHour.text=hour.toString()
+
+                        if ( minute > 0) {
                             tvMin.visible()
                             tvUnitMin.visible()
                         }
-                        tvHour.text = hour.toString()
-                        tvMin.text = min.toString()
+                        else{
+                            tvMin.gone()
+                            tvUnitMin.gone()
+                        }
+                        tvMin.text = minute.toString()
                     }
                 }
 
                 binding.lytTopView.lytTopSingleView.apply {
-                    val dayDate:String = when (viewModel.selectedPeriod.value) {
-                        InternalSelectedPeriod.DAY -> data.dayDate
+                    /*val dayDate: String = when (viewModel.selectedPeriod.value) {
+                        InternalSelectedPeriod.DAY -> data.dayDate.toString()
                         InternalSelectedPeriod.WEEK -> {
                             "23 April - 30 May, 2024"
                         }
+
                         else -> {
                             "July  2024"
                         }
-                    }
-                    tvDateTime.text = dayDate
+                    }*/
+                    tvDateTime.text = data.dayDate
                     tvDesc.text = data.description
                     if (data.isShowHighlight) {
                         val colors = viewModel.getHighlightBackType(0)
                         lytHighlightTrends.main.setBackgroundResource(colors.first)
-                        val textColor= ContextCompat.getColor(binding.lytTopView.lytTopSingleView.tvDesc.context,colors.second)
+                        val textColor = ContextCompat.getColor(
+                            binding.lytTopView.lytTopSingleView.tvDesc.context,
+                            colors.second
+                        )
                         lytHighlightTrends.tvRangeValue.setTextColor(textColor)
                         val icons = viewModel.returnTrendsArrow(data.trendType)
                         if (icons == 0) {
@@ -160,8 +212,7 @@ class SleepInternalDetailsFragment :
                     }
                 }
             }
-        }
-        else{
+        } else {
             defaultDataView()
         }
     }
@@ -299,6 +350,41 @@ class SleepInternalDetailsFragment :
             binding.ivTrendsIcon.setImageResource(it.second)
             showTopContent()
         }
+
+        viewModel.trendsInternalData.observe(this) {
+            if (it != null) {
+                val parseData = viewModel.parsePageData(it)
+                viewModel.pageData = parseData
+                showTopContent()
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
+
 
     }
 

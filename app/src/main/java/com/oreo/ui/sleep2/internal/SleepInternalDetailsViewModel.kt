@@ -6,16 +6,23 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OSleepTrendsDataModel
+import com.oreo.data.model.TrendsValues
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SleepInternalDetailsViewModel @Inject constructor(
-    private val resourcesProvider: ResourcesProvider
+    private val resourcesProvider: ResourcesProvider,
+    private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
     lateinit var selectedLaunchMode: SleepInternalLaunchState
+    var startDate: String = ""
+    var endDate: String = ""
+    private var filterType: String = ""
 
     private val _selectedPeriod =
         MutableLiveData<InternalSelectedPeriod>(InternalSelectedPeriod.DAY)
@@ -28,6 +35,55 @@ class SleepInternalDetailsViewModel @Inject constructor(
     private val _titleUpdate =
         MutableLiveData<Pair<String, Int>>()
     val titleUpdate: LiveData<Pair<String, Int>> = _titleUpdate
+
+    private val _trendsInternalData = MutableLiveData<OSleepInternalTrendsDataModel>()
+    val trendsInternalData: LiveData<OSleepInternalTrendsDataModel>
+        get() = _trendsInternalData
+
+    var pageData:OSleepTrendsDataModel?=null
+
+    fun getTrendsInternalDetailsData() {
+        /*viewModelScope.launch {
+            userActivityRepository.getSleepInternalTrendsPagesData(
+                startDate, endDate, filterType.lowercase()
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getTrendsInternalDetailsData()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _trendsInternalData.postValue(it)
+                        }
+                    }
+                }
+            }
+        }*/
+
+        _trendsInternalData.postValue(trendsListDummyData())
+
+    }
 
 
     private fun getTitle(): Pair<String, Int> {
@@ -160,11 +216,40 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
     }
 
+    fun trendsListDummyData(): OSleepInternalTrendsDataModel {
+        val tempListData = ArrayList<TrendsValues>()
+        tempListData.add(
+            TrendsValues(date = "Monday 23 July, 2024", value = 20, nudge = "Nudge 1")
+        )
+        tempListData.add(
+            TrendsValues(date = "Tuesday 24 July, 2024", value = 30, nudge = "Nudge 2")
+        )
+        tempListData.add(
+            TrendsValues(date = "Wednesday 25 July, 2024", value = 10, nudge = "Nudge 3")
+        )
+        tempListData.add(
+            TrendsValues(date = "Thursday 26 July, 2024", value = 5, nudge = "Nudge 4")
+        )
+        tempListData.add(
+            TrendsValues(date = "Friday 27 July, 2024", value = 15, nudge = "Nudge 5")
+        )
+        tempListData.add(
+            TrendsValues(date = "Saturday 28 July, 2024", value = 25, nudge = "Nudge 6")
+        )
+        tempListData.add(
+            TrendsValues(date = "Sunday 29 July, 2024", value = 100, value2 = 200, nudge = "Nudge 7")
+        )
+        val trendsData = OSleepInternalTrendsDataModel()
+        trendsData.values = tempListData
+        return trendsData
+
+    }
+
     fun trendsDummyData(): OSleepTrendsDataModel? {
         return OSleepTrendsDataModel(
             trendType = selectedLaunchMode,
             dayDate = "Monday  30 May, 2024",
-            dspValue = "40",
+            dspValue = 40,
             isShowOptimal = false,
             isShowHighlight = true,
             description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
@@ -218,6 +303,17 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
         return icon
 
+    }
+
+    fun parsePageData(it: OSleepInternalTrendsDataModel): OSleepTrendsDataModel {
+        val childData = OSleepTrendsDataModel()
+        val data = it.values?.lastOrNull()
+
+        childData.trendType = selectedLaunchMode
+        childData.dayDate = data?.date
+        childData.dspValue = data?.value
+        childData.dspValue2=data?.value2
+        return childData
     }
 
 
