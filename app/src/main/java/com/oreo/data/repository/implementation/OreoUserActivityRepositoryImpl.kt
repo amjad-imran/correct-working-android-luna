@@ -1896,4 +1896,11 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, filterType)
         }
     }
+
+    override suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/addsleep"
+            remoteDataSource.addSleep(url, request)
+        }
+    }
 }

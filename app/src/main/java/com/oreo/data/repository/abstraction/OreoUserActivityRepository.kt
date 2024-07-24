@@ -125,4 +125,7 @@ interface OreoUserActivityRepository {
         filterType: String
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
 
+    suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
+
+
 }

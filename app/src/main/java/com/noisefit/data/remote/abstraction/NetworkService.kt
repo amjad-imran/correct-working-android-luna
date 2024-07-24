@@ -419,6 +419,11 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<ChatMessagesResponse>
 
+    @POST
+    suspend fun addSleep(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponseData<Any>
+
     /**
      * ===================================
      */
@@ -490,6 +495,7 @@ interface NetworkService {
     suspend fun updateCycleTrackerInfo(
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<Any>
+
 
     /**
      * ---------------------------------------------------------------------------------

@@ -289,7 +289,8 @@ class SleepDashFragment :
 
     override fun initListener() {
         binding.toolbar.viewBackCalendar.setOnClickListener {
-            navigate(R.id.healthMonitorInternal)
+//            navigate(R.id.healthMonitorInternal)
+            navigate(R.id.fragmentAddSleep)
         }
         binding.lytScore.ivInfo.setOnClickListener {
             navigate(R.id.sleepPlannerFragment)

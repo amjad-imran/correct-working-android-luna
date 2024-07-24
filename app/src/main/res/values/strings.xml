@@ -1322,6 +1322,7 @@
     <string name="text_hrv">HRV</string>
     <string name="text_avg_need">avg need</string>
     <string name="text_avg_hours">avg hours</string>
+    <string name="text_add_sleep">Add sleep</string>
 
 
 </resources>
