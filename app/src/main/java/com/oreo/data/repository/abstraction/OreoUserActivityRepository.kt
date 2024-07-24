@@ -27,6 +27,7 @@ import com.oreo.data.model.TestUserData
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDay
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
 
@@ -35,17 +36,19 @@ interface OreoUserActivityRepository {
     suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>>
     suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>>
 
-    //    suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
     suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>>
 
-    //    suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
     suspend fun getUserHealthData(
         startDate: String? = null,
         endDate: String? = null
     ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>>
 
-//    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
-//    suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
+
+    suspend fun getUserHealthSleepData(
+        startDate: String? = null,
+        endDate: String? = null
+    ): Flow<Resource<BaseApiResponse<List<SleepDay>>>>
+
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 

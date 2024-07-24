@@ -3,22 +3,23 @@ package com.oreo.ui.sleep2
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.JsonParser
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.PeriodCycleHistory
+import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.sleep.MultiSleep
 import com.oreo.data.model.sleep.SleepDay
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.sleep.SleepTimeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,20 +27,22 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.math.abs
-import kotlin.math.min
 
 @HiltViewModel
-class SleepDashViewModel @Inject constructor() : BaseViewModel() {
+class SleepDashViewModel @Inject constructor(
+    private val userActivityRepository: OreoUserActivityRepository
+) : BaseViewModel() {
+
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
     var trendsData = MutableLiveData<String>()
+    val selectedMultiSleep = MutableLiveData<MultiSleep>()
 
 
     /**
@@ -51,19 +54,59 @@ class SleepDashViewModel @Inject constructor() : BaseViewModel() {
     val sleepDayData: LiveData<SleepDay?> get() = _sleepDayData
 
     fun getSleepData(startDate: String, endDate: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            userActivityRepository.getUserHealthSleepData(
+                startDate, endDate
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-            val response =
-                "[ { \"date\": \"2024-07-13\" }, { \"date\": \"2024-07-12\", \"sleep_score\": { \"value\": 92, \"text\": \"Optimal\", \"status\": \"optimal\" }, \"sleep_duration\": { \"value\": 19710, \"text\": \"Less than 7 hr\", \"status\": \"warning\" }, \"rem_sleep\": { \"value\": 2460, \"text\": \"\", \"status\": \"\" }, \"deep_sleep\": { \"value\": 5790, \"text\": \"Less than 2956.5\", \"status\": \"warning\" }, \"latency\": { \"value\": 3, \"text\": \"Less than 5 min\", \"status\": \"warning\" }, \"efficiency\": { \"value\": 94, \"text\": \"Above 85%\", \"status\": \"optimal\" }, \"restfulness\": { \"value\": 3, \"text\": \"Greater than 3 times\", \"status\": \"warning\" }, \"master_sleep_start\": \"2024-07-12 00:17:00\", \"master_sleep_end\": \"2024-07-12 06:05:00\", \"timing\": { \"value\": \"\", \"text\": \"Greater than 3am\", \"status\": \"warning\" }, \"nudges\": [ {} ], \"naps\": [ {} ], \"sleep_child\": [ { \"start_time\": \"2024-07-12 00:17:00\", \"end_time\": \"2024-07-12 06:05:00\", \"night_time_movement\": [ { \"duration\": 1800, \"end_time\": \"2024-07-12 00:47:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 00:17:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 00:53:00\", \"movement_type\": \"INTENSE\", \"start_time\": \"2024-07-12 00:47:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 00:59:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-12 00:53:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 01:05:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 00:59:00\" }, { \"duration\": 720, \"end_time\": \"2024-07-12 01:17:00\", \"movement_type\": \"INTENSE\", \"start_time\": \"2024-07-12 01:05:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 01:23:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-12 01:17:00\" }, { \"duration\": 720, \"end_time\": \"2024-07-12 01:35:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 01:23:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 01:41:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-12 01:35:00\" }, { \"duration\": 5040, \"end_time\": \"2024-07-12 03:05:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 01:41:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 03:11:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-12 03:05:00\" }, { \"duration\": 6480, \"end_time\": \"2024-07-12 04:59:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 03:11:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:05:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-12 04:59:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:11:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-12 05:05:00\" }, { \"duration\": 1080, \"end_time\": \"2024-07-12 05:29:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 05:11:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:35:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-12 05:29:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:41:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 05:35:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:47:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-12 05:41:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:53:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-12 05:47:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 05:59:00\", \"movement_type\": \"INTENSE\", \"start_time\": \"2024-07-12 05:53:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 06:05:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-12 05:59:00\" } ], \"hourly\": [ { \"duration\": 180, \"end_time\": \"2024-07-12 00:20:00\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-12 00:17:00\" }, { \"duration\": 630, \"end_time\": \"2024-07-12 00:30:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 00:20:00\" }, { \"duration\": 180, \"end_time\": \"2024-07-12 00:33:30\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-12 00:30:30\" }, { \"duration\": 1020, \"end_time\": \"2024-07-12 00:50:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 00:33:30\" }, { \"duration\": 300, \"end_time\": \"2024-07-12 00:55:30\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-12 00:50:30\" }, { \"duration\": 960, \"end_time\": \"2024-07-12 01:11:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 00:55:30\" }, { \"duration\": 480, \"end_time\": \"2024-07-12 01:19:30\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-12 01:11:30\" }, { \"duration\": 540, \"end_time\": \"2024-07-12 01:28:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 01:19:30\" }, { \"duration\": 720, \"end_time\": \"2024-07-12 01:40:30\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-12 01:28:30\" }, { \"duration\": 210, \"end_time\": \"2024-07-12 01:44:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 01:40:30\" }, { \"duration\": 3330, \"end_time\": \"2024-07-12 02:39:30\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-12 01:44:00\" }, { \"duration\": 810, \"end_time\": \"2024-07-12 02:53:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 02:39:30\" }, { \"duration\": 810, \"end_time\": \"2024-07-12 03:06:30\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-12 02:53:00\" }, { \"duration\": 660, \"end_time\": \"2024-07-12 03:17:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 03:06:30\" }, { \"duration\": 360, \"end_time\": \"2024-07-12 03:23:30\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-12 03:17:30\" }, { \"duration\": 690, \"end_time\": \"2024-07-12 03:35:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 03:23:30\" }, { \"duration\": 1560, \"end_time\": \"2024-07-12 04:01:00\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-12 03:35:00\" }, { \"duration\": 900, \"end_time\": \"2024-07-12 04:16:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 04:01:00\" }, { \"duration\": 1380, \"end_time\": \"2024-07-12 04:39:00\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-12 04:16:00\" }, { \"duration\": 4500, \"end_time\": \"2024-07-12 05:54:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 04:39:00\" }, { \"duration\": 90, \"end_time\": \"2024-07-12 05:55:30\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-12 05:54:00\" }, { \"duration\": 540, \"end_time\": \"2024-07-12 06:04:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-12 05:55:30\" }, { \"duration\": 30, \"end_time\": \"2024-07-12 06:05:00\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-12 06:04:30\" } ] } ] }, { \"date\": \"2024-07-11\", \"sleep_score\": { \"value\": 92, \"text\": \"Optimal\", \"status\": \"optimal\" }, \"sleep_duration\": { \"value\": 14370, \"text\": \"Less than 7 hr\", \"status\": \"warning\" }, \"rem_sleep\": { \"value\": 1950, \"text\": \"\", \"status\": \"\" }, \"deep_sleep\": { \"value\": 3150, \"text\": \"Less than 2155.5\", \"status\": \"warning\" }, \"latency\": { \"value\": 7, \"text\": \"Within 5 min to 20 min\", \"status\": \"optimal\" }, \"efficiency\": { \"value\": 96, \"text\": \"Above 85%\", \"status\": \"optimal\" }, \"restfulness\": { \"value\": 2, \"text\": \"Within 0-3 times\", \"status\": \"optimal\" }, \"master_sleep_start\": \"2024-07-11 01:37:00\", \"master_sleep_end\": \"2024-07-11 05:44:00\", \"timing\": { \"value\": \"\", \"text\": \"Greater than 3am\", \"status\": \"warning\" }, \"nudges\": [ {} ], \"naps\": [ {} ], \"sleep_child\": [ { \"start_time\": \"2024-07-11 01:37:00\", \"end_time\": \"2024-07-11 05:44:00\", \"night_time_movement\": [ { \"duration\": 360, \"end_time\": \"2024-07-11 01:43:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-11 01:37:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 01:49:00\", \"movement_type\": \"LOW\", \"start_time\": \"2024-07-11 01:43:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 01:55:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-11 01:49:00\" }, { \"duration\": 2880, \"end_time\": \"2024-07-11 02:43:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-11 01:55:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 02:49:00\", \"movement_type\": \"INTENSE\", \"start_time\": \"2024-07-11 02:43:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 02:55:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-11 02:49:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 03:01:00\", \"movement_type\": \"INTENSE\", \"start_time\": \"2024-07-11 02:55:00\" }, { \"duration\": 6120, \"end_time\": \"2024-07-11 04:43:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-11 03:01:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 04:49:00\", \"movement_type\": \"MEDIUM\", \"start_time\": \"2024-07-11 04:43:00\" }, { \"duration\": 3240, \"end_time\": \"2024-07-11 05:43:00\", \"movement_type\": \"NO_MOVEMENT\", \"start_time\": \"2024-07-11 04:49:00\" } ], \"hourly\": [ { \"duration\": 420, \"end_time\": \"2024-07-11 01:44:00\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-11 01:37:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 01:50:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 01:44:00\" }, { \"duration\": 570, \"end_time\": \"2024-07-11 01:59:30\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-11 01:50:00\" }, { \"duration\": 180, \"end_time\": \"2024-07-11 02:02:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 01:59:30\" }, { \"duration\": 1830, \"end_time\": \"2024-07-11 02:33:00\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-11 02:02:30\" }, { \"duration\": 1020, \"end_time\": \"2024-07-11 02:50:00\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-11 02:33:00\" }, { \"duration\": 420, \"end_time\": \"2024-07-11 02:57:00\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 02:50:00\" }, { \"duration\": 360, \"end_time\": \"2024-07-11 03:03:00\", \"sleep_type\": \"rem\", \"start_time\": \"2024-07-11 02:57:00\" }, { \"duration\": 450, \"end_time\": \"2024-07-11 03:10:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 03:03:00\" }, { \"duration\": 180, \"end_time\": \"2024-07-11 03:13:30\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-11 03:10:30\" }, { \"duration\": 600, \"end_time\": \"2024-07-11 03:23:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 03:13:30\" }, { \"duration\": 1140, \"end_time\": \"2024-07-11 03:42:30\", \"sleep_type\": \"deep\", \"start_time\": \"2024-07-11 03:23:30\" }, { \"duration\": 7260, \"end_time\": \"2024-07-11 05:43:30\", \"sleep_type\": \"light\", \"start_time\": \"2024-07-11 03:42:30\" }, { \"duration\": 30, \"end_time\": \"2024-07-11 05:44:00\", \"sleep_type\": \"awake\", \"start_time\": \"2024-07-11 05:43:30\" } ] } ] } ]"
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-            val responseParse = Gson().fromJson<List<SleepDay>>(response)
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getSleepData(startDate, endDate)
+                                    }
 
-            responseParse.forEach {
-                val date = LocalDate.parse(it.date)
-                sleepData[date] = it
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let { res ->
+
+                            res.forEach {
+                                val date = LocalDate.parse(it.date)
+                                sleepData[date] = it
+                            }
+
+                            _sleepDayData.postValue(sleepData[selectedDate.value])
+
+                            trendsData.postValue("")
+
+
+                            var notifyDate = LocalDate.parse(startDate)
+                            val endDateNotify = LocalDate.parse(endDate)
+                            while (notifyDate < endDateNotify) {
+                                notifyDateChange.value = Event(notifyDate)
+                                notifyDate = notifyDate.plusDays(1)
+                            }
+
+                        }
+                    }
+                }
             }
-
-            _sleepDayData.postValue(sleepData[selectedDate.value])
         }
     }
 
@@ -296,5 +339,109 @@ class SleepDashViewModel @Inject constructor() : BaseViewModel() {
         return color
     }
 
+    fun generateSleepContributorData(
+        data: SleepDay?,
+        showAll: Boolean = false
+    ): List<OHMDataModel> {
+        val listData = ArrayList<OHMDataModel>()
 
+        if (data?.sleepScore?.value == null) {
+            listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
+            listData.add(OHMDataModel(SleepContributor.REM_SLEEP))
+            listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP))
+            listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
+            if (showAll) {
+                listData.add(OHMDataModel(SleepContributor.LATENCY))
+                listData.add(OHMDataModel(SleepContributor.RESTFULNESS))
+                listData.add(OHMDataModel(SleepContributor.TIMING))
+            }
+
+            return listData
+        }
+
+
+
+        listData.add(
+            OHMDataModel(
+                SleepContributor.SLEEP_DURATION, valueTime = data.sleepDuration?.value,
+                status = data.sleepDuration?.status, text = data.sleepDuration?.text
+            )
+        )
+
+        listData.add(
+            OHMDataModel(
+                SleepContributor.REM_SLEEP, valueTime = data.remSleep?.value,
+                status = data.remSleep?.status, text = data.remSleep?.text
+            )
+        )
+
+        listData.add(
+            OHMDataModel(
+                SleepContributor.DEEP_SLEEP, valueTime = data.deepSleep?.value,
+                status = data.deepSleep?.status, text = data.deepSleep?.text
+            )
+        )
+
+        listData.add(
+            OHMDataModel(
+                SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
+                status = data.efficiency?.status, text = data.efficiency?.text
+            )
+        )
+
+        if (showAll) {
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.LATENCY, valueTime = data.latency?.value,
+                    status = data.latency?.status, text = data.latency?.text
+                )
+            )
+
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.RESTFULNESS,
+                    value = "${data.restfulness?.value}",
+                    unit = "times",
+                    status = data.restfulness?.status,
+                    text = data.restfulness?.text
+                )
+            )
+
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.TIMING, value = "${data.timing?.value}", unit = "",
+                    status = data.timing?.status, text = data.timing?.text
+                )
+            )
+
+        }
+        return listData
+    }
+
+    fun getSelectedDateData(): SleepDay? {
+        return sleepData[selectedDate.value]
+    }
+
+    fun generateMultiSleepData(sleepChild: List<MultiSleep>?): List<String>? {
+        if (sleepChild.isNullOrEmpty()) return null
+
+        val sleeps = ArrayList<String>()
+
+        sleepChild.forEach {
+            sleeps.add("")
+        }
+        return sleeps
+    }
+
+
+}
+
+enum class SleepContributor(val displayName: String, val icon: Int) {
+    SLEEP_DURATION("Sleep duration", R.drawable.ic_sleep_duration),
+    REM_SLEEP("REM sleep", R.drawable.ic_sleep_rem),
+    DEEP_SLEEP("Deep sleep", R.drawable.ic_sleep_deep),
+    EFFICIENCY("Efficiency", R.drawable.ic_sleep_efficiency),
+    LATENCY("Latency", R.drawable.ic_sleep_latency),
+    RESTFULNESS("Restfulness", R.drawable.ic_sleep_restfulness),
+    TIMING("Timing", R.drawable.ic_sleep_timing)
 }

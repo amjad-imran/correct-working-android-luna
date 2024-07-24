@@ -15,6 +15,7 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
@@ -46,8 +47,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
-import java.time.temporal.WeekFields
-import java.util.Locale
 import javax.inject.Inject
 
 
@@ -100,27 +99,7 @@ class SleepDashFragment :
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = multiSleepAdapter
         }
-        mAdapter.setData(getHealthMonitorData())
 
-        multiSleepAdapter.setData(arrayListOf("", "", ""))
-    }
-
-    fun getHealthMonitorData(): ArrayList<OHMDataModel> {
-        val listData = ArrayList<OHMDataModel>()
-        listData.add(
-            OHMDataModel(
-                R.drawable.ic_respiratory_rate,
-                "Respiratory rate",
-                value = "98.4",
-                unit = "rpm",
-                rangeValue = "near 11.9-13.8"
-            )
-        )
-        listData.add(OHMDataModel(R.drawable.ic_resting_hr, "Resting heart rate"))
-        listData.add(OHMDataModel(R.drawable.ic_blood_oxygen, "Blood oxygen"))
-        listData.add(OHMDataModel(R.drawable.ic_hrv, "HRV"))
-        listData.add(OHMDataModel(R.drawable.ic_skin_tempreature, "Skin temperature"))
-        return listData
     }
 
     private fun setNudgesView(data: List<Nudges>?) {
@@ -263,6 +242,24 @@ class SleepDashFragment :
 
     override fun initListener() {
 
+        binding.lytSleepContributor.ivArrowOpen.setOnClickListener {
+            val data = viewModel.getSelectedDateData()
+            if (data != null) {
+                mAdapter.setData(viewModel.generateSleepContributorData(data, true))
+                binding.lytSleepContributor.ivArrowOpen.gone()
+                binding.lytSleepContributor.ivClose.visible()
+            }
+        }
+
+        binding.lytSleepContributor.ivClose.setOnClickListener {
+            val data = viewModel.getSelectedDateData()
+            if (data != null) {
+                mAdapter.setData(viewModel.generateSleepContributorData(data))
+                binding.lytSleepContributor.ivArrowOpen.visible()
+                binding.lytSleepContributor.ivClose.gone()
+            }
+        }
+
         binding.vCalendar.weekScrollListener = { weekDays ->
             viewModel.onWeekScrolled(weekDays.days.get(0).date)
         }
@@ -295,6 +292,11 @@ class SleepDashFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.selectedMultiSleep.observe(this) {
+            showNightTimeMovementGraph(it.night_time_movement, it.start_time, it.end_time)
+            initSleepAnalysisGraph(it.hourly)
+        }
 
         viewModel.trendsData.observe(this) {
 
@@ -403,8 +405,12 @@ class SleepDashFragment :
                 textHour.visible()
                 textMin.visible()
 
-                tvHour.text = ""
-                tvMin.text = ""
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                    data.sleepDuration?.value ?: 0
+                )
+
+                tvHour.text = "$hour"
+                tvMin.text = "$minute"
 
                 tvHour.setTextGradient(
                     requireActivity().getColor(R.color.white),
@@ -429,9 +435,25 @@ class SleepDashFragment :
 
         binding.lytScore.circularProgressBar.setProgress(data?.sleepScore?.value ?: 0)
 
-        setNudgesView(data?.nudges)
+        //setNudgesView(data?.nudges)
 
-        setNapData(data?.naps, data?.date ?: "")
+        //setNapData(data?.naps, data?.date ?: "")
+
+
+        mAdapter.setData(viewModel.generateSleepContributorData(data))
+
+
+        val multiSleep = viewModel.generateMultiSleepData(data?.sleepChild)
+        if (multiSleep == null || multiSleep.size == 1) {
+            binding.rvSleeps.gone()
+        } else {
+            binding.rvSleeps.visible()
+            multiSleepAdapter.setData(multiSleep)
+        }
+
+        data?.sleepChild?.firstOrNull()?.let {
+            viewModel.selectedMultiSleep.postValue(it)
+        }
 
     }
 

@@ -13,7 +13,7 @@ class OHMInternalViewModel @Inject constructor() : BaseViewModel() {
 
     fun getHealthMonitorData(): ArrayList<OHMDataModel> {
         val listData = ArrayList<OHMDataModel>()
-        listData.add(
+       /* listData.add(
             OHMDataModel(
                 R.drawable.ic_respiratory_rate,
                 "Respiratory rate",
@@ -25,7 +25,7 @@ class OHMInternalViewModel @Inject constructor() : BaseViewModel() {
         listData.add(OHMDataModel(R.drawable.ic_resting_hr, "Resting heart rate"))
         listData.add(OHMDataModel(R.drawable.ic_blood_oxygen, "Blood oxygen"))
         listData.add(OHMDataModel(R.drawable.ic_hrv, "HRV"))
-        listData.add(OHMDataModel(R.drawable.ic_skin_tempreature, "Skin temperature"))
+        listData.add(OHMDataModel(R.drawable.ic_skin_tempreature, "Skin temperature"))*/
         return listData
     }
 

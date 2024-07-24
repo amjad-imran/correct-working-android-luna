@@ -56,7 +56,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             SleepInternalLaunchState.EFFICIENCY -> Pair(
                 resourcesProvider.getString(R.string.text_efficiency),
-                R.drawable.ic_sleep_efficieny
+                R.drawable.ic_sleep_efficiency
             )
 
             SleepInternalLaunchState.REM_SLEEP -> Pair(
@@ -193,17 +193,17 @@ class SleepInternalDetailsViewModel @Inject constructor(
         val textColor: Int
         when (type) {
             0 -> {
-                background = R.drawable.back_hm_range
+                background = R.drawable.back_hm_optimal
                 textColor = R.color.edit_text_color
             }
 
             1 -> {
-                background = R.drawable.back_hm_warning_range
+                background = R.drawable.back_hm_fair
                 textColor = R.color.color_trends_warning
             }
 
             else -> {
-                background = R.drawable.back_hm_down_range
+                background = R.drawable.back_hm_warning
                 textColor = R.color.oreo_contributor_warning
             }
         }

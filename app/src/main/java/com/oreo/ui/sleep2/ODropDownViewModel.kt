@@ -15,7 +15,7 @@ class ODropDownViewModel @Inject constructor(
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     fun fetchDropDownData(): Triple<ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
         val sleepData = ArrayList<ODropDownDataModel>()
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_efficieny, "Efficiency"))
+        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
         sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
         sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
         sleepData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
@@ -23,7 +23,7 @@ class ODropDownViewModel @Inject constructor(
         sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
 
         val activityData = ArrayList<ODropDownDataModel>()
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficieny, "Efficiency"))
+        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
         activityData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
@@ -31,7 +31,7 @@ class ODropDownViewModel @Inject constructor(
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
 
         val readinessData = ArrayList<ODropDownDataModel>()
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_efficieny, "Efficiency"))
+        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
         readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
         readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
         readinessData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
@@ -67,7 +67,7 @@ class ODropDownViewModel @Inject constructor(
 
             SleepInternalLaunchState.EFFICIENCY -> Pair(
                 resourcesProvider.getString(R.string.text_efficiency),
-                R.drawable.ic_sleep_efficieny
+                R.drawable.ic_sleep_efficiency
             )
 
             SleepInternalLaunchState.REM_SLEEP -> Pair(

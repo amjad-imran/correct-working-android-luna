@@ -3,53 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvValue"
-            style="@style/H3"
+        <include
+            android:id="@+id/lytHourMin"
+            layout="@layout/layout_hour_min_sleep_contri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@id/tvUnit"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="14.3" />
-
-        <TextView
-            android:id="@+id/tvUnit"
-            style="@style/H6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white_60"
-            app:layout_constraintBottom_toBottomOf="@id/tvValue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="rpm" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <View
-            android:id="@+id/view1"
-            android:layout_width="110dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/back_hm_range"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvValue" />
+            android:id="@+id/viewTextBack"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="-4dp"
+            android:layout_marginBottom="-2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRangeValue"
+            app:layout_constraintEnd_toEndOf="@+id/tvRangeValue"
+            app:layout_constraintStart_toStartOf="@+id/tvRangeValue"
+            app:layout_constraintTop_toTopOf="@+id/tvRangeValue"
+            tools:background="@drawable/back_hm_optimal" />
 
         <TextView
-            style="@style/Small"
+            android:id="@+id/tvRangeValue"
+            style="@style/S12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_hm_tick"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="4dp"
             android:drawablePadding="4dp"
-            android:textColor="#29cc74"
             android:padding="4dp"
-            android:id="@+id/tvRangeValue"
-            app:layout_constraintBottom_toBottomOf="@id/view1"
-            app:layout_constraintEnd_toEndOf="@id/view1"
-            app:layout_constraintStart_toStartOf="@id/view1"
-            app:layout_constraintTop_toTopOf="@id/view1"
-            tools:text="wihtin 56 - 58"
-            tools:ignore="UseCompatTextViewDrawableXml" />
+            android:textColor="#29cc74"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytHourMin"
+            tools:drawableStart="@drawable/ic_hm_tick"
+            tools:text="wihtin 56 -sdfsdfsdf 58" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
