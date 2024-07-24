@@ -66,8 +66,8 @@ class SleepDashFragment :
 
     private val multiSleepAdapter: MultiSleepAdapter by lazy {
         MultiSleepAdapter(object : MultiSleepAction {
-            override fun onSleepClicked() {
-
+            override fun onSleepClicked(position: Int) {
+                viewModel.updateSelectedMultiSleep(position)
             }
         })
     }
@@ -294,8 +294,8 @@ class SleepDashFragment :
     override fun subscribeObservers() {
 
         viewModel.selectedMultiSleep.observe(this) {
-            showNightTimeMovementGraph(it.night_time_movement, it.start_time, it.end_time)
-            initSleepAnalysisGraph(it.hourly)
+            showNightTimeMovementGraph(it?.night_time_movement, it?.start_time, it?.end_time)
+            initSleepAnalysisGraph(it?.hourly)
         }
 
         viewModel.trendsData.observe(this) {
@@ -439,8 +439,9 @@ class SleepDashFragment :
 
         //setNapData(data?.naps, data?.date ?: "")
 
-
         mAdapter.setData(viewModel.generateSleepContributorData(data))
+        binding.lytSleepContributor.ivArrowOpen.visible()
+        binding.lytSleepContributor.ivClose.gone()
 
 
         val multiSleep = viewModel.generateMultiSleepData(data?.sleepChild)
@@ -451,9 +452,7 @@ class SleepDashFragment :
             multiSleepAdapter.setData(multiSleep)
         }
 
-        data?.sleepChild?.firstOrNull()?.let {
-            viewModel.selectedMultiSleep.postValue(it)
-        }
+        viewModel.updateSelectedMultiSleep(0)
 
     }
 

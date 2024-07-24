@@ -29,6 +29,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -42,7 +43,7 @@ class SleepDashViewModel @Inject constructor(
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
     var trendsData = MutableLiveData<String>()
-    val selectedMultiSleep = MutableLiveData<MultiSleep>()
+    val selectedMultiSleep = MutableLiveData<MultiSleep?>()
 
 
     /**
@@ -98,7 +99,7 @@ class SleepDashViewModel @Inject constructor(
 
                             var notifyDate = LocalDate.parse(startDate)
                             val endDateNotify = LocalDate.parse(endDate)
-                            while (notifyDate < endDateNotify) {
+                            while (notifyDate <= endDateNotify) {
                                 notifyDateChange.value = Event(notifyDate)
                                 notifyDate = notifyDate.plusDays(1)
                             }
@@ -422,15 +423,47 @@ class SleepDashViewModel @Inject constructor(
         return sleepData[selectedDate.value]
     }
 
-    fun generateMultiSleepData(sleepChild: List<MultiSleep>?): List<String>? {
+    fun generateMultiSleepData(sleepChild: List<MultiSleep>?): List<MultiSleepDisplay>? {
         if (sleepChild.isNullOrEmpty()) return null
 
-        val sleeps = ArrayList<String>()
+        val sleeps = ArrayList<MultiSleepDisplay>()
+
+        val dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
 
         sleepChild.forEach {
-            sleeps.add("")
+            val start = LocalDateTime.parse(it.start_time, dateTimeFormat)
+            val end = LocalDateTime.parse(it.end_time, dateTimeFormat)
+
+            val duration = Duration.between(start, end)
+
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                duration.toMinutes().toInt()
+            )
+
+            val durationText = if (hour == 0) {
+                "${minute}min"
+            } else {
+                "${hour}hr ${minute}min"
+            }
+
+            sleeps.add(
+                MultiSleepDisplay(
+                    sleepStart = start.format(timeFormatter),
+                    sleepTime = durationText,
+                    score = "",
+                    scoreImpact = 1
+                )
+            )
         }
         return sleeps
+    }
+
+    fun updateSelectedMultiSleep(position: Int) {
+        val dayData = sleepData[selectedDate.value]
+        dayData?.sleepChild?.getOrNull(position).let {
+            selectedMultiSleep.postValue(it)
+        }
     }
 
 

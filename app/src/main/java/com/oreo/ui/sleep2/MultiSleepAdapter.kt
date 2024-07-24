@@ -7,16 +7,21 @@ import com.noisefit.luna.databinding.RowMultiSleepBinding
 
 class MultiSleepAdapter(val listener: MultiSleepAction) :
     RecyclerView.Adapter<MultiSleepAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<String>()
+    private var mDataSet = ArrayList<MultiSleepDisplay>()
+    private var selectedPosition = 0
 
     inner class ViewHolder(val binding: RowMultiSleepBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
-            binding.tvTime.text = "10:04 | 4hr 12min"
-            binding.tvScore.text = "Score 66"
+        fun bind(data: MultiSleepDisplay) {
+            binding.tvTime.text = "${data.sleepStart} | ${data.sleepTime}"
+            binding.tvScore.text = "Score ${data.score}"
 
             binding.root.setOnClickListener {
-                listener.onSleepClicked()
+                val oldPos = selectedPosition
+                selectedPosition = bindingAdapterPosition
+                notifyItemChanged(oldPos)
+                notifyItemChanged(selectedPosition)
+                listener.onSleepClicked(bindingAdapterPosition)
             }
         }
     }
@@ -38,7 +43,8 @@ class MultiSleepAdapter(val listener: MultiSleepAction) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<String>) {
+    fun setData(resultData: List<MultiSleepDisplay>) {
+        selectedPosition = 0
         mDataSet.clear()
         mDataSet.addAll(resultData)
         notifyDataSetChanged()
@@ -47,5 +53,12 @@ class MultiSleepAdapter(val listener: MultiSleepAction) :
 }
 
 interface MultiSleepAction {
-    fun onSleepClicked()
+    fun onSleepClicked(position: Int)
 }
+
+data class MultiSleepDisplay(
+    val sleepStart: String,
+    val sleepTime: String,
+    val score: String,
+    val scoreImpact: Int
+)
