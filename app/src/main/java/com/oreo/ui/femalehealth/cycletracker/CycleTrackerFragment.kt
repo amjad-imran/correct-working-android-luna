@@ -524,26 +524,20 @@ class CycleTrackerFragment :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        val isNoClicked = data.confirmedPeriod != null
 
                         tvCurrentState.text = if (data.otaLog) {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
                             "Period"
-                        } else if (isNoClicked) {
-                            "Period late for"
                         } else {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
                             "Predicted period"
                         }
 
-                        tvStateDay.text =
-                            if (data.otaLog) {
-                                "Day ${data.currentDay}"
-                            } else if (isNoClicked) {
-                                "${data.currentDay} day"
-                            } else {
-                                "Day ${data.currentDay}"
-                            }
+                        tvStateDay.text = if (data.otaLog) {
+                            "Day ${data.currentDay}"
+                        } else {
+                            "Day ${data.currentDay}"
+                        }
                     }
 
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
@@ -585,8 +579,20 @@ class CycleTrackerFragment :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        tvCurrentState.text = "Period in"
-                        tvStateDay.text = "${daysUntilNextPeriod} Days"
+
+                        val isPeriodLate = data.confirmPeriodDate != null
+
+                        tvCurrentState.text = if (isPeriodLate) {
+                            "Period late for"
+                        } else {
+                            "Period in"
+                        }
+
+                        tvStateDay.text = if (isPeriodLate) {
+                            "${data.confirmPeriodDate?.day} day"
+                        } else {
+                            "${daysUntilNextPeriod} Days"
+                        }
                     }
 
                     if (daysUntilNextPeriod > 2) {

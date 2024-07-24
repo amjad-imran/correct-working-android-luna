@@ -716,11 +716,11 @@ class SummaryDataViewModelToday @Inject constructor(
         val tempVariance = calculateTempVariance(data.temp)
 
         if (data.isPeriod) {
-            val isNoClicked = data.confirmedPeriod != null
+            val isPeriodLate = data.confirmPeriodDate != null
 
             return PeriodCard2(
-                title = if (data.otaLog) "Period" else if (isNoClicked) "Period late for" else "Predicted period",
-                subTitle = if (data.otaLog) "Day ${data.currentDay}" else if (isNoClicked) "${data.currentDay} day" else "Day ${data.currentDay}",
+                title = if (isPeriodLate) "Period late for" else if (data.otaLog) "Period" else "Predicted period",
+                subTitle = if (isPeriodLate) "${data.confirmPeriodDate?.day} day" else if (data.otaLog) "Day ${data.currentDay}" else "Day ${data.currentDay}",
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -759,27 +759,7 @@ class SummaryDataViewModelToday @Inject constructor(
         if (list == null) {
             return null
         }
-
         return list.getOrNull(0)?.temperature ?: null
-//        if (list.size < 4) {
-//            return null
-//        }
-//
-//        try {
-//            val first = list[0].temperature
-//            val second = list[1].temperature
-//            val third = list[2].temperature
-//            val fourth = list[3].temperature
-//
-//            if (first == null || second == null || third == null || fourth == null) {
-//                return null
-//            }
-//
-//            val variation = first - ((second + third + fourth) / 2)
-//            return variation
-//        } catch (exp: Exception) {
-//            return null
-//        }
     }
 
     private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
@@ -808,9 +788,12 @@ class SummaryDataViewModelToday @Inject constructor(
                 background = R.drawable.back_card_ovulation_small
             )
         } else {
+            val isPeriodLate = data.confirmPeriodDate != null
+
             return PeriodCard1(
-                title = "Period in",
-                days = daysUntilNextPeriod.toInt(),
+                title = if (isPeriodLate) "Period late for" else "Period in",
+                days = if (isPeriodLate) data.confirmPeriodDate?.day
+                    ?: 0 else daysUntilNextPeriod.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -824,34 +807,6 @@ class SummaryDataViewModelToday @Inject constructor(
             )
         }
 
-
-        /*
-
-                val title: String
-                val bottomText: String
-                val predictionDate: String
-                val nextDay: Int
-                if (daysUntilOvulation < daysUntilNextPeriod) {
-                    title = "Ovulation in"
-                    bottomText = "Predicted period:"
-                    predictionDate = data.nextPeriodDate
-                    nextDay = daysUntilNextPeriod.toInt()
-                } else {
-                    title = "Period in"
-                    bottomText = "Predicted ovulation:"
-                    predictionDate = data.ovulationDate
-                    nextDay = daysUntilOvulation.toInt()
-                }
-
-                return PeriodCard1(
-                    title = title,
-                    days = nextDay,
-                    nudge = data.nudges?.firstOrNull()?.message ?: "",
-                    currentCycleDay = data.currentDay ?: 0,
-                    totalCycleDay = data.cycleLength ?: 0,
-                    bottomText = bottomText,
-                    predictionDate = predictionDate
-                )*/
     }
 
     fun getStressStatus(value: Int?): String {
@@ -1551,7 +1506,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        onGotPeriodClicked(status,currentDay)
+                                        onGotPeriodClicked(status, currentDay)
                                     }
 
                                     override fun no() {
