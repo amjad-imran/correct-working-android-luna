@@ -38,6 +38,18 @@
             app:layout_constraintTop_toBottomOf="@+id/exSevenDayText"
             tools:text="24" />
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/vSelected"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:background="@android:color/white"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
+            app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
+            app:layout_constraintTop_toBottomOf="@+id/exSevenDateText"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

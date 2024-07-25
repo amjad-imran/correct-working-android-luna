@@ -49,6 +49,7 @@ import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -209,6 +210,13 @@ interface NetworkService {
         @Query("start_date") startDate: String?,
         @Query("end_date") endDate: String?
     ): BaseApiResponse<ServerUserHealthResponse>
+
+    @GET
+    suspend fun getUserHealthSleepData(
+        @Url string: String,
+        @Query("start_date") startDate: String?,
+        @Query("end_date") endDate: String?
+    ): BaseApiResponse<List<SleepDay>>
 
     @GET
     suspend fun getCityList(

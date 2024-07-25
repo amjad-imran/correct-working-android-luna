@@ -80,3 +80,9 @@ data class CommonDataModel(
     val text: String,
     val status: String,//"warning/good"
 )
+
+data class CommonDataModelString(
+    val value: String?,
+    val text: String,
+    val status: String,//"warning/good"
+)

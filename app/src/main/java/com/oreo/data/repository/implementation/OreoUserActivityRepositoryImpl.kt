@@ -61,6 +61,10 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -105,16 +109,14 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=care_ring"
+            val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=care_ring"
             remoteDataSource.getRingCareData(url)
         }
     }
 
     override suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=welcome_ring"
+            val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=welcome_ring"
             remoteDataSource.getRingWelcomeData(url)
         }
     }
@@ -133,12 +135,20 @@ class OreoUserActivityRepositoryImpl(
 
     }
 
+    override suspend fun getUserHealthSleepData(
+        startDate: String?, endDate: String?
+    ): Flow<Resource<BaseApiResponse<List<SleepDay>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.BASE_URL_NEW}/luna/sleep/v2/get"
+            remoteDataSource.getUserHealthSleepData(url, startDate, endDate)
+        }
+    }
+
     /**
      * @param startDate endDate in format YYYY-MM-dd
      */
     override suspend fun getUserHealthData(
-        startDate: String?,
-        endDate: String?
+        startDate: String?, endDate: String?
     ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>> {
 
         return flow {
@@ -176,8 +186,7 @@ class OreoUserActivityRepositoryImpl(
                         apiEndDate = todayDate
 
                     } else {
-                        val minDate = dates.stream().min(LocalDate::compareTo)
-                            .get()
+                        val minDate = dates.stream().min(LocalDate::compareTo).get()
                         apiStartDate = minDate.toString()
                         apiEndDate = todayDate
                     }
@@ -246,8 +255,7 @@ class OreoUserActivityRepositoryImpl(
             }
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url =
-                    "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
+                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
                 remoteDataSource.getUserHealthData(url, apiStartDate, apiEndDate)
             }
 
@@ -593,14 +601,11 @@ class OreoUserActivityRepositoryImpl(
 
             val cacheResult = safeCacheCall(Dispatchers.IO) {
 
-                val localData =
-                    keyValueDataSource.getData("", type)
-                        ?: return@safeCacheCall null
+                val localData = keyValueDataSource.getData("", type) ?: return@safeCacheCall null
 
                 val lastCallTime = localData.getSafeLastSyncValue()
 
-                val shouldCallApi =
-                    lastCallTime.checkDayDifferenceMoreOne()
+                val shouldCallApi = lastCallTime.checkDayDifferenceMoreOne()
                 LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
 
 
@@ -651,8 +656,7 @@ class OreoUserActivityRepositoryImpl(
 
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url =
-                    "${BuildConfig.OREO_BASE_URL}/protean/v1/learn-more"
+                val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/learn-more"
                 remoteDataSource.getLearnData(url)
             }
 
@@ -1210,9 +1214,7 @@ class OreoUserActivityRepositoryImpl(
                     breakup?.forEachIndexed { index, breakupData ->
                         response.add(
                             TestUserData(
-                                DataType.HRV,
-                                time = positionToTime(index),
-                                "$breakupData ms"
+                                DataType.HRV, time = positionToTime(index), "$breakupData ms"
                             )
                         )
                     }
@@ -1249,9 +1251,7 @@ class OreoUserActivityRepositoryImpl(
                     breakup?.forEachIndexed { index, breakupData ->
                         response.add(
                             TestUserData(
-                                DataType.BLOOD_OXYGEN,
-                                time = positionToTime(index),
-                                "$breakupData"
+                                DataType.BLOOD_OXYGEN, time = positionToTime(index), "$breakupData"
                             )
                         )
                     }
@@ -1268,9 +1268,7 @@ class OreoUserActivityRepositoryImpl(
                     breakup?.forEachIndexed { index, breakupData ->
                         response.add(
                             TestUserData(
-                                DataType.TEMP,
-                                time = positionToTime(index),
-                                "$breakupData °F"
+                                DataType.TEMP, time = positionToTime(index), "$breakupData °F"
                             )
                         )
                     }
@@ -1346,8 +1344,7 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<OActivityListModal>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
-            /* keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"/* keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
              keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)*/
 
             //todo clear data based on dates
@@ -1397,45 +1394,35 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getInternalPagesData(
-        selectDate: String,
-        dayType: String,
-        contriType: String
+        selectDate: String, dayType: String, contriType: String
     ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v1/sleep-contributors"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/sleep-contributors"
             remoteDataSource.getInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
 
     override suspend fun getActivityInternalPagesData(
-        selectDate: String,
-        dayType: String,
-        contriType: String
+        selectDate: String, dayType: String, contriType: String
     ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"
             remoteDataSource.getActivityInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
 
     override suspend fun getReadinessInternalPagesData(
-        selectDate: String,
-        dayType: String,
-        contriType: String
+        selectDate: String, dayType: String, contriType: String
     ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v1/readiness-contributors"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/readiness-contributors"
             remoteDataSource.getReadinessInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
 
     override suspend fun addRecordedWorkout(request: JsonObject): Flow<Resource<BaseApiResponse<List<AddWorkoutResponse>>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
             remoteDataSource.addRecordedWorkout(url, request)
         }
     }
@@ -1452,8 +1439,7 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getAllActivityList(
-        page: Int,
-        pageLimit: Int
+        page: Int, pageLimit: Int
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/user_workout"
@@ -1471,8 +1457,7 @@ class OreoUserActivityRepositoryImpl(
             val cacheResult = safeCacheCall(Dispatchers.IO) {
 
                 val localData =
-                    keyValueDataSource.getData(contributorType, type)
-                        ?: return@safeCacheCall null
+                    keyValueDataSource.getData(contributorType, type) ?: return@safeCacheCall null
 
                 val lastCallTime = localData.getSafeLastSyncValue()
 
@@ -1600,8 +1585,7 @@ class OreoUserActivityRepositoryImpl(
     }
 
     private fun shouldCallBannerApi(
-        serverTime: Long,
-        localTime: Long
+        serverTime: Long, localTime: Long
     ): Boolean {
         if (serverTime == 0L) return true
         if (localTime == 0L) return true
@@ -1718,9 +1702,8 @@ class OreoUserActivityRepositoryImpl(
 
             val cacheResult = safeCacheCall(Dispatchers.IO) {
 
-                val localData =
-                    keyValueDataSource.getData(quesId, KeyValueDataType.H_AND_S)
-                        ?: return@safeCacheCall null
+                val localData = keyValueDataSource.getData(quesId, KeyValueDataType.H_AND_S)
+                    ?: return@safeCacheCall null
 
                 if (localData.value == null) {
                     return@safeCacheCall null
@@ -1823,8 +1806,7 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun getUserNapData(napId: String): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"
             remoteDataSource.getUserNapDetailsData(url)
         }
     }
@@ -1833,8 +1815,7 @@ class OreoUserActivityRepositoryImpl(
         val napRequest = onlineDataMapper.getNapRequest(nap)
 
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
             remoteDataSource.addNapServer(url, napRequest)
         }
     }
@@ -1850,9 +1831,7 @@ class OreoUserActivityRepositoryImpl(
         naps?.forEach {
             val newSleepFormat = try {
                 DateFormats.formatDate(
-                    it.startTime,
-                    DateFormats.dateTimeFormat5(),
-                    DateFormats.dateTimeFormat6()
+                    it.startTime, DateFormats.dateTimeFormat5(), DateFormats.dateTimeFormat6()
                 )
             } catch (exp: Exception) {
                 ""
@@ -1872,14 +1851,11 @@ class OreoUserActivityRepositoryImpl(
 
     //todo endpoint, response, request format will change, once define
     override suspend fun getStressInternalPagesData(
-        selectDate: String,
-        dayType: String,
-        filterType: String
+        selectDate: String, dayType: String, filterType: String
     ): Flow<Resource<BaseApiResponse<List<StressResultData>>>> {
         ///luna/stress/v1/stress?type=day&date=2024-04-05
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
+            val url = "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
             remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
         }
     }

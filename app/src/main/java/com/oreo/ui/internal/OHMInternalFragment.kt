@@ -17,7 +17,7 @@ class OHMInternalFragment :
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-                val launchType = viewModel.getLaunchType(resultData.title)
+                val launchType = viewModel.getLaunchType(resultData.type.displayName)
                 val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
                     launchType
                 )
