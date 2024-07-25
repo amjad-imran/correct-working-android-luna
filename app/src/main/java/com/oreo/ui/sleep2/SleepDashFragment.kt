@@ -27,6 +27,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.Nap
@@ -38,17 +39,17 @@ import com.oreo.data.model.sleep.SleepSummary
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
-import com.oreo.ui.sleep.OreoSleepStageAnalysisAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import com.oreo.ui.sleep2.add.OAddSleepFragment
 import com.oreo.ui.sleep2.add.OAddSleepLaunchState
-import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
@@ -253,6 +254,28 @@ class SleepDashFragment :
         }
 
         viewModel.selectedMultiSleep.observe(this) {
+
+            if (it?.start_time == null || it.end_time == null) {
+                totalSleepNoDataView()
+            } else {
+                val startTime = LocalDateTime.parse(
+                    it.start_time,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                val endTime = LocalDateTime.parse(
+                    it.end_time,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                val duration = Duration.between(startTime, endTime).toSeconds()
+
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                    duration.toInt()
+                )
+                binding.lytSSAnalysis.lytTotalSleep.tvHour.text = "$hour"
+                binding.lytSSAnalysis.lytTotalSleep.tvMin.text = "$minute"
+                totalSleepDataView()
+            }
+
             showNightTimeMovementGraph(it?.night_time_movement, it?.start_time, it?.end_time)
             initSleepAnalysisGraph(it?.hourly)
         }
@@ -278,6 +301,8 @@ class SleepDashFragment :
             binding.lytSleepTrends.lytSleepTime.graphSleepTime.setDataSet(
                 it.sleepTime, it.selectedPosition
             )
+            setTrendsTopIcons(it)
+
 
         }
 
@@ -305,6 +330,68 @@ class SleepDashFragment :
             binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
 
             viewModel.getDataForDate(it)
+        }
+    }
+
+    private fun totalSleepDataView() {
+        binding.lytSSAnalysis.lytTotalSleep.tvHour.visible()
+        binding.lytSSAnalysis.lytTotalSleep.textHour.visible()
+        binding.lytSSAnalysis.lytTotalSleep.tvMin.visible()
+        binding.lytSSAnalysis.lytTotalSleep.textMin.visible()
+    }
+
+    private fun totalSleepNoDataView() {
+        binding.lytSSAnalysis.lytTotalSleep.tvHour.text = "-"
+        binding.lytSSAnalysis.lytTotalSleep.tvHour.visible()
+        binding.lytSSAnalysis.lytTotalSleep.textHour.gone()
+        binding.lytSSAnalysis.lytTotalSleep.tvMin.gone()
+        binding.lytSSAnalysis.lytTotalSleep.textMin.gone()
+    }
+
+    private fun setTrendsTopIcons(trendsData: SleepTrendsData) {
+        if (trendsData.sleepPerformanceIcon.size == 7) {
+            binding.lytSleepTrends.lytSleepPerformance.apply {
+                ivPos1.setImageResource(trendsData.sleepPerformanceIcon[0])
+                ivPos2.setImageResource(trendsData.sleepPerformanceIcon[1])
+                ivPos3.setImageResource(trendsData.sleepPerformanceIcon[2])
+                ivPos4.setImageResource(trendsData.sleepPerformanceIcon[3])
+                ivPos5.setImageResource(trendsData.sleepPerformanceIcon[4])
+                ivPos6.setImageResource(trendsData.sleepPerformanceIcon[5])
+                ivPos7.setImageResource(trendsData.sleepPerformanceIcon[6])
+            }
+        }
+        if (trendsData.hourVsNeedIcon.size == 7) {
+            binding.lytSleepTrends.lytHourVsNeed.apply {
+                ivPos1.setImageResource(trendsData.hourVsNeedIcon[0])
+                ivPos2.setImageResource(trendsData.hourVsNeedIcon[1])
+                ivPos3.setImageResource(trendsData.hourVsNeedIcon[2])
+                ivPos4.setImageResource(trendsData.hourVsNeedIcon[3])
+                ivPos5.setImageResource(trendsData.hourVsNeedIcon[4])
+                ivPos6.setImageResource(trendsData.hourVsNeedIcon[5])
+                ivPos7.setImageResource(trendsData.hourVsNeedIcon[6])
+            }
+        }
+        if (trendsData.restorativeIcon.size == 7) {
+            binding.lytSleepTrends.lytRestorativeSleep.apply {
+                ivPos1.setImageResource(trendsData.restorativeIcon[0])
+                ivPos2.setImageResource(trendsData.restorativeIcon[1])
+                ivPos3.setImageResource(trendsData.restorativeIcon[2])
+                ivPos4.setImageResource(trendsData.restorativeIcon[3])
+                ivPos5.setImageResource(trendsData.restorativeIcon[4])
+                ivPos6.setImageResource(trendsData.restorativeIcon[5])
+                ivPos7.setImageResource(trendsData.restorativeIcon[6])
+            }
+        }
+        if (trendsData.sleepTimeIcons.size == 7) {
+            binding.lytSleepTrends.lytSleepTime.apply {
+                ivPos1.setImageResource(trendsData.sleepTimeIcons[0])
+                ivPos2.setImageResource(trendsData.sleepTimeIcons[1])
+                ivPos3.setImageResource(trendsData.sleepTimeIcons[2])
+                ivPos4.setImageResource(trendsData.sleepTimeIcons[3])
+                ivPos5.setImageResource(trendsData.sleepTimeIcons[4])
+                ivPos6.setImageResource(trendsData.sleepTimeIcons[5])
+                ivPos7.setImageResource(trendsData.sleepTimeIcons[6])
+            }
         }
     }
 
@@ -367,16 +454,37 @@ class SleepDashFragment :
         }
 
         binding.lytScore.lytSleepNeeded.apply {
-            tvNoData.gone()
-            tvHour.text = "-"
-            tvMin.text = "-"
+
+            if (data?.sleepScore?.value == null) {
+                tvNoData.visible()
+
+                tvHour.gone()
+                tvMin.gone()
+                textHour.gone()
+                textMin.gone()
+            } else {
+                tvNoData.gone()
+
+                tvHour.visible()
+                tvMin.visible()
+                textHour.visible()
+                textMin.visible()
+
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                    data.sleepNeed ?: 0
+                )
+
+                tvHour.text = "$hour"
+                tvMin.text = "$minute"
+
+            }
         }
 
         binding.lytScore.circularProgressBar.setProgress(data?.sleepScore?.value ?: 0)
 
-        //setNudgesView(data?.nudges)
+        setNudgesView(data?.nudges)
 
-        //setNapData(data?.naps, data?.date ?: "")
+        setNapData(data?.naps, data?.date ?: "")
 
         mAdapter.setData(viewModel.generateSleepContributorData(data))
         binding.lytSleepContributor.ivArrowOpen.visible()

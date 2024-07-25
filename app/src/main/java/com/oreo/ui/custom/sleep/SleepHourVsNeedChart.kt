@@ -166,7 +166,6 @@ class SleepHourVsNeedChart constructor(context: Context?, attrs: AttributeSet?) 
                 }
 
 
-
                 canvas.drawCircle(
                     start + stepWidth / 2,
                     actualPos,
@@ -174,17 +173,23 @@ class SleepHourVsNeedChart constructor(context: Context?, attrs: AttributeSet?) 
                     circlePaint
                 )
 
-
                 val (hour, minute) = getFormattedSleepDuration(it.first ?: 0)
 
                 val text = String.format("%d:%02d", hour, minute)
                 val xTextBounds = Rect()
                 textPaintHour.getTextBounds(text, 0, text.length, xTextBounds)
                 val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+
+                val yPos = if ((it.first ?: 0) > (it.second ?: 0)) {
+                    actualPos - textPadding
+                } else {
+                    actualPos + xTextBounds.height() + textPadding
+                }
+
                 canvas.drawText(
                     text,
                     textStart,
-                    actualPos + xTextBounds.height() + textPadding,
+                    yPos,
                     textPaintHour
                 )
             }
@@ -218,10 +223,17 @@ class SleepHourVsNeedChart constructor(context: Context?, attrs: AttributeSet?) 
                 val xTextBounds = Rect()
                 textPaintNeed.getTextBounds(text, 0, text.length, xTextBounds)
                 val textStart = start + stepWidth / 2 - xTextBounds.width() / 2
+
+                val yPos = if ((it.first ?: 0) > (it.second ?: 0)) {
+                    needPos + xTextBounds.height() + textPadding
+                } else {
+                    needPos - textPadding
+                }
+
                 canvas.drawText(
                     text,
                     textStart,
-                    needPos - textPadding,
+                    yPos,
                     textPaintNeed
                 )
             }

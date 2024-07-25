@@ -55,49 +55,49 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos2"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos3"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos4"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos5"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos6"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
 
         <ImageView
             android:id="@+id/ivPos7"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_check_mark_period" />
+            tools:src="@drawable/ic_trend_state_default" />
     </LinearLayout>
 
     <com.oreo.ui.custom.sleep.SleepPerformanceChart
