@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddSleepBinding
 import com.noisefit.ui.common.bottomSheet.SLEEP_TIME_REQUEST_KEY
@@ -22,6 +23,15 @@ import java.util.Calendar
 class OAddSleepFragment :
     BaseFragment<FragmentOAddSleepBinding>(FragmentOAddSleepBinding::inflate) {
     private val viewModel: OAddSleepViewModel by viewModels()
+    private val args: OAddSleepFragmentArgs by navArgs()
+
+    companion object {
+        fun getStartData(launchMode: OAddSleepLaunchState): Pair<Int, Bundle?> {
+            return Pair(R.id.fragmentAddSleep, Bundle().apply {
+                putSerializable("launchMode", launchMode)
+            })
+        }
+    }
 
     override fun initListener() {
         binding.lytToolbar.tvSave.setOnClickListener {
@@ -35,7 +45,8 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
                 val minute = bundle.getInt("minute")
-
+                viewModel.dayName = bundle.getString("day").toString()
+                viewModel.dayPos = bundle.getInt("dayPos")
 
                 val calendar = Calendar.getInstance()
 
@@ -73,6 +84,7 @@ class OAddSleepFragment :
                     viewModel.addSleep.startMinute,
                     0,
                     1,
+                    viewModel.dayPos,
                     getString(R.string.text_start_time)
                 )
             )
@@ -85,6 +97,8 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
                 val minute = bundle.getInt("minute")
+                viewModel.dayName = bundle.getString("day").toString()
+                viewModel.dayPos = bundle.getInt("dayPos")
                 val calendar = Calendar.getInstance()
 
                 if (DateFormats.compareTime(
@@ -125,9 +139,13 @@ class OAddSleepFragment :
                     viewModel.addSleep.startMinute,
                     0,
                     1,
+                    viewModel.dayPos,
                     getString(R.string.text_end_time)
                 )
             )
+        }
+        binding.tvDeleteSleep.setOnClickListener {
+            //wrote code to delete sleep
         }
     }
 
@@ -158,8 +176,8 @@ class OAddSleepFragment :
             viewModel.addSleep.endMinute
         )
         viewModel.isEndTimeSelected = true
-        binding.lytAddTime.lytEndTime.tvTimeValue.text = endTime
-        if (viewModel.isStartTimeSelected && viewModel.isStartTimeSelected) {
+        binding.lytAddTime.lytEndTime.tvTimeValue.text = "${viewModel.dayName}, $endTime"
+        if (viewModel.isStartTimeSelected && viewModel.isEndTimeSelected) {
             binding.lytToolbar.tvSave.isEnabled = true
         }
     }
@@ -170,7 +188,7 @@ class OAddSleepFragment :
             viewModel.addSleep.startMinute
         )
 
-        binding.lytAddTime.lytStartTime.tvTimeValue.text = startTime
+        binding.lytAddTime.lytStartTime.tvTimeValue.text = "${viewModel.dayName}, $startTime"
         viewModel.isStartTimeSelected = true
     }
 
@@ -204,11 +222,13 @@ class OAddSleepFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initUI()
     }
 
     private fun initUI() {
-        binding.lytToolbar.tvTitle.text = getString(R.string.text_add_sleep)
+
+        binding.lytToolbar.tvTitle.text = viewModel.getPageTitle(args.launchMode)
         binding.lytToolbar.tvSave.text = getString(R.string.text_save)
         binding.lytToolbar.tvSave.disable()
         binding.lytToolbar.tvSave.alpha = .5f
@@ -262,7 +282,17 @@ class OAddSleepFragment :
                 R.color.white_48
             )
         )
+
+        if (args.launchMode == OAddSleepLaunchState.ADD) {
+            binding.tvDeleteSleep.gone()
+        } else {
+            binding.tvDeleteSleep.visible()
+        }
     }
 
 
+}
+
+enum class OAddSleepLaunchState {
+    ADD, EDIT
 }

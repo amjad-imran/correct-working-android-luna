@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <TimePicker
+           <!-- <TimePicker
                 android:id="@+id/timePicker"
                 style="@style/MyTimePickerStyle"
                 android:layout_width="match_parent"
@@ -57,7 +57,14 @@
                 app:layout_constraintEnd_toEndOf="@+id/tvTitle"
                 app:layout_constraintStart_toStartOf="@+id/tvTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
+-->
+            <include layout="@layout/layout_o_day_picker"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/lytTimePicker"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                app:layout_constraintEnd_toEndOf="parent"/>
             <LinearLayout
                 android:id="@+id/lytMessage"
                 android:layout_width="match_parent"
@@ -68,7 +75,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timePicker">
+                app:layout_constraintTop_toBottomOf="@+id/lytTimePicker">
 
 
                 <TextView
@@ -105,7 +112,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/btnAllow"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timePicker"
+                app:layout_constraintTop_toBottomOf="@+id/lytTimePicker"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
@@ -122,7 +129,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnCancel"
-                app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+                app:layout_constraintTop_toBottomOf="@+id/lytTimePicker" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </layout>

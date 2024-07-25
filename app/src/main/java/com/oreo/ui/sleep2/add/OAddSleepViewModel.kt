@@ -1,6 +1,8 @@
 package com.oreo.ui.sleep2.add
 
 import androidx.lifecycle.MutableLiveData
+import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.OAddSleep
@@ -9,12 +11,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OAddSleepViewModel @Inject constructor(private val userActivityRepository: OreoUserActivityRepository) :
+class OAddSleepViewModel @Inject constructor(
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val resourcesProvider: ResourcesProvider
+) :
     BaseViewModel() {
 
     var isStartTimeSelected = false
     var isEndTimeSelected = false
     var addSleep = OAddSleep()
+    var dayPos:Int=0
+    var dayName:String="Yesterday"
+    var isEdit: Boolean = false
     private val _addSleepResponse =
         MutableLiveData<Event<Boolean>>()//todo return type will change once finalized
     val addSleepResponse = _addSleepResponse
@@ -72,6 +80,12 @@ class OAddSleepViewModel @Inject constructor(private val userActivityRepository:
             }
         }*/
         _addSleepResponse.postValue(Event(true))
+    }
+
+    fun getPageTitle(launchMode: OAddSleepLaunchState):String {
+        return  if (launchMode == OAddSleepLaunchState.ADD) resourcesProvider.getString(R.string.text_add_sleep) else resourcesProvider.getString(
+            R.string.text_edit_sleep
+        )
     }
 
 }

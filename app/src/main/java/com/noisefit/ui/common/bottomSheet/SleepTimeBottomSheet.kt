@@ -1,12 +1,15 @@
 package com.noisefit.ui.common.bottomSheet
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.noisefit.luna.databinding.SleepTimeBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.utils.WheelAdapter
+import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SLEEP_TIME_REQUEST_KEY = "SLEEP_TIME_REQUEST_KEY"
@@ -25,6 +28,14 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
     private var mMinuteOther: Int = 0
     private var isStart: Int = 0
 
+    private var lastSelectedPos: Int = 0
+    private var dayName: String = ""
+    private val dayList = ArrayList<WheelItem<String>>()
+
+    private val wheelAdapter: WheelAdapter<String> by lazy {
+        WheelAdapter()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,9 +49,11 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
             mMinuteOther = args.minuteOther
             isStart = args.isStart
             mUnitPosition = args.unitPosition
+            lastSelectedPos=args.dayPos
 
-           /* viewModel.userDayData =
-                mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]*/
+
+            /* viewModel.userDayData =
+                 mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]*/
 
             initUi()
         }
@@ -50,15 +63,52 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
 
     private fun initUi() {
         binding.tvTitle.text = title
-        binding.timePicker.currentHour = mHour
-        binding.timePicker.currentMinute = mMinute
-        binding.timePicker.setOnTimeChangedListener { _, hour, minute ->
+        binding.lytTimePicker.timePicker.currentHour = mHour
+        binding.lytTimePicker.timePicker.currentMinute = mMinute
+        binding.lytTimePicker.timePicker.setOnTimeChangedListener { _, hour, minute ->
             this.mHour = hour
             this.mMinute = minute
         }
 
-        binding.timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
+        binding.lytTimePicker.timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
+        setWheelPicker()
 
+    }
+
+    private fun dayData(): ArrayList<WheelItem<String>> {
+        if (dayList.size > 0) {
+            dayList.clear()
+        }
+
+        dayList.add(WheelItem("Yesterday"))
+        dayList.add(WheelItem("Today"))
+        return dayList
+    }
+
+    private fun setWheelPicker() {
+        binding.lytTimePicker.wheelPicker.visibleItemCount = 2
+        wheelAdapter.data = dayData()
+        wheelAdapter.setOnItemSelectedListener { item ->
+             dayName = item.split(" ")[0]
+            updateSelectedIndex(wheelAdapter.currentItemPosition)
+            lastSelectedPos = getUpdatedIndex()
+
+        }
+        wheelAdapter.bind(binding.lytTimePicker.wheelPicker)
+        wheelAdapter.selectedItemPosition = getUpdatedIndex()
+    }
+
+    private fun updateSelectedIndex(pos: Int) {
+        lastSelectedPos = pos
+    }
+
+    private fun getUpdatedIndex(): Int {
+        dayList.forEachIndexed { index, wheelItem ->
+            if (wheelItem == dayList[lastSelectedPos]) {
+                return index
+            }
+        }
+        return 0
     }
 
 
@@ -68,33 +118,15 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         }
         binding.btnAllow.setOnClickListener {
 
-           /* val existMessage =
-                if (isStart == 1) {
-                    viewModel.checkIfAnyEventExists(
-                        String.format("%02d:%02d", mHour, mMinute),
-                        String.format("%02d:%02d", mHourOther, mMinuteOther)
-                    )
-                } else {
-                    viewModel.checkIfAnyEventExists(
-                        String.format(
-                            "%02d:%02d",
-                            mHourOther,
-                            mMinuteOther
-                        ), String.format("%02d:%02d", mHour, mMinute)
-                    )
-                }
-
-            if (existMessage.isNullOrEmpty().not()) {
-                binding.lytMessage.visible()
-                binding.tvMessage.text = existMessage
-                return@setOnClickListener
-            } else {
-                binding.lytMessage.gone()
-            }*/
-
             setFragmentResult(
                 SLEEP_TIME_REQUEST_KEY,
-                bundleOf("hour" to mHour, "minute" to mMinute, "unit" to mUnitPosition)
+                bundleOf(
+                    "hour" to mHour,
+                    "minute" to mMinute,
+                    "unit" to mUnitPosition,
+                    "day" to dayName,
+                    "dayPos" to lastSelectedPos
+                )
             )
             navigateUpSafe()
         }

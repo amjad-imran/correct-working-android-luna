@@ -37,6 +37,9 @@ import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.sleep.OreoSleepStageAnalysisAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.sleep2.add.OAddSleepFragment
+import com.oreo.ui.sleep2.add.OAddSleepLaunchState
+import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -290,7 +293,10 @@ class SleepDashFragment :
     override fun initListener() {
         binding.toolbar.viewBackCalendar.setOnClickListener {
 //            navigate(R.id.healthMonitorInternal)
-            navigate(R.id.fragmentAddSleep)
+            val (frag, bundle) = OAddSleepFragment.getStartData(
+                OAddSleepLaunchState.ADD
+            )
+            navigate(frag, bundle)
         }
         binding.lytScore.ivInfo.setOnClickListener {
             navigate(R.id.sleepPlannerFragment)
