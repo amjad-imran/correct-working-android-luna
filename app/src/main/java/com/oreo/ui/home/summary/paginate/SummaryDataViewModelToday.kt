@@ -359,7 +359,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         )
                                     )*/
                                     gotYourPeriodCard = OHealthOverview.GotYourPeriod(
-                                        dayMessage,
+                                            dayMessage,
                                         femaleData.currentDay
                                     )
                                 }

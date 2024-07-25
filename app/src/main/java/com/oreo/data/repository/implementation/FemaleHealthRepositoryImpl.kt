@@ -201,6 +201,7 @@ class FemaleHealthRepositoryImpl(
 
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+            localDataStore.removeGotPeriodClicked()
 
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/period"
             remoteDataSource.logPeriod(url, jsonObject)
