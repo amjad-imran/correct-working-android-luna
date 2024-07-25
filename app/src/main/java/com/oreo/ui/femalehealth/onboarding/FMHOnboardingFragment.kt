@@ -44,6 +44,7 @@ class FMHOnboardingFragment :
             clipChildren = false
             offscreenPageLimit = 1
             adapter = fragAdapter
+            isUserInputEnabled = false
             setOnTouchListener(null)
 
         }
