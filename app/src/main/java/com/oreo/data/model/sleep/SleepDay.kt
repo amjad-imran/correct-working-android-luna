@@ -31,6 +31,8 @@ data class SleepDay(
 
     var latency: CommonDataModel? = null,
 
+    var summary: SleepSummary? = null,
+
     var efficiency: CommonDataModel? = null,
 
     var restfulness: CommonDataModel? = null,
@@ -46,6 +48,18 @@ data class SleepDay(
 
 
     )
+
+data class SleepSummary(
+    val rem: SleepSummaryValue,
+    val deep: SleepSummaryValue,
+    val awake: SleepSummaryValue,
+    val light: SleepSummaryValue,
+)
+
+data class SleepSummaryValue(
+    val curr_val: Int? = null,
+    val avg: Int? = null,
+)
 
 data class MultiSleep(
     val start_time: String? = null,

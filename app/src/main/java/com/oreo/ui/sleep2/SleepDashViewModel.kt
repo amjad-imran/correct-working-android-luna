@@ -55,8 +55,18 @@ class SleepDashViewModel @Inject constructor(
 
     fun getSleepData(startDate: String, endDate: String) {
         viewModelScope.launch {
+
+            val todayDate = LocalDate.now()
+            val weekEnd = LocalDate.parse(endDate)
+            var calculatedEndDate = endDate
+
+            if (weekEnd > todayDate) {
+                calculatedEndDate = todayDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            }
+
+
             userActivityRepository.getUserHealthSleepData(
-                startDate, endDate
+                startDate, calculatedEndDate
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -98,8 +108,6 @@ class SleepDashViewModel @Inject constructor(
                             var weekStart = LocalDate.parse(startDate)
                             notifyDates.add(weekStart)
 
-                            val weekEnd = LocalDate.parse(endDate)
-
 
                             while (weekStart <= weekEnd) {
                                 notifyDateChange.value = Event(weekStart)
@@ -127,7 +135,8 @@ class SleepDashViewModel @Inject constructor(
             if (dayData != null) {
                 sleepPerformance.add(dayData.efficiency?.value)//todo change to sleep performance
 
-                val sleepDuration: Int? = ((dayData.sleepDuration?.value ?: 0) / 60).takeIf { it != 0 }
+                val sleepDuration: Int? =
+                    ((dayData.sleepDuration?.value ?: 0) / 60).takeIf { it != 0 }
                 hourVsNeed.add(Pair(sleepDuration, 60))//todo sleep need pending from backend
 
                 val rem: Int? = ((dayData.remSleep?.value ?: 0) / 60).takeIf { it != 0 }
@@ -233,15 +242,15 @@ class SleepDashViewModel @Inject constructor(
     private fun generateSleepTimeData(notifyDates: ArrayList<LocalDate>): List<SleepTimeModel> {
 
         //Sleep start and end times
-       /* val sleepArray = arrayListOf(
-            Triple("2024-06-30 22:00:00", "2024-07-01 06:00:00", "2024-07-01"),
-            Triple("2024-07-01 23:00:00", "2024-07-02 07:00:00", "2024-07-02"),
-            Triple(null, null, "2024-07-03"),
-            Triple("2024-07-03 22:45:00", "2024-07-04 09:00:00", "2024-07-04"),
-            Triple("2024-07-04 21:30:00", "2024-07-05 06:30:00", "2024-07-05"),
-            Triple("2024-07-05 22:10:00", "2024-07-06 07:30:00", "2024-07-06"),
-            Triple("2024-07-06 23:20:00", "2024-07-07 08:30:00", "2024-07-07")
-        )*/
+        /* val sleepArray = arrayListOf(
+             Triple("2024-06-30 22:00:00", "2024-07-01 06:00:00", "2024-07-01"),
+             Triple("2024-07-01 23:00:00", "2024-07-02 07:00:00", "2024-07-02"),
+             Triple(null, null, "2024-07-03"),
+             Triple("2024-07-03 22:45:00", "2024-07-04 09:00:00", "2024-07-04"),
+             Triple("2024-07-04 21:30:00", "2024-07-05 06:30:00", "2024-07-05"),
+             Triple("2024-07-05 22:10:00", "2024-07-06 07:30:00", "2024-07-06"),
+             Triple("2024-07-06 23:20:00", "2024-07-07 08:30:00", "2024-07-07")
+         )*/
 
 
         //Get min start time based on day start time
@@ -252,7 +261,8 @@ class SleepDashViewModel @Inject constructor(
             if (dayData?.masterSleepStart != null) {
                 val currentDay = LocalDate.parse(dayData.date).atStartOfDay()
 
-                val sleepStartTime = LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
+                val sleepStartTime =
+                    LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
 
                 val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
                 val newStartTime = if (difference < 0) {
@@ -276,7 +286,8 @@ class SleepDashViewModel @Inject constructor(
 
             if (dayData?.masterSleepStart != null) {
                 val currentDay = LocalDate.parse(dayData.date).atStartOfDay()
-                val sleepStartTime = LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
+                val sleepStartTime =
+                    LocalDateTime.parse(dayData.masterSleepStart, dateTimeFormatter)
                 val sleepEndTime = LocalDateTime.parse(dayData.masterSleepEnd, dateTimeFormatter)
 
                 val difference = Duration.between(currentDay, sleepStartTime).toMinutes()

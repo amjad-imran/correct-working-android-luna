@@ -147,7 +147,7 @@
             app:layout_constraintStart_toStartOf="@id/view1"
             app:layout_constraintTop_toTopOf="@id/view1"
             tools:itemCount="4"
-            tools:listitem="@layout/row_sleep_summary" />
+            tools:listitem="@layout/row_sleep_analysis_summary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
