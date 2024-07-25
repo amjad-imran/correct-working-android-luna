@@ -71,8 +71,9 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="visible" />
+
         <include
             android:id="@+id/lytSplanner"
             layout="@layout/layout_dash_sleep_planner_card"
@@ -81,8 +82,9 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="visible" />
+
         <include
             android:id="@+id/lytConnectHelp"
             layout="@layout/layout_trouble_connecting_ring"
@@ -178,6 +180,7 @@
             android:layout_marginTop="24dp"
             android:visibility="gone"
             tools:visiblity="visible" />
+
         <include
             android:id="@+id/lytFemaleHealthGotPeriod"
             layout="@layout/list_dash_got_period"
