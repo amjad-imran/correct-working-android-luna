@@ -28,6 +28,7 @@ import com.noisefit_commans.ui.custom.SleepStageAction
 import com.noisefit_commans.ui.custom.ToolTipEntry
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -38,6 +39,7 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.model.sleep.SleepDay
+import com.oreo.data.model.sleep.SleepSummary
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
@@ -65,8 +67,8 @@ class SleepDashFragment :
     @Inject
     lateinit var vibrationUtils: VibrationUtils
 
-    private val mSleepStageAdapter: OreoSleepStageAnalysisAdapter by lazy {
-        OreoSleepStageAnalysisAdapter()
+    private val mSleepStageAdapter: SleepAnalysisAdapter by lazy {
+        SleepAnalysisAdapter()
     }
 
     private val multiSleepAdapter: MultiSleepAdapter by lazy {
@@ -250,6 +252,25 @@ class SleepDashFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
         viewModel.selectedMultiSleep.observe(this) {
             showNightTimeMovementGraph(it?.night_time_movement, it?.start_time, it?.end_time)
             initSleepAnalysisGraph(it?.hourly)
@@ -391,6 +412,36 @@ class SleepDashFragment :
 
         viewModel.updateSelectedMultiSleep(0)
 
+
+        updateSleepSummary(data?.summary)
+
+    }
+
+    private fun updateSleepSummary(summary: SleepSummary?) {
+        val sleepSummary = arrayListOf(
+            SleepAnalysisData(
+                name = "REM sleep",
+                icon = R.drawable.ic_sleep_rem,
+                currentValue = summary?.rem?.curr_val,
+                avgValue = summary?.rem?.avg
+            ), SleepAnalysisData(
+                name = "Deep sleep",
+                icon = R.drawable.ic_sleep_deep,
+                currentValue = summary?.rem?.curr_val,
+                avgValue = summary?.rem?.avg
+            ), SleepAnalysisData(
+                name = "Awake sleep",
+                icon = R.drawable.ic_sleep_awake,
+                currentValue = summary?.rem?.curr_val,
+                avgValue = summary?.rem?.avg
+            ), SleepAnalysisData(
+                name = "Light sleep",
+                icon = R.drawable.ic_sleep_light,
+                currentValue = summary?.rem?.curr_val,
+                avgValue = summary?.rem?.avg
+            )
+        )
+        mSleepStageAdapter.setData(sleepSummary)
     }
 
     private fun setNapData(naps: List<Nap>?, date: String) {
