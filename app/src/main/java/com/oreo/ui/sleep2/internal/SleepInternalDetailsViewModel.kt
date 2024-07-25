@@ -245,17 +245,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     }
 
-    fun trendsDummyData(): OSleepTrendsDataModel? {
-        return OSleepTrendsDataModel(
-            trendType = selectedLaunchMode,
-            dayDate = "Monday  30 May, 2024",
-            dspValue = 40,
-            isShowOptimal = false,
-            isShowHighlight = true,
-            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
-        )
-
-    }
 
     fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
         var abr = ""
@@ -305,10 +294,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     }
 
-    fun parsePageData(it: OSleepInternalTrendsDataModel): OSleepTrendsDataModel {
+    fun parsePageData(pos:Int): OSleepTrendsDataModel {
         val childData = OSleepTrendsDataModel()
-        val data = it.values?.lastOrNull()
-
+        val data = trendsInternalData.value?.values?.get(pos)
         childData.trendType = selectedLaunchMode
         childData.dayDate = data?.date
         childData.dspValue = data?.value

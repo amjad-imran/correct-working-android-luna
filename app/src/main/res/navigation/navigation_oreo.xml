@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -919,7 +918,7 @@
     <fragment
         android:id="@+id/dropDownFragment"
         android:name="com.oreo.ui.sleep2.ODropDownFragment"
-        android:label="DropDownFragment" >
+        android:label="DropDownFragment">
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
@@ -959,4 +958,47 @@
             android:name="launchMode"
             app:argType="com.oreo.ui.sleep2.internal.SkinTempInternalLaunchState" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentAddSleep"
+        android:name="com.oreo.ui.sleep2.add.OAddSleepFragment"
+        android:label="fragment_add_sleep">
+        <action
+            android:id="@+id/action_addSleepFragment_to_sleepTimeBottomSheet"
+            app:destination="@id/sleepTimeBottomSheet" />
+        <argument
+            android:name="launchMode"
+            app:argType="com.oreo.ui.sleep2.add.OAddSleepLaunchState" />
+    </fragment>
+    <dialog
+        android:id="@+id/sleepTimeBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.SleepTimeBottomSheet"
+        android:label="SleepTimeBottomSheet">
+        <argument
+            android:name="hour"
+            app:argType="integer" />
+        <argument
+            android:name="minute"
+            app:argType="integer" />
+
+        <argument
+            android:name="hourOther"
+            app:argType="integer" />
+        <argument
+            android:name="minuteOther"
+            app:argType="integer" />
+
+        <argument
+            android:name="isStart"
+            app:argType="integer" />
+
+        <argument
+            android:name="unitPosition"
+            app:argType="integer" />
+        <argument
+            android:name="dayPos"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
 </navigation>

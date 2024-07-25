@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -28,6 +29,7 @@ class SleepInternalDetailsFragment :
     BaseFragment<FragmentSleepInternalDetailsBinding>(FragmentSleepInternalDetailsBinding::inflate) {
 
     private val viewModel: SleepInternalDetailsViewModel by viewModels()
+    private val sharedViewModel:OSPTrendsSharedViewModel by activityViewModels()
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
 
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
@@ -55,7 +57,6 @@ class SleepInternalDetailsFragment :
         viewModel.updateTitle()
         setGraphPagerView()
         setRecycler()
-//        showTopContent()
         viewModel.getTrendsInternalDetailsData()
     }
 
@@ -70,36 +71,24 @@ class SleepInternalDetailsFragment :
         val data = viewModel.pageData
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
-                /*val dayDate: String = when (viewModel.selectedPeriod.value) {
-                    InternalSelectedPeriod.DAY -> data.dayDate.toString()
-                    InternalSelectedPeriod.WEEK -> {
-                        "23 April - 30 May, 2024"
-                    }
-
-                    else -> {
-                        "July  2024"
-                    }
-                }*/
                 binding.lytTopView.lytTopMultipleView.tvDateTime.text = data.dayDate
                 binding.lytTopView.lytTopMultipleView.lytContentView.apply {
 
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        data.dspValue2?: 0
+                        data.dspValue2 ?: 0
                     )
-                    if (hour>0){
+                    if (hour > 0) {
                         lytNeed.tvHour.visible()
                         lytNeed.tvUnitHr.visible()
-                    }
-                    else{
+                    } else {
                         lytNeed.tvUnitHr.gone()
                         lytNeed.tvHour.gone()
                     }
                     lytNeed.tvHour.text = hour.toString()
-                    if (minute >0){
+                    if (minute > 0) {
                         lytNeed.tvMin.visible()
                         lytNeed.tvUnitMin.visible()
-                    }
-                    else{
+                    } else {
                         lytNeed.tvMin.gone()
                         lytNeed.tvUnitMin.gone()
                     }
@@ -109,22 +98,20 @@ class SleepInternalDetailsFragment :
                 }
                 binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        data.dspValue?: 0
+                        data.dspValue ?: 0
                     )
-                    if (hour>0){
+                    if (hour > 0) {
                         lytHours.tvHour.visible()
                         lytHours.tvUnitHr.visible()
-                    }
-                    else{
+                    } else {
                         lytHours.tvUnitHr.gone()
                         lytHours.tvHour.gone()
                     }
                     lytHours.tvHour.text = hour.toString()
-                    if (minute >0){
+                    if (minute > 0) {
                         lytHours.tvMin.visible()
                         lytHours.tvUnitMin.visible()
-                    }
-                    else{
+                    } else {
                         lytHours.tvMin.gone()
                         lytHours.tvUnitMin.gone()
                     }
@@ -149,24 +136,22 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopSingleView.lytTopPercentView.root.gone()
                     binding.lytTopView.lytTopSingleView.lytTopHourView.root.visible()
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        data.dspValue?: 0
+                        data.dspValue ?: 0
                     )
                     binding.lytTopView.lytTopSingleView.lytTopHourView.apply {
                         if (hour > 0) {
                             tvHour.visible()
                             tvUnitHr.visible()
-                        }
-                        else{
+                        } else {
                             tvHour.gone()
                             tvUnitHr.gone()
                         }
-                        tvHour.text=hour.toString()
+                        tvHour.text = hour.toString()
 
-                        if ( minute > 0) {
+                        if (minute > 0) {
                             tvMin.visible()
                             tvUnitMin.visible()
-                        }
-                        else{
+                        } else {
                             tvMin.gone()
                             tvUnitMin.gone()
                         }
@@ -175,16 +160,6 @@ class SleepInternalDetailsFragment :
                 }
 
                 binding.lytTopView.lytTopSingleView.apply {
-                    /*val dayDate: String = when (viewModel.selectedPeriod.value) {
-                        InternalSelectedPeriod.DAY -> data.dayDate.toString()
-                        InternalSelectedPeriod.WEEK -> {
-                            "23 April - 30 May, 2024"
-                        }
-
-                        else -> {
-                            "July  2024"
-                        }
-                    }*/
                     tvDateTime.text = data.dayDate
                     tvDesc.text = data.description
                     if (data.isShowHighlight) {
@@ -340,6 +315,11 @@ class SleepInternalDetailsFragment :
     }
 
     override fun subscribeObservers() {
+        sharedViewModel.interactGraphData.observe(this){
+            val parseData = viewModel.parsePageData(pos = it)
+            viewModel.pageData = parseData
+            showTopContent()
+        }
 
         viewModel.selectedPeriod.observe(this) {
             setPeriodUiState(it)
@@ -353,7 +333,7 @@ class SleepInternalDetailsFragment :
 
         viewModel.trendsInternalData.observe(this) {
             if (it != null) {
-                val parseData = viewModel.parsePageData(it)
+                val parseData = viewModel.parsePageData(it.values?.size?.minus(1) ?: 0)
                 viewModel.pageData = parseData
                 showTopContent()
             }
