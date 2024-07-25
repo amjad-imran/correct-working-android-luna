@@ -642,6 +642,10 @@ class CycleTrackerFragment :
             nudgeBgColor = NudgeBgColor.OVULATION_LOW
         }
 
+        if (femaleHealthUserInfoModel.confirmPeriodDate != null) {
+            nudgeBgColor = NudgeBgColor.PERIOD_LOW
+        }
+
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
             fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor))
