@@ -1,8 +1,11 @@
 package com.oreo.ui.sleep2
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +18,7 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
+import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.ui.BaseFragment
@@ -175,7 +179,23 @@ class SleepDashFragment :
             viewModel.selectedDate.value ?: LocalDate.now()
         )
     }
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
 
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
+
+                viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
+                binding.vCalendar.scrollToDate(
+                    viewModel.selectedDate.value ?: LocalDate.now()
+                )
+
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+
+            }
+        }
 
     override fun initListener() {
 
@@ -202,11 +222,12 @@ class SleepDashFragment :
         }
 
         binding.toolbar.viewBackCalendar.setOnClickListener {
-//            navigate(R.id.healthMonitorInternal)
-            val (frag, bundle) = OAddSleepFragment.getStartData(
-                OAddSleepLaunchState.ADD
+            resultLauncher.launch(
+                HistoryCalendarActivity.getStartIntent(
+                    requireContext(),viewModel.selectedDate.value.toString(),
+                    "ring"
+                )
             )
-            navigate(frag, bundle)
         }
         binding.lytScore.ivInfo.setOnClickListener {
             navigate(R.id.sleepPlannerFragment)
