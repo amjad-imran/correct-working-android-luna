@@ -70,6 +70,7 @@ class SleepDashFragment :
     @Inject
     lateinit var vibrationUtils: VibrationUtils
 
+
     private val mSleepStageAdapter: SleepAnalysisAdapter by lazy {
         SleepAnalysisAdapter()
     }
@@ -93,10 +94,11 @@ class SleepDashFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
-        viewModel.setStartDate(mainViewModel.registerDate)
+        //viewModel.setStartDate(mainViewModel.registerDate)
         initCalender()
         setRecycler()
     }
+
     override fun initListener() {
 
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
@@ -176,6 +178,23 @@ class SleepDashFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.calendarStartDate.observe(this) {
+            it.getContent()?.let {
+                val lastDayOfWeek: LocalDate =
+                    LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+
+                binding.vCalendar.setup(
+                    it,
+                    lastDayOfWeek,
+                    DayOfWeek.MONDAY,
+                )
+                binding.vCalendar.scrollToDate(
+                    viewModel.selectedDate.value ?: LocalDate.now()
+                )
+            }
+
+        }
 
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
@@ -350,7 +369,7 @@ class SleepDashFragment :
             LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
         binding.vCalendar.setup(
-            viewModel.calendarStartDate,
+            LocalDate.now().minusDays(10),
             lastDayOfWeek,
             DayOfWeek.MONDAY,
         )
@@ -376,7 +395,6 @@ class SleepDashFragment :
 
             }
         }
-
 
 
     private fun totalSleepDataView() {
@@ -459,7 +477,7 @@ class SleepDashFragment :
                 text = "${data?.sleepScore?.text}"
                 val statusColor = ContextCompat.getColor(
                     this.context,
-                    viewModel.getStatusColors(data?.sleepScore?.status?:"")
+                    viewModel.getStatusColors(data?.sleepScore?.status ?: "")
                 )
                 setTextColor(statusColor)
             }

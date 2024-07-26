@@ -45,7 +45,7 @@ class SleepDashViewModel @Inject constructor(
 
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
-    var calendarStartDate = LocalDate.now().minusDays(30)
+    var calendarStartDate = MutableLiveData<Event<LocalDate>>()
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
     var trendsData = MutableLiveData<SleepTrendsData>()
@@ -55,6 +55,11 @@ class SleepDashViewModel @Inject constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+
+    /**
+     * for multi api call handling during calendar start it
+     */
+    private var lastApiCallWeek: Pair<String, String>? = null
 
     init {
         getContributorInfo()
@@ -84,6 +89,13 @@ class SleepDashViewModel @Inject constructor(
                 calculatedEndDate = todayDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             }
 
+
+            if (lastApiCallWeek != null && lastApiCallWeek?.first.equals(startDate) && lastApiCallWeek?.second.equals(
+                    calculatedEndDate
+                )
+            ) {
+                return@launch
+            }
 
             userActivityRepository.getUserHealthSleepData(
                 startDate, calculatedEndDate
@@ -116,7 +128,11 @@ class SleepDashViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let { res ->
 
-                            res.forEach {
+                            lastApiCallWeek = Pair(startDate, calculatedEndDate)
+
+                            setStartDate(res.registerDate ?: -1)
+
+                            res.result?.forEach {
                                 val date = LocalDate.parse(it.date)
                                 sleepData[date] = it
                             }
@@ -640,7 +656,9 @@ class SleepDashViewModel @Inject constructor(
 
     fun setStartDate(registerDate: Int) {
         if (registerDate == -1) return
-        calendarStartDate = LocalDate.now().minusDays(registerDate.toLong())
+        if (calendarStartDate.value?.peekContent() == null) {
+            calendarStartDate.postValue(Event(LocalDate.now().minusDays(registerDate.toLong())))
+        }
     }
 
 

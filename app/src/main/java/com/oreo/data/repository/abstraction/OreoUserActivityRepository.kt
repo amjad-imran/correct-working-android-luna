@@ -26,6 +26,7 @@ import com.oreo.data.model.TestUserData
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDataResponse
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +47,7 @@ interface OreoUserActivityRepository {
     suspend fun getUserHealthSleepData(
         startDate: String? = null,
         endDate: String? = null
-    ): Flow<Resource<BaseApiResponse<List<SleepDay>>>>
+    ): Flow<Resource<BaseApiResponse<SleepDataResponse>>>
 
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?

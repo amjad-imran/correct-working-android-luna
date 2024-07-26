@@ -64,6 +64,7 @@ import com.oreo.data.model.TrendsData
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDataResponse
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -137,7 +138,7 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun getUserHealthSleepData(
         startDate: String?, endDate: String?
-    ): Flow<Resource<BaseApiResponse<List<SleepDay>>>> {
+    ): Flow<Resource<BaseApiResponse<SleepDataResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/luna/sleep/v2/get"
             remoteDataSource.getUserHealthSleepData(url, startDate, endDate)

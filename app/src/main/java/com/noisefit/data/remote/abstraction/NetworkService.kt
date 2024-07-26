@@ -49,6 +49,7 @@ import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.sleep.SleepDataResponse
 import com.oreo.data.model.sleep.SleepDay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -216,7 +217,7 @@ interface NetworkService {
         @Url string: String,
         @Query("start_date") startDate: String?,
         @Query("end_date") endDate: String?
-    ): BaseApiResponse<List<SleepDay>>
+    ): BaseApiResponse<SleepDataResponse>
 
     @GET
     suspend fun getCityList(
