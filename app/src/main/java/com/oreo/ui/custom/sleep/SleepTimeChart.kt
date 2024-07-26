@@ -295,10 +295,7 @@ class SleepTimeChart constructor(context: Context?, attrs: AttributeSet?) :
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    /**
-     * array list of values -> Pair(deep minutes, rem minutes)
-     * selected position
-     */
+
     fun setDataSet(list: List<SleepTimeModel>, selectedPosition: Int) {
         dataSet.clear()
         dataSet.addAll(list)

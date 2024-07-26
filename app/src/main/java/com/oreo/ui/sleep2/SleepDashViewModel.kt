@@ -24,8 +24,12 @@ import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.sleep.SleepTimeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -65,8 +69,12 @@ class SleepDashViewModel @Inject constructor(
     private val _sleepDayData = MutableLiveData<SleepDay?>()
     val sleepDayData: LiveData<SleepDay?> get() = _sleepDayData
 
+    private var weekDataGetJob: Job? = null
+
     fun getSleepData(startDate: String, endDate: String) {
-        viewModelScope.launch {
+        weekDataGetJob?.cancel()
+
+        weekDataGetJob = viewModelScope.launch {
 
             val todayDate = LocalDate.now()
             val weekEnd = LocalDate.parse(endDate)

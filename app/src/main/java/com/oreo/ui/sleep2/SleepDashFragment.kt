@@ -97,108 +97,6 @@ class SleepDashFragment :
         initCalender()
         setRecycler()
     }
-
-    private fun setRecycler() {
-        with(binding.lytSleepContributor.rvHm) {
-            adapter = adapterSleepContributor
-        }
-        with(binding.lytSSAnalysis.rvSleepStage) {
-            adapter = mSleepStageAdapter
-        }
-        with(binding.rvSleeps) {
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = multiSleepAdapter
-        }
-    }
-
-    private fun initCalender() {
-
-        class DayViewContainer(view: View) : ViewContainer(view) {
-            val bind = CalenderSleepDayBinding.bind(view)
-            lateinit var day: WeekDay
-            val dateToday = LocalDate.now()
-
-            init {
-                view.setOnClickListener {
-                    if (day.date > dateToday) {
-                        return@setOnClickListener
-                    }
-
-                    if (viewModel.selectedDate.value != day.date) {
-                        viewModel.updateSelectedDate(day.date)
-                    }
-                }
-            }
-
-            fun bind(day: WeekDay) {
-                this.day = day
-
-                bind.exSevenDateText.text =
-                    DateFormats.getDayFromDate(DateFormats.convertLocalDateToDate(day.date))
-                bind.exSevenDayText.text =
-                    DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
-
-
-                val score = viewModel.sleepData[day.date]?.sleepScore?.value
-                if (score == null) {
-                    bind.circularProgressBar.setProgress(0)
-                    bind.exSevenDayText.alpha = 0.3f
-                } else {
-                    bind.circularProgressBar.setProgress(score)
-                    bind.exSevenDayText.alpha = 1f
-                }
-
-                if (day.date == viewModel.selectedDate.value) {
-                    bind.vSelected.visible()
-                } else {
-                    bind.vSelected.invisible()
-                }
-
-                if (day.date > dateToday) {
-                    bind.exSevenDayText.alpha = 0.3f
-                } else {
-                    bind.exSevenDayText.alpha = 1f
-                }
-
-            }
-        }
-
-        binding.vCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
-        }
-
-        val lastDayOfWeek: LocalDate =
-            LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-
-        binding.vCalendar.setup(
-            viewModel.calendarStartDate,
-            lastDayOfWeek,
-            DayOfWeek.MONDAY,
-        )
-        binding.vCalendar.scrollToDate(
-            viewModel.selectedDate.value ?: LocalDate.now()
-        )
-    }
-
-    var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-
-                val selectedDate =
-                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
-
-                viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
-                binding.vCalendar.scrollToDate(
-                    viewModel.selectedDate.value ?: LocalDate.now()
-                )
-
-                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
-
-            }
-        }
-
     override fun initListener() {
 
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
@@ -377,6 +275,109 @@ class SleepDashFragment :
             viewModel.getDataForDate(it)
         }
     }
+
+    private fun setRecycler() {
+        with(binding.lytSleepContributor.rvHm) {
+            adapter = adapterSleepContributor
+        }
+        with(binding.lytSSAnalysis.rvSleepStage) {
+            adapter = mSleepStageAdapter
+        }
+        with(binding.rvSleeps) {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = multiSleepAdapter
+        }
+    }
+
+    private fun initCalender() {
+
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val bind = CalenderSleepDayBinding.bind(view)
+            lateinit var day: WeekDay
+            val dateToday = LocalDate.now()
+
+            init {
+                view.setOnClickListener {
+                    if (day.date > dateToday) {
+                        return@setOnClickListener
+                    }
+
+                    if (viewModel.selectedDate.value != day.date) {
+                        viewModel.updateSelectedDate(day.date)
+                    }
+                }
+            }
+
+            fun bind(day: WeekDay) {
+                this.day = day
+
+                bind.exSevenDateText.text =
+                    DateFormats.getDayFromDate(DateFormats.convertLocalDateToDate(day.date))
+                bind.exSevenDayText.text =
+                    DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
+
+
+                val score = viewModel.sleepData[day.date]?.sleepScore?.value
+                if (score == null) {
+                    bind.circularProgressBar.setProgress(0)
+                    bind.exSevenDayText.alpha = 0.3f
+                } else {
+                    bind.circularProgressBar.setProgress(score)
+                    bind.exSevenDayText.alpha = 1f
+                }
+
+                if (day.date == viewModel.selectedDate.value) {
+                    bind.vSelected.visible()
+                } else {
+                    bind.vSelected.invisible()
+                }
+
+                if (day.date > dateToday) {
+                    bind.exSevenDayText.alpha = 0.3f
+                } else {
+                    bind.exSevenDayText.alpha = 1f
+                }
+
+            }
+        }
+
+        binding.vCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
+        }
+
+        val lastDayOfWeek: LocalDate =
+            LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+
+        binding.vCalendar.setup(
+            viewModel.calendarStartDate,
+            lastDayOfWeek,
+            DayOfWeek.MONDAY,
+        )
+        binding.vCalendar.scrollToDate(
+            viewModel.selectedDate.value ?: LocalDate.now()
+        )
+    }
+
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
+
+                viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
+                binding.vCalendar.scrollToDate(
+                    viewModel.selectedDate.value ?: LocalDate.now()
+                )
+
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+
+            }
+        }
+
+
 
     private fun totalSleepDataView() {
         binding.lytSSAnalysis.lytTotalSleep.tvHour.visible()
