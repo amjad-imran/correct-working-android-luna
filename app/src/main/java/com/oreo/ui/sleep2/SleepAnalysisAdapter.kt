@@ -28,7 +28,7 @@ class SleepAnalysisAdapter :
                 binding.imageRight.gone()
 
                 binding.tvPercent.text = "${sleepAnalysis.currentValue}"
-                binding.tvPercentChange.text = "${sleepAnalysis.avgValue}"
+                binding.tvPercentChange.text = "${sleepAnalysis.avgValue}%"
 
                 if (sleepAnalysis.currentValue >= sleepAnalysis.avgValue) {
                     binding.ivState.setImageResource(R.drawable.ic_arrow_increase)

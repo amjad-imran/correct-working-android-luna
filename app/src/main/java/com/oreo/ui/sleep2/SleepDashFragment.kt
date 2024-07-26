@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -18,6 +20,7 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.setTextGradient
@@ -66,6 +69,7 @@ class SleepDashFragment :
 
     private val viewModel: SleepDashViewModel by viewModels()
     private var sleepDayGraphView: SleepGraphViewOreo? = null
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
@@ -92,6 +96,7 @@ class SleepDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.setStartDate(mainViewModel.registerDate)
         initCalender()
         setRecycler()
     }
@@ -166,12 +171,11 @@ class SleepDashFragment :
             override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
         }
 
-        val currentMonth = YearMonth.now()
         val lastDayOfWeek: LocalDate =
             LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
         binding.vCalendar.setup(
-            currentMonth.atStartOfMonth(),//todo change to start of data
+            viewModel.calendarStartDate,
             lastDayOfWeek,
             DayOfWeek.MONDAY,
         )
@@ -179,6 +183,7 @@ class SleepDashFragment :
             viewModel.selectedDate.value ?: LocalDate.now()
         )
     }
+
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -224,7 +229,7 @@ class SleepDashFragment :
         binding.toolbar.viewBackCalendar.setOnClickListener {
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
-                    requireContext(),viewModel.selectedDate.value.toString(),
+                    requireContext(), viewModel.selectedDate.value.toString(),
                     "ring"
                 )
             )
@@ -432,7 +437,11 @@ class SleepDashFragment :
             } else {
                 visible()
                 text = "${data?.sleepScore?.text}"
-                setTextColor(Color.parseColor("#29cc74"))
+                val statusColor = ContextCompat.getColor(
+                    this.context,
+                    viewModel.getStatusColors(data?.sleepScore?.status?:"")
+                )
+                setTextColor(statusColor)
             }
         }
 

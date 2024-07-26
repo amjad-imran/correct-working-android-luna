@@ -40,6 +40,7 @@ class SleepDashViewModel @Inject constructor(
 
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    var calendarStartDate = LocalDate.now().minusDays(30)
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
     var trendsData = MutableLiveData<SleepTrendsData>()
@@ -171,12 +172,12 @@ class SleepDashViewModel @Inject constructor(
                 val deep: Int? = ((dayData.deepSleep?.value ?: 0) / 60).takeIf { it != 0 }
                 restorative.add(Pair(rem, deep))
 
-                if (rem == null && deep == null) {
+                if ((rem == null && deep == null) || (dayData.timeInBed ?: 0) == 0) {
                     restorativeIcon.add(R.drawable.ic_trend_state_default)
                 } else {
 
                     val resSleep = (rem ?: 0) + (deep ?: 0)
-                    val total = dayData.sleepDuration?.value ?: 0
+                    val total = dayData.timeInBed ?: 0
                     val percent = (resSleep.toFloat() / total.toFloat()) * 100
                     val isInIdealRange = percent in 40f..50f
 
@@ -367,10 +368,11 @@ class SleepDashViewModel @Inject constructor(
                 )
             }
 
-            if (dayData?.masterSleepStart == null) {
+            if (dayData?.masterSleepStart == null || dayData.prev14DayBed == null || dayData.prev14DayAwake == null) {
                 sleepTimeIcons.add(R.drawable.ic_trend_state_default)
             } else {
-                val isInIdealRange = false//todo discuss logic with prashant - koshima
+                val isInIdealRange = (dayData.prev14DayAwake!! <= 60 && dayData.prev14DayBed!! <= 60)
+
                 if (isInIdealRange) {
                     sleepTimeIcons.add(R.drawable.ic_trend_state_green)
                 } else {
@@ -577,6 +579,11 @@ class SleepDashViewModel @Inject constructor(
         dayData?.sleepChild?.getOrNull(position).let {
             selectedMultiSleep.postValue(it)
         }
+    }
+
+    fun setStartDate(registerDate: Int) {
+        if(registerDate==-1) return
+        calendarStartDate = LocalDate.now().minusDays(registerDate.toLong())
     }
 
 
