@@ -93,9 +93,9 @@ class RescueServiceInBgWorker
 
         val future: SettableFuture<ForegroundInfo> = SettableFuture.create()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(420, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            future.set(ForegroundInfo(420, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC))
         } else {
-            ForegroundInfo(420, notification)
+            future.set(ForegroundInfo(420, notification))
         }
         return future
     }

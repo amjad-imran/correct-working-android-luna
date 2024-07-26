@@ -231,7 +231,7 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
 
 //    implementation(CalenderView.calendarView)
-    implementation(libs.view)
+    implementation(libs.calendarView)
 //    implementation(CleverTap.sdk)
 
     implementation(libs.exoplayer.core)
