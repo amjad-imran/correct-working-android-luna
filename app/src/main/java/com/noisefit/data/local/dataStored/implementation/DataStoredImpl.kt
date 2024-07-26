@@ -226,6 +226,10 @@ class DataStoredImpl
         mPrefs.edit()?.putString(GOT_PERIOD_CLICKED, DateFormats.getCurrentDate())?.commit()
     }
 
+    override fun removeGotPeriodClicked() {
+        mPrefs.edit()?.remove(GOT_PERIOD_CLICKED)?.commit()
+    }
+
     //-1 if no value saved else days
     override fun getFMHWalkthroughRemindLaterDays(): Long {
         val savedTimeStamp = mPrefs.getLong(FMH_REMIND_LATER, -1)
@@ -353,6 +357,7 @@ class DataStoredImpl
     }
 
     override fun clearUserLogoutData() {
+        mPrefs.edit()?.remove(GOT_PERIOD_CLICKED)?.apply()
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
         mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()
         mPrefs.edit()?.remove(FMH_WALK_THROUGH)?.apply()
