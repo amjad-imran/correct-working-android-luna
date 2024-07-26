@@ -315,8 +315,6 @@ class SleepTimeChart constructor(context: Context?, attrs: AttributeSet?) :
         mMax = (mMax + offset * 2)
 
 
-        LOGS.d("dfgdfgdfg Max - > $mMax")
-
         invalidate()
     }
 

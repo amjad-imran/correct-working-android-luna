@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <include
             android:id="@+id/lytHourMin"
@@ -20,9 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="-4dp"
-            android:layout_marginTop="-2dp"
             android:layout_marginEnd="-4dp"
-            android:layout_marginBottom="-2dp"
+            android:alpha="0.2"
             app:layout_constraintBottom_toBottomOf="@+id/tvRangeValue"
             app:layout_constraintEnd_toEndOf="@+id/tvRangeValue"
             app:layout_constraintStart_toStartOf="@+id/tvRangeValue"
@@ -37,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="4dp"
             android:drawablePadding="4dp"
-            android:padding="4dp"
+            android:padding="2dp"
             android:textColor="#29cc74"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lytHourMin"

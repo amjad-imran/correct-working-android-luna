@@ -10,7 +10,7 @@
         android:id="@+id/circularProgressBar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:archWidth="20dp"
+        app:archWidth="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivInfo"
+        android:visibility="invisible"
         android:src="@drawable/ic_info_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
@@ -48,8 +47,6 @@ import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
-import com.oreo.ui.sleep2.add.OAddSleepFragment
-import com.oreo.ui.sleep2.add.OAddSleepLaunchState
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +54,6 @@ import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
@@ -86,7 +82,7 @@ class SleepDashFragment :
         })
     }
 
-    private val mAdapter: OHMInternalAdapter by lazy {
+    private val adapterSleepContributor: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
 
@@ -96,6 +92,7 @@ class SleepDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
         viewModel.setStartDate(mainViewModel.registerDate)
         initCalender()
         setRecycler()
@@ -103,7 +100,7 @@ class SleepDashFragment :
 
     private fun setRecycler() {
         with(binding.lytSleepContributor.rvHm) {
-            adapter = mAdapter
+            adapter = adapterSleepContributor
         }
         with(binding.lytSSAnalysis.rvSleepStage) {
             adapter = mSleepStageAdapter
@@ -145,7 +142,7 @@ class SleepDashFragment :
                 val score = viewModel.sleepData[day.date]?.sleepScore?.value
                 if (score == null) {
                     bind.circularProgressBar.setProgress(0)
-                    bind.exSevenDayText.alpha = 0.5f
+                    bind.exSevenDayText.alpha = 0.3f
                 } else {
                     bind.circularProgressBar.setProgress(score)
                     bind.exSevenDayText.alpha = 1f
@@ -158,7 +155,7 @@ class SleepDashFragment :
                 }
 
                 if (day.date > dateToday) {
-                    bind.exSevenDayText.alpha = 0.5f
+                    bind.exSevenDayText.alpha = 0.3f
                 } else {
                     bind.exSevenDayText.alpha = 1f
                 }
@@ -204,10 +201,24 @@ class SleepDashFragment :
 
     override fun initListener() {
 
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                sleepDayGraphView?.resetIfInteracting()
+            }
+        }
+
+        binding.lytSSAnalysis.lytNightMovement.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.night_time_movements?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytSleepContributor.ivArrowOpen.setOnClickListener {
             val data = viewModel.getSelectedDateData()
             if (data != null) {
-                mAdapter.setData(viewModel.generateSleepContributorData(data, true))
+                adapterSleepContributor.setData(viewModel.generateSleepContributorData(data, true))
                 binding.lytSleepContributor.ivArrowOpen.gone()
                 binding.lytSleepContributor.ivClose.visible()
             }
@@ -216,7 +227,7 @@ class SleepDashFragment :
         binding.lytSleepContributor.ivClose.setOnClickListener {
             val data = viewModel.getSelectedDateData()
             if (data != null) {
-                mAdapter.setData(viewModel.generateSleepContributorData(data))
+                adapterSleepContributor.setData(viewModel.generateSleepContributorData(data))
                 binding.lytSleepContributor.ivArrowOpen.visible()
                 binding.lytSleepContributor.ivClose.gone()
             }
@@ -240,18 +251,26 @@ class SleepDashFragment :
 
 
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
+            context.showShortToast("In dev")
+            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_PERFORMANCE)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
+            context.showShortToast("In dev")
+            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.HOUR_VS_NEED)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
+            context.showShortToast("In dev")
+            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytSleepTime.root.setOnClickListener {
+            context.showShortToast("In dev")
+            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
             navigate(frag, bundle)
         }
@@ -516,7 +535,7 @@ class SleepDashFragment :
 
         setNapData(data?.naps, data?.date ?: "")
 
-        mAdapter.setData(viewModel.generateSleepContributorData(data))
+        adapterSleepContributor.setData(viewModel.generateSleepContributorData(data))
         binding.lytSleepContributor.ivArrowOpen.visible()
         binding.lytSleepContributor.ivClose.gone()
 
@@ -546,18 +565,18 @@ class SleepDashFragment :
             ), SleepAnalysisData(
                 name = "Deep sleep",
                 icon = R.drawable.ic_sleep_deep,
-                currentValue = summary?.rem?.curr_val,
-                avgValue = summary?.rem?.avg
+                currentValue = summary?.deep?.curr_val,
+                avgValue = summary?.deep?.avg
             ), SleepAnalysisData(
                 name = "Awake sleep",
                 icon = R.drawable.ic_sleep_awake,
-                currentValue = summary?.rem?.curr_val,
-                avgValue = summary?.rem?.avg
+                currentValue = summary?.awake?.curr_val,
+                avgValue = summary?.awake?.avg
             ), SleepAnalysisData(
                 name = "Light sleep",
                 icon = R.drawable.ic_sleep_light,
-                currentValue = summary?.rem?.curr_val,
-                avgValue = summary?.rem?.avg
+                currentValue = summary?.light?.curr_val,
+                avgValue = summary?.light?.avg
             )
         )
         mSleepStageAdapter.setData(sleepSummary)
@@ -567,9 +586,11 @@ class SleepDashFragment :
         val filteredNaps = naps?.filter { !it.isNextDayNap }
 
         if (filteredNaps.isNullOrEmpty()) {
+            binding.dividerNap.root.gone()
             binding.lytNaps.root.gone()
             return
         } else {
+            binding.dividerNap.root.visible()
             binding.lytNaps.root.visible()
         }
 

@@ -57,9 +57,10 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
 
                 binding.lytRightValues.apply {
                     this.tvRangeValue.text = resultData.text
-                    val (back, textColor) = getColorByStatus(resultData.status)
+                    val (back, textColor,background) = getColorByStatus(resultData.status)
                     this.tvRangeValue.setTextColor(textColor)
                     this.viewTextBack.setBackgroundResource(back)
+                    binding.rootView.setBackgroundResource(background)
 
                     if(resultData.status.equals("optimal")){
                         this.tvRangeValue.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hm_tick, 0, 0, 0);
@@ -79,14 +80,15 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
             }
         }
 
-        private fun getColorByStatus(status: String?): Pair<Int, Int> {
-            if (status == null) return Pair(0, R.color.white)
+        private fun getColorByStatus(status: String?): Triple<Int, Int,Int> {
+            if (status == null) return Triple(0, R.color.white,com.noisefit_commans.R.drawable.back_modal_new)
 
             return when (status.lowercase()) {
-                "warning" -> Pair(R.drawable.back_hm_warning, Color.parseColor("#ff7c94"))
-                "optimal" -> Pair(R.drawable.back_hm_optimal, Color.parseColor("#29cc74"))
-                "fair" -> Pair(R.drawable.back_hm_fair, Color.parseColor("#d79d58"))
-                else -> Pair(0, R.color.white)
+
+                "warning" -> Triple(R.drawable.back_hm_warning, Color.parseColor("#ff7c94"),com.noisefit_commans.R.drawable.back_modal_new_warning)
+                "optimal" -> Triple(R.drawable.back_hm_optimal, Color.parseColor("#29cc74"),com.noisefit_commans.R.drawable.back_modal_new)
+                "fair" -> Triple(R.drawable.back_hm_fair, Color.parseColor("#d79d58"),com.noisefit_commans.R.drawable.back_modal_new)
+                else -> Triple(0, R.color.white,com.noisefit_commans.R.drawable.back_modal_new)
             }
         }
     }

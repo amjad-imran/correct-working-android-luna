@@ -15,6 +15,8 @@
     <TextView
         android:id="@+id/tvHour"
         style="@style/S28"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="7" />
@@ -25,12 +27,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:text="@string/text_hr"
         android:textColor="@color/white_60" />
 
     <TextView
         android:id="@+id/tvMin"
         style="@style/S28"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -39,6 +45,8 @@
     <TextView
         android:id="@+id/textMin"
         style="@style/S18"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"

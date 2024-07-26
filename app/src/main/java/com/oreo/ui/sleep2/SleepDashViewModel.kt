@@ -15,6 +15,7 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
@@ -47,6 +48,13 @@ class SleepDashViewModel @Inject constructor(
     val selectedMultiSleep = MutableLiveData<MultiSleep?>()
 
     val currentWeekDates = ArrayList<LocalDate>()
+
+    private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
+    val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+
+    init {
+        getContributorInfo()
+    }
 
 
     /**
@@ -127,6 +135,51 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
+    fun getContributorInfo() {
+        viewModelScope.launch {
+            userActivityRepository.getContributorDetailsInfo(
+                "sleep"
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getContributorInfo()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _contributorInfo.postValue(it)
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     * OS-2386
+     */
     private fun generateTrendsData(): SleepTrendsData {
 
         val sleepPerformance = ArrayList<Int?>()
@@ -147,10 +200,13 @@ class SleepDashViewModel @Inject constructor(
                 sleepPerformance.add(dayData.sleepPerformance)
                 if (dayData.sleepPerformance == null) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_default)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
                 } else if (dayData.sleepPerformance!! > 70) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_green)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_green)
                 } else {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_red)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_red)
                 }
 
                 val sleepDuration: Int? =
@@ -159,13 +215,6 @@ class SleepDashViewModel @Inject constructor(
                     ((dayData.sleepNeed ?: 0) / 60).takeIf { it != 0 }
 
                 hourVsNeed.add(Pair(sleepDuration, sleepNeeded))
-                if (dayData.sleepPerformance == null) {
-                    hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
-                } else if (dayData.sleepPerformance!! > 70) {
-                    hourVsNeedIcon.add(R.drawable.ic_trend_state_green)
-                } else {
-                    hourVsNeedIcon.add(R.drawable.ic_trend_state_red)
-                }
 
 
                 val rem: Int? = ((dayData.remSleep?.value ?: 0) / 60).takeIf { it != 0 }
@@ -371,7 +420,8 @@ class SleepDashViewModel @Inject constructor(
             if (dayData?.masterSleepStart == null || dayData.prev14DayBed == null || dayData.prev14DayAwake == null) {
                 sleepTimeIcons.add(R.drawable.ic_trend_state_default)
             } else {
-                val isInIdealRange = (dayData.prev14DayAwake!! <= 60 && dayData.prev14DayBed!! <= 60)
+                val isInIdealRange =
+                    (dayData.prev14DayAwake!! <= 60 && dayData.prev14DayBed!! <= 60)
 
                 if (isInIdealRange) {
                     sleepTimeIcons.add(R.drawable.ic_trend_state_green)
@@ -465,8 +515,8 @@ class SleepDashViewModel @Inject constructor(
             listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
             listData.add(OHMDataModel(SleepContributor.REM_SLEEP))
             listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP))
-            listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
             if (showAll) {
+                listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
                 listData.add(OHMDataModel(SleepContributor.LATENCY))
                 listData.add(OHMDataModel(SleepContributor.RESTFULNESS))
                 listData.add(OHMDataModel(SleepContributor.TIMING))
@@ -498,14 +548,13 @@ class SleepDashViewModel @Inject constructor(
             )
         )
 
-        listData.add(
-            OHMDataModel(
-                SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
-                status = data.efficiency?.status, text = data.efficiency?.text
-            )
-        )
-
         if (showAll) {
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
+                    status = data.efficiency?.status, text = data.efficiency?.text
+                )
+            )
             listData.add(
                 OHMDataModel(
                     SleepContributor.LATENCY, valueTime = data.latency?.value,
@@ -582,7 +631,7 @@ class SleepDashViewModel @Inject constructor(
     }
 
     fun setStartDate(registerDate: Int) {
-        if(registerDate==-1) return
+        if (registerDate == -1) return
         calendarStartDate = LocalDate.now().minusDays(registerDate.toLong())
     }
 

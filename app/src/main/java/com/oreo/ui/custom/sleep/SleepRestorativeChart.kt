@@ -293,9 +293,6 @@ class SleepRestorativeChart constructor(context: Context?, attrs: AttributeSet?)
 
         mMax += ((0.2) * mMax).toInt()
 
-        LOGS.d("dfjhsdkjfhskdf Max - > $mMax")
-
-
         invalidate()
     }
 
