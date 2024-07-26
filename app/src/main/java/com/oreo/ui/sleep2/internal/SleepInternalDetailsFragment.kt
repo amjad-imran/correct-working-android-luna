@@ -22,14 +22,13 @@ import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.min
 
 @AndroidEntryPoint
 class SleepInternalDetailsFragment :
     BaseFragment<FragmentSleepInternalDetailsBinding>(FragmentSleepInternalDetailsBinding::inflate) {
 
     private val viewModel: SleepInternalDetailsViewModel by viewModels()
-    private val sharedViewModel:OSPTrendsSharedViewModel by activityViewModels()
+    private val sharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
 
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
@@ -55,7 +54,6 @@ class SleepInternalDetailsFragment :
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
         viewModel.updateTitle()
-        setGraphPagerView()
         setRecycler()
         viewModel.getTrendsInternalDetailsData()
     }
@@ -68,6 +66,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
+        setGraphPagerView()
         val data = viewModel.pageData
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
@@ -206,10 +205,12 @@ class SleepInternalDetailsFragment :
 
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
-        fragments.add(SleepSingleLineChartFragment.newInstance())
-        fragments.add(SleepMultiLineChartFragment.newInstance())
-        fragments.add(SleepMultiBarChartFragment.newInstance())
-        fragments.add(SleepBarChartFragment.newInstance())
+        when (viewModel.selectedLaunchMode) {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.EFFICIENCY -> fragments.add(SleepSingleLineChartFragment.newInstance())
+            SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
+            else -> fragments.add(SleepBarChartFragment.newInstance())
+        }
 
         val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
 
@@ -315,7 +316,7 @@ class SleepInternalDetailsFragment :
     }
 
     override fun subscribeObservers() {
-        sharedViewModel.interactGraphData.observe(this){
+        sharedViewModel.interactGraphData.observe(this) {
             val parseData = viewModel.parsePageData(pos = it)
             viewModel.pageData = parseData
             showTopContent()
@@ -336,6 +337,7 @@ class SleepInternalDetailsFragment :
                 val parseData = viewModel.parsePageData(it.values?.size?.minus(1) ?: 0)
                 viewModel.pageData = parseData
                 showTopContent()
+
             }
         }
 
