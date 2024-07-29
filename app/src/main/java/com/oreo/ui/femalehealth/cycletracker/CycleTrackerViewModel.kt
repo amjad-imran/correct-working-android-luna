@@ -24,6 +24,7 @@ import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
 import com.oreo.ui.custom.TempPeriodCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -71,13 +72,17 @@ class CycleTrackerViewModel @Inject constructor(
 
     var lastDataLoadedFor: String? = null
 
+    private var dateJob: Job? = null
+
     fun getDataForDate(date: String) {
 
         if (date.equals(lastDataLoadedFor)) return
 
         lastDataLoadedFor = date
 
-        viewModelScope.launch {
+        dateJob?.cancel()
+
+        dateJob = viewModelScope.launch {
             femaleHealthRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {

@@ -114,7 +114,6 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
             if (totalDuration != 0) {
                 val eachMinutesWidth = (width.toFloat() - endPadding) / totalDuration
-                LOGS.d("NIGHT_GRAPH $eachMinutesWidth")
 
                 var start = startPadding
                 var end: Float
@@ -127,8 +126,6 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
 
                     val mid = start + ((end - start) / 2)
-
-                    LOGS.d("NIGHT_GRAPH start:$start mid:$mid end:$end")
 
                     when (SleepMovementType.getValueFromString(rowData.movementType)) {
                         SleepMovementType.LOW -> {

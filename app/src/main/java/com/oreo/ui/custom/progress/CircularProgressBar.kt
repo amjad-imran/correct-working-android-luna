@@ -44,13 +44,12 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
         backgroundPaint.setColor(Color.parseColor("#19ffffff"))
         backgroundPaint.style = Paint.Style.STROKE
         backgroundPaint.strokeWidth = strokeWidth
-        backgroundPaint.strokeCap = Paint.Cap.ROUND
+        backgroundPaint.strokeCap = Paint.Cap.BUTT
 
         progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        //progressPaint.setColor(-0x9dff12)
         progressPaint.style = Paint.Style.STROKE
         progressPaint.strokeWidth = strokeWidth
-        progressPaint.strokeCap = Paint.Cap.ROUND
+        progressPaint.strokeCap = Paint.Cap.BUTT
 
 
     }

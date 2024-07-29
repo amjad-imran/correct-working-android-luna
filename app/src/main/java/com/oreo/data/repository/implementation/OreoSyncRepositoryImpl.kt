@@ -30,7 +30,6 @@ import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
 
 import com.noisefit_commans.response.SleepBreakup
@@ -38,7 +37,6 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
-import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyStressDataImpl
@@ -453,7 +451,7 @@ class OreoSyncRepositoryImpl(
             )
         )
         data.sleepData?.let {
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             sleepDataImpl.updateServerSyncData(it, todayTimeStampForSleep)
 
         }

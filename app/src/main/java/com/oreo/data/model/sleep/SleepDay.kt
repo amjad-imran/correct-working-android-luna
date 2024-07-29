@@ -17,6 +17,12 @@ data class SleepDay(
     @SerializedName("sleep_duration")
     var sleepDuration: CommonDataModel? = null,
 
+    @SerializedName("sleep_need")
+    var sleepNeed: Int? = null,
+
+    @SerializedName("time_in_bed")
+    var timeInBed: Int? = null,
+
     @SerializedName("rem_sleep")
     var remSleep: CommonDataModel? = null,
 
@@ -34,6 +40,15 @@ data class SleepDay(
     var summary: SleepSummary? = null,
 
     var efficiency: CommonDataModel? = null,
+
+    @SerializedName("sleep_performance")
+    var sleepPerformance: Int? = null,
+
+    @SerializedName("prev_14_day_bed")
+    var prev14DayBed: Int? = null,
+
+    @SerializedName("prev_14_day_awake")
+    var prev14DayAwake: Int? = null,
 
     var restfulness: CommonDataModel? = null,
 

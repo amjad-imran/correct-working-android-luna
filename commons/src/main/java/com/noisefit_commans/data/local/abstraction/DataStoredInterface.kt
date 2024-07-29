@@ -457,4 +457,5 @@ interface DataStoredInterface {
 
     fun getGotPeriodClickedStatus(): Boolean
     fun saveGotPeriodClicked()
+    fun removeGotPeriodClicked()
 }

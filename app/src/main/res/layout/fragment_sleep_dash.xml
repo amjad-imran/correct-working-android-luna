@@ -24,6 +24,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/svMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="@dimen/side_margin" />
 
             <androidx.viewpager2.widget.ViewPager2
@@ -87,7 +89,8 @@
             <include
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSleeps"
@@ -104,6 +107,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp" />
 
+            <include
+                android:id="@+id/dividerNap"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
+
 
             <include
                 android:id="@+id/lytNaps"
@@ -113,6 +123,12 @@
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 tools:visibility="visible" />
+
+            <include
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
 
             <include
                 android:id="@+id/lytSleepTrends"
@@ -125,6 +141,9 @@
 
             <View
                 android:layout_width="match_parent"
+                android:layout_height="16dp" />
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="64dp" />
 
 
@@ -135,9 +154,9 @@
     <include
         android:id="@+id/progressBar"
         layout="@layout/default_loader"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

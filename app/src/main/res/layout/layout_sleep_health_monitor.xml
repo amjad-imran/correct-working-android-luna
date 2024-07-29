@@ -161,7 +161,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_hm_check_mark"
+            android:src="@drawable/ic_hm_check_default"
             app:layout_constraintEnd_toEndOf="@+id/imageView32"
             app:layout_constraintStart_toStartOf="@+id/imageView32"
             app:layout_constraintTop_toBottomOf="@+id/textView118" />
@@ -170,7 +170,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_hm_check_mark"
+            android:src="@drawable/ic_hm_check_default"
             app:layout_constraintEnd_toEndOf="@+id/imageView31"
             app:layout_constraintStart_toStartOf="@+id/imageView31"
             app:layout_constraintTop_toBottomOf="@+id/textView119" />
@@ -179,7 +179,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_hm_check_mark"
+            android:src="@drawable/ic_hm_check_default"
             app:layout_constraintEnd_toEndOf="@+id/imageView41"
             app:layout_constraintStart_toStartOf="@+id/imageView41"
             app:layout_constraintTop_toBottomOf="@+id/textView120" />
@@ -188,7 +188,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_hm_check_mark"
+            android:src="@drawable/ic_hm_check_default"
             app:layout_constraintEnd_toEndOf="@+id/imageView42"
             app:layout_constraintStart_toStartOf="@+id/imageView42"
             app:layout_constraintTop_toBottomOf="@+id/textView122" />
@@ -197,7 +197,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_hm_check_mark"
+            android:src="@drawable/ic_hm_check_default"
             app:layout_constraintEnd_toEndOf="@+id/imageView43"
             app:layout_constraintStart_toStartOf="@+id/imageView43"
             app:layout_constraintTop_toBottomOf="@+id/textView121" />
@@ -218,7 +218,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView44"
-            tools:text="Your respiratory rate is significantly elevated" />
+            android:text="No data so far" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

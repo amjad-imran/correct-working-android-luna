@@ -92,7 +92,7 @@ camerax = "1.3.3"
 camerax-view = "1.3.3"
 lifecycle-extensions = "2.2.0"
 hilt-work = "1.2.0"
-view = "2.0.2"
+calendar-view = "2.5.2"
 work-runtime-ktx = "2.9.0"
 concurrent-futures-ktx = "1.1.0"
 fragment-ktx = "1.7.1"
@@ -224,7 +224,7 @@ androidxNavigationSafeArgsGradlePlugin = { group = "androidx.navigation", name =
 googleDaggerHiltAndroidGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt-android-gradle-plugin" }
 googleFirebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
 review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "reviewKtx" }
-view = { module = "com.kizitonwose.calendar:view", version.ref = "view" }
+calendarView = { module = "com.kizitonwose.calendar:view", version.ref = "calendar-view" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

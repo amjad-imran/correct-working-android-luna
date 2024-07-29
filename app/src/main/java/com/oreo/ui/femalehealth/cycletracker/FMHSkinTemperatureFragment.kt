@@ -95,7 +95,7 @@ class FMHSkinTemperatureFragment :
             "0°$unit"
         } else {
             val formattedValue = String.format(locale = Locale.US, "%.1f", value)
-            if (value > 0.0f) "+${formattedValue}" else "${formattedValue}°$unit"
+            if (value > 0.0f) "+${formattedValue}°$unit" else "${formattedValue}°$unit"
         }
     }
 

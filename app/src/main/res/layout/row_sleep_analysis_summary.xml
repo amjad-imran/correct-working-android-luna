@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/back_modal_new_10">
+        android:background="@drawable/back_modal_new">
 
         <ImageView
             android:id="@+id/ivMain"
@@ -66,9 +66,10 @@
 
         <ImageView
             android:id="@+id/ivState"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginEnd="12dp"
+            tools:src="@drawable/ic_arrow_increase"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -17,8 +17,6 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FemaleHealthIconsModel
-import com.oreo.data.model.LearnModel
-import com.oreo.data.model.OHSModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
@@ -40,7 +38,7 @@ class FemaleHealthRepositoryImpl(
 ) : FemaleHealthRepository {
     override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/symptom"
             remoteDataSource.saveLogSymptom(url, jsonObject)
 
@@ -50,7 +48,7 @@ class FemaleHealthRepositoryImpl(
     override suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
 
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
             remoteDataSource.submitFemaleHealthInfo(url, jsonObject)
@@ -62,7 +60,7 @@ class FemaleHealthRepositoryImpl(
         if (LocalDate.parse(selectDate) == LocalDate.now()) {
             return flow {
                 emit(Resource.Loading(true))
-                val type = KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY
+                val type = KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2
                 var resultData: FemaleHealthUserInfoModel? = null
 
                 val cacheResult = safeCacheCall(Dispatchers.IO) {
@@ -202,7 +200,8 @@ class FemaleHealthRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
 
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+            localDataStore.removeGotPeriodClicked()
 
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/period"
             remoteDataSource.logPeriod(url, jsonObject)
@@ -362,7 +361,7 @@ class FemaleHealthRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
 
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info/$id"
             remoteDataSource.updateCycleTrackerInfo(url, jsonObject)
@@ -503,7 +502,7 @@ class FemaleHealthRepositoryImpl(
     override suspend fun setPeriodConfirm(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/confirm"
             remoteDataSource.setPeriodConfirm(url, jsonObject)
         }

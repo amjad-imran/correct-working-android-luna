@@ -1,5 +1,6 @@
 package com.oreo.ui.sleep2
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
@@ -22,8 +24,12 @@ import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.sleep.SleepTimeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -39,10 +45,25 @@ class SleepDashViewModel @Inject constructor(
 
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    var calendarStartDate = MutableLiveData<Event<LocalDate>>()
 
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
     var trendsData = MutableLiveData<SleepTrendsData>()
     val selectedMultiSleep = MutableLiveData<MultiSleep?>()
+
+    val currentWeekDates = ArrayList<LocalDate>()
+
+    private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
+    val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+
+    /**
+     * for multi api call handling during calendar start it
+     */
+    private var lastApiCallWeek: Pair<String, String>? = null
+
+    init {
+        getContributorInfo()
+    }
 
 
     /**
@@ -53,8 +74,12 @@ class SleepDashViewModel @Inject constructor(
     private val _sleepDayData = MutableLiveData<SleepDay?>()
     val sleepDayData: LiveData<SleepDay?> get() = _sleepDayData
 
+    private var weekDataGetJob: Job? = null
+
     fun getSleepData(startDate: String, endDate: String) {
-        viewModelScope.launch {
+        weekDataGetJob?.cancel()
+
+        weekDataGetJob = viewModelScope.launch {
 
             val todayDate = LocalDate.now()
             val weekEnd = LocalDate.parse(endDate)
@@ -64,6 +89,13 @@ class SleepDashViewModel @Inject constructor(
                 calculatedEndDate = todayDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             }
 
+
+            if (lastApiCallWeek != null && lastApiCallWeek?.first.equals(startDate) && lastApiCallWeek?.second.equals(
+                    calculatedEndDate
+                )
+            ) {
+                return@launch
+            }
 
             userActivityRepository.getUserHealthSleepData(
                 startDate, calculatedEndDate
@@ -96,7 +128,11 @@ class SleepDashViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let { res ->
 
-                            res.forEach {
+                            lastApiCallWeek = Pair(startDate, calculatedEndDate)
+
+                            setStartDate(res.registerDate ?: -1)
+
+                            res.result?.forEach {
                                 val date = LocalDate.parse(it.date)
                                 sleepData[date] = it
                             }
@@ -104,19 +140,18 @@ class SleepDashViewModel @Inject constructor(
                             _sleepDayData.postValue(sleepData[selectedDate.value])
 
 
-                            val notifyDates = ArrayList<LocalDate>()
+                            currentWeekDates.clear()
                             var weekStart = LocalDate.parse(startDate)
-                            notifyDates.add(weekStart)
+                            currentWeekDates.add(weekStart)
 
 
-                            while (weekStart <= weekEnd) {
+                            while (weekStart < weekEnd) {
                                 notifyDateChange.value = Event(weekStart)
                                 weekStart = weekStart.plusDays(1)
-                                notifyDates.add(weekStart)
+                                currentWeekDates.add(weekStart)
                             }
 
-                            trendsData.postValue(generateTrendsData(notifyDates))
-
+                            trendsData.postValue(generateTrendsData())
                         }
                     }
                 }
@@ -124,38 +159,136 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
-    private fun generateTrendsData(notifyDates: ArrayList<LocalDate>): SleepTrendsData {
+    fun getContributorInfo() {
+        viewModelScope.launch {
+            userActivityRepository.getContributorDetailsInfo(
+                "sleep"
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getContributorInfo()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _contributorInfo.postValue(it)
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     * OS-2386
+     */
+    private fun generateTrendsData(): SleepTrendsData {
 
         val sleepPerformance = ArrayList<Int?>()
+        val sleepPerformanceIcon = ArrayList<Int>()
+
         val hourVsNeed = ArrayList<Pair<Int?, Int?>>()
+        val hourVsNeedIcon = ArrayList<Int>()
+
         val restorative = ArrayList<Pair<Int?, Int?>>()
-        notifyDates.forEach {
-            val dayData = sleepData[it]
+        val restorativeIcon = ArrayList<Int>()
+
+        var selectedPosition = -1
+
+        currentWeekDates.forEachIndexed { index, localDate ->
+            val dayData = sleepData[localDate]
 
             if (dayData != null) {
-                sleepPerformance.add(dayData.efficiency?.value)//todo change to sleep performance
+                sleepPerformance.add(dayData.sleepPerformance)
+                if (dayData.sleepPerformance == null) {
+                    sleepPerformanceIcon.add(R.drawable.ic_trend_state_default)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
+                } else if (dayData.sleepPerformance!! > 70) {
+                    sleepPerformanceIcon.add(R.drawable.ic_trend_state_green)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_green)
+                } else {
+                    sleepPerformanceIcon.add(R.drawable.ic_trend_state_red)
+                    hourVsNeedIcon.add(R.drawable.ic_trend_state_red)
+                }
 
                 val sleepDuration: Int? =
                     ((dayData.sleepDuration?.value ?: 0) / 60).takeIf { it != 0 }
-                hourVsNeed.add(Pair(sleepDuration, 60))//todo sleep need pending from backend
+                val sleepNeeded: Int? =
+                    ((dayData.sleepNeed ?: 0) / 60).takeIf { it != 0 }
+
+                hourVsNeed.add(Pair(sleepDuration, sleepNeeded))
+
 
                 val rem: Int? = ((dayData.remSleep?.value ?: 0) / 60).takeIf { it != 0 }
                 val deep: Int? = ((dayData.deepSleep?.value ?: 0) / 60).takeIf { it != 0 }
                 restorative.add(Pair(rem, deep))
+
+                if ((rem == null && deep == null) || (dayData.timeInBed ?: 0) == 0) {
+                    restorativeIcon.add(R.drawable.ic_trend_state_default)
+                } else {
+
+                    val resSleep = (rem ?: 0) + (deep ?: 0)
+                    val total = dayData.timeInBed ?: 0
+                    val percent = (resSleep.toFloat() / total.toFloat()) * 100
+                    val isInIdealRange = percent in 40f..50f
+
+                    if (isInIdealRange) {
+                        restorativeIcon.add(R.drawable.ic_trend_state_green)
+                    } else {
+                        restorativeIcon.add(R.drawable.ic_trend_state_red)
+                    }
+                }
+
             } else {
                 sleepPerformance.add(null)
+                sleepPerformanceIcon.add(R.drawable.ic_trend_state_default)
+
                 hourVsNeed.add(Pair(null, null))
+                hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
+
                 restorative.add(Pair(null, null))
+                restorativeIcon.add(R.drawable.ic_trend_state_default)
+            }
+
+            if (localDate == selectedDate.value) {
+                selectedPosition = index
             }
 
         }
 
+        val (sleepTime, sleepTimeIcons) = generateSleepTimeData(currentWeekDates)
         return SleepTrendsData(
             sleepPerformance = sleepPerformance,
+            sleepPerformanceIcon = sleepPerformanceIcon,
             hourVsNeed = hourVsNeed,
+            hourVsNeedIcon = hourVsNeedIcon,
             restorative = restorative,
-            sleepTime = generateSleepTimeData(notifyDates),
-            selectedPosition = 4
+            restorativeIcon = restorativeIcon,
+            sleepTime = sleepTime,
+            sleepTimeIcons = sleepTimeIcons,
+            selectedPosition = (selectedPosition + 1)
         )
     }
 
@@ -239,22 +372,10 @@ class SleepDashViewModel @Inject constructor(
         return Pair(sleepArray, countCData)
     }
 
-    private fun generateSleepTimeData(notifyDates: ArrayList<LocalDate>): List<SleepTimeModel> {
-
-        //Sleep start and end times
-        /* val sleepArray = arrayListOf(
-             Triple("2024-06-30 22:00:00", "2024-07-01 06:00:00", "2024-07-01"),
-             Triple("2024-07-01 23:00:00", "2024-07-02 07:00:00", "2024-07-02"),
-             Triple(null, null, "2024-07-03"),
-             Triple("2024-07-03 22:45:00", "2024-07-04 09:00:00", "2024-07-04"),
-             Triple("2024-07-04 21:30:00", "2024-07-05 06:30:00", "2024-07-05"),
-             Triple("2024-07-05 22:10:00", "2024-07-06 07:30:00", "2024-07-06"),
-             Triple("2024-07-06 23:20:00", "2024-07-07 08:30:00", "2024-07-07")
-         )*/
-
-
+    private fun generateSleepTimeData(notifyDates: ArrayList<LocalDate>): Pair<List<SleepTimeModel>, List<Int>> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val sleepTimeIcons = ArrayList<Int>()
         var minValue: Long? = null
         notifyDates.forEach {
             val dayData = sleepData[it]
@@ -319,8 +440,22 @@ class SleepDashViewModel @Inject constructor(
                     )
                 )
             }
+
+            if (dayData?.masterSleepStart == null || dayData.prev14DayBed == null || dayData.prev14DayAwake == null) {
+                sleepTimeIcons.add(R.drawable.ic_trend_state_default)
+            } else {
+                val isInIdealRange =
+                    (dayData.prev14DayAwake!! <= 60 && dayData.prev14DayBed!! <= 60)
+
+                if (isInIdealRange) {
+                    sleepTimeIcons.add(R.drawable.ic_trend_state_green)
+                } else {
+                    sleepTimeIcons.add(R.drawable.ic_trend_state_red)
+                }
+            }
+
         }
-        return result
+        return Pair(result, sleepTimeIcons)
     }
 
     fun updateSelectedDate(date: LocalDate) {
@@ -328,6 +463,7 @@ class SleepDashViewModel @Inject constructor(
 
         selectedDate.value = date
         notifyDateChange.value = Event(old)
+        trendsData.postValue(generateTrendsData())
     }
 
     fun onWeekScrolled(date: LocalDate) {
@@ -403,8 +539,8 @@ class SleepDashViewModel @Inject constructor(
             listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
             listData.add(OHMDataModel(SleepContributor.REM_SLEEP))
             listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP))
-            listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
             if (showAll) {
+                listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
                 listData.add(OHMDataModel(SleepContributor.LATENCY))
                 listData.add(OHMDataModel(SleepContributor.RESTFULNESS))
                 listData.add(OHMDataModel(SleepContributor.TIMING))
@@ -436,14 +572,13 @@ class SleepDashViewModel @Inject constructor(
             )
         )
 
-        listData.add(
-            OHMDataModel(
-                SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
-                status = data.efficiency?.status, text = data.efficiency?.text
-            )
-        )
-
         if (showAll) {
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
+                    status = data.efficiency?.status, text = data.efficiency?.text
+                )
+            )
             listData.add(
                 OHMDataModel(
                     SleepContributor.LATENCY, valueTime = data.latency?.value,
@@ -519,6 +654,13 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
+    fun setStartDate(registerDate: Int) {
+        if (registerDate == -1) return
+        if (calendarStartDate.value?.peekContent() == null) {
+            calendarStartDate.postValue(Event(LocalDate.now().minusDays(registerDate.toLong())))
+        }
+    }
+
 
 }
 
@@ -534,8 +676,12 @@ enum class SleepContributor(val displayName: String, val icon: Int) {
 
 data class SleepTrendsData(
     val sleepPerformance: List<Int?>,
+    val sleepPerformanceIcon: List<Int>,
     val hourVsNeed: List<Pair<Int?, Int?>>,
+    val hourVsNeedIcon: List<Int>,
     val restorative: List<Pair<Int?, Int?>>,
+    val restorativeIcon: List<Int>,
     val sleepTime: List<SleepTimeModel>,
+    val sleepTimeIcons: List<Int>,
     val selectedPosition: Int
 )

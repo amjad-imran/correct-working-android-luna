@@ -9,7 +9,6 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.remote.request.LoginRequest
-import com.noisefit.data.remote.request.RegistrationRequest
 import com.noisefit_commans.data.response.*
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.safeApiCallFlow
@@ -119,7 +118,7 @@ class AuthenticationRepositoryImpl(
     override suspend fun logoutUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
 
             val url = "${BuildConfig.BASE_URL_NEW}/auth_v2/logout"
             remoteDataSource.logoutUser(url)
