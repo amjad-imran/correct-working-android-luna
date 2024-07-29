@@ -196,7 +196,7 @@ class SkinTempInternalDetailsFragment :
 
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
-        fragments.add(SleepSingleLineChartFragment.newInstance())
+//        fragments.add(SleepSingleLineChartFragment.newInstance(viewModel.findLastSixMonthDatesList()))
         fragments.add(SleepMultiLineChartFragment.newInstance())
         fragments.add(SleepMultiBarChartFragment.newInstance())
         fragments.add(SleepBarChartFragment.newInstance())

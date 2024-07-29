@@ -11,6 +11,8 @@ import com.oreo.data.model.OSleepTrendsDataModel
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +42,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
     val trendsInternalData: LiveData<OSleepInternalTrendsDataModel>
         get() = _trendsInternalData
 
-    var pageData:OSleepTrendsDataModel?=null
+    var pageData: OSleepTrendsDataModel? = null
+    var overAllPageData:OSleepInternalTrendsDataModel?= null
 
     fun getTrendsInternalDetailsData() {
         /*viewModelScope.launch {
@@ -217,7 +220,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun trendsListDummyData(): OSleepInternalTrendsDataModel {
-        val tempListData = ArrayList<TrendsValues>()
+        /*val tempListData = ArrayList<TrendsValues>()
         tempListData.add(
             TrendsValues(date = "Monday 23 July, 2024", value = 20, nudge = "Nudge 1")
         )
@@ -237,10 +240,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
             TrendsValues(date = "Saturday 28 July, 2024", value = 25, nudge = "Nudge 6")
         )
         tempListData.add(
-            TrendsValues(date = "Sunday 29 July, 2024", value = 100, value2 = 200, nudge = "Nudge 7")
-        )
+            TrendsValues(
+                date = "Sunday 29 July, 2024",
+                value = 100,
+                value2 = 200,
+                nudge = "Nudge 7"
+            )
+        )*/
         val trendsData = OSleepInternalTrendsDataModel()
-        trendsData.values = tempListData
+        trendsData.values = findLastSixMonthDatesList()
         return trendsData
 
     }
@@ -294,14 +302,43 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     }
 
-    fun parsePageData(pos:Int): OSleepTrendsDataModel {
+    fun parsePageData(pos: Int): OSleepTrendsDataModel {
         val childData = OSleepTrendsDataModel()
         val data = trendsInternalData.value?.values?.get(pos)
         childData.trendType = selectedLaunchMode
         childData.dayDate = data?.date
         childData.dspValue = data?.value
-        childData.dspValue2=data?.value2
+        childData.dspValue2 = data?.value2
         return childData
+    }
+
+    private fun findLastSixMonthDatesList() :List<TrendsValues>{
+        val currentDate = LocalDate.now()
+        val sixMonthsAgo = currentDate.minusMonths(6)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        val datesList = mutableListOf<String>()
+        var date = sixMonthsAgo
+
+        while (!date.isAfter(currentDate)) {
+            datesList.add(date.format(formatter))
+            date = date.plusDays(1)
+        }
+
+        val graphData = mutableListOf<TrendsValues>()
+        println("List of Dates from 6 Months Ago to Current Date: ${datesList.size}")
+        var i = 0
+        for (formattedDate in datesList) {
+            i++
+            val ch = TrendsValues()
+            ch.date = formattedDate
+            ch.value = 3600 + i
+            ch.value2=200
+            ch.nudge="nudge $i"
+        }
+
+        return graphData.takeLast(7)
     }
 
 

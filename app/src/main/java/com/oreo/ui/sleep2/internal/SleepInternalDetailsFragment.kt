@@ -56,6 +56,7 @@ class SleepInternalDetailsFragment :
         viewModel.updateTitle()
         setRecycler()
         viewModel.getTrendsInternalDetailsData()
+//        viewModel.findLastSixMonthDatesList()
     }
 
     private fun showTopContent() {
@@ -66,7 +67,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
-        setGraphPagerView()
+
         val data = viewModel.pageData
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
@@ -205,8 +206,12 @@ class SleepInternalDetailsFragment :
 
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
+        val pageData = viewModel.overAllPageData
         when (viewModel.selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.EFFICIENCY -> fragments.add(SleepSingleLineChartFragment.newInstance())
+            SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.EFFICIENCY -> fragments.add(
+                SleepSingleLineChartFragment.newInstance(pageData)
+            )
+
             SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
             else -> fragments.add(SleepBarChartFragment.newInstance())
@@ -317,9 +322,9 @@ class SleepInternalDetailsFragment :
 
     override fun subscribeObservers() {
         sharedViewModel.interactGraphData.observe(this) {
-            val parseData = viewModel.parsePageData(pos = it)
-            viewModel.pageData = parseData
-            showTopContent()
+//            val parseData = viewModel.parsePageData(pos = it)
+//            viewModel.pageData = parseData
+//            showTopContent()
         }
 
         viewModel.selectedPeriod.observe(this) {
@@ -334,9 +339,13 @@ class SleepInternalDetailsFragment :
 
         viewModel.trendsInternalData.observe(this) {
             if (it != null) {
-                val parseData = viewModel.parsePageData(it.values?.size?.minus(1) ?: 0)
-                viewModel.pageData = parseData
-                showTopContent()
+                if (it.values?.isNotEmpty() == true) {
+                    val parseData = viewModel.parsePageData(it.values?.size?.minus(1) ?: 0)
+                    viewModel.overAllPageData = it
+                    viewModel.pageData = parseData
+                    showTopContent()
+                    setGraphPagerView()
+                }
 
             }
         }
