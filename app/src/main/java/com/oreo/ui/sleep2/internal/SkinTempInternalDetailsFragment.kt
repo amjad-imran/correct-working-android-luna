@@ -199,7 +199,7 @@ class SkinTempInternalDetailsFragment :
 //        fragments.add(SleepSingleLineChartFragment.newInstance(viewModel.findLastSixMonthDatesList()))
         fragments.add(SleepMultiLineChartFragment.newInstance())
         fragments.add(SleepMultiBarChartFragment.newInstance())
-        fragments.add(SleepBarChartFragment.newInstance())
+        //fragments.add(SleepBarChartFragment.newInstance())
 
         val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
 

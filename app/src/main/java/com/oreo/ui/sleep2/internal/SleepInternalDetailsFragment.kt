@@ -16,12 +16,20 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjuster
+import java.time.temporal.TemporalAdjusters
 
 @AndroidEntryPoint
 class SleepInternalDetailsFragment :
@@ -30,6 +38,7 @@ class SleepInternalDetailsFragment :
     private val viewModel: SleepInternalDetailsViewModel by viewModels()
     private val sharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
+    private var pagerAdapter: InternalSleepVPAdapter? = null
 
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
         OHRLearnMoreAdapter(object : OnItemClickListener {
@@ -53,10 +62,32 @@ class SleepInternalDetailsFragment :
         viewModel.selectedLaunchMode = args.launchMode
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
+
         viewModel.updateTitle()
         setRecycler()
+        initViewPager()
         viewModel.getTrendsInternalDetailsData()
-//        viewModel.findLastSixMonthDatesList()
+    }
+
+    private fun initViewPager() {
+        pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
+
+        binding.graphPager.adapter = pagerAdapter
+        binding.graphPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
+
+        binding.graphPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                pagerAdapter?.let {
+                    val total = it.itemCount
+
+                    if (position == (total - 1)) {
+                        pagerAdapter?.addFragment(SleepMultiBarChartFragment.newInstance())
+                    }
+                }
+
+            }
+        })
     }
 
     private fun showTopContent() {
@@ -68,7 +99,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
 
-        val data = viewModel.pageData
+        /*val data = viewModel
         if (data != null) {
             if (data.trendType == SleepInternalLaunchState.HOUR_VS_NEED) {
                 binding.lytTopView.lytTopMultipleView.tvDateTime.text = data.dayDate
@@ -189,7 +220,7 @@ class SleepInternalDetailsFragment :
             }
         } else {
             defaultDataView()
-        }
+        }*/
     }
 
     private fun defaultDataView() {
@@ -203,19 +234,76 @@ class SleepInternalDetailsFragment :
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
     }
 
+    private fun setGraphPager() {
+        val (start, end) = when (viewModel.selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                val start = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                Pair(start, end)
+            }
 
-    private fun setGraphPagerView() {
+            InternalSelectedPeriod.WEEK -> {
+                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
+                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                Pair(start, end)
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
+                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                Pair(start, end)
+            }
+        }
+
+
         val fragments = ArrayList<Fragment>()
-        val pageData = viewModel.overAllPageData
+
+        val dataToDisplay = ArrayList<TrendsValues>()
+
+        var current = start
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        while (current <= end) {
+            val data = viewModel.trendsData[current]
+            dataToDisplay.add(
+                TrendsValues(
+                    date = current.format(dateFormat),
+                    value1 = 40
+                )
+            )
+            current = current.plusDays(1)
+        }
+
+        val trendData = TrendsGraphData(
+            data = dataToDisplay
+        )
+
         when (viewModel.selectedLaunchMode) {
             SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.EFFICIENCY -> fragments.add(
-                SleepSingleLineChartFragment.newInstance(pageData)
+                SleepSingleLineChartFragment.newInstance(trendData)
             )
 
             SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
-            else -> fragments.add(SleepBarChartFragment.newInstance())
+            else -> fragments.add(SleepBarChartFragment.newInstance(trendData))
         }
+
+        pagerAdapter?.setDataSet(fragments)
+
+
+    }
+
+
+    private fun setGraphPagerView() {
+        val fragments = ArrayList<Fragment>()
+        /* when (viewModel.selectedLaunchMode) {
+             SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.EFFICIENCY -> fragments.add(
+                 SleepSingleLineChartFragment.newInstance(pageData)
+             )
+
+             SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
+             SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
+             else -> fragments.add(SleepBarChartFragment.newInstance())
+         }*/
 
         val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
 
@@ -300,18 +388,14 @@ class SleepInternalDetailsFragment :
         }
         binding.lytSelector.tvDay.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
-
-
         }
 
         binding.lytSelector.tvWeek.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
-
         }
 
         binding.lytSelector.tvMonth.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
-
         }
 
         binding.toolbar.backBtn.setOnClickListener {
@@ -321,6 +405,13 @@ class SleepInternalDetailsFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.trendsDataLoaded.observe(this) {
+            it.getContent()?.let {
+                setGraphPager()
+            }
+        }
+
         sharedViewModel.interactGraphData.observe(this) {
 //            val parseData = viewModel.parsePageData(pos = it)
 //            viewModel.pageData = parseData
@@ -339,10 +430,8 @@ class SleepInternalDetailsFragment :
 
         viewModel.trendsInternalData.observe(this) {
             if (it != null) {
-                if (it.values?.isNotEmpty() == true) {
-                    val parseData = viewModel.parsePageData(it.values?.size?.minus(1) ?: 0)
-                    viewModel.overAllPageData = it
-                    viewModel.pageData = parseData
+                if (it.data?.isNotEmpty() == true) {
+                    val parseData = viewModel.parsePageData(it.data?.size?.minus(1) ?: 0)
                     showTopContent()
                     setGraphPagerView()
                 }
@@ -406,7 +495,16 @@ class SleepInternalDetailsFragment :
     }
 }
 
-enum class SleepInternalLaunchState {
-    RESTORATIVE_SLEEP, SLEEP_PERFORMANCE, HOUR_VS_NEED, SLEEP_TIME, EFFICIENCY, REM_SLEEP, DEEP_SLEEP, SLEEP_DURATION, LATENCY, RESTFULNESS
+enum class SleepInternalLaunchState(val key: String) {
+    RESTORATIVE_SLEEP("restorative_sleep"),
+    SLEEP_PERFORMANCE("performance"),
+    HOUR_VS_NEED("performance"),//pending
+    SLEEP_TIME("performance"),//pending
+    EFFICIENCY("efficiency"),
+    REM_SLEEP("rem_sleep"),
+    DEEP_SLEEP("deep_sleep"),
+    SLEEP_DURATION("sleep_duration"),
+    LATENCY("latency"),
+    RESTFULNESS("restfulness")
 }
 

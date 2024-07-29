@@ -2,15 +2,23 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OSleepTrendsDataModel
+import com.oreo.data.model.TrendsData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -22,9 +30,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     lateinit var selectedLaunchMode: SleepInternalLaunchState
+    val trendsData = HashMap<LocalDate, TrendsValues>()
+
     var startDate: String = ""
     var endDate: String = ""
-    private var filterType: String = ""
 
     private val _selectedPeriod =
         MutableLiveData<InternalSelectedPeriod>(InternalSelectedPeriod.DAY)
@@ -42,13 +51,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
     val trendsInternalData: LiveData<OSleepInternalTrendsDataModel>
         get() = _trendsInternalData
 
-    var pageData: OSleepTrendsDataModel? = null
-    var overAllPageData:OSleepInternalTrendsDataModel?= null
+    val trendsDataLoaded = MutableLiveData<Event<Boolean>>()
 
     fun getTrendsInternalDetailsData() {
-        /*viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.getSleepInternalTrendsPagesData(
-                startDate, endDate, filterType.lowercase()
+                startDate, endDate, selectedLaunchMode.key.lowercase()
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -77,15 +85,18 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _trendsInternalData.postValue(it)
+
+                            it.data?.forEach {
+                                trendsData[LocalDate.parse(it.date)] = it
+                            }
+                            trendsDataLoaded.postValue(Event(true))
+
+                            //_trendsInternalData.postValue(it)
                         }
                     }
                 }
             }
-        }*/
-
-        _trendsInternalData.postValue(trendsListDummyData())
-
+        }
     }
 
 
@@ -248,7 +259,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
         )*/
         val trendsData = OSleepInternalTrendsDataModel()
-        trendsData.values = findLastSixMonthDatesList()
+        trendsData.data = findLastSixMonthDatesList()
         return trendsData
 
     }
@@ -304,15 +315,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun parsePageData(pos: Int): OSleepTrendsDataModel {
         val childData = OSleepTrendsDataModel()
-        val data = trendsInternalData.value?.values?.get(pos)
+        val data = trendsInternalData.value?.data?.get(pos)
         childData.trendType = selectedLaunchMode
         childData.dayDate = data?.date
-        childData.dspValue = data?.value
+        childData.dspValue = data?.value1
         childData.dspValue2 = data?.value2
         return childData
     }
 
-    private fun findLastSixMonthDatesList() :List<TrendsValues>{
+    private fun findLastSixMonthDatesList(): List<TrendsValues> {
         val currentDate = LocalDate.now()
         val sixMonthsAgo = currentDate.minusMonths(6)
 
@@ -333,9 +344,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
             i++
             val ch = TrendsValues()
             ch.date = formattedDate
-            ch.value = 3600 + i
-            ch.value2=200
-            ch.nudge="nudge $i"
+            ch.value1 = 3600 + i
+            ch.value2 = 200
         }
 
         return graphData.takeLast(7)

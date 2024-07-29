@@ -8,6 +8,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.OSleepInternalTrendsDataModel
+import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -19,13 +21,13 @@ class SleepSingleLineChartFragment :
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
-    private var pageData: OSleepInternalTrendsDataModel? = null
+    private var pageData: TrendsGraphData? = null
 
     companion object {
         private const val graphData = "GRAPH_DATA"
 
         @JvmStatic
-        fun newInstance(pageData: OSleepInternalTrendsDataModel?) =
+        fun newInstance(pageData: TrendsGraphData) =
             SleepSingleLineChartFragment().apply {
                 arguments = Bundle().apply {
                     this.putParcelable(graphData, pageData)
@@ -38,7 +40,7 @@ class SleepSingleLineChartFragment :
         arguments?.let { bundle ->
             pageData = bundle.getParcelable(graphData)
         }
-        LOGS.d("PageData ${Gson().toJson(pageData)}")
+
         //Value in minutes
         /*val dataList = arrayListOf(
             10, 30, 20, 70, 10, 50, 90,
@@ -48,11 +50,10 @@ class SleepSingleLineChartFragment :
             60, 70, 80, 90, 10, 50, 90,
             10, 50, 90, 90, 10, 10, 20,
         )*/
-        val tempList = ArrayList<Int?>()
-        pageData?.values?.forEach {
-            tempList.add(it.value?.div(60))
-        }
 
+
+        val tempList = ArrayList<Int?>()
+        //pageData = tempList.add(it.value?.div(60))
 
         //31+29+30+31+30+31+30
         /*val dataList = ArrayList<Int?>()

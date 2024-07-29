@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.View
 import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.custom.SleepGraphInteractionListener
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.ArrayList
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -18,12 +17,16 @@ class SleepBarChartFragment :
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
+    private var pageData: TrendsGraphData? = null
 
     companion object {
+        private const val graphData = "GRAPH_DATA"
+
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(pageData: TrendsGraphData) =
             SleepBarChartFragment().apply {
                 arguments = Bundle().apply {
+                    this.putParcelable(graphData, pageData)
                 }
             }
     }
@@ -31,15 +34,12 @@ class SleepBarChartFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dataList = arrayListOf(
-            20,
-            30,
-            null,
-            50,
-            100,
-            70,
-            null
-        )
+        arguments?.let { bundle ->
+            pageData = bundle.getParcelable(SleepBarChartFragment.graphData)
+        }
+
+        val dataList = pageData?.data?.map { it.value1 } ?: ArrayList()
+
         val maxValue = getMaxValue(dataList)
         val avgValue = getAvgValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)

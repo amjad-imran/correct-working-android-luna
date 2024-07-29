@@ -1861,7 +1861,6 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    //todo endpoint, response, request format will change, once define
     override suspend fun getSleepInternalTrendsPagesData(
         startDate: String,
         endDate: String,
@@ -1869,8 +1868,8 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
-            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, filterType)
+                "${BuildConfig.OREO_BASE_URL}/sleep/v2/trends/$filterType"
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate)
         }
     }
 

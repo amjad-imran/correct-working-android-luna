@@ -381,8 +381,7 @@ interface NetworkService {
     suspend fun getSleepTrendsInternalPageData(
         @Url url: String,
         @Query("startDate") selectDate: String,
-        @Query("endDate") dayType: String,
-        @Query("filter_type") filterType: String
+        @Query("endDate") dayType: String
     ): BaseApiResponse<OSleepInternalTrendsDataModel>
 
 

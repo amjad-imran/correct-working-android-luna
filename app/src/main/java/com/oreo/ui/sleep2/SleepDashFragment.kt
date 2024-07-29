@@ -94,7 +94,6 @@ class SleepDashFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
-        //viewModel.setStartDate(mainViewModel.registerDate)
         initCalender()
         setRecycler()
     }
@@ -151,26 +150,18 @@ class SleepDashFragment :
 
 
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
-            context.showShortToast("In dev")
-            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_PERFORMANCE)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
-            context.showShortToast("In dev")
-            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.HOUR_VS_NEED)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
-            context.showShortToast("In dev")
-            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
             navigate(frag, bundle)
         }
         binding.lytSleepTrends.lytSleepTime.root.setOnClickListener {
-            context.showShortToast("In dev")
-            return@setOnClickListener
             val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
             navigate(frag, bundle)
         }
