@@ -516,19 +516,6 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
-    fun getStatusColors(status: String): Int {
-        val color: Int = if (status.equals("warning", true)) {
-            R.color.oreo_contributor_warning
-        } else if (status.equals("good", true)) {
-            R.color.white_12_72
-        } else if (status.equals("optimal", true)) {
-            R.color.steps_arc
-        } else {
-            R.color.white_12_72
-        }
-        return color
-    }
-
     fun generateSleepContributorData(
         data: SleepDay?,
         showAll: Boolean = false
@@ -659,6 +646,32 @@ class SleepDashViewModel @Inject constructor(
         if (calendarStartDate.value?.peekContent() == null) {
             calendarStartDate.postValue(Event(LocalDate.now().minusDays(registerDate.toLong())))
         }
+    }
+
+    fun getGradientColor(status: String): Pair<Int, Int> {
+        val color = if (status.equals("warning", true)) {
+            Pair(Color.parseColor("#ffc3ce"), Color.parseColor("#ff7c94"))
+        } else if (status.equals("good", true)) {
+            Pair(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"))
+        } else if (status.equals("optimal", true)) {
+            Pair(Color.parseColor("#aef8be"), Color.parseColor("#2fce77"))
+        } else {
+            Pair(Color.parseColor("#fffceb"), Color.parseColor("#fff3b5"))
+        }
+        return color
+    }
+
+    fun getStatusColors(status: String): Int {
+        val color: Int = if (status.equals("warning", true)) {
+            R.color.oreo_contributor_warning
+        } else if (status.equals("good", true)) {
+            R.color.white_12_72
+        } else if (status.equals("optimal", true)) {
+            R.color.steps_arc
+        } else {
+            R.color.white_12_72
+        }
+        return color
     }
 
 

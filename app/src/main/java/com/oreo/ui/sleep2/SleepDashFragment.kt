@@ -497,15 +497,19 @@ class SleepDashFragment :
                 tvHour.text = "$hour"
                 tvMin.text = "$minute"
 
+                val (startColor, endColor) = viewModel.getGradientColor(
+                    data.sleepScore?.status ?: ""
+                )
+
                 tvHour.setTextGradient(
                     requireActivity().getColor(R.color.white),
-                    Color.parseColor("#aef8be"),
-                    Color.parseColor("#2fce77")
+                    startColor,
+                    endColor
                 )
                 tvMin.setTextGradient(
                     requireActivity().getColor(R.color.white),
-                    Color.parseColor("#aef8be"),
-                    Color.parseColor("#2fce77")
+                    startColor,
+                    endColor
                 )
             }
 
