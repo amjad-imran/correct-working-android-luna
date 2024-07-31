@@ -2,11 +2,14 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepMultiLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.math.max
 
@@ -17,11 +20,18 @@ class SleepMultiLineChartFragment :
     @Inject
     lateinit var vibrationUtils: VibrationUtils
 
+    private var pageData: TrendsGraphData? = null
+
+    private val sharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
+
     companion object {
+        private const val GRAPH_DATA = "GRAPH_DATA"
+
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(pageData: TrendsGraphData) =
             SleepMultiLineChartFragment().apply {
                 arguments = Bundle().apply {
+                    this.putParcelable(GRAPH_DATA, pageData)
                 }
             }
     }
@@ -29,8 +39,14 @@ class SleepMultiLineChartFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let { bundle ->
+            pageData = bundle.getParcelable(SleepMultiLineChartFragment.GRAPH_DATA)
+        }
+
+        val dataList = pageData?.data?.map { Pair(it.value1,it.value2) } ?: ArrayList()
+
         //Value in minutes
-        val dataList = arrayListOf(
+       /* val dataList = arrayListOf(
             Pair(480, 560),
             Pair(null, null),
             Pair(600, 480),
@@ -38,7 +54,7 @@ class SleepMultiLineChartFragment :
             Pair(480, 500),
             Pair(450, 480),
             Pair(480, 560),
-        )
+        )*/
         val maxValue = getMaxValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)
 
@@ -54,11 +70,16 @@ class SleepMultiLineChartFragment :
 
         binding.graphBar.setClickListener(object : SleepSingleBarAction {
             override fun onValueSelected(position: Int) {
-
+                try {
+                    val date = pageData?.data?.get(position)?.date
+                    sharedViewModel.sendInteractDay(LocalDate.parse(date))
+                } catch (exp: Exception) {
+                    sharedViewModel.sendInteractDay(null)
+                }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-
+                sharedViewModel.sendInteractDay(null)
             }
 
         })

@@ -23,6 +23,7 @@ import com.oreo.data.model.sleep.MultiSleep
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.sleep.SleepTimeModel
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -672,6 +673,18 @@ class SleepDashViewModel @Inject constructor(
             R.color.white_12_72
         }
         return color
+    }
+
+    fun getLaunchState(type: SleepContributor): SleepInternalLaunchState {
+        return when (type) {
+            SleepContributor.SLEEP_DURATION -> SleepInternalLaunchState.SLEEP_DURATION
+            SleepContributor.REM_SLEEP -> SleepInternalLaunchState.REM_SLEEP
+            SleepContributor.DEEP_SLEEP -> SleepInternalLaunchState.DEEP_SLEEP
+            SleepContributor.EFFICIENCY -> SleepInternalLaunchState.EFFICIENCY
+            SleepContributor.LATENCY -> SleepInternalLaunchState.LATENCY
+            SleepContributor.RESTFULNESS -> SleepInternalLaunchState.RESTFULNESS
+            SleepContributor.TIMING -> SleepInternalLaunchState.TIMING
+        }
     }
 
 

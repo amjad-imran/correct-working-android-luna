@@ -1,22 +1,17 @@
 package com.oreo.ui.sleep2
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentODropDownBinding
-import com.noisefit.luna.databinding.LayoutSleepDurationDropDownBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.ODropDownDataModel
 import com.oreo.ui.internal.ODropDownAdapter
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,13 +26,12 @@ class ODropDownFragment :
     var alert: AlertDialog? = null
     val mDDAdapter by lazy {
         ODropDownAdapter(object : ODropDownAdapter.ODDItemClickListener {
-            override fun onItemClick(resultData: ODropDownDataModel, position: Int) {
+            override fun onItemClick(resultData: SleepInternalLaunchState, position: Int) {
                 if (alert != null)
                     alert?.dismiss()
-                LOGS.d("Clicked Item ${resultData.title}")
                 setFragmentResult(
                     SLEEP_DROP_DOWN_ITEM,
-                    bundleOf("itemName" to resultData.title)
+                    bundleOf("itemName" to resultData)
                 )
                 navigateUpSafe()
 
@@ -186,7 +180,7 @@ class ODropDownFragment :
             }
 
             1 -> {
-                mDDAdapter.setData(viewModel.fetchDropDownData().second)
+                mDDAdapter.setData(viewModel.fetchDropDownData().first)
                 binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
                         binding.lytTopView.ivDropDown.context,
@@ -226,7 +220,7 @@ class ODropDownFragment :
             }
 
             else -> {
-                mDDAdapter.setData(viewModel.fetchDropDownData().third)
+                mDDAdapter.setData(viewModel.fetchDropDownData().first)
                 binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
                         binding.lytTopView.ivDropDown.context,

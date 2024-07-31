@@ -2,13 +2,14 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
+import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepMultiBarChartBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.custom.SleepGraphInteractionListener
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -18,11 +19,17 @@ class SleepMultiBarChartFragment :
     @Inject
     lateinit var vibrationUtils: VibrationUtils
 
+    private var pageData: TrendsGraphData? = null
+    private val sharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
+
     companion object {
+        private const val GRAPH_DATA = "GRAPH_DATA"
+
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(pageData: TrendsGraphData) =
             SleepMultiBarChartFragment().apply {
                 arguments = Bundle().apply {
+                    this.putParcelable(GRAPH_DATA, pageData)
                 }
             }
     }
@@ -30,7 +37,13 @@ class SleepMultiBarChartFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dataList = arrayListOf(
+        arguments?.let { bundle ->
+            pageData = bundle.getParcelable(SleepMultiBarChartFragment.GRAPH_DATA)
+        }
+
+        val dataList = pageData?.data?.map { Pair(it.value1, it.value2) } ?: ArrayList()
+
+        /*val dataList = arrayListOf(
             Pair(60, 40),
             Pair(80, 50),
             Pair(null, null),
@@ -38,10 +51,10 @@ class SleepMultiBarChartFragment :
             Pair(120, 20),
             Pair(150, 10),
             Pair(180, 0),
-        )
+        )*/
+
         val maxValue = getMaxValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)
-
 
         binding.graphBar.setDataSet(
             dataList,
@@ -55,11 +68,16 @@ class SleepMultiBarChartFragment :
 
         binding.graphBar.setClickListener(object : SleepSingleBarAction {
             override fun onValueSelected(position: Int) {
-
+                try {
+                    val date = pageData?.data?.get(position)?.date
+                    sharedViewModel.sendInteractDay(LocalDate.parse(date))
+                } catch (exp: Exception) {
+                    sharedViewModel.sendInteractDay(null)
+                }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-
+                sharedViewModel.sendInteractDay(null)
             }
 
         })

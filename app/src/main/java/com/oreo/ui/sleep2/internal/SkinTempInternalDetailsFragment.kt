@@ -161,11 +161,11 @@ class SkinTempInternalDetailsFragment :
                     }
                     tvDateTime.text = dayDate
                 }
-                tvDesc.text = data.description
+                tvNudge.text = data.description
                 if (data.isShowHighlight) {
                     val colors = viewModel.getHighlightBackType(0)
                     lytHighlightTrends.main.setBackgroundResource(colors.first)
-                    val textColor=ContextCompat.getColor(binding.lytTopView.lytTopSingleView.tvDesc.context,colors.second)
+                    val textColor=ContextCompat.getColor(binding.lytTopView.lytTopSingleView.tvNudge.context,colors.second)
                     lytHighlightTrends.tvRangeValue.setTextColor(textColor)
                     val icons = viewModel.returnTrendsArrow(data.trendType)
 
@@ -197,8 +197,8 @@ class SkinTempInternalDetailsFragment :
     private fun setGraphPagerView() {
         val fragments = ArrayList<Fragment>()
 //        fragments.add(SleepSingleLineChartFragment.newInstance(viewModel.findLastSixMonthDatesList()))
-        fragments.add(SleepMultiLineChartFragment.newInstance())
-        fragments.add(SleepMultiBarChartFragment.newInstance())
+        //fragments.add(SleepMultiLineChartFragment.newInstance())
+        //fragments.add(SleepMultiBarChartFragment.newInstance())
         //fragments.add(SleepBarChartFragment.newInstance())
 
         val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
@@ -214,7 +214,7 @@ class SkinTempInternalDetailsFragment :
                 val total = sleepBannerAdapter.itemCount
 
                 if (position == (total - 1)) {
-                    sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
+                    //sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
                 }
             }
         })

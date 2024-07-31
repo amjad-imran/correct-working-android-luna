@@ -57,14 +57,19 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
 
                 binding.lytRightValues.apply {
                     this.tvRangeValue.text = resultData.text
-                    val (back, textColor,background) = getColorByStatus(resultData.status)
+                    val (back, textColor, background) = getColorByStatus(resultData.status)
                     this.tvRangeValue.setTextColor(textColor)
                     this.viewTextBack.setBackgroundResource(back)
                     binding.rootView.setBackgroundResource(background)
 
-                    if(resultData.status.equals("optimal")){
-                        this.tvRangeValue.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hm_tick, 0, 0, 0);
-                    }else{
+                    if (resultData.status.equals("optimal")) {
+                        this.tvRangeValue.setCompoundDrawablesWithIntrinsicBounds(
+                            R.drawable.ic_hm_tick,
+                            0,
+                            0,
+                            0
+                        );
+                    } else {
                         this.tvRangeValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     }
                 }
@@ -74,21 +79,39 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
             }
 
 
-
-            binding.ivForward.setOnClickListener {
+            binding.root.setOnClickListener {
                 listener.onItemClick(resultData, bindingAdapterPosition)
             }
         }
 
-        private fun getColorByStatus(status: String?): Triple<Int, Int,Int> {
-            if (status == null) return Triple(0, R.color.white,com.noisefit_commans.R.drawable.back_modal_new)
+        private fun getColorByStatus(status: String?): Triple<Int, Int, Int> {
+            if (status == null) return Triple(
+                0,
+                R.color.white,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
 
             return when (status.lowercase()) {
 
-                "warning" -> Triple(R.drawable.back_hm_warning, Color.parseColor("#ff7c94"),com.noisefit_commans.R.drawable.back_modal_new_warning)
-                "optimal" -> Triple(R.drawable.back_hm_optimal, Color.parseColor("#29cc74"),com.noisefit_commans.R.drawable.back_modal_new)
-                "fair" -> Triple(R.drawable.back_hm_fair, Color.parseColor("#d79d58"),com.noisefit_commans.R.drawable.back_modal_new)
-                else -> Triple(0, R.color.white,com.noisefit_commans.R.drawable.back_modal_new)
+                "warning" -> Triple(
+                    R.drawable.back_hm_warning,
+                    Color.parseColor("#ff7c94"),
+                    com.noisefit_commans.R.drawable.back_modal_new_warning
+                )
+
+                "optimal" -> Triple(
+                    R.drawable.back_hm_optimal,
+                    Color.parseColor("#29cc74"),
+                    com.noisefit_commans.R.drawable.back_modal_new
+                )
+
+                "fair" -> Triple(
+                    R.drawable.back_hm_fair,
+                    Color.parseColor("#d79d58"),
+                    com.noisefit_commans.R.drawable.back_modal_new
+                )
+
+                else -> Triple(0, R.color.white, com.noisefit_commans.R.drawable.back_modal_new)
             }
         }
     }

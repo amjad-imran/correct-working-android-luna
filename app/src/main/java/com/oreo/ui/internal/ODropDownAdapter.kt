@@ -1,24 +1,27 @@
 package com.oreo.ui.internal
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemRvDropDownBinding
 import com.noisefit_commans.ui.loadImage
-import com.oreo.data.model.ODropDownDataModel
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 
 class ODropDownAdapter(val listener: ODDItemClickListener) :
     RecyclerView.Adapter<ODropDownAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<ODropDownDataModel>()
+    private var mDataSet = ArrayList<SleepInternalLaunchState>()
     private var selectedPost = -1
 
 
     inner class ViewHolder(val binding: ItemRvDropDownBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(resultData: ODropDownDataModel) {
-            binding.ivIcon.loadImage(binding.ivIcon.context, resultData.icon)
-            binding.tvTitle.text = resultData.title
+        fun bind(resultData: SleepInternalLaunchState) {
+
+            val (title, icon) = getTitle(binding.tvTitle.context, resultData)
+            binding.ivIcon.loadImage(binding.ivIcon.context, icon)
+            binding.tvTitle.text = title
             if (selectedPost == bindingAdapterPosition) {
                 binding.lytMain.setBackgroundResource(R.drawable.back_selected_drop_down)
             } else {
@@ -27,7 +30,7 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
 
             binding.root.setOnClickListener {
                 listener.onItemClick(resultData, bindingAdapterPosition)
-                selectedPost=bindingAdapterPosition
+                selectedPost = bindingAdapterPosition
                 notifyDataSetChanged()
             }
         }
@@ -49,16 +52,80 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<ODropDownDataModel>) {
+    fun setData(resultData: List<SleepInternalLaunchState>) {
 
         mDataSet.clear()
         mDataSet.addAll(resultData)
-        selectedPost=-1
+        selectedPost = -1
         notifyDataSetChanged()
     }
 
     interface ODDItemClickListener {
-        fun onItemClick(resultData: ODropDownDataModel, position: Int)
+        fun onItemClick(resultData: SleepInternalLaunchState, position: Int)
+    }
+
+    fun getTitle(
+        context: Context,
+        selectedLaunchMode: SleepInternalLaunchState
+    ): Pair<String, Int> {
+        return when (selectedLaunchMode) {
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                Pair(
+                    context.getString(R.string.text_restorative_sleep),
+                    R.drawable.ic_sleep_restroactive_sp
+                )
+            }
+
+            SleepInternalLaunchState.SLEEP_TIME -> Pair(
+                context.getString(R.string.text_sleep_time),
+                R.drawable.ic_sleep_time
+            )
+
+            SleepInternalLaunchState.HOUR_VS_NEED -> Pair(
+                context.getString(R.string.text_hour_vs_need),
+                R.drawable.ic_sleep_snooz
+            )
+
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(
+                context.getString(R.string.text_sleep_performance),
+                R.drawable.ic_sleep_performance
+            )
+
+            SleepInternalLaunchState.EFFICIENCY -> Pair(
+                context.getString(R.string.text_efficiency),
+                R.drawable.ic_sleep_efficiency
+            )
+
+            SleepInternalLaunchState.REM_SLEEP -> Pair(
+                context.getString(R.string.text_rem_sleep),
+                R.drawable.ic_sleep_rem_sp
+            )
+
+            SleepInternalLaunchState.DEEP_SLEEP -> Pair(
+                context.getString(R.string.text_deep_sleep),
+                R.drawable.ic_sleep_deep_sp
+            )
+
+            SleepInternalLaunchState.LATENCY -> Pair(
+                context.getString(R.string.text_latency),
+                R.drawable.ic_sleep_latency
+            )
+
+            SleepInternalLaunchState.RESTFULNESS -> Pair(
+                context.getString(R.string.text_restfulness),
+                R.drawable.ic_sleep_restfulness
+            )
+
+            SleepInternalLaunchState.SLEEP_DURATION -> Pair(
+                context.getString(R.string.text_sleep_duration),
+                R.drawable.ic_clock_off_sleep
+            )
+
+            SleepInternalLaunchState.TIMING -> Pair(
+                context.getString(R.string.text_timing),
+                R.drawable.ic_clock_off_sleep
+            )
+        }
     }
 }
 

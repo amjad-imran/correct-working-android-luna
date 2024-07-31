@@ -13,14 +13,14 @@ class ODropDownViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
     lateinit var selectedLaunchMode: SleepInternalLaunchState
-    fun fetchDropDownData(): Triple<ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
-        val sleepData = ArrayList<ODropDownDataModel>()
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
-        sleepData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_latency, "Latency"))
-        sleepData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
+    fun fetchDropDownData(): Triple<ArrayList<SleepInternalLaunchState>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
+        val sleepData = ArrayList<SleepInternalLaunchState>()
+        sleepData.add(SleepInternalLaunchState.EFFICIENCY)
+        sleepData.add(SleepInternalLaunchState.REM_SLEEP)
+        sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
+        sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
+        sleepData.add(SleepInternalLaunchState.LATENCY)
+        sleepData.add(SleepInternalLaunchState.RESTFULNESS)
 
         val activityData = ArrayList<ODropDownDataModel>()
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
@@ -95,7 +95,10 @@ class ODropDownViewModel @Inject constructor(
                 R.drawable.ic_clock_off_sleep
             )
 
-
+            SleepInternalLaunchState.TIMING -> Pair(
+                resourcesProvider.getString(R.string.text_timing),
+                R.drawable.ic_clock_off_sleep
+            )
         }
     }
 

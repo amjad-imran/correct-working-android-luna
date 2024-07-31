@@ -11,10 +11,9 @@
             style="@style/H3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/lytTrendsHighlight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="8" />
 
         <TextView
@@ -24,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:text="@string/text_hr"
-            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintStart_toEndOf="@id/tvHour" />
 
@@ -34,9 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toTopOf="@id/lytTrendsHighlight"
             app:layout_constraintStart_toEndOf="@id/tvUnitHr"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/lytTrendsHighlight"
             tools:text="8" />
 
         <TextView
@@ -49,23 +47,13 @@
             app:layout_constraintBaseline_toBaselineOf="@id/tvMin"
             app:layout_constraintStart_toEndOf="@id/tvMin" />
 
-        <include layout="@layout/layout_trends_highlight_up"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <include
             android:id="@+id/lytTrendsHighlight"
-            android:layout_height="wrap_content"
+            layout="@layout/layout_trends_highlight_up"
             android:layout_width="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tvDesc"
-            style="@style/Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/white_60"
-            app:layout_constraintBottom_toBottomOf="@id/lytTrendsHighlight"
-            app:layout_constraintStart_toEndOf="@id/lytTrendsHighlight"
-            app:layout_constraintTop_toTopOf="@id/lytTrendsHighlight"
-            tools:text="avg hours" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

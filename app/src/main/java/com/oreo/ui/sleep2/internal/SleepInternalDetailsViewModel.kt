@@ -1,5 +1,6 @@
 package com.oreo.ui.sleep2.internal
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,18 +10,20 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
-import com.oreo.data.model.OSleepTrendsDataModel
-import com.oreo.data.model.TrendsData
+import com.oreo.data.model.TrendAverage
+import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,19 +42,32 @@ class SleepInternalDetailsViewModel @Inject constructor(
         MutableLiveData<InternalSelectedPeriod>(InternalSelectedPeriod.DAY)
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
+
+    var dayAvg: TrendAverage? = null
+    var weekAvg: TrendAverage? = null
+    var monthAvg: TrendAverage? = null
+
+
     fun setSelectedPeriod(selectedPeriod: InternalSelectedPeriod) {
-        _selectedPeriod.postValue(selectedPeriod)
+        fragments.value = null
+        _selectedPeriod.value = selectedPeriod
     }
 
     private val _titleUpdate =
         MutableLiveData<Pair<String, Int>>()
     val titleUpdate: LiveData<Pair<String, Int>> = _titleUpdate
 
-    private val _trendsInternalData = MutableLiveData<OSleepInternalTrendsDataModel>()
-    val trendsInternalData: LiveData<OSleepInternalTrendsDataModel>
-        get() = _trendsInternalData
+    init {
+        val datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        endDate = LocalDate.now().format(datePattern)
+        startDate = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+            .format(datePattern)
+    }
 
-    val trendsDataLoaded = MutableLiveData<Event<Boolean>>()
+
+    var dataTill: LocalDate? = null
+    val fragments = MutableLiveData<List<Fragment>?>()
+    var currentStartDate: LocalDate? = null
 
     fun getTrendsInternalDetailsData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -89,9 +105,24 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             it.data?.forEach {
                                 trendsData[LocalDate.parse(it.date)] = it
                             }
-                            trendsDataLoaded.postValue(Event(true))
 
-                            //_trendsInternalData.postValue(it)
+                            it.data?.firstOrNull()?.date?.let {
+                                dataTill = LocalDate.parse(it)
+                            }
+
+                            loadNewFragment()
+
+
+
+                            if (dayAvg == null) {
+                                dayAvg = it.dayAvg
+                            }
+                            if (weekAvg == null) {
+                                weekAvg = it.weekAvg
+                            }
+                            if (monthAvg == null) {
+                                monthAvg = it.monthAvg
+                            }
                         }
                     }
                 }
@@ -99,6 +130,150 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * @return Pair of start date and end date
+     */
+    private fun getDatesToLoad(): Pair<LocalDate, LocalDate> {
+        val (start, end) = when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                return if (currentStartDate == null) {
+                    Pair(
+                        LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
+                        LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                    )
+                } else {
+                    Pair(
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.MONDAY)),
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY))
+                    )
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                return if (currentStartDate == null) {
+                    Pair(
+                        LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                            .minusWeeks(6),
+                        LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                    )
+                } else {
+                    Pair(
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.MONDAY))
+                            .minusWeeks(6),
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY))
+                    )
+                }
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
+                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                Pair(start, end)
+            }
+        }
+
+        return Pair(start, end)
+    }
+
+    private fun loadNewFragment() {
+
+        val (start, end) = getDatesToLoad()
+        currentStartDate = start
+
+        val dataToDisplay = ArrayList<TrendsValues>()
+
+        var current = start
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        while (current <= end) {
+            val data = trendsData[current]
+            dataToDisplay.add(
+                TrendsValues(
+                    date = current.format(dateFormat),
+                    value1 = data?.value1
+                )
+            )
+            current = current.plusDays(1)
+        }
+
+        val trendData = TrendsGraphData(
+            data = dataToDisplay
+        )
+
+        getFragmentToAdd(trendData).let {
+            var oldData = fragments.value
+            if (oldData == null) {
+                oldData = ArrayList()
+            }
+            (oldData as ArrayList).add(it)
+            fragments.postValue(oldData)
+        }
+    }
+
+
+    private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
+        trendData.contributorType = selectedLaunchMode
+        when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                return when (selectedLaunchMode) {
+                    SleepInternalLaunchState.REM_SLEEP,
+                    SleepInternalLaunchState.DEEP_SLEEP -> SleepBarChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.SLEEP_DURATION -> SleepSingleLineGradientChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.EFFICIENCY -> SleepSingleLineGradientChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.SLEEP_PERFORMANCE -> SleepBarChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.LATENCY -> SleepBarChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.RESTFULNESS -> SleepBarChartFragment.newInstance(
+                        trendData
+                    )
+
+
+
+
+                    SleepInternalLaunchState.SLEEP_TIME ->
+                        SleepSingleLineChartFragment.newInstance(trendData)
+
+
+                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> SleepMultiBarChartFragment.newInstance(
+                        trendData
+                    )
+
+                    SleepInternalLaunchState.HOUR_VS_NEED -> SleepMultiLineChartFragment.newInstance(
+                        trendData
+                    )
+
+                    else -> SleepBarChartFragment.newInstance(trendData)
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                return SleepSingleLineChartFragment.newInstance(trendData.apply {
+                    this.selectedPeriod = InternalSelectedPeriod.WEEK
+                })
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                return SleepSingleLineChartFragment.newInstance(trendData.apply {
+                    this.selectedPeriod = InternalSelectedPeriod.MONTH
+                })
+            }
+        }
+
+
+    }
 
     private fun getTitle(): Pair<String, Int> {
         return when (selectedLaunchMode) {
@@ -154,6 +329,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 R.drawable.ic_clock_off_sleep
             )
 
+            SleepInternalLaunchState.TIMING -> Pair(
+                resourcesProvider.getString(R.string.text_timing),
+                R.drawable.ic_clock_off_sleep
+            )
         }
     }
 
@@ -198,84 +377,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return dataList
     }
 
-    fun updateTrendsName(trendsName: String?) {
-        when (trendsName?.lowercase()?.replace(" ", "_")) {
-            SleepInternalLaunchState.RESTORATIVE_SLEEP.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.RESTORATIVE_SLEEP
-
-            SleepInternalLaunchState.SLEEP_PERFORMANCE.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.SLEEP_PERFORMANCE
-
-            SleepInternalLaunchState.DEEP_SLEEP.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.DEEP_SLEEP
-
-            SleepInternalLaunchState.EFFICIENCY.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.EFFICIENCY
-
-            SleepInternalLaunchState.LATENCY.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.LATENCY
-
-            SleepInternalLaunchState.RESTFULNESS.name.lowercase() -> selectedLaunchMode =
-                SleepInternalLaunchState.RESTFULNESS
-
-            SleepInternalLaunchState.REM_SLEEP.name.lowercase() ->
-                selectedLaunchMode = SleepInternalLaunchState.REM_SLEEP
-
-            SleepInternalLaunchState.SLEEP_TIME.name.lowercase() ->
-                selectedLaunchMode = SleepInternalLaunchState.SLEEP_TIME
-
-            SleepInternalLaunchState.SLEEP_DURATION.name.lowercase() ->
-                selectedLaunchMode = SleepInternalLaunchState.SLEEP_DURATION
-
-        }
-    }
-
-    fun trendsListDummyData(): OSleepInternalTrendsDataModel {
-        /*val tempListData = ArrayList<TrendsValues>()
-        tempListData.add(
-            TrendsValues(date = "Monday 23 July, 2024", value = 20, nudge = "Nudge 1")
-        )
-        tempListData.add(
-            TrendsValues(date = "Tuesday 24 July, 2024", value = 30, nudge = "Nudge 2")
-        )
-        tempListData.add(
-            TrendsValues(date = "Wednesday 25 July, 2024", value = 10, nudge = "Nudge 3")
-        )
-        tempListData.add(
-            TrendsValues(date = "Thursday 26 July, 2024", value = 5, nudge = "Nudge 4")
-        )
-        tempListData.add(
-            TrendsValues(date = "Friday 27 July, 2024", value = 15, nudge = "Nudge 5")
-        )
-        tempListData.add(
-            TrendsValues(date = "Saturday 28 July, 2024", value = 25, nudge = "Nudge 6")
-        )
-        tempListData.add(
-            TrendsValues(
-                date = "Sunday 29 July, 2024",
-                value = 100,
-                value2 = 200,
-                nudge = "Nudge 7"
-            )
-        )*/
-        val trendsData = OSleepInternalTrendsDataModel()
-        trendsData.data = findLastSixMonthDatesList()
-        return trendsData
-
-    }
-
-
-    fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
-        var abr = ""
-        if (trendType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
-            abr = "% - average"
-        } else if (trendType == SleepInternalLaunchState.RESTFULNESS)
-            abr = "times - average"
-
-        return abr
-
-    }
-
     fun getHighlightBackType(type: Int): Pair<Int, Int> {
         /*
         * 0-up
@@ -313,16 +414,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     }
 
-    fun parsePageData(pos: Int): OSleepTrendsDataModel {
-        val childData = OSleepTrendsDataModel()
-        val data = trendsInternalData.value?.data?.get(pos)
-        childData.trendType = selectedLaunchMode
-        childData.dayDate = data?.date
-        childData.dspValue = data?.value1
-        childData.dspValue2 = data?.value2
-        return childData
-    }
-
     private fun findLastSixMonthDatesList(): List<TrendsValues> {
         val currentDate = LocalDate.now()
         val sixMonthsAgo = currentDate.minusMonths(6)
@@ -351,9 +442,40 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return graphData.takeLast(7)
     }
 
+    fun loadMoreData() {
+        loadNewFragment()
+    }
+
+    fun reloadData() {
+        currentStartDate = null
+        loadNewFragment()
+    }
+
+    fun getUnit(): String {
+        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
+            "%"
+        } else if (selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS) {
+            "times"
+        } else {
+            "min"
+        }
+    }
+
+    fun getTopState(): TrendsTopState {
+        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION) {
+            TrendsTopState.SINGLE_DATE
+        } else {
+            TrendsTopState.SINGLE
+        }
+    }
+
 
 }
 
 enum class InternalSelectedPeriod {
     DAY, WEEK, MONTH
+}
+
+enum class TrendsTopState {
+    SINGLE, SINGLE_DATE
 }

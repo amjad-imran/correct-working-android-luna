@@ -2,7 +2,6 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -14,12 +13,10 @@ import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.TrendsGraphData
-import com.oreo.data.model.TrendsValues
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
@@ -30,6 +27,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
+import java.util.Locale
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SleepInternalDetailsFragment :
@@ -63,10 +62,172 @@ class SleepInternalDetailsFragment :
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
 
+        initUi()
         viewModel.updateTitle()
         setRecycler()
         initViewPager()
         viewModel.getTrendsInternalDetailsData()
+    }
+
+    private fun initUi() {
+        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
+            binding.lytLegendRestorative.root.visible()
+        } else {
+            binding.lytLegendRestorative.root.gone()
+        }
+    }
+
+    override fun initListener() {
+        binding.lytSpinnerView.setOnClickListener {
+            setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
+                val data = bundle.getSerializable("itemName") as SleepInternalLaunchState
+
+                viewModel.selectedLaunchMode = data
+                viewModel.updateTitle()
+
+                //todo reload data
+            }
+
+            val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode)
+            navigate(frag, bundle)
+        }
+        binding.lytSelector.tvDay.setOnClickListener {
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
+        }
+
+        binding.lytSelector.tvWeek.setOnClickListener {
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
+        }
+
+        binding.lytSelector.tvMonth.setOnClickListener {
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
+        }
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
+    }
+
+    override fun subscribeObservers() {
+
+        viewModel.fragments.observe(this) {
+
+            if (it == null) {
+                pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
+                binding.graphPager.adapter = pagerAdapter
+            }
+
+            pagerAdapter?.setDataSet(it ?: ArrayList())
+
+            showTopContent()
+        }
+
+
+        sharedViewModel.interactGraphData.observe(this) {
+            if (it == null) {
+                showDefaultDates()
+            } else {
+
+
+                val topState = viewModel.getTopState()
+                when (topState) {
+                    TrendsTopState.SINGLE -> {
+                        binding.lytTopView.lytTopSingleView.apply {
+                            tvNudge.alpha = 0.5f
+                            tvOptimalRangeLabel.alpha = 0.5f
+                            ivCircle.alpha = 0.5f
+                            lytHighlightTrends.root.gone()
+                        }
+
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                        binding.lytTopView.lytTopSingleView.tvDateTime.text = it.format(dayFormat)
+
+                        val data = viewModel.trendsData[it]
+                        if (data != null) {
+                            val displayValue =
+                                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP ||
+                                    viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP
+                                ) {
+                                    (data.value1 ?: 0) / 60
+                                } else {
+                                    data.value1
+                                }
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.apply {
+                                tvUnit.text = viewModel.getUnit()
+                                tvScore.text =
+                                    "$displayValue"
+                            }
+                        } else {
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.apply {
+                                tvUnit.text = viewModel.getUnit()
+                                tvScore.text =
+                                    "--"
+                            }
+                        }
+                    }
+
+                    TrendsTopState.SINGLE_DATE -> {
+                        binding.lytTopView.lytTopMultipleView.apply {
+                            tvNudge.alpha = 0.5f
+                        }
+
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                        binding.lytTopView.lytTopMultipleView.tvDateTime.text = it.format(dayFormat)
+
+                        val data = viewModel.trendsData[it]
+                        if (data != null) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
+                                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                                    data.value1 ?: 0
+                                )
+                                tvHour.text = String.format(locale = Locale.US, "%02d", hour)
+                                tvMin.text = String.format(locale = Locale.US, "%02d", minute)
+                            }
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
+                                tvHour.text = "-"
+                                tvMin.text = "-"
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        viewModel.selectedPeriod.observe(this) {
+            setPeriodUiState(it)
+            showTopContent()
+            viewModel.reloadData()
+        }
+
+        viewModel.titleUpdate.observe(this) {
+            binding.tvTrendName.text = it.first
+            binding.ivTrendsIcon.setImageResource(it.second)
+            showTopContent()
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
+
     }
 
     private fun initViewPager() {
@@ -80,9 +241,8 @@ class SleepInternalDetailsFragment :
                 super.onPageSelected(position)
                 pagerAdapter?.let {
                     val total = it.itemCount
-
-                    if (position == (total - 1)) {
-                        pagerAdapter?.addFragment(SleepMultiBarChartFragment.newInstance())
+                    if (position == (total - 1)) {//is last page
+                        viewModel.loadMoreData()
                     }
                 }
 
@@ -90,14 +250,171 @@ class SleepInternalDetailsFragment :
         })
     }
 
+    //TODO optimize
+    private fun showDefaultDates() {
+        val topState = viewModel.getTopState()
+
+        when (topState) {
+            TrendsTopState.SINGLE -> {
+                binding.lytTopView.lytTopSingleView.apply {
+                    tvNudge.alpha = 1.0f
+                    tvOptimalRangeLabel.alpha = 1.0f
+                    ivCircle.alpha = 1.0f
+                    lytHighlightTrends.root.visible()
+                }
+            }
+
+            TrendsTopState.SINGLE_DATE -> {
+                binding.lytTopView.lytTopMultipleView.apply {
+                    tvNudge.alpha = 1.0f
+
+                    lytContentView.divider1.root.gone()
+                    lytContentView.lytNeed.root.gone()
+                    lytContentView.lytHours.lytTrendsHighlight.root.alpha = 1.0f
+                }
+            }
+        }
+
+
+        val todayDate = LocalDate.now()
+        when (viewModel.selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                when (topState) {
+                    TrendsTopState.SINGLE -> {
+                        binding.lytTopView.lytTopSingleView.tvDateTime.text =
+                            todayDate.format(dayFormat)
+
+                        binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
+
+                        if (viewModel.dayAvg?.avg == null) {
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
+                                "--"
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                                viewModel.getUnit()
+                        } else {
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
+                                "${viewModel.dayAvg?.avg}"
+                            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                                "${viewModel.getUnit()} - average"
+
+                        }
+
+                        binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()//todo set
+                    }
+
+                    TrendsTopState.SINGLE_DATE -> {
+                        binding.lytTopView.lytTopMultipleView.tvDateTime.text =
+                            todayDate.format(dayFormat)
+
+                        binding.lytTopView.lytTopMultipleView.lytContentView.root.visible()
+
+                        if (viewModel.dayAvg?.avg == null) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text =
+                                "-"
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text =
+                                "-"
+                        } else {
+                            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                                viewModel.dayAvg?.avg?.roundToInt() ?: 0
+                            )
+
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text =
+                                "$hour"
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text =
+                                "$minute"
+
+                        }
+
+                        binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight.root.gone()//todo set
+                    }
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                val weekFormatStart = DateTimeFormatter.ofPattern("dd MMMM")
+                val weekFormatEnd = DateTimeFormatter.ofPattern("dd MMMM, yyyy")
+                val weekStart = todayDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                val weekEnd = todayDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                val dateText =
+                    "${weekStart.format(weekFormatStart)} - ${weekEnd.format(weekFormatEnd)}"
+
+                binding.lytTopView.lytTopSingleView.tvDateTime.text = dateText
+
+                if (viewModel.weekAvg?.avg == null) {
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "--"
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        viewModel.getUnit()
+                } else {
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
+                        "${viewModel.weekAvg?.avg}"
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        "${viewModel.getUnit()} - average"
+                }
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()//todo set
+
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val dayFormat = DateTimeFormatter.ofPattern("MMMM yyyy")
+                binding.lytTopView.lytTopSingleView.tvDateTime.text = todayDate.format(dayFormat)
+
+                if (viewModel.monthAvg?.avg == null) {
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "--"
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        viewModel.getUnit()
+                } else {
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text =
+                        "${viewModel.monthAvg?.avg}"
+                    binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                        "${viewModel.getUnit()} - average"
+                }
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()//todo set
+            }
+
+        }
+    }
+
     private fun showTopContent() {
         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
             binding.lytTopView.lytTopMultipleView.root.visible()
+            binding.lytTopView.lytTopSingleView.root.gone()
+        } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION) {
+            binding.lytTopView.lytTopMultipleView.root.visible()
+            binding.lytTopView.lytTopMultipleView.apply {
+                this.lytContentView.lytNeed.root.gone()
+                this.lytContentView.divider1.root.gone()
+            }
             binding.lytTopView.lytTopSingleView.root.gone()
         } else {
             binding.lytTopView.lytTopSingleView.root.visible()
             binding.lytTopView.lytTopMultipleView.root.gone()
         }
+
+        when (viewModel.selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                if (viewModel.dayAvg != null) {
+
+                    binding.lytTopView.lytTopSingleView.tvNudge.text = viewModel.dayAvg?.nudge ?: ""
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                if (viewModel.weekAvg != null) {
+                    binding.lytTopView.lytTopSingleView.tvNudge.text =
+                        viewModel.weekAvg?.nudge ?: ""
+                }
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                if (viewModel.monthAvg != null) {
+                    binding.lytTopView.lytTopSingleView.tvNudge.text =
+                        viewModel.monthAvg?.nudge ?: ""
+                }
+            }
+        }
+        showDefaultDates()
+
 
         /*val data = viewModel
         if (data != null) {
@@ -223,73 +540,12 @@ class SleepInternalDetailsFragment :
         }*/
     }
 
-    private fun defaultDataView() {
-    }
-
     private fun setRecycler() {
         with(binding.lytLearnMore.rvLearnMode) {
             isNestedScrollingEnabled = false
             adapter = learnMoreAdapter
         }
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
-    }
-
-    private fun setGraphPager() {
-        val (start, end) = when (viewModel.selectedPeriod.value) {
-            InternalSelectedPeriod.DAY, null -> {
-                val start = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-                Pair(start, end)
-            }
-
-            InternalSelectedPeriod.WEEK -> {
-                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
-                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-                Pair(start, end)
-            }
-
-            InternalSelectedPeriod.MONTH -> {
-                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
-                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-                Pair(start, end)
-            }
-        }
-
-
-        val fragments = ArrayList<Fragment>()
-
-        val dataToDisplay = ArrayList<TrendsValues>()
-
-        var current = start
-        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        while (current <= end) {
-            val data = viewModel.trendsData[current]
-            dataToDisplay.add(
-                TrendsValues(
-                    date = current.format(dateFormat),
-                    value1 = 40
-                )
-            )
-            current = current.plusDays(1)
-        }
-
-        val trendData = TrendsGraphData(
-            data = dataToDisplay
-        )
-
-        when (viewModel.selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.EFFICIENCY -> fragments.add(
-                SleepSingleLineChartFragment.newInstance(trendData)
-            )
-
-            SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
-            SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
-            else -> fragments.add(SleepBarChartFragment.newInstance(trendData))
-        }
-
-        pagerAdapter?.setDataSet(fragments)
-
-
     }
 
 
@@ -318,155 +574,13 @@ class SleepInternalDetailsFragment :
                 val total = sleepBannerAdapter.itemCount
 
                 if (position == (total - 1)) {
-                    sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
+                    //sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
                 }
             }
         })
 
     }
 
-    override fun initListener() {
-        binding.lytSpinnerView.setOnClickListener {
-            setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
-                val data = bundle.getString("itemName")
-                viewModel.updateTrendsName(data)
-                viewModel.updateTitle()
-            }
-            when (viewModel.selectedLaunchMode) {
-                SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.SLEEP_PERFORMANCE -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.SLEEP_PERFORMANCE)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.HOUR_VS_NEED -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.HOUR_VS_NEED)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.SLEEP_TIME -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.EFFICIENCY -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.EFFICIENCY)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.REM_SLEEP -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.REM_SLEEP)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.DEEP_SLEEP -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.DEEP_SLEEP)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.SLEEP_DURATION -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.SLEEP_DURATION)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.LATENCY -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.LATENCY)
-                    navigate(frag, bundle)
-                }
-
-                SleepInternalLaunchState.RESTFULNESS -> {
-                    val (frag, bundle) = ODropDownFragment.getStartData(SleepInternalLaunchState.RESTFULNESS)
-                    navigate(frag, bundle)
-                }
-
-                else -> {}
-            }
-        }
-        binding.lytSelector.tvDay.setOnClickListener {
-            viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
-        }
-
-        binding.lytSelector.tvWeek.setOnClickListener {
-            viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
-        }
-
-        binding.lytSelector.tvMonth.setOnClickListener {
-            viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
-        }
-
-        binding.toolbar.backBtn.setOnClickListener {
-            navigateUpSafe()
-        }
-
-    }
-
-    override fun subscribeObservers() {
-
-        viewModel.trendsDataLoaded.observe(this) {
-            it.getContent()?.let {
-                setGraphPager()
-            }
-        }
-
-        sharedViewModel.interactGraphData.observe(this) {
-//            val parseData = viewModel.parsePageData(pos = it)
-//            viewModel.pageData = parseData
-//            showTopContent()
-        }
-
-        viewModel.selectedPeriod.observe(this) {
-            setPeriodUiState(it)
-            showTopContent()
-        }
-        viewModel.titleUpdate.observe(this) {
-            binding.tvTrendName.text = it.first
-            binding.ivTrendsIcon.setImageResource(it.second)
-            showTopContent()
-        }
-
-        viewModel.trendsInternalData.observe(this) {
-            if (it != null) {
-                if (it.data?.isNotEmpty() == true) {
-                    val parseData = viewModel.parsePageData(it.data?.size?.minus(1) ?: 0)
-                    showTopContent()
-                    setGraphPagerView()
-                }
-
-            }
-        }
-
-        viewModel.getMessages().observe(this) {
-            it.getContent()?.let { message ->
-                context.showShortToast(message)
-            }
-        }
-
-        viewModel.getApiErrors().observe(this) {
-            it?.getContent()?.let { response ->
-                uiController.onApiErrorReceived(response)
-            }
-        }
-        viewModel.getLoading().observe(this) {
-            if (it) {
-                binding.progressBar1.root.visible()
-            } else {
-                binding.progressBar1.root.gone()
-            }
-        }
-        viewModel.getLoading().observe(this) {
-            if (it) {
-                binding.progressBar1.root.visible()
-            } else {
-                binding.progressBar1.root.gone()
-            }
-        }
-
-
-    }
 
     private fun setPeriodUiState(state: InternalSelectedPeriod) {
         binding.lytSelector.tvDay.setBackgroundResource(0)
@@ -500,6 +614,7 @@ enum class SleepInternalLaunchState(val key: String) {
     SLEEP_PERFORMANCE("performance"),
     HOUR_VS_NEED("performance"),//pending
     SLEEP_TIME("performance"),//pending
+    TIMING("timing"),//pending
     EFFICIENCY("efficiency"),
     REM_SLEEP("rem_sleep"),
     DEEP_SLEEP("deep_sleep"),

@@ -70,6 +70,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private val endPadding = dip2px(30f)
     var mAverage: Pair<Int, String>? = null
+    private var showOverlay = false
 
 
     /**
@@ -192,7 +193,9 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         drawXAxis(canvas)
         drawYAxis(canvas)
         drawContent(canvas)
-        drawOverlay(canvas)
+        if (showOverlay) {
+            drawOverlay(canvas)
+        }
     }
 
     private fun drawOverlay(canvas: Canvas) {
@@ -213,39 +216,43 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             val avgValue = filterValues.filterNotNull().averageWithoutZero()
 
-            val pos = getYAxisValue(avgValue)
-            val end = start.toFloat() + stepWidth
+
+            if (avgValue != 0) {
+
+                val pos = getYAxisValue(avgValue)
+                val end = start.toFloat() + stepWidth
 
 
-            val text = "$avgValue%"
-            xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+                val text = "$avgValue%"
+                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
 
-            canvas.drawText(
-                text,
-                start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                pos - paddingText,
-                xOverlayLinePaint
-            )
+                canvas.drawText(
+                    text,
+                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                    pos - paddingText,
+                    xOverlayLinePaint
+                )
 
-            canvas.drawLine(
-                start.toFloat(),
-                pos,
-                end,
-                pos,
-                xOverlayLinePaint
-            )
+                canvas.drawLine(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos,
+                    xOverlayLinePaint
+                )
 
 
-            val path = Path()
-            path.reset()
-            path.moveTo(start.toFloat(), pos)
-            path.lineTo(end, pos)
-            path.lineTo(end, pos + dip2px(50f).toFloat())
-            path.lineTo(start.toFloat(), pos + dip2px(50f).toFloat())
+                val path = Path()
+                path.reset()
+                path.moveTo(start.toFloat(), pos)
+                path.lineTo(end, pos)
+                path.lineTo(end, pos + dip2px(50f).toFloat())
+                path.lineTo(start.toFloat(), pos + dip2px(50f).toFloat())
 
-            avgLineFillPaint.setShader(linearGradient)
+                avgLineFillPaint.setShader(linearGradient)
 
-            canvas.drawPath(path, avgLineFillPaint)
+                canvas.drawPath(path, avgLineFillPaint)
+            }
 
             start += stepWidth.toInt()
         }
@@ -273,6 +280,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     lastSentValuePos = selectedPosition
                 }
             }
+
+            listener?.onValueSelected(selectedPosition)
         }
 
         if (dataSet.isEmpty()) {
@@ -533,9 +542,12 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<String>,
         maxValue: Int,
-        avgValue: Pair<Int, String>,
-        selectedPosition: Int
+        avgValue: Pair<Int, String>?,
+        selectedPosition: Int,
+        showOverlay: Boolean = false
     ) {
+        this.showOverlay = showOverlay
+
         dataPosition.clear()
 
         this.yAxisRange.clear()
@@ -611,6 +623,25 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     fun setClickListener(listener: SleepSingleBarAction?) {
         this.listener = listener
+    }
+
+    //TODO
+    private fun getDaysOfMonth(month: String): Int {
+        return when (month.lowercase()) {
+            "jan" -> 31
+            "feb" -> 28
+            "mar" -> 31
+            "apr" -> 30
+            "may" -> 31
+            "jun" -> 30
+            "jul" -> 31
+            "aug" -> 31
+            "sep" -> 30
+            "oct" -> 31
+            "nov" -> 30
+            "dec" -> 31
+            else -> 30
+        }
     }
 
 

@@ -86,7 +86,7 @@ class SleepDashFragment :
     private val adapterSleepContributor: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-
+                showInternalTrend(viewModel.getLaunchState(resultData.type))
             }
         })
     }
@@ -150,20 +150,16 @@ class SleepDashFragment :
 
 
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_PERFORMANCE)
-            navigate(frag, bundle)
+            showInternalTrend(SleepInternalLaunchState.SLEEP_PERFORMANCE)
         }
         binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.HOUR_VS_NEED)
-            navigate(frag, bundle)
+            showInternalTrend(SleepInternalLaunchState.HOUR_VS_NEED)
         }
         binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.RESTORATIVE_SLEEP)
-            navigate(frag, bundle)
+            showInternalTrend(SleepInternalLaunchState.RESTORATIVE_SLEEP)
         }
         binding.lytSleepTrends.lytSleepTime.root.setOnClickListener {
-            val (frag, bundle) = SleepInternalDetailsFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
-            navigate(frag, bundle)
+            showInternalTrend(SleepInternalLaunchState.SLEEP_TIME)
         }
 
     }
@@ -751,6 +747,13 @@ class SleepDashFragment :
             })
             adapter = sleepBannerAdapter
         }
+    }
+
+    fun showInternalTrend(state: SleepInternalLaunchState) {
+        val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
+            state
+        )
+        navigate(frag, bundle)
     }
 
 
