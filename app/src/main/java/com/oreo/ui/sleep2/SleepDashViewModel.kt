@@ -25,12 +25,9 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.sleep.SleepTimeModel
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -684,8 +681,14 @@ class SleepDashViewModel @Inject constructor(
             SleepContributor.LATENCY -> SleepInternalLaunchState.LATENCY
             SleepContributor.RESTFULNESS -> SleepInternalLaunchState.RESTFULNESS
             SleepContributor.TIMING -> SleepInternalLaunchState.TIMING
+            SleepContributor.RESPIRATORY_RATE -> SleepInternalLaunchState.RESPIRATORY_RATE
+            SleepContributor.RESTING_HEART_RATE -> SleepInternalLaunchState.RESTING_HEART_RATE
+            SleepContributor.HRV -> SleepInternalLaunchState.HRV
+            SleepContributor.SKIN_TEMPERATURE -> SleepInternalLaunchState.SKIN_TEMPERATURE
+            SleepContributor.BLOOD_OXYGEN -> SleepInternalLaunchState.BLOOD_OXYGEN
         }
     }
+
 
 
 }
@@ -697,7 +700,12 @@ enum class SleepContributor(val displayName: String, val icon: Int) {
     EFFICIENCY("Efficiency", R.drawable.ic_sleep_efficiency),
     LATENCY("Latency", R.drawable.ic_sleep_latency),
     RESTFULNESS("Restfulness", R.drawable.ic_sleep_restfulness),
-    TIMING("Timing", R.drawable.ic_sleep_timing)
+    TIMING("Timing", R.drawable.ic_sleep_timing),
+    RESPIRATORY_RATE("Respiratory rate", R.drawable.ic_respiratory_rate),
+    RESTING_HEART_RATE("Resting heart rate", R.drawable.ic_resting_hr),
+    HRV("HRV", R.drawable.ic_hrv),
+    SKIN_TEMPERATURE("Skin temperature", R.drawable.ic_skin_tempreature),
+    BLOOD_OXYGEN("Blood oxygen", R.drawable.ic_blood_oxygen)
 }
 
 data class SleepTrendsData(

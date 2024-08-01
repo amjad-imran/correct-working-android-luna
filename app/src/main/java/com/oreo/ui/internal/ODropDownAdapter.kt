@@ -125,6 +125,27 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
                 context.getString(R.string.text_timing),
                 R.drawable.ic_clock_off_sleep
             )
+
+            SleepInternalLaunchState.RESPIRATORY_RATE -> Pair(
+                context.getString(R.string.text_respiratory_rate),
+                R.drawable.ic_respiratory_rate
+            )
+            SleepInternalLaunchState.RESTING_HEART_RATE -> Pair(
+                context.getString(R.string.text_resting_heart_rate),
+                R.drawable.ic_resting_hr
+            )
+            SleepInternalLaunchState.HRV -> Pair(
+                context.getString(R.string.text_hrv),
+                R.drawable.ic_hrv
+            )
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> Pair(
+                context.getString(R.string.text_skin_temperature),
+                R.drawable.ic_skin_tempreature
+            )
+            SleepInternalLaunchState.BLOOD_OXYGEN -> Pair(
+                context.getString(R.string.text_blood_oxygen),
+                R.drawable.ic_blood_oxygen
+            )
         }
     }
 }

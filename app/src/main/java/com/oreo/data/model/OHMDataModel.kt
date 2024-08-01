@@ -1,5 +1,6 @@
 package com.oreo.data.model
 
+
 import com.oreo.ui.sleep2.SleepContributor
 
 data class OHMDataModel(

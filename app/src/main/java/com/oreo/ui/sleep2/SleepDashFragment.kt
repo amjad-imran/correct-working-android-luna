@@ -149,6 +149,9 @@ class SleepDashFragment :
         }
 
 
+        binding.lytHealthMonitor.ivArrow.setOnClickListener {
+            navigate(R.id.healthMonitorInternal)
+        }
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
             showInternalTrend(SleepInternalLaunchState.SLEEP_PERFORMANCE)
         }

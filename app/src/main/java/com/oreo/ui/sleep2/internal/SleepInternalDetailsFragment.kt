@@ -13,7 +13,6 @@ import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnMoreDataModel
@@ -25,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -620,6 +618,11 @@ enum class SleepInternalLaunchState(val key: String) {
     DEEP_SLEEP("deep_sleep"),
     SLEEP_DURATION("sleep_duration"),
     LATENCY("latency"),
-    RESTFULNESS("restfulness")
+    RESTFULNESS("restfulness"),
+    RESPIRATORY_RATE("respiratory_rate"),
+    RESTING_HEART_RATE("resting_heart_rate"),
+    HRV("hrv"),
+    SKIN_TEMPERATURE("skin_temperature"),
+    BLOOD_OXYGEN("blood_oxygen")
 }
 

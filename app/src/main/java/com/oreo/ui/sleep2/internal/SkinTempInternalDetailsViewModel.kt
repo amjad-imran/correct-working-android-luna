@@ -7,6 +7,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthMonTrendsDataModel
+import com.oreo.ui.sleep2.SleepContributor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,7 +16,7 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
-    lateinit var selectedLaunchMode: SkinTempInternalLaunchState
+    lateinit var selectedLaunchMode: SleepInternalLaunchState
     var isDeviationSelected:Boolean=true
 
     private val _selectedPeriod =
@@ -33,33 +34,39 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
 
     private fun getTitle(): Pair<String, Int> {
         return when (selectedLaunchMode) {
-            SkinTempInternalLaunchState.RESPIRATORY_RATE -> {
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
                 Pair(
                     resourcesProvider.getString(R.string.text_respiratory_rate),
                     R.drawable.ic_respiratory_rate
                 )
             }
 
-            SkinTempInternalLaunchState.RESTING_HEART_RATE -> Pair(
+            SleepInternalLaunchState.RESTING_HEART_RATE -> Pair(
                 resourcesProvider.getString(R.string.text_resting_heart_rate),
                 R.drawable.ic_resting_hr
             )
 
-            SkinTempInternalLaunchState.HRV -> Pair(
+            SleepInternalLaunchState.HRV -> Pair(
                 resourcesProvider.getString(R.string.text_hrv),
                 R.drawable.ic_hrv
             )
 
-            SkinTempInternalLaunchState.SKIN_TEMPERATURE -> Pair(
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> Pair(
                 resourcesProvider.getString(R.string.text_skin_temperature),
                 R.drawable.ic_skin_tempreature
             )
 
-            SkinTempInternalLaunchState.BLOOD_OXYGEN -> Pair(
+            SleepInternalLaunchState.BLOOD_OXYGEN -> Pair(
                 resourcesProvider.getString(R.string.text_blood_oxygen),
                 R.drawable.ic_blood_oxygen
             )
 
+            else -> {
+                Pair(
+                    resourcesProvider.getString(R.string.text_skin_temperature),
+                    R.drawable.ic_skin_tempreature
+                )
+            }
         }
     }
 
@@ -104,33 +111,43 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         return dataList
     }
 
-    fun updateTrendsName(trendsName: String?) {
-        when (trendsName?.lowercase()?.replace(" ", "_")) {
-            SkinTempInternalLaunchState.RESPIRATORY_RATE.name.lowercase() -> selectedLaunchMode =
-                SkinTempInternalLaunchState.RESPIRATORY_RATE
+//    fun updateTrendsName(trendsName: String?) {
+//        when (trendsName?.lowercase()?.replace(" ", "_")) {
+//            SleepInternalLaunchState.RESPIRATORY_RATE.name.lowercase() -> selectedLaunchMode =
+//                SleepContributor.RESPIRATORY_RATE
+//
+//            SleepContributor.RESTING_HEART_RATE.name.lowercase() -> selectedLaunchMode =
+//                SleepContributor.RESTING_HEART_RATE
+//
+//            SleepContributor.HRV.name.lowercase() -> selectedLaunchMode =
+//                SleepContributor.HRV
+//
+//            SleepContributor.SKIN_TEMPERATURE.name.lowercase() -> selectedLaunchMode =
+//                SleepContributor.SKIN_TEMPERATURE
+//
+//            SleepContributor.BLOOD_OXYGEN.name.lowercase() -> selectedLaunchMode =
+//                SleepContributor.BLOOD_OXYGEN
+//
+//        }
+//    }
 
-            SkinTempInternalLaunchState.RESTING_HEART_RATE.name.lowercase() -> selectedLaunchMode =
-                SkinTempInternalLaunchState.RESTING_HEART_RATE
-
-            SkinTempInternalLaunchState.HRV.name.lowercase() -> selectedLaunchMode =
-                SkinTempInternalLaunchState.HRV
-
-            SkinTempInternalLaunchState.SKIN_TEMPERATURE.name.lowercase() -> selectedLaunchMode =
-                SkinTempInternalLaunchState.SKIN_TEMPERATURE
-
-            SkinTempInternalLaunchState.BLOOD_OXYGEN.name.lowercase() -> selectedLaunchMode =
-                SkinTempInternalLaunchState.BLOOD_OXYGEN
-
-        }
-    }
-
-    fun getPostFixAbr(trendType: SkinTempInternalLaunchState): String {
+    fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
         val abr: String = when (trendType) {
-            SkinTempInternalLaunchState.SKIN_TEMPERATURE -> "°F - average"
-            SkinTempInternalLaunchState.HRV -> "ms - average"
-            SkinTempInternalLaunchState.RESPIRATORY_RATE -> "rpm - average"
-            SkinTempInternalLaunchState.RESTING_HEART_RATE -> "bpm - average"
-            SkinTempInternalLaunchState.BLOOD_OXYGEN -> "% - average"
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> "°F - average"
+            SleepInternalLaunchState.HRV -> "ms - average"
+            SleepInternalLaunchState.RESPIRATORY_RATE -> "rpm - average"
+            SleepInternalLaunchState.RESTING_HEART_RATE -> "bpm - average"
+            SleepInternalLaunchState.BLOOD_OXYGEN -> "% - average"
+            SleepInternalLaunchState.SLEEP_DURATION -> ""
+            SleepInternalLaunchState.REM_SLEEP -> ""
+            SleepInternalLaunchState.DEEP_SLEEP -> ""
+            SleepInternalLaunchState.EFFICIENCY -> ""
+            SleepInternalLaunchState.LATENCY -> ""
+            SleepInternalLaunchState.RESTFULNESS -> ""
+            SleepInternalLaunchState.TIMING -> ""
+            else->{
+                ""
+            }
         }
         return abr
 
@@ -163,13 +180,13 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         return Pair(background, textColor)
     }
 
-    fun returnTrendsArrow(type: SkinTempInternalLaunchState): Int {
+    fun returnTrendsArrow(type: SleepInternalLaunchState): Int {
         val icon: Int = when (type) {
-            SkinTempInternalLaunchState.RESPIRATORY_RATE,
-            SkinTempInternalLaunchState.HRV,
-            SkinTempInternalLaunchState.RESTING_HEART_RATE,
-            SkinTempInternalLaunchState.BLOOD_OXYGEN,
-                SkinTempInternalLaunchState.SKIN_TEMPERATURE
+            SleepInternalLaunchState.RESPIRATORY_RATE,
+            SleepInternalLaunchState.HRV,
+            SleepInternalLaunchState.RESTING_HEART_RATE,
+            SleepInternalLaunchState.BLOOD_OXYGEN,
+            SleepInternalLaunchState.SKIN_TEMPERATURE
             -> R.drawable.ic_hm_tick
             else -> 0
         }

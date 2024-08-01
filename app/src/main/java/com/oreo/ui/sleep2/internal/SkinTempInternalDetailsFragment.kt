@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
+import com.oreo.ui.sleep2.SleepContributor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,7 +34,7 @@ class SkinTempInternalDetailsFragment :
     }
 
     companion object {
-        fun getStartData(launchMode: SkinTempInternalLaunchState): Pair<Int, Bundle?> {
+        fun getStartData(launchMode: SleepInternalLaunchState): Pair<Int, Bundle?> {
             return Pair(R.id.skinTempInternalDetailsFragment, Bundle().apply {
                 putSerializable("launchMode", launchMode)
             })
@@ -47,7 +48,7 @@ class SkinTempInternalDetailsFragment :
         viewModel.updateTitle()
         setGraphPagerView()
         setRecycler()
-        if (viewModel.selectedLaunchMode == SkinTempInternalLaunchState.SKIN_TEMPERATURE) {
+        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
             binding.lytDeviation.root.visible()
             binding.lytSelector.root.gone()
         } else {
@@ -222,6 +223,3 @@ class SkinTempInternalDetailsFragment :
     }
 }
 
-enum class SkinTempInternalLaunchState {
-    RESPIRATORY_RATE, RESTING_HEART_RATE, HRV, SKIN_TEMPERATURE, BLOOD_OXYGEN
-}

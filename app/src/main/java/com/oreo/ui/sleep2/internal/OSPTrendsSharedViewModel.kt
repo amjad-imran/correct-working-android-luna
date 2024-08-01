@@ -120,7 +120,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 }
             }
 
-            null -> default
+            else -> default
         }
     }
 
@@ -172,6 +172,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             null -> 100
+            else -> 100
         }
     }
 
@@ -204,7 +205,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
             SleepInternalLaunchState.LATENCY -> Pair(avg, "$avg%")
             SleepInternalLaunchState.RESTFULNESS -> Pair(avg, "$avg")
-            null -> Pair(avg, "$avg%")
+            else -> Pair(avg, "$avg%")
         }
     }
 

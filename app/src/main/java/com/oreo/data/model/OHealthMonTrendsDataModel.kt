@@ -1,9 +1,11 @@
 package com.oreo.data.model
 
-import com.oreo.ui.sleep2.internal.SkinTempInternalLaunchState
+import com.oreo.ui.sleep2.SleepContributor
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+
 
 data class OHealthMonTrendsDataModel(
-    val trendType:SkinTempInternalLaunchState,
+    val trendType: SleepInternalLaunchState,
     val dayDate:String,
     val dspValue:String,
     val isShowOptimal:Boolean=false,

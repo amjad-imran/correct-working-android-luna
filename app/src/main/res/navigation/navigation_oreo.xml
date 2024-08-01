@@ -956,7 +956,7 @@
         android:label="fragment_skin_temp_internal_details">
         <argument
             android:name="launchMode"
-            app:argType="com.oreo.ui.sleep2.internal.SkinTempInternalLaunchState" />
+            app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
     </fragment>
     <fragment
         android:id="@+id/fragmentAddSleep"

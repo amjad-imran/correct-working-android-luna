@@ -7,17 +7,20 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHMInternalBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.OHMDataModel
+import com.oreo.ui.sleep2.SleepDashViewModel
 import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OHMInternalFragment :
     BaseFragment<FragmentOHMInternalBinding>(FragmentOHMInternalBinding::inflate) {
+
+    private val sleepDashViewModel: SleepDashViewModel by viewModels()
     private val viewModel: OHMInternalViewModel by viewModels()
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-                val launchType = viewModel.getLaunchType(resultData.type.displayName)
+                val launchType = sleepDashViewModel.getLaunchState(resultData.type)
                 val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
                     launchType
                 )

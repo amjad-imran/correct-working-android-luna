@@ -333,6 +333,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 resourcesProvider.getString(R.string.text_timing),
                 R.drawable.ic_clock_off_sleep
             )
+            else->{
+                Pair(
+                    resourcesProvider.getString(R.string.text_timing),
+                    R.drawable.ic_clock_off_sleep
+                )
+            }
         }
     }
 
