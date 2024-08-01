@@ -47,6 +47,7 @@ import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,6 +67,7 @@ class SleepDashFragment :
     private val viewModel: SleepDashViewModel by viewModels()
     private var sleepDayGraphView: SleepGraphViewOreo? = null
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private val trendsSharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
@@ -171,6 +173,7 @@ class SleepDashFragment :
 
         viewModel.calendarStartDate.observe(this) {
             it.getContent()?.let {
+                trendsSharedViewModel.calendarStartDate = it
                 val lastDayOfWeek: LocalDate =
                     LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 

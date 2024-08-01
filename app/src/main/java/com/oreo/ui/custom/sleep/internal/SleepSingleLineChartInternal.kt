@@ -17,9 +17,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import java.util.Locale
 
 
 class SleepSingleLineChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -71,6 +74,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private val endPadding = dip2px(30f)
     var mAverage: Pair<Int, String>? = null
     private var showOverlay = false
+    private var launchState: SleepInternalLaunchState? = null
 
 
     /**
@@ -222,8 +226,20 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 val pos = getYAxisValue(avgValue)
                 val end = start.toFloat() + stepWidth
 
-
-                val text = "$avgValue%"
+                val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION) {
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                        avgValue
+                    )
+                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
+                } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
+                    launchState == SleepInternalLaunchState.DEEP_SLEEP ||
+                    launchState == SleepInternalLaunchState.RESTFULNESS ||
+                    launchState == SleepInternalLaunchState.LATENCY
+                ) {
+                    "$avgValue"
+                } else {
+                    "$avgValue%"
+                }
                 xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
 
                 canvas.drawText(
@@ -234,11 +250,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 )
 
                 canvas.drawLine(
-                    start.toFloat(),
-                    pos,
-                    end,
-                    pos,
-                    xOverlayLinePaint
+                    start.toFloat(), pos, end, pos, xOverlayLinePaint
                 )
 
 
@@ -307,8 +319,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 )
 
                 canvas.drawRect(
-                    rectFSelected,
-                    selectedDayPaint
+                    rectFSelected, selectedDayPaint
                 )
             }
 
@@ -342,8 +353,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                             topHeight.toFloat(),
                             center + 2f,
                             height.toFloat() - bottomHeight
-                        ),
-                        circlePaint
+                        ), circlePaint
                     )
 
                     val widthHalf = dip2px(6f)
@@ -357,10 +367,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     canvas.drawRect(rectFTopI, circlePaint)
 
                     canvas.drawCircle(
-                        start + dataStepWidth / 2,
-                        actualPos,
-                        circleRadiusBig,
-                        circlePaint
+                        start + dataStepWidth / 2, actualPos, circleRadiusBig, circlePaint
                     )
                 }
             }
@@ -384,17 +391,11 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     textY - textBounds.height() - dip2px(3f),
                     textX + textBounds.width() + dip2px(3f),
                     textY + dip2px(3f)
-                ),
-                dip2px(2f).toFloat(),
-                dip2px(2f).toFloat(),
-                avgBackPaint
+                ), dip2px(2f).toFloat(), dip2px(2f).toFloat(), avgBackPaint
             )
 
             canvas.drawText(
-                mAverage!!.second,
-                textX,
-                textY,
-                avgTextPaint
+                mAverage!!.second, textX, textY, avgTextPaint
             )
 
             canvas.drawLine(
@@ -437,11 +438,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         var start = 0f
         for (i in 0..xAxisRange.size) {
             canvas.drawLine(
-                start,
-                topHeight.toFloat(),
-                start,
-                height.toFloat() - bottomHeight,
-                gridLinePaint
+                start, topHeight.toFloat(), start, height.toFloat() - bottomHeight, gridLinePaint
             )
             start += stepWidth
         }
@@ -544,9 +541,11 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         maxValue: Int,
         avgValue: Pair<Int, String>?,
         selectedPosition: Int,
-        showOverlay: Boolean = false
+        showOverlay: Boolean = false,
+        launchState: SleepInternalLaunchState?
     ) {
         this.showOverlay = showOverlay
+        this.launchState = launchState
 
         dataPosition.clear()
 
@@ -645,4 +644,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
 
+}
+
+enum class AvgBarType {
+    PERCENT, TIME, DEFAULT
 }
