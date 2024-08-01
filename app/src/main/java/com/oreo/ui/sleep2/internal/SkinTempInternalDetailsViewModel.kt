@@ -53,7 +53,7 @@ constructor(
     init {
         val datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         endDate = LocalDate.now().format(datePattern)
-        startDate = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+        startDate = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
             .format(datePattern)
     }
     fun setSelectedPeriod(selectedPeriod: InternalSelectedPeriod) {
@@ -197,6 +197,7 @@ constructor(
             userActivityRepository.getSleepInternalTrendsPagesData(
                 startDate,
                 endDate,
+               /* SleepInternalLaunchState.SLEEP_PERFORMANCE.key*/
               selectedLaunchMode.key.lowercase()
             ).collect { resource ->
                 when (resource) {
@@ -314,11 +315,13 @@ constructor(
             dataToDisplay.add(
                 TrendsValues(
                     date = current.format(dateFormat),
-                    value1 = data?.value1
+                    value1 = data?.value1,
+                    value2 = data?.value2
                 )
             )
             current = current.plusDays(1)
         }
+
 
         val trendData = TrendsGraphData(
             data = dataToDisplay
@@ -449,6 +452,32 @@ constructor(
 //            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
 //        )
 //    }
+
+    fun getTopDisplayDate(): String {
+        val todayDate = LocalDate.now()
+        return when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+
+                todayDate.format(dayFormat)
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                val weekFormatStart = DateTimeFormatter.ofPattern("dd MMMM")
+                val weekFormatEnd = DateTimeFormatter.ofPattern("dd MMMM, yyyy")
+                val weekStart = todayDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                val weekEnd = todayDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+
+                "${weekStart.format(weekFormatStart)} - ${weekEnd.format(weekFormatEnd)}"
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val dayFormat = DateTimeFormatter.ofPattern("MMMM yyyy")
+                todayDate.format(dayFormat)
+            }
+        }
+
+    }
 
 
 }
