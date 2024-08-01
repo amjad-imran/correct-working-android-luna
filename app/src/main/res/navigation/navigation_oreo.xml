@@ -883,7 +883,7 @@
     <fragment
         android:id="@+id/chatHistoryFragment"
         android:name="com.oreo.ui.chatGpt.history.ChatHistoryFragment"
-        android:label="fragment_chat_history" >
+        android:label="fragment_chat_history">
         <action
             android:id="@+id/action_chatHistoryFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
@@ -893,11 +893,11 @@
     <fragment
         android:id="@+id/hrArticle1Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle1Fragment"
-        android:label="fragment_hr_article1"/>
+        android:label="fragment_hr_article1" />
     <fragment
         android:id="@+id/hrArticle2Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle2Fragment"
-        android:label="fragment_hr_article2"/>
+        android:label="fragment_hr_article2" />
     <fragment
         android:id="@+id/hrArticle3Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle3Fragment"
@@ -906,4 +906,8 @@
         android:id="@+id/hrArticle4Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle4Fragment"
         android:label="fragment_hr_article4" />
+    <dialog
+        android:id="@+id/bottomSheetForceUpdate"
+        android:name="com.noisefit.ui.update.BottomSheetForceUpdate"
+        android:label="BottomSheetForceUpdate" />
 </navigation>

@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.remote.NetworkErrors.FORCE_UPDATE
 import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
@@ -62,6 +63,7 @@ class NetworkConnectionInterceptor(
     private val STATUS_CODE_LOGOUT = 401
     private val STATUS_CODE_REFRESH = 403
     private val WRONG_TIME_CODE = 406
+    private val APP_FORCE_UPDATE = 410
 
 
     /**
@@ -135,6 +137,9 @@ class NetworkConnectionInterceptor(
             when (response.code) {
                 WRONG_TIME_CODE -> {// wrong time
                     throw IOException(WRONG_CLIENT_TIME_ERROR)
+                }
+                APP_FORCE_UPDATE -> {
+                    throw IOException(FORCE_UPDATE)
                 }
 
                 STATUS_CODE_REFRESH -> {//Refresh token

@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
+import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -202,6 +203,8 @@ private const val APP_VERSION_NEW_TIMESTAMP = "APP_VERSION_NEW_TIMESTAMP"
 private const val APP_VERSION_REMIND = "APP_VERSION_REMIND"
 private const val APP_VERSION_CURRENT = "APP_VERSION_CURRENT"
 
+private const val FORCE_UPDATE_REQUIRED_VERSION = "FORCE_UPDATE_REQUIRED_VERSION"
+
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -211,6 +214,29 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun setForceUpdateRequired() {
+        mPrefs.edit()?.putInt(FORCE_UPDATE_REQUIRED_VERSION, BuildConfig.VERSION_CODE)?.commit()
+    }
+
+    override fun getForceUpdateRequired(): Boolean {
+        val forceUpdateVersion = mPrefs.getInt(FORCE_UPDATE_REQUIRED_VERSION, -1)
+        if (forceUpdateVersion == -1) {
+            return false
+        } else {
+            val currentVersion = BuildConfig.VERSION_CODE
+            if (currentVersion > forceUpdateVersion) {
+                mPrefs.edit()?.remove(FORCE_UPDATE_REQUIRED_VERSION)?.commit()
+                return false
+            } else {
+                return true
+            }
+        }
+    }
+
+    override fun clearForceUpdateRequired() {
+        mPrefs.edit()?.remove(FORCE_UPDATE_REQUIRED_VERSION)?.commit()
+    }
 
     override fun getGotPeriodClickedStatus(): Boolean {
         val savedValue = mPrefs.getString(GOT_PERIOD_CLICKED, null) ?: return false

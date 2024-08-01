@@ -169,8 +169,12 @@ constructor(
                     syncRepository.postDataToServer(userActivities.first)?.collect { resource ->
                         when (resource) {
                             is Resource.GenericError -> {
+
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
-                                LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.message)
+                                LOGS.d(
+                                    TAG,
+                                    "OreoSyncDataWork: combinedData1 ${resource.errorCode} -- " + resource.message
+                                )
                                 AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.errorCode} ${resource.message}")
                             }
 
@@ -180,7 +184,16 @@ constructor(
 
                             is Resource.NetworkError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
-                                LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.response)
+                                LOGS.d(
+                                    TAG,
+                                    "OreoSyncDataWork: combinedData1 ${resource.code} -- " + resource.response
+                                )
+
+                                if (resource.code == 410) {
+                                    localDataStore.setForceUpdateRequired()
+                                    sessionManager.forceUpdateApp.postValue(Event(true))
+                                }
+
                                 tryCatch {
                                     val dialog =
                                         resource.response.uiComponentType as UIComponentType.RetryApiDialog
