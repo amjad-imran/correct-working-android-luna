@@ -56,6 +56,8 @@ import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -181,7 +183,7 @@ interface NetworkService {
     //HistoryData APIs ring
     @POST
     suspend fun postOreoCombinedHistoryData(
-        @Url url: String, @Body requestObject: OreoUserDataPost
+        @Url url: String, @Body requestObject: OreoUserDataPost,
     ): BaseApiResponse<VersionCheckResponse>
 
     @POST
@@ -212,11 +214,13 @@ interface NetworkService {
         @Query("end_date") endDate: String?
     ): BaseApiResponse<ServerUserHealthResponse>
 
+
     @GET
     suspend fun getUserHealthSleepData(
         @Url string: String,
         @Query("start_date") startDate: String?,
-        @Query("end_date") endDate: String?
+        @Query("end_date") endDate: String?,
+        @Header("api-version") version: String,
     ): BaseApiResponse<SleepDataResponse>
 
     @GET

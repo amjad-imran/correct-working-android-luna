@@ -141,7 +141,7 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<SleepDataResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/luna/sleep/v2/get"
-            remoteDataSource.getUserHealthSleepData(url, startDate, endDate)
+            remoteDataSource.getUserHealthSleepData(url, startDate, endDate,"2")
         }
     }
 
