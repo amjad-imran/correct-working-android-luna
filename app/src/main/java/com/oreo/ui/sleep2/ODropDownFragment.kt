@@ -22,12 +22,12 @@ class ODropDownFragment :
     BaseFragment<FragmentODropDownBinding>(FragmentODropDownBinding::inflate) {
     private val viewModel: ODropDownViewModel by viewModels()
     private val args: ODropDownFragmentArgs by navArgs()
-    var alert: AlertDialog? = null
-    val mDDAdapter by lazy {
+    private var alert: AlertDialog? = null
+    private val mDDAdapter by lazy {
         ODropDownAdapter(object : ODropDownAdapter.ODDItemClickListener {
             override fun onItemClick(resultData: SleepInternalLaunchState, position: Int) {
-                if (alert != null)
-                    alert?.dismiss()
+
+                alert?.dismiss()
                 setFragmentResult(
                     SLEEP_DROP_DOWN_ITEM,
                     bundleOf("itemName" to resultData)
@@ -39,9 +39,10 @@ class ODropDownFragment :
     }
 
     companion object {
-        fun getStartData(launchMode: SleepInternalLaunchState): Pair<Int, Bundle?> {
+        fun getStartData(launchMode: SleepInternalLaunchState,isFromHm:Boolean): Pair<Int, Bundle?> {
             return Pair(R.id.dropDownFragment, Bundle().apply {
                 putSerializable("launchMode", launchMode)
+                putSerializable("isFromHm", isFromHm)
             })
         }
     }
@@ -49,6 +50,7 @@ class ODropDownFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.selectedLaunchMode = args.launchMode
+        viewModel.isFromHealthMonitor = args.isFromHm
         initUi()
 
 

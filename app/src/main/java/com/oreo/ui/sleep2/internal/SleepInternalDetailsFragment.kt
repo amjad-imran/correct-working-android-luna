@@ -104,7 +104,7 @@ class SleepInternalDetailsFragment :
                 viewModel.reloadFragment.postValue(Event(data))
             }
 
-            val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode)
+            val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode,false)
             navigate(frag, bundle)
         }
         binding.lytSelector.tvDay.setOnClickListener {
