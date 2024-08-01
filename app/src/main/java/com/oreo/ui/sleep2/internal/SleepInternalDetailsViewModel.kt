@@ -39,7 +39,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     var endDate: String = ""
 
     private val _selectedPeriod =
-        MutableLiveData<InternalSelectedPeriod>(InternalSelectedPeriod.DAY)
+        MutableLiveData<InternalSelectedPeriod>()
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
 
@@ -60,7 +60,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     init {
         val datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         endDate = LocalDate.now().format(datePattern)
-        startDate = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+        startDate = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
             .format(datePattern)
     }
 
@@ -178,6 +178,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     private fun loadNewFragment() {
 
         val (start, end) = getDatesToLoad()
+
         currentStartDate = start
 
         val dataToDisplay = ArrayList<TrendsValues>()
@@ -189,7 +190,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
             dataToDisplay.add(
                 TrendsValues(
                     date = current.format(dateFormat),
-                    value1 = data?.value1
+                    value1 = data?.value1,
+                    value2 = data?.value2
                 )
             )
             current = current.plusDays(1)
@@ -240,16 +242,14 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         trendData
                     )
 
-
+                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> SleepMultiBarChartFragment.newInstance(
+                        trendData
+                    )
 
 
                     SleepInternalLaunchState.SLEEP_TIME ->
                         SleepSingleLineChartFragment.newInstance(trendData)
 
-
-                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> SleepMultiBarChartFragment.newInstance(
-                        trendData
-                    )
 
                     SleepInternalLaunchState.HOUR_VS_NEED -> SleepMultiLineChartFragment.newInstance(
                         trendData
@@ -333,7 +333,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 resourcesProvider.getString(R.string.text_timing),
                 R.drawable.ic_clock_off_sleep
             )
-            else->{
+
+            else -> {
                 Pair(
                     resourcesProvider.getString(R.string.text_timing),
                     R.drawable.ic_clock_off_sleep
@@ -458,21 +459,60 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getUnit(): String {
-        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
-            "%"
-        } else if (selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS) {
-            "times"
-        } else {
-            "min"
+        return when(selectedLaunchMode){
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> ""
+            SleepInternalLaunchState.SLEEP_PERFORMANCE ->  "%"
+            SleepInternalLaunchState.HOUR_VS_NEED -> ""
+            SleepInternalLaunchState.SLEEP_TIME -> ""
+            SleepInternalLaunchState.TIMING -> "min"
+            SleepInternalLaunchState.EFFICIENCY -> "%"
+            SleepInternalLaunchState.REM_SLEEP -> "min"
+            SleepInternalLaunchState.DEEP_SLEEP -> "min"
+            SleepInternalLaunchState.SLEEP_DURATION -> ""
+            SleepInternalLaunchState.LATENCY -> "min"
+            SleepInternalLaunchState.RESTFULNESS -> "times"
+            SleepInternalLaunchState.RESPIRATORY_RATE -> ""
+            SleepInternalLaunchState.RESTING_HEART_RATE -> ""
+            SleepInternalLaunchState.HRV -> ""
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> ""
+            SleepInternalLaunchState.BLOOD_OXYGEN -> ""
         }
     }
 
     fun getTopState(): TrendsTopState {
-        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION) {
+        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION ||
+            selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP
+        ) {
             TrendsTopState.SINGLE_DATE
         } else {
             TrendsTopState.SINGLE
         }
+    }
+
+    fun getTopDisplayDate(): String {
+        val todayDate = LocalDate.now()
+        return when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+
+                todayDate.format(dayFormat)
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                val weekFormatStart = DateTimeFormatter.ofPattern("dd MMMM")
+                val weekFormatEnd = DateTimeFormatter.ofPattern("dd MMMM, yyyy")
+                val weekStart = todayDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                val weekEnd = todayDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+
+                "${weekStart.format(weekFormatStart)} - ${weekEnd.format(weekFormatEnd)}"
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val dayFormat = DateTimeFormatter.ofPattern("MMMM yyyy")
+                todayDate.format(dayFormat)
+            }
+        }
+
     }
 
 

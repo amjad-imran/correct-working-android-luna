@@ -10,8 +10,11 @@ import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.temporal.WeekFields
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 class SleepSingleLineChartFragment :
@@ -40,17 +43,28 @@ class SleepSingleLineChartFragment :
             pageData = bundle.getParcelable(graphData)
         }
 
-        val dataList = pageData?.data?.map { it.value1 } ?: ArrayList()
+        val dataList = pageData?.data?.map {
+            if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+                pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
+                pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP) {
+                if (it.value1 != null) {
+                    (it.value1 ?: 0) / 60
+                } else null
+            } else {
+                it.value1
+            }
+        } ?: ArrayList()
 
-        val maxValue = getMaxValue(dataList)
-        val yAxisRange = getYAxisRange(maxValue)
-        val xAxisRange = getXAxisRange()
-        val avgValue = getAvgValue(dataList)
+        val maxValue = sharedViewModel.getMaxValue(dataList, pageData?.contributorType)
+        val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
+        val xAxisRange = getXAxisRange(pageData)
+        val avgValue = sharedViewModel.getAvgValue(dataList, pageData?.contributorType)
         val showOverlay =
             if (pageData?.selectedPeriod == InternalSelectedPeriod.DAY) false else true
 
         binding.graphBar.setDataSet(
-            dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1, showOverlay
+            dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1, showOverlay,
+            pageData?.contributorType
         )
 
 
@@ -83,14 +97,28 @@ class SleepSingleLineChartFragment :
         return Pair(avg, "$avg%")
     }
 
-    private fun getXAxisRange(): List<String> {
+    private fun getXAxisRange(pageData: TrendsGraphData?): List<String> {
         return when (pageData?.selectedPeriod) {
             InternalSelectedPeriod.MONTH -> {
                 arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
             }
 
             InternalSelectedPeriod.WEEK -> {
-                arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
+                val weekList = HashSet<Int>()
+                val weekListReturn = ArrayList<String>()
+
+                pageData.data?.forEach {
+                    val date = LocalDate.parse(it.date)
+
+                    val weekFields = WeekFields.of(Locale.getDefault())
+                    val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
+                    weekList.add(weekNumber)
+                }
+                weekList.sorted().forEach {
+                    weekListReturn.add("W$it")
+                }
+                weekListReturn
+                //arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
             }
 
             else -> {

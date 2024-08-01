@@ -162,6 +162,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     lastSentValuePos = selectedPosition
                 }
             }
+            listener?.onValueSelected(selectedPosition)
         }
 
         if (dataSet.isEmpty()) {

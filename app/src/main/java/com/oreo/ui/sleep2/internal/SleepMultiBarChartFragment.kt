@@ -41,17 +41,10 @@ class SleepMultiBarChartFragment :
             pageData = bundle.getParcelable(SleepMultiBarChartFragment.GRAPH_DATA)
         }
 
-        val dataList = pageData?.data?.map { Pair(it.value1, it.value2) } ?: ArrayList()
+        val dataList =
+            pageData?.data?.map { Pair(((it.value2 ?: 0) / 60),((it.value1 ?: 0) / 60)) }
+                ?: ArrayList()
 
-        /*val dataList = arrayListOf(
-            Pair(60, 40),
-            Pair(80, 50),
-            Pair(null, null),
-            Pair(null, null),
-            Pair(120, 20),
-            Pair(150, 10),
-            Pair(180, 0),
-        )*/
 
         val maxValue = getMaxValue(dataList)
         val yAxisRange = getYAxisRange(maxValue)

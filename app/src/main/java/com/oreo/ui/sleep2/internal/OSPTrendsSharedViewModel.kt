@@ -14,6 +14,8 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
         _interactGraphData.postValue(day)
     }
 
+    var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
+
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
     val interactGraphData: LiveData<LocalDate?> = _interactGraphData
@@ -203,7 +205,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 Pair(avg, "${avg / 60}")
             }
 
-            SleepInternalLaunchState.LATENCY -> Pair(avg, "$avg%")
+            SleepInternalLaunchState.LATENCY -> Pair(avg, "${avg}min")
             SleepInternalLaunchState.RESTFULNESS -> Pair(avg, "$avg")
             else -> Pair(avg, "$avg%")
         }
