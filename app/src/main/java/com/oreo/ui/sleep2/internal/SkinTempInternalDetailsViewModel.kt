@@ -1,21 +1,48 @@
 package com.oreo.ui.sleep2.internal
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.OHealthMonTrendsDataModel
-import com.oreo.ui.sleep2.SleepContributor
+import com.oreo.data.model.TrendAverage
+import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
 @HiltViewModel
-class SkinTempInternalDetailsViewModel @Inject constructor(
-    private val resourcesProvider: ResourcesProvider
+class SkinTempInternalDetailsViewModel
+@Inject
+constructor(
+    private val resourcesProvider: ResourcesProvider,
+    private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
+    var startDate: String = ""
+    var endDate: String = ""
+    val fragments = MutableLiveData<List<Fragment>?>()
+    var dayAvg: TrendAverage? = null
+    var weekAvg: TrendAverage? = null
+    var monthAvg: TrendAverage? = null
+
+    var currentStartDate: LocalDate? = null
+    var dataTill: LocalDate? = null
+    val trendsData = HashMap<LocalDate, TrendsValues>()
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     var isDeviationSelected:Boolean=true
 
@@ -23,8 +50,16 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         MutableLiveData(InternalSelectedPeriod.DAY)
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
+    init {
+        val datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        endDate = LocalDate.now().format(datePattern)
+        startDate = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+            .format(datePattern)
+    }
     fun setSelectedPeriod(selectedPeriod: InternalSelectedPeriod) {
-        _selectedPeriod.postValue(selectedPeriod)
+        fragments.value = null
+        _selectedPeriod.value = selectedPeriod
+
     }
 
     private val _titleUpdate =
@@ -70,8 +105,33 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
         }
     }
 
+    fun loadMoreData() {
+        loadNewFragment()
+    }
+
+    fun reloadData() {
+        currentStartDate = null
+        loadNewFragment()
+    }
     fun updateTitle() {
         _titleUpdate.postValue(getTitle())
+    }
+    fun getTopState(): TrendsTopState {
+        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION) {
+            TrendsTopState.SINGLE_DATE
+        } else {
+            TrendsTopState.SINGLE
+        }
+    }
+
+    fun getUnit(): String {
+        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
+            "%"
+        } else if (selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS) {
+            "times"
+        } else {
+            "min"
+        }
     }
 
     fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
@@ -130,6 +190,191 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
 //
 //        }
 //    }
+
+    fun getTrendsInternalDetailsData() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.getSleepInternalTrendsPagesData(
+                startDate,
+                endDate,
+              selectedLaunchMode.key.lowercase()
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getTrendsInternalDetailsData()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            it.data?.forEach {
+                                trendsData[LocalDate.parse(it.date)] = it
+                            }
+
+                            it.data?.firstOrNull()?.date?.let {
+                                dataTill = LocalDate.parse(it)
+                            }
+
+                            loadNewFragment()
+
+
+
+                            if (dayAvg == null) {
+                                dayAvg = it.dayAvg
+                            }
+                            if (weekAvg == null) {
+                                weekAvg = it.weekAvg
+                            }
+                            if (monthAvg == null) {
+                                monthAvg = it.monthAvg
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return Pair of start date and end date
+     */
+    private fun getDatesToLoad(): Pair<LocalDate, LocalDate> {
+        val (start, end) = when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                return if (currentStartDate == null) {
+                    Pair(
+                        LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
+                        LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                    )
+                } else {
+                    Pair(
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.MONDAY)),
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY))
+                    )
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                return if (currentStartDate == null) {
+                    Pair(
+                        LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                            .minusWeeks(6),
+                        LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                    )
+                } else {
+                    Pair(
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.MONDAY))
+                            .minusWeeks(6),
+                        currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY))
+                    )
+                }
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
+                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                Pair(start, end)
+            }
+        }
+
+        return Pair(start, end)
+    }
+
+    private fun loadNewFragment() {
+
+        val (start, end) = getDatesToLoad()
+        currentStartDate = start
+
+        val dataToDisplay = ArrayList<TrendsValues>()
+
+        var current = start
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        while (current <= end) {
+            val data = trendsData[current]
+            dataToDisplay.add(
+                TrendsValues(
+                    date = current.format(dateFormat),
+                    value1 = data?.value1
+                )
+            )
+            current = current.plusDays(1)
+        }
+
+        val trendData = TrendsGraphData(
+            data = dataToDisplay
+        )
+
+        getFragmentToAdd(trendData).let {
+            var oldData = fragments.value
+            if (oldData == null) {
+                oldData = ArrayList()
+            }
+            (oldData as ArrayList).add(it)
+            fragments.postValue(oldData)
+        }
+    }
+
+
+    private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
+        trendData.contributorType = selectedLaunchMode
+
+        when (selectedPeriod.value) {
+            InternalSelectedPeriod.DAY, null -> {
+                return when (selectedLaunchMode) {
+                    SleepInternalLaunchState.BLOOD_OXYGEN,
+                    SleepInternalLaunchState.RESPIRATORY_RATE -> {
+
+                        SleepBarChartFragment.newInstance(
+                            trendData
+                        )
+                    }
+
+                    SleepInternalLaunchState.SKIN_TEMPERATURE,
+                    SleepInternalLaunchState.RESTING_HEART_RATE,
+                    SleepInternalLaunchState.HRV -> SleepSingleLineGradientChartFragment.newInstance(
+                        trendData
+                    )
+
+
+                    else -> SleepBarChartFragment.newInstance(trendData)
+                }
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                return SleepSingleLineChartFragment.newInstance(trendData.apply {
+                    this.selectedPeriod = InternalSelectedPeriod.WEEK
+                })
+            }
+
+            InternalSelectedPeriod.MONTH -> {
+                return SleepSingleLineChartFragment.newInstance(trendData.apply {
+                    this.selectedPeriod = InternalSelectedPeriod.MONTH
+                })
+            }
+        }
+
+
+    }
 
     fun getPostFixAbr(trendType: SleepInternalLaunchState): String {
         val abr: String = when (trendType) {
@@ -194,16 +439,16 @@ class SkinTempInternalDetailsViewModel @Inject constructor(
 
     }
 
-    fun hmDummyData(): OHealthMonTrendsDataModel {
-        return OHealthMonTrendsDataModel(
-            trendType = selectedLaunchMode,
-            dayDate = "Monday  30 May, 2024",
-            dspValue = "40",
-            isShowOptimal = false,
-            isShowHighlight = true,
-            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
-        )
-    }
+//    fun hmDummyData(): OHealthMonTrendsDataModel {
+//        return OHealthMonTrendsDataModel(
+//            trendType = selectedLaunchMode,
+//            dayDate = "Monday  30 May, 2024",
+//            dspValue = "40",
+//            isShowOptimal = false,
+//            isShowHighlight = true,
+//            description = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow."
+//        )
+//    }
 
 
 }

@@ -12,31 +12,42 @@ import javax.inject.Inject
 class ODropDownViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
+    var isFromHealthMonitor = false
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     fun fetchDropDownData(): Triple<ArrayList<SleepInternalLaunchState>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
         val sleepData = ArrayList<SleepInternalLaunchState>()
-        sleepData.add(SleepInternalLaunchState.EFFICIENCY)
-        sleepData.add(SleepInternalLaunchState.REM_SLEEP)
-        sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
-        sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
-        sleepData.add(SleepInternalLaunchState.LATENCY)
-        sleepData.add(SleepInternalLaunchState.RESTFULNESS)
-
         val activityData = ArrayList<ODropDownDataModel>()
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
-        activityData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_latency, "Latency"))
-        activityData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
-
         val readinessData = ArrayList<ODropDownDataModel>()
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
-        readinessData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_latency, "Latency"))
-        readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
+        if (isFromHealthMonitor) {
+            sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
+            sleepData.add(SleepInternalLaunchState.RESTING_HEART_RATE)
+            sleepData.add(SleepInternalLaunchState.HRV)
+            sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
+            sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)
+
+        } else {
+            sleepData.add(SleepInternalLaunchState.EFFICIENCY)
+            sleepData.add(SleepInternalLaunchState.REM_SLEEP)
+            sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
+            sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
+            sleepData.add(SleepInternalLaunchState.LATENCY)
+            sleepData.add(SleepInternalLaunchState.RESTFULNESS)
+
+            activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
+            activityData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
+            activityData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
+            activityData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
+            activityData.add(ODropDownDataModel(R.drawable.ic_sleep_latency, "Latency"))
+            activityData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
+
+            readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))
+            readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_rem_sp, "REM sleep"))
+            readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_deep_sp, "Deep sleep"))
+            readinessData.add(ODropDownDataModel(R.drawable.ic_clock_off_sleep, "Sleep duration"))
+            readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_latency, "Latency"))
+            readinessData.add(ODropDownDataModel(R.drawable.ic_sleep_restfulness, "Restfulness"))
+        }
+
 
         return Triple(sleepData, activityData, readinessData)
     }
