@@ -11,7 +11,6 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentODropDownBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.internal.ODropDownAdapter
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,7 +90,7 @@ class ODropDownFragment :
     private fun defaultView(
 
     ) {
-        mDDAdapter.setData(viewModel.fetchDropDownData().first)
+        mDDAdapter.setData(viewModel.fetchDropDownData().first, viewModel.selectedLaunchMode)
         binding.lytContentView.lytTab1.tvTitle.text = getString(R.string.text_sleep)
         binding.lytContentView.lytTab1.tvTitle.setTextColor(
             ContextCompat.getColor(
@@ -138,7 +137,7 @@ class ODropDownFragment :
 
         when (type) {
             0 -> {
-                mDDAdapter.setData(viewModel.fetchDropDownData().first)
+                mDDAdapter.setData(viewModel.fetchDropDownData().first, viewModel.selectedLaunchMode)
                 binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
                         binding.lytTopView.ivDropDown.context,
@@ -180,7 +179,10 @@ class ODropDownFragment :
             }
 
             1 -> {
-                mDDAdapter.setData(viewModel.fetchDropDownData().first)
+                mDDAdapter.setData(
+                    viewModel.fetchDropDownData().first,
+                    viewModel.selectedLaunchMode
+                )
                 binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
                         binding.lytTopView.ivDropDown.context,
@@ -220,7 +222,10 @@ class ODropDownFragment :
             }
 
             else -> {
-                mDDAdapter.setData(viewModel.fetchDropDownData().first)
+                mDDAdapter.setData(
+                    viewModel.fetchDropDownData().first,
+                    viewModel.selectedLaunchMode
+                )
                 binding.lytContentView.lytTab1.tvTitle.setTextColor(
                     ContextCompat.getColor(
                         binding.lytTopView.ivDropDown.context,

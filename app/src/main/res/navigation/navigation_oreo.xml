@@ -910,6 +910,11 @@
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
+        <action
+            android:id="@+id/action_sleepInternalDetailsFragment_self"
+            app:destination="@id/sleepInternalDetailsFragment"
+            app:popUpTo="@id/sleepInternalDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/dialogAlarmSound"

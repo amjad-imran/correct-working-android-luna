@@ -381,7 +381,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
-            val textX = width - textBounds.width().toFloat()
+            val textX = width - textBounds.width().toFloat()- dip2px(6f)
             val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
 
 

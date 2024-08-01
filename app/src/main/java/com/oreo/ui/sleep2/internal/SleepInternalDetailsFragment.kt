@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
@@ -100,10 +101,7 @@ class SleepInternalDetailsFragment :
             setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
                 val data = bundle.getSerializable("itemName") as SleepInternalLaunchState
 
-                viewModel.selectedLaunchMode = data
-                viewModel.updateTitle()
-
-                //todo reload data
+                viewModel.reloadFragment.postValue(Event(data))
             }
 
             val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode)
@@ -129,6 +127,16 @@ class SleepInternalDetailsFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.reloadFragment.observe(this) {
+            it.getContent()?.let {
+                navigate(
+                    SleepInternalDetailsFragmentDirections.actionSleepInternalDetailsFragmentSelf(
+                        it
+                    )
+                )
+            }
+        }
+
         viewModel.fragments.observe(this) {
 
             if (it == null) {
@@ -146,7 +154,6 @@ class SleepInternalDetailsFragment :
             if (it == null) {
                 showDefaultDates()
             } else {
-
 
                 val topState = viewModel.getTopState()
                 when (topState) {
@@ -342,9 +349,6 @@ class SleepInternalDetailsFragment :
 
                 binding.lytTopView.lytTopMultipleView.tvDateTime.text =
                     viewModel.getTopDisplayDate()
-
-                binding.lytTopView.lytTopMultipleView.tvDateTime.text =
-                    todayDate.format(dayFormat)
 
                 binding.lytTopView.lytTopMultipleView.lytContentView.root.visible()
 

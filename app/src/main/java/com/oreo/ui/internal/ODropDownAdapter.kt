@@ -12,8 +12,7 @@ import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 class ODropDownAdapter(val listener: ODDItemClickListener) :
     RecyclerView.Adapter<ODropDownAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<SleepInternalLaunchState>()
-    private var selectedPost = -1
-
+    private var selectedLaunchMode: SleepInternalLaunchState? = null
 
     inner class ViewHolder(val binding: ItemRvDropDownBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +21,7 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
             val (title, icon) = getTitle(binding.tvTitle.context, resultData)
             binding.ivIcon.loadImage(binding.ivIcon.context, icon)
             binding.tvTitle.text = title
-            if (selectedPost == bindingAdapterPosition) {
+            if (selectedLaunchMode == resultData) {
                 binding.lytMain.setBackgroundResource(R.drawable.back_selected_drop_down)
             } else {
                 binding.lytMain.setBackgroundResource(R.drawable.back_non_selected_drop_down)
@@ -30,7 +29,7 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
 
             binding.root.setOnClickListener {
                 listener.onItemClick(resultData, bindingAdapterPosition)
-                selectedPost = bindingAdapterPosition
+                selectedLaunchMode = resultData
                 notifyDataSetChanged()
             }
         }
@@ -52,11 +51,13 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<SleepInternalLaunchState>) {
-
+    fun setData(
+        resultData: List<SleepInternalLaunchState>,
+        selectedLaunchMode: SleepInternalLaunchState
+    ) {
+        this.selectedLaunchMode = selectedLaunchMode
         mDataSet.clear()
         mDataSet.addAll(resultData)
-        selectedPost = -1
         notifyDataSetChanged()
     }
 
@@ -130,18 +131,22 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
                 context.getString(R.string.text_respiratory_rate),
                 R.drawable.ic_respiratory_rate
             )
+
             SleepInternalLaunchState.RESTING_HEART_RATE -> Pair(
                 context.getString(R.string.text_resting_heart_rate),
                 R.drawable.ic_resting_hr
             )
+
             SleepInternalLaunchState.HRV -> Pair(
                 context.getString(R.string.text_hrv),
                 R.drawable.ic_hrv
             )
+
             SleepInternalLaunchState.SKIN_TEMPERATURE -> Pair(
                 context.getString(R.string.text_skin_temperature),
                 R.drawable.ic_skin_tempreature
             )
+
             SleepInternalLaunchState.BLOOD_OXYGEN -> Pair(
                 context.getString(R.string.text_blood_oxygen),
                 R.drawable.ic_blood_oxygen

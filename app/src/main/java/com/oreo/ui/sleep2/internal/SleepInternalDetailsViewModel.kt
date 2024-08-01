@@ -10,6 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
@@ -34,6 +35,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     val trendsData = HashMap<LocalDate, TrendsValues>()
+
+
+    val reloadFragment = MutableLiveData<Event<SleepInternalLaunchState>>()
 
     var startDate: String = ""
     var endDate: String = ""
