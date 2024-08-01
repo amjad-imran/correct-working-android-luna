@@ -96,6 +96,9 @@ class SleepDashFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
+
+        viewModel.updateSelectedDate(LocalDate.parse(mainViewModel.selectedDate))
+
         initCalender()
         setRecycler()
     }
@@ -362,12 +365,14 @@ class SleepDashFragment :
             LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
         binding.vCalendar.setup(
-            LocalDate.now().minusDays(10),
+            LocalDate.now().minusYears(5),
             lastDayOfWeek,
             DayOfWeek.MONDAY,
         )
         binding.vCalendar.scrollToDate(
-            viewModel.selectedDate.value ?: LocalDate.now()
+            if (mainViewModel.selectedDate == null) LocalDate.now() else LocalDate.parse(
+                mainViewModel.selectedDate
+            )
         )
     }
 
@@ -380,6 +385,9 @@ class SleepDashFragment :
                     data?.getStringExtra("selected_date") ?: return@registerForActivityResult
 
                 viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
+
+                mainViewModel.selectedDate = selectedDate
+
                 binding.vCalendar.scrollToDate(
                     viewModel.selectedDate.value ?: LocalDate.now()
                 )
