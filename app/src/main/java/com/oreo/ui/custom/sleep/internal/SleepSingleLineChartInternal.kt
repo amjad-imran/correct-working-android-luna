@@ -20,10 +20,18 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import org.joda.time.DateTimeFieldType
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalField
+import java.time.temporal.WeekFields
 import java.util.Locale
 
 
@@ -69,7 +77,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
-    private val xAxisRange = ArrayList<String>()
+    private val xAxisRange = ArrayList<LocalDate>()
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
@@ -208,9 +216,12 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         var previousValue: Int? = null
 
+        var lastPos = 0
         xAxisRange.forEachIndexed { index, value ->
 
-            val filterValues = dataSet.subList(index * 7, index * 7 + 7)
+            val dataSize = getDataSize(value)
+            val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
+            lastPos += dataSize
 
             val avgValue = filterValues.mapNotNull { it.value }.averageWithoutZero()
 
@@ -275,6 +286,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             start += stepWidth.toInt()
         }
 
+    }
+
+    private fun getDataSize(date: LocalDate): Int {
+        return if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+            getDaysOfMonth(date.yearMonth)
+        } else {
+            7
+        }
     }
 
     private fun drawContent(canvas: Canvas) {
@@ -523,10 +542,18 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val textWidth = xAxisPaint.measureText(it)
-            xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
+            val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+                it.format(DateTimeFormatter.ofPattern("MMM"))
+            } else {
+                //for week
+                val weekFields = WeekFields.of(Locale.getDefault())
+                val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
+                "W$weekNumber"
+            }
+            val textWidth = xAxisPaint.measureText(displayMonth)
+            xAxisPaint.getTextBounds(displayMonth, 0, displayMonth.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(it, textStart, textY, xAxisPaint)
+            canvas.drawText(displayMonth, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -536,14 +563,10 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    /**
-     * array list of values -> Pair(actual sleep minutes, need minutes)
-     * selected position
-     */
     fun setDataSet(
         list: List<GraphDataSingleModel>,
         yAxisRange: List<Pair<Int, String>>,
-        xAxisRange: List<String>,
+        xAxisRange: List<LocalDate>,
         maxValue: Int,
         avgValue: Pair<Int, String>?,
         selectedPosition: Int,
@@ -632,23 +655,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         this.listener = listener
     }
 
-    //TODO
-    private fun getDaysOfMonth(month: String): Int {
-        return when (month.lowercase()) {
-            "jan" -> 31
-            "feb" -> 28
-            "mar" -> 31
-            "apr" -> 30
-            "may" -> 31
-            "jun" -> 30
-            "jul" -> 31
-            "aug" -> 31
-            "sep" -> 30
-            "oct" -> 31
-            "nov" -> 30
-            "dec" -> 31
-            else -> 30
-        }
+    private fun getDaysOfMonth(yearMonth: YearMonth): Int {
+        return yearMonth.lengthOfMonth()
     }
 
 

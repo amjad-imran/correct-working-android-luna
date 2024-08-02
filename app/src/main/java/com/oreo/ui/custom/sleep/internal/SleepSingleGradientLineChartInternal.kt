@@ -19,6 +19,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -65,7 +67,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
-    private val xAxisRange = ArrayList<String>()
+    private val xAxisRange = ArrayList<LocalDate>()
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
@@ -501,10 +503,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val textWidth = xAxisPaint.measureText(it)
-            xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
+            val displayText =it.format(DateTimeFormatter.ofPattern("E"))
+            val textWidth = xAxisPaint.measureText(displayText)
+            xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(it, textStart, textY, xAxisPaint)
+            canvas.drawText(displayText, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -521,7 +524,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     fun setDataSet(
         list: List<GraphDataSingleModel>,
         yAxisRange: List<Pair<Int, String>>,
-        xAxisRange: List<String>,
+        xAxisRange: List<LocalDate>,
         maxValue: Int,
         avgValue: Pair<Int, String>?,
         selectedPosition: Int,

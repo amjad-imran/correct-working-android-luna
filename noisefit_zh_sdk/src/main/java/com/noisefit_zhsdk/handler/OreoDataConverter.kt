@@ -517,12 +517,12 @@ constructor(
 
         filteredData.addAll(algoAvgLastThreeZeroValues(pressureData, lastSavedHrv))
 
-        val stringBuilder = StringBuilder()
+       /* val stringBuilder = StringBuilder()
 
         filteredData.forEachIndexed { index, i ->
 
             stringBuilder.append("${pressureData[index]} -> $i\n")
-        }
+        }*/
         //LOGS.w("filtered_data -> $stringBuilder")
         //AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
 

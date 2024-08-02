@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.noisefit_commans.common.atStartOfMonth
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.TrendsGraphData
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
 import java.util.Locale
 import javax.inject.Inject
@@ -241,6 +243,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
         }
     }
+
     fun getAvgValue(
         dataListType1: List<GraphDataSingleModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,
@@ -274,27 +277,26 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun getXAxisRange(pageData: TrendsGraphData?): List<String> {
+    fun getXAxisRange(pageData: TrendsGraphData?): List<LocalDate> {
         return when (pageData?.selectedPeriod) {
             InternalSelectedPeriod.MONTH -> {
-                val monthListString = ArrayList<String>()
+                val monthListString = ArrayList<LocalDate>()
                 var lastYearMonth: YearMonth? = null
-                pageData.data?.forEach {
-
+                pageData?.data?.forEach {
                     val currentYearMonth = LocalDate.parse(it.date).yearMonth
                     if (lastYearMonth == null) {
                         lastYearMonth = currentYearMonth
-                        monthListString.add(currentYearMonth.format(DateTimeFormatter.ofPattern("MMM")))
+                        monthListString.add(currentYearMonth.atDay(1))
                     } else if (lastYearMonth != currentYearMonth) {
                         lastYearMonth = currentYearMonth
-                        monthListString.add(currentYearMonth.format(DateTimeFormatter.ofPattern("MMM")))
+                        monthListString.add(currentYearMonth.atDay(1))
                     }
                 }
-                monthListString
+                return monthListString
             }
 
             InternalSelectedPeriod.WEEK -> {
-                val weekListReturn = ArrayList<String>()
+                val weekListReturn = ArrayList<LocalDate>()
 
                 var lastWeek: Int? = null
                 pageData.data?.forEach {
@@ -305,17 +307,22 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
                     if (lastWeek == null) {
                         lastWeek = weekNumber
-                        weekListReturn.add("W$weekNumber")
+                        weekListReturn.add(date)
                     } else if (lastWeek != weekNumber) {
                         lastWeek = weekNumber
-                        weekListReturn.add("W$weekNumber")
+                        weekListReturn.add(date)
                     }
                 }
                 weekListReturn
             }
 
             else -> {
-                arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+                val dayList = ArrayList<LocalDate>()
+                pageData?.data?.forEach {
+                    dayList.add(LocalDate.parse(it.date))
+                }
+                return dayList
+                //arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             }
         }
     }

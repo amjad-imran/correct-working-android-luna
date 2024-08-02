@@ -18,6 +18,10 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
+import java.util.Locale
 
 
 class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -62,7 +66,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
-    private val xAxisRange = ArrayList<String>()
+    private val xAxisRange = ArrayList<LocalDate>()
 
     private var lastSentValuePos: Int? = null
 
@@ -507,10 +511,13 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val textWidth = xAxisPaint.measureText(it)
-            xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
+            val weekFields = WeekFields.of(Locale.getDefault())
+            val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
+            val displayText = "W$weekNumber"
+            val textWidth = xAxisPaint.measureText(displayText)
+            xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(it, textStart, textY, xAxisPaint)
+            canvas.drawText(displayText, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -527,7 +534,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     fun setDataSet(
         list: List<Pair<Int?, Int?>>,
         yAxisRange: List<Pair<Int, String>>,
-        xAxisRange: List<String>,
+        xAxisRange: List<LocalDate>,
         maxValue: Int,
         avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
         selectedPosition: Int

@@ -157,20 +157,20 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 return if (currentStartDate == null) {
                     Pair(
                         LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                            .minusWeeks(6),
+                            .minusWeeks(5),
                         LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
                     )
                 } else {
                     Pair(
                         currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.MONDAY))
-                            .minusWeeks(6),
+                            .minusWeeks(5),
                         currentStartDate!!.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY))
                     )
                 }
             }
 
             InternalSelectedPeriod.MONTH -> {
-                val start = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+                val start = LocalDate.now().minusMonths(5).with(TemporalAdjusters.firstDayOfMonth())
                 val end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
                 Pair(start, end)
             }
