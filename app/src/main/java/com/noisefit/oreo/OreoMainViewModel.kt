@@ -239,23 +239,28 @@ constructor(
                     }
 
                     is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getUserHealthData(
-                                            startDate,
-                                            endDate
-                                        )
-                                    }
-
-                                    override fun no() {
-
-                                    }
-                                }
-                        })
                         isFetchRequestOnGoing = false
+                        if (resource.code == 410) {
+                            localDataStore.setForceUpdateRequired()
+                            sessionManager.forceUpdateApp.postValue(Event(true))
+                        } else {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            getUserHealthData(
+                                                startDate,
+                                                endDate
+                                            )
+                                        }
+
+                                        override fun no() {
+
+                                        }
+                                    }
+                            })
+                        }
                     }
 
                     is Resource.Success -> {
@@ -900,6 +905,17 @@ constructor(
         }
 
 
+    }
+
+    fun checkForForceUpdate() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isForceUpdateRequired = localDataStore.getForceUpdateRequired()
+            if (isForceUpdateRequired) {
+                sessionManager.forceUpdateApp.postValue(Event(true))
+            } else {
+                sessionManager.forceUpdateApp.postValue(Event(false))
+            }
+        }
     }
 
 }

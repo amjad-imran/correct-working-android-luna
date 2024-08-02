@@ -458,4 +458,8 @@ interface DataStoredInterface {
     fun getGotPeriodClickedStatus(): Boolean
     fun saveGotPeriodClicked()
     fun removeGotPeriodClicked()
+
+    fun setForceUpdateRequired()
+    fun getForceUpdateRequired(): Boolean
+    fun clearForceUpdateRequired()
 }

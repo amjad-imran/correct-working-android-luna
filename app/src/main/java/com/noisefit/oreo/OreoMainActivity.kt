@@ -18,6 +18,8 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.os.postDelayed
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
@@ -51,6 +53,9 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -109,6 +114,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         }
+
+        /*
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navController?.navigate(R.id.bottomSheetForceUpdate)
+                }, 3000)*/
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {
@@ -592,6 +602,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
+        viewModel.sessionManager.forceUpdateApp.observe(this) {
+            it.getContent()?.let { isRequired->
+                if (isRequired) {
+                    if (navController?.currentDestination?.id != R.id.bottomSheetForceUpdate) {
+                        navController?.navigate(R.id.bottomSheetForceUpdate)
+                    }
+                }
+            }
+        }
+
         viewModel.showChatUi.observe(this) {
             it.getContent()?.let { threadId ->
                 val (frag, bundle) = ChatGptFragment.getStartData(threadId)
@@ -888,6 +908,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
             viewModel.syncRecordedWorkoutData()
         }
+
+
+        viewModel.checkForForceUpdate()
 
 
         //viewModel.shouldResetMasterDates()

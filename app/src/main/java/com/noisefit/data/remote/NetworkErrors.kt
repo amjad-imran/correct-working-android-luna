@@ -10,6 +10,7 @@ object NetworkErrors {
     const val NETWORK_ERROR_TIMEOUT = "Network timeout"
     const val NETWORK_ERROR_205 = "Network error 205"
     const val WRONG_CLIENT_TIME_ERROR = "Wrong client error"
+    const val FORCE_UPDATE = "Force update"
     const val NETWORK_DATA_NULL = "Network data is null"
     const val ERROR_UNKNOWN = "Unknown error"
 

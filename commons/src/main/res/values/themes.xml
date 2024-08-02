@@ -270,6 +270,9 @@
     <style name="ModalStyleDialog">
         <item name="android:background">@drawable/back_modal_dialog</item>
     </style>
+    <style name="ModalStyleDialogUpdate">
+        <item name="android:background">@drawable/back_modal_dialog_update</item>
+    </style>
 
     <style name="RippleEffect">
         <item name="android:clickable">true</item>

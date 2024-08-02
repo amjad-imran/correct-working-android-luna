@@ -959,6 +959,10 @@
         android:id="@+id/hrArticle4Fragment"
         android:name="com.oreo.ui.heartrate.article.HrArticle4Fragment"
         android:label="fragment_hr_article4" />
+    <dialog
+        android:id="@+id/bottomSheetForceUpdate"
+        android:name="com.noisefit.ui.update.BottomSheetForceUpdate"
+        android:label="BottomSheetForceUpdate" />
     <fragment
         android:id="@+id/skinTempInternalDetailsFragment"
         android:name="com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment"

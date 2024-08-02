@@ -1313,6 +1313,8 @@
     <string name="the_plateau">The plateau</string>
     <string name="text_hra4_5">A consistently elevated heart rate throughout the night is reflected in a plateau curve. This pattern indicates chronic stress hindering your body\'s ability to recover fully. If you see this frequently, practice rest and relaxing techniques, schedule extra downtime, or consider taking a power nap.</string>
     <string name="text_hra4_6">By understanding your heart rate patterns, you can implement better sleep routines to enhance your sleep quality and wake up feeling energized</string>
+    <string name="text_app_update_required">App update required</string>
+    <string name="text_force_update_message">Ensure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
     <string name="text_sleep_time">Sleep time</string>
     <string name="text_efficiency">Efficiency</string>
     <string name="text_latency">Latency</string>

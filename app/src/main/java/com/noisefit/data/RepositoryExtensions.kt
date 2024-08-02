@@ -6,6 +6,7 @@ import com.noisefit.data.local.db.CacheErrors.CACHE_ERROR_TIMEOUT
 import com.noisefit.data.local.db.CacheErrors.CACHE_ERROR_UNKNOWN
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.NetworkConstants.CALL_TIMEOUT
+import com.noisefit.data.remote.NetworkErrors.FORCE_UPDATE
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_205
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
@@ -58,6 +59,8 @@ suspend fun <T> safeApiCallFlow(
                     val message = throwable.message
                     if (message == WRONG_CLIENT_TIME_ERROR) {
                         emit(networkError(message, null))
+                    }else if(message == FORCE_UPDATE){
+                        emit(networkError(message, 410))
                     } else {
                         emit(networkError(NETWORK_ERROR, null))
                     }

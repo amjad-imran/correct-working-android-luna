@@ -67,6 +67,8 @@ class SessionManager
 
     }
 
+    val forceUpdateApp =  MutableLiveData<Event<Boolean>>()
+
     /**
      * Get app Foreground status
      */
