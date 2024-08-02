@@ -10,7 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
@@ -45,9 +45,9 @@ constructor(
     val trendsData = HashMap<LocalDate, TrendsValues>()
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     var isDeviationSelected:Boolean=true
+    val reloadFragment = MutableLiveData<Event<SleepInternalLaunchState>>()
 
-    private val _selectedPeriod =
-        MutableLiveData(InternalSelectedPeriod.DAY)
+    private val _selectedPeriod = MutableLiveData<InternalSelectedPeriod>()
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
     init {
@@ -192,13 +192,12 @@ constructor(
 //    }
 
     fun getTrendsInternalDetailsData() {
-
         viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.getSleepInternalTrendsPagesData(
                 startDate,
                 endDate,
-               /* SleepInternalLaunchState.SLEEP_PERFORMANCE.key*/
-              selectedLaunchMode.key.lowercase()
+                SleepInternalLaunchState.SLEEP_PERFORMANCE.key
+                /*  selectedLaunchMode.key.lowercase()*/
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -393,7 +392,7 @@ constructor(
             SleepInternalLaunchState.LATENCY -> ""
             SleepInternalLaunchState.RESTFULNESS -> ""
             SleepInternalLaunchState.TIMING -> ""
-            else->{
+            else -> {
                 ""
             }
         }
@@ -436,6 +435,7 @@ constructor(
             SleepInternalLaunchState.BLOOD_OXYGEN,
             SleepInternalLaunchState.SKIN_TEMPERATURE
             -> R.drawable.ic_hm_tick
+
             else -> 0
         }
         return icon

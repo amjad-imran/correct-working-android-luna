@@ -179,6 +179,20 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
 
+    fun redirectToSkinTempInternal(launchMode: SleepInternalLaunchState): Boolean {
+        return when (launchMode) {
+            SleepInternalLaunchState.SKIN_TEMPERATURE,
+            SleepInternalLaunchState.RESPIRATORY_RATE,
+            SleepInternalLaunchState.RESTING_HEART_RATE,
+            SleepInternalLaunchState.HRV,
+            SleepInternalLaunchState.BLOOD_OXYGEN -> {
+                return true
+            }
+
+            else -> false
+
+        }
+    }
     fun getAvgValue(
         list: List<Int?>,
         contributorType: SleepInternalLaunchState?
