@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -17,15 +16,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
-import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
-import java.util.Locale
 
 
-class SleepSingleLineChartInternal constructor(context: Context?, attrs: AttributeSet?) :
+class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
 
     lateinit var xAxisPaint: Paint
@@ -38,20 +33,22 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     lateinit var textPaintHourI: Paint
     lateinit var textPaintNeed: Paint
     lateinit var textPaintNeedI: Paint
+
+    lateinit var linePaintHour: Paint
+    lateinit var linePaintHourI: Paint
+    lateinit var linePaintNeed: Paint
+    lateinit var linePaintNeedI: Paint
+
     lateinit var avgTextPaint: Paint
     lateinit var avgLinePaint: Paint
-    lateinit var avgBackPaint: Paint
-    lateinit var xOverlayLinePaint: Paint
-    lateinit var avgLineFillPaint: Paint
-
-
-    lateinit var linePaint: Paint
-    lateinit var linePaintI: Paint
+    lateinit var avgBackPaintHour: Paint
+    lateinit var avgBackPaintNeed: Paint
 
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
+    var dataStepWidth = 0F
 
     var mMax = 0
 
@@ -59,29 +56,29 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
-    private var startX: Float? = null
-    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    //private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     private val xAxisRange = ArrayList<String>()
+
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    private var mAverage: Pair<Int, String>? = null
-    private var showOverlay = false
-    private var launchState: SleepInternalLaunchState? = null
 
 
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<Int?>()
+    private val dataSet = ArrayList<Pair<Int?, Int?>>()
     private var mSelectedPosition: Int? = null
+
+    /**
+     * Pair(hour(value,displayValue),need(value,displayValue))
+     */
+    var mAverage: Pair<Pair<Int, String>?, Pair<Int, String>?>? = null
 
     init {
         init(attrs)
@@ -92,19 +89,12 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
-        avgLineFillPaint = Paint().apply {
-            style = Paint.Style.FILL
-            isAntiAlias = true
+        avgBackPaintHour = Paint().apply {
+            this.color = Color.parseColor("#465c8a")
         }
 
-        avgBackPaint = Paint().apply {
-            this.color = Color.parseColor("#28ffffff")
-        }
-        xOverlayLinePaint = Paint().apply {
-            this.color = Color.parseColor("#29cc74")
-            strokeWidth = dip2px(2f).toFloat()
-            this.typeface = fontGilroy
-            this.textSize = dip2px(12f).toFloat()
+        avgBackPaintNeed = Paint().apply {
+            this.color = Color.parseColor("#7858cc")
         }
 
         avgTextPaint = Paint().apply {
@@ -146,14 +136,23 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             this.textSize = dip2px(12f).toFloat()
         }
 
-        linePaint = Paint().apply {
+        linePaintHour = Paint().apply {
             this.color = Color.parseColor("#465c8a")
-            strokeWidth = dip2px(1f).toFloat()
+            strokeWidth = dip2px(2f).toFloat()
         }
-        linePaintI = Paint().apply {
+        linePaintHourI = Paint().apply {
             this.color = Color.parseColor("#66465c8a")
-            strokeWidth = dip2px(1f).toFloat()
+            strokeWidth = dip2px(2f).toFloat()
         }
+        linePaintNeed = Paint().apply {
+            this.color = Color.parseColor("#7858cc")
+            strokeWidth = dip2px(2f).toFloat()
+        }
+        linePaintNeedI = Paint().apply {
+            this.color = Color.parseColor("#667858cc")
+            strokeWidth = dip2px(2f).toFloat()
+        }
+
 
         xLinePaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
@@ -197,93 +196,18 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         drawXAxis(canvas)
         drawYAxis(canvas)
         drawContent(canvas)
-        if (showOverlay) {
-            drawOverlay(canvas)
-        }
-    }
-
-    private fun drawOverlay(canvas: Canvas) {
-        if (isInteracting) return
-        if (dataSet.isEmpty() || dataSet.size % 7 != 0) return
-
-        val availableWidth = width.toFloat() - endPadding
-
-        val stepWidth = availableWidth / xAxisRange.size
-        var start = 0
-        val paddingText = dip2px(4f)
-
-        val textBounds = Rect()
-
-        var previousValue: Int? = null
-
-        xAxisRange.forEachIndexed { index, value ->
-
-            val filterValues = dataSet.subList(index * 7, index * 7 + 7)
-
-            val avgValue = filterValues.filterNotNull().averageWithoutZero()
-
-            if (avgValue != 0) {
-
-                val overlayColor = getAvgBarColor(avgValue, previousValue)
-                xOverlayLinePaint.color = overlayColor
-
-
-                val pos = getYAxisValue(avgValue)
-                val end = start.toFloat() + stepWidth
-
-                val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION) {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        avgValue
-                    )
-                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
-                } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
-                    launchState == SleepInternalLaunchState.DEEP_SLEEP ||
-                    launchState == SleepInternalLaunchState.RESTFULNESS ||
-                    launchState == SleepInternalLaunchState.LATENCY
-                ) {
-                    "$avgValue"
-                } else {
-                    "$avgValue%"
-                }
-                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
-
-                canvas.drawText(
-                    text,
-                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                    pos - paddingText,
-                    xOverlayLinePaint
-                )
-
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
-                )
-
-
-                val path = Path()
-                path.reset()
-                path.moveTo(start.toFloat(), pos)
-                path.lineTo(end, pos)
-                path.lineTo(end, pos + dip2px(50f).toFloat())
-                path.lineTo(start.toFloat(), pos + dip2px(50f).toFloat())
-
-                avgLineFillPaint.setShader(linearGradient)
-
-                canvas.drawPath(path, avgLineFillPaint)
-                previousValue = avgValue
-            }
-
-            start += stepWidth.toInt()
-        }
-
     }
 
     private fun drawContent(canvas: Canvas) {
-
         val availableWidth = (width - endPadding).toFloat()
+
         dataStepWidth = availableWidth / dataSet.size
+
         var start = 0f
+        val circleRadius = dip2px(2f).toFloat()
         val circleRadiusBig = dip2px(4f).toFloat()
         val paddingHorizontal = dip2px(4f)
+        val textPadding = dip2px(6f)
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
@@ -298,7 +222,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     lastSentValuePos = selectedPosition
                 }
             }
-
             listener?.onValueSelected(selectedPosition)
         }
 
@@ -316,6 +239,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         }
 
         dataSet.forEachIndexed { index, it ->
+
+
             if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
@@ -325,94 +250,148 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 )
 
                 canvas.drawRect(
-                    rectFSelected, selectedDayPaint
+                    rectFSelected,
+                    selectedDayPaint
                 )
+
             }
 
+            val isSelectedPosition = selectedPosition == index
 
-            if (it != null) {
-                val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it ?: 0)
+            if (it.first != null) {
+                val actualPos = getYAxisValue(it.first ?: 0)
 
-                //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1] != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].first != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.first ?: 0)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
                         start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
-                        if (isInteracting) linePaintI else linePaint
+                        if (isInteracting) linePaintHourI else linePaintHour
                     )
                 }
 
-                if (isSelectedPosition && isInteracting) {
-                    val center = start + dataStepWidth / 2
-
-                    canvas.drawRect(
-                        RectF(
-                            center - 2f,
-                            topHeight.toFloat(),
-                            center + 2f,
-                            height.toFloat() - bottomHeight
-                        ), circlePaint
-                    )
-
-                    val widthHalf = dip2px(6f)
-                    val rectFTopI = RectF().apply {
-                        this.left = center - widthHalf
-                        this.right = center + widthHalf
-                        this.top = topHeight.toFloat()
-                        this.bottom = topHeight.toFloat() + dip2px(2f)
-                    }
-
-                    canvas.drawRect(rectFTopI, circlePaint)
-
+                if (isSelectedPosition) {
                     canvas.drawCircle(
-                        start + dataStepWidth / 2, actualPos, circleRadiusBig, circlePaint
+                        start + dataStepWidth / 2,
+                        actualPos,
+                        circleRadiusBig,
+                        circlePaint
                     )
                 }
+
             }
+
+            if (it.second != null) {
+                val needPos = getYAxisValue(it.second ?: 0)
+
+                if (index + 1 < maxDataSize && dataSet[index + 1].second != null) {
+                    val nextElement = dataSet[index + 1]
+
+                    val actualPosNext = getYAxisValue(nextElement.second ?: 0)
+                    canvas.drawLine(
+                        start + dataStepWidth / 2,
+                        needPos,
+                        start + dataStepWidth + dataStepWidth / 2,
+                        actualPosNext,
+                        if (isInteracting) linePaintNeedI else linePaintNeed
+                    )
+                }
+                if (isSelectedPosition) {
+                    canvas.drawCircle(
+                        start + dataStepWidth / 2,
+                        needPos,
+                        circleRadiusBig,
+                        circlePaint
+                    )
+                }
+
+            }
+
+            if (isSelectedPosition && isInteracting) {
+                val center = start + dataStepWidth / 2
+
+                canvas.drawRect(
+                    RectF(
+                        center - 2f,
+                        topHeight.toFloat(),
+                        center + 2f,
+                        height.toFloat() - bottomHeight
+                    ),
+                    circlePaint
+                )
+
+                val widthHalf = dip2px(6f)
+                val rectFTopI = RectF().apply {
+                    this.left = center - widthHalf
+                    this.right = center + widthHalf
+                    this.top = topHeight.toFloat()
+                    this.bottom = topHeight.toFloat() + dip2px(2f)
+                }
+
+                canvas.drawRect(rectFTopI, circlePaint)
+            }
+
             start += dataStepWidth
         }
-
     }
+
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
+        if (isInteracting) return
         if (mAverage != null) {
-            val textBounds = Rect()
-            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
-            val textX = width - textBounds.width().toFloat() - dip2px(6f)
-            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
+            val hour = mAverage!!.first
+            val need = mAverage!!.second
 
-
-            canvas.drawRoundRect(
-                RectF(
-                    textX - dip2px(3f),
-                    textY - textBounds.height() - dip2px(3f),
-                    textX + textBounds.width() + dip2px(3f),
-                    textY + dip2px(3f)
-                ), dip2px(2f).toFloat(), dip2px(2f).toFloat(), avgBackPaint
-            )
-
-            canvas.drawText(
-                mAverage!!.second, textX, textY, avgTextPaint
-            )
-
-            canvas.drawLine(
-                0f,
-                getYAxisValue(mAverage!!.first),
-                availableWidth,
-                getYAxisValue(mAverage!!.first),
-                avgLinePaint
-            )
+            if (hour != null) {
+                drawAverage(hour.first, hour.second, canvas, availableWidth, avgBackPaintHour)
+            }
+            if (need != null) {
+                drawAverage(need.first, need.second, canvas, availableWidth, avgBackPaintNeed)
+            }
         }
     }
+
+    private fun drawAverage(
+        value: Int,
+        displayText: String,
+        canvas: Canvas,
+        availableWidth: Float,
+        backPaint: Paint,
+    ) {
+        canvas.drawLine(
+            0f,
+            getYAxisValue(value),
+            availableWidth,
+            getYAxisValue(value),
+            avgLinePaint
+        )
+
+        val textBounds = Rect()
+        avgTextPaint.getTextBounds(displayText, 0, displayText.length, textBounds)
+
+        val textX = availableWidth - textBounds.width().toFloat() - dip2px(3f)
+        val textY = getYAxisValue(value) + textBounds.height() / 2
+        canvas.drawRoundRect(
+            RectF(
+                textX - dip2px(3f),
+                textY - textBounds.height() - dip2px(3f),
+                textX + textBounds.width() + dip2px(3f),
+                textY + dip2px(3f)
+            ), dip2px(2f).toFloat(), dip2px(2f).toFloat(), backPaint
+        )
+        canvas.drawText(
+            displayText, textX, textY, avgTextPaint
+        )
+
+    }
+
 
     private fun performHapticFeedbackCustom() {
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
@@ -435,6 +414,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val percent = (value.toFloat() / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
+
     }
 
     private fun drawBackGrid(canvas: Canvas) {
@@ -444,7 +424,11 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         var start = 0f
         for (i in 0..xAxisRange.size) {
             canvas.drawLine(
-                start, topHeight.toFloat(), start, height.toFloat() - bottomHeight, gridLinePaint
+                start,
+                topHeight.toFloat(),
+                start,
+                height.toFloat() - bottomHeight,
+                gridLinePaint
             )
             start += stepWidth
         }
@@ -510,8 +494,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             }
 
         }
-
         showAverage(canvas, availableWidth)
+
     }
 
     private fun drawXAxis(canvas: Canvas) {
@@ -541,19 +525,16 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
      * selected position
      */
     fun setDataSet(
-        list: List<Int?>,
+        list: List<Pair<Int?, Int?>>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<String>,
         maxValue: Int,
-        avgValue: Pair<Int, String>?,
-        selectedPosition: Int,
-        showOverlay: Boolean = false,
-        launchState: SleepInternalLaunchState?
+        avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
+        selectedPosition: Int
     ) {
-        this.showOverlay = showOverlay
-        this.launchState = launchState
-
         dataPosition.clear()
+        mAverage = avgValue
+
 
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
@@ -566,11 +547,10 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         mSelectedPosition = selectedPosition
         mMax = maxValue
-        mAverage = avgValue
-
         invalidate()
     }
 
+    var startX: Float? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
@@ -628,46 +608,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     fun setClickListener(listener: SleepSingleBarAction?) {
         this.listener = listener
-    }
-
-    //TODO
-    private fun getDaysOfMonth(month: String): Int {
-        return when (month.lowercase()) {
-            "jan" -> 31
-            "feb" -> 28
-            "mar" -> 31
-            "apr" -> 30
-            "may" -> 31
-            "jun" -> 30
-            "jul" -> 31
-            "aug" -> 31
-            "sep" -> 30
-            "oct" -> 31
-            "nov" -> 30
-            "dec" -> 31
-            else -> 30
-        }
-    }
-
-
-    /**
-     * current, previous value
-     * @return color
-     */
-    private fun getAvgBarColor(currentValue: Int?, previousValue: Int?): Int {
-        if (currentValue == null) return Color.WHITE
-        if (previousValue == null) return Color.WHITE
-
-        val currentPercentRaise =
-            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
-
-        return if (currentPercentRaise > 20) {//green
-            Color.parseColor("#29cc74")
-        } else if (currentPercentRaise in 0.0..20.0) {//yellow
-            Color.parseColor("#ffbb6b")
-        } else {//red
-            Color.parseColor("#ff7c94")
-        }
     }
 
 

@@ -55,10 +55,10 @@ class SleepSingleLineChartFragment :
             }
         } ?: ArrayList()
 
-        val maxValue = sharedViewModel.getMaxValue(dataList, pageData?.contributorType)
+        val maxValue = sharedViewModel.getMaxValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
-        val xAxisRange = getXAxisRange(pageData)
-        val avgValue = sharedViewModel.getAvgValue(dataList, pageData?.contributorType)
+        val xAxisRange = sharedViewModel.getXAxisRange(pageData)
+        val avgValue = sharedViewModel.getAvgValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
         val showOverlay =
             if (pageData?.selectedPeriod == InternalSelectedPeriod.DAY) false else true
 
@@ -86,58 +86,6 @@ class SleepSingleLineChartFragment :
 
         })
     }
-
-    private fun getAvgValue(list: List<Int?>): Pair<Int, String>? {
-        val filteredData = list.filterNotNull()
-        if (filteredData.isEmpty()) {
-            return null
-        }
-
-        val avg = list.filterNotNull().average().roundToInt()
-        return Pair(avg, "$avg%")
-    }
-
-    private fun getXAxisRange(pageData: TrendsGraphData?): List<String> {
-        return when (pageData?.selectedPeriod) {
-            InternalSelectedPeriod.MONTH -> {
-                arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
-            }
-
-            InternalSelectedPeriod.WEEK -> {
-                val weekList = HashSet<Int>()
-                val weekListReturn = ArrayList<String>()
-
-                pageData.data?.forEach {
-                    val date = LocalDate.parse(it.date)
-
-                    val weekFields = WeekFields.of(Locale.getDefault())
-                    val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
-                    weekList.add(weekNumber)
-                }
-                weekList.sorted().forEach {
-                    weekListReturn.add("W$it")
-                }
-                weekListReturn
-                //arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
-            }
-
-            else -> {
-                arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-            }
-        }
-    }
-
-    private fun getMaxValue(list: List<Int?>): Int {
-        return 100
-    }
-
-
-    fun getYAxisRange(maxValue: Int): List<Pair<Int, String>> {
-        return arrayListOf(
-            Pair(0, "0%"), Pair(25, "25%"), Pair(50, "50%"), Pair(75, "75%"), Pair(100, "100%")
-        )
-    }
-
 
     override fun initListener() {
 
