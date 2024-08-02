@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
@@ -103,10 +104,7 @@ class SkinTempInternalDetailsFragment :
             setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
                 val data = bundle.getSerializable("itemName") as SleepInternalLaunchState
 
-                viewModel.selectedLaunchMode = data
-                viewModel.updateTitle()
-
-                //todo reload data
+                viewModel.reloadFragment.postValue(Event(data))
             }
 
             val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode, true)
@@ -139,6 +137,7 @@ class SkinTempInternalDetailsFragment :
             viewModel.isDeviationSelected = true
             showTopContent()
         }
+
         binding.lytDeviation.tvAbsolute.setOnClickListener {
             binding.lytDeviation.tvAbsolute.setBackgroundResource(R.drawable.back_deviation_selected)
             binding.lytDeviation.tvDeviation.setBackgroundResource(0)
@@ -176,6 +175,27 @@ class SkinTempInternalDetailsFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.reloadFragment.observe(this) {
+            it.getContent()?.let {
+
+                if (sharedViewModel.redirectToSkinTempInternal(viewModel.selectedLaunchMode)) {
+                    navigate(
+                        SkinTempInternalDetailsFragmentDirections.actionSkinTempInternalDetailsFragmentSelf(
+                            it
+                        )
+                    )
+                } else {
+//                    navigate(
+//                        SkinTempInternalDetailsFragmentDirections.actionSkinTempInternalDetailsFragmentToSleepFragment(
+//                            it
+//                        )
+//                    )
+                }
+
+            }
+        }
+
+
         viewModel.fragments.observe(this) {
 
             if (it == null) {
@@ -371,9 +391,6 @@ class SkinTempInternalDetailsFragment :
                 binding.lytTopView.lytTopMultipleView.tvDateTime.text =
                     viewModel.getTopDisplayDate()
 
-                binding.lytTopView.lytTopMultipleView.tvDateTime.text =
-                    todayDate.format(dayFormat)
-
                 binding.lytTopView.lytTopMultipleView.lytContentView.root.visible()
 
                 val avgValue = when (viewModel.selectedPeriod.value) {
@@ -403,7 +420,6 @@ class SkinTempInternalDetailsFragment :
             }
         }
     }
-
 
     private fun showTopContent() {
 

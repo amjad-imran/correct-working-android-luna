@@ -963,6 +963,14 @@
         android:id="@+id/skinTempInternalDetailsFragment"
         android:name="com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment"
         android:label="fragment_skin_temp_internal_details">
+
+        <action
+            android:id="@+id/action_skinTempInternalDetailsFragment_self"
+            app:destination="@id/skinTempInternalDetailsFragment"
+            app:popUpTo="@id/skinTempInternalDetailsFragment"
+            app:popUpToInclusive="true" />
+
+
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />

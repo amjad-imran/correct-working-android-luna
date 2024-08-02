@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:id="@+id/main"
         android:background="@color/transparent">
+
         <include
             android:id="@+id/lytTopView"
             layout="@layout/layout_o_top_drop_down_view"
@@ -22,7 +23,7 @@
             android:id="@+id/lytContentView"
             layout="@layout/layout_o_drop_down_tab_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="4dp"
