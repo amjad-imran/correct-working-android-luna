@@ -214,14 +214,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         val textBounds = Rect()
 
+        var previousValue: Int? = null
+
         xAxisRange.forEachIndexed { index, value ->
 
             val filterValues = dataSet.subList(index * 7, index * 7 + 7)
 
             val avgValue = filterValues.filterNotNull().averageWithoutZero()
 
-
             if (avgValue != 0) {
+
+                val overlayColor = getAvgBarColor(avgValue, previousValue)
+                xOverlayLinePaint.color = overlayColor
+
 
                 val pos = getYAxisValue(avgValue)
                 val end = start.toFloat() + stepWidth
@@ -264,6 +269,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 avgLineFillPaint.setShader(linearGradient)
 
                 canvas.drawPath(path, avgLineFillPaint)
+                previousValue = avgValue
             }
 
             start += stepWidth.toInt()
@@ -644,8 +650,25 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
 
-}
+    /**
+     * current, previous value
+     * @return color
+     */
+    private fun getAvgBarColor(currentValue: Int?, previousValue: Int?): Int {
+        if (currentValue == null) return Color.WHITE
+        if (previousValue == null) return Color.WHITE
 
-enum class AvgBarType {
-    PERCENT, TIME, DEFAULT
+        val currentPercentRaise =
+            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+
+        return if (currentPercentRaise > 20) {//green
+            Color.parseColor("#29cc74")
+        } else if (currentPercentRaise in 0.0..20.0) {//yellow
+            Color.parseColor("#ffbb6b")
+        } else {//red
+            Color.parseColor("#ff7c94")
+        }
+    }
+
+
 }
