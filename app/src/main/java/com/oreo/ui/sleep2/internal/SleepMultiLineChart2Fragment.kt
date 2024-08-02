@@ -3,18 +3,21 @@ package com.oreo.ui.sleep2.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.luna.databinding.FragmentSleepMultiLineChartBinding
+import com.noisefit.luna.databinding.FragmentSleepMultiLineChart2Binding
+import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class SleepMultiLineChartFragment :
-    BaseFragment<FragmentSleepMultiLineChartBinding>(FragmentSleepMultiLineChartBinding::inflate) {
+class SleepMultiLineChart2Fragment :
+    BaseFragment<FragmentSleepMultiLineChart2Binding>(FragmentSleepMultiLineChart2Binding::inflate) {
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
@@ -27,7 +30,7 @@ class SleepMultiLineChartFragment :
         private const val GRAPH_DATA = "GRAPH_DATA"
 
         @JvmStatic
-        fun newInstance(pageData: TrendsGraphData) = SleepMultiLineChartFragment().apply {
+        fun newInstance(pageData: TrendsGraphData) = SleepMultiLineChart2Fragment().apply {
             arguments = Bundle().apply {
                 this.putParcelable(GRAPH_DATA, pageData)
             }
@@ -38,7 +41,7 @@ class SleepMultiLineChartFragment :
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let { bundle ->
-            pageData = bundle.getParcelable(SleepMultiLineChartFragment.GRAPH_DATA)
+            pageData = bundle.getParcelable(SleepMultiLineChart2Fragment.GRAPH_DATA)
         }
 
 
@@ -60,12 +63,16 @@ class SleepMultiLineChartFragment :
         val maxValue = sharedViewModel.getMaxValue(
             dataListType2 = dataList, contributorType = pageData?.contributorType
         )
+        val avgValue =
+            getAvgValue(dataListType2 = dataList, contributorType = pageData?.contributorType)
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
+        val xAxisRange = sharedViewModel.getXAxisRange(pageData)
 
         binding.graphBar.setDataSet(
-            dataList, yAxisRange, yAxisRange.last().first, -1
+            dataList, yAxisRange, xAxisRange, yAxisRange.last().first,
+            avgValue,
+            -1
         )
-
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
 
@@ -86,24 +93,45 @@ class SleepMultiLineChartFragment :
         })
     }
 
-    private fun getMaxValue(list: List<Pair<Int?, Int?>>): Int {
-        var mMax = 0
-        list.forEach {
+    private fun getAvgValue(
+        dataListType2: List<Pair<Int?, Int?>>,
+        contributorType: SleepInternalLaunchState?
+    ): Pair<Pair<Int, String>?, Pair<Int, String>?> {
 
-            var max = it.first ?: 0
-            if ((it.second ?: 0) > max) {
-                max = it.second ?: 0
-            }
+        val filteredDataHour = dataListType2.mapNotNull { it.first }
+        val filteredDataNeed = dataListType2.mapNotNull { it.second }
 
-            if (max > mMax) {
-                mMax = max
-            }
+
+        var averageHour: Int? = null
+        var averageHourString: String? = null
+        var averageNeed: Int? = null
+        var averageNeedString: String? = null
+        if (filteredDataHour.isNotEmpty()) {
+            averageHour = filteredDataHour.average().roundToInt()
+
+            val (hour, minute) = getFormattedSleepDuration(
+                averageHour
+            )
+
+            averageHourString = String.format(locale = Locale.US, "%d:%02d", hour, minute)
+        }
+        if (filteredDataNeed.isNotEmpty()) {
+            averageNeed = filteredDataNeed.average().roundToInt()
+            val (hour, minute) = getFormattedSleepDuration(
+                averageNeed
+            )
+
+            averageNeedString = String.format(locale = Locale.US, "%d:%02d", hour, minute)
         }
 
-        mMax += ((0.2) * mMax).toInt()
-        return mMax
+        return Pair(
+            if (averageHour == null) null else Pair(
+                averageHour,
+                "$averageHourString"
+            ),
+            if (averageNeed == null) null else Pair(averageNeed, "$averageNeedString")
+        )
     }
-
 
     override fun initListener() {
 

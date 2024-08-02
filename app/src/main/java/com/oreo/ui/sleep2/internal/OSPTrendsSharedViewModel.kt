@@ -3,23 +3,26 @@ package com.oreo.ui.sleep2.internal
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.noisefit_commans.ui.BaseViewModel
+import com.oreo.data.model.TrendsGraphData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import java.time.temporal.WeekFields
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
 class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
-    fun sendInteractDay(day: LocalDate?) {
-        _interactGraphData.postValue(day)
-    }
-
-    var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
 
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
     val interactGraphData: LiveData<LocalDate?> = _interactGraphData
 
+    var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
+
+    fun sendInteractDay(day: LocalDate?) {
+        _interactGraphData.postValue(day)
+    }
 
     fun getYAxisRange(
         maxValue: Int,
@@ -35,7 +38,30 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> default
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> default
-            SleepInternalLaunchState.HOUR_VS_NEED -> default
+            SleepInternalLaunchState.HOUR_VS_NEED -> {
+                return when (maxValue) {
+                    in 0..720 -> {
+                        arrayListOf(
+                            Pair(0, "0"),
+                            Pair(180, "3"),
+                            Pair(360, "6"),
+                            Pair(540, "9"),
+                            Pair(720, "12")
+                        )
+                    }
+
+                    else -> {
+                        arrayListOf(
+                            Pair(0, "0"),
+                            Pair(360, "6"),
+                            Pair(720, "12"),
+                            Pair(1080, "18"),
+                            Pair(1440, "24")
+                        )
+                    }
+                }
+            }
+
             SleepInternalLaunchState.SLEEP_TIME -> default
             SleepInternalLaunchState.TIMING -> default
             SleepInternalLaunchState.EFFICIENCY -> {
@@ -127,14 +153,32 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getMaxValue(
-        list: List<Int?>,
+        dataListType1: List<Int?>? = null,
+        dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
     ): Int {
-        val nonNullValues = list.filterNotNull()
+        val nonNullValues = dataListType1?.filterNotNull()
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> 100
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100
-            SleepInternalLaunchState.HOUR_VS_NEED -> 100
+            SleepInternalLaunchState.HOUR_VS_NEED -> {
+                var mMax = 0
+                dataListType2?.forEach {
+
+                    var max = it.first ?: 0
+                    if ((it.second ?: 0) > max) {
+                        max = it.second ?: 0
+                    }
+
+                    if (max > mMax) {
+                        mMax = max
+                    }
+                }
+
+                mMax += ((0.2) * mMax).toInt()
+                return mMax
+            }
+
             SleepInternalLaunchState.SLEEP_TIME -> 100
             SleepInternalLaunchState.TIMING -> 100
             SleepInternalLaunchState.EFFICIENCY -> {
@@ -142,7 +186,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.REM_SLEEP -> {
-                return if (nonNullValues.isEmpty()) {
+                return if (nonNullValues.isNullOrEmpty()) {
                     60
                 } else {
                     nonNullValues.max()
@@ -150,7 +194,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.SLEEP_DURATION -> {
-                if (nonNullValues.isEmpty()) {
+                if (nonNullValues.isNullOrEmpty()) {
                     12 * 60
                 } else {
                     nonNullValues.max()
@@ -158,7 +202,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.LATENCY -> {
-                return if (nonNullValues.isEmpty()) {
+                return if (nonNullValues.isNullOrEmpty()) {
                     25
                 } else {
                     nonNullValues.max()
@@ -166,7 +210,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.RESTFULNESS -> {
-                return if (nonNullValues.isEmpty()) {
+                return if (nonNullValues.isNullOrEmpty()) {
                     4
                 } else {
                     nonNullValues.max()
@@ -180,15 +224,16 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
 
     fun getAvgValue(
-        list: List<Int?>,
+        dataListType1: List<Int?>? = null,
+        dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
     ): Pair<Int, String>? {
-        val filteredData = list.filterNotNull()
-        if (filteredData.isEmpty()) {
+        val filteredData = dataListType1?.filterNotNull()
+        if (filteredData.isNullOrEmpty()) {
             return null
         }
 
-        val avg = list.filterNotNull().average().roundToInt()
+        val avg = dataListType1.filterNotNull().average().roundToInt()
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> Pair(avg, "$avg%")
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(avg, "$avg%")
@@ -208,6 +253,35 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             SleepInternalLaunchState.LATENCY -> Pair(avg, "${avg}min")
             SleepInternalLaunchState.RESTFULNESS -> Pair(avg, "$avg")
             else -> Pair(avg, "$avg%")
+        }
+    }
+
+    fun getXAxisRange(pageData: TrendsGraphData?): List<String> {
+        return when (pageData?.selectedPeriod) {
+            InternalSelectedPeriod.MONTH -> {
+                arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                val weekList = HashSet<Int>()
+                val weekListReturn = ArrayList<String>()
+
+                pageData.data?.forEach {
+                    val date = LocalDate.parse(it.date)
+
+                    val weekFields = WeekFields.of(Locale.getDefault())
+                    val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
+                    weekList.add(weekNumber)
+                }
+                weekList.sorted().forEach {
+                    weekListReturn.add("W$it")
+                }
+                weekListReturn
+            }
+
+            else -> {
+                arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            }
         }
     }
 

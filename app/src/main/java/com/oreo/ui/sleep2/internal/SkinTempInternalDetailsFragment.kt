@@ -97,6 +97,7 @@ class SkinTempInternalDetailsFragment :
             binding.lytDeviation.root.gone()
         }
     }
+
     override fun initListener() {
         binding.lytSpinnerView.setOnClickListener {
             setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
@@ -262,7 +263,7 @@ class SkinTempInternalDetailsFragment :
                         }
                     }
 
-                    TrendsTopState.SINGLE_DATE -> {
+                    TrendsTopState.SINGLE_DATE, TrendsTopState.DOUBLE_DATE -> {
                         binding.lytTopView.lytTopMultipleView.apply {
                             tvNudge.alpha = 0.5f
                         }
@@ -286,6 +287,7 @@ class SkinTempInternalDetailsFragment :
                             }
                         }
                     }
+
                 }
 
 
@@ -308,7 +310,7 @@ class SkinTempInternalDetailsFragment :
                 }
             }
 
-            TrendsTopState.SINGLE_DATE -> {
+            TrendsTopState.SINGLE_DATE, TrendsTopState.DOUBLE_DATE -> {
                 binding.lytTopView.lytTopMultipleView.apply {
                     tvNudge.alpha = 1.0f
 
@@ -363,7 +365,7 @@ class SkinTempInternalDetailsFragment :
                 binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()//todo set
             }
 
-            TrendsTopState.SINGLE_DATE -> {
+            TrendsTopState.SINGLE_DATE,TrendsTopState.DOUBLE_DATE -> {
 
 
                 binding.lytTopView.lytTopMultipleView.tvDateTime.text =

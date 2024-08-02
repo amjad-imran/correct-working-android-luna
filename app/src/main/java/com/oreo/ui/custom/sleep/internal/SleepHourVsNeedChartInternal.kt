@@ -193,6 +193,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                     lastSentValuePos = selectedPosition
                 }
             }
+            listener?.onValueSelected(selectedPosition)
         }
 
         if (dataSet.isEmpty()) {
@@ -264,10 +265,16 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                         textPaintHour.getTextBounds(text, 0, text.length, xTextBounds)
                     }
                     val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
+                    val yPos = if ((it.first ?: 0) > (it.second ?: 0)) {
+                        actualPos - textPadding
+                    } else {
+                        actualPos + xTextBounds.height() + textPadding
+                    }
+
                     canvas.drawText(
                         text,
                         textStart,
-                        actualPos + xTextBounds.height() + textPadding,
+                        yPos/*actualPos + xTextBounds.height() + textPadding*/,
                         if (isInteracting) textPaintHourI else textPaintHour
                     )
                 }
@@ -308,10 +315,16 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                         textPaintNeed.getTextBounds(text, 0, text.length, xTextBounds)
                     }
                     val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
+
+                    val yPos = if ((it.first ?: 0) > (it.second ?: 0)) {
+                        needPos + xTextBounds.height() + textPadding
+                    } else {
+                        needPos - textPadding
+                    }
                     canvas.drawText(
                         text,
                         textStart,
-                        needPos - textPadding,
+                        yPos/*needPos - textPadding*/,
                         if (isInteracting) textPaintNeedI else textPaintNeed
                     )
                 }

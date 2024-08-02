@@ -250,23 +250,32 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         trendData
                     )
 
-
-                    SleepInternalLaunchState.SLEEP_TIME ->
-                        SleepSingleLineChartFragment.newInstance(trendData)
-
-
                     SleepInternalLaunchState.HOUR_VS_NEED -> SleepMultiLineChartFragment.newInstance(
                         trendData
                     )
+
+
+                    SleepInternalLaunchState.SLEEP_TIME ->
+                        SleepSingleLineChartFragment.newInstance(trendData)
 
                     else -> SleepBarChartFragment.newInstance(trendData)
                 }
             }
 
             InternalSelectedPeriod.WEEK -> {
-                return SleepSingleLineChartFragment.newInstance(trendData.apply {
-                    this.selectedPeriod = InternalSelectedPeriod.WEEK
-                })
+                return when (selectedLaunchMode) {
+                    SleepInternalLaunchState.HOUR_VS_NEED -> {
+                        SleepMultiLineChart2Fragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.WEEK
+                        })
+                    }
+
+                    else -> {
+                        SleepSingleLineChartFragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.WEEK
+                        })
+                    }
+                }
             }
 
             InternalSelectedPeriod.MONTH -> {
@@ -463,9 +472,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getUnit(): String {
-        return when(selectedLaunchMode){
+        return when (selectedLaunchMode) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> ""
-            SleepInternalLaunchState.SLEEP_PERFORMANCE ->  "%"
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> "%"
             SleepInternalLaunchState.HOUR_VS_NEED -> ""
             SleepInternalLaunchState.SLEEP_TIME -> ""
             SleepInternalLaunchState.TIMING -> "min"
@@ -484,12 +493,18 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getTopState(): TrendsTopState {
-        return if (selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION ||
-            selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP
-        ) {
-            TrendsTopState.SINGLE_DATE
-        } else {
-            TrendsTopState.SINGLE
+        return when (selectedLaunchMode) {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                TrendsTopState.SINGLE_DATE
+            }
+
+            SleepInternalLaunchState.HOUR_VS_NEED -> {
+                TrendsTopState.DOUBLE_DATE
+            }
+
+            else -> {
+                TrendsTopState.SINGLE
+            }
         }
     }
 
@@ -527,5 +542,5 @@ enum class InternalSelectedPeriod {
 }
 
 enum class TrendsTopState {
-    SINGLE, SINGLE_DATE
+    SINGLE, SINGLE_DATE, DOUBLE_DATE
 }
