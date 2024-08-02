@@ -2,10 +2,14 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
 import javax.inject.Inject
@@ -153,11 +157,11 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getMaxValue(
-        dataListType1: List<Int?>? = null,
+        dataListType1: List<GraphDataSingleModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
     ): Int {
-        val nonNullValues = dataListType1?.filterNotNull()
+        val nonNullValues = dataListType1?.mapNotNull { it.value }
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> 100
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100
@@ -224,16 +228,16 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
 
     fun getAvgValue(
-        dataListType1: List<Int?>? = null,
+        dataListType1: List<GraphDataSingleModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
     ): Pair<Int, String>? {
-        val filteredData = dataListType1?.filterNotNull()
+        val filteredData = dataListType1?.mapNotNull { it.value }
         if (filteredData.isNullOrEmpty()) {
             return null
         }
 
-        val avg = dataListType1.filterNotNull().average().roundToInt()
+        val avg = filteredData.average().roundToInt()
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> Pair(avg, "$avg%")
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(avg, "$avg%")
@@ -259,22 +263,39 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     fun getXAxisRange(pageData: TrendsGraphData?): List<String> {
         return when (pageData?.selectedPeriod) {
             InternalSelectedPeriod.MONTH -> {
-                arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
+                val monthListString = ArrayList<String>()
+                var lastYearMonth: YearMonth? = null
+                pageData.data?.forEach {
+
+                    val currentYearMonth = LocalDate.parse(it.date).yearMonth
+                    if (lastYearMonth == null) {
+                        lastYearMonth = currentYearMonth
+                        monthListString.add(currentYearMonth.format(DateTimeFormatter.ofPattern("MMM")))
+                    } else if (lastYearMonth != currentYearMonth) {
+                        lastYearMonth = currentYearMonth
+                        monthListString.add(currentYearMonth.format(DateTimeFormatter.ofPattern("MMM")))
+                    }
+                }
+                monthListString
             }
 
             InternalSelectedPeriod.WEEK -> {
-                val weekList = HashSet<Int>()
                 val weekListReturn = ArrayList<String>()
 
+                var lastWeek: Int? = null
                 pageData.data?.forEach {
                     val date = LocalDate.parse(it.date)
 
                     val weekFields = WeekFields.of(Locale.getDefault())
                     val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
-                    weekList.add(weekNumber)
-                }
-                weekList.sorted().forEach {
-                    weekListReturn.add("W$it")
+
+                    if (lastWeek == null) {
+                        lastWeek = weekNumber
+                        weekListReturn.add("W$weekNumber")
+                    } else if (lastWeek != weekNumber) {
+                        lastWeek = weekNumber
+                        weekListReturn.add("W$weekNumber")
+                    }
                 }
                 weekListReturn
             }

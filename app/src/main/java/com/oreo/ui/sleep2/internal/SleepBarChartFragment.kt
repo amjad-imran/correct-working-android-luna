@@ -7,6 +7,8 @@ import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -42,22 +44,16 @@ class SleepBarChartFragment :
             pageData = bundle.getParcelable(SleepBarChartFragment.graphData)
         }
 
-        val dataList = pageData?.data?.map {
-            if (pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
-                pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
-            ) {
-                if (it.value1 == null) {
-                    it.value1
-                } else {
-                    (it.value1 ?: 0) / 60
-                }
-            } else {
-                it.value1
-            }
-        } ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
-        val maxValue = sharedViewModel.getMaxValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
-        val avgValue = sharedViewModel.getAvgValue(dataListType1 =dataList, contributorType = pageData?.contributorType)
+        val maxValue = sharedViewModel.getMaxValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
+        val avgValue = sharedViewModel.getAvgValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
 
 
@@ -88,34 +84,23 @@ class SleepBarChartFragment :
         })
     }
 
-    private fun getMaxValue(list: List<Int?>): Int {
-        if (pageData?.contributorType == SleepInternalLaunchState.LATENCY) {
-            val nonNullValues = list.filterNotNull()
-            return if (nonNullValues.isEmpty()) {
-                25
-            } else {
-                nonNullValues.max()
-            }
-        } else if (pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
-            pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
-        ) {
-            val nonNullValues = list.filterNotNull()
-            return if (nonNullValues.isEmpty()) {
-                60
-            } else {
-                nonNullValues.max()
-            }
-        } else if (pageData?.contributorType == SleepInternalLaunchState.RESTFULNESS) {
-            val nonNullValues = list.filterNotNull()
-            return if (nonNullValues.isEmpty()) {
-                4
-            } else {
-                nonNullValues.max()
-            }
-
-        } else {
-            return 100
-        }
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataSingleModel> {
+        return data?.map {
+            GraphDataSingleModel(
+                date = LocalDate.parse(it.date),
+                value = if (pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
+                    pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
+                ) {
+                    if (it.value1 == null) {
+                        null
+                    } else {
+                        (it.value1 ?: 0) / 60
+                    }
+                } else {
+                    it.value1
+                }
+            )
+        } ?: ArrayList()
     }
 
 

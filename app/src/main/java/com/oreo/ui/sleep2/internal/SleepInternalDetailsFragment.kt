@@ -337,7 +337,7 @@ class SleepInternalDetailsFragment :
                     tvNudge.alpha = 1.0f
                     tvOptimalRangeLabel.alpha = 1.0f
                     ivCircle.alpha = 1.0f
-                    lytHighlightTrends.root.visible()
+                    lytHighlightTrends.root.gone()
                 }
             }
 
@@ -347,14 +347,14 @@ class SleepInternalDetailsFragment :
 
                     lytContentView.divider1.root.gone()
                     lytContentView.lytNeed.root.gone()
-                    lytContentView.lytHours.lytTrendsHighlight.root.alpha = 1.0f
+                    lytContentView.lytHours.lytTrendsHighlight.root.gone()
                 }
             }
 
             TrendsTopState.DOUBLE_DATE -> {
                 binding.lytTopView.lytTopMultipleView.apply {
                     tvNudge.alpha = 1.0f
-                    lytContentView.lytHours.lytTrendsHighlight.root.alpha = 1.0f
+                    lytContentView.lytHours.lytTrendsHighlight.root.gone()
                 }
             }
         }
@@ -376,8 +376,7 @@ class SleepInternalDetailsFragment :
 
 
 
-                binding.lytTopView.lytTopSingleView.lytHighlightTrends.tvRangeValue.text =
-                    "${viewModel.dayAvg?.status}"
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()
 
 
                 if (avgValue == null) {
@@ -403,8 +402,6 @@ class SleepInternalDetailsFragment :
                         "${viewModel.getUnit()} - average"
 
                 }
-
-                binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()//todo set
             }
 
             TrendsTopState.SINGLE_DATE -> {
@@ -440,7 +437,7 @@ class SleepInternalDetailsFragment :
 
                 }
 
-                binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight.root.gone()//todo set
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight.root.gone()
             }
 
             TrendsTopState.DOUBLE_DATE -> {
@@ -500,7 +497,9 @@ class SleepInternalDetailsFragment :
                         "$minute"
 
                 }
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight.root.gone()
             }
+
         }
     }
 

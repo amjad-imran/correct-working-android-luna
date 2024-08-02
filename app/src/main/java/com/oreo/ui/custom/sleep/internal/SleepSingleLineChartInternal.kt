@@ -17,10 +17,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.util.Locale
 
@@ -50,7 +52,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
-    private var linearGradient: LinearGradient? = null
     private var mHeight = 0
 
     var mMax = 0
@@ -75,12 +76,10 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var mAverage: Pair<Int, String>? = null
     private var showOverlay = false
     private var launchState: SleepInternalLaunchState? = null
+    private var selectedPeriod: InternalSelectedPeriod? = null
 
 
-    /**
-     * Pair(deep,rem)
-     */
-    private val dataSet = ArrayList<Int?>()
+    private val dataSet = ArrayList<GraphDataSingleModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -92,10 +91,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
-        avgLineFillPaint = Paint().apply {
-            style = Paint.Style.FILL
-            isAntiAlias = true
-        }
+        avgLineFillPaint = Paint()
 
         avgBackPaint = Paint().apply {
             this.color = Color.parseColor("#28ffffff")
@@ -174,19 +170,9 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         super.onSizeChanged(w, h, oldw, oldh)
         mHeight = h
 
-        linearGradient = LinearGradient(
-            0f,
-            0f,
-            0f,
-            mHeight.toFloat(),
-            Color.parseColor("#11ffffff"),
-            Color.TRANSPARENT,
-            Shader.TileMode.CLAMP
-        )
-
-        selectedDayPaint = Paint().apply {
-            shader = linearGradient
-        }
+        /* selectedDayPaint = Paint().apply {
+             shader = linearGradient
+         }*/
     }
 
     @Synchronized
@@ -204,10 +190,16 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun drawOverlay(canvas: Canvas) {
         if (isInteracting) return
-        if (dataSet.isEmpty() || dataSet.size % 7 != 0) return
+        if (dataSet.isEmpty()) return
+
+        if (selectedPeriod == InternalSelectedPeriod.WEEK) {
+            if (dataSet.size % 7 != 0) {
+                return
+            }
+        }
+
 
         val availableWidth = width.toFloat() - endPadding
-
         val stepWidth = availableWidth / xAxisRange.size
         var start = 0
         val paddingText = dip2px(4f)
@@ -220,13 +212,9 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             val filterValues = dataSet.subList(index * 7, index * 7 + 7)
 
-            val avgValue = filterValues.filterNotNull().averageWithoutZero()
+            val avgValue = filterValues.mapNotNull { it.value }.averageWithoutZero()
 
             if (avgValue != 0) {
-
-                val overlayColor = getAvgBarColor(avgValue, previousValue)
-                xOverlayLinePaint.color = overlayColor
-
 
                 val pos = getYAxisValue(avgValue)
                 val end = start.toFloat() + stepWidth
@@ -245,6 +233,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 } else {
                     "$avgValue%"
                 }
+
+
+                val overlayColor = getAvgBarColor(avgValue, previousValue)
+                val gradient = LinearGradient(
+                    0f,
+                    pos,
+                    0f,
+                    pos + dip2px(40f),
+                    ColorUtils.setAlphaComponent(overlayColor, 80),
+                    Color.TRANSPARENT,
+                    Shader.TileMode.CLAMP
+                )
+                xOverlayLinePaint.color = overlayColor
                 xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
 
                 canvas.drawText(
@@ -263,11 +264,10 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 path.reset()
                 path.moveTo(start.toFloat(), pos)
                 path.lineTo(end, pos)
-                path.lineTo(end, pos + dip2px(50f).toFloat())
-                path.lineTo(start.toFloat(), pos + dip2px(50f).toFloat())
+                path.lineTo(end, pos + dip2px(40f).toFloat())
+                path.lineTo(start.toFloat(), pos + dip2px(40f).toFloat())
 
-                avgLineFillPaint.setShader(linearGradient)
-
+                avgLineFillPaint.setShader(gradient)
                 canvas.drawPath(path, avgLineFillPaint)
                 previousValue = avgValue
             }
@@ -330,15 +330,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             }
 
 
-            if (it != null) {
+            if (it.value != null) {
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it ?: 0)
+                val actualPos = getYAxisValue(it.value ?: 0)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1] != null) {
-                    val nextElement = dataSet[index + 1]
+                if (index + 1 < maxDataSize && dataSet[index + 1].value != null) {
+                    val nextElement = dataSet[index + 1].value
 
                     val actualPosNext = getYAxisValue(nextElement ?: 0)
                     canvas.drawLine(
@@ -541,17 +541,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
      * selected position
      */
     fun setDataSet(
-        list: List<Int?>,
+        list: List<GraphDataSingleModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<String>,
         maxValue: Int,
         avgValue: Pair<Int, String>?,
         selectedPosition: Int,
         showOverlay: Boolean = false,
-        launchState: SleepInternalLaunchState?
+        launchState: SleepInternalLaunchState?,
+        selectedPeriod: InternalSelectedPeriod?
     ) {
         this.showOverlay = showOverlay
         this.launchState = launchState
+        this.selectedPeriod = selectedPeriod
 
         dataPosition.clear()
 
@@ -661,9 +663,9 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val currentPercentRaise =
             ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
 
-        return if (currentPercentRaise > 20) {//green
+        return if (currentPercentRaise >= 0) {//green
             Color.parseColor("#29cc74")
-        } else if (currentPercentRaise in 0.0..20.0) {//yellow
+        } else if (currentPercentRaise > -2) {//yellow
             Color.parseColor("#ffbb6b")
         } else {//red
             Color.parseColor("#ff7c94")

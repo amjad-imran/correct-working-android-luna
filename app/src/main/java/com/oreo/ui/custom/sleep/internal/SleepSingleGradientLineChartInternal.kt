@@ -76,7 +76,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<Int?>()
+    private val dataSet = ArrayList<GraphDataSingleModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -243,18 +243,18 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
 
-            if (it != null && it != 0) {
+            if (it.value != null && it.value != 0) {
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it ?: 0)
+                val actualPos = getYAxisValue(it.value ?: 0)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
 
-                if (index + 1 < maxDataSize && dataSet[index + 1] != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value ?: 0)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -274,7 +274,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                     if (isInteracting) circlePaintI else circlePaint
                 )
 
-                val topText = getTimeText(it)
+                val topText = getTimeText(it.value)
                 val textStart = start + dataStepWidth / 2 - textPaintHour.measureText(topText) / 2
 
                 canvas.drawText(
@@ -519,7 +519,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
      * selected position
      */
     fun setDataSet(
-        list: List<Int?>,
+        list: List<GraphDataSingleModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<String>,
         maxValue: Int,

@@ -170,8 +170,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
 
             InternalSelectedPeriod.MONTH -> {
-                val start = LocalDate.now().minusMonths(6).withDayOfMonth(1)
-                val end = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                val start = LocalDate.now().minusMonths(6).with(TemporalAdjusters.firstDayOfMonth())
+                val end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
                 Pair(start, end)
             }
         }
@@ -255,6 +255,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     )
 
 
+                    //pending from product
                     SleepInternalLaunchState.SLEEP_TIME ->
                         SleepSingleLineChartFragment.newInstance(trendData)
 

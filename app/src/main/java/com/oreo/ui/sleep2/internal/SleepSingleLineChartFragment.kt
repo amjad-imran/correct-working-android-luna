@@ -7,13 +7,12 @@ import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-import java.time.temporal.WeekFields
-import java.util.Locale
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -43,28 +42,24 @@ class SleepSingleLineChartFragment :
             pageData = bundle.getParcelable(graphData)
         }
 
-        val dataList = pageData?.data?.map {
-            if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
-                pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
-                pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP) {
-                if (it.value1 != null) {
-                    (it.value1 ?: 0) / 60
-                } else null
-            } else {
-                it.value1
-            }
-        } ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
-        val maxValue = sharedViewModel.getMaxValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
+        val maxValue = sharedViewModel.getMaxValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
-        val avgValue = sharedViewModel.getAvgValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
+        val avgValue = sharedViewModel.getAvgValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
         val showOverlay =
             if (pageData?.selectedPeriod == InternalSelectedPeriod.DAY) false else true
 
         binding.graphBar.setDataSet(
             dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1, showOverlay,
-            pageData?.contributorType
+            pageData?.contributorType, pageData?.selectedPeriod
         )
 
 
@@ -85,6 +80,24 @@ class SleepSingleLineChartFragment :
             }
 
         })
+    }
+
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataSingleModel> {
+        return data?.map {
+            GraphDataSingleModel(
+                date = LocalDate.parse(it.date),
+                value = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+                    pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
+                    pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
+                ) {
+                    if (it.value1 != null) {
+                        (it.value1 ?: 0) / 60
+                    } else null
+                } else {
+                    it.value1
+                }
+            )
+        } ?: ArrayList()
     }
 
     override fun initListener() {

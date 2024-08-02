@@ -7,6 +7,8 @@ import com.noisefit.luna.databinding.FragmentSleepSingleLineGradientChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,20 +45,11 @@ class SleepSingleLineGradientChartFragment :
             pageData = bundle.getParcelable(graphData)
         }
 
-        val dataList = pageData?.data?.map {
-            if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
-                if (it.value1 != null) {
-                    (it.value1 ?: 0) / 60
-                } else it.value1
-            } else {
-                it.value1
-            }
-
-        } ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
         val maxValue = sharedViewModel.getMaxValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
-        val xAxisRange = getXAxisRange()
+        val xAxisRange = sharedViewModel.getXAxisRange(pageData)
         val avgValue = sharedViewModel.getAvgValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
 
         val type = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
@@ -89,36 +82,20 @@ class SleepSingleLineGradientChartFragment :
         })
     }
 
-    private fun getAvgValue(list: List<Int?>): Pair<Int, String>? {
-        val filteredData = list.filterNotNull()
-        if (filteredData.isEmpty()) {
-            return null
-        }
-
-        val avg = list.filterNotNull().average().roundToInt()
-        if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
-            return Pair(avg, "${avg / 60}")
-        } else {
-            return Pair(avg, "$avg%")
-        }
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataSingleModel> {
+        return data?.map {
+            GraphDataSingleModel(
+                date = LocalDate.parse(it.date),
+                value = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
+                    if (it.value1 != null) {
+                        (it.value1 ?: 0) / 60
+                    } else null
+                } else {
+                    it.value1
+                }
+            )
+        } ?: ArrayList()
     }
-
-    private fun getXAxisRange(): List<String> {
-        return when (pageData?.selectedPeriod) {
-            InternalSelectedPeriod.MONTH -> {
-                arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun")
-            }
-
-            InternalSelectedPeriod.WEEK -> {
-                arrayListOf("W1", "W2", "W3", "W4", "W5", "W6")
-            }
-
-            else -> {
-                arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-            }
-        }
-    }
-
 
     override fun initListener() {
 
