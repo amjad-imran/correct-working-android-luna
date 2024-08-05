@@ -22,6 +22,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -214,6 +215,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         var previousValue: Int? = null
 
         var lastPos = 0
+        LOGS.d("dfjkghdkfjghkdjfg ${dataSet.size}")
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)

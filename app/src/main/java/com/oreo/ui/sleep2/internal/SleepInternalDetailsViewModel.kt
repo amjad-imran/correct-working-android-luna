@@ -67,7 +67,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
 
-    var dataTill: LocalDate? = null
     val fragments = MutableLiveData<List<Fragment>?>()
     var currentStartDate: LocalDate? = null
 
@@ -108,13 +107,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 trendsData[LocalDate.parse(it.date)] = it
                             }
 
-                            it.data?.firstOrNull()?.date?.let {
-                                dataTill = LocalDate.parse(it)
-                            }
-
                             loadNewFragment()
-
-
 
                             if (dayAvg == null) {
                                 dayAvg = it.dayAvg
@@ -168,9 +161,17 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
 
             InternalSelectedPeriod.MONTH -> {
-                val start = LocalDate.now().minusMonths(5).with(TemporalAdjusters.firstDayOfMonth())
-                val end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
-                Pair(start, end)
+                if (currentStartDate == null) {
+                    val start =
+                        LocalDate.now().minusMonths(5).with(TemporalAdjusters.firstDayOfMonth())
+                    val end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
+                    Pair(start, end)
+                } else {
+                    val start =
+                        currentStartDate!!.minusMonths(5).with(TemporalAdjusters.firstDayOfMonth())
+                    val end = currentStartDate!!.with(TemporalAdjusters.lastDayOfMonth())
+                    Pair(start, end)
+                }
             }
         }
 
@@ -181,6 +182,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
         val (start, end) = getDatesToLoad()
 
+
+        if (end < LocalDate.parse(startDate)) {
+            return
+        }
         currentStartDate = start
 
         val dataToDisplay = ArrayList<TrendsValues>()
