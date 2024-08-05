@@ -103,12 +103,22 @@ class SummaryDataViewModel @Inject constructor(
 
             healthData.sleep.let {
                 if ((it?.sleepScore?.value ?: 0) > 0) {
+
+                    var totalSleep: Int? = null
+                    it?.sleepdata?.forEach {
+                        if (totalSleep == null) {
+                            totalSleep = 0
+                        }
+                        totalSleep = totalSleep!! + it.totalDuration
+                    }
+
+
                     userActivities.add(
                         OHealthOverview.Sleep(
                             ODashboardSleepModel(
                                 sleepScore = it?.sleepScore?.value,
-                                totalSleep = it?.totalSleep?.value,
-                                restingHr = healthData.sleep?.restingHr?.value,
+                                totalSleep = totalSleep,
+                                restingHr = healthData.sleep?.avg_hrv,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
                                 status = it?.sleepScore?.text?.capitalizeWords(),
                                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",

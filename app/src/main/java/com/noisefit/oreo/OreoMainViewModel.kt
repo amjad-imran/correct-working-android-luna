@@ -378,6 +378,8 @@ constructor(
 
         if (isYesterdayDate) return false
 
+        return false
+
         if ((sleepHistoryResponse.value!![sleepHistoryResponse.value!!.size - 2]).date.equals(
                 selectedDate
             )
