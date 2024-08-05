@@ -46,13 +46,21 @@ class SleepSingleLineGradientChartFragment :
 
         val dataList = convertData(pageData?.data)
 
-        val maxValue = sharedViewModel.getMaxValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
+        val maxValue = sharedViewModel.getMaxValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
-        val avgValue = sharedViewModel.getAvgValue(dataListType1 = dataList, contributorType = pageData?.contributorType)
+        val avgValue = sharedViewModel.getAvgValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
 
         val type = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
             SleepSingleGradientChartType.TIME
+        } else if (pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE) {
+            SleepSingleGradientChartType.DEFAULT
         } else {
             SleepSingleGradientChartType.PERCENT
         }

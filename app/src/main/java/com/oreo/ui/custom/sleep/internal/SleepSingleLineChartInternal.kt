@@ -237,6 +237,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
                     launchState == SleepInternalLaunchState.DEEP_SLEEP ||
                     launchState == SleepInternalLaunchState.RESTFULNESS ||
+                    launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
                     "$avgValue"

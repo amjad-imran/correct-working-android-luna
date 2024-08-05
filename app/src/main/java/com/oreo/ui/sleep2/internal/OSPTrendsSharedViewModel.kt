@@ -39,6 +39,43 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             Pair(100, "100%")
         )
         return when (contributorType) {
+            SleepInternalLaunchState.RESTING_HEART_RATE->{
+                if (maxValue <= 80) {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(20, "20"),
+                        Pair(40, "40"),
+                        Pair(60, "60"),
+                        Pair(80, "80")
+                    )
+                } else {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(40, "40"),
+                        Pair(80, "80"),
+                        Pair(120, "120"),
+                        Pair(160, "160")
+                    )
+                }
+            }SleepInternalLaunchState.RESPIRATORY_RATE->{
+                if (maxValue <= 20) {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(5, "5"),
+                        Pair(10, "10"),
+                        Pair(15, "15"),
+                        Pair(20, "20")
+                    )
+                } else {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(15, "15"),
+                        Pair(30, "30"),
+                        Pair(45, "45"),
+                        Pair(60, "60")
+                    )
+                }
+            }
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> default
             SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                 return when (maxValue) {
@@ -226,6 +263,20 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                     nonNullValues.max()
                 }
             }
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    20
+                } else {
+                    nonNullValues.max()
+                }
+            }
+            SleepInternalLaunchState.RESTING_HEART_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    80
+                } else {
+                    nonNullValues.max()
+                }
+            }
 
             null -> 100
             else -> 100
@@ -276,7 +327,8 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.LATENCY -> Pair(avg, "${avg}min")
-            SleepInternalLaunchState.RESTFULNESS -> Pair(avg, "$avg")
+            SleepInternalLaunchState.RESTFULNESS,SleepInternalLaunchState.RESTING_HEART_RATE -> Pair(avg, "$avg")
+            SleepInternalLaunchState.RESPIRATORY_RATE -> Pair(avg, "$avg")
             else -> Pair(avg, "$avg%")
         }
     }

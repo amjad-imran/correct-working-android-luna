@@ -1873,6 +1873,18 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getSleepHealthMonitorTrendsPagesData(
+        startDate: String,
+        endDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/sleep/v2/health/trends/$filterType"
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate)
+        }
+    }
+
     override suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/addsleep"

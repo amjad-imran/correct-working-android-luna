@@ -633,10 +633,10 @@ enum class SleepInternalLaunchState(val key: String) {
     SLEEP_DURATION("sleep_duration"),
     LATENCY("latency"),
     RESTFULNESS("restfulness"),
-    RESPIRATORY_RATE("respiratory_rate"),
-    RESTING_HEART_RATE("resting_heart_rate"),
+    RESPIRATORY_RATE("resp"),
+    RESTING_HEART_RATE("rhr"),
     HRV("hrv"),
-    SKIN_TEMPERATURE("skin_temperature"),
-    BLOOD_OXYGEN("blood_oxygen")
+    SKIN_TEMPERATURE("skin_temp"),
+    BLOOD_OXYGEN("blood_oxy")
 }
 

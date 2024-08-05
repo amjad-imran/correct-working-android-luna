@@ -9,6 +9,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.OHMDataModel
 import com.oreo.ui.sleep2.SleepDashViewModel
 import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
+import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,12 +23,22 @@ class OHMInternalFragment :
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
                 val launchType = sleepDashViewModel.getLaunchState(resultData.type)
-                val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
+              /*  val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
                     launchType
                 )
-                navigate(frag, bundle)
+                navigate(frag, bundle)*/
+
+                showInternalTrend(launchType)
+
             }
         })
+    }
+
+    fun showInternalTrend(state: SleepInternalLaunchState) {
+        val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
+            state
+        )
+        navigate(frag, bundle)
     }
 
 

@@ -190,7 +190,6 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
         dataSet.forEachIndexed { index, it ->
 
-
             if (index + 1 == mSelectedPosition) {
                 val padding = dip2px(4f)
                 val rectFSelected = RectF(
@@ -266,7 +265,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
 
                 if (isSelectedPosition.not()) {
-                    val text = if (contributorType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
+                    val text = if (contributorType == SleepInternalLaunchState.SLEEP_PERFORMANCE
+                        || contributorType == SleepInternalLaunchState.BLOOD_OXYGEN
+                    ) {
                         "${it.value1}%"
                     } else {
                         "${it.value1}"

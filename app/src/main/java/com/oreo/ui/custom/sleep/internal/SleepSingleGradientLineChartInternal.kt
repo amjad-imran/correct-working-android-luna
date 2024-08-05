@@ -336,6 +336,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             SleepSingleGradientChartType.PERCENT -> {
                 return "${value}%"
             }
+
+            SleepSingleGradientChartType.DEFAULT -> return "${value}"
         }
 
     }
@@ -611,5 +613,5 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 }
 
 enum class SleepSingleGradientChartType {
-    TIME, PERCENT
+    TIME, PERCENT,DEFAULT
 }
