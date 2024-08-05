@@ -42,8 +42,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     var startDate: String = ""
     var endDate: String = ""
 
-    private val _selectedPeriod =
-        MutableLiveData<InternalSelectedPeriod>()
+    private val _selectedPeriod = MutableLiveData<InternalSelectedPeriod>()
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
 
 
@@ -57,8 +56,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
         _selectedPeriod.value = selectedPeriod
     }
 
-    private val _titleUpdate =
-        MutableLiveData<Pair<String, Int>>()
+    private val _titleUpdate = MutableLiveData<Pair<String, Int>>()
     val titleUpdate: LiveData<Pair<String, Int>> = _titleUpdate
 
     init {
@@ -193,9 +191,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             val data = trendsData[current]
             dataToDisplay.add(
                 TrendsValues(
-                    date = current.format(dateFormat),
-                    value1 = data?.value1,
-                    value2 = data?.value2
+                    date = current.format(dateFormat), value1 = data?.value1, value2 = data?.value2
                 )
             )
             current = current.plusDays(1)
@@ -221,8 +217,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
         when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
                 return when (selectedLaunchMode) {
-                    SleepInternalLaunchState.REM_SLEEP,
-                    SleepInternalLaunchState.DEEP_SLEEP -> SleepBarChartFragment.newInstance(
+                    SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> SleepBarChartFragment.newInstance(
                         trendData
                     )
 
@@ -256,8 +251,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
 
                     //pending from product
-                    SleepInternalLaunchState.SLEEP_TIME ->
-                        SleepSingleLineChartFragment.newInstance(trendData)
+                    SleepInternalLaunchState.SLEEP_TIME -> SleepSingleLineChartFragment.newInstance(
+                        trendData
+                    )
 
                     else -> SleepBarChartFragment.newInstance(trendData)
                 }
@@ -265,7 +261,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             InternalSelectedPeriod.WEEK -> {
                 return when (selectedLaunchMode) {
-                    SleepInternalLaunchState.HOUR_VS_NEED -> {
+                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+                    SleepInternalLaunchState.SLEEP_TIME -> {
                         SleepMultiLineChart2Fragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.WEEK
                         })
@@ -280,9 +277,20 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
 
             InternalSelectedPeriod.MONTH -> {
-                return SleepSingleLineChartFragment.newInstance(trendData.apply {
-                    this.selectedPeriod = InternalSelectedPeriod.MONTH
-                })
+                return when (selectedLaunchMode) {
+                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+                    SleepInternalLaunchState.SLEEP_TIME -> {
+                        SleepMultiLineChart2Fragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.MONTH
+                        })
+                    }
+
+                    else -> {
+                        SleepSingleLineChartFragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.MONTH
+                        })
+                    }
+                }
             }
         }
 
@@ -299,13 +307,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
 
             SleepInternalLaunchState.SLEEP_TIME -> Pair(
-                resourcesProvider.getString(R.string.text_sleep_time),
-                R.drawable.ic_sleep_time
+                resourcesProvider.getString(R.string.text_sleep_time), R.drawable.ic_sleep_time
             )
 
             SleepInternalLaunchState.HOUR_VS_NEED -> Pair(
-                resourcesProvider.getString(R.string.text_hour_vs_need),
-                R.drawable.ic_sleep_snooz
+                resourcesProvider.getString(R.string.text_hour_vs_need), R.drawable.ic_sleep_snooz
             )
 
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(
@@ -319,18 +325,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.REM_SLEEP -> Pair(
-                resourcesProvider.getString(R.string.text_rem_sleep),
-                R.drawable.ic_sleep_rem_sp
+                resourcesProvider.getString(R.string.text_rem_sleep), R.drawable.ic_sleep_rem_sp
             )
 
             SleepInternalLaunchState.DEEP_SLEEP -> Pair(
-                resourcesProvider.getString(R.string.text_deep_sleep),
-                R.drawable.ic_sleep_deep_sp
+                resourcesProvider.getString(R.string.text_deep_sleep), R.drawable.ic_sleep_deep_sp
             )
 
             SleepInternalLaunchState.LATENCY -> Pair(
-                resourcesProvider.getString(R.string.text_latency),
-                R.drawable.ic_sleep_latency
+                resourcesProvider.getString(R.string.text_latency), R.drawable.ic_sleep_latency
             )
 
             SleepInternalLaunchState.RESTFULNESS -> Pair(
@@ -344,14 +347,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.TIMING -> Pair(
-                resourcesProvider.getString(R.string.text_timing),
-                R.drawable.ic_clock_off_sleep
+                resourcesProvider.getString(R.string.text_timing), R.drawable.ic_clock_off_sleep
             )
 
             else -> {
                 Pair(
-                    resourcesProvider.getString(R.string.text_timing),
-                    R.drawable.ic_clock_off_sleep
+                    resourcesProvider.getString(R.string.text_timing), R.drawable.ic_clock_off_sleep
                 )
             }
         }
@@ -398,8 +399,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return dataList
     }
 
-    fun getHighlightBackType(type: Int): Pair<Int, Int> {
-        /*
+    fun getHighlightBackType(type: Int): Pair<Int, Int> {/*
         * 0-up
         * 1-warning
         * 2-red alert

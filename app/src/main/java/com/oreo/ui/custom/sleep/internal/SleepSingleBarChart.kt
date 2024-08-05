@@ -44,7 +44,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
 
-    private val dataSet = ArrayList<GraphDataSingleModel>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
     private var contributorType: SleepInternalLaunchState? = null
 
@@ -207,9 +207,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             }
 
 
-            if (it.value != null) {
+            if (it.value1 != null) {
 
-                val top = getYAxisValue(it.value)
+                val top = getYAxisValue(it.value1)
                 val isSelectedPosition = selectedPosition == index
 
                 dataPosition.add(Pair(index, start))
@@ -267,9 +267,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
                 if (isSelectedPosition.not()) {
                     val text = if (contributorType == SleepInternalLaunchState.SLEEP_PERFORMANCE) {
-                        "${it.value}%"
+                        "${it.value1}%"
                     } else {
-                        "${it.value}"
+                        "${it.value1}"
                     }
                     val xTextBounds = Rect()
                     if (isInteracting) {
@@ -468,7 +468,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     }
 
     fun setDataSet(
-        list: List<GraphDataSingleModel>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         maxValue: Int,
         avgValue: Pair<Int, String>?,

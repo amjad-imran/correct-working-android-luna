@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -16,9 +17,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
+import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
@@ -71,12 +79,16 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
+    private var selectedPeriod: InternalSelectedPeriod? = null
+    private var launchState: SleepInternalLaunchState? = null
+    lateinit var xOverlayLinePaint: Paint
+    lateinit var avgLineFillPaint: Paint
 
 
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<Pair<Int?, Int?>>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
 
     /**
@@ -93,12 +105,21 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
+        avgLineFillPaint = Paint()
+
         avgBackPaintHour = Paint().apply {
             this.color = Color.parseColor("#465c8a")
         }
 
         avgBackPaintNeed = Paint().apply {
             this.color = Color.parseColor("#7858cc")
+        }
+
+        xOverlayLinePaint = Paint().apply {
+            this.color = Color.parseColor("#29cc74")
+            strokeWidth = dip2px(2f).toFloat()
+            this.typeface = fontGilroy
+            this.textSize = dip2px(12f).toFloat()
         }
 
         avgTextPaint = Paint().apply {
@@ -142,19 +163,19 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
         linePaintHour = Paint().apply {
             this.color = Color.parseColor("#465c8a")
-            strokeWidth = dip2px(2f).toFloat()
+            strokeWidth = dip2px(1f).toFloat()
         }
         linePaintHourI = Paint().apply {
             this.color = Color.parseColor("#66465c8a")
-            strokeWidth = dip2px(2f).toFloat()
+            strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeed = Paint().apply {
             this.color = Color.parseColor("#7858cc")
-            strokeWidth = dip2px(2f).toFloat()
+            strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeedI = Paint().apply {
             this.color = Color.parseColor("#667858cc")
-            strokeWidth = dip2px(2f).toFloat()
+            strokeWidth = dip2px(1f).toFloat()
         }
 
 
@@ -200,6 +221,8 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         drawXAxis(canvas)
         drawYAxis(canvas)
         drawContent(canvas)
+
+        drawOverlay(canvas)
     }
 
     private fun drawContent(canvas: Canvas) {
@@ -208,10 +231,8 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         dataStepWidth = availableWidth / dataSet.size
 
         var start = 0f
-        val circleRadius = dip2px(2f).toFloat()
         val circleRadiusBig = dip2px(4f).toFloat()
         val paddingHorizontal = dip2px(4f)
-        val textPadding = dip2px(6f)
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
@@ -262,15 +283,15 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
             val isSelectedPosition = selectedPosition == index
 
-            if (it.first != null) {
-                val actualPos = getYAxisValue(it.first ?: 0)
+            if (it.value1 != null) {
+                val actualPos = getYAxisValue(it.value1 ?: 0)
 
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].first != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.first ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -291,13 +312,13 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
             }
 
-            if (it.second != null) {
-                val needPos = getYAxisValue(it.second ?: 0)
+            if (it.value2 != null) {
+                val needPos = getYAxisValue(it.value2 ?: 0)
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].second != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.second ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         needPos,
@@ -345,6 +366,122 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         }
     }
 
+    private fun drawOverlay(canvas: Canvas) {
+        if (isInteracting) return
+        if (dataSet.isEmpty()) return
+
+        if (selectedPeriod == InternalSelectedPeriod.WEEK) {
+            if (dataSet.size % 7 != 0) {
+                return
+            }
+        }
+
+
+        val availableWidth = width.toFloat() - endPadding
+        val stepWidth = availableWidth / xAxisRange.size
+        var start = 0
+        val paddingText = dip2px(4f)
+
+        val textBounds = Rect()
+
+        var previousValue: Int? = null
+        var previousValue2: Int? = null
+
+        var lastPos = 0
+        xAxisRange.forEachIndexed { index, value ->
+
+            val dataSize = getDataSize(value)
+            val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
+            lastPos += dataSize
+
+            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
+            val avgValue2 = filterValues.mapNotNull { it.value2 }.averageWithoutZero()
+
+            if (avgValue != 0 && launchState == SleepInternalLaunchState.HOUR_VS_NEED) {
+
+                val pos = getYAxisValue(avgValue)
+                val end = start.toFloat() + stepWidth
+
+                val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
+                ) {
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                        avgValue
+                    )
+                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
+                } else {
+                    "$avgValue%"
+                }
+
+
+                val overlayColor = getAvgBarColor(avgValue, previousValue)
+                xOverlayLinePaint.color = overlayColor
+                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+
+                canvas.drawText(
+                    text,
+                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                    pos - paddingText,
+                    xOverlayLinePaint
+                )
+
+                canvas.drawLine(
+                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )
+
+                previousValue = avgValue
+            }
+
+            if (avgValue2 != 0) {
+
+                val pos = getYAxisValue(avgValue2)
+                val end = start.toFloat() + stepWidth
+
+                val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
+                    || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP
+                ) {
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                        avgValue2
+                    )
+                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
+                } else {
+                    "$avgValue2%"
+                }
+
+
+                val overlayColor = getAvgBarColor(avgValue2, previousValue2)
+                xOverlayLinePaint.color = overlayColor
+                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+
+                canvas.drawText(
+                    text,
+                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                    pos - paddingText,
+                    xOverlayLinePaint
+                )
+
+                canvas.drawLine(
+                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )
+
+                previousValue2 = avgValue2
+            }
+
+            start += stepWidth.toInt()
+        }
+
+    }
+
+    private fun getDataSize(date: LocalDate): Int {
+        return if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+            getDaysOfMonth(date.yearMonth)
+        } else {
+            7
+        }
+    }
+
+    private fun getDaysOfMonth(yearMonth: YearMonth): Int {
+        return yearMonth.lengthOfMonth()
+    }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
         if (isInteracting) return
@@ -498,7 +635,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             }
 
         }
-        showAverage(canvas, availableWidth)
+        //showAverage(canvas, availableWidth)
 
     }
 
@@ -511,13 +648,18 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val weekFields = WeekFields.of(Locale.getDefault())
-            val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
-            val displayText = "W$weekNumber"
-            val textWidth = xAxisPaint.measureText(displayText)
-            xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
+            val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+                it.format(DateTimeFormatter.ofPattern("MMM"))
+            } else {
+                //for week
+                val weekFields = WeekFields.of(Locale.getDefault())
+                val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
+                "W$weekNumber"
+            }
+            val textWidth = xAxisPaint.measureText(displayMonth)
+            xAxisPaint.getTextBounds(displayMonth, 0, displayMonth.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(displayText, textStart, textY, xAxisPaint)
+            canvas.drawText(displayMonth, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -532,16 +674,20 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
      * selected position
      */
     fun setDataSet(
-        list: List<Pair<Int?, Int?>>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,
         avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
-        selectedPosition: Int
+        selectedPosition: Int,
+        launchState: SleepInternalLaunchState?,
+        selectedPeriod: InternalSelectedPeriod?
     ) {
         dataPosition.clear()
         mAverage = avgValue
 
+        this.launchState = launchState
+        this.selectedPeriod = selectedPeriod
 
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
@@ -597,6 +743,27 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         }
 
         return false
+    }
+
+
+    /**
+     * current, previous value
+     * @return color
+     */
+    private fun getAvgBarColor(currentValue: Int?, previousValue: Int?): Int {
+        if (currentValue == null) return Color.WHITE
+        if (previousValue == null) return Color.WHITE
+
+        val currentPercentRaise =
+            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+
+        return if (currentPercentRaise >= 0) {//green
+            Color.parseColor("#29cc74")
+        } else if (currentPercentRaise > -2) {//yellow
+            Color.parseColor("#ffbb6b")
+        } else {//red
+            Color.parseColor("#ff7c94")
+        }
     }
 
 

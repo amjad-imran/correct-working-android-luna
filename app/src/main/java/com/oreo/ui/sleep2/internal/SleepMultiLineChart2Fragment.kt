@@ -8,6 +8,8 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -45,20 +47,7 @@ class SleepMultiLineChart2Fragment :
         }
 
 
-        val dataList = pageData?.data?.map {
-            Pair(
-                if (it.value1 == null) {
-                    null
-                } else {
-                    (it.value1 ?: 0) / 60
-                },
-                if (it.value2 == null) {
-                    null
-                } else {
-                    (it.value2 ?: 0) / 60
-                }
-            )
-        } ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
         val maxValue = sharedViewModel.getMaxValue(
             dataListType2 = dataList, contributorType = pageData?.contributorType
@@ -71,7 +60,8 @@ class SleepMultiLineChart2Fragment :
         binding.graphBar.setDataSet(
             dataList, yAxisRange, xAxisRange, yAxisRange.last().first,
             avgValue,
-            -1
+            -1,
+            pageData?.contributorType, pageData?.selectedPeriod
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
@@ -93,13 +83,31 @@ class SleepMultiLineChart2Fragment :
         })
     }
 
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+        return data?.map {
+            GraphDataModel(
+                date = LocalDate.parse(it.date),
+                value1 = if (it.value1 == null) {
+                    null
+                } else {
+                    (it.value1 ?: 0) / 60
+                },
+                value2 = if (it.value2 == null) {
+                    null
+                } else {
+                    (it.value2 ?: 0) / 60
+                }
+            )
+        } ?: ArrayList()
+    }
+
     private fun getAvgValue(
-        dataListType2: List<Pair<Int?, Int?>>,
+        dataListType2: List<GraphDataModel>,
         contributorType: SleepInternalLaunchState?
     ): Pair<Pair<Int, String>?, Pair<Int, String>?> {
 
-        val filteredDataHour = dataListType2.mapNotNull { it.first }
-        val filteredDataNeed = dataListType2.mapNotNull { it.second }
+        val filteredDataHour = dataListType2.mapNotNull { it.value1 }
+        val filteredDataNeed = dataListType2.mapNotNull { it.value2 }
 
 
         var averageHour: Int? = null

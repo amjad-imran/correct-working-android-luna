@@ -78,7 +78,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<GraphDataSingleModel>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -245,18 +245,18 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
 
-            if (it.value != null && it.value != 0) {
+            if (it.value1 != null && it.value1 != 0) {
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it.value ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -276,7 +276,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                     if (isInteracting) circlePaintI else circlePaint
                 )
 
-                val topText = getTimeText(it.value)
+                val topText = getTimeText(it.value1)
                 val textStart = start + dataStepWidth / 2 - textPaintHour.measureText(topText) / 2
 
                 canvas.drawText(
@@ -522,7 +522,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
      * selected position
      */
     fun setDataSet(
-        list: List<GraphDataSingleModel>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,

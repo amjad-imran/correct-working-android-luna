@@ -22,15 +22,12 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
-import org.joda.time.DateTimeFieldType
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalField
 import java.time.temporal.WeekFields
 import java.util.Locale
 
@@ -87,7 +84,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var selectedPeriod: InternalSelectedPeriod? = null
 
 
-    private val dataSet = ArrayList<GraphDataSingleModel>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -223,7 +220,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
             lastPos += dataSize
 
-            val avgValue = filterValues.mapNotNull { it.value }.averageWithoutZero()
+            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
 
             if (avgValue != 0) {
 
@@ -349,15 +346,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             }
 
 
-            if (it.value != null) {
+            if (it.value1 != null) {
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it.value ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value != null) {
-                    val nextElement = dataSet[index + 1].value
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                    val nextElement = dataSet[index + 1].value1
 
                     val actualPosNext = getYAxisValue(nextElement ?: 0)
                     canvas.drawLine(
@@ -564,7 +561,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     fun setDataSet(
-        list: List<GraphDataSingleModel>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,

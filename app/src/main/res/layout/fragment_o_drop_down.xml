@@ -2,9 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main"
         android:background="@color/transparent">
 
         <include
@@ -12,8 +12,8 @@
             layout="@layout/layout_o_top_drop_down_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="81dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="81dp"
             android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytTopView" />

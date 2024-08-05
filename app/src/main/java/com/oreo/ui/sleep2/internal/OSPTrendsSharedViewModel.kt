@@ -2,16 +2,13 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.noisefit_commans.common.atStartOfMonth
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.TrendsGraphData
-import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
 import java.util.Locale
 import javax.inject.Inject
@@ -42,10 +39,18 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             Pair(100, "100%")
         )
         return when (contributorType) {
-            SleepInternalLaunchState.RESTORATIVE_SLEEP -> default
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> default
-            SleepInternalLaunchState.HOUR_VS_NEED -> {
+            SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                 return when (maxValue) {
+                    in 0..360 -> {
+                        arrayListOf(
+                            Pair(0, "0"),
+                            Pair(120, "2"),
+                            Pair(240, "4"),
+                            Pair(360, "6")
+                        )
+                    }
+
                     in 0..720 -> {
                         arrayListOf(
                             Pair(0, "0"),
@@ -159,21 +164,21 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getMaxValue(
-        dataListType1: List<GraphDataSingleModel>? = null,
-        dataListType2: List<Pair<Int?, Int?>>? = null,
+        dataListType1: List<GraphDataModel>? = null,
+        dataListType2: List<GraphDataModel>? = null,
         contributorType: SleepInternalLaunchState?
     ): Int {
-        val nonNullValues = dataListType1?.mapNotNull { it.value }
+        val nonNullValues = dataListType1?.mapNotNull { it.value1 }
         return when (contributorType) {
-            SleepInternalLaunchState.RESTORATIVE_SLEEP -> 100
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100
-            SleepInternalLaunchState.HOUR_VS_NEED -> {
+            SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_TIME -> {
                 var mMax = 0
                 dataListType2?.forEach {
 
-                    var max = it.first ?: 0
-                    if ((it.second ?: 0) > max) {
-                        max = it.second ?: 0
+                    var max = it.value1 ?: 0
+                    if ((it.value2 ?: 0) > max) {
+                        max = it.value2 ?: 0
                     }
 
                     if (max > mMax) {
@@ -185,7 +190,6 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 return mMax
             }
 
-            SleepInternalLaunchState.SLEEP_TIME -> 100
             SleepInternalLaunchState.TIMING -> 100
             SleepInternalLaunchState.EFFICIENCY -> {
                 100
@@ -245,11 +249,11 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getAvgValue(
-        dataListType1: List<GraphDataSingleModel>? = null,
+        dataListType1: List<GraphDataModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
     ): Pair<Int, String>? {
-        val filteredData = dataListType1?.mapNotNull { it.value }
+        val filteredData = dataListType1?.mapNotNull { it.value1 }
         if (filteredData.isNullOrEmpty()) {
             return null
         }

@@ -8,7 +8,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
-import com.oreo.ui.custom.sleep.internal.GraphDataSingleModel
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -83,11 +83,11 @@ class SleepSingleLineChartFragment :
         })
     }
 
-    private fun convertData(data: List<TrendsValues>?): List<GraphDataSingleModel> {
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
         return data?.map {
-            GraphDataSingleModel(
+            GraphDataModel(
                 date = LocalDate.parse(it.date),
-                value = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+                value1 = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
                     pageData?.contributorType == SleepInternalLaunchState.REM_SLEEP ||
                     pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
                 ) {

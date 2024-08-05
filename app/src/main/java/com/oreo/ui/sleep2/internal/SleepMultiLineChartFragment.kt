@@ -7,6 +7,8 @@ import com.noisefit.luna.databinding.FragmentSleepMultiLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -42,20 +44,7 @@ class SleepMultiLineChartFragment :
         }
 
 
-        val dataList = pageData?.data?.map {
-            Pair(
-                if (it.value1 == null) {
-                    null
-                } else {
-                    (it.value1 ?: 0) / 60
-                },
-                if (it.value2 == null) {
-                    null
-                } else {
-                    (it.value2 ?: 0) / 60
-                }
-            )
-        } ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
         val maxValue = sharedViewModel.getMaxValue(
             dataListType2 = dataList, contributorType = pageData?.contributorType
@@ -86,24 +75,23 @@ class SleepMultiLineChartFragment :
         })
     }
 
-    private fun getMaxValue(list: List<Pair<Int?, Int?>>): Int {
-        var mMax = 0
-        list.forEach {
-
-            var max = it.first ?: 0
-            if ((it.second ?: 0) > max) {
-                max = it.second ?: 0
-            }
-
-            if (max > mMax) {
-                mMax = max
-            }
-        }
-
-        mMax += ((0.2) * mMax).toInt()
-        return mMax
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+        return data?.map {
+            GraphDataModel(
+                date = LocalDate.parse(it.date),
+                value1 = if (it.value1 == null) {
+                    null
+                } else {
+                    (it.value1 ?: 0) / 60
+                },
+                value2 = if (it.value2 == null) {
+                    null
+                } else {
+                    (it.value2 ?: 0) / 60
+                }
+            )
+        } ?: ArrayList()
     }
-
 
     override fun initListener() {
 
