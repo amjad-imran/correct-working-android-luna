@@ -269,33 +269,20 @@ class SummaryDataViewModelToday @Inject constructor(
 
             femaleHealthData.let {
                 val (hasDataLoaded, femaleData) = it
-                LOGS.d("sdfjhksdjfhk", " here in block")
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
-                        LOGS.d("sdfjhksdjfhk", " female data is null")
                         if (gender.equals("male", true).not()) {
 
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
 
-                            LOGS.d(
-                                "sdfjhksdjfhk",
-                                "lastShownDays $lastShownDays -${localDataStore.getFMHWalkthroughShownStatus()}"
-                            )
-
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
                             ) {
-                                LOGS.d("sdfjhksdjfhk", " SHow track card")
                                 trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
                                     FemaleHealthCardState.TRACK
                                 )
-                                /*userActivities.add(
-                                    OHealthOverview.CardTrackFemaleHealth(
-                                        FemaleHealthCardState.TRACK
-                                    )
-                                )*/
                             }
                         }
                     } else {
@@ -304,11 +291,6 @@ class SummaryDataViewModelToday @Inject constructor(
                                 trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
                                     FemaleHealthCardState.LOG
                                 )
-                                /*userActivities.add(
-                                    OHealthOverview.CardTrackFemaleHealth(
-                                        FemaleHealthCardState.LOG
-                                    )
-                                )*/
                             } else {
                                 if (femaleData.isOvulation || femaleData.isPeriod) {
                                     cycleTrackerCardBig = OHealthOverview.CycleTrackerCardBig(
@@ -316,31 +298,16 @@ class SummaryDataViewModelToday @Inject constructor(
                                             femaleData
                                         )
                                     )
-                                    /*userActivities.add(
-                                        OHealthOverview.CycleTrackerCardBig(
-                                            convertToPeriodBigCardModel(
-                                                femaleData
-                                            )
-                                        )
-                                    )*/
                                 } else {
                                     cycleTrackerCardSmall = OHealthOverview.CycleTrackerCardSmall(
                                         convertToPeriodSmallCardModel(
                                             femaleData
                                         )
                                     )
-                                    /*userActivities.add(
-                                        OHealthOverview.CycleTrackerCardSmall(
-                                            convertToPeriodSmallCardModel(
-                                                femaleData
-                                            )
-                                        )
-                                    )*/
                                 }
 
                                 val isCardShownForToday =
                                     femaleHealthRepository.getGotPeriodClickedStatus()
-                                LOGS.d("ASDsadsad $isCardShownForToday")
                                 if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
 
                                     val periodCurrentDay = femaleData.currentDay
@@ -353,11 +320,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                             )
                                         } day."
                                     }
-                                    /*userActivities.add(
-                                        OHealthOverview.GotYourPeriod(
-                                            dayMessage
-                                        )
-                                    )*/
+
                                     gotYourPeriodCard = OHealthOverview.GotYourPeriod(
                                             dayMessage,
                                         femaleData.currentDay
@@ -367,12 +330,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
                 }
-
-
             }
-
-            //userActivities.add(OHealthOverview.GotYourPeriod(""))
-
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {

@@ -217,7 +217,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
-            val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
+            val filterValues = dataSet.subList(lastPos, (lastPos + dataSize-1))
             lastPos += dataSize
 
             val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()

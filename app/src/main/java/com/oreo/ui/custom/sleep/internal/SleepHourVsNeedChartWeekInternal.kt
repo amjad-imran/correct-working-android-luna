@@ -22,6 +22,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -394,76 +395,124 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
             lastPos += dataSize
 
-            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
-            val avgValue2 = filterValues.mapNotNull { it.value2 }.averageWithoutZero()
+            val hour = filterValues.mapNotNull { it.value1 }.averageWithoutZero()//deep
+            val need = filterValues.mapNotNull { it.value2 }.averageWithoutZero()//rem
 
-            if (avgValue != 0 && launchState == SleepInternalLaunchState.HOUR_VS_NEED) {
 
-                val pos = getYAxisValue(avgValue)
+            var hourY = 0.0f
+            if (hour != 0 && launchState == SleepInternalLaunchState.HOUR_VS_NEED) {
+
+                val pos = getYAxisValue(hour)
                 val end = start.toFloat() + stepWidth
 
-                val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
-                ) {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        avgValue
-                    )
-                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
-                } else {
-                    "$avgValue%"
-                }
+                val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
+                    hour
+                )
 
+                val text = String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
 
-                val overlayColor = getAvgBarColor(avgValue, previousValue)
+                val overlayColor = getAvgBarColor(hour, need)
                 xOverlayLinePaint.color = overlayColor
                 xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
 
-                canvas.drawText(
-                    text,
-                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                    pos - paddingText,
-                    xOverlayLinePaint
-                )
+                hourY = pos
+
+
+                val posNeed = getYAxisValue(need)
+
+                if (posNeed + textBounds.height() > hourY) {
+                    canvas.drawText(
+                        text,
+                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                        pos - paddingText,
+                        xOverlayLinePaint
+                    )
+                } else {
+                    canvas.drawText(
+                        text,
+                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                        pos + paddingText + textBounds.height(),
+                        xOverlayLinePaint
+                    )
+                }
+
+
 
                 canvas.drawLine(
                     start.toFloat(), pos, end, pos, xOverlayLinePaint
                 )
 
-                previousValue = avgValue
+                previousValue = hour
             }
 
-            if (avgValue2 != 0) {
+            if (need != 0) {
 
-                val pos = getYAxisValue(avgValue2)
+                val pos = getYAxisValue(need)
                 val end = start.toFloat() + stepWidth
 
                 val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
                     || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP
                 ) {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        avgValue2
+                    val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
+                        need
                     )
-                    String.format(locale = Locale.US, "%d:%02d", hour, minute)
+                    String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
                 } else {
-                    "$avgValue2%"
+                    "$need%"
                 }
 
-
-                val overlayColor = getAvgBarColor(avgValue2, previousValue2)
+                val overlayColor = if (launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
+                    getAvgBarColorRestorativeLogic(need, previousValue2)
+                } else {
+                    getAvgBarColor(null, null)
+                }
                 xOverlayLinePaint.color = overlayColor
                 xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
 
-                canvas.drawText(
-                    text,
-                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                    pos - paddingText,
-                    xOverlayLinePaint
-                )
+
+                val needY = pos - paddingText
+                if (needY + textBounds.height() < hourY || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
+                    canvas.drawText(
+                        text,
+                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                        pos - paddingText,
+                        xOverlayLinePaint
+                    )
+
+                    val path = Path()
+                    path.reset()
+                    path.moveTo(start.toFloat(), pos)
+                    path.lineTo(end, pos)
+                    path.lineTo(end, pos + dip2px(40f).toFloat())
+                    path.lineTo(start.toFloat(), pos + dip2px(40f).toFloat())
+
+                    val gradient = LinearGradient(
+                        0f,
+                        pos,
+                        0f,
+                        pos + dip2px(40f),
+                        ColorUtils.setAlphaComponent(overlayColor, 80),
+                        Color.TRANSPARENT,
+                        Shader.TileMode.CLAMP
+                    )
+
+                    avgLineFillPaint.setShader(gradient)
+                    canvas.drawPath(path, avgLineFillPaint)
+
+                } else {
+                    canvas.drawText(
+                        text,
+                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                        pos + paddingText + textBounds.height(),
+                        xOverlayLinePaint
+                    )
+                }
 
                 canvas.drawLine(
                     start.toFloat(), pos, end, pos, xOverlayLinePaint
                 )
 
-                previousValue2 = avgValue2
+                previousValue2 = need
             }
 
             start += stepWidth.toInt()
@@ -750,7 +799,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
      * current, previous value
      * @return color
      */
-    private fun getAvgBarColor(currentValue: Int?, previousValue: Int?): Int {
+    private fun getAvgBarColorRestorativeLogic(currentValue: Int?, previousValue: Int?): Int {
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
 
@@ -762,6 +811,19 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         } else if (currentPercentRaise > -2) {//yellow
             Color.parseColor("#ffbb6b")
         } else {//red
+            Color.parseColor("#ff7c94")
+        }
+    }
+
+    private fun getAvgBarColor(hour: Int?, need: Int?): Int {
+        if (hour == null) return Color.WHITE
+        if (need == null) return Color.WHITE
+
+
+        return if (hour >= need) {
+            //green
+            Color.parseColor("#29cc74")
+        } else {
             Color.parseColor("#ff7c94")
         }
     }
