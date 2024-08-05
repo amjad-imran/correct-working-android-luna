@@ -256,7 +256,7 @@ class OreoUserActivityRepositoryImpl(
             }
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
+                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v3/dashboard"
                 remoteDataSource.getUserHealthData(url, apiStartDate, apiEndDate)
             }
 
@@ -1416,7 +1416,7 @@ class OreoUserActivityRepositoryImpl(
         selectDate: String, dayType: String, contriType: String
     ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/readiness-contributors"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/readiness-contributors"
             remoteDataSource.getReadinessInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
@@ -1816,7 +1816,7 @@ class OreoUserActivityRepositoryImpl(
         val napRequest = onlineDataMapper.getNapRequest(nap)
 
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/nap"
             remoteDataSource.addNapServer(url, napRequest)
         }
     }
