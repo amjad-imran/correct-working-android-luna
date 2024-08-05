@@ -219,7 +219,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
-            val filterValues = dataSet.subList(lastPos, (lastPos + dataSize-1))
+            val filterValues = dataSet.subList(lastPos, (lastPos + dataSize - 1))
             lastPos += dataSize
 
             val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
@@ -320,19 +320,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             listener?.onValueSelected(selectedPosition)
         }
 
-        if (dataSet.isEmpty()) {
-            val noDataText = "No record available"
-            val textBounds = Rect()
-            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 
-            canvas.drawText(
-                noDataText,
-                availableWidth / 2 - textBounds.width() / 2,
-                (height).toFloat() / 2,
-                xAxisPaint
-            )
-        }
-
+        var isDataNull = true
         dataSet.forEachIndexed { index, it ->
             if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
@@ -349,6 +338,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
             if (it.value1 != null) {
+                isDataNull = false
                 val isSelectedPosition = selectedPosition == index
                 val actualPos = getYAxisValue(it.value1 ?: 0)
 
@@ -397,7 +387,22 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             }
             start += dataStepWidth
         }
+        if (isDataNull) {
+            showNoRecordAvailable(canvas, availableWidth)
+        }
+    }
 
+    private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
+        val noDataText = "No record available"
+        val textBounds = Rect()
+        xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
+
+        canvas.drawText(
+            noDataText,
+            availableWidth / 2 - textBounds.width() / 2,
+            (height).toFloat() / 2,
+            xAxisPaint
+        )
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {

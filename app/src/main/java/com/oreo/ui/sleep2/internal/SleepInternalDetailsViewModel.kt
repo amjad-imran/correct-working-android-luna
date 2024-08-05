@@ -266,9 +266,14 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             InternalSelectedPeriod.WEEK -> {
                 return when (selectedLaunchMode) {
-                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
-                    SleepInternalLaunchState.SLEEP_TIME -> {
+                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                         SleepMultiLineChart2Fragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.WEEK
+                        })
+                    }
+
+                    SleepInternalLaunchState.SLEEP_TIME -> {
+                        SleepSleepTImeChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.WEEK
                         })
                     }
@@ -283,9 +288,14 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             InternalSelectedPeriod.MONTH -> {
                 return when (selectedLaunchMode) {
-                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
-                    SleepInternalLaunchState.SLEEP_TIME -> {
+                    SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                         SleepMultiLineChart2Fragment.newInstance(trendData.apply {
+                            this.selectedPeriod = InternalSelectedPeriod.MONTH
+                        })
+                    }
+
+                    SleepInternalLaunchState.SLEEP_TIME -> {
+                        SleepSleepTImeChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.MONTH
                         })
                     }

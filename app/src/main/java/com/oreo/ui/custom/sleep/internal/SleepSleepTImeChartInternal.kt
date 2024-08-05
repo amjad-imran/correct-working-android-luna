@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -16,15 +17,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
+import androidx.core.graphics.ColorUtils
+import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 import java.util.Locale
 
 
-class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs: AttributeSet?) :
+class SleepSleepTImeChartInternal constructor(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
 
     lateinit var xAxisPaint: Paint
@@ -37,20 +46,22 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     lateinit var textPaintHourI: Paint
     lateinit var textPaintNeed: Paint
     lateinit var textPaintNeedI: Paint
+
+    lateinit var linePaintHour: Paint
+    lateinit var linePaintHourI: Paint
+    lateinit var linePaintNeed: Paint
+    lateinit var linePaintNeedI: Paint
+
     lateinit var avgTextPaint: Paint
     lateinit var avgLinePaint: Paint
-    lateinit var avgBackPaint: Paint
-    lateinit var xOverlayLinePaint: Paint
-    lateinit var avgLineFillPaint: Paint
-
-
-    lateinit var linePaint: Paint
-    lateinit var linePaintI: Paint
+    lateinit var avgBackPaintHour: Paint
+    lateinit var avgBackPaintNeed: Paint
 
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
+    var dataStepWidth = 0F
 
     var mMax = 0
 
@@ -58,27 +69,33 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
-    private var startX: Float? = null
-    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
-    //private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     private val xAxisRange = ArrayList<LocalDate>()
+
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    var mAverage: Pair<Int, String>? = null
-    private var chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.PERCENT
+    private var selectedPeriod: InternalSelectedPeriod? = null
+    private var launchState: SleepInternalLaunchState? = null
+    lateinit var xOverlayLinePaint: Paint
+    lateinit var avgLineFillPaint: Paint
+
 
     /**
      * Pair(deep,rem)
      */
     private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
+
+    /**
+     * Pair(hour(value,displayValue),need(value,displayValue))
+     */
+    var mAverage: Pair<Pair<Int, String>?, Pair<Int, String>?>? = null
 
     init {
         init(attrs)
@@ -89,14 +106,16 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
-        avgLineFillPaint = Paint().apply {
-            style = Paint.Style.FILL
-            isAntiAlias = true
+        avgLineFillPaint = Paint()
+
+        avgBackPaintHour = Paint().apply {
+            this.color = Color.parseColor("#465c8a")
         }
 
-        avgBackPaint = Paint().apply {
-            this.color = Color.parseColor("#28ffffff")
+        avgBackPaintNeed = Paint().apply {
+            this.color = Color.parseColor("#7858cc")
         }
+
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
             strokeWidth = dip2px(2f).toFloat()
@@ -123,17 +142,17 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         }
 
         textPaintHour = Paint().apply {
-            this.color = Color.parseColor("#66ffffff")
+            this.color = Color.parseColor("#96ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintHourI = Paint().apply {
-            this.color = Color.parseColor("#22ffffff")
+            this.color = Color.parseColor("#20FFFFFF")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeed = Paint().apply {
-            this.color = Color.parseColor("#66ffffff")
+            this.color = Color.parseColor("#ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
@@ -143,14 +162,23 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             this.textSize = dip2px(12f).toFloat()
         }
 
-        linePaint = Paint().apply {
+        linePaintHour = Paint().apply {
             this.color = Color.parseColor("#465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
-        linePaintI = Paint().apply {
+        linePaintHourI = Paint().apply {
             this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
+        linePaintNeed = Paint().apply {
+            this.color = Color.parseColor("#7858cc")
+            strokeWidth = dip2px(1f).toFloat()
+        }
+        linePaintNeedI = Paint().apply {
+            this.color = Color.parseColor("#667858cc")
+            strokeWidth = dip2px(1f).toFloat()
+        }
+
 
         xLinePaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
@@ -194,18 +222,18 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         drawXAxis(canvas)
         drawYAxis(canvas)
         drawContent(canvas)
+
+        drawOverlay(canvas)
     }
 
-
     private fun drawContent(canvas: Canvas) {
-
         val availableWidth = (width - endPadding).toFloat()
+
         dataStepWidth = availableWidth / dataSet.size
+
         var start = 0f
         val circleRadiusBig = dip2px(4f).toFloat()
-        val circleRadiusSmall = dip2px(2f).toFloat()
         val paddingHorizontal = dip2px(4f)
-        val paddingTopText = dip2px(6f)
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
@@ -220,13 +248,25 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                     lastSentValuePos = selectedPosition
                 }
             }
-
             listener?.onValueSelected(selectedPosition)
         }
 
+        if (dataSet.isEmpty()) {
+            val noDataText = "No record available"
+            val textBounds = Rect()
+            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 
-        var isDataNull = true
+            canvas.drawText(
+                noDataText,
+                availableWidth / 2 - textBounds.width() / 2,
+                (height).toFloat() / 2,
+                xAxisPaint
+            )
+        }
+
         dataSet.forEachIndexed { index, it ->
+
+
             if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
@@ -239,17 +279,15 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                     rectFSelected,
                     selectedDayPaint
                 )
+
             }
 
+            val isSelectedPosition = selectedPosition == index
 
-            if (it.value1 != null && it.value1 != 0) {
-                isDataNull = false
-                val isSelectedPosition = selectedPosition == index
+            if (it.value1 != null) {
                 val actualPos = getYAxisValue(it.value1 ?: 0)
 
-                //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
-
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
@@ -260,53 +298,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                         actualPos,
                         start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
-                        if (isInteracting) linePaintI else linePaint
+                        if (isInteracting) linePaintHourI else linePaintHour
                     )
-
-
-                    //todo show gradient below line
-
                 }
-                canvas.drawCircle(
-                    start + dataStepWidth / 2,
-                    actualPos,
-                    circleRadiusSmall,
-                    if (isInteracting) circlePaintI else circlePaint
-                )
 
-                val topText = getTimeText(it.value1)
-                val textStart = start + dataStepWidth / 2 - textPaintHour.measureText(topText) / 2
-
-                canvas.drawText(
-                    topText,
-                    textStart,
-                    actualPos - paddingTopText,
-                    if (isInteracting) textPaintHourI else textPaintHour
-                )
-
-                if (isSelectedPosition && isInteracting) {
-                    val center = start + dataStepWidth / 2
-
-                    canvas.drawRect(
-                        RectF(
-                            center - 2f,
-                            topHeight.toFloat(),
-                            center + 2f,
-                            height.toFloat() - bottomHeight
-                        ),
-                        circlePaint
-                    )
-
-                    val widthHalf = dip2px(6f)
-                    val rectFTopI = RectF().apply {
-                        this.left = center - widthHalf
-                        this.right = center + widthHalf
-                        this.top = topHeight.toFloat()
-                        this.bottom = topHeight.toFloat() + dip2px(2f)
-                    }
-
-                    canvas.drawRect(rectFTopI, circlePaint)
-
+                if (isSelectedPosition) {
                     canvas.drawCircle(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -314,83 +310,171 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                         circlePaint
                     )
                 }
+
             }
+
+            if (it.value2 != null) {
+                val needPos = getYAxisValue(it.value2 ?: 0)
+
+                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
+                    val nextElement = dataSet[index + 1]
+
+                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0)
+                    canvas.drawLine(
+                        start + dataStepWidth / 2,
+                        needPos,
+                        start + dataStepWidth + dataStepWidth / 2,
+                        actualPosNext,
+                        if (isInteracting) linePaintNeedI else linePaintNeed
+                    )
+                }
+                if (isSelectedPosition) {
+                    canvas.drawCircle(
+                        start + dataStepWidth / 2,
+                        needPos,
+                        circleRadiusBig,
+                        circlePaint
+                    )
+                }
+
+            }
+
+            if (isSelectedPosition && isInteracting) {
+                val center = start + dataStepWidth / 2
+
+                canvas.drawRect(
+                    RectF(
+                        center - 2f,
+                        topHeight.toFloat(),
+                        center + 2f,
+                        height.toFloat() - bottomHeight
+                    ),
+                    circlePaint
+                )
+
+                val widthHalf = dip2px(6f)
+                val rectFTopI = RectF().apply {
+                    this.left = center - widthHalf
+                    this.right = center + widthHalf
+                    this.top = topHeight.toFloat()
+                    this.bottom = topHeight.toFloat() + dip2px(2f)
+                }
+
+                canvas.drawRect(rectFTopI, circlePaint)
+            }
+
             start += dataStepWidth
         }
-
-        if (isDataNull) {
-            showNoRecordAvailable(canvas, availableWidth)
-        }
-
     }
 
-    private fun getTimeText(value: Int): String {
-        when (chartType) {
-            SleepSingleGradientChartType.TIME -> {
-                val (hour, minute) = getFormattedSleepDuration(
-                    (value ?: 0L).toInt()
-                )
-                return String.format(locale = Locale.US, "%02d:%02d", hour, minute)
-            }
+    private fun drawOverlay(canvas: Canvas) {
+        if (isInteracting) return
+        if (dataSet.isEmpty()) return
 
-            SleepSingleGradientChartType.PERCENT -> {
-                return "${value}%"
+        if (selectedPeriod == InternalSelectedPeriod.WEEK) {
+            if (dataSet.size % 7 != 0) {
+                return
             }
         }
 
-    }
 
-    private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
-        val noDataText = "No record available"
+        val availableWidth = width.toFloat() - endPadding
+        val stepWidth = availableWidth / xAxisRange.size
+        var start = 0
+        val paddingText = dip2px(4f)
+
         val textBounds = Rect()
-        xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 
-        canvas.drawText(
-            noDataText,
-            availableWidth / 2 - textBounds.width() / 2,
-            (height).toFloat() / 2,
-            xAxisPaint
-        )
+
+        var lastPos = 0
+        xAxisRange.forEachIndexed { index, value ->
+
+            val dataSize = getDataSize(value)
+            val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
+            lastPos += dataSize
+
+            val startTime = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
+            val endTime = filterValues.mapNotNull { it.value2 }.averageWithoutZero()
+
+
+            if (startTime != 0) {
+
+                val pos = getYAxisValue(startTime)
+                val end = start.toFloat() + stepWidth
+
+                val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
+                    startTime
+                )
+
+                val text = String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
+
+                val overlayColor = getAvgBarColor(null, null)
+                xOverlayLinePaint.color = overlayColor
+                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+
+                canvas.drawText(
+                    text,
+                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                    pos - paddingText,
+                    xOverlayLinePaint
+                )
+
+                canvas.drawLine(
+                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )
+
+            }
+
+            if (endTime != 0) {
+
+                val pos = getYAxisValue(endTime)
+                val end = start.toFloat() + stepWidth
+
+                val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
+                    || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP
+                ) {
+                    val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
+                        endTime
+                    )
+                    String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
+                } else {
+                    "$endTime%"
+                }
+
+                val overlayColor = getAvgBarColor(null, null)
+
+                xOverlayLinePaint.color = overlayColor
+                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
+
+                canvas.drawText(
+                    text,
+                    start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
+                    pos - paddingText,
+                    xOverlayLinePaint
+                )
+
+                canvas.drawLine(
+                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )
+            }
+
+            start += stepWidth.toInt()
+        }
+
     }
 
-    private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null && mAverage?.first != 0) {
-            val textBounds = Rect()
-            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
-
-            val textX = width - textBounds.width().toFloat() - dip2px(6f)
-            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
-
-            canvas.drawRoundRect(
-                RectF(
-                    textX - dip2px(3f),
-                    textY - textBounds.height() - dip2px(3f),
-                    textX + textBounds.width() + dip2px(3f),
-                    textY + dip2px(3f)
-                ),
-                dip2px(2f).toFloat(),
-                dip2px(2f).toFloat(),
-                avgBackPaint
-            )
-
-            canvas.drawText(
-                mAverage!!.second,
-                textX,
-                textY,
-                avgTextPaint
-            )
-
-            canvas.drawLine(
-                0f,
-                getYAxisValue(mAverage!!.first),
-                availableWidth,
-                getYAxisValue(mAverage!!.first),
-                avgLinePaint
-            )
+    private fun getDataSize(date: LocalDate): Int {
+        return if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+            getDaysOfMonth(date.yearMonth)
         } else {
-            showNoRecordAvailable(canvas, availableWidth)
+            7
         }
     }
+
+    private fun getDaysOfMonth(yearMonth: YearMonth): Int {
+        return yearMonth.lengthOfMonth()
+    }
+
 
     private fun performHapticFeedbackCustom() {
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
@@ -413,6 +497,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val percent = (value.toFloat() / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
+
     }
 
     private fun drawBackGrid(canvas: Canvas) {
@@ -492,8 +577,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
         }
+        //showAverage(canvas, availableWidth)
 
-        showAverage(canvas, availableWidth)
     }
 
     private fun drawXAxis(canvas: Canvas) {
@@ -505,11 +590,18 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val displayText = it.format(DateTimeFormatter.ofPattern("E"))
-            val textWidth = xAxisPaint.measureText(displayText)
-            xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
+            val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
+                it.format(DateTimeFormatter.ofPattern("MMM"))
+            } else {
+                //for week
+                val weekFields = WeekFields.of(Locale.getDefault())
+                val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
+                "W$weekNumber"
+            }
+            val textWidth = xAxisPaint.measureText(displayMonth)
+            xAxisPaint.getTextBounds(displayMonth, 0, displayMonth.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(displayText, textStart, textY, xAxisPaint)
+            canvas.drawText(displayMonth, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -528,12 +620,17 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,
-        avgValue: Pair<Int, String>?,
+        avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
         selectedPosition: Int,
-        chartType: SleepSingleGradientChartType,
+        launchState: SleepInternalLaunchState?,
+        selectedPeriod: InternalSelectedPeriod?
     ) {
         dataPosition.clear()
-        this.chartType = chartType
+        mAverage = avgValue
+
+        this.launchState = launchState
+        this.selectedPeriod = selectedPeriod
+
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
 
@@ -545,11 +642,10 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
         mSelectedPosition = selectedPosition
         mMax = maxValue
-        mAverage = avgValue
-
         invalidate()
     }
 
+    var startX: Float? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
@@ -592,6 +688,40 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     }
 
 
+    /**
+     * current, previous value
+     * @return color
+     */
+    private fun getAvgBarColorRestorativeLogic(currentValue: Int?, previousValue: Int?): Int {
+        if (currentValue == null) return Color.WHITE
+        if (previousValue == null) return Color.WHITE
+
+        val currentPercentRaise =
+            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+
+        return if (currentPercentRaise >= 0) {//green
+            Color.parseColor("#29cc74")
+        } else if (currentPercentRaise > -2) {//yellow
+            Color.parseColor("#ffbb6b")
+        } else {//red
+            Color.parseColor("#ff7c94")
+        }
+    }
+
+    private fun getAvgBarColor(hour: Int?, need: Int?): Int {
+        if (hour == null) return Color.WHITE
+        if (need == null) return Color.WHITE
+
+
+        return if (hour >= need) {
+            //green
+            Color.parseColor("#29cc74")
+        } else {
+            Color.parseColor("#ff7c94")
+        }
+    }
+
+
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         isInteracting = true
@@ -608,8 +738,6 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     fun setClickListener(listener: SleepSingleBarAction?) {
         this.listener = listener
     }
-}
 
-enum class SleepSingleGradientChartType {
-    TIME, PERCENT
+
 }
