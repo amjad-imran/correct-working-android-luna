@@ -214,9 +214,6 @@ class SleepDashFragment :
         }
 
 
-        binding.lytHealthMonitor.ivArrow.setOnClickListener {
-            navigate(R.id.healthMonitorInternal)
-        }
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
             showInternalTrend(SleepInternalLaunchState.SLEEP_PERFORMANCE)
         }
@@ -667,6 +664,47 @@ class SleepDashFragment :
                 )
                 setTextColor(statusColor)
             }
+        }
+
+        data?.healthTrend?.apply {
+            if(!bloodOxy?.status.isNullOrEmpty()){
+                binding.lytHealthMonitor.imvSpo2.setImageResource(viewModel.getHealthTrendIcon(bloodOxy?.status))
+            }else{
+                binding.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if(!hrv?.status.isNullOrEmpty()){
+                binding.lytHealthMonitor.imvHrv.setImageResource(viewModel.getHealthTrendIcon(hrv?.status))
+            }else{
+                binding.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if(!rhr?.status.isNullOrEmpty()){
+                binding.lytHealthMonitor.imvRHR.setImageResource(viewModel.getHealthTrendIcon(rhr?.status))
+            }else{
+                binding.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if(!skinTemp?.status.isNullOrEmpty()){
+                binding.lytHealthMonitor.imvSkin.setImageResource(viewModel.getHealthTrendIcon(skinTemp?.status))
+            }else{
+                binding.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if(!resp?.status.isNullOrEmpty()){
+                binding.lytHealthMonitor.imvResp.setImageResource(viewModel.getHealthTrendIcon(resp?.status))
+            }else{
+                binding.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+        } ?: {
+
+        }
+
+        binding.lytHealthMonitor.ivArrow.setOnClickListener {
+            navigate(R.id.healthMonitorInternal, Bundle().apply {
+                this.putParcelable("healthTrend",  data?.healthTrend)
+            })
         }
 
         binding.lytScore.lytSleepActual.apply {

@@ -3,12 +3,12 @@ package com.oreo.ui.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHMInternalBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.OHMDataModel
 import com.oreo.ui.sleep2.SleepDashViewModel
-import com.oreo.ui.sleep2.internal.SkinTempInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +19,8 @@ class OHMInternalFragment :
 
     private val sleepDashViewModel: SleepDashViewModel by viewModels()
     private val viewModel: OHMInternalViewModel by viewModels()
+    private val args: OHMInternalFragmentArgs by navArgs()
+
     private val mAdapter: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
@@ -44,6 +46,9 @@ class OHMInternalFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            viewModel.healthTrend = args.healthTrend
+        }
         setupUI()
     }
 

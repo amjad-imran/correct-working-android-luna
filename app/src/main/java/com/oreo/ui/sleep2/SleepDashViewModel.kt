@@ -180,6 +180,20 @@ class SleepDashViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun getHealthTrendIcon(status: String?): Int {
+        val drawable: Int = if (status.equals("warning", true)) {
+            R.drawable.ic_health_warning
+        } else if (status.equals("good", true)) {
+            R.drawable.ic_health_good
+        } else if (status.equals("optimal", true)) {
+            R.drawable.ic_health_optimal
+        } else {
+            R.drawable.ic_health_good
+        }
+        return drawable
+    }
     fun getContributorInfo() {
         viewModelScope.launch {
             userActivityRepository.getContributorDetailsInfo(
