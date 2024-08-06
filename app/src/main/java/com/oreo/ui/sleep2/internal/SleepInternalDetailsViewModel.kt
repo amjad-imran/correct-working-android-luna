@@ -1,5 +1,6 @@
 package com.oreo.ui.sleep2.internal
 
+import android.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -335,6 +336,43 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
         }
 
+
+    }
+
+    /*
+            * 0-up
+            * 1-warning
+            * 2-red alert
+            * */
+    fun getHighlightBackType(type: Int): Pair<Int, Int> {
+        val background: Int
+        val textColor: Int
+        when (type) {
+            0 -> {
+                background = R.drawable.back_hm_optimal
+                textColor = Color.parseColor("#29cc74")
+            }
+
+            1 -> {
+                background = R.drawable.back_hm_fair
+                textColor = Color.parseColor("#ffffff")
+            }
+
+            else -> {
+                background = R.drawable.back_hm_warning
+                textColor = Color.parseColor("#ff7c94")
+            }
+        }
+        return Pair(background, textColor)
+    }
+
+    fun returnTrendsArrow(type: SleepInternalLaunchState): Int {
+        val icon: Int = when (type) {
+            SleepInternalLaunchState.SLEEP_PERFORMANCE, SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> R.drawable.ic_trend_up
+            SleepInternalLaunchState.EFFICIENCY, SleepInternalLaunchState.RESTFULNESS, SleepInternalLaunchState.LATENCY, SleepInternalLaunchState.SLEEP_DURATION -> R.drawable.ic_hm_tick
+            else -> 0
+        }
+        return icon
 
     }
 

@@ -1097,7 +1097,8 @@
     <string name="text_inactive_stress_definition">Non active stress measures your body’s physiological stress outside of sleep and exercise.</string>
     <string name="text_note">Note</string>
     <string name="text_allow_location_access">Allow location access</string>
-    <string name="text_location_perm_message">To enhance your outdoor workout experience, we need you to allow access to your location at all times. This enables real-time tracking and tailored fitness advice based on your exact route and conditions. Do you agree to allow Luna to always access your location during your workouts?</string>
+    <string name="text_location_perm_message">Our app utilizes the fitness.activity.read and fitness.activity.write scopes to provide users with a comprehensive view of their daily activities. Users can log and track workouts, monitor step count, and analyze calories burned.</string>
+    <string name="text_location_perm_message_2">Our app uses background location data to enhance your fitness tracking experience by accurately recording routes and distances for outdoor activities such as running, walking, and cycling. This allows for precise step count monitoring and calorie burn analysis, helping users gain comprehensive insights into their daily activities and overall fitness. We prioritize user privacy and ensure that location data is handled securely to provide the best possible fitness tracking experience.</string>
     <string name="text_no">No</string>
     <string name="text_permission_to_use_your_location">Permission to Use Your Location</string>
     <string name="text_don_t_allow">Don’t Allow</string>
