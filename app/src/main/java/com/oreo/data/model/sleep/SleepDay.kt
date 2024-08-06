@@ -1,5 +1,6 @@
 package com.oreo.data.model.sleep
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.CommonDataModelString
@@ -7,6 +8,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import kotlinx.parcelize.Parcelize
 
 data class SleepDay(
     val date: String,
@@ -53,8 +55,8 @@ data class SleepDay(
     var restfulness: CommonDataModel? = null,
 
     var timing: CommonDataModelString? = null,
-
-
+    @SerializedName("health_trend")
+    var healthTrend: HealthTrend? = null,
     @SerializedName("sleep_child")
     val sleepChild: List<MultiSleep>? = null,
 
@@ -76,6 +78,23 @@ data class SleepSummaryValue(
     val avg: Int? = null,
 )
 
+@Parcelize
+data class HealthTrend(
+    val resp: HealthTrendValue? = null,
+    val rhr: HealthTrendValue? = null,
+    val hrv: HealthTrendValue? = null,
+    @SerializedName("skin_temp")
+    val skinTemp: HealthTrendValue? = null,
+    val bloodOxy: HealthTrendValue? = null,
+) : Parcelable
+
+
+@Parcelize
+data class HealthTrendValue(
+    val value: Double? = null,
+    val text: String? = null,
+    val status: String? = null
+) : Parcelable
 data class MultiSleep(
     val start_time: String? = null,
     val end_time: String? = null,

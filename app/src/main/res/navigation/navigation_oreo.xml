@@ -886,7 +886,12 @@
     <fragment
         android:id="@+id/healthMonitorInternal"
         android:name="com.oreo.ui.internal.OHMInternalFragment"
-        android:label="fragment_health_monitor_internal" />
+        android:label="fragment_health_monitor_internal" >
+        <argument
+            android:name="healthTrend"
+            app:argType="com.oreo.data.model.sleep.HealthTrend"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/sleepPlannerFragment"
         android:name="com.oreo.ui.sleep2.sleepplanner.SleepPlannerFragment"
