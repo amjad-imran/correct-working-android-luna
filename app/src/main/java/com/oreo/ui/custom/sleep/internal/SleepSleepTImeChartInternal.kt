@@ -31,6 +31,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class SleepSleepTImeChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -285,14 +286,14 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             val isSelectedPosition = selectedPosition == index
 
             if (it.value1 != null) {
-                val actualPos = getYAxisValue(it.value1 ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 dataPosition.add(Pair(index, start))
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -314,12 +315,12 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             }
 
             if (it.value2 != null) {
-                val needPos = getYAxisValue(it.value2 ?: 0)
+                val needPos = getYAxisValue(it.value2 ?: 0.0f)
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         needPos,
@@ -393,13 +394,13 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
             lastPos += dataSize
 
-            val startTime = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
-            val endTime = filterValues.mapNotNull { it.value2 }.averageWithoutZero()
+            val startTime = filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()
+            val endTime = filterValues.mapNotNull { it.value2?.roundToInt() }.averageWithoutZero()
 
 
             if (startTime != 0) {
 
-                val pos = getYAxisValue(startTime)
+                val pos = getYAxisValue(startTime.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
@@ -427,7 +428,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
             if (endTime != 0) {
 
-                val pos = getYAxisValue(endTime)
+                val pos = getYAxisValue(endTime.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
@@ -493,7 +494,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
+    private fun getYAxisValue(value: Float): Float {
         val percent = (value.toFloat() / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
@@ -532,14 +533,14 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -547,15 +548,15 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -563,15 +564,15 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }

@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.TrendsGraphData
@@ -28,7 +29,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun getYAxisRange(
-        maxValue: Int,
+        maxValue: Float,
         contributorType: SleepInternalLaunchState?
     ): List<Pair<Int, String>> {
         val default = arrayListOf(
@@ -39,8 +40,28 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             Pair(100, "100%")
         )
         return when (contributorType) {
-            SleepInternalLaunchState.RESTING_HEART_RATE->{
-                if (maxValue <= 80) {
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                if (maxValue <= 120.0f) {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(30, "30"),
+                        Pair(60, "60"),
+                        Pair(90, "90"),
+                        Pair(120, "120")
+                    )
+                } else {
+                    return arrayListOf(
+                        Pair(0, "0"),
+                        Pair(40, "40"),
+                        Pair(80, "80"),
+                        Pair(120, "120"),
+                        Pair(160, "160")
+                    )
+                }
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE, SleepInternalLaunchState.HRV -> {
+                if (maxValue <= 80.0f) {
                     return arrayListOf(
                         Pair(0, "0"),
                         Pair(20, "20"),
@@ -57,8 +78,10 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                         Pair(160, "160")
                     )
                 }
-            }SleepInternalLaunchState.RESPIRATORY_RATE->{
-                if (maxValue <= 20) {
+            }
+
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                if (maxValue <= 20.0f) {
                     return arrayListOf(
                         Pair(0, "0"),
                         Pair(5, "5"),
@@ -76,10 +99,11 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                     )
                 }
             }
+
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> default
             SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                 return when (maxValue) {
-                    in 0..360 -> {
+                    in 0.0f..360.0f -> {
                         arrayListOf(
                             Pair(0, "0"),
                             Pair(120, "2"),
@@ -88,7 +112,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                         )
                     }
 
-                    in 0..720 -> {
+                    in 0.0f..720.0f -> {
                         arrayListOf(
                             Pair(0, "0"),
                             Pair(180, "3"),
@@ -117,7 +141,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
-                if (maxValue <= 60) {
+                if (maxValue <= 60.0f) {
                     return arrayListOf(
                         Pair(0, "0"),
                         Pair(15, "15"),
@@ -137,7 +161,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.SLEEP_DURATION -> {
-                if (maxValue <= 12 * 60) {
+                if (maxValue <= 12 * 60.0f) {
                     arrayListOf(
                         Pair(0, "0"),
                         Pair(3 * 60, "3"),
@@ -157,7 +181,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.LATENCY -> {
-                if (maxValue <= 40) {
+                if (maxValue <= 40.0f) {
                     return arrayListOf(
                         Pair(0, "0"),
                         Pair(10, "10"),
@@ -177,7 +201,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
             }
 
             SleepInternalLaunchState.RESTFULNESS -> {
-                if (maxValue <= 4) {
+                if (maxValue <= 4.0f) {
                     return arrayListOf(
                         Pair(0, "0"),
                         Pair(1, "1"),
@@ -202,20 +226,19 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
     fun getMaxValue(
         dataListType1: List<GraphDataModel>? = null,
-        dataListType2: List<GraphDataModel>? = null,
         contributorType: SleepInternalLaunchState?
-    ): Int {
+    ): Float {
         val nonNullValues = dataListType1?.mapNotNull { it.value1 }
         return when (contributorType) {
-            SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100
-            SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100.0f
+            SleepInternalLaunchState.HOUR_VS_NEED,
             SleepInternalLaunchState.SLEEP_TIME -> {
-                var mMax = 0
-                dataListType2?.forEach {
+                var mMax = 0.0f
+                dataListType1?.forEach {
 
-                    var max = it.value1 ?: 0
-                    if ((it.value2 ?: 0) > max) {
-                        max = it.value2 ?: 0
+                    var max = it.value1 ?: 0.0f
+                    if ((it.value2 ?: 0.0f) > max) {
+                        max = it.value2 ?: 0.0f
                     }
 
                     if (max > mMax) {
@@ -226,15 +249,28 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 mMax += ((0.2) * mMax).toInt()
                 return mMax
             }
+            SleepInternalLaunchState.RESTORATIVE_SLEEP->{
+                var mMax = 0.0f
+                dataListType1?.forEach {
+                    val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
+                    if (sum > mMax) {
+                        mMax = sum
+                    }
+                }
 
-            SleepInternalLaunchState.TIMING -> 100
+                mMax += ((0.2) * mMax).toInt()
+
+                return mMax
+            }
+
+            SleepInternalLaunchState.TIMING -> 100.0f
             SleepInternalLaunchState.EFFICIENCY -> {
-                100
+                100.0f
             }
 
             SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.REM_SLEEP -> {
                 return if (nonNullValues.isNullOrEmpty()) {
-                    60
+                    60.0f
                 } else {
                     nonNullValues.max()
                 }
@@ -242,7 +278,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
             SleepInternalLaunchState.SLEEP_DURATION -> {
                 if (nonNullValues.isNullOrEmpty()) {
-                    12 * 60
+                    12 * 60.0f
                 } else {
                     nonNullValues.max()
                 }
@@ -250,7 +286,7 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
             SleepInternalLaunchState.LATENCY -> {
                 return if (nonNullValues.isNullOrEmpty()) {
-                    25
+                    25.0f
                 } else {
                     nonNullValues.max()
                 }
@@ -258,28 +294,46 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
             SleepInternalLaunchState.RESTFULNESS -> {
                 return if (nonNullValues.isNullOrEmpty()) {
-                    4
-                } else {
-                    nonNullValues.max()
-                }
-            }
-            SleepInternalLaunchState.RESPIRATORY_RATE -> {
-                return if (nonNullValues.isNullOrEmpty()) {
-                    20
-                } else {
-                    nonNullValues.max()
-                }
-            }
-            SleepInternalLaunchState.RESTING_HEART_RATE -> {
-                return if (nonNullValues.isNullOrEmpty()) {
-                    80
+                    4.0f
                 } else {
                     nonNullValues.max()
                 }
             }
 
-            null -> 100
-            else -> 100
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    20.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    80.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.HRV -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    80.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    120.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            null -> 100.0f
+            else -> 100.0f
         }
     }
 
@@ -303,32 +357,47 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
         dataListType1: List<GraphDataModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,
         contributorType: SleepInternalLaunchState?
-    ): Pair<Int, String>? {
+    ): Pair<Float, String>? {
         val filteredData = dataListType1?.mapNotNull { it.value1 }
         if (filteredData.isNullOrEmpty()) {
             return null
         }
 
-        val avg = filteredData.average().roundToInt()
+        val avg = filteredData.average().toFloat()
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> Pair(avg, "$avg%")
-            SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(avg, "$avg%")
 
             SleepInternalLaunchState.HOUR_VS_NEED -> Pair(avg, "$avg%")
             SleepInternalLaunchState.SLEEP_TIME -> Pair(avg, "$avg%")
             SleepInternalLaunchState.TIMING -> Pair(avg, "$avg%")
-            SleepInternalLaunchState.EFFICIENCY -> Pair(avg, "$avg%")
-            SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
-                Pair(avg, "${avg}min")
+            SleepInternalLaunchState.EFFICIENCY, SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(
+                avg,
+                "${avg.roundToInt()}%"
+            )
+
+            SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.LATENCY -> {
+                Pair(avg, "${avg.roundToInt()}min")
             }
 
             SleepInternalLaunchState.SLEEP_DURATION -> {
-                Pair(avg, "${avg / 60}")
+                val (hour, min) = ApplicationUtils.getFormattedSleepDuration(avg.roundToInt())
+                Pair(avg, String.format(locale = Locale.US, "%d:%02d", hour, min))
             }
 
-            SleepInternalLaunchState.LATENCY -> Pair(avg, "${avg}min")
-            SleepInternalLaunchState.RESTFULNESS,SleepInternalLaunchState.RESTING_HEART_RATE -> Pair(avg, "$avg")
-            SleepInternalLaunchState.RESPIRATORY_RATE -> Pair(avg, "$avg")
+            SleepInternalLaunchState.RESTFULNESS, SleepInternalLaunchState.RESPIRATORY_RATE,
+            SleepInternalLaunchState.BLOOD_OXYGEN, SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                Pair(
+                    avg,
+                    String.format(locale = Locale.US, "%.1f", avg)
+                )
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE,
+            SleepInternalLaunchState.HRV -> Pair(
+                avg,
+                "${avg.roundToInt()}"
+            )
+
             else -> Pair(avg, "$avg%")
         }
     }

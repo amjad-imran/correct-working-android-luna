@@ -15,7 +15,9 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.health.MultiSleepModel
 import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.SleepHourlyBreakup
 import javax.inject.Inject
@@ -29,6 +31,78 @@ class DataConverter
     val ringDataStore: RingDataStore,
     val locationDataSource: LocationDataSource
 ) {
+
+    fun mergeSleepDataV2(
+        sleepArray: List<MultiSleepModel>?, naps: List<Nap>?
+    ): List<SleepHourlyBreakup>? {
+
+
+        LOGS.d("dfkjskfjsdhkfj $sleepArray")
+        val dates = ArrayList<String>()
+
+        naps?.forEach {
+            dates.add(it.startTime)
+        }
+        sleepArray?.forEach {
+            dates.add(it.startTime)
+        }
+        val sortedDates = DateFormats.sortDates(dates)
+        val newSleepArray = ArrayList<SleepHourlyBreakup>()
+        var lastDateTime: String? = null
+
+        sortedDates.forEach {
+            val dateTime = it.toString("yyyy-MM-dd HH:mm:ss")
+
+            val sleep = sleepArray?.find { it.startTime.equals(dateTime) }
+
+            if (sleep != null) {
+                sleep.hourly_breakup?.let { breakup ->
+
+                    if (lastDateTime != null) {
+                        val duration = DateFormats.getDifferenceInMinutes(
+                            lastDateTime, sleep.startTime
+                        ) * 60
+                        newSleepArray.add(
+                            SleepHourlyBreakup(
+                                start_time = lastDateTime ?: "",
+                                end_time = sleep.startTime,
+                                duration = duration,
+                                sleep_type = "awake",
+                                date = ""
+                            )
+                        )
+                    }
+
+                    newSleepArray.addAll(breakup)
+                    lastDateTime = breakup.lastOrNull()?.end_time
+                }
+            } else {
+                val nap = naps?.find { it.startTime.equals(dateTime) }
+                if (nap != null) {
+                    val breakup = getSleepDataBreakup(dateTime, naps)
+                    if (breakup != null) {
+                        if (lastDateTime != null) {
+                            val duration = DateFormats.getDifferenceInMinutes(
+                                lastDateTime, breakup.start_time
+                            ) * 60
+                            newSleepArray.add(
+                                SleepHourlyBreakup(
+                                    start_time = lastDateTime ?: "",
+                                    end_time = breakup.start_time ?: "",
+                                    duration = duration,
+                                    sleep_type = "awake",
+                                    date = ""
+                                )
+                            )
+                        }
+                        newSleepArray.add(breakup)
+                        lastDateTime = breakup.end_time
+                    }
+                }
+            }
+        }
+        return newSleepArray
+    }
 
     fun mergeSleepData(
         sleepArray: List<SleepHourlyBreakup>?, naps: List<Nap>?

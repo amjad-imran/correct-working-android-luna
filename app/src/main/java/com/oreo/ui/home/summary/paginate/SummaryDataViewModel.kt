@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -97,15 +98,15 @@ class SummaryDataViewModel @Inject constructor(
             }
             val filteredNaps = nap.filter { !it.isNextDayNap }
 
-            val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup, filteredNaps
+            val newSleepArray = dataConverter.mergeSleepDataV2(
+                healthData.sleep?.sleeps, filteredNaps
             )
 
             healthData.sleep.let {
-                if ((it?.sleepScore?.value ?: 0) > 0) {
+                if ((it?.sleep_score?.value ?: 0) > 0) {
 
                     var totalSleep: Int? = null
-                    it?.sleepdata?.forEach {
+                    it?.sleeps?.forEach {
                         if (totalSleep == null) {
                             totalSleep = 0
                         }
@@ -116,11 +117,11 @@ class SummaryDataViewModel @Inject constructor(
                     userActivities.add(
                         OHealthOverview.Sleep(
                             ODashboardSleepModel(
-                                sleepScore = it?.sleepScore?.value,
+                                sleepScore = it?.sleep_score?.value,
                                 totalSleep = totalSleep,
                                 restingHr = healthData.sleep?.avg_hrv,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
-                                status = it?.sleepScore?.text?.capitalizeWords(),
+                                status = it?.sleep_score?.text?.capitalizeWords(),
                                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                                 sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,

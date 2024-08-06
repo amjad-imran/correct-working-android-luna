@@ -21,6 +21,7 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import kotlin.math.roundToInt
 
 
 class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -230,14 +231,14 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             val isSelectedPosition = selectedPosition == index
 
             if (it.value1 != null) {
-                val actualPos = getYAxisValue(it.value1 ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 dataPosition.add(Pair(index, start))
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -255,7 +256,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 )
 
                 if (isSelectedPosition.not()) {
-                    val (hour, minute) = getFormattedSleepDuration(it.value1 ?: 0)
+                    val (hour, minute) = getFormattedSleepDuration((it.value1 ?: 0.0f).roundToInt())
 
                     val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
@@ -265,7 +266,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                         textPaintHour.getTextBounds(text, 0, text.length, xTextBounds)
                     }
                     val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
-                    val yPos = if ((it.value1 ?: 0) > (it.value2 ?: 0)) {
+                    val yPos = if ((it.value1 ?: 0.0f) > (it.value2 ?: 0.0f)) {
                         actualPos - textPadding
                     } else {
                         actualPos + xTextBounds.height() + textPadding
@@ -281,12 +282,12 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             }
 
             if (it.value2 != null) {
-                val needPos = getYAxisValue(it.value2 ?: 0)
+                val needPos = getYAxisValue(it.value2 ?: 0.0f)
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         needPos,
@@ -305,7 +306,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
 
                 if (isSelectedPosition.not()) {
-                    val (hour, minute) = getFormattedSleepDuration(it.value2 ?: 0)
+                    val (hour, minute) = getFormattedSleepDuration((it.value2 ?: 0.0f).roundToInt())
 
                     val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
@@ -316,7 +317,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                     }
                     val textStart = start + dataStepWidth / 2 - xTextBounds.width() / 2
 
-                    val yPos = if ((it.value1 ?: 0) > (it.value2 ?: 0)) {
+                    val yPos = if ((it.value1 ?: 0.0f) > (it.value2 ?: 0.0f)) {
                         needPos + xTextBounds.height() + textPadding
                     } else {
                         needPos - textPadding
@@ -375,8 +376,8 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    private fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -413,14 +414,14 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -428,15 +429,15 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -444,15 +445,15 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }

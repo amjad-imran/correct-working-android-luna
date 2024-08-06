@@ -47,7 +47,7 @@ class SleepMultiLineChartFragment :
         val dataList = convertData(pageData?.data)
 
         val maxValue = sharedViewModel.getMaxValue(
-            dataListType2 = dataList, contributorType = pageData?.contributorType
+            dataListType1 = dataList, contributorType = pageData?.contributorType
         )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
 
@@ -82,12 +82,12 @@ class SleepMultiLineChartFragment :
                 value1 = if (it.value1 == null) {
                     null
                 } else {
-                    (it.value1 ?: 0) / 60
+                    (it.value1 ?: 0.0f) / 60
                 },
                 value2 = if (it.value2 == null) {
                     null
                 } else {
-                    (it.value2 ?: 0) / 60
+                    (it.value2 ?: 0.0f) / 60
                 }
             )
         } ?: ArrayList()

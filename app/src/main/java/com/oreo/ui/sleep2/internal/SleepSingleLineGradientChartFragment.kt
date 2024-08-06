@@ -59,7 +59,10 @@ class SleepSingleLineGradientChartFragment :
 
         val type = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
             SleepSingleGradientChartType.TIME
-        } else if (pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE) {
+        } else if (pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE
+            || pageData?.contributorType == SleepInternalLaunchState.HRV
+            || pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE
+        ) {
             SleepSingleGradientChartType.DEFAULT
         } else {
             SleepSingleGradientChartType.PERCENT
@@ -95,7 +98,7 @@ class SleepSingleLineGradientChartFragment :
                 date = LocalDate.parse(it.date),
                 value1 = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
                     if (it.value1 != null) {
-                        (it.value1 ?: 0) / 60
+                        (it.value1 ?: 0.0f) / 60
                     } else null
                 } else {
                     it.value1

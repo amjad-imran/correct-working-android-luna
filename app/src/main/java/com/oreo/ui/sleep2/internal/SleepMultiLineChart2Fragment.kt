@@ -50,7 +50,7 @@ class SleepMultiLineChart2Fragment :
         val dataList = convertData(pageData?.data)
 
         val maxValue = sharedViewModel.getMaxValue(
-            dataListType2 = dataList, contributorType = pageData?.contributorType
+            dataListType1 = dataList, contributorType = pageData?.contributorType
         )
         val avgValue =
             getAvgValue(dataListType2 = dataList, contributorType = pageData?.contributorType)
@@ -90,12 +90,12 @@ class SleepMultiLineChart2Fragment :
                 value1 = if (it.value1 == null) {
                     null
                 } else {
-                    (it.value1 ?: 0) / 60
+                    (it.value1 ?: 0.0f) / 60
                 },
                 value2 = if (it.value2 == null) {
                     null
                 } else {
-                    (it.value2 ?: 0) / 60
+                    (it.value2 ?: 0.0f) / 60
                 }
             )
         } ?: ArrayList()

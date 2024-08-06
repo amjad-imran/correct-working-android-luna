@@ -21,6 +21,7 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import kotlin.math.roundToInt
 
 
 class SleepRestorativeChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -60,7 +61,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<Pair<Int?, Int?>>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -195,17 +196,17 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 )
             }
 
-            val sum = (it.first ?: 0) + (it.second ?: 0)
-            if (sum != 0) {
+            val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
+            if (sum != 0.0f) {
 
                 val top = getYAxisValue(sum)
                 val isSelectedPosition = selectedPosition == index
 
-                val remEnd = getYAxisValue(it.second ?: 0)
+                val remEnd = getYAxisValue(it.value2 ?: 0.0f)
                 dataPosition.add(Pair(index, start))
 
                 var topRectF: RectF? = null
-                if (it.second != 0) {
+                if (it.value2 != 0.0f) {
                     val rectFRem = RectF(
                         start + barWidth / 2,
                         remEnd + padding,
@@ -223,7 +224,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     )
                 }
 
-                if (it.first != 0) {
+                if (it.value1 != 0.0f) {
                     val rectFDeep = RectF(
                         start + barWidth / 2,
                         top,
@@ -261,7 +262,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 }
 
                 if (isSelectedPosition.not()) {
-                    val (hour, minute) = getFormattedSleepDuration(sum)
+                    val (hour, minute) = getFormattedSleepDuration(sum.roundToInt())
 
                     val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
@@ -292,8 +293,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    private fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -329,14 +330,14 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -344,15 +345,15 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -360,15 +361,15 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }
@@ -463,7 +464,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
      * selected position
      */
     fun setDataSet(
-        list: List<Pair<Int?, Int?>>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         maxValue: Int,
         selectedPosition: Int

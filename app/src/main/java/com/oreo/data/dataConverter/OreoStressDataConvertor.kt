@@ -47,7 +47,7 @@ constructor(
             }
         }
 
-        getSleepSection(dayData.sleep)?.let { pos ->
+        getSleepSections(dayData.sleep).forEach {pos->
             sections.add(
                 Section(
                     "sleep",
@@ -244,13 +244,21 @@ constructor(
 
     }
 
+    private fun getSleepSections(sleep: OreoSleepModel?): List<Pair<Int, Int>> {
+        val returnData = ArrayList<Pair<Int, Int>>()
+        sleep?.sleeps?.forEach {
+            getSleepSection(it.startTime, it.endTime)?.let {
+                returnData.add(it)
+            }
+        }
+        return returnData
+    }
+
     /**
      * "start_time":"2024-01-29 23:34:00",
      * "end_time":"2024-01-29 23:43:30",
      */
-    private fun getSleepSection(sleep: OreoSleepModel?): Pair<Int, Int>? {
-        val startTime = sleep?.hourly_breakup?.firstOrNull()?.start_time
-        val endTime = sleep?.hourly_breakup?.lastOrNull()?.end_time
+    private fun getSleepSection(startTime: String?, endTime: String?): Pair<Int, Int>? {
         if (startTime == null || endTime == null) return null
 
         val sleepStartDate = startTime.split(" ")[0]

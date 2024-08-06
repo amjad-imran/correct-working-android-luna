@@ -350,18 +350,25 @@ class SummaryDataViewModelToday @Inject constructor(
             )
 
 
-            val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup,
-                healthData.sleep?.naps?.filter { !it.isNextDayNap }
+            val newSleepArray = dataConverter.mergeSleepDataV2(
+                healthData.sleep?.sleeps, healthData.sleep?.naps?.filter { !it.isNextDayNap }
             )
 
 
+            var totalSleep: Int? = null
+            healthData.sleep?.sleeps?.forEach {
+                if (totalSleep == null) {
+                    totalSleep = 0
+                }
+                totalSleep = totalSleep!! + it.totalDuration
+            }
+
             val sleepModel = ODashboardSleepModel(
-                sleepScore = healthData.sleep?.sleepScore?.value,
-                totalSleep = healthData.sleep?.totalSleep?.value,
-                restingHr = healthData.sleep?.restingHr?.value,
-                sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
-                status = healthData.sleep?.sleepScore?.text?.capitalizeWords(),
+                sleepScore = healthData.sleep?.sleep_score?.value,
+                totalSleep = totalSleep,
+                restingHr = healthData.sleep?.avg_hrv,
+                sleepStage = newSleepArray ?: ArrayList(),
+                status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                 sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
@@ -384,7 +391,7 @@ class SummaryDataViewModelToday @Inject constructor(
             when (daySlot) {
                 0 -> {
                     //sleep
-                    if (healthData.sleep?.sleepScore != null) {
+                    if (healthData.sleep?.sleep_score != null) {
                         if (registerDate != 0) {
                             healthData.readiness?.let {
                                 if ((readinessModel.readinessScore ?: 0) > 0) {
@@ -423,7 +430,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 1 -> {
 
                     //sleep
-                    if (healthData.sleep?.sleepScore != null) {
+                    if (healthData.sleep?.sleep_score != null) {
                         if (registerDate != 0) {
                             healthData.readiness?.let {
                                 if ((readinessModel.readinessScore ?: 0) > 0) {
@@ -563,7 +570,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
                     if (registerDate != 0) {
-                        if (healthData.sleep?.sleepScore != null) {
+                        if (healthData.sleep?.sleep_score != null) {
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(

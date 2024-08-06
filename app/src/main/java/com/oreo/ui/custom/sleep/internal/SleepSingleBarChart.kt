@@ -19,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import kotlin.math.roundToInt
 
 
 class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
@@ -61,7 +62,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     var mMax = 0
-    var mAverage: Pair<Int, String>? = null
+    var mAverage: Pair<Float, String>? = null
 
 
     init {
@@ -268,9 +269,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                     val text = if (contributorType == SleepInternalLaunchState.SLEEP_PERFORMANCE
                         || contributorType == SleepInternalLaunchState.BLOOD_OXYGEN
                     ) {
-                        "${it.value1}%"
+                        "${it.value1.roundToInt()}%"
                     } else {
-                        "${it.value1}"
+                        "${it.value1.roundToInt()}"
                     }
                     val xTextBounds = Rect()
                     if (isInteracting) {
@@ -322,8 +323,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         return null
     }
 
-    fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -358,14 +359,14 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -373,7 +374,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
 
@@ -381,9 +382,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -391,7 +392,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
 
@@ -399,9 +400,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }
@@ -472,7 +473,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         maxValue: Int,
-        avgValue: Pair<Int, String>?,
+        avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         contributorType: SleepInternalLaunchState?
     ) {

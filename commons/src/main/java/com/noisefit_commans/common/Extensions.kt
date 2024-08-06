@@ -107,6 +107,22 @@ fun List<Int>.averageWithoutZero(): Int {
         0
     }
 }
+fun List<Int>.averageWithoutZeroGeneric(): Int {
+    val newList = this.filter { it != 0 }
+    return if (newList.isNotEmpty()) {
+        newList.average().roundToInt()
+    } else {
+        0
+    }
+}
+fun List<Float>.averageWithoutZeroGenericFloat(): Float {
+    val newList = this.filter { it != 0.0f }
+    return if (newList.isNotEmpty()) {
+        newList.average().toFloat()
+    } else {
+        0.0f
+    }
+}
 
 fun List<Int>.averageDaytimeValues(): Int {
     val newList = this.filter { it != 0 && it != 255 }

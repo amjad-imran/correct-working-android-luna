@@ -88,7 +88,7 @@ constructor(
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"
             chartModel.index = DateFormats.formatWeek(it.date)
-            chartModel.value = it.sleepScore?.value ?: 0
+            chartModel.value = it.sleep_score?.value ?: 0
             list.add(chartModel)
             dateList.add(it.date)
         }
@@ -676,8 +676,8 @@ constructor(
         val itemList: ArrayList<Int> = ArrayList()
         if (it.isNotEmpty()) {
             it.forEach {
-                if ((it.sleepScore?.value ?: 0) > 0) {
-                    itemList.add(it.sleepScore?.value ?: 0)
+                if ((it.sleep_score?.value ?: 0) > 0) {
+                    itemList.add(it.sleep_score?.value ?: 0)
                 }
             }
             avgValue = itemList.averageWithoutZero()

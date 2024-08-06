@@ -93,7 +93,7 @@ class SleepBarChartFragment :
                     if (it.value1 == null) {
                         null
                     } else {
-                        (it.value1 ?: 0) / 60
+                        (it.value1 ?: 0.0f) / 60
                     }
                 } else {
                     it.value1
