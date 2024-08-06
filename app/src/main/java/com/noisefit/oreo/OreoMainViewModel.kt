@@ -321,7 +321,7 @@ constructor(
     private fun sendSleepEvents(data: ServerUserHealthData) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            if ((data.sleep?.sleepScore?.value ?: 0) == 0) {
+            if ((data.sleep?.sleep_score?.value ?: 0) == 0) {
                 return@launch
             }
             val isSynced = localDataStore.isSleepSyncedForDate(data.date)
@@ -334,7 +334,7 @@ constructor(
                 HashMap<String, Any>().apply {
                     this[MoEngageAppEventParams.date] = data.date
                     this[MoEngageAppEventParams.first_name] = name ?: ""
-                    this[MoEngageAppEventParams.sleep_score] = data.sleep?.sleepScore ?: 0
+                    this[MoEngageAppEventParams.sleep_score] = data.sleep?.sleep_score ?: 0
                     this[MoEngageAppEventParams.sleep_duration] = data.sleep?.totalSleep?.value ?: 0
                     this[MoEngageAppEventParams.rem_sleep_duration] =
                         data.sleep?.remSleep?.value ?: 0
@@ -614,7 +614,7 @@ constructor(
 
         //Sleep
         response.sleep?.let {
-            if ((it.sleepScore?.value ?: 0) > 75 && (it.totalSleep?.value
+            if ((it.sleep_score?.value ?: 0) > 75 && (it.totalSleep?.value
                     ?: 0) >= 25200 && (it.totalSleep?.value
                     ?: 0) <= 32400
             ) {

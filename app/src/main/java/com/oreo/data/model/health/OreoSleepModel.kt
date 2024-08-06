@@ -6,11 +6,10 @@ import kotlinx.parcelize.Parcelize
 
 data class OreoSleepModel(
     var date: String,//YYYY-MM-DD
-    val sleepdata: List<MultiSleepModel>? = null,
+    val sleeps: List<MultiSleepModel>? = null,
     val avg_hrv:Int?=null,
 
-
-    var sleepScore: CommonDataModel? = null,
+    var sleep_score: CommonDataModel? = null,
     var totalSleep: CommonDataModel? = null,
     var timeInBed: CommonDataModel? = null,
     var sleepEfficiency: CommonDataModel? = null,
@@ -41,7 +40,8 @@ data class MultiSleepModel(
     @SerializedName("end_time") val endTime: String,
     @SerializedName("sleep_score") val sleepScore: Int? = null,
     @SerializedName("avg_hrv") val avgHrv: Int? = null,
-)
+    var hourly_breakup: List<SleepHourlyBreakup>? = null,
+    )
 
 data class Nap(
     val date: String,

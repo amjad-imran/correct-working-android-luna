@@ -1009,7 +1009,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepEfficiency.tvTitle.text =
             getString(R.string.text_sleep_efficiency)
         setSleepBannerViewPager(dayData.nudges)
-        val sleepScoreData = dayData.sleepScore
+        val sleepScoreData = dayData.sleep_score
         if (sleepScoreData != null) {
             binding.lytSleepScore.lytSleepAvg.emptyText.gone()
             binding.lytSleepScore.lytSleepAvg.tvValue.visible()
