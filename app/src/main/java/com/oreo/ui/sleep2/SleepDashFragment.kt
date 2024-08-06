@@ -1,9 +1,14 @@
 package com.oreo.ui.sleep2
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -51,6 +56,8 @@ import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
@@ -93,18 +100,71 @@ class SleepDashFragment :
         })
     }
 
+    private fun setBlurAddCta(radius: Float = 5f) {
+        val decorView = requireActivity().window.decorView;
+        val rootView = binding.root
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(requireActivity())
+        }
+
+        binding.blurViewSelector.setupWith(rootView, blurAlgo)
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
 
         viewModel.updateSelectedDate(LocalDate.parse(mainViewModel.selectedDate))
-
+        setBlurAddCta()
         initCalender()
         setRecycler()
     }
 
+    private fun showAddSleepCta() {
+        viewModel.addSleepCtaVisibility.postValue(true)
+        //binding.btnAddWorkout.visible()
+    }
+
+    private fun showAddSleep() {
+        showAddSleepCta()
+        binding.blurViewSelector.gone()
+        navigate(R.id.fragmentAddSleep)
+    }
+    
     override fun initListener() {
 
+        binding.blurViewSelector.setOnClickListener {
+            animateFabDown()
+            //binding.blurViewSelector.gone()
+        }
+        binding.lytAddSleep.tvAddSleep.setOnClickListener {
+            showAddSleep()
+        }
+
+        binding.lytAddSleep.ivRecordSleep.setOnClickListener {
+            showAddSleep()
+        }
+
+        binding.btnAddWorkout.setOnClickListener {
+            setBlurAddCta()
+            viewModel.addSleepCtaVisibility.postValue(false)
+
+            animateFabUp()
+
+            //binding.blurViewSelector.visible()
+        }
+
+
+        binding.lytAddSleep.ivSleepClose.setOnClickListener {
+            animateFabDown()
+        }
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (Math.abs(scrollY - oldScrollY) > 0) {
                 sleepDayGraphView?.resetIfInteracting()
@@ -172,8 +232,132 @@ class SleepDashFragment :
 
     }
 
+
+    private fun animateFabUp() {
+        binding.blurViewSelector.visible()
+
+        animateItemsUp(binding.lytAddSleep.ivRecordSleep, 200f)
+        animateItemsUp(binding.lytAddSleep.tvAddSleep, 200f)
+
+
+
+        val rotate =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivSleepClose,
+                View.ROTATION,
+                0f,
+                -45f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivAddSleepBack,
+                View.ALPHA,
+                1f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 0f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 0f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(rotate, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
+        animatorSet.start()
+
+
+    }
+
+    private fun animateFabDown() {
+        //binding.blurViewSelector.gone()
+
+        animateItemsDown(binding.lytAddSleep.ivRecordSleep, binding.lytAddSleep.ivSleepClose)
+        animateItemsDown(binding.lytAddSleep.tvAddSleep, binding.lytAddSleep.ivSleepClose)
+        
+        val alpha =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivSleepClose,
+                View.ROTATION,
+                -45f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivAddSleepBack,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                1f,
+                0.3f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 1f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 1f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(alpha, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
+        animatorSet.start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                viewModel.addSleepCtaVisibility.value = (true)
+                binding.blurViewSelector.gone()
+            } catch (exp: Exception) {
+            }
+        }, viewModel.FAB_ANIM_TIME)
+
+    }
+
     override fun subscribeObservers() {
 
+        viewModel.addSleepCtaVisibility.observe(this) {
+            if (it) {
+                binding.btnAddWorkout.visible()
+            } else {
+                binding.btnAddWorkout.gone()
+            }
+        }
         viewModel.calendarStartDate.observe(this) {
             it.getContent()?.let {
                 trendsSharedViewModel.calendarStartDate = it
@@ -282,6 +466,7 @@ class SleepDashFragment :
         viewModel.selectedDate.observe(this) {
             try {
                 binding.vCalendar.notifyDateChanged(it)
+                viewModel.handleAddWorkoutVisibility()
             } catch (exp: Exception) {
             }
 

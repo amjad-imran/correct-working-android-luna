@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -38,10 +39,14 @@ import kotlin.math.abs
 
 @HiltViewModel
 class SleepDashViewModel @Inject constructor(
-    private val userActivityRepository: OreoUserActivityRepository
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val sessionManager: SessionManager
 ) : BaseViewModel() {
 
+    var addSleepCtaVisibility = MutableLiveData<Boolean>()
 
+
+    val FAB_ANIM_TIME = 500L
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var calendarStartDate = MutableLiveData<Event<LocalDate>>()
 
@@ -157,6 +162,24 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Today condition check
+     * Device paired check
+     */
+    fun handleAddWorkoutVisibility() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (sessionManager.connectedDeviceRing.value == null) {
+                addSleepCtaVisibility.postValue(false)
+                return@launch
+            }
+            if (selectedDate.value == LocalDate.now()) {
+                addSleepCtaVisibility.postValue(true)
+            } else {
+                addSleepCtaVisibility.postValue(false)
+
+            }
+        }
+    }
     fun getContributorInfo() {
         viewModelScope.launch {
             userActivityRepository.getContributorDetailsInfo(

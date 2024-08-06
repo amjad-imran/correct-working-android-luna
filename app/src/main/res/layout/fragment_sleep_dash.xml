@@ -151,6 +151,49 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurViewSelector"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <include
+            android:id="@+id/lytAddSleep"
+            layout="@layout/layout_add_sleep"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </eightbitlab.com.blurview.BlurView>
+
+    <FrameLayout
+        android:id="@+id/btnAddWorkout"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivAddWorkoutBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/back_add_workout" />
+
+        <ImageView
+            android:id="@+id/ivWorkout"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_add_workout" />
+    </FrameLayout>
+
     <include
         android:id="@+id/progressBar"
         layout="@layout/default_loader"

@@ -32,6 +32,7 @@
             style="@style/H5"
             android:layout_marginEnd="@dimen/dimen_16dp"
             android:layout_width="wrap_content"
+            android:padding="@dimen/dimen_4dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
 

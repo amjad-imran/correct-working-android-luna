@@ -1,17 +1,21 @@
 package com.noisefit.ui.common.bottomSheet
 
+
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.noisefit.luna.databinding.SleepTimeBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.WheelItem
+import com.oreo.data.model.OAddSleep
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
+private const val YESTERDAY_HOUR = 22
 const val SLEEP_TIME_REQUEST_KEY = "SLEEP_TIME_REQUEST_KEY"
 
 @AndroidEntryPoint
@@ -19,17 +23,11 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
     SleepTimeBottomSheetBinding::inflate
 ) {
 
-    private var mHour: Int = 0
-    private var title: String = ""
-    private var mMinute: Int = 0
-    private var mUnitPosition = 0
+    private var isStartDateToday = false
+    private var showYesterdayToast = false
+    private var showTodayToast = false
+    private var addSleep = OAddSleep()
 
-    private var mHourOther: Int = 0
-    private var mMinuteOther: Int = 0
-    private var isStart: Int = 0
-
-    private var lastSelectedPos: Int = 0
-    private var dayName: String = ""
     private val dayList = ArrayList<WheelItem<String>>()
 
     private val wheelAdapter: WheelAdapter<String> by lazy {
@@ -42,32 +40,61 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
 
         arguments?.let {
             val args = SleepTimeBottomSheetArgs.fromBundle(it)
-            mMinute = args.minute
-            mHour = args.hour
-            title = args.title
-            mHourOther = args.hourOther
-            mMinuteOther = args.minuteOther
-            isStart = args.isStart
-            mUnitPosition = args.unitPosition
-            lastSelectedPos=args.dayPos
-
-
-            /* viewModel.userDayData =
-                 mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]*/
-
+            addSleep = args.addSleep
+            isStartDateToday = args.isStartDateToday
+            dayData()
             initUi()
         }
-
 
     }
 
     private fun initUi() {
-        binding.tvTitle.text = title
-        binding.lytTimePicker.timePicker.currentHour = mHour
-        binding.lytTimePicker.timePicker.currentMinute = mMinute
+        binding.tvTitle.text = addSleep.title
+        binding.lytTimePicker.timePicker.currentHour = addSleep.hour.toInt()
+        binding.lytTimePicker.timePicker.currentMinute = addSleep.minute.toInt()
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
         binding.lytTimePicker.timePicker.setOnTimeChangedListener { _, hour, minute ->
-            this.mHour = hour
-            this.mMinute = minute
+            if (addSleep.day.equals("Today", true)) {
+
+                if (hour > currentHour) {
+                    binding.lytTimePicker.timePicker.currentHour = currentHour
+                    binding.lytTimePicker.timePicker.currentMinute = currentMinute
+                    if (!showTodayToast) {
+                        showTodayToast = true
+                        context.showShortToast("Please select a time before current time")
+                    }
+
+                } else {
+                    if (hour != currentHour && minute != 0) {
+                        showTodayToast = false
+                    }
+
+                    addSleep.hour = handleMinutes(hour)
+                    addSleep.minute = handleMinutes(minute)
+                }
+            } else {
+                if (hour >= YESTERDAY_HOUR) {
+                    if (hour != YESTERDAY_HOUR && minute != 0) {
+                        showYesterdayToast = false
+                    }
+
+                    addSleep.hour = handleMinutes(hour)
+                    addSleep.minute = handleMinutes(minute)
+                } else {
+
+                    binding.lytTimePicker.timePicker.currentHour = YESTERDAY_HOUR
+                    binding.lytTimePicker.timePicker.currentMinute = 0
+                    if (!showYesterdayToast) {
+                        showYesterdayToast = true
+                        context.showShortToast("Please select a time after 10 PM")
+                    }
+
+                }
+
+            }
+
         }
 
         binding.lytTimePicker.timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
@@ -75,36 +102,41 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
 
     }
 
-    private fun dayData(): ArrayList<WheelItem<String>> {
-        if (dayList.size > 0) {
+    private fun handleMinutes(value: Int): String {
+        if (value < 10) {
+            return "0$value"
+        }
+        return value.toString()
+    }
+
+    private fun dayData() {
+        if (dayList.isNotEmpty()) {
             dayList.clear()
         }
 
-        dayList.add(WheelItem("Yesterday"))
+        if (!isStartDateToday) {
+            dayList.add(WheelItem("Yesterday"))
+        }
         dayList.add(WheelItem("Today"))
-        return dayList
+
+        if (addSleep.day.isEmpty()) {
+            addSleep.day = dayList[0].data
+        }
     }
 
     private fun setWheelPicker() {
         binding.lytTimePicker.wheelPicker.visibleItemCount = 2
-        wheelAdapter.data = dayData()
+        wheelAdapter.data = dayList
         wheelAdapter.setOnItemSelectedListener { item ->
-             dayName = item.split(" ")[0]
-            updateSelectedIndex(wheelAdapter.currentItemPosition)
-            lastSelectedPos = getUpdatedIndex()
-
+            addSleep.day = item.split(" ")[0]
         }
         wheelAdapter.bind(binding.lytTimePicker.wheelPicker)
         wheelAdapter.selectedItemPosition = getUpdatedIndex()
     }
 
-    private fun updateSelectedIndex(pos: Int) {
-        lastSelectedPos = pos
-    }
-
     private fun getUpdatedIndex(): Int {
         dayList.forEachIndexed { index, wheelItem ->
-            if (wheelItem == dayList[lastSelectedPos]) {
+            if (wheelItem.data.equals(addSleep.day, true)) {
                 return index
             }
         }
@@ -121,11 +153,7 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
             setFragmentResult(
                 SLEEP_TIME_REQUEST_KEY,
                 bundleOf(
-                    "hour" to mHour,
-                    "minute" to mMinute,
-                    "unit" to mUnitPosition,
-                    "day" to dayName,
-                    "dayPos" to lastSelectedPos
+                    "sleepTime" to addSleep
                 )
             )
             navigateUpSafe()
