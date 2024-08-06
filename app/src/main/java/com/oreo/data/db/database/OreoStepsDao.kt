@@ -47,6 +47,8 @@ interface OreoStepsDao : BaseDao<OreoStepsData> {
     fun getUnSyncServerData(isSync: Boolean): List<OreoStepsData>?
     //As per discussion with Anil Rawat
 
+
+
 //Between :startDate  And :endDate
 
     @Query("DELETE FROM steps_data WHERE date <= date('now', '-' || :day || ' days')")
