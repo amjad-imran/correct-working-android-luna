@@ -61,7 +61,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<Pair<Float?, Float?>>()
+    private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
 
     init {
@@ -196,17 +196,17 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 )
             }
 
-            val sum = (it.first ?: 0.0f) + (it.second ?: 0.0f)
+            val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
             if (sum != 0.0f) {
 
                 val top = getYAxisValue(sum)
                 val isSelectedPosition = selectedPosition == index
 
-                val remEnd = getYAxisValue(it.second ?: 0.0f)
+                val remEnd = getYAxisValue(it.value2 ?: 0.0f)
                 dataPosition.add(Pair(index, start))
 
                 var topRectF: RectF? = null
-                if (it.second != 0.0f) {
+                if (it.value2 != 0.0f) {
                     val rectFRem = RectF(
                         start + barWidth / 2,
                         remEnd + padding,
@@ -224,7 +224,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     )
                 }
 
-                if (it.first != 0.0f) {
+                if (it.value1 != 0.0f) {
                     val rectFDeep = RectF(
                         start + barWidth / 2,
                         top,
@@ -464,7 +464,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
      * selected position
      */
     fun setDataSet(
-        list: List<Pair<Float?, Float?>>,
+        list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         maxValue: Int,
         selectedPosition: Int

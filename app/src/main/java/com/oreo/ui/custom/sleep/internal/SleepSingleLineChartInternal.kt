@@ -222,7 +222,11 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
-            val filterValues = dataSet.subList(lastPos, (lastPos + dataSize - 1))
+            val filterValues = try {
+                dataSet.subList(lastPos, (lastPos + dataSize - 1))
+            } catch (exp: Exception) {
+                ArrayList()
+            }
             lastPos += dataSize
 
             val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZeroGenericFloat()
@@ -245,12 +249,12 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
                     "${avgValue.roundToInt()}"
-                }else if(
+                } else if (
                     launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
-                ){
-                    String.format(locale = Locale.US,"%.1f", avgValue)
+                ) {
+                    String.format(locale = Locale.US, "%.1f", avgValue)
                 } else {
-                    "${String.format(locale = Locale.US,"%.1f", avgValue)}%"
+                    "${String.format(locale = Locale.US, "%.1f", avgValue)}%"
                 }
 
 

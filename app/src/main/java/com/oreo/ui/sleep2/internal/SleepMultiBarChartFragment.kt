@@ -7,6 +7,8 @@ import com.noisefit.luna.databinding.FragmentSleepMultiBarChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
+import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -41,13 +43,15 @@ class SleepMultiBarChartFragment :
             pageData = bundle.getParcelable(SleepMultiBarChartFragment.GRAPH_DATA)
         }
 
-        val dataList =
-            pageData?.data?.map { Pair(((it.value2 ?: 0.0f) / 60),((it.value1 ?: 0.0f) / 60)) }
-                ?: ArrayList()
+        val dataList = convertData(pageData?.data)
 
+        val maxValue = sharedViewModel.getMaxValue(
+            dataListType1 = dataList,
+            contributorType = pageData?.contributorType
+        )
+        val yAxisRange =
+            sharedViewModel.getYAxisRange(maxValue, contributorType = pageData?.contributorType)
 
-        val maxValue = getMaxValue(dataList)
-        val yAxisRange = getYAxisRange(maxValue)
 
         binding.graphBar.setDataSet(
             dataList,
@@ -74,6 +78,28 @@ class SleepMultiBarChartFragment :
             }
 
         })
+    }
+
+    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+        pageData?.data?.map { Pair(((it.value2 ?: 0.0f) / 60), ((it.value1 ?: 0.0f) / 60)) }
+            ?: ArrayList()
+
+        return data?.map {
+            GraphDataModel(
+                date = LocalDate.parse(it.date),
+                value1 =
+                if (it.value1 == null) {
+                    null
+                } else {
+                    (it.value1 ?: 0.0f) / 60
+                },
+                value2 = if (it.value2 == null) {
+                    null
+                } else {
+                    (it.value2 ?: 0.0f) / 60
+                }
+            )
+        } ?: ArrayList()
     }
 
     private fun getMaxValue(list: List<Pair<Float?, Float?>>): Float {

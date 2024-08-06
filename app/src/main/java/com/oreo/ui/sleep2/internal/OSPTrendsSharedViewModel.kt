@@ -226,16 +226,15 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
 
     fun getMaxValue(
         dataListType1: List<GraphDataModel>? = null,
-        dataListType2: List<GraphDataModel>? = null,
         contributorType: SleepInternalLaunchState?
     ): Float {
         val nonNullValues = dataListType1?.mapNotNull { it.value1 }
         return when (contributorType) {
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100.0f
-            SleepInternalLaunchState.HOUR_VS_NEED, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.HOUR_VS_NEED,
             SleepInternalLaunchState.SLEEP_TIME -> {
                 var mMax = 0.0f
-                dataListType2?.forEach {
+                dataListType1?.forEach {
 
                     var max = it.value1 ?: 0.0f
                     if ((it.value2 ?: 0.0f) > max) {
@@ -248,6 +247,19 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 }
 
                 mMax += ((0.2) * mMax).toInt()
+                return mMax
+            }
+            SleepInternalLaunchState.RESTORATIVE_SLEEP->{
+                var mMax = 0.0f
+                dataListType1?.forEach {
+                    val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
+                    if (sum > mMax) {
+                        mMax = sum
+                    }
+                }
+
+                mMax += ((0.2) * mMax).toInt()
+
                 return mMax
             }
 
