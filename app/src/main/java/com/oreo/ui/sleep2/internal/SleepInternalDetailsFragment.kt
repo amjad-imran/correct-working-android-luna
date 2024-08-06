@@ -170,14 +170,14 @@ class SleepInternalDetailsFragment :
                                 if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP ||
                                     viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP
                                 ) {
-                                    (data.value1 ?: 0) / 60
+                                    (data.value1 ?: 0.0f) / 60
                                 } else {
                                     data.value1
                                 }
                             binding.lytTopView.lytTopSingleView.lytTopPercentView.apply {
                                 tvUnit.text = viewModel.getUnit()
                                 tvScore.text =
-                                    "$displayValue"
+                                    "${displayValue?.roundToInt()}"
                             }
                         } else {
                             binding.lytTopView.lytTopSingleView.lytTopPercentView.apply {
@@ -200,7 +200,7 @@ class SleepInternalDetailsFragment :
                         if (data != null) {
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                                    (data.value1 ?: 0) + (data.value2 ?: 0)
+                                    ((data.value1 ?: 0.0f) + (data.value2 ?: 0.0f)).roundToInt()
                                 )
                                 tvHour.text = String.format(locale = Locale.US, "%02d", hour)
                                 tvMin.text = String.format(locale = Locale.US, "%02d", minute)
@@ -228,7 +228,7 @@ class SleepInternalDetailsFragment :
                             if (hours != null) {
                                 binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                                        hours
+                                        hours.roundToInt()
                                     )
                                     tvHour.text = String.format(locale = Locale.US, "%02d", hour)
                                     tvMin.text = String.format(locale = Locale.US, "%02d", minute)
@@ -242,7 +242,7 @@ class SleepInternalDetailsFragment :
                             if (need != null) {
                                 binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.apply {
                                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                                        need
+                                        need.roundToInt()
                                     )
                                     tvHour.text = String.format(locale = Locale.US, "%02d", hour)
                                     tvMin.text = String.format(locale = Locale.US, "%02d", minute)

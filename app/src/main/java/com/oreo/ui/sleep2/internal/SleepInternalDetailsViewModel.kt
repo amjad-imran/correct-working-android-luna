@@ -483,10 +483,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.SLEEP_DURATION -> ""
             SleepInternalLaunchState.LATENCY -> "min"
             SleepInternalLaunchState.RESTFULNESS -> "times"
-            SleepInternalLaunchState.RESPIRATORY_RATE -> ""
+            SleepInternalLaunchState.RESPIRATORY_RATE -> "rpm"
             SleepInternalLaunchState.RESTING_HEART_RATE -> "bpm"
-            SleepInternalLaunchState.HRV -> ""
-            SleepInternalLaunchState.SKIN_TEMPERATURE -> ""
+            SleepInternalLaunchState.HRV -> "ms"
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> "°F"
             SleepInternalLaunchState.BLOOD_OXYGEN -> "%"
         }
     }

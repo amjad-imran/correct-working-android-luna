@@ -22,8 +22,8 @@ data class OSleepInternalTrendsDataModel(
 @Parcelize
 data class TrendsValues(
     var date: String? = null,
-    var value1: Int? = null,
-    var value2: Int? = null,
+    var value1: Float? = null,
+    var value2: Float? = null,
 ) : Parcelable
 
 @Parcelize

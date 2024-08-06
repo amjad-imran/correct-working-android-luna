@@ -20,6 +20,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.averageWithoutZeroGeneric
+import com.noisefit_commans.common.averageWithoutZeroGenericFloat
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
@@ -31,6 +33,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class SleepSingleLineChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -79,7 +82,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    private var mAverage: Pair<Int, String>? = null
+    private var mAverage: Pair<Float, String>? = null
     private var showOverlay = false
     private var launchState: SleepInternalLaunchState? = null
     private var selectedPeriod: InternalSelectedPeriod? = null
@@ -212,7 +215,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         val textBounds = Rect()
 
-        var previousValue: Int? = null
+        var previousValue: Float? = null
 
         var lastPos = 0
         LOGS.d("dfjkghdkfjghkdjfg ${dataSet.size}")
@@ -222,27 +225,32 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             val filterValues = dataSet.subList(lastPos, (lastPos + dataSize - 1))
             lastPos += dataSize
 
-            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZero()
+            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZeroGenericFloat()
 
-            if (avgValue != 0) {
+            if (avgValue != 0.0f) {
 
-                val pos = getYAxisValue(avgValue)
+                val pos = getYAxisValue(avgValue.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION) {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        avgValue
+                        avgValue.roundToInt()
                     )
                     String.format(locale = Locale.US, "%d:%02d", hour, minute)
                 } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
                     launchState == SleepInternalLaunchState.DEEP_SLEEP ||
                     launchState == SleepInternalLaunchState.RESTFULNESS ||
+                    launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
-                    "$avgValue"
+                    "${avgValue.roundToInt()}"
+                }else if(
+                    launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
+                ){
+                    String.format(locale = Locale.US,"%.1f", avgValue)
                 } else {
-                    "$avgValue%"
+                    "${String.format(locale = Locale.US,"%.1f", avgValue)}%"
                 }
 
 
@@ -341,7 +349,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             if (it.value1 != null) {
                 isDataNull = false
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it.value1 ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
@@ -349,7 +357,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1].value1
 
-                    val actualPosNext = getYAxisValue(nextElement ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -455,8 +463,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    private fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -489,14 +497,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -504,15 +512,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -520,15 +528,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }
@@ -573,7 +581,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,
-        avgValue: Pair<Int, String>?,
+        avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         showOverlay: Boolean = false,
         launchState: SleepInternalLaunchState?,
@@ -669,7 +677,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
      * current, previous value
      * @return color
      */
-    private fun getAvgBarColor(currentValue: Int?, previousValue: Int?): Int {
+    private fun getAvgBarColor(currentValue: Float?, previousValue: Float?): Int {
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
 

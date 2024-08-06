@@ -42,7 +42,7 @@ class SleepMultiBarChartFragment :
         }
 
         val dataList =
-            pageData?.data?.map { Pair(((it.value2 ?: 0) / 60),((it.value1 ?: 0) / 60)) }
+            pageData?.data?.map { Pair(((it.value2 ?: 0.0f) / 60),((it.value1 ?: 0.0f) / 60)) }
                 ?: ArrayList()
 
 
@@ -76,10 +76,10 @@ class SleepMultiBarChartFragment :
         })
     }
 
-    private fun getMaxValue(list: List<Pair<Int?, Int?>>): Int {
-        var mMax = 0
+    private fun getMaxValue(list: List<Pair<Float?, Float?>>): Float {
+        var mMax = 0.0f
         list.forEach {
-            val sum = (it.first ?: 0) + (it.second ?: 0)
+            val sum = (it.first ?: 0.0f) + (it.second ?: 0.0f)
             if (sum > mMax) {
                 mMax = sum
             }

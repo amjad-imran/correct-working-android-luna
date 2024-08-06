@@ -92,7 +92,7 @@ class SleepSingleLineChartFragment :
                     pageData?.contributorType == SleepInternalLaunchState.DEEP_SLEEP
                 ) {
                     if (it.value1 != null) {
-                        (it.value1 ?: 0) / 60
+                        (it.value1 ?: 0.0f) / 60
                     } else null
                 } else {
                     it.value1

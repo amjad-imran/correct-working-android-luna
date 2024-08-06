@@ -23,6 +23,7 @@ import com.noisefit_commans.utils.VibrationUtils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -73,7 +74,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    var mAverage: Pair<Int, String>? = null
+    var mAverage: Pair<Float, String>? = null
     private var chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.PERCENT
 
     /**
@@ -252,10 +253,10 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
             fillPath.reset()
 
-            if (it.value1 != null && it.value1 != 0) {
+            if (it.value1 != null && it.value1 != 0.0f) {
                 isDataNull = false
                 val isSelectedPosition = selectedPosition == index
-                val actualPos = getYAxisValue(it.value1 ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
@@ -267,7 +268,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -343,7 +344,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
     }
 
-    private fun getTimeText(value: Int): String {
+    private fun getTimeText(value: Float): String {
         when (chartType) {
             SleepSingleGradientChartType.TIME -> {
                 val (hour, minute) = getFormattedSleepDuration(
@@ -353,10 +354,10 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
             SleepSingleGradientChartType.PERCENT -> {
-                return "${value}%"
+                return "${value.roundToInt()}%"
             }
 
-            SleepSingleGradientChartType.DEFAULT -> return "${value}"
+            SleepSingleGradientChartType.DEFAULT -> return "${value.roundToInt()}"
         }
 
     }
@@ -375,7 +376,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null && mAverage?.first != 0) {
+        if (mAverage != null && mAverage?.first != 0.0f) {
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
@@ -430,8 +431,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    private fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -468,14 +469,14 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -483,15 +484,15 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -499,15 +500,15 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }
@@ -549,7 +550,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         maxValue: Int,
-        avgValue: Pair<Int, String>?,
+        avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         chartType: SleepSingleGradientChartType,
     ) {

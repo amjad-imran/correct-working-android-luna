@@ -31,6 +31,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -285,14 +286,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             val isSelectedPosition = selectedPosition == index
 
             if (it.value1 != null) {
-                val actualPos = getYAxisValue(it.value1 ?: 0)
+                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 dataPosition.add(Pair(index, start))
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -314,12 +315,12 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             }
 
             if (it.value2 != null) {
-                val needPos = getYAxisValue(it.value2 ?: 0)
+                val needPos = getYAxisValue(it.value2 ?: 0.0f)
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0)
+                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         needPos,
@@ -395,14 +396,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
             lastPos += dataSize
 
-            val hour = filterValues.mapNotNull { it.value1 }.averageWithoutZero()//deep
-            val need = filterValues.mapNotNull { it.value2 }.averageWithoutZero()//rem
+            val hour = filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()//deep
+            val need = filterValues.mapNotNull { it.value2?.roundToInt() }.averageWithoutZero()//rem
 
 
             var hourY = 0.0f
             if (hour != 0 && launchState == SleepInternalLaunchState.HOUR_VS_NEED) {
 
-                val pos = getYAxisValue(hour)
+                val pos = getYAxisValue(hour.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
@@ -418,7 +419,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 hourY = pos
 
 
-                val posNeed = getYAxisValue(need)
+                val posNeed = getYAxisValue(need.toFloat())
 
                 if (posNeed + textBounds.height() > hourY) {
                     canvas.drawText(
@@ -447,7 +448,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
             if (need != 0) {
 
-                val pos = getYAxisValue(need)
+                val pos = getYAxisValue(need.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
@@ -532,57 +533,6 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         return yearMonth.lengthOfMonth()
     }
 
-    private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (isInteracting) return
-        if (mAverage != null) {
-
-            val hour = mAverage!!.first
-            val need = mAverage!!.second
-
-            if (hour != null) {
-                drawAverage(hour.first, hour.second, canvas, availableWidth, avgBackPaintHour)
-            }
-            if (need != null) {
-                drawAverage(need.first, need.second, canvas, availableWidth, avgBackPaintNeed)
-            }
-        }
-    }
-
-    private fun drawAverage(
-        value: Int,
-        displayText: String,
-        canvas: Canvas,
-        availableWidth: Float,
-        backPaint: Paint,
-    ) {
-        canvas.drawLine(
-            0f,
-            getYAxisValue(value),
-            availableWidth,
-            getYAxisValue(value),
-            avgLinePaint
-        )
-
-        val textBounds = Rect()
-        avgTextPaint.getTextBounds(displayText, 0, displayText.length, textBounds)
-
-        val textX = availableWidth - textBounds.width().toFloat() - dip2px(3f)
-        val textY = getYAxisValue(value) + textBounds.height() / 2
-        canvas.drawRoundRect(
-            RectF(
-                textX - dip2px(3f),
-                textY - textBounds.height() - dip2px(3f),
-                textX + textBounds.width() + dip2px(3f),
-                textY + dip2px(3f)
-            ), dip2px(2f).toFloat(), dip2px(2f).toFloat(), backPaint
-        )
-        canvas.drawText(
-            displayText, textX, textY, avgTextPaint
-        )
-
-    }
-
-
     private fun performHapticFeedbackCustom() {
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
     }
@@ -600,8 +550,8 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         return null
     }
 
-    private fun getYAxisValue(value: Int): Float {
-        val percent = (value.toFloat() / mMax.toFloat()) * 100
+    private fun getYAxisValue(value: Float): Float {
+        val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
 
@@ -639,14 +589,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -654,15 +604,15 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height(),
+                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             } else {
@@ -670,15 +620,15 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     availableWidth,
-                    getYAxisValue(value.first),
+                    getYAxisValue(value.first.toFloat()),
                     gridLinePaint
                 )
             }

@@ -265,7 +265,7 @@ class SkinTempInternalDetailsFragment :
                                 if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP ||
                                     viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP
                                 ) {
-                                    (data.value1 ?: 0) / 60
+                                    (data.value1 ?: 0.0f) / 60
                                 } else {
                                     data.value1
                                 }
@@ -295,7 +295,7 @@ class SkinTempInternalDetailsFragment :
                         if (data != null) {
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                                    (data.value1 ?: 0) + (data.value2 ?: 0)
+                                    (data.value1 ?: 0.0f).toInt() + (data.value2 ?: 0.0f).toInt()
                                 )
                                 tvHour.text = String.format(locale = Locale.US, "%02d", hour)
                                 tvMin.text = String.format(locale = Locale.US, "%02d", minute)
