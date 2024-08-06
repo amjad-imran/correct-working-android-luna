@@ -25,6 +25,7 @@ import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -158,7 +159,7 @@ class SleepInternalDetailsFragment :
                             tvNudge.alpha = 0.5f
                             tvOptimalRangeLabel.alpha = 0.5f
                             ivCircle.alpha = 0.5f
-                            //lytHighlightTrends.root.gone()
+                            lytHighlightTrends.root.alpha = 0.5f
                         }
 
                         val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
@@ -323,7 +324,6 @@ class SleepInternalDetailsFragment :
         })
     }
 
-    //TODO optimize
     private fun showDefaultDates() {
         val topState = viewModel.getTopState()
 
@@ -333,7 +333,7 @@ class SleepInternalDetailsFragment :
                     tvNudge.alpha = 1.0f
                     tvOptimalRangeLabel.alpha = 1.0f
                     ivCircle.alpha = 1.0f
-                    lytHighlightTrends.root.gone()
+                    lytHighlightTrends.root.alpha = 1.0f
                 }
             }
 
@@ -370,9 +370,6 @@ class SleepInternalDetailsFragment :
                     InternalSelectedPeriod.MONTH -> viewModel.monthAvg?.avg
                 }
 
-
-
-                binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()
 
 
                 if (avgValue == null) {
@@ -524,6 +521,7 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopSingleView.tvNudge.text = viewModel.dayAvg?.nudge ?: ""
                     binding.lytTopView.lytTopMultipleView.tvNudge.text =
                         viewModel.dayAvg?.nudge ?: ""
+                    handleDayComparison()
                 }
             }
 
@@ -533,6 +531,7 @@ class SleepInternalDetailsFragment :
                         viewModel.weekAvg?.nudge ?: ""
                     binding.lytTopView.lytTopMultipleView.tvNudge.text =
                         viewModel.weekAvg?.nudge ?: ""
+                    handleWeekComparison()
                 }
             }
 
@@ -542,11 +541,148 @@ class SleepInternalDetailsFragment :
                         viewModel.monthAvg?.nudge ?: ""
                     binding.lytTopView.lytTopMultipleView.tvNudge.text =
                         viewModel.monthAvg?.nudge ?: ""
+                    handleMonthComparison()
                 }
             }
         }
         showDefaultDates()
     }
+
+    private fun handleDayComparison() {
+        if (viewModel.dayAvg?.percent != null) {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.visible()
+            viewModel.dayAvg
+            if (viewModel.dayAvg!!.percent!! > 0) {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.dayAvg?.percent}% from yesterday"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_up
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+
+            } else if (viewModel.dayAvg!!.percent!! == 0) {
+
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.dayAvg?.percent}% from yesterday"
+                    ivTick.setImageResource(
+                        0
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            } else {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${abs(viewModel.dayAvg?.percent!!)}% from yesterday"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_down
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            }
+        } else {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()
+        }
+    }
+
+    private fun handleWeekComparison() {
+        if (viewModel.weekAvg?.percent != null) {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.visible()
+            viewModel.weekAvg
+            if (viewModel.weekAvg!!.percent!! > 0) {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.weekAvg?.percent}% from last 6 week"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_up
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+
+            } else if (viewModel.weekAvg!!.percent!! == 0) {
+
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.weekAvg?.percent}% from last 6 week"
+                    ivTick.setImageResource(
+                        0
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            } else {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${abs(viewModel.weekAvg?.percent!!)}% from last 6 week"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_down
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            }
+        } else {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()
+        }
+    }
+
+    private fun handleMonthComparison() {
+        if (viewModel.monthAvg?.percent != null) {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.visible()
+            viewModel.monthAvg
+            if (viewModel.monthAvg!!.percent!! > 0) {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.monthAvg?.percent}% from last 6 month"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_up
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+
+            } else if (viewModel.monthAvg!!.percent!! == 0) {
+
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${viewModel.monthAvg?.percent}% from last 6 month"
+                    ivTick.setImageResource(
+                        0
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            } else {
+                binding.lytTopView.lytTopSingleView.lytHighlightTrends.apply {
+                    tvRangeValue.text =
+                        "${abs(viewModel.monthAvg?.percent!!)}% from last 6 month"
+                    ivTick.setImageResource(
+                        R.drawable.ic_trend_down
+                    )
+                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                    bgImage.setBackgroundResource(bgColor)
+                    tvRangeValue.setTextColor(textColor)
+                }
+            }
+        } else {
+            binding.lytTopView.lytTopSingleView.lytHighlightTrends.root.gone()
+        }
+    }
+
 
     private fun setRecycler() {
         with(binding.lytLearnMore.rvLearnMode) {

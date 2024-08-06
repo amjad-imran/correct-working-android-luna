@@ -32,7 +32,7 @@ data class TrendAverage(
     val avg_need: Double? = null,
     val avg_hour: Double? = null,
     val nudge: String? = null,
-    val percent: Float? = null,
+    val percent: Int? = null,
     val status: String? = null
 ) : Parcelable
 
