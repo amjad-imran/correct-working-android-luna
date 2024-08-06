@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -50,6 +51,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
+    lateinit var chartLineFillPaint: Paint
     private var mHeight = 0
 
     var mMax = 0
@@ -90,6 +92,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
         avgLineFillPaint = Paint().apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
+
+        chartLineFillPaint = Paint().apply {
             style = Paint.Style.FILL
             isAntiAlias = true
         }
@@ -209,6 +216,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
+        val fillPath = Path()
+
 
         if (selectedPosition != null && isInteracting) {
             if (lastSentValuePos == null) {
@@ -241,6 +250,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 )
             }
 
+            fillPath.reset()
 
             if (it.value1 != null && it.value1 != 0) {
                 isDataNull = false
@@ -249,6 +259,9 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
+
+                fillPath.moveTo(start + dataStepWidth / 2, height - bottomHeight.toFloat())
+                fillPath.lineTo(start + dataStepWidth/ 2, actualPos)
 
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
@@ -263,8 +276,14 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                         if (isInteracting) linePaintI else linePaint
                     )
 
+                    fillPath.lineTo(start + dataStepWidth + dataStepWidth / 2, actualPosNext)
+                    fillPath.lineTo(
+                        start + dataStepWidth + dataStepWidth / 2,
+                        height - bottomHeight.toFloat()
+                    )
+                    chartLineFillPaint.setShader(linearGradient)
+                    canvas.drawPath(fillPath, chartLineFillPaint)
 
-                    //todo show gradient below line
 
                 }
                 canvas.drawCircle(
@@ -613,5 +632,5 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 }
 
 enum class SleepSingleGradientChartType {
-    TIME, PERCENT,DEFAULT
+    TIME, PERCENT, DEFAULT
 }

@@ -11,9 +11,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -72,73 +70,74 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun getTrendsInternalDetailsData() {
         viewModelScope.launch(Dispatchers.IO) {
-            if(isHealthMonitorTrend()){
+            if (isHealthMonitorTrend()) {
                 userActivityRepository.getSleepHealthMonitorTrendsPagesData(
                     startDate, endDate, selectedLaunchMode.key.lowercase()
                 )
-            }else{
+            } else {
                 userActivityRepository.getSleepInternalTrendsPagesData(
                     startDate, endDate, selectedLaunchMode.key.lowercase()
                 )
             }
-            .collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
 
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getTrendsInternalDetailsData()
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            getTrendsInternalDetailsData()
+                                        }
+
+                                        override fun no() {
+
+                                        }
                                     }
+                            })
+                        }
 
-                                    override fun no() {
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
 
-                                    }
+                                it.data?.forEach {
+                                    trendsData[LocalDate.parse(it.date)] = it
                                 }
-                        })
-                    }
 
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
+                                loadNewFragment()
 
-                            it.data?.forEach {
-                                trendsData[LocalDate.parse(it.date)] = it
-                            }
-
-                            loadNewFragment()
-
-                            if (dayAvg == null) {
-                                dayAvg = it.dayAvg
-                            }
-                            if (weekAvg == null) {
-                                weekAvg = it.weekAvg
-                            }
-                            if (monthAvg == null) {
-                                monthAvg = it.monthAvg
+                                if (dayAvg == null) {
+                                    dayAvg = it.dayAvg
+                                }
+                                if (weekAvg == null) {
+                                    weekAvg = it.weekAvg
+                                }
+                                if (monthAvg == null) {
+                                    monthAvg = it.monthAvg
+                                }
                             }
                         }
                     }
                 }
-            }
         }
     }
 
-    fun isHealthMonitorTrend():Boolean{
+    fun isHealthMonitorTrend(): Boolean {
         val healthTrends = arrayListOf(
             SleepInternalLaunchState.RESPIRATORY_RATE,
             SleepInternalLaunchState.BLOOD_OXYGEN,
             SleepInternalLaunchState.HRV,
             SleepInternalLaunchState.RESTING_HEART_RATE,
-            SleepInternalLaunchState.SKIN_TEMPERATURE)
+            SleepInternalLaunchState.SKIN_TEMPERATURE
+        )
         return selectedLaunchMode in healthTrends
     }
 
@@ -243,7 +242,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.BLOOD_OXYGEN,
                     SleepInternalLaunchState.LATENCY,
                     SleepInternalLaunchState.RESTFULNESS,
-                    SleepInternalLaunchState.SLEEP_PERFORMANCE-> SleepBarChartFragment.newInstance(
+                    SleepInternalLaunchState.SLEEP_PERFORMANCE -> SleepBarChartFragment.newInstance(
                         trendData
                     )
 
@@ -251,7 +250,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepInternalLaunchState.HRV,
                     SleepInternalLaunchState.RESTING_HEART_RATE,
                     SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.EFFICIENCY-> SleepSingleLineGradientChartFragment.newInstance(
+                    SleepInternalLaunchState.EFFICIENCY -> SleepSingleLineGradientChartFragment.newInstance(
                         trendData
                     )
 
@@ -391,6 +390,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.TIMING -> Pair(
                 resourcesProvider.getString(R.string.text_timing), R.drawable.ic_clock_off_sleep
             )
+
             SleepInternalLaunchState.RESPIRATORY_RATE -> {
                 Pair(
                     resourcesProvider.getString(R.string.text_respiratory_rate),
