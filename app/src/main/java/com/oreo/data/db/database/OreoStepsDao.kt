@@ -43,8 +43,11 @@ interface OreoStepsDao : BaseDao<OreoStepsData> {
     //1643826600729
 
     @Query("SELECT id,is_synced,reset_data,total_steps,total_calories,total_distance,active_calories,total_active_time," +
-            "date,hour_of_the_day,step_array,sync_date FROM steps_data where total_steps > 0 and is_synced = :isSync")
+            "date,hour_of_the_day,step_array,sync_date FROM steps_data where is_synced = :isSync")
     fun getUnSyncServerData(isSync: Boolean): List<OreoStepsData>?
+    //As per discussion with Anil Rawat
+
+
 
 //Between :startDate  And :endDate
 
