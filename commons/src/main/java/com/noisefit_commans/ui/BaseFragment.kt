@@ -1,14 +1,17 @@
 package com.noisefit_commans.ui
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
@@ -26,6 +29,7 @@ import kotlinx.coroutines.Job
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
+const val FAB_ANIM_TIME = 500L
 abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
 ) : Fragment() {
@@ -204,6 +208,52 @@ abstract class BaseFragment<VB : ViewBinding>(
             //}
         }
     }
+
+    fun animateItemsDown(view: View, closeView: ImageView) {
+        val translateDown = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            0f,
+            closeView.y - view.y
+        ).apply {
+            this.duration = FAB_ANIM_TIME
+        }
+
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 1f, 0f)
+                .apply {
+                    this.duration = FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateDown, alpha)
+        animatorSet.start()
+    }
+
+
+    fun animateItemsUp(view: View, value: Float) {
+
+        val translateUp = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            value,
+            0f
+        ).apply {
+            this.duration = FAB_ANIM_TIME
+        }
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 0f, 1f)
+                .apply {
+                    this.duration = FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateUp, alpha)
+        animatorSet.start()
+    }
+
 
     fun isFragmentInBackStack(destinationId: Int) =
         try {

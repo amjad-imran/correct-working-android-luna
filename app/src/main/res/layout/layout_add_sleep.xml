@@ -1,0 +1,50 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cc030f1d">
+
+
+    <TextView
+        android:id="@+id/tvAddSleep"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:gravity="center_vertical|end"
+        android:text="@string/text_add_sleep"
+        app:layout_constraintBottom_toBottomOf="@+id/ivRecordSleep"
+        app:layout_constraintEnd_toStartOf="@+id/ivRecordSleep"
+        app:layout_constraintTop_toTopOf="@+id/ivRecordSleep" />
+
+    <ImageView
+        android:id="@+id/ivRecordSleep"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_add_sleep"
+        app:layout_constraintBottom_toTopOf="@+id/ivSleepClose"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAddSleepBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/back_add_workout"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSleepClose"
+        app:layout_constraintEnd_toEndOf="@+id/ivSleepClose"
+        app:layout_constraintStart_toStartOf="@+id/ivSleepClose"
+        app:layout_constraintTop_toTopOf="@+id/ivSleepClose" />
+
+    <ImageView
+        android:id="@+id/ivSleepClose"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_add_workout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

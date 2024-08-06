@@ -61,11 +61,7 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
-import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
-import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
-import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.sleep.SleepDataResponse
-import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -1361,6 +1357,16 @@ class OreoUserActivityRepositoryImpl(
 
             val requestObject = JsonObject().apply {
                 this.add("workouts", request)
+            }
+            remoteDataSource.addGFitWorkout(url, requestObject)
+        }
+    }
+
+    override suspend fun addManualSleep(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/add/manual"
+            val requestObject = JsonObject().apply {
+                this.add("sleeps", request)
             }
             remoteDataSource.addGFitWorkout(url, requestObject)
         }

@@ -986,40 +986,19 @@
         <action
             android:id="@+id/action_addSleepFragment_to_sleepTimeBottomSheet"
             app:destination="@id/sleepTimeBottomSheet" />
-        <argument
-            android:name="launchMode"
-            app:argType="com.oreo.ui.sleep2.add.OAddSleepLaunchState" />
+
     </fragment>
     <dialog
         android:id="@+id/sleepTimeBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.SleepTimeBottomSheet"
         android:label="SleepTimeBottomSheet">
-        <argument
-            android:name="hour"
-            app:argType="integer" />
-        <argument
-            android:name="minute"
-            app:argType="integer" />
 
         <argument
-            android:name="hourOther"
-            app:argType="integer" />
+            android:name="addSleep"
+            app:argType="com.oreo.data.model.OAddSleep" />
         <argument
-            android:name="minuteOther"
-            app:argType="integer" />
-
-        <argument
-            android:name="isStart"
-            app:argType="integer" />
-
-        <argument
-            android:name="unitPosition"
-            app:argType="integer" />
-        <argument
-            android:name="dayPos"
-            app:argType="integer" />
-        <argument
-            android:name="title"
-            app:argType="string" />
+            android:name="isStartDateToday"
+            app:argType="boolean"
+           />
     </dialog>
 </navigation>

@@ -5,36 +5,37 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddSleepBinding
 import com.noisefit.ui.common.bottomSheet.SLEEP_TIME_REQUEST_KEY
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.OAddSleep
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 
 @AndroidEntryPoint
 class OAddSleepFragment :
     BaseFragment<FragmentOAddSleepBinding>(FragmentOAddSleepBinding::inflate) {
     private val viewModel: OAddSleepViewModel by viewModels()
-    private val args: OAddSleepFragmentArgs by navArgs()
 
-    companion object {
-        fun getStartData(launchMode: OAddSleepLaunchState): Pair<Int, Bundle?> {
-            return Pair(R.id.fragmentAddSleep, Bundle().apply {
-                putSerializable("launchMode", launchMode)
-            })
-        }
-    }
 
     override fun initListener() {
         binding.lytToolbar.tvSave.setOnClickListener {
+            if (viewModel.startTimeSleep.day.isEmpty()) {
+                uiController.onDisplayError("Please select start time")
+                return@setOnClickListener
+            }
+            if (viewModel.endTimeSleep.day.isEmpty()) {
+                uiController.onDisplayError("Please select end time")
+                return@setOnClickListener
+            }
             viewModel.callApiToAddSleep()
         }
         binding.lytToolbar.backBtn.setOnClickListener {
@@ -43,49 +44,56 @@ class OAddSleepFragment :
         binding.lytAddTime.lytStartTime.root.setOnClickListener {
 
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
-                val hourOfDay = bundle.getInt("hour")
-                val minute = bundle.getInt("minute")
-                viewModel.dayName = bundle.getString("day").toString()
-                viewModel.dayPos = bundle.getInt("dayPos")
+                val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
-                val calendar = Calendar.getInstance()
 
-                if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE)
-                    ) >= 0
-                ) {
-                    context.showShortToast(getString(R.string.text_start_time_less_then_current_time))
-                } else if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        viewModel.addSleep.endHour,
-                        viewModel.addSleep.endMinute
-                    ) >= 0
-                ) {
-                    context.showShortToast(getString(R.string.text_start_time_less))
-                } else if (hourOfDay == viewModel.addSleep.endHour && minute == viewModel.addSleep.endMinute) {
-                    context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
-                } else {
-                    viewModel.addSleep.startHour = hourOfDay
-                    viewModel.addSleep.startMinute = minute
-                    setStartTimeBetween()
+                addSleep?.let {
+                    viewModel.startTimeSleep = addSleep
+
+                    if (viewModel.endTimeSleep.day.isEmpty()) {
+                        setStartTimeBetween()
+                    } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
+                        viewModel.endTimeSleep.day.equals("Today", true)
+                    ) {
+
+                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                            setStartTimeBetween()
+                        } else {
+                            uiController.onDisplayError("Start time should be less than end time")
+                        }
+
+                    } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
+                        viewModel.endTimeSleep.day.equals("Yesterday", true)
+                    ) {
+
+                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                            setStartTimeBetween()
+                        } else {
+                            uiController.onDisplayError("Start time should be less than end time")
+                        }
+
+                    } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
+                        viewModel.endTimeSleep.day.equals("Today", true)
+                    ) {
+
+
+                        setStartTimeBetween()
+                    } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
+                        viewModel.endTimeSleep.day.equals("Yesterday", true)
+                    ) {
+
+                        uiController.onDisplayError("Please check end time")
+                    }
+
+                    updateCalculatedData()
                 }
 
             }
-
+            viewModel.startTimeSleep.title = getString(R.string.text_start_time)
             navigate(
                 OAddSleepFragmentDirections.actionAddSleepFragmentToSleepTimeBottomSheet(
-                    viewModel.addSleep.endHour,
-                    viewModel.addSleep.endMinute,
-                    viewModel.addSleep.startHour,
-                    viewModel.addSleep.startMinute,
-                    0,
-                    1,
-                    viewModel.dayPos,
-                    getString(R.string.text_start_time)
+                    viewModel.startTimeSleep,
+                    false
                 )
             )
         }
@@ -95,100 +103,98 @@ class OAddSleepFragment :
                 return@setOnClickListener
             }
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
-                val hourOfDay = bundle.getInt("hour")
-                val minute = bundle.getInt("minute")
-                viewModel.dayName = bundle.getString("day").toString()
-                viewModel.dayPos = bundle.getInt("dayPos")
-                val calendar = Calendar.getInstance()
+                val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
-                if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE)
-                    ) > 0
-                ) {
-                    context.showShortToast(getString(R.string.text_end_time_greater_then_current_time))
-                    return@setFragmentResultListener
+                addSleep?.let {
+                    viewModel.endTimeSleep = addSleep
+
+
+                    if (viewModel.startTimeSleep.day.equals("Today", true) &&
+                        viewModel.endTimeSleep.day.equals("Today", true)
+                    ) {
+                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                            setEndTimeBetween()
+                        } else {
+                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                        }
+
+                    } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
+                        viewModel.endTimeSleep.day.equals("Yesterday", true)
+                    ) {
+                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                            setEndTimeBetween()
+                        } else {
+                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                        }
+
+                    } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
+                        viewModel.endTimeSleep.day.equals("Today", true)
+                    ) {
+                        setEndTimeBetween()
+                    } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
+                        viewModel.endTimeSleep.day.equals("Yesterday", true)
+                    ) {
+                        uiController.onDisplayError("Please check end time")
+                    }
+
                 }
 
-                if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        viewModel.addSleep.startHour,
-                        viewModel.addSleep.startMinute
-                    ) < 0
-                ) {
-                    context.showShortToast(getString(R.string.text_end_time_greater))
-                } else if (hourOfDay == viewModel.addSleep.startHour && minute == viewModel.addSleep.startMinute) {
-                    context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
-                } else {
-                    viewModel.addSleep.endHour = hourOfDay
-                    viewModel.addSleep.endMinute = minute
-                    setEndTimeBetween()
-                }
 
                 updateCalculatedData()
             }
 
+            viewModel.endTimeSleep.title = getString(R.string.text_end_time)
             navigate(
                 OAddSleepFragmentDirections.actionAddSleepFragmentToSleepTimeBottomSheet(
-                    viewModel.addSleep.endHour,
-                    viewModel.addSleep.endMinute,
-                    viewModel.addSleep.startHour,
-                    viewModel.addSleep.startMinute,
-                    0,
-                    1,
-                    viewModel.dayPos,
-                    getString(R.string.text_end_time)
+                    viewModel.endTimeSleep,
+                    viewModel.isStartDateToday()
                 )
             )
         }
-        binding.tvDeleteSleep.setOnClickListener {
-            //wrote code to delete sleep
-        }
+//        binding.tvDeleteSleep.setOnClickListener {
+//            //wrote code to delete sleep
+//        }
     }
 
     private fun updateCalculatedData() {
         val duration = viewModel.getSleepDuration()
-        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(duration)
+        LOGS.d("updateCalculatedData $duration")
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(duration.toInt())
         if (hour > 0) {
-            binding.lytDuration.tvHour.visible()
-            binding.lytDuration.tvHourUnit.visible()
             binding.lytDuration.tvHour.text = hour.toString()
         } else {
-            binding.lytDuration.tvHour.gone()
-            binding.lytDuration.tvHourUnit.gone()
+            binding.lytDuration.tvHour.text = "--"
         }
-        if (minute > 0) {
-            binding.lytDuration.tvMinute.visible()
-            binding.lytDuration.tvMinuteUnit.visible()
+        if (minute >= 0) {
+
             binding.lytDuration.tvMinute.text = minute.toString()
         } else {
-            binding.lytDuration.tvMinute.gone()
-            binding.lytDuration.tvMinuteUnit.gone()
+            binding.lytDuration.tvMinute.text = "--"
+
         }
     }
 
     private fun setEndTimeBetween() {
         val endTime = DateFormats.formatTimeWithAmPm(
-            viewModel.addSleep.endHour,
-            viewModel.addSleep.endMinute
+            viewModel.endTimeSleep.hour.toInt(),
+            viewModel.endTimeSleep.minute.toInt()
         )
         viewModel.isEndTimeSelected = true
-        binding.lytAddTime.lytEndTime.tvTimeValue.text = "${viewModel.dayName}, $endTime"
+        binding.lytAddTime.lytEndTime.tvTimeValue.setTextColor(resources.getColor(R.color.white))
+        binding.lytAddTime.lytEndTime.tvTimeValue.text = "${viewModel.endTimeSleep.day}, $endTime"
         if (viewModel.isStartTimeSelected && viewModel.isEndTimeSelected) {
-            binding.lytToolbar.tvSave.isEnabled = true
+            binding.lytToolbar.tvSave.enable()
         }
     }
 
     private fun setStartTimeBetween() {
         val startTime = DateFormats.formatTimeWithAmPm(
-            viewModel.addSleep.startHour,
-            viewModel.addSleep.startMinute
+            viewModel.startTimeSleep.hour.toInt(),
+            viewModel.startTimeSleep.minute.toInt()
         )
-
-        binding.lytAddTime.lytStartTime.tvTimeValue.text = "${viewModel.dayName}, $startTime"
+        binding.lytAddTime.lytStartTime.tvTimeValue.setTextColor(resources.getColor(R.color.white))
+        binding.lytAddTime.lytStartTime.tvTimeValue.text =
+            "${viewModel.startTimeSleep.day}, $startTime"
         viewModel.isStartTimeSelected = true
     }
 
@@ -228,10 +234,9 @@ class OAddSleepFragment :
 
     private fun initUI() {
 
-        binding.lytToolbar.tvTitle.text = viewModel.getPageTitle(args.launchMode)
+        binding.lytToolbar.tvTitle.text = getString(R.string.text_add_sleep)
         binding.lytToolbar.tvSave.text = getString(R.string.text_save)
         binding.lytToolbar.tvSave.disable()
-        binding.lytToolbar.tvSave.alpha = .5f
         binding.lytToolbar.tvSave.setTextColor(
             ContextCompat.getColor(
                 binding.tvDurationDesc.context,
@@ -283,11 +288,11 @@ class OAddSleepFragment :
             )
         )
 
-        if (args.launchMode == OAddSleepLaunchState.ADD) {
-            binding.tvDeleteSleep.gone()
-        } else {
-            binding.tvDeleteSleep.visible()
-        }
+//        if (args.launchMode == OAddSleepLaunchState.ADD) {
+//            binding.tvDeleteSleep.gone()
+//        } else {
+//            binding.tvDeleteSleep.visible()
+//        }
     }
 
 
