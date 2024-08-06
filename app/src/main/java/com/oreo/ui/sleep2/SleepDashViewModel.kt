@@ -75,6 +75,7 @@ class SleepDashViewModel @Inject constructor(
     private var weekDataGetJob: Job? = null
 
     fun getSleepData(startDate: String, endDate: String) {
+        setLoading(false)
         weekDataGetJob?.cancel()
 
         weekDataGetJob = viewModelScope.launch {
@@ -688,7 +689,6 @@ class SleepDashViewModel @Inject constructor(
             SleepContributor.BLOOD_OXYGEN -> SleepInternalLaunchState.BLOOD_OXYGEN
         }
     }
-
 
 
 }
