@@ -497,22 +497,28 @@ class SleepInternalDetailsFragment :
     }
 
     private fun showTopContent() {
-        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
-            binding.lytTopView.lytTopMultipleView.root.visible()
-            binding.lytTopView.lytTopSingleView.root.gone()
-        } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SLEEP_DURATION ||
-            viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP
-        ) {
-            binding.lytTopView.lytTopMultipleView.root.visible()
-            binding.lytTopView.lytTopMultipleView.apply {
-                this.lytContentView.lytNeed.root.gone()
-                this.lytContentView.divider1.root.gone()
+        val topState = viewModel.getTopState()
+        when (topState) {
+            TrendsTopState.SINGLE -> {
+                binding.lytTopView.lytTopSingleView.root.visible()
+                binding.lytTopView.lytTopMultipleView.root.gone()
             }
-            binding.lytTopView.lytTopSingleView.root.gone()
-        } else {
-            binding.lytTopView.lytTopSingleView.root.visible()
-            binding.lytTopView.lytTopMultipleView.root.gone()
+
+            TrendsTopState.SINGLE_DATE -> {
+                binding.lytTopView.lytTopMultipleView.root.visible()
+                binding.lytTopView.lytTopMultipleView.apply {
+                    this.lytContentView.lytNeed.root.gone()
+                    this.lytContentView.divider1.root.gone()
+                }
+                binding.lytTopView.lytTopSingleView.root.gone()
+            }
+
+            TrendsTopState.DOUBLE_DATE -> {
+                binding.lytTopView.lytTopMultipleView.root.visible()
+                binding.lytTopView.lytTopSingleView.root.gone()
+            }
         }
+
 
         when (viewModel.selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
