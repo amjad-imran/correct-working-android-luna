@@ -50,6 +50,7 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OSleepDailyTrendsDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -1876,6 +1877,18 @@ class OreoUserActivityRepositoryImpl(
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/trends/$filterType"
             remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate)
+        }
+    }
+
+    override suspend fun getDailyTrendsData(
+        startDate: String,
+        endDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OSleepDailyTrendsDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/sleep/v2/daily/trends/$filterType"
+            remoteDataSource.getDailyTrendsData(url, startDate, endDate)
         }
     }
 

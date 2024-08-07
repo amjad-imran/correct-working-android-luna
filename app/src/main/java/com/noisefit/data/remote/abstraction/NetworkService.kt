@@ -33,6 +33,7 @@ import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OSleepDailyTrendsDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -387,6 +388,13 @@ interface NetworkService {
         @Query("startDate") selectDate: String,
         @Query("endDate") dayType: String
     ): BaseApiResponse<OSleepInternalTrendsDataModel>
+
+    @GET
+    suspend fun getDailyTrendsData(
+        @Url url: String,
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String
+    ): BaseApiResponse<OSleepDailyTrendsDataModel>
 
 
     /**

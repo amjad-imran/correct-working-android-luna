@@ -8,6 +8,19 @@ import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+data class OSleepDailyTrendsDataModel(
+    var data: List<TrendDailyData>? = null
+) : Parcelable
+
+@Parcelize
+data class TrendDailyData(
+    val date: String,
+    val avg_resp: Float? = null,
+    val resp_breakup: List<Float>? = null
+) : Parcelable
+
+
+@Parcelize
 data class OSleepInternalTrendsDataModel(
     var data: List<TrendsValues>? = null,
     var nudge: String? = null,
@@ -40,6 +53,7 @@ data class TrendAverage(
 @Parcelize
 data class TrendsGraphData(
     var data: List<TrendsValues>? = null,
+    var dataType2: List<TrendDailyData>? = null,
     var contributorType: SleepInternalLaunchState? = null,
     var selectedPeriod: InternalSelectedPeriod = InternalSelectedPeriod.DAY
 ) : Parcelable

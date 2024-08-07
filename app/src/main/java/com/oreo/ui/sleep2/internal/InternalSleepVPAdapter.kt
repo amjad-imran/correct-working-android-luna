@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.oreo.ui.sleep2.internal.SleepMultiBarChartFragment
 
 class InternalSleepVPAdapter(
     fragmentManager: FragmentManager,
@@ -28,9 +27,13 @@ class InternalSleepVPAdapter(
         notifyDataSetChanged()
     }
 
-    fun addFragment(frag: Fragment) {
-        fragments.add(frag)
-        val lastPos = fragments.size - 1
-        notifyItemInserted(lastPos)
+    fun addFragment(frag: Fragment, atStart: Boolean) {
+        if (atStart) {
+            fragments.add(0, frag)
+            notifyItemInserted(0)
+        } else {
+            fragments.add(frag)
+            notifyItemInserted(fragments.size - 1)
+        }
     }
 }

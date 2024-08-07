@@ -3,7 +3,6 @@ package com.oreo.ui.sleep2.internal
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -17,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
@@ -74,7 +74,18 @@ class SleepInternalDetailsFragment :
         initUi()
         setRecycler()
         initViewPager()
-        viewModel.getTrendsInternalDetailsData()
+
+        if (viewModel.isHealthMonitorTrend()) {
+            var endDate = viewModel.selectedDate
+            if (viewModel.selectedDate != LocalDate.now()) {
+                endDate = LocalDate.now()
+            }
+            val startDate = endDate.minusDays(7)
+
+            viewModel.getTrendsDailyData(startDate, endDate)
+        } else {
+            viewModel.getTrendsInternalDetailsData()
+        }
     }
 
     private fun initUi() {
@@ -104,12 +115,13 @@ class SleepInternalDetailsFragment :
 
         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
             binding.lytDeviation.root.visible()
+            binding.lytSelector.root.gone()
         } else {
             binding.lytDeviation.root.gone()
+            binding.lytSelector.root.visible()
         }
 
         if (viewModel.isHealthMonitorTrend()) {
-            binding.lytSelector.root.gone()
             binding.lytSelector.tvDaily.visible()
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAILY)
         } else {
@@ -148,7 +160,12 @@ class SleepInternalDetailsFragment :
         }
         binding.lytSelector.tvDaily.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAILY)
-            viewModel.reloadData()
+
+            viewModel.currentStartDate = null
+            viewModel.fragments.value = null
+
+
+            //viewModel.reloadData()
         }
         binding.lytSelector.tvDay.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
@@ -367,12 +384,14 @@ class SleepInternalDetailsFragment :
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 pagerAdapter?.let {
-                    if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-                        //handle scroll for this case if any
-                    } else {
-                        val total = it.itemCount
-                        if (position == (total - 1)) {//is last page
-                            //viewModel.loadMoreData()
+
+                    if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+                        if (position == 0) {
+                            // Load new data for the previous date
+                            viewModel.loadDailyNextDayData()
+                        } else if (position == ((viewModel.fragments.value?.size ?: 0) - 1)) {
+                            // Load new data for the next date
+                            viewModel.loadDailyPrevDayData()
                         }
                     }
                 }

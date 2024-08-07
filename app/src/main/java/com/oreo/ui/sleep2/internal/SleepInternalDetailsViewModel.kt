@@ -12,9 +12,9 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
+import com.oreo.data.model.TrendDailyData
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -38,7 +38,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     val trendsData = HashMap<LocalDate, TrendsValues>()
 
-
     val reloadFragment = MutableLiveData<Event<SleepInternalLaunchState>>()
 
     var startDate: String = ""
@@ -55,6 +54,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
     var dayAvg: TrendAverage? = null
     var weekAvg: TrendAverage? = null
     var monthAvg: TrendAverage? = null
+
+    val fragments = MutableLiveData<List<Fragment>?>()
+    var currentStartDate: LocalDate? = null
+    val lastLoadedDataDate: LocalDate? = null
 
 
     fun setSelectedPeriod(selectedPeriod: InternalSelectedPeriod) {
@@ -73,8 +76,80 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
 
-    val fragments = MutableLiveData<List<Fragment>?>()
-    var currentStartDate: LocalDate? = null
+    fun getTrendsDailyData(sDate: LocalDate, eDate: LocalDate) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.getDailyTrendsData(
+                sDate.toString(), eDate.toString(), selectedLaunchMode.key.lowercase()
+            )
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            getTrendsInternalDetailsData()
+                                        }
+
+                                        override fun no() {
+
+                                        }
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                var oldData = fragments.value
+
+                                if (oldData == null) {
+                                    oldData = ArrayList()
+                                }
+
+                                val dataToDisplay = ArrayList<TrendDailyData>()
+                                it.data?.forEach {
+                                    dataToDisplay.add(
+                                        it
+                                    )
+
+                                    val trendData = TrendsGraphData(
+                                        dataType2 = dataToDisplay
+                                    )
+
+                                    (oldData as ArrayList).add(
+                                        0, SleepSingleLineGradientChartFragment.newInstance(
+                                            trendData
+                                        )
+                                    )
+                                }
+
+                                fragments.postValue(oldData)
+
+
+                                /*it.data?.forEach {
+                                    trendsData[LocalDate.parse(it.date)] = it
+                                }
+
+                                loadAllFragments()*/
+
+
+                            }
+                        }
+                    }
+                }
+        }
+
+    }
 
     fun getTrendsInternalDetailsData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -572,7 +647,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
     fun reloadData() {
         currentStartDate = null
         fragments.value = null
-        loadAllFragments()
+
+        if(trendsData.isEmpty()){
+            getTrendsInternalDetailsData()
+        }else{
+            loadAllFragments()
+        }
     }
 
     fun getUnit(): String {
@@ -643,7 +723,34 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getSelectedPosition(): Int {
-        return selectedPosition
+        return if (selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+            fragments.value?.size ?: 0
+        } else {
+            selectedPosition
+        }
+    }
+
+    fun loadDailyPrevDayData() {
+        val userStartDate = LocalDate.parse(startDate)
+        val prevDate = selectedDate.minusDays(1)
+        if (prevDate < userStartDate) {
+            return
+        }
+
+        getTrendsDailyData(prevDate, prevDate)
+
+        //Call API with prevDate
+    }
+
+    fun loadDailyNextDayData() {
+        val todayDate = LocalDate.now()
+        val nextDate = selectedDate.plusDays(1)
+        if (nextDate > todayDate) {
+            return
+        }
+        //Call API with nextDate
+
+
     }
 
 

@@ -15,6 +15,7 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OSleepDailyTrendsDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -133,6 +134,12 @@ interface OreoUserActivityRepository {
         endDate: String,
         filterType: String
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
+
+    suspend fun getDailyTrendsData(
+        startDate: String,
+        endDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OSleepDailyTrendsDataModel>>>
 
     suspend fun getSleepHealthMonitorTrendsPagesData(
         startDate: String,
