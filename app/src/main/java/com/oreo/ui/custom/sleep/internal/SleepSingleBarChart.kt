@@ -44,10 +44,12 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private val endPadding = dip2px(30f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
+    lateinit var optimalPaint: Paint
 
     private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
     private var contributorType: SleepInternalLaunchState? = null
+    private var optimalRange: Pair<Float, Float>? = null
 
     private var isInteracting = false
     private var vibrationUtils: VibrationUtils? = null
@@ -78,6 +80,10 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             this.color = Color.parseColor("#40ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
+        }
+
+        optimalPaint = Paint().apply {
+            this.color = Color.parseColor("#19a3eeff")
         }
 
         barTextPaint = Paint().apply {
@@ -292,6 +298,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             }
             start += dataStepWidth
         }
+
+        showAverage(canvas, availableWidth)
     }
 
     private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
@@ -341,6 +349,61 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 start, topHeight.toFloat(), start, height.toFloat() - bottomHeight, gridLinePaint
             )
             start += stepWidth
+        }
+
+        optimalRange?.let {
+            val min = getYAxisValue(it.first)
+            val max = getYAxisValue(it.second)
+
+            canvas.drawRect(
+                RectF(
+                    0f,
+                    min,
+                    availableWidth,
+                    max
+                ), optimalPaint
+            )
+        }
+    }
+
+    private fun showAverage(canvas: Canvas, availableWidth: Float) {
+        if (mAverage != null) {
+            val textBounds = Rect()
+
+            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
+
+            val textX = width - textBounds.width().toFloat()
+            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
+
+
+            canvas.drawRoundRect(
+                RectF(
+                    textX - dip2px(3f),
+                    textY - textBounds.height() - dip2px(3f),
+                    textX + textBounds.width() + dip2px(3f),
+                    textY + dip2px(3f)
+                ),
+                dip2px(2f).toFloat(),
+                dip2px(2f).toFloat(),
+                avgBackPaint
+            )
+
+            canvas.drawText(
+                mAverage!!.second,
+                textX,
+                textY,
+                avgTextPaint
+            )
+
+            canvas.drawLine(
+                0f,
+                getYAxisValue(mAverage!!.first),
+                availableWidth,
+                getYAxisValue(mAverage!!.first),
+                avgLinePaint
+            )
+        } else {
+            showNoRecordAvailable(canvas, availableWidth)
         }
     }
 
@@ -407,43 +470,6 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 )
             }
         }
-
-        if (mAverage != null) {
-            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
-
-            val textX = width - textBounds.width().toFloat()
-            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
-
-
-            canvas.drawRoundRect(
-                RectF(
-                    textX - dip2px(3f),
-                    textY - textBounds.height() - dip2px(3f),
-                    textX + textBounds.width() + dip2px(3f),
-                    textY + dip2px(3f)
-                ),
-                dip2px(2f).toFloat(),
-                dip2px(2f).toFloat(),
-                avgBackPaint
-            )
-
-            canvas.drawText(
-                mAverage!!.second,
-                textX,
-                textY,
-                avgTextPaint
-            )
-
-            canvas.drawLine(
-                0f,
-                getYAxisValue(mAverage!!.first),
-                availableWidth,
-                getYAxisValue(mAverage!!.first),
-                avgLinePaint
-            )
-        } else {
-            showNoRecordAvailable(canvas, availableWidth)
-        }
     }
 
     private fun drawXAxis(canvas: Canvas) {
@@ -475,13 +501,15 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         maxValue: Int,
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
-        contributorType: SleepInternalLaunchState?
+        contributorType: SleepInternalLaunchState?,
+        optimalRange: Pair<Float, Float>?
     ) {
         dataPosition.clear()
         dataSet.clear()
         dataSet.addAll(list)
         mSelectedPosition = selectedPosition
         this.contributorType = contributorType
+        this.optimalRange = optimalRange
 
 
         this.yAxisRange.clear()

@@ -192,6 +192,8 @@ class SleepInternalDetailsFragment :
                     TrendsTopState.SINGLE_DATE -> {
                         binding.lytTopView.lytTopMultipleView.apply {
                             tvNudge.alpha = 0.5f
+                            tvOptimalRangeLabel.alpha = 0.5f
+                            ivCircle.alpha = 0.5f
                         }
 
                         val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
@@ -217,6 +219,8 @@ class SleepInternalDetailsFragment :
                     TrendsTopState.DOUBLE_DATE -> {
                         binding.lytTopView.lytTopMultipleView.apply {
                             tvNudge.alpha = 0.5f
+                            tvOptimalRangeLabel.alpha = 0.5f
+                            ivCircle.alpha = 0.5f
                         }
 
                         val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
@@ -340,6 +344,8 @@ class SleepInternalDetailsFragment :
             TrendsTopState.SINGLE_DATE -> {
                 binding.lytTopView.lytTopMultipleView.apply {
                     tvNudge.alpha = 1.0f
+                    tvOptimalRangeLabel.alpha = 1.0f
+                    ivCircle.alpha = 1.0f
 
                     lytContentView.divider1.root.gone()
                     lytContentView.lytNeed.root.gone()
@@ -350,6 +356,9 @@ class SleepInternalDetailsFragment :
             TrendsTopState.DOUBLE_DATE -> {
                 binding.lytTopView.lytTopMultipleView.apply {
                     tvNudge.alpha = 1.0f
+                    tvOptimalRangeLabel.alpha = 1.0f
+                    ivCircle.alpha = 1.0f
+
                     lytContentView.lytHours.lytTrendsHighlight.root.gone()
                 }
             }
@@ -528,6 +537,29 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopMultipleView.tvNudge.text =
                         viewModel.dayAvg?.nudge ?: ""
                     handleDayComparison()
+
+                    val optimalRange =
+                        sharedViewModel.getOptimalRangeMinMax(viewModel.selectedLaunchMode)
+                    if (optimalRange == null) {
+                        binding.lytTopView.lytTopSingleView.ivCircle.gone()
+                        binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.gone()
+
+
+                        binding.lytTopView.lytTopMultipleView.ivCircle.gone()
+                        binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.gone()
+                    } else {
+                        binding.lytTopView.lytTopSingleView.ivCircle.visible()
+                        binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.visible()
+
+                        binding.lytTopView.lytTopMultipleView.ivCircle.visible()
+                        binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.visible()
+                    }
+                } else {
+                    binding.lytTopView.lytTopSingleView.ivCircle.gone()
+                    binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.gone()
+
+                    binding.lytTopView.lytTopMultipleView.ivCircle.gone()
+                    binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.gone()
                 }
             }
 
@@ -539,6 +571,11 @@ class SleepInternalDetailsFragment :
                         viewModel.weekAvg?.nudge ?: ""
                     handleWeekComparison()
                 }
+                binding.lytTopView.lytTopSingleView.ivCircle.gone()
+                binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.gone()
+
+                binding.lytTopView.lytTopMultipleView.ivCircle.gone()
+                binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.gone()
             }
 
             InternalSelectedPeriod.MONTH -> {
@@ -549,6 +586,11 @@ class SleepInternalDetailsFragment :
                         viewModel.monthAvg?.nudge ?: ""
                     handleMonthComparison()
                 }
+                binding.lytTopView.lytTopSingleView.ivCircle.gone()
+                binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.gone()
+
+                binding.lytTopView.lytTopMultipleView.ivCircle.gone()
+                binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.gone()
             }
         }
         showDefaultDates()

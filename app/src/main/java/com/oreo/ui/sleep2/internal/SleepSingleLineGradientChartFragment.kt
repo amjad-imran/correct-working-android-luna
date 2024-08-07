@@ -56,6 +56,7 @@ class SleepSingleLineGradientChartFragment :
             dataListType1 = dataList,
             contributorType = pageData?.contributorType
         )
+        val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)
 
         val type = if (pageData?.contributorType == SleepInternalLaunchState.SLEEP_DURATION) {
             SleepSingleGradientChartType.TIME
@@ -70,7 +71,8 @@ class SleepSingleLineGradientChartFragment :
 
         binding.graphBar.setDataSet(
             dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1,
-            type
+            type,
+            optimalRange
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)

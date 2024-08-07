@@ -54,6 +54,7 @@ class SleepBarChartFragment :
             contributorType = pageData?.contributorType
         )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
+        val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)
 
 
         binding.graphBar.setDataSet(
@@ -62,7 +63,8 @@ class SleepBarChartFragment :
             yAxisRange.last().first,
             avgValue,
             -1,
-            pageData?.contributorType
+            pageData?.contributorType,
+            optimalRange
         )
         binding.graphBar.setVibrationUtil(vibrationUtils)
 

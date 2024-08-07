@@ -224,6 +224,31 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    /**
+     * Returns optimal range
+     */
+    fun getOptimalRangeMinMax(contributorType: SleepInternalLaunchState?): Pair<Float, Float>? {
+        return when (contributorType) {
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> null
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> null
+            SleepInternalLaunchState.HOUR_VS_NEED -> null
+            SleepInternalLaunchState.SLEEP_TIME -> null
+            SleepInternalLaunchState.TIMING -> null
+            SleepInternalLaunchState.EFFICIENCY -> null
+            SleepInternalLaunchState.REM_SLEEP -> Pair(1.5f * 60.0f, 2 * 60.0f)
+            SleepInternalLaunchState.DEEP_SLEEP -> null
+            SleepInternalLaunchState.SLEEP_DURATION -> Pair(7 * 60.0f, 9 * 60.0f)
+            SleepInternalLaunchState.LATENCY -> null
+            SleepInternalLaunchState.RESTFULNESS -> null
+            SleepInternalLaunchState.RESPIRATORY_RATE -> null
+            SleepInternalLaunchState.RESTING_HEART_RATE -> null
+            SleepInternalLaunchState.HRV -> null
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> null
+            SleepInternalLaunchState.BLOOD_OXYGEN -> null
+            null -> null
+        }
+    }
+
     fun getMaxValue(
         dataListType1: List<GraphDataModel>? = null,
         contributorType: SleepInternalLaunchState?
@@ -249,7 +274,8 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 mMax += ((0.2) * mMax).toInt()
                 return mMax
             }
-            SleepInternalLaunchState.RESTORATIVE_SLEEP->{
+
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                 var mMax = 0.0f
                 dataListType1?.forEach {
                     val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)

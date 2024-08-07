@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@+id/tvOptimalRangeLabel"
-            style="@style/Small"
+            style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white_48"
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toBottomOf="@id/lytHighlightTrends"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/lytHighlightTrends"
-            tools:text="Optimal range"
+            android:text="@string/text_optimal_range"
             tools:visibility="visible" />
 
         <TextView

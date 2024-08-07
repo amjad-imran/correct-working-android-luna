@@ -26,6 +26,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDateTime" />
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivCircle"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="6dp"
+            android:background="#33a3eeff"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tvOptimalRangeLabel"
+            app:layout_constraintEnd_toStartOf="@id/tvOptimalRangeLabel"
+            app:layout_constraintTop_toTopOf="@id/tvOptimalRangeLabel"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvOptimalRangeLabel"
+            style="@style/S12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:text="@string/text_optimal_range"
+            android:textColor="@color/white_48"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/tvNudge"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/tvNudge"
             style="@style/S14"

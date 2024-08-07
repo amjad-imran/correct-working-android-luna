@@ -44,6 +44,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     lateinit var avgBackPaint: Paint
     lateinit var xOverlayLinePaint: Paint
     lateinit var avgLineFillPaint: Paint
+    lateinit var optimalPaint: Paint
 
 
     lateinit var linePaint: Paint
@@ -74,7 +75,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    var mAverage: Pair<Float, String>? = null
+    private var mAverage: Pair<Float, String>? = null
+    private var optimalRange: Pair<Float, Float>? = null
     private var chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.PERCENT
 
     /**
@@ -104,6 +106,9 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
         avgBackPaint = Paint().apply {
             this.color = Color.parseColor("#28ffffff")
+        }
+        optimalPaint = Paint().apply {
+            this.color = Color.parseColor("#19a3eeff")
         }
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
@@ -262,7 +267,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 dataPosition.add(Pair(index, start))
 
                 fillPath.moveTo(start + dataStepWidth / 2, height - bottomHeight.toFloat())
-                fillPath.lineTo(start + dataStepWidth/ 2, actualPos)
+                fillPath.lineTo(start + dataStepWidth / 2, actualPos)
 
 
                 if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
@@ -452,6 +457,20 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             )
             start += stepWidth
         }
+
+        optimalRange?.let {
+            val min = getYAxisValue(it.first)
+            val max = getYAxisValue(it.second)
+
+            canvas.drawRect(
+                RectF(
+                    0f,
+                    min,
+                    availableWidth,
+                    max
+                ), optimalPaint
+            )
+        }
     }
 
     private fun drawYAxis(canvas: Canvas) {
@@ -553,9 +572,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         chartType: SleepSingleGradientChartType,
+        optimalRange: Pair<Float, Float>?
     ) {
         dataPosition.clear()
         this.chartType = chartType
+        this.optimalRange = optimalRange
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
 
