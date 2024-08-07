@@ -1,7 +1,6 @@
 package com.oreo.ui.sleep2.internal
 
 import android.graphics.Color
-import android.icu.util.LocaleData
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -108,6 +107,15 @@ class SleepInternalDetailsFragment :
         } else {
             binding.lytDeviation.root.gone()
         }
+
+        if (viewModel.isHealthMonitorTrend()) {
+            binding.lytSelector.root.gone()
+            binding.lytSelector.tvDaily.visible()
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.DAILY)
+        } else {
+            binding.lytSelector.tvDaily.gone()
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
+        }
     }
 
 
@@ -138,16 +146,23 @@ class SleepInternalDetailsFragment :
             val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode, false)
             navigate(frag, bundle)
         }
+        binding.lytSelector.tvDaily.setOnClickListener {
+            viewModel.setSelectedPeriod(InternalSelectedPeriod.DAILY)
+            viewModel.reloadData()
+        }
         binding.lytSelector.tvDay.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
+            viewModel.reloadData()
         }
 
         binding.lytSelector.tvWeek.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
+            viewModel.reloadData()
         }
 
         binding.lytSelector.tvMonth.setOnClickListener {
             viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
+            viewModel.reloadData()
         }
 
         binding.toolbar.backBtn.setOnClickListener {
@@ -177,7 +192,7 @@ class SleepInternalDetailsFragment :
 
             pagerAdapter?.setDataSet(it ?: ArrayList())
 
-            binding.graphPager.setCurrentItem(viewModel.getSelectedPosition(),false)
+            binding.graphPager.setCurrentItem(viewModel.getSelectedPosition(), false)
 
             showTopContent()
         }
@@ -313,8 +328,6 @@ class SleepInternalDetailsFragment :
 
         viewModel.selectedPeriod.observe(this) {
             setPeriodUiState(it)
-            showTopContent()
-            viewModel.reloadData()
         }
 
         viewModel.titleUpdate.observe(this) {
@@ -417,6 +430,7 @@ class SleepInternalDetailsFragment :
                     InternalSelectedPeriod.DAY, null -> viewModel.dayAvg?.avg
                     InternalSelectedPeriod.WEEK -> viewModel.weekAvg?.avg
                     InternalSelectedPeriod.MONTH -> viewModel.monthAvg?.avg
+                    InternalSelectedPeriod.DAILY -> null
                 }
 
 
@@ -457,6 +471,7 @@ class SleepInternalDetailsFragment :
                     InternalSelectedPeriod.DAY, null -> viewModel.dayAvg?.avg
                     InternalSelectedPeriod.WEEK -> viewModel.weekAvg?.avg
                     InternalSelectedPeriod.MONTH -> viewModel.monthAvg?.avg
+                    InternalSelectedPeriod.DAILY -> null
                 }
 
                 binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight.tvRangeValue.text =
@@ -503,6 +518,8 @@ class SleepInternalDetailsFragment :
                         viewModel.monthAvg?.avg_hour,
                         viewModel.monthAvg?.avg_need
                     )
+
+                    InternalSelectedPeriod.DAILY -> Pair(null, null)
                 }
 
                 /* binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight.tvRangeValue.text =
@@ -631,6 +648,10 @@ class SleepInternalDetailsFragment :
 
                 binding.lytTopView.lytTopMultipleView.ivCircle.gone()
                 binding.lytTopView.lytTopMultipleView.tvOptimalRangeLabel.gone()
+            }
+
+            InternalSelectedPeriod.DAILY -> {
+
             }
         }
         showDefaultDates()
@@ -781,40 +802,9 @@ class SleepInternalDetailsFragment :
     }
 
 
-    private fun setGraphPagerView() {
-        val fragments = ArrayList<Fragment>()
-        /* when (viewModel.selectedLaunchMode) {
-             SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.EFFICIENCY -> fragments.add(
-                 SleepSingleLineChartFragment.newInstance(pageData)
-             )
-
-             SleepInternalLaunchState.HOUR_VS_NEED -> fragments.add(SleepMultiLineChartFragment.newInstance())
-             SleepInternalLaunchState.RESTORATIVE_SLEEP -> fragments.add(SleepMultiBarChartFragment.newInstance())
-             else -> fragments.add(SleepBarChartFragment.newInstance())
-         }*/
-
-        val sleepBannerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
-
-        binding.graphPager.adapter = sleepBannerAdapter
-        binding.graphPager.layoutDirection = ViewPager2.LAYOUT_DIRECTION_RTL
-
-        sleepBannerAdapter.setDataSet(fragments)
-
-        binding.graphPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val total = sleepBannerAdapter.itemCount
-
-                if (position == (total - 1)) {
-                    //sleepBannerAdapter.addFragment(SleepMultiBarChartFragment.newInstance())
-                }
-            }
-        })
-
-    }
-
-
     private fun setPeriodUiState(state: InternalSelectedPeriod) {
+        binding.lytSelector.tvDaily.setBackgroundResource(0)
+        binding.lytSelector.tvDaily.setTextColor(resources.getColor(R.color.white_40))
         binding.lytSelector.tvDay.setBackgroundResource(0)
         binding.lytSelector.tvDay.setTextColor(resources.getColor(R.color.white_40))
         binding.lytSelector.tvWeek.setBackgroundResource(0)
@@ -823,6 +813,11 @@ class SleepInternalDetailsFragment :
         binding.lytSelector.tvMonth.setTextColor(resources.getColor(R.color.white_40))
 
         when (state) {
+            InternalSelectedPeriod.DAILY -> {
+                binding.lytSelector.tvDaily.setBackgroundResource(R.drawable.back_modal)
+                binding.lytSelector.tvDaily.setTextColor(resources.getColor(R.color.white))
+            }
+
             InternalSelectedPeriod.DAY -> {
                 binding.lytSelector.tvDay.setBackgroundResource(R.drawable.back_modal)
                 binding.lytSelector.tvDay.setTextColor(resources.getColor(R.color.white))
@@ -837,6 +832,8 @@ class SleepInternalDetailsFragment :
                 binding.lytSelector.tvMonth.setBackgroundResource(R.drawable.back_modal)
                 binding.lytSelector.tvMonth.setTextColor(resources.getColor(R.color.white))
             }
+
+
         }
     }
 }

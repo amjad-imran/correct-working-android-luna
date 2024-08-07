@@ -12,6 +12,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
@@ -153,6 +154,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
      * @return Pair of start date and end date
      */
     private fun getDatesToLoad(): Pair<LocalDate, LocalDate> {
+
         val (start, end) = when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
                 return if (currentStartDate == null) {
@@ -197,12 +199,60 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     Pair(start, end)
                 }
             }
+
+            InternalSelectedPeriod.DAILY -> {
+                if (currentStartDate == null) {
+                    currentStartDate = LocalDate.now()
+                    Pair(currentStartDate, currentStartDate)
+                } else {
+                    currentStartDate = currentStartDate!!.minusDays(1)
+                    Pair(currentStartDate, currentStartDate)
+                }
+            }
         }
 
         return Pair(start, end)
     }
 
+    private fun loadTempDeviationFrag() {
+        val start = LocalDate.parse(startDate)
+        val end = LocalDate.now()
+
+        var current = start
+        val dataToDisplay = ArrayList<TrendsValues>()
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        while (current <= end) {
+            val data = trendsData[current]
+            dataToDisplay.add(
+                TrendsValues(
+                    date = current.format(dateFormat),
+                    value1 = data?.value1,
+                    value2 = data?.value2
+                )
+            )
+            current = current.plusDays(1)
+        }
+
+        val trendData = TrendsGraphData(
+            data = dataToDisplay
+        )
+        fragments.postValue(
+            arrayListOf(
+                SleepTempDeviationChartFragment.newInstance(
+                    trendData
+                )
+            )
+        )
+
+    }
+
     private fun loadAllFragments() {
+
+        if (isDeviationSelected && selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+            loadTempDeviationFrag()
+            return
+        }
+
         val initDates = getDatesToLoad()
         var start = initDates.first
         var end = initDates.second
@@ -251,13 +301,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
         trendData.contributorType = selectedLaunchMode
-
-        if (isDeviationSelected && selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-            return SleepTempDeviationChartFragment.newInstance(
-                trendData
-            )
-        }
-
 
         when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
@@ -357,9 +400,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     }
                 }
             }
+
+            InternalSelectedPeriod.DAILY -> {
+                return SleepSingleLineGradientChartFragment.newInstance(
+                    trendData
+                )
+            }
         }
-
-
     }
 
     /*
@@ -524,6 +571,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun reloadData() {
         currentStartDate = null
+        fragments.value = null
         loadAllFragments()
     }
 
@@ -585,6 +633,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 val dayFormat = DateTimeFormatter.ofPattern("MMMM yyyy")
                 todayDate.format(dayFormat)
             }
+
+            InternalSelectedPeriod.DAILY -> {
+                val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                todayDate.format(dayFormat)
+            }
         }
 
     }
@@ -597,7 +650,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 }
 
 enum class InternalSelectedPeriod {
-    DAY, WEEK, MONTH
+    DAILY, DAY, WEEK, MONTH
 }
 
 enum class TrendsTopState {

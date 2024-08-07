@@ -1330,6 +1330,7 @@
     <string name="text_delete_sleep">Delete sleep</string>
     <string name="text_edit_sleep">Edit sleep</string>
     <string name="text_optimal_range">Optimal range</string>
+    <string name="text_daily">Daily</string>
 
 
 </resources>
