@@ -984,7 +984,7 @@ constructor(
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepDataBreakup>()
 
-        val sleepStartInBtw = DateFormats.convertTimestampToDate(
+        /*val sleepStartInBtw = DateFormats.convertTimestampToDate(
             bean.entryTime.toLong() * 1000,
             DateFormats.timeFormatHour()
         ).toInt() //00,01,02....23
@@ -992,7 +992,7 @@ constructor(
         if (sleepStartInBtw in 8..18) {
             AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data invalid interval $bean")
             return null
-        }
+        }*/
         sleepData.startTime = DateFormats.convertTimestampToDate(
             bean.entryTime.toLong() * 1000,
             DateFormats.timeFormatSleepTime()
