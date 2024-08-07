@@ -469,6 +469,9 @@ class SleepDashFragment :
             binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
 
             viewModel.getDataForDate(it)
+
+            mainViewModel.onCalendarDateSelected(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
         }
     }
 
@@ -567,7 +570,6 @@ class SleepDashFragment :
 
                 viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
 
-                mainViewModel.selectedDate = selectedDate
 
                 binding.vCalendar.scrollToDate(
                     viewModel.selectedDate.value ?: LocalDate.now()
