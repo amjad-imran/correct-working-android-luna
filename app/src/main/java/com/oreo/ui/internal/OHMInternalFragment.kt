@@ -12,6 +12,8 @@ import com.oreo.ui.sleep2.SleepDashViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class OHMInternalFragment :
@@ -38,7 +40,7 @@ class OHMInternalFragment :
 
     fun showInternalTrend(state: SleepInternalLaunchState) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state
+            state,LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         )
         navigate(frag, bundle)
     }

@@ -12,7 +12,6 @@ import javax.inject.Inject
 class ODropDownViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
-    var isFromHealthMonitor = false
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     fun fetchDropDownData(): Triple<ArrayList<SleepInternalLaunchState>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
         val sleepData = ArrayList<SleepInternalLaunchState>()
@@ -26,14 +25,12 @@ class ODropDownViewModel @Inject constructor(
         sleepData.add(SleepInternalLaunchState.HOUR_VS_NEED)
         sleepData.add(SleepInternalLaunchState.RESTORATIVE_SLEEP)
 
-
-
         //health monitor trends
-       /* sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
+        sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
         sleepData.add(SleepInternalLaunchState.RESTING_HEART_RATE)
         sleepData.add(SleepInternalLaunchState.HRV)
         sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
-        sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)*/
+        sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)
 
         val activityData = ArrayList<ODropDownDataModel>()
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))

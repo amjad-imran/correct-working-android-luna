@@ -137,7 +137,7 @@ class SleepDashFragment :
         binding.blurViewSelector.gone()
         navigate(R.id.fragmentAddSleep)
     }
-    
+
     override fun initListener() {
 
         binding.blurViewSelector.setOnClickListener {
@@ -237,7 +237,6 @@ class SleepDashFragment :
         animateItemsUp(binding.lytAddSleep.tvAddSleep, 200f)
 
 
-
         val rotate =
             ObjectAnimator.ofFloat(
                 binding.lytAddSleep.ivSleepClose,
@@ -291,7 +290,7 @@ class SleepDashFragment :
 
         animateItemsDown(binding.lytAddSleep.ivRecordSleep, binding.lytAddSleep.ivSleepClose)
         animateItemsDown(binding.lytAddSleep.tvAddSleep, binding.lytAddSleep.ivSleepClose)
-        
+
         val alpha =
             ObjectAnimator.ofFloat(
                 binding.lytAddSleep.ivSleepClose,
@@ -667,33 +666,41 @@ class SleepDashFragment :
         }
 
         data?.healthTrend?.apply {
-            if(!bloodOxy?.status.isNullOrEmpty()){
-                binding.lytHealthMonitor.imvSpo2.setImageResource(viewModel.getHealthTrendIcon(bloodOxy?.status))
-            }else{
+            if (!bloodOxy?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvSpo2.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        bloodOxy?.status
+                    )
+                )
+            } else {
                 binding.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
             }
 
-            if(!hrv?.status.isNullOrEmpty()){
+            if (!hrv?.status.isNullOrEmpty()) {
                 binding.lytHealthMonitor.imvHrv.setImageResource(viewModel.getHealthTrendIcon(hrv?.status))
-            }else{
+            } else {
                 binding.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
             }
 
-            if(!rhr?.status.isNullOrEmpty()){
+            if (!rhr?.status.isNullOrEmpty()) {
                 binding.lytHealthMonitor.imvRHR.setImageResource(viewModel.getHealthTrendIcon(rhr?.status))
-            }else{
+            } else {
                 binding.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
             }
 
-            if(!skinTemp?.status.isNullOrEmpty()){
-                binding.lytHealthMonitor.imvSkin.setImageResource(viewModel.getHealthTrendIcon(skinTemp?.status))
-            }else{
+            if (!skinTemp?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvSkin.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        skinTemp?.status
+                    )
+                )
+            } else {
                 binding.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
             }
 
-            if(!resp?.status.isNullOrEmpty()){
+            if (!resp?.status.isNullOrEmpty()) {
                 binding.lytHealthMonitor.imvResp.setImageResource(viewModel.getHealthTrendIcon(resp?.status))
-            }else{
+            } else {
                 binding.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
             }
 
@@ -703,7 +710,7 @@ class SleepDashFragment :
 
         binding.lytHealthMonitor.ivArrow.setOnClickListener {
             navigate(R.id.healthMonitorInternal, Bundle().apply {
-                this.putParcelable("healthTrend",  data?.healthTrend)
+                this.putParcelable("healthTrend", data?.healthTrend)
             })
         }
 
@@ -988,7 +995,7 @@ class SleepDashFragment :
 
     fun showInternalTrend(state: SleepInternalLaunchState) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state
+            state, viewModel.selectedDate.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         )
         navigate(frag, bundle)
     }

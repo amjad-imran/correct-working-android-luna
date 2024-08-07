@@ -2,9 +2,14 @@ package com.oreo.ui.sleep2.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
+import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.ChartModel
+import com.oreo.data.model.ResultData
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +21,9 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
-class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
+class OSPTrendsSharedViewModel @Inject constructor(
+    val sessionManager: SessionManager
+) : BaseViewModel() {
 
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
@@ -476,6 +483,60 @@ class OSPTrendsSharedViewModel @Inject constructor() : BaseViewModel() {
                 //arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             }
         }
+    }
+
+    fun getPrefixAndSuffixListTemp(
+        dataList: ArrayList<ResultData>,
+    ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
+        dataList.reversed()
+        val list = java.util.ArrayList<ChartModel>()
+        var max = 10
+        dataList.forEach {
+
+
+            val chartModel = ChartModel()
+            chartModel.date = it.date
+            chartModel.valueFloat2 =
+                if (it.data != 0.0f) {
+                    if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(it.data) else it.data
+                } else {
+                    it.data
+                }
+
+            chartModel.index =
+                DateFormats.parseDate(
+                    it.date,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormatDay()
+                )
+
+            chartModel.valueFloat =
+                if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
+                    32 + (it.deviation ?: 0.0f)
+                ) else it.deviation ?: 0.0f
+
+            list.add(chartModel)
+        }
+
+
+        val suffix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            suffix.add(chartModel)
+        }
+
+        val prefix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            prefix.add(chartModel)
+        }
+        return Triple(Pair(list, max), suffix, prefix)
     }
 
 }

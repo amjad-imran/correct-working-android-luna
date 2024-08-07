@@ -32,6 +32,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
+    var isDeviationSelected = true
+
     lateinit var selectedLaunchMode: SleepInternalLaunchState
     val trendsData = HashMap<LocalDate, TrendsValues>()
 
@@ -40,6 +42,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     var startDate: String = ""
     var endDate: String = ""
+
+
+    var selectedDate: LocalDate = LocalDate.now()
+    private var selectedPosition = 0
 
     private val _selectedPeriod = MutableLiveData<InternalSelectedPeriod>()
     val selectedPeriod: LiveData<InternalSelectedPeriod> = _selectedPeriod
@@ -113,7 +119,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                     trendsData[LocalDate.parse(it.date)] = it
                                 }
 
-                                loadNewFragment()
+                                loadAllFragments()
 
                                 if (dayAvg == null) {
                                     dayAvg = it.dayAvg
@@ -130,6 +136,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 }
         }
     }
+
 
     fun isHealthMonitorTrend(): Boolean {
         val healthTrends = arrayListOf(
@@ -195,47 +202,63 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return Pair(start, end)
     }
 
-    private fun loadNewFragment() {
+    private fun loadAllFragments() {
+        val initDates = getDatesToLoad()
+        var start = initDates.first
+        var end = initDates.second
 
-        val (start, end) = getDatesToLoad()
+        val userStartDate = LocalDate.parse(startDate)
+        val fragmentsToShow = ArrayList<Fragment>()
+        var positionCount = 0
+        while (end >= userStartDate) {
+            currentStartDate = start
+            val dataToDisplay = ArrayList<TrendsValues>()
 
-
-        if (end < LocalDate.parse(startDate)) {
-            return
-        }
-        currentStartDate = start
-
-        val dataToDisplay = ArrayList<TrendsValues>()
-
-        var current = start
-        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        while (current <= end) {
-            val data = trendsData[current]
-            dataToDisplay.add(
-                TrendsValues(
-                    date = current.format(dateFormat), value1 = data?.value1, value2 = data?.value2
+            var current = start
+            val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            while (current <= end) {
+                val data = trendsData[current]
+                dataToDisplay.add(
+                    TrendsValues(
+                        date = current.format(dateFormat),
+                        value1 = data?.value1,
+                        value2 = data?.value2
+                    )
                 )
-            )
-            current = current.plusDays(1)
-        }
-
-        val trendData = TrendsGraphData(
-            data = dataToDisplay
-        )
-
-        getFragmentToAdd(trendData).let {
-            var oldData = fragments.value
-            if (oldData == null) {
-                oldData = ArrayList()
+                if (current == selectedDate) {
+                    selectedPosition = positionCount
+                }
+                current = current.plusDays(1)
             }
-            (oldData as ArrayList).add(it)
-            fragments.postValue(oldData)
+
+            val trendData = TrendsGraphData(
+                data = dataToDisplay
+            )
+
+            getFragmentToAdd(trendData).let {
+                fragmentsToShow.add(it)
+            }
+
+            val initDatesNew = getDatesToLoad()
+            start = initDatesNew.first
+            end = initDatesNew.second
+            positionCount++
         }
+
+        fragments.postValue(fragmentsToShow)
     }
 
 
     private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
         trendData.contributorType = selectedLaunchMode
+
+        if (isDeviationSelected && selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+            return SleepTempDeviationChartFragment.newInstance(
+                trendData
+            )
+        }
+
+
         when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
                 return when (selectedLaunchMode) {
@@ -499,13 +522,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return dataList
     }
 
-    fun loadMoreData() {
-        loadNewFragment()
-    }
-
     fun reloadData() {
         currentStartDate = null
-        loadNewFragment()
+        loadAllFragments()
     }
 
     fun getUnit(): String {
@@ -568,6 +587,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun getSelectedPosition(): Int {
+        return selectedPosition
     }
 
 

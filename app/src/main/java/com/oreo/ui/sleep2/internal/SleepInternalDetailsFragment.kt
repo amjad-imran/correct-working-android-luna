@@ -1,6 +1,7 @@
 package com.oreo.ui.sleep2.internal
 
 import android.graphics.Color
+import android.icu.util.LocaleData
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -47,9 +49,13 @@ class SleepInternalDetailsFragment :
     }
 
     companion object {
-        fun getStartData(launchMode: SleepInternalLaunchState): Pair<Int, Bundle?> {
+        fun getStartData(
+            launchMode: SleepInternalLaunchState,
+            selectedDate: String?
+        ): Pair<Int, Bundle?> {
             return Pair(R.id.sleepInternalDetailsFragment, Bundle().apply {
                 putSerializable("launchMode", launchMode)
+                putSerializable("selectedDate", selectedDate)
             })
         }
     }
@@ -57,6 +63,9 @@ class SleepInternalDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.selectedLaunchMode = args.launchMode
+        args.selectedDate?.let {
+            viewModel.selectedDate = LocalDate.parse(it)
+        }
 
         viewModel.startDate =
             sharedViewModel.calendarStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -64,13 +73,14 @@ class SleepInternalDetailsFragment :
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
 
         initUi()
-        viewModel.updateTitle()
         setRecycler()
         initViewPager()
         viewModel.getTrendsInternalDetailsData()
     }
 
     private fun initUi() {
+        viewModel.updateTitle()
+
         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
             binding.lytLegendRestorative.apply {
                 root.visible()
@@ -91,9 +101,33 @@ class SleepInternalDetailsFragment :
         } else {
             binding.lytLegendRestorative.root.gone()
         }
+
+
+        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+            binding.lytDeviation.root.visible()
+        } else {
+            binding.lytDeviation.root.gone()
+        }
     }
 
+
     override fun initListener() {
+        binding.lytDeviation.tvDeviation.setOnClickListener {
+            binding.lytDeviation.tvDeviation.setBackgroundResource(R.drawable.back_deviation_selected)
+            binding.lytDeviation.tvAbsolute.setBackgroundResource(0)
+            binding.lytSelector.root.gone()
+            viewModel.isDeviationSelected = true
+            viewModel.reloadData()
+        }
+
+        binding.lytDeviation.tvAbsolute.setOnClickListener {
+            binding.lytDeviation.tvAbsolute.setBackgroundResource(R.drawable.back_deviation_selected)
+            binding.lytDeviation.tvDeviation.setBackgroundResource(0)
+            binding.lytSelector.root.visible()
+            viewModel.isDeviationSelected = false
+            viewModel.reloadData()
+        }
+
         binding.lytSpinnerView.setOnClickListener {
             setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
                 val data = bundle.getSerializable("itemName") as SleepInternalLaunchState
@@ -128,7 +162,7 @@ class SleepInternalDetailsFragment :
             it.getContent()?.let {
                 navigate(
                     SleepInternalDetailsFragmentDirections.actionSleepInternalDetailsFragmentSelf(
-                        it
+                        it, viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     )
                 )
             }
@@ -142,6 +176,8 @@ class SleepInternalDetailsFragment :
             }
 
             pagerAdapter?.setDataSet(it ?: ArrayList())
+
+            binding.graphPager.setCurrentItem(viewModel.getSelectedPosition(),false)
 
             showTopContent()
         }
@@ -318,9 +354,13 @@ class SleepInternalDetailsFragment :
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 pagerAdapter?.let {
-                    val total = it.itemCount
-                    if (position == (total - 1)) {//is last page
-                        viewModel.loadMoreData()
+                    if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                        //handle scroll for this case if any
+                    } else {
+                        val total = it.itemCount
+                        if (position == (total - 1)) {//is last page
+                            //viewModel.loadMoreData()
+                        }
                     }
                 }
 
