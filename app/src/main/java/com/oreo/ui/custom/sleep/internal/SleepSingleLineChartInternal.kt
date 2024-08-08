@@ -218,7 +218,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         var previousValue: Float? = null
 
         var lastPos = 0
-        LOGS.d("dfjkghdkfjghkdjfg ${dataSet.size}")
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
@@ -684,6 +683,10 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private fun getAvgBarColor(currentValue: Float?, previousValue: Float?): Int {
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
+
+        if (currentValue >= previousValue) {
+            return Color.parseColor("#29cc74")
+        }
 
         val currentPercentRaise =
             ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100

@@ -185,6 +185,7 @@ interface NetworkService {
     @POST
     suspend fun postOreoCombinedHistoryData(
         @Url url: String, @Body requestObject: OreoUserDataPost,
+        @Header("api-version") version: String,
     ): BaseApiResponse<VersionCheckResponse>
 
     @POST

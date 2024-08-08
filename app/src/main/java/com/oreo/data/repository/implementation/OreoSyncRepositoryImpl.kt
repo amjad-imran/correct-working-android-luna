@@ -267,7 +267,7 @@ class OreoSyncRepositoryImpl(
                 val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync"
                 AppLogs.sendAppLogs("POST Multisync DATA SERVER $url -> ${Gson().toJson(it)}")
 
-                remoteDataSource.postOreoCombinedHistoryData(url, it)
+                remoteDataSource.postOreoCombinedHistoryData(url, it,"2")
             }
 
         }
