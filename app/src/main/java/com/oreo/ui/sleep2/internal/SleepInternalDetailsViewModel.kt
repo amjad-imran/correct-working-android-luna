@@ -131,7 +131,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun loadGraphData(loadPrev: Boolean) {
-        if (isHealthMonitorTrend()) {
+        if (isHealthMonitorTrend() && selectedPeriod.value == InternalSelectedPeriod.DAILY) {
             getStartAndEndTime(loadPrev)?.let {
                 getTrendsDailyData(it.first, it.second)
             }
