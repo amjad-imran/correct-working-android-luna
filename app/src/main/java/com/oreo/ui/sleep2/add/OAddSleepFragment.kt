@@ -37,7 +37,7 @@ class OAddSleepFragment :
                 return@setOnClickListener
             }
             if(viewModel.getSleepDuration()< (3 * 60 * 60)){
-                uiController.onDisplayError("Duration of more than 3 hr required")
+                uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
             }
 

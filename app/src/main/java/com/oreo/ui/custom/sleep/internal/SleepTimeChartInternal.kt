@@ -139,7 +139,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
         drawBackGrid(canvas)
         drawXAxis(canvas)
 
-        drawYAxis(canvas)
+        //drawYAxis(canvas)
 
         drawContent(canvas)
     }
