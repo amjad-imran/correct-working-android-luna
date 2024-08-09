@@ -925,7 +925,9 @@ class OreoReadinessFragment :
 
 
         } else {
-            if ((it.temperature?.value ?: 0) != 0) {
+            temperatureDefaultView()
+
+            /*if ((it.temperature?.value ?: 0) != 0) {
                 val baselineAvg = it.base_temp
                     ?: (mainViewModel.temperatureBaseLine
                         ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE)
@@ -947,7 +949,7 @@ class OreoReadinessFragment :
 
             } else {
                 temperatureDefaultView()
-            }
+            }*/
         }
 
         //respiration
