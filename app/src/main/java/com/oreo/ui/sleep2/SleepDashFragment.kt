@@ -739,11 +739,23 @@ class SleepDashFragment :
                 tvHour.text = "$hour"
                 tvMin.text = "$minute"
 
-                val (startColor, endColor) = viewModel.getGradientColor(
-                    data.sleepScore?.status ?: ""
+                val statusColor = ContextCompat.getColor(
+                    this.tvHour.context,
+                    viewModel.getStatusColors(data?.sleepScore?.status ?: "")
                 )
 
-                tvHour.setTextGradient(
+                tvHour.setTextColor(
+                    statusColor
+                )
+                tvMin.setTextColor(
+                    statusColor
+                )
+
+               /* val (startColor, endColor) = viewModel.getGradientColor(
+                    data.sleepScore?.status ?: ""
+                )*/
+
+               /* tvHour.setTextGradient(
                     requireActivity().getColor(R.color.white),
                     startColor,
                     endColor
@@ -752,7 +764,7 @@ class SleepDashFragment :
                     requireActivity().getColor(R.color.white),
                     startColor,
                     endColor
-                )
+                )*/
             }
 
 

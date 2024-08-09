@@ -701,9 +701,11 @@ class SleepDashViewModel @Inject constructor(
         val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
-            R.color.white_12_72
+            R.color.steps_arc
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
+        }else if (status.equals("fair", true)) {
+            R.color.color_fair
         } else {
             R.color.white_12_72
         }
