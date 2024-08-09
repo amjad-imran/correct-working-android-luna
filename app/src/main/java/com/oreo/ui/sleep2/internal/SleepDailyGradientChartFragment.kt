@@ -59,9 +59,12 @@ class SleepDailyGradientChartFragment :
         )
         val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)
 
+        val firstData = pageData?.data?.firstOrNull()
         binding.graphBar.setDataSet(
             dataList, yAxisRange, yAxisRange.last().first, avgValue, -1,
-            optimalRange
+            optimalRange,
+            firstData?.start_time,
+            firstData?.end_time,
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)

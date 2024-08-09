@@ -21,6 +21,7 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -76,6 +77,8 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
     private val endPadding = dip2px(30f)
     private var mAverage: Pair<Float, String>? = null
     private var optimalRange: Pair<Float, Float>? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
 
     /**
      * Pair(deep,rem)
@@ -265,7 +268,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 fillPath.lineTo(start + dataStepWidth / 2, actualPos)
 
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null&& dataSet[index + 1].value1 != 0.0f) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && dataSet[index + 1].value1 != 0.0f) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
@@ -500,7 +503,20 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
 
     private fun drawXAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
-        val xAxisRange = arrayListOf("Start", "", "", "", "", "End")
+        val format = DateTimeFormatter.ofPattern("hh:mm")
+        val formatInput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val startDisplay = if (startTime.isNullOrEmpty()) {
+            ""
+        } else {
+            LocalDateTime.parse(startTime, formatInput).format(format)
+        }
+        val endDisplay = if (endTime.isNullOrEmpty()) {
+            ""
+        } else {
+            LocalDateTime.parse(endTime, formatInput).format(format)
+        }
+        val xAxisRange = arrayListOf(startDisplay, "", "", "", "", endDisplay)
+
         val stepWidth = availableWidth / xAxisRange.size
         var start = 0
         val xTextBounds = Rect()
@@ -531,10 +547,14 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
         maxValue: Int,
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
-        optimalRange: Pair<Float, Float>?
+        optimalRange: Pair<Float, Float>?,
+        startTime: String?,
+        endTime: String?
     ) {
         dataPosition.clear()
         this.optimalRange = optimalRange
+        this.startTime = startTime
+        this.endTime = endTime
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
 

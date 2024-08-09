@@ -223,7 +223,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     date = current.format(dateFormat),
                     value1 = data?.value1,
                     value2 = data?.value2,
-                    breakup = data?.breakup
+                    breakup = data?.breakup,
+                    start_time = data?.start_time,
+                    end_time = data?.end_time
                 )
             )
             current = current.plusDays(1)

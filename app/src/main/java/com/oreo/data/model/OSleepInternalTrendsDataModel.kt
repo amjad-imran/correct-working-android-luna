@@ -26,6 +26,10 @@ data class TrendsValues(
     var master_end_time: String? = null,
 
     //For daily
+    var start_time: String? = null,
+    var end_time: String? = null,
+
+    //For daily
     val avg: Float? = null,
     val breakup: List<Float>? = null
 ) : Parcelable
