@@ -3,15 +3,13 @@ package com.oreo.ui.sleep2.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.luna.R
-import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit.luna.databinding.FragmentSleepTimeChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.ui.custom.sleep.SleepTimeModel
-import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
@@ -52,12 +50,13 @@ class SleepTimeChartFragment :
         val dataList = convertData(pageData?.data)
 
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
+        val yAxisRange = sharedViewModel.getYAxisRange(100f, pageData?.contributorType)
+
 
         binding.graphBar.setDataSet(
-            dataList
+            dataList, yAxisRange
         )
 
-/*
         binding.graphBar.setVibrationUtil(vibrationUtils)
 
         binding.graphBar.setClickListener(object : SleepSingleBarAction {
@@ -74,7 +73,7 @@ class SleepTimeChartFragment :
                 sharedViewModel.sendInteractDay(null)
             }
 
-        })*/
+        })
     }
 
     private fun convertData(data: List<TrendsValues>?): List<SleepTimeModel> {
@@ -120,7 +119,7 @@ class SleepTimeChartFragment :
                     1440 + difference
                 }
 
-                val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
+                    val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
 
                 val startTime = (newStartTime - (minValue ?: 0L))
                 val endTime = startTime + abs(sleepDifference)
@@ -143,6 +142,7 @@ class SleepTimeChartFragment :
                 )
             }
         }
+        LOGS.d("resultsdsd $result ")
         return result
     }
 

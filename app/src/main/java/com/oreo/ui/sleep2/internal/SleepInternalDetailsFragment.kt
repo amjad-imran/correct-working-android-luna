@@ -23,7 +23,9 @@ import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -465,8 +467,13 @@ class SleepInternalDetailsFragment :
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytContentView.lytHours.lytTrendsHighlight.root.invisible()
                     }
-                    val data = viewModel.trendsData[topContentData.date]
-                    showSingleDateData(data?.value1, null)
+                    val value =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SLEEP_TIME) {
+                            viewModel.getDuration(viewModel.trendsData[topContentData.date])
+                        } else {
+                            viewModel.trendsData[topContentData.date]?.value1
+                        }
+                    showSingleDateData(value, null)
                 } else {
                     binding.lytTopView.lytTopMultipleView.apply {
                         tvNudge.alpha = 1.0f

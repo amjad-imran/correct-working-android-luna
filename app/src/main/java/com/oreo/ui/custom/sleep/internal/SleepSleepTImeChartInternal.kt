@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -17,13 +16,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.ColorUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.custom.sleep.SleepTimeModel
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
@@ -64,8 +62,6 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
     private var mHeight = 0
     var dataStepWidth = 0F
 
-    var mMax = 0
-
     private var isInteracting = false
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
@@ -82,21 +78,18 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
     private val endPadding = dip2px(30f)
     private var selectedPeriod: InternalSelectedPeriod? = null
-    private var launchState: SleepInternalLaunchState? = null
     lateinit var xOverlayLinePaint: Paint
     lateinit var avgLineFillPaint: Paint
+
+    var mMax = 0L
+    var offset = 120L
 
 
     /**
      * Pair(deep,rem)
      */
-    private val dataSet = ArrayList<GraphDataModel>()
-    private var mSelectedPosition: Int? = null
+    private val dataSet = ArrayList<SleepTimeModel>()
 
-    /**
-     * Pair(hour(value,displayValue),need(value,displayValue))
-     */
-    var mAverage: Pair<Pair<Int, String>?, Pair<Int, String>?>? = null
 
     init {
         init(attrs)
@@ -172,11 +165,11 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeed = Paint().apply {
-            this.color = Color.parseColor("#7858cc")
+            this.color = Color.parseColor("#465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeedI = Paint().apply {
-            this.color = Color.parseColor("#667858cc")
+            this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
 
@@ -221,7 +214,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
         drawBackGrid(canvas)
         drawXAxis(canvas)
-        drawYAxis(canvas)
+        //drawYAxis(canvas)
         drawContent(canvas)
 
         drawOverlay(canvas)
@@ -267,33 +260,17 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
         dataSet.forEachIndexed { index, it ->
 
-
-            if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
-                val rectFSelected = RectF(
-                    start + paddingHorizontal,
-                    topHeight.toFloat(),
-                    start + dataStepWidth - paddingHorizontal,
-                    height.toFloat() - bottomHeight
-                )
-
-                canvas.drawRect(
-                    rectFSelected,
-                    selectedDayPaint
-                )
-
-            }
-
             val isSelectedPosition = selectedPosition == index
 
-            if (it.value1 != null) {
-                val actualPos = getYAxisValue(it.value1 ?: 0.0f)
+            if (it.startTime != 0L) {
+                val actualPos = getYAxisValue(it.startTime)
 
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].startTime != 0L) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
+                    val actualPosNext = getYAxisValue(nextElement.startTime)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -314,13 +291,13 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
             }
 
-            if (it.value2 != null) {
-                val needPos = getYAxisValue(it.value2 ?: 0.0f)
+            if (it.endTime != 0L) {
+                val needPos = getYAxisValue(it.endTime)
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].endTime!=0L) {
                     val nextElement = dataSet[index + 1]
 
-                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
+                    val actualPosNext = getYAxisValue(nextElement.endTime)
                     canvas.drawLine(
                         start + dataStepWidth / 2,
                         needPos,
@@ -369,7 +346,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
     }
 
     private fun drawOverlay(canvas: Canvas) {
-        if (isInteracting) return
+        /*if (isInteracting) return
         if (dataSet.isEmpty()) return
 
         if (selectedPeriod == InternalSelectedPeriod.WEEK) {
@@ -391,7 +368,11 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
-            val filterValues = dataSet.subList(lastPos, lastPos + dataSize)
+            val filterValues = try {
+                dataSet.subList(lastPos, lastPos + dataSize)
+            } catch (exp: Exception) {
+                ArrayList()
+            }
             lastPos += dataSize
 
             val startTime = filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()
@@ -460,8 +441,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             }
 
             start += stepWidth.toInt()
-        }
-
+        }*/
     }
 
     private fun getDataSize(date: LocalDate): Int {
@@ -494,7 +474,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         return null
     }
 
-    private fun getYAxisValue(value: Float): Float {
+    private fun getYAxisValue(value: Long): Float {
         val percent = (value.toFloat() / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
@@ -533,14 +513,14 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     availableWidth,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
@@ -548,15 +528,15 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
+                    getYAxisValue(value.first.toLong()) + textBounds.height(),
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(2f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     availableWidth,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     gridLinePaint
                 )
             } else {
@@ -564,15 +544,15 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
+                    getYAxisValue(value.first.toLong()) + textBounds.height() / 2,
                     xAxisPaint
                 )
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     availableWidth,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toLong()),
                     gridLinePaint
                 )
             }
@@ -617,19 +597,13 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
      * selected position
      */
     fun setDataSet(
-        list: List<GraphDataModel>,
+        list: List<SleepTimeModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
-        maxValue: Int,
-        avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
-        selectedPosition: Int,
-        launchState: SleepInternalLaunchState?,
         selectedPeriod: InternalSelectedPeriod?
     ) {
         dataPosition.clear()
-        mAverage = avgValue
 
-        this.launchState = launchState
         this.selectedPeriod = selectedPeriod
 
         this.yAxisRange.clear()
@@ -638,11 +612,19 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         this.xAxisRange.clear()
         this.xAxisRange.addAll(xAxisRange)
 
+        mMax = 0
+        offset = 60 * 6L
+        list.forEach {
+            if (it.endTime > mMax) {
+                mMax = it.endTime
+            }
+        }
+
+        mMax = (mMax + offset * 2)
+
         dataSet.clear()
         dataSet.addAll(list)
 
-        mSelectedPosition = selectedPosition
-        mMax = maxValue
         invalidate()
     }
 

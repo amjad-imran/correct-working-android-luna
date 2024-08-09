@@ -25,6 +25,9 @@ data class TrendsValues(
     var master_start_time: String? = null,
     var master_end_time: String? = null,
 
+    //For timing
+    var master_mid_time: String? = null,
+
     //For daily
     var start_time: String? = null,
     var end_time: String? = null,

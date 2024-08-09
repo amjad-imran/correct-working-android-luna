@@ -21,7 +21,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
@@ -225,7 +227,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     value2 = data?.value2,
                     breakup = data?.breakup,
                     start_time = data?.start_time,
-                    end_time = data?.end_time
+                    end_time = data?.end_time,
+                    master_start_time = data?.master_start_time,
+                    master_end_time = data?.master_end_time,
+                    master_mid_time = data?.master_mid_time
                 )
             )
             current = current.plusDays(1)
@@ -341,7 +346,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         })
                     }
 
-                    SleepInternalLaunchState.SLEEP_TIME -> {
+                    SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.TIMING -> {
                         SleepSleepTImeChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.WEEK
                         })
@@ -372,7 +377,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         })
                     }
 
-                    SleepInternalLaunchState.SLEEP_TIME -> {
+                    SleepInternalLaunchState.SLEEP_TIME, SleepInternalLaunchState.TIMING -> {
                         SleepSleepTImeChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.MONTH
                         })
@@ -584,7 +589,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun getTopState(): TrendsTopState {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_TIME -> {
                 TrendsTopState.SINGLE_DATE
             }
 
@@ -773,6 +779,21 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     Pair(start, end)
                 }
             }
+        }
+    }
+
+    fun getDuration(trendsValues: TrendsValues?): Float? {
+        val startDate = trendsValues?.master_start_time
+        val endDate = trendsValues?.master_end_time
+        if (startDate == null || endDate == null) {
+            return null
+        } else {
+            val format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            return Duration.between(
+                LocalDateTime.parse(startDate, format),
+                LocalDateTime.parse(endDate, format)
+            )
+                .toSeconds().toFloat()
         }
     }
 

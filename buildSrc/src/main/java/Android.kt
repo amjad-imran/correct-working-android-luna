@@ -8,5 +8,5 @@ object Android {
 
     const val targetSdk = 34
     const val versionCode = 95
-    const val versionName = "1.2.7"
+    const val versionName = "1.2.7.4"
 }
