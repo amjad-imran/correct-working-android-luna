@@ -343,6 +343,7 @@
     <string name="text_bpm">BPM</string>
     <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">Average HR</string>
+    <string name="text_resting_hrv">Average HRV</string>
     <string name="route">Route</string>
     <string name="heart_rate_zone">Heart rate zone</string>
     <string name="there_might_be_a_little_bit_of_inaccuracy_in_the_data_based_on_the_watch_performance">There might be a little bit of inaccuracy in the data based on the ring performance</string>
