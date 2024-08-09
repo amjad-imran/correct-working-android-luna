@@ -36,6 +36,12 @@ class OAddSleepFragment :
                 uiController.onDisplayError("Please select end time")
                 return@setOnClickListener
             }
+            if(viewModel.getSleepDuration()< (3 * 60 * 60)){
+                uiController.onDisplayError("Duration of more than 3 hr required")
+                return@setOnClickListener
+            }
+
+
             viewModel.callApiToAddSleep()
         }
         binding.lytToolbar.backBtn.setOnClickListener {

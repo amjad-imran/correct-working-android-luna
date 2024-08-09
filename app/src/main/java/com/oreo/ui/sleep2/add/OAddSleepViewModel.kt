@@ -77,8 +77,6 @@ constructor(
     }
 
     fun callApiToAddSleep() {
-
-
         viewModelScope.launch {
 
             oreoStepsDataImpl.getTodaySteps().collect { resource ->
