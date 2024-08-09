@@ -221,6 +221,25 @@ class SleepInternalDetailsFragment :
                 )
             }
         }
+        sharedViewModel.interactGraphDataDaily.observe(this) {
+            if (it == null) {
+                viewModel.topContentData.postValue(
+                    TopContentData(
+                        isInteracting = false,
+                        trendsData = viewModel.topContentDataAverage
+                    )
+                )
+            } else {
+                viewModel.topContentData.postValue(
+                    TopContentData(
+                        isInteracting = true,
+                        date = it.first,
+                        dailyValue = it.second,
+                        trendsData = viewModel.topContentDataAverage
+                    )
+                )
+            }
+        }
 
         viewModel.selectedPeriod.observe(this) {
             setPeriodUiState(it)
@@ -408,7 +427,9 @@ class SleepInternalDetailsFragment :
                     }
 
                     val data = viewModel.trendsData[topContentData.date]
-                    setSingleData(data?.value1, null)
+
+                    val value = topContentData.dailyValue ?: data?.value1
+                    setSingleData(value, null)
                 } else {
                     binding.lytTopView.lytTopSingleView.apply {
                         tvNudge.alpha = 1.0f

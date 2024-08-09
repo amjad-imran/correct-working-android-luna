@@ -119,8 +119,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 it.data?.forEach {
                                     trendsData[LocalDate.parse(it.date)] = it
                                 }
+                                val avg = it.data?.firstOrNull()?.avg
 
-                                generateFragment(trendsData, it.avg)
+                                generateFragment(trendsData, TrendAverage(avg = avg))
                             }
                         }
                     }
@@ -779,7 +780,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
 data class TopContentData(
     val isInteracting: Boolean,
     val date: LocalDate? = null,
-    val trendsData: TrendAverage? = null
+    val trendsData: TrendAverage? = null,
+    val dailyValue: Float? = null
 )
 
 enum class InternalSelectedPeriod {

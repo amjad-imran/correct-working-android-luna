@@ -27,12 +27,22 @@ class OSPTrendsSharedViewModel @Inject constructor(
 
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
+
+    private val _interactGraphDataDaily =
+        MutableLiveData<Pair<LocalDate?, Float?>?>()
+
     val interactGraphData: LiveData<LocalDate?> = _interactGraphData
+
+    val interactGraphDataDaily: LiveData<Pair<LocalDate?, Float?>?> = _interactGraphDataDaily
 
     var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
 
     fun sendInteractDay(day: LocalDate?) {
         _interactGraphData.postValue(day)
+    }
+
+    fun sendInteractDaily(day: LocalDate?, data: Float?) {
+        _interactGraphDataDaily.postValue(Pair(day, data))
     }
 
     fun getYAxisRange(

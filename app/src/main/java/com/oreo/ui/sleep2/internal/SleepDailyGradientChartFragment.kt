@@ -69,15 +69,17 @@ class SleepDailyGradientChartFragment :
         binding.graphBar.setClickListener(object : SleepSingleBarAction {
             override fun onValueSelected(position: Int) {
                 try {
-                    val date = pageData?.data?.get(position)?.date
-                    sharedViewModel.sendInteractDay(LocalDate.parse(date))
+                    val firstValue = pageData?.data?.firstOrNull()
+                    val date = firstValue?.date
+                    val value = firstValue?.breakup?.get(position)
+                    sharedViewModel.sendInteractDaily(LocalDate.parse(date), value)
                 } catch (exp: Exception) {
-                    sharedViewModel.sendInteractDay(null)
+                    sharedViewModel.sendInteractDaily(null, null)
                 }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-                sharedViewModel.sendInteractDay(null)
+                sharedViewModel.sendInteractDaily(null, null)
             }
 
         })
