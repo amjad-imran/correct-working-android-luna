@@ -51,8 +51,8 @@ class SleepSingleLineChartFragment :
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
 
-        val avgValue = sharedViewModel.getAvgValue(
-            dataListType1 = dataList,
+        val avgValue = sharedViewModel.getAvgValuePair(
+            pageData?.avgValue,
             contributorType = pageData?.contributorType
         )
         val showOverlay =

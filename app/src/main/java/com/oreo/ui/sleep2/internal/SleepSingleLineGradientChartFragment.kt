@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepSingleLineGradientChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -52,8 +53,8 @@ class SleepSingleLineGradientChartFragment :
         )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
-        val avgValue = sharedViewModel.getAvgValue(
-            dataListType1 = dataList,
+        val avgValue = sharedViewModel.getAvgValuePair(
+            pageData?.avgValue,
             contributorType = pageData?.contributorType
         )
         val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)

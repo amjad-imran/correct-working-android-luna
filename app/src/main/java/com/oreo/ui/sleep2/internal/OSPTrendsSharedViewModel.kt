@@ -396,6 +396,61 @@ class OSPTrendsSharedViewModel @Inject constructor(
         }
     }
 
+    fun getAvgValuePair(
+        value: Float?,
+        contributorType: SleepInternalLaunchState?
+    ): Pair<Float, String>? {
+        if (value == null) {
+            return null
+        }
+
+        return when (contributorType) {
+            SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_TIME,
+            SleepInternalLaunchState.TIMING,
+            SleepInternalLaunchState.HOUR_VS_NEED -> Pair(value, "$value%")
+
+            SleepInternalLaunchState.EFFICIENCY, SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(
+                value,
+                "${value.roundToInt()}%"
+            )
+
+            SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
+                val min = value.div(60)
+                Pair(min, "${min.roundToInt()}min")
+            }
+
+            SleepInternalLaunchState.LATENCY -> {
+                Pair(value, "${value.roundToInt()}min")
+            }
+
+            SleepInternalLaunchState.SLEEP_DURATION -> {
+                val minValue = (value / 60)
+                val (hour, min) = ApplicationUtils.getFormattedSleepDurationFromSeconds(value.roundToInt())
+                Pair(minValue, String.format(locale = Locale.US, "%d:%02d", hour, min))
+            }
+
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                Pair(
+                    value,
+                    String.format(locale = Locale.US, "%.1f", value)
+                )
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE,
+            SleepInternalLaunchState.RESTFULNESS,
+            SleepInternalLaunchState.BLOOD_OXYGEN,
+            SleepInternalLaunchState.RESPIRATORY_RATE,
+            SleepInternalLaunchState.HRV -> Pair(
+                value,
+                "${value.roundToInt()}"
+            )
+
+            else -> Pair(value, "$value%")
+        }
+
+    }
+
     fun getAvgValue(
         dataListType1: List<GraphDataModel>? = null,
         dataListType2: List<Pair<Int?, Int?>>? = null,

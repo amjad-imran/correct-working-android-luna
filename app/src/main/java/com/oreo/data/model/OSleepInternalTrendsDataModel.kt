@@ -53,6 +53,7 @@ data class TrendAverage(
 @Parcelize
 data class TrendsGraphData(
     var data: List<TrendsValues>? = null,
+    val avgValue:Float?=null,
     var contributorType: SleepInternalLaunchState? = null,
     var selectedPeriod: InternalSelectedPeriod = InternalSelectedPeriod.DAY
 ) : Parcelable

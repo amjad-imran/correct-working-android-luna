@@ -53,8 +53,9 @@ class SleepDailyGradientChartFragment :
             contributorType = pageData?.contributorType
         )
         val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
-        val avgValue = sharedViewModel.getAvgValue(
-            dataListType1 = dataList,
+
+        val avgValue = sharedViewModel.getAvgValuePair(
+            pageData?.avgValue,
             contributorType = pageData?.contributorType
         )
         val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)

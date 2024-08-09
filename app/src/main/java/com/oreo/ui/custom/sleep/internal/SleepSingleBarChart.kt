@@ -372,7 +372,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
-            val textX = width - textBounds.width().toFloat()
+            val textX = width - textBounds.width().toFloat() - dip2px(3f)
             val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
 
 

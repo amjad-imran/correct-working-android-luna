@@ -239,6 +239,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
         val trendData = TrendsGraphData(
             data = dataToDisplay,
+            avgValue = avgValue?.avg
         )
 
         getFragmentToAdd(trendData).let {
