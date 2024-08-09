@@ -247,16 +247,16 @@ class OSPTrendsSharedViewModel @Inject constructor(
     fun getOptimalRangeMinMax(contributorType: SleepInternalLaunchState?): Pair<Float, Float>? {
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> null
-            SleepInternalLaunchState.SLEEP_PERFORMANCE -> null
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(85f, 100f)
             SleepInternalLaunchState.HOUR_VS_NEED -> null
             SleepInternalLaunchState.SLEEP_TIME -> null
             SleepInternalLaunchState.TIMING -> null
-            SleepInternalLaunchState.EFFICIENCY -> null
+            SleepInternalLaunchState.EFFICIENCY -> Pair(85f, 100f)
             SleepInternalLaunchState.REM_SLEEP -> Pair(1.5f * 60.0f, 2 * 60.0f)
-            SleepInternalLaunchState.DEEP_SLEEP -> null
+            SleepInternalLaunchState.DEEP_SLEEP -> Pair(1.5f * 60.0f, 2.25f * 60.0f)
             SleepInternalLaunchState.SLEEP_DURATION -> Pair(7 * 60.0f, 9 * 60.0f)
-            SleepInternalLaunchState.LATENCY -> null
-            SleepInternalLaunchState.RESTFULNESS -> null
+            SleepInternalLaunchState.LATENCY -> Pair(5f, 20f)
+            SleepInternalLaunchState.RESTFULNESS -> Pair(0f, 2f)
             SleepInternalLaunchState.RESPIRATORY_RATE -> null
             SleepInternalLaunchState.RESTING_HEART_RATE -> null
             SleepInternalLaunchState.HRV -> null
