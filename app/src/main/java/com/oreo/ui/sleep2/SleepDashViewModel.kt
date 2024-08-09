@@ -195,6 +195,7 @@ class SleepDashViewModel @Inject constructor(
         }
         return drawable
     }
+
     fun getContributorInfo() {
         viewModelScope.launch {
             userActivityRepository.getContributorDetailsInfo(
@@ -598,8 +599,11 @@ class SleepDashViewModel @Inject constructor(
         if (showAll) {
             listData.add(
                 OHMDataModel(
-                    SleepContributor.EFFICIENCY, value = "${data.efficiency?.value}", unit = "%",
-                    status = data.efficiency?.status, text = data.efficiency?.text
+                    SleepContributor.EFFICIENCY,
+                    value = if (data.efficiency?.value == null) null else "${data.efficiency?.value}",
+                    unit = "%",
+                    status = data.efficiency?.status,
+                    text = data.efficiency?.text
                 )
             )
             listData.add(
@@ -612,7 +616,7 @@ class SleepDashViewModel @Inject constructor(
             listData.add(
                 OHMDataModel(
                     SleepContributor.RESTFULNESS,
-                    value = "${data.restfulness?.value}",
+                    value = if (data.restfulness?.value == null) null else "${data.restfulness?.value}",
                     unit = "times",
                     status = data.restfulness?.status,
                     text = data.restfulness?.text
@@ -621,8 +625,11 @@ class SleepDashViewModel @Inject constructor(
 
             listData.add(
                 OHMDataModel(
-                    SleepContributor.TIMING, value = "${data.timing?.value}", unit = "",
-                    status = data.timing?.status, text = data.timing?.text
+                    SleepContributor.TIMING,
+                    value = if (data.timing?.value.isNullOrEmpty()) null else "${data.timing?.value}",
+                    unit = "",
+                    status = data.timing?.status,
+                    text = data.timing?.text
                 )
             )
 
@@ -704,7 +711,7 @@ class SleepDashViewModel @Inject constructor(
             R.color.steps_arc
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
-        }else if (status.equals("fair", true)) {
+        } else if (status.equals("fair", true)) {
             R.color.color_fair
         } else {
             R.color.white_12_72

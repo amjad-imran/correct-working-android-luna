@@ -21,9 +21,15 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
         fun bind(resultData: OHMDataModel) {
             binding.ivIcon.loadImage(binding.ivIcon.context, resultData.type.icon)
             binding.tvTitle.text = resultData.type.displayName
-            if (resultData.value != null || resultData.valueTime != null) {
-                binding.ivForward.gone()
+
+            if (resultData.value == null && resultData.valueTime == null) {
+                binding.lytRightValues.root.gone()
+                binding.ivForward.visible()
+                binding.rootView.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+
+            } else {
                 binding.lytRightValues.root.visible()
+                binding.ivForward.gone()
 
                 if (resultData.valueTime != null) {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
@@ -73,11 +79,7 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
                         this.tvRangeValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     }
                 }
-            } else {
-                binding.lytRightValues.root.gone()
-                binding.ivForward.visible()
             }
-
 
             binding.root.setOnClickListener {
                 listener.onItemClick(resultData, bindingAdapterPosition)
