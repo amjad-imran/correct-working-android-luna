@@ -15,7 +15,6 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OSleepDailyTrendsDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -24,11 +23,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
-import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
-import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
-import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.sleep.SleepDataResponse
-import com.oreo.data.model.sleep.SleepDay
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
 
@@ -132,19 +127,21 @@ interface OreoUserActivityRepository {
     suspend fun getSleepInternalTrendsPagesData(
         startDate: String,
         endDate: String,
-        filterType: String
+        filterType: String,
+        dataType: String?
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
 
     suspend fun getDailyTrendsData(
         startDate: String,
         endDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OSleepDailyTrendsDataModel>>>
+    ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
 
     suspend fun getSleepHealthMonitorTrendsPagesData(
         startDate: String,
         endDate: String,
-        filterType: String
+        filterType: String,
+        dataType: String?
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
 
     suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>

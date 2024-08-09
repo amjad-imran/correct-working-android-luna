@@ -17,24 +17,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.ColorUtils
-import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.yearMonth
+import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
-import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
-import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 import java.util.Locale
 import kotlin.math.roundToInt
 
 
-class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: AttributeSet?) :
+class SleepDailyGradientChartInternal constructor(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
 
     lateinit var xAxisPaint: Paint
@@ -47,22 +39,22 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     lateinit var textPaintHourI: Paint
     lateinit var textPaintNeed: Paint
     lateinit var textPaintNeedI: Paint
-
-    lateinit var linePaintHour: Paint
-    lateinit var linePaintHourI: Paint
-    lateinit var linePaintNeed: Paint
-    lateinit var linePaintNeedI: Paint
-
     lateinit var avgTextPaint: Paint
     lateinit var avgLinePaint: Paint
-    lateinit var avgBackPaintHour: Paint
-    lateinit var avgBackPaintNeed: Paint
+    lateinit var avgBackPaint: Paint
+    lateinit var xOverlayLinePaint: Paint
+    lateinit var avgLineFillPaint: Paint
+    lateinit var optimalPaint: Paint
+
+
+    lateinit var linePaint: Paint
+    lateinit var linePaintI: Paint
 
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
+    lateinit var chartLineFillPaint: Paint
     private var mHeight = 0
-    var dataStepWidth = 0F
 
     var mMax = 0
 
@@ -70,33 +62,26 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
+    private var startX: Float? = null
+    var dataStepWidth = 0F
 
 
     //HashMap<Position,Pair<StartX,EndX>>
+    //private val dataPosition = HashMap<Int, Pair<Float, Float>>()
     private val dataPosition = ArrayList<Pair<Int, Float>>()
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
-    private val xAxisRange = ArrayList<LocalDate>()
-
     private var lastSentValuePos: Int? = null
 
     private val endPadding = dip2px(30f)
-    private var selectedPeriod: InternalSelectedPeriod? = null
-    private var launchState: SleepInternalLaunchState? = null
-    lateinit var xOverlayLinePaint: Paint
-    lateinit var avgLineFillPaint: Paint
-
+    private var mAverage: Pair<Float, String>? = null
+    private var optimalRange: Pair<Float, Float>? = null
 
     /**
      * Pair(deep,rem)
      */
     private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
-
-    /**
-     * Pair(hour(value,displayValue),need(value,displayValue))
-     */
-    var mAverage: Pair<Pair<Int, String>?, Pair<Int, String>?>? = null
 
     init {
         init(attrs)
@@ -107,16 +92,22 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
 
-        avgLineFillPaint = Paint()
-
-        avgBackPaintHour = Paint().apply {
-            this.color = Color.parseColor("#465c8a")
+        avgLineFillPaint = Paint().apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
         }
 
-        avgBackPaintNeed = Paint().apply {
-            this.color = Color.parseColor("#7858cc")
+        chartLineFillPaint = Paint().apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
         }
 
+        avgBackPaint = Paint().apply {
+            this.color = Color.parseColor("#28ffffff")
+        }
+        optimalPaint = Paint().apply {
+            this.color = Color.parseColor("#19a3eeff")
+        }
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
             strokeWidth = dip2px(2f).toFloat()
@@ -143,17 +134,17 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         }
 
         textPaintHour = Paint().apply {
-            this.color = Color.parseColor("#96ffffff")
+            this.color = Color.parseColor("#66ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintHourI = Paint().apply {
-            this.color = Color.parseColor("#20FFFFFF")
+            this.color = Color.parseColor("#22ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeed = Paint().apply {
-            this.color = Color.parseColor("#ffffff")
+            this.color = Color.parseColor("#66ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(12f).toFloat()
         }
@@ -163,23 +154,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             this.textSize = dip2px(12f).toFloat()
         }
 
-        linePaintHour = Paint().apply {
+        linePaint = Paint().apply {
             this.color = Color.parseColor("#465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
-        linePaintHourI = Paint().apply {
+        linePaintI = Paint().apply {
             this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
-        linePaintNeed = Paint().apply {
-            this.color = Color.parseColor("#7858cc")
-            strokeWidth = dip2px(1f).toFloat()
-        }
-        linePaintNeedI = Paint().apply {
-            this.color = Color.parseColor("#667858cc")
-            strokeWidth = dip2px(1f).toFloat()
-        }
-
 
         xLinePaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
@@ -223,21 +205,21 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         drawXAxis(canvas)
         drawYAxis(canvas)
         drawContent(canvas)
-
-        drawOverlay(canvas)
     }
 
+
     private fun drawContent(canvas: Canvas) {
+
         val availableWidth = (width - endPadding).toFloat()
-
         dataStepWidth = availableWidth / dataSet.size
-
         var start = 0f
         val circleRadiusBig = dip2px(4f).toFloat()
         val paddingHorizontal = dip2px(4f)
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
+        val fillPath = Path()
+
 
         if (selectedPosition != null && isInteracting) {
             if (lastSentValuePos == null) {
@@ -249,25 +231,13 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                     lastSentValuePos = selectedPosition
                 }
             }
+
             listener?.onValueSelected(selectedPosition)
         }
 
-        if (dataSet.isEmpty()) {
-            val noDataText = "No record available"
-            val textBounds = Rect()
-            xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 
-            canvas.drawText(
-                noDataText,
-                availableWidth / 2 - textBounds.width() / 2,
-                (height).toFloat() / 2,
-                xAxisPaint
-            )
-        }
-
+        var isDataNull = true
         dataSet.forEachIndexed { index, it ->
-
-
             if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
                 val rectFSelected = RectF(
                     start + paddingHorizontal,
@@ -280,17 +250,22 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                     rectFSelected,
                     selectedDayPaint
                 )
-
             }
 
-            val isSelectedPosition = selectedPosition == index
+            fillPath.reset()
 
-            if (it.value1 != null) {
+            if (it.value1 != null && it.value1 != 0.0f) {
+                isDataNull = false
+                val isSelectedPosition = selectedPosition == index
                 val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                fillPath.moveTo(start + dataStepWidth / 2, height - bottomHeight.toFloat())
+                fillPath.lineTo(start + dataStepWidth / 2, actualPos)
+
+
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null&& dataSet[index + 1].value1 != 0.0f) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
@@ -299,11 +274,43 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                         actualPos,
                         start + dataStepWidth + dataStepWidth / 2,
                         actualPosNext,
-                        if (isInteracting) linePaintHourI else linePaintHour
+                        if (isInteracting) linePaintI else linePaint
                     )
+
+                    fillPath.lineTo(start + dataStepWidth + dataStepWidth / 2, actualPosNext)
+                    fillPath.lineTo(
+                        start + dataStepWidth + dataStepWidth / 2,
+                        height - bottomHeight.toFloat()
+                    )
+                    chartLineFillPaint.setShader(linearGradient)
+                    canvas.drawPath(fillPath, chartLineFillPaint)
+
+
                 }
 
-                if (isSelectedPosition) {
+                if (isSelectedPosition && isInteracting) {
+                    val center = start + dataStepWidth / 2
+
+                    canvas.drawRect(
+                        RectF(
+                            center - 2f,
+                            topHeight.toFloat(),
+                            center + 2f,
+                            height.toFloat() - bottomHeight
+                        ),
+                        circlePaint
+                    )
+
+                    val widthHalf = dip2px(6f)
+                    val rectFTopI = RectF().apply {
+                        this.left = center - widthHalf
+                        this.right = center + widthHalf
+                        this.top = topHeight.toFloat()
+                        this.bottom = topHeight.toFloat() + dip2px(2f)
+                    }
+
+                    canvas.drawRect(rectFTopI, circlePaint)
+
                     canvas.drawCircle(
                         start + dataStepWidth / 2,
                         actualPos,
@@ -311,230 +318,66 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                         circlePaint
                     )
                 }
-
             }
-
-            if (it.value2 != null) {
-                val needPos = getYAxisValue(it.value2 ?: 0.0f)
-
-                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
-                    val nextElement = dataSet[index + 1]
-
-                    val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
-                    canvas.drawLine(
-                        start + dataStepWidth / 2,
-                        needPos,
-                        start + dataStepWidth + dataStepWidth / 2,
-                        actualPosNext,
-                        if (isInteracting) linePaintNeedI else linePaintNeed
-                    )
-                }
-                if (isSelectedPosition) {
-                    canvas.drawCircle(
-                        start + dataStepWidth / 2,
-                        needPos,
-                        circleRadiusBig,
-                        circlePaint
-                    )
-                }
-
-            }
-
-            if (isSelectedPosition && isInteracting) {
-                val center = start + dataStepWidth / 2
-
-                canvas.drawRect(
-                    RectF(
-                        center - 2f,
-                        topHeight.toFloat(),
-                        center + 2f,
-                        height.toFloat() - bottomHeight
-                    ),
-                    circlePaint
-                )
-
-                val widthHalf = dip2px(6f)
-                val rectFTopI = RectF().apply {
-                    this.left = center - widthHalf
-                    this.right = center + widthHalf
-                    this.top = topHeight.toFloat()
-                    this.bottom = topHeight.toFloat() + dip2px(2f)
-                }
-
-                canvas.drawRect(rectFTopI, circlePaint)
-            }
-
             start += dataStepWidth
         }
-    }
 
-    private fun drawOverlay(canvas: Canvas) {
-        if (isInteracting) return
-        if (dataSet.isEmpty()) return
-
-        if (selectedPeriod == InternalSelectedPeriod.WEEK) {
-            if (dataSet.size % 7 != 0) {
-                return
-            }
+        if (isDataNull) {
+            showNoRecordAvailable(canvas, availableWidth)
         }
 
+    }
 
-        val availableWidth = width.toFloat() - endPadding
-        val stepWidth = availableWidth / xAxisRange.size
-        var start = 0
-        val paddingText = dip2px(4f)
-
+    private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
+        val noDataText = "No record available"
         val textBounds = Rect()
+        xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 
-        var previousValue: Int? = null
-        var previousValue2: Int? = null
-
-        var lastPos = 0
-        xAxisRange.forEachIndexed { index, value ->
-
-            val dataSize = getDataSize(value)
-            val filterValues = try {
-                dataSet.subList(lastPos, lastPos + dataSize)
-            }catch (exp:Exception){
-                ArrayList()
-            }
-            lastPos += dataSize
-
-            val hour = filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()//deep
-            val need = filterValues.mapNotNull { it.value2?.roundToInt() }.averageWithoutZero()//rem
-
-
-            var hourY = 0.0f
-            if (hour != 0 && launchState == SleepInternalLaunchState.HOUR_VS_NEED) {
-
-                val pos = getYAxisValue(hour.toFloat())
-                val end = start.toFloat() + stepWidth
-
-                val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
-                    hour
-                )
-
-                val text = String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
-
-                val overlayColor = getAvgBarColor(hour, need)
-                xOverlayLinePaint.color = overlayColor
-                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
-
-                hourY = pos
-
-
-                val posNeed = getYAxisValue(need.toFloat())
-
-                if (posNeed + textBounds.height() > hourY) {
-                    canvas.drawText(
-                        text,
-                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                        pos - paddingText,
-                        xOverlayLinePaint
-                    )
-                } else {
-                    canvas.drawText(
-                        text,
-                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                        pos + paddingText + textBounds.height(),
-                        xOverlayLinePaint
-                    )
-                }
-
-
-
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
-                )
-
-                previousValue = hour
-            }
-
-            if (need != 0) {
-
-                val pos = getYAxisValue(need.toFloat())
-                val end = start.toFloat() + stepWidth
-
-                val text = if (launchState == SleepInternalLaunchState.HOUR_VS_NEED
-                    || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP
-                ) {
-                    val (hourVal, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        need
-                    )
-                    String.format(locale = Locale.US, "%d:%02d", hourVal, minute)
-                } else {
-                    "$need%"
-                }
-
-                val overlayColor = if (launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
-                    getAvgBarColorRestorativeLogic(need, previousValue2)
-                } else {
-                    getAvgBarColor(null, null)
-                }
-                xOverlayLinePaint.color = overlayColor
-                xOverlayLinePaint.getTextBounds(text, 0, text.length, textBounds)
-
-
-                val needY = pos - paddingText
-                if (needY + textBounds.height() < hourY || launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
-                    canvas.drawText(
-                        text,
-                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                        pos - paddingText,
-                        xOverlayLinePaint
-                    )
-
-                    val path = Path()
-                    path.reset()
-                    path.moveTo(start.toFloat(), pos)
-                    path.lineTo(end, pos)
-                    path.lineTo(end, pos + dip2px(40f).toFloat())
-                    path.lineTo(start.toFloat(), pos + dip2px(40f).toFloat())
-
-                    val gradient = LinearGradient(
-                        0f,
-                        pos,
-                        0f,
-                        pos + dip2px(40f),
-                        ColorUtils.setAlphaComponent(overlayColor, 80),
-                        Color.TRANSPARENT,
-                        Shader.TileMode.CLAMP
-                    )
-
-                    avgLineFillPaint.setShader(gradient)
-                    canvas.drawPath(path, avgLineFillPaint)
-
-                } else {
-                    canvas.drawText(
-                        text,
-                        start.toFloat() + stepWidth / 2 - textBounds.width() / 2,
-                        pos + paddingText + textBounds.height(),
-                        xOverlayLinePaint
-                    )
-                }
-
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
-                )
-
-                previousValue2 = need
-            }
-
-            start += stepWidth.toInt()
-        }
-
+        canvas.drawText(
+            noDataText,
+            availableWidth / 2 - textBounds.width() / 2,
+            (height).toFloat() / 2,
+            xAxisPaint
+        )
     }
 
-    private fun getDataSize(date: LocalDate): Int {
-        return if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-            getDaysOfMonth(date.yearMonth)
+    private fun showAverage(canvas: Canvas, availableWidth: Float) {
+        if (mAverage != null && mAverage?.first != 0.0f) {
+            val textBounds = Rect()
+            avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
+
+            val textX = width - textBounds.width().toFloat() - dip2px(6f)
+            val textY = getYAxisValue(mAverage!!.first) + textBounds.height() / 2
+
+            canvas.drawRoundRect(
+                RectF(
+                    textX - dip2px(3f),
+                    textY - textBounds.height() - dip2px(3f),
+                    textX + textBounds.width() + dip2px(3f),
+                    textY + dip2px(3f)
+                ),
+                dip2px(2f).toFloat(),
+                dip2px(2f).toFloat(),
+                avgBackPaint
+            )
+
+            canvas.drawText(
+                mAverage!!.second,
+                textX,
+                textY,
+                avgTextPaint
+            )
+
+            canvas.drawLine(
+                0f,
+                getYAxisValue(mAverage!!.first),
+                availableWidth,
+                getYAxisValue(mAverage!!.first),
+                avgLinePaint
+            )
         } else {
-            7
+            showNoRecordAvailable(canvas, availableWidth)
         }
-    }
-
-    private fun getDaysOfMonth(yearMonth: YearMonth): Int {
-        return yearMonth.lengthOfMonth()
     }
 
     private fun performHapticFeedbackCustom() {
@@ -558,15 +401,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         val percent = (value / mMax.toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
-
     }
 
     private fun drawBackGrid(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
 
-        val stepWidth = (availableWidth) / xAxisRange.size
+        val stepWidth = (availableWidth) / 6
         var start = 0f
-        for (i in 0..xAxisRange.size) {
+        for (i in 0..6) {
             canvas.drawLine(
                 start,
                 topHeight.toFloat(),
@@ -575,6 +417,20 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 gridLinePaint
             )
             start += stepWidth
+        }
+
+        optimalRange?.let {
+            val min = getYAxisValue(it.first)
+            val max = getYAxisValue(it.second)
+
+            canvas.drawRect(
+                RectF(
+                    0f,
+                    min,
+                    availableWidth,
+                    max
+                ), optimalPaint
+            )
         }
     }
 
@@ -638,31 +494,24 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             }
 
         }
-        //showAverage(canvas, availableWidth)
 
+        showAverage(canvas, availableWidth)
     }
 
     private fun drawXAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
-
+        val xAxisRange = arrayListOf("Start", "", "", "", "", "End")
         val stepWidth = availableWidth / xAxisRange.size
         var start = 0
         val xTextBounds = Rect()
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-                it.format(DateTimeFormatter.ofPattern("MMM"))
-            } else {
-                //for week
-                val weekFields = WeekFields.of(Locale.getDefault())
-                val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
-                "W$weekNumber"
-            }
-            val textWidth = xAxisPaint.measureText(displayMonth)
-            xAxisPaint.getTextBounds(displayMonth, 0, displayMonth.length, xTextBounds)
+            val displayText = it.format(DateTimeFormatter.ofPattern("E"))
+            val textWidth = xAxisPaint.measureText(displayText)
+            xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(displayMonth, textStart, textY, xAxisPaint)
+            canvas.drawText(displayText, textStart, textY, xAxisPaint)
             start += stepWidth.toInt()
         }
     }
@@ -679,34 +528,26 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     fun setDataSet(
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
-        xAxisRange: List<LocalDate>,
         maxValue: Int,
-        avgValue: Pair<Pair<Int, String>?, Pair<Int, String>?>,
+        avgValue: Pair<Float, String>?,
         selectedPosition: Int,
-        launchState: SleepInternalLaunchState?,
-        selectedPeriod: InternalSelectedPeriod?
+        optimalRange: Pair<Float, Float>?
     ) {
         dataPosition.clear()
-        mAverage = avgValue
-
-        this.launchState = launchState
-        this.selectedPeriod = selectedPeriod
-
+        this.optimalRange = optimalRange
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
-
-        this.xAxisRange.clear()
-        this.xAxisRange.addAll(xAxisRange)
 
         dataSet.clear()
         dataSet.addAll(list)
 
         mSelectedPosition = selectedPosition
         mMax = maxValue
+        mAverage = avgValue
+
         invalidate()
     }
 
-    var startX: Float? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val parent = parent
@@ -749,40 +590,6 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     }
 
 
-    /**
-     * current, previous value
-     * @return color
-     */
-    private fun getAvgBarColorRestorativeLogic(currentValue: Int?, previousValue: Int?): Int {
-        if (currentValue == null) return Color.WHITE
-        if (previousValue == null) return Color.WHITE
-
-        val currentPercentRaise =
-            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
-
-        return if (currentPercentRaise >= 0) {//green
-            Color.parseColor("#29cc74")
-        } else if (currentPercentRaise > -2) {//yellow
-            Color.parseColor("#ffbb6b")
-        } else {//red
-            Color.parseColor("#ff7c94")
-        }
-    }
-
-    private fun getAvgBarColor(hour: Int?, need: Int?): Int {
-        if (hour == null) return Color.WHITE
-        if (need == null) return Color.WHITE
-
-
-        return if (hour >= need) {
-            //green
-            Color.parseColor("#29cc74")
-        } else {
-            Color.parseColor("#ff7c94")
-        }
-    }
-
-
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         isInteracting = true
@@ -799,6 +606,4 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
     fun setClickListener(listener: SleepSingleBarAction?) {
         this.listener = listener
     }
-
-
 }

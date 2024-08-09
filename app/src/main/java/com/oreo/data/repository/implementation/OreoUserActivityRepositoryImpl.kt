@@ -50,7 +50,6 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OSleepDailyTrendsDataModel
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -138,7 +137,7 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<SleepDataResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/luna/sleep/v2/get"
-            remoteDataSource.getUserHealthSleepData(url, startDate, endDate,"2")
+            remoteDataSource.getUserHealthSleepData(url, startDate, endDate, "2")
         }
     }
 
@@ -1871,12 +1870,13 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getSleepInternalTrendsPagesData(
         startDate: String,
         endDate: String,
-        filterType: String
+        filterType: String,
+        dataType: String?
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/trends/$filterType"
-            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate)
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate,dataType?:"")
         }
     }
 
@@ -1884,7 +1884,7 @@ class OreoUserActivityRepositoryImpl(
         startDate: String,
         endDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OSleepDailyTrendsDataModel>>> {
+    ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/daily/trends/$filterType"
@@ -1895,12 +1895,13 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getSleepHealthMonitorTrendsPagesData(
         startDate: String,
         endDate: String,
-        filterType: String
+        filterType: String,
+        dataType: String?
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/health/trends/$filterType"
-            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate)
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, dataType?:"")
         }
     }
 
