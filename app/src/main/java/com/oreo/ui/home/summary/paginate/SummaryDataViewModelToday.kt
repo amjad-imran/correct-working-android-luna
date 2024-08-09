@@ -71,6 +71,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -349,9 +350,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 noOfNaps = healthData.readiness?.noOfNaps
             )
 
+            val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
 
             val newSleepArray = dataConverter.mergeSleepDataV2(
-                healthData.sleep?.sleeps, healthData.sleep?.naps?.filter { !it.isNextDayNap }
+                healthData.sleep?.sleeps, filteredNaps
             )
 
 
@@ -361,6 +363,23 @@ class SummaryDataViewModelToday @Inject constructor(
                     totalSleep = 0
                 }
                 totalSleep = totalSleep!! + it.totalDuration
+            }
+
+            filteredNaps?.forEach {
+                val start = java.time.LocalDateTime.parse(
+                    it.startTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                val end = java.time.LocalDateTime.parse(
+                    it.endTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                if (totalSleep == null) {
+                    totalSleep = 0
+                }
+                Duration.between(start, end).toSeconds().toInt().let {
+                    totalSleep = totalSleep!! + it
+                }
             }
 
             val sleepModel = ODashboardSleepModel(

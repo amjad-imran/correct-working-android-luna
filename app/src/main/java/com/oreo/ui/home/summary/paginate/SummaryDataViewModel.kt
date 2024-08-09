@@ -37,7 +37,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.Duration
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -111,6 +113,22 @@ class SummaryDataViewModel @Inject constructor(
                             totalSleep = 0
                         }
                         totalSleep = totalSleep!! + it.totalDuration
+                    }
+                    filteredNaps.forEach {
+                        val start = java.time.LocalDateTime.parse(
+                            it.startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                        val end = java.time.LocalDateTime.parse(
+                            it.endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                        if (totalSleep == null) {
+                            totalSleep = 0
+                        }
+                        Duration.between(start, end).toSeconds().toInt().let {
+                            totalSleep = totalSleep!! + it
+                        }
                     }
 
 
