@@ -39,7 +39,6 @@ data class SleepDay(
 
     var latency: CommonDataModel? = null,
 
-    var summary: SleepSummary? = null,
 
     var efficiency: CommonDataModel? = null,
 
@@ -100,4 +99,5 @@ data class MultiSleep(
     val end_time: String? = null,
     var hourly: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,
+    var summary: SleepSummary? = null
 )

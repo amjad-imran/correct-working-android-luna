@@ -393,6 +393,9 @@ class SleepDashFragment :
 
         viewModel.selectedMultiSleep.observe(this) {
 
+            updateSleepSummary(it?.summary)
+
+
             if (it?.start_time == null || it.end_time == null) {
                 totalSleepNoDataView()
             } else {
@@ -817,9 +820,6 @@ class SleepDashFragment :
         }
 
         viewModel.updateSelectedMultiSleep(0)
-
-
-        updateSleepSummary(data?.summary)
 
     }
 

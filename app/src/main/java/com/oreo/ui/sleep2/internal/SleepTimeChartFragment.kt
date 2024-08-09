@@ -50,7 +50,7 @@ class SleepTimeChartFragment :
         val dataList = convertData(pageData?.data)
 
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
-        val yAxisRange = sharedViewModel.getYAxisRange(100f, pageData?.contributorType)
+        val yAxisRange = getYAxisRange()
 
 
         binding.graphBar.setDataSet(
@@ -74,6 +74,16 @@ class SleepTimeChartFragment :
             }
 
         })
+    }
+
+    fun getYAxisRange():List<Pair<Int,String>>{
+        return arrayListOf(
+            Pair(0, "0"),
+            Pair(180, "3"),
+            Pair(360, "6"),
+            Pair(540, "9"),
+            Pair(720, "12")
+        )
     }
 
     private fun convertData(data: List<TrendsValues>?): List<SleepTimeModel> {

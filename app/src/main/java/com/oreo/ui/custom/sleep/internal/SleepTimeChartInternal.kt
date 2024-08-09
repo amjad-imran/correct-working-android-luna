@@ -139,7 +139,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
         drawBackGrid(canvas)
         drawXAxis(canvas)
 
-        //drawYAxis(canvas)
+        drawYAxis(canvas)
 
         drawContent(canvas)
     }
@@ -308,11 +308,6 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
 
     private fun drawBackGrid(canvas: Canvas) {
 
-
-        //canvas.drawLine(0f, getYAxisValue(25), width.toFloat(), getYAxisValue(25), gridLinePaint)
-        //canvas.drawLine(0f, getYAxisValue(50), width.toFloat(), getYAxisValue(50), gridLinePaint)
-        //canvas.drawLine(0f, getYAxisValue(75), width.toFloat(), getYAxisValue(75), gridLinePaint)
-
         val availableWidth = (width - endPadding).toFloat()
 
         val stepWidth = availableWidth / 7
@@ -338,7 +333,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
 
         gridLinePaint.strokeWidth = dip2px(1f).toFloat()
 
-        val heightStep = mMax / 4
+        /*val heightStep = mMax / 4
         var heightStart = heightStep
         for (i in 1 until 5) {
             canvas.drawLine(
@@ -360,7 +355,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
             }
 
             heightStart += heightStep
-        }
+        }*/
 
 
     }
@@ -415,6 +410,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
         val availableWidth = width.toFloat() - endPadding
 
         val textBounds = Rect()
+        val textPadding = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -425,7 +421,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -440,7 +436,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -458,7 +454,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

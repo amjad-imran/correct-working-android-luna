@@ -48,16 +48,15 @@ class SleepSleepTImeChartFragment :
         }
 
 
-        val dataList = convertData(pageData?.data,pageData?.contributorType)
-
+        val dataList = convertData(pageData?.data, pageData?.contributorType)
 
 
         val yAxisRange = sharedViewModel.getYAxisRange(100f, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
 
         binding.graphBar.setDataSet(
-            dataList, yAxisRange, xAxisRange,
-             pageData?.selectedPeriod
+            dataList.first, yAxisRange, xAxisRange,
+            pageData?.selectedPeriod,dataList.second
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
@@ -79,59 +78,49 @@ class SleepSleepTImeChartFragment :
         })
     }
 
-    private fun convertData(data: List<TrendsValues>?, contributorType: SleepInternalLaunchState?): List<SleepTimeModel> {
+    private fun convertData(
+        data: List<TrendsValues>?,
+        contributorType: SleepInternalLaunchState?
+    ): Pair<List<SleepTimeModel>,LocalDateTime?> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val minTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         var minValue: Long? = null
+        var minTime: LocalDateTime? = null
+
         data?.forEach {
-            if(contributorType==SleepInternalLaunchState.TIMING){
-                if (it.master_mid_time != null) {
-                    val currentDay = LocalDate.parse(it.date).atStartOfDay()
 
-                    val sleepStartTime =
-                        LocalDateTime.parse(it.master_mid_time, dateTimeFormatter)
-
-                    val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
-                    val newStartTime = if (difference < 0) {
-                        1440 - abs(difference)
-                    } else {
-                        1440 + difference
-                    }
-
-                    if (minValue == null) {
-                        minValue = newStartTime
-                    } else if (newStartTime < minValue!!) {
-                        minValue = newStartTime
-                    }
-                }
-            }else{
-                if (it.master_start_time != null) {
-                    val currentDay = LocalDate.parse(it.date).atStartOfDay()
-
-                    val sleepStartTime =
-                        LocalDateTime.parse(it.master_start_time, dateTimeFormatter)
-
-                    val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
-                    val newStartTime = if (difference < 0) {
-                        1440 - abs(difference)
-                    } else {
-                        1440 + difference
-                    }
-
-                    if (minValue == null) {
-                        minValue = newStartTime
-                    } else if (newStartTime < minValue!!) {
-                        minValue = newStartTime
-                    }
-                }
+            val startDate = if (contributorType == SleepInternalLaunchState.TIMING) {
+                it.master_mid_time
+            } else {
+                it.master_start_time
             }
 
-        }
+            if (startDate != null) {
+                val currentDay = LocalDate.parse(it.date).atStartOfDay()
 
+                val sleepStartTime =
+                    LocalDateTime.parse(startDate, dateTimeFormatter)
+
+                val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
+                val newStartTime = if (difference < 0) {
+                    1440 - abs(difference)
+                } else {
+                    1440 + difference
+                }
+
+                if (minValue == null) {
+                    minValue = newStartTime
+                    minTime  = sleepStartTime
+                } else if (newStartTime < minValue!!) {
+                    minValue = newStartTime
+                }
+            }
+        }
 
         val result = ArrayList<SleepTimeModel>()
         data?.forEach {
-            if(contributorType==SleepInternalLaunchState.TIMING){
+            if (contributorType == SleepInternalLaunchState.TIMING) {
                 if (it.master_mid_time != null) {
                     val currentDay = LocalDate.parse(it.date).atStartOfDay()
                     val sleepStartTime =
@@ -167,7 +156,7 @@ class SleepSleepTImeChartFragment :
                         )
                     )
                 }
-            }else{
+            } else {
                 if (it.master_start_time != null) {
                     val currentDay = LocalDate.parse(it.date).atStartOfDay()
                     val sleepStartTime =
@@ -184,6 +173,7 @@ class SleepSleepTImeChartFragment :
                     val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
 
                     val startTime = (newStartTime - (minValue ?: 0L))
+
                     val endTime = startTime + abs(sleepDifference)
                     result.add(
                         SleepTimeModel(
@@ -207,7 +197,7 @@ class SleepSleepTImeChartFragment :
 
 
         }
-        return result
+        return Pair(result,minTime)
     }
 
     override fun initListener() {
