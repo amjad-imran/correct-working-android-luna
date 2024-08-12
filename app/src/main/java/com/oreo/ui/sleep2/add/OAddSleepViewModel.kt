@@ -104,9 +104,10 @@ constructor(
                                 LocalDate.now().minusDays(1)
                             } ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
                         }
+                        val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
                         jsonObject.addProperty(
                             "date",
-                            DateFormats.getCurrentDate(DateFormats.dateFormat3())
+                            date
                         )
                         jsonObject.addProperty("end_time", endTime)
                         jsonObject.addProperty("start_time", startTime)
@@ -120,7 +121,7 @@ constructor(
                         val jsonArray = JsonArray()
                         jsonArray.add(jsonFinalObject)
                         userActivityRepository.addManualSleep(
-                            jsonArray
+                            jsonArray,date
                         ).collect { resource ->
                             when (resource) {
                                 is Resource.GenericError -> {

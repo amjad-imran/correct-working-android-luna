@@ -83,9 +83,6 @@ class SleepDailyGradientChartFragment :
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-                val firstValue = pageData?.data?.firstOrNull()
-                val date = firstValue?.date
-
                 sharedViewModel.sendInteractDaily(null, null)
             }
 

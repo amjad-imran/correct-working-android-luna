@@ -34,6 +34,7 @@ data class TrendsValues(
 
     //For daily
     val avg: Float? = null,
+    val nudge: String? = null,
     val breakup: List<Float>? = null
 ) : Parcelable
 

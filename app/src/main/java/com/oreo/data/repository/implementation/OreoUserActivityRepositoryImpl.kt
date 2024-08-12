@@ -1362,8 +1362,14 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun addManualSleep(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>> {
+    override suspend fun addManualSleep(
+        request: JsonArray,
+        date: String
+    ): Flow<Resource<BaseApiResponseData<Any>>> {
+
+        //TODO clear today data
         return safeApiCallFlow(dispatcher) {
+            userHealthDataSource.clearDataByDates(arrayListOf(date))
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/add/manual"
             val requestObject = JsonObject().apply {
                 this.add("sleeps", request)
@@ -1876,7 +1882,7 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/trends/$filterType"
-            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate,dataType?:"")
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, dataType ?: "")
         }
     }
 
@@ -1901,7 +1907,7 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v2/health/trends/$filterType"
-            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, dataType?:"")
+            remoteDataSource.getSleepTrendsInternalPageData(url, startDate, endDate, dataType ?: "")
         }
     }
 

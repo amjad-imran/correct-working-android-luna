@@ -121,9 +121,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 it.data?.forEach {
                                     trendsData[LocalDate.parse(it.date)] = it
                                 }
-                                val avg = it.data?.firstOrNull()?.avg
+                                val firstDate = it.data?.firstOrNull()
+                                val avg = firstDate?.avg
+                                val nudge = firstDate?.nudge
 
-                                generateFragment(trendsData, TrendAverage(avg = avg))
+                                generateFragment(trendsData, TrendAverage(avg = avg, nudge = nudge))
                             }
                         }
                     }

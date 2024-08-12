@@ -432,7 +432,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
 
             SleepInternalLaunchState.SLEEP_DURATION -> {
                 val minValue = (value / 60)
-                val (hour, min) = ApplicationUtils.getFormattedSleepDurationFromSeconds(value.roundToInt())
+                val (hour, min) = ApplicationUtils.getFormattedSleepDuration(minValue.roundToInt())
                 Pair(minValue, String.format(locale = Locale.US, "%d:%02d", hour, min))
             }
 
