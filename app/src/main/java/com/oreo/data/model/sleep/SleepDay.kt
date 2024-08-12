@@ -97,6 +97,8 @@ data class HealthTrendValue(
 data class MultiSleep(
     val start_time: String? = null,
     val end_time: String? = null,
+    val sleep_impact: Int? = null,
+    val sleep_score: Int? = null,
     var hourly: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,
     var summary: SleepSummary? = null

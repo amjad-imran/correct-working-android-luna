@@ -541,7 +541,6 @@ class OSPTrendsSharedViewModel @Inject constructor(
                         lastWeek = weekNumber
                         weekListReturn.add(date)
                     }
-                    LOGS.d("sdkjfhsdkjfhsdkf  Week number$date- $weekNumber")
                 }
                 weekListReturn
             }

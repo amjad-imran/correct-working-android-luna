@@ -32,7 +32,6 @@ class SleepSingleLineChartFragment :
 
         @JvmStatic
         fun newInstance(pageData: TrendsGraphData) = SleepSingleLineChartFragment().apply {
-            LOGS.d("sdkjfhsdkjfhsdkf ${Gson().toJson(pageData)}")
             arguments = Bundle().apply {
                 this.putParcelable(graphData, pageData)
             }

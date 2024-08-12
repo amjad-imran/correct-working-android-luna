@@ -649,9 +649,9 @@ class SleepDashViewModel @Inject constructor(
         val dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
 
-        sleepChild.forEach {
-            val start = LocalDateTime.parse(it.start_time, dateTimeFormat)
-            val end = LocalDateTime.parse(it.end_time, dateTimeFormat)
+        sleepChild.forEachIndexed { index, multiSleep ->
+            val start = LocalDateTime.parse(multiSleep.start_time, dateTimeFormat)
+            val end = LocalDateTime.parse(multiSleep.end_time, dateTimeFormat)
 
             val duration = Duration.between(start, end)
 
@@ -669,8 +669,8 @@ class SleepDashViewModel @Inject constructor(
                 MultiSleepDisplay(
                     sleepStart = start.format(timeFormatter),
                     sleepTime = durationText,
-                    score = "",
-                    scoreImpact = 1
+                    score = multiSleep.sleep_impact?:0,
+                    scoreImpact = multiSleep.sleep_impact?:0
                 )
             )
         }

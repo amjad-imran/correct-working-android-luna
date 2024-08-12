@@ -18,7 +18,7 @@ class MultiSleepAdapter(val listener: MultiSleepAction) :
         fun bind(data: MultiSleepDisplay) {
             binding.tvTime.text = "${data.sleepStart} | ${data.sleepTime}"
 
-            if (bindingAdapterPosition == mDataSet.size - 1) {
+            if (bindingAdapterPosition == 0) {
                 binding.tvScore.text = "Score ${data.score}"
 
                 binding.tvScore.setTextGradient(
@@ -96,6 +96,6 @@ interface MultiSleepAction {
 data class MultiSleepDisplay(
     val sleepStart: String,
     val sleepTime: String,
-    val score: String,
+    val score: Int,
     val scoreImpact: Int
 )

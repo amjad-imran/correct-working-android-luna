@@ -16,10 +16,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.google.gson.Gson
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZeroGeneric
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.sleep.SleepTimeModel
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
@@ -620,6 +622,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         xAxisRange: List<LocalDate>,
         selectedPeriod: InternalSelectedPeriod?,
     ) {
+        LOGS.d("sdfkjshdkfj ${Gson().toJson(list)}")
         dataPosition.clear()
 
         this.selectedPeriod = selectedPeriod
