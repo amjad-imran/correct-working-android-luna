@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepTimeChartBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -49,12 +48,12 @@ class SleepTimeChartFragment :
 
         val dataList = convertData(pageData?.data)
 
-        val xAxisRange = sharedViewModel.getXAxisRange(pageData)
-        val yAxisRange = getYAxisRange()
+        //val xAxisRange = sharedViewModel.getXAxisRange(pageData)
+        //val yAxisRange = getYAxisRange(dataList.first, dataList.second)
 
 
         binding.graphBar.setDataSet(
-            dataList, yAxisRange
+            dataList.first, dataList.second
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
@@ -76,20 +75,26 @@ class SleepTimeChartFragment :
         })
     }
 
-    fun getYAxisRange():List<Pair<Int,String>>{
+    fun getYAxisRange(dataList: List<SleepTimeModel>, minValue: Long?): List<Pair<Int, String>> {
         return arrayListOf(
+            Pair(((minValue ?: 0) / 60).toInt(), "test y")
+        )
+
+        /*return arrayListOf(
             Pair(0, "0"),
             Pair(180, "3"),
             Pair(360, "6"),
             Pair(540, "9"),
             Pair(720, "12")
-        )
+        )*/
     }
 
-    private fun convertData(data: List<TrendsValues>?): List<SleepTimeModel> {
+    private fun convertData(data: List<TrendsValues>?): Pair<List<SleepTimeModel>, List<Pair<Int, String>>> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         var minValue: Long? = null
+        var minStartTime: LocalDateTime? = null
+
         data?.forEach {
             if (it.master_start_time != null) {
                 val currentDay = LocalDate.parse(it.date).atStartOfDay()
@@ -106,8 +111,10 @@ class SleepTimeChartFragment :
 
                 if (minValue == null) {
                     minValue = newStartTime
+                    minStartTime = sleepStartTime
                 } else if (newStartTime < minValue!!) {
                     minValue = newStartTime
+                    minStartTime = sleepStartTime
                 }
             }
         }
@@ -129,7 +136,7 @@ class SleepTimeChartFragment :
                     1440 + difference
                 }
 
-                    val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
+                val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
 
                 val startTime = (newStartTime - (minValue ?: 0L))
                 val endTime = startTime + abs(sleepDifference)
@@ -152,8 +159,25 @@ class SleepTimeChartFragment :
                 )
             }
         }
-        LOGS.d("resultsdsd $result ")
-        return result
+
+        val yAxis = ArrayList<Pair<Int, String>>()
+        val offset = 60 * 6
+
+        if (minStartTime != null) {
+            var minMinutes = ((minValue ?: 0) / 60).toInt() - offset
+            var current = minStartTime!!.minusMinutes(offset.toLong())
+            val max = current!!.plusHours(30)
+
+            val dispFormat = DateTimeFormatter.ofPattern("hh:mm")
+            while (current < max) {
+
+                yAxis.add(Pair(minMinutes, current.format(dispFormat)))
+                minMinutes = minMinutes.plus(4 * 60)
+                current = current.plusMinutes(4 * 60)
+            }
+        }
+
+        return Pair(result, yAxis)
     }
 
 

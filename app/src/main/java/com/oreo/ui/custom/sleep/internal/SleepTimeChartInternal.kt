@@ -139,7 +139,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
         drawBackGrid(canvas)
         drawXAxis(canvas)
 
-        //drawYAxis(canvas)
+        drawYAxis(canvas)
 
         drawContent(canvas)
     }
@@ -322,42 +322,6 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
             )
             start += stepWidth
         }
-
-        canvas.drawLine(
-            0f,
-            getYAxisValue(0f),
-            availableWidth.toFloat(),
-            getYAxisValue(0f),
-            xLinePaint
-        )
-
-        gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-
-        /*val heightStep = mMax / 4
-        var heightStart = heightStep
-        for (i in 1 until 5) {
-            canvas.drawLine(
-                0f,
-                getYAxisValue(heightStart.toFloat()),
-                availableWidth.toFloat(),
-                getYAxisValue(heightStart.toFloat()),
-                gridLinePaint
-            )
-            if (i == 4) {
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(heightStart.toFloat()),
-                    availableWidth.toFloat(),
-                    getYAxisValue(heightStart.toFloat()),
-                    gridLinePaint
-                )
-            }
-
-            heightStart += heightStep
-        }*/
-
-
     }
 
     private fun drawXAxis(canvas: Canvas) {
@@ -422,54 +386,73 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
                 canvas.drawText(
                     text,
                     width - textBounds.width().toFloat() - textPadding,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toFloat() + offset),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toFloat() + offset),
                     availableWidth,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toFloat() + offset),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
-                canvas.drawText(
-                    text,
-                    width - textBounds.width().toFloat() - textPadding,
-                    getYAxisValue(value.first.toFloat()) + textBounds.height(),
-                    xAxisPaint
-                )
+                val yAxis = getYAxisValue(value.first.toFloat() + offset) + textBounds.height()
 
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+                if ((yAxis - textBounds.height()) > topHeight) {
+                    canvas.drawText(
+                        text,
+                        width - textBounds.width().toFloat() - textPadding,
+                        getYAxisValue(value.first.toFloat() + offset) + textBounds.height(),
+                        xAxisPaint
+                    )
+                    gridLinePaint.strokeWidth = dip2px(2f).toFloat()
 
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(value.first.toFloat()),
-                    availableWidth,
-                    getYAxisValue(value.first.toFloat()),
-                    gridLinePaint
-                )
+                    canvas.drawLine(
+                        0f,
+                        getYAxisValue(value.first.toFloat() + offset),
+                        availableWidth,
+                        getYAxisValue(value.first.toFloat() + offset),
+                        gridLinePaint
+                    )
+                }
+
+
             } else {
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
-                canvas.drawText(
-                    text,
-                    width - textBounds.width().toFloat() - textPadding,
-                    getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
-                    xAxisPaint
-                )
 
-                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+                val yAxis = getYAxisValue(value.first.toFloat() + offset) + textBounds.height() / 2
+                if ((yAxis - textBounds.height()) > topHeight) {
+                    canvas.drawText(
+                        text,
+                        width - textBounds.width().toFloat() - textPadding,
+                        yAxis,
+                        xAxisPaint
+                    )
+                    gridLinePaint.strokeWidth = dip2px(1f).toFloat()
 
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(value.first.toFloat()),
-                    availableWidth,
-                    getYAxisValue(value.first.toFloat()),
-                    gridLinePaint
-                )
+                    canvas.drawLine(
+                        0f,
+                        getYAxisValue(value.first.toFloat() + offset),
+                        availableWidth,
+                        getYAxisValue(value.first.toFloat() + offset),
+                        gridLinePaint
+                    )
+                }
+
+
             }
         }
+        gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+
+        canvas.drawLine(
+            0f,
+            topHeight.toFloat(),
+            availableWidth,
+            topHeight.toFloat(),
+            gridLinePaint
+        )
     }
 
     var startX: Float? = null

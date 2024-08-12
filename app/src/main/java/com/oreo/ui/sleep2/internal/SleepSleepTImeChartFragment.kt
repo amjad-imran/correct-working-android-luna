@@ -55,8 +55,8 @@ class SleepSleepTImeChartFragment :
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
 
         binding.graphBar.setDataSet(
-            dataList.first, yAxisRange, xAxisRange,
-            pageData?.selectedPeriod,dataList.second
+            dataList.first, dataList.second, xAxisRange,
+            pageData?.selectedPeriod
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
@@ -81,12 +81,12 @@ class SleepSleepTImeChartFragment :
     private fun convertData(
         data: List<TrendsValues>?,
         contributorType: SleepInternalLaunchState?
-    ): Pair<List<SleepTimeModel>,LocalDateTime?> {
+    ):Pair<List<SleepTimeModel>, List<Pair<Int, String>>> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val minTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         var minValue: Long? = null
-        var minTime: LocalDateTime? = null
+        var minStartTime: LocalDateTime? = null
 
         data?.forEach {
 
@@ -111,9 +111,10 @@ class SleepSleepTImeChartFragment :
 
                 if (minValue == null) {
                     minValue = newStartTime
-                    minTime  = sleepStartTime
+                    minStartTime  = sleepStartTime
                 } else if (newStartTime < minValue!!) {
                     minValue = newStartTime
+                    minStartTime  = sleepStartTime
                 }
             }
         }
@@ -197,7 +198,25 @@ class SleepSleepTImeChartFragment :
 
 
         }
-        return Pair(result,minTime)
+
+        val yAxis = ArrayList<Pair<Int, String>>()
+        val offset = 60 * 6
+
+        if (minStartTime != null) {
+            var minMinutes = ((minValue ?: 0) / 60).toInt() - offset
+            var current = minStartTime!!.minusMinutes(offset.toLong())
+            val max = current!!.plusHours(30)
+
+            val dispFormat = DateTimeFormatter.ofPattern("hh:mm")
+            while (current < max) {
+
+                yAxis.add(Pair(minMinutes, current.format(dispFormat)))
+                minMinutes = minMinutes.plus(4 * 60)
+                current = current.plusMinutes(4 * 60)
+            }
+        }
+
+        return Pair(result, yAxis)
     }
 
     override fun initListener() {

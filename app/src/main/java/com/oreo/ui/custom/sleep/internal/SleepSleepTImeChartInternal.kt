@@ -83,7 +83,6 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
     private var mMax = 0L
     private var offset = 120L
-    private var minTime: LocalDateTime? = null
 
 
     /**
@@ -498,39 +497,8 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
     private fun drawYAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
 
-
         val textBounds = Rect()
-        if (minTime == null) return
-
-        val maxTime = minTime!!.plusHours(24)
-
-        var current = minTime!!
-       /* while (current < maxTime) {
-
-
-            val text = "$current"
-            xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
-            canvas.drawText(
-                text,
-                width - textBounds.width().toFloat(),
-                getYAxisValue(value.first.toLong()) + textBounds.height() / 2,
-                xAxisPaint
-            )
-            gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-            canvas.drawLine(
-                0f,
-                getYAxisValue(value.first.toLong()),
-                availableWidth,
-                getYAxisValue(value.first.toLong()),
-                gridLinePaint
-            )
-
-
-            current = current.plusHours(1)
-        }*/
-
-
-        return
+        val textPadding = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -538,57 +506,79 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
             xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
 
             if (index == 0) {
+                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toLong()),
+                    width - textBounds.width().toFloat() - textPadding,
+                    getYAxisValue(value.first + offset),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toLong()),
+                    getYAxisValue(value.first + offset),
                     availableWidth,
-                    getYAxisValue(value.first.toLong()),
+                    getYAxisValue(value.first + offset),
                     xLinePaint
                 )
             } else if (index == yAxisRange.size - 1) {
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
-                canvas.drawText(
-                    text,
-                    width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toLong()) + textBounds.height(),
-                    xAxisPaint
-                )
-                gridLinePaint.strokeWidth = dip2px(2f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(value.first.toLong()),
-                    availableWidth,
-                    getYAxisValue(value.first.toLong()),
-                    gridLinePaint
-                )
+                val yAxis = getYAxisValue(value.first + offset) + textBounds.height()
+
+                if ((yAxis - textBounds.height()) > topHeight) {
+                    canvas.drawText(
+                        text,
+                        width.toFloat() - textBounds.width() - textPadding,
+                        getYAxisValue(value.first + offset) + textBounds.height(),
+                        xAxisPaint
+                    )
+                    gridLinePaint.strokeWidth = dip2px(2f).toFloat()
+
+                    canvas.drawLine(
+                        0f,
+                        getYAxisValue(value.first + offset),
+                        availableWidth,
+                        getYAxisValue(value.first + offset),
+                        gridLinePaint
+                    )
+                }
+
+
             } else {
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
-                canvas.drawText(
-                    text,
-                    width - textBounds.width().toFloat(),
-                    getYAxisValue(value.first.toLong()) + textBounds.height() / 2,
-                    xAxisPaint
-                )
-                gridLinePaint.strokeWidth = dip2px(1f).toFloat()
-                canvas.drawLine(
-                    0f,
-                    getYAxisValue(value.first.toLong()),
-                    availableWidth,
-                    getYAxisValue(value.first.toLong()),
-                    gridLinePaint
-                )
+
+                val yAxis = getYAxisValue(value.first + offset) + textBounds.height() / 2
+                if ((yAxis - textBounds.height()) > topHeight) {
+                    canvas.drawText(
+                        text,
+                        width - textBounds.width().toFloat() - textPadding,
+                        yAxis,
+                        xAxisPaint
+                    )
+                    gridLinePaint.strokeWidth = dip2px(1f).toFloat()
+
+                    canvas.drawLine(
+                        0f,
+                        getYAxisValue(value.first + offset),
+                        availableWidth,
+                        getYAxisValue(value.first + offset),
+                        gridLinePaint
+                    )
+                }
+
+
             }
-
         }
-        //showAverage(canvas, availableWidth)
+        gridLinePaint.strokeWidth = dip2px(2f).toFloat()
 
+        canvas.drawLine(
+            0f,
+            topHeight.toFloat(),
+            availableWidth,
+            topHeight.toFloat(),
+            gridLinePaint
+        )
     }
+
 
     private fun drawXAxis(canvas: Canvas) {
         val availableWidth = width.toFloat() - endPadding
@@ -629,7 +619,6 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
         selectedPeriod: InternalSelectedPeriod?,
-        minTime: LocalDateTime?
     ) {
         dataPosition.clear()
 
@@ -643,8 +632,6 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
         mMax = 0
         offset = 60 * 6L
-
-        this.minTime = minTime?.minusMinutes(offset)
 
         list.forEach {
             if (it.endTime > mMax) {
