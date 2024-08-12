@@ -133,6 +133,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun loadGraphData(loadPrev: Boolean) {
+        if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) {
+            getTrendsInternalDetailsData(LocalDate.parse(startDate), LocalDate.now())
+            return
+        }
+
+
         if (isHealthMonitorTrend() && selectedPeriod.value == InternalSelectedPeriod.DAILY) {
             getStartAndEndTime(loadPrev)?.let {
                 getTrendsDailyData(it.first, it.second)
@@ -148,13 +154,19 @@ class SleepInternalDetailsViewModel @Inject constructor(
         currentSelectedStartDate = startDate
         currentSelectedEndDate = endDate
 
+        val period = if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+            InternalSelectedPeriod.DAY.name.lowercase()
+        } else {
+            selectedPeriod.value?.name?.lowercase()
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             if (isHealthMonitorTrend()) {
                 userActivityRepository.getSleepHealthMonitorTrendsPagesData(
                     startDate.toString(),
                     getCalculatedEnd(endDate).toString(),
                     selectedLaunchMode.key.lowercase(),
-                    selectedPeriod.value?.name?.lowercase()
+                    period
                 )
             } else {
                 userActivityRepository.getSleepInternalTrendsPagesData(
@@ -303,6 +315,12 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
         trendData.contributorType = selectedLaunchMode
+
+        if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) {
+            return SleepTempDeviationChartFragment.newInstance(
+                trendData
+            )
+        }
 
         when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
@@ -706,13 +724,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             TemporalAdjusters.previous(
                                 DayOfWeek.MONDAY
                             )
-                        ).minusWeeks(5)
+                        ).minusWeeks(4)
 
                         val endOfWeek = currentSelectedEndDate.with(
                             TemporalAdjusters.previous(
                                 DayOfWeek.SUNDAY
                             )
-                        ).minusWeeks(5)
+                        ).minusWeeks(4)
 
                         Pair(startOfWeek, endOfWeek)
                     } else {
@@ -720,13 +738,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             TemporalAdjusters.next(
                                 DayOfWeek.MONDAY
                             )
-                        ).plusWeeks(5)
+                        ).plusWeeks(4)
 
                         val endOfWeek = currentSelectedEndDate.with(
                             TemporalAdjusters.next(
                                 DayOfWeek.SUNDAY
                             )
-                        ).plusWeeks(5)
+                        ).plusWeeks(4)
 
                         if (startOfWeek > LocalDate.now()) {
                             return null
@@ -798,6 +816,20 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
     }
 
+    fun getDisplayDate(): String {
+        val format = DateTimeFormatter.ofPattern("dd MMM")
+        return if (currentSelectedStartDate == currentSelectedEndDate) {
+            currentSelectedStartDate.format(format)
+
+        } else {
+            "${currentSelectedStartDate.format(format)} - ${
+                currentSelectedEndDate.format(
+                    format
+                )
+            }"
+        }
+    }
+
 
 }
 
@@ -805,7 +837,7 @@ data class TopContentData(
     val isInteracting: Boolean,
     val date: LocalDate? = null,
     val trendsData: TrendAverage? = null,
-    val dailyValue: Float? = null
+    val dailyValue: Float? = null,
 )
 
 enum class InternalSelectedPeriod {

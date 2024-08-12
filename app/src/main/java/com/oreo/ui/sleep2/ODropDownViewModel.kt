@@ -27,11 +27,11 @@ class ODropDownViewModel @Inject constructor(
         sleepData.add(SleepInternalLaunchState.SLEEP_TIME)
 
         //health monitor trends
-        sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
+        /*sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
         sleepData.add(SleepInternalLaunchState.RESTING_HEART_RATE)
         sleepData.add(SleepInternalLaunchState.HRV)
         sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
-        sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)
+        sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)*/
 
         val activityData = ArrayList<ODropDownDataModel>()
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))

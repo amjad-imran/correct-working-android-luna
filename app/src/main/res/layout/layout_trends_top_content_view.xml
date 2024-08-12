@@ -17,6 +17,14 @@
             tools:text="23 April - 30 May, 2024" />
 
         <include
+            android:id="@+id/lytPaginate"
+            layout="@layout/layout_change_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
             android:id="@+id/lytTopPercentView"
             layout="@layout/layout_top_trends_percent_view"
             android:layout_width="wrap_content"
@@ -66,12 +74,12 @@
             style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/text_optimal_range"
             android:textColor="@color/white_48"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/lytHighlightTrends"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/lytHighlightTrends"
-            android:text="@string/text_optimal_range"
             tools:visibility="visible" />
 
         <TextView

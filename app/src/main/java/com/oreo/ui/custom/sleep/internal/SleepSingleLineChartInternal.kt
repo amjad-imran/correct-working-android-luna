@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import com.google.gson.Gson
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.averageWithoutZeroGeneric
@@ -218,15 +219,17 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         var previousValue: Float? = null
 
         var lastPos = 0
+
         xAxisRange.forEachIndexed { index, value ->
 
             val dataSize = getDataSize(value)
             val filterValues = try {
-                dataSet.subList(lastPos, (lastPos + dataSize - 1))
+                dataSet.subList(lastPos, (lastPos + dataSize))
             } catch (exp: Exception) {
                 ArrayList()
             }
             lastPos += dataSize
+
 
             val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZeroGenericFloat()
 
@@ -313,7 +316,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         dataStepWidth = availableWidth / dataSet.size
         var start = 0f
         val circleRadiusBig = dip2px(4f).toFloat()
-        val paddingHorizontal = dip2px(4f)
         val maxDataSize = dataSet.size
 
         val selectedPosition = getSelectedPosition()
@@ -335,21 +337,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         var isDataNull = true
         dataSet.forEachIndexed { index, it ->
-            if (mSelectedPosition != -1 && index + 1 == mSelectedPosition) {
-                val rectFSelected = RectF(
-                    start + paddingHorizontal,
-                    topHeight.toFloat(),
-                    start + dataStepWidth - paddingHorizontal,
-                    height.toFloat() - bottomHeight
-                )
 
-                canvas.drawRect(
-                    rectFSelected, selectedDayPaint
-                )
-            }
-
-
-            if (it.value1 != null) {
+            if (it.value1 != null && it.value1 != 0f) {
                 isDataNull = false
                 val isSelectedPosition = selectedPosition == index
                 val actualPos = getYAxisValue(it.value1 ?: 0.0f)
@@ -357,21 +346,21 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && dataSet[index + 1].value1 != 0.0f) {
                     val nextElement = dataSet[index + 1].value1
 
                     val actualPosNext = getYAxisValue(nextElement ?: 0.0f)
                     canvas.drawLine(
-                        start + dataStepWidth / 2,
+                        start,
                         actualPos,
-                        start + dataStepWidth + dataStepWidth / 2,
+                        start + dataStepWidth,
                         actualPosNext,
                         if (isInteracting) linePaintI else linePaint
                     )
                 }
 
                 if (isSelectedPosition && isInteracting) {
-                    val center = start + dataStepWidth / 2
+                    val center = start
 
                     canvas.drawRect(
                         RectF(
@@ -393,7 +382,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     canvas.drawRect(rectFTopI, circlePaint)
 
                     canvas.drawCircle(
-                        start + dataStepWidth / 2, actualPos, circleRadiusBig, circlePaint
+                        start, actualPos, circleRadiusBig, circlePaint
                     )
                 }
             }

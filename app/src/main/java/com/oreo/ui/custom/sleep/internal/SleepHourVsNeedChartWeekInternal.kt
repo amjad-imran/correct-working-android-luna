@@ -285,19 +285,19 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
             val isSelectedPosition = selectedPosition == index
 
-            if (it.value1 != null) {
+            if (it.value1 != null && it.value1 != 0f) {
                 val actualPos = getYAxisValue(it.value1 ?: 0.0f)
 
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && dataSet[index + 1].value1 != 0f) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
                     canvas.drawLine(
-                        start + dataStepWidth / 2,
+                        start,
                         actualPos,
-                        start + dataStepWidth + dataStepWidth / 2,
+                        start + dataStepWidth ,
                         actualPosNext,
                         if (isInteracting) linePaintHourI else linePaintHour
                     )
@@ -305,7 +305,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
                 if (isSelectedPosition) {
                     canvas.drawCircle(
-                        start + dataStepWidth / 2,
+                        start,
                         actualPos,
                         circleRadiusBig,
                         circlePaint
@@ -314,24 +314,24 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
             }
 
-            if (it.value2 != null) {
+            if (it.value2 != null && it.value2 != 0f) {
                 val needPos = getYAxisValue(it.value2 ?: 0.0f)
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value2 != null && dataSet[index + 1].value2 != 0f) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.value2 ?: 0.0f)
                     canvas.drawLine(
-                        start + dataStepWidth / 2,
+                        start,
                         needPos,
-                        start + dataStepWidth + dataStepWidth / 2,
+                        start + dataStepWidth,
                         actualPosNext,
                         if (isInteracting) linePaintNeedI else linePaintNeed
                     )
                 }
                 if (isSelectedPosition) {
                     canvas.drawCircle(
-                        start + dataStepWidth / 2,
+                        start,
                         needPos,
                         circleRadiusBig,
                         circlePaint
@@ -341,7 +341,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             }
 
             if (isSelectedPosition && isInteracting) {
-                val center = start + dataStepWidth / 2
+                val center = start
 
                 canvas.drawRect(
                     RectF(
@@ -395,12 +395,13 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             val dataSize = getDataSize(value)
             val filterValues = try {
                 dataSet.subList(lastPos, lastPos + dataSize)
-            }catch (exp:Exception){
+            } catch (exp: Exception) {
                 ArrayList()
             }
             lastPos += dataSize
 
-            val hour = filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()//deep
+            val hour =
+                filterValues.mapNotNull { it.value1?.roundToInt() }.averageWithoutZero()//deep
             val need = filterValues.mapNotNull { it.value2?.roundToInt() }.averageWithoutZero()//rem
 
 

@@ -3,13 +3,17 @@ package com.oreo.ui.sleep2.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.google.gson.Gson
 import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit.luna.databinding.FragmentSleepTempDeviationBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.ChartModel
 import com.oreo.data.model.ResultData
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
+import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +59,28 @@ class SleepTempDeviationChartFragment :
             topGraphData.third,
             topGraphData.second
         )
+
+        pageData?.data?.firstOrNull()?.date?.let {
+            sharedViewModel.sendInteractDay(LocalDate.parse(it))
+        }
+
+
+        binding.rvTopBarGraph.setOnChartScrollChangedListener(object : ScrollListener {
+            override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
+                try {
+                    val calcPos = (pageData?.data?.size ?: 0) - (position - 14)
+                    val date = pageData?.data?.get(calcPos)?.date
+                    sharedViewModel.sendInteractDay(LocalDate.parse(date))
+                } catch (exp: Exception) {
+                    sharedViewModel.sendInteractDay(null)
+                }
+            }
+
+            override fun onScrolling(position: Int, chartModel: ChartModel?) {
+
+            }
+
+        })
 
     }
 

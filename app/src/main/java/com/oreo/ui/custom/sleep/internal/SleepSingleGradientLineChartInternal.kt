@@ -270,7 +270,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 fillPath.lineTo(start + dataStepWidth / 2, actualPos)
 
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null) {
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && dataSet[index + 1].value1 != 0.0f) {
                     val nextElement = dataSet[index + 1]
 
                     val actualPosNext = getYAxisValue(nextElement.value1 ?: 0.0f)
@@ -353,7 +353,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         when (chartType) {
             SleepSingleGradientChartType.TIME -> {
                 val (hour, minute) = getFormattedSleepDuration(
-                    (value ?: 0L).toInt()
+                    (value ?: 0f).roundToInt()
                 )
                 return String.format(locale = Locale.US, "%02d:%02d", hour, minute)
             }

@@ -8,11 +8,13 @@ import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.ResultData
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -42,7 +44,11 @@ class OSPTrendsSharedViewModel @Inject constructor(
     }
 
     fun sendInteractDaily(day: LocalDate?, data: Float?) {
-        _interactGraphDataDaily.postValue(Pair(day, data))
+        if (day == null) {
+            _interactGraphDataDaily.postValue(null)
+        } else {
+            _interactGraphDataDaily.postValue(Pair(day, data))
+        }
     }
 
     fun getYAxisRange(
@@ -525,7 +531,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 pageData.data?.forEach {
                     val date = LocalDate.parse(it.date)
 
-                    val weekFields = WeekFields.of(Locale.getDefault())
+                    val weekFields = WeekFields.of(DayOfWeek.MONDAY, 7)
                     val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
 
                     if (lastWeek == null) {
@@ -535,6 +541,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                         lastWeek = weekNumber
                         weekListReturn.add(date)
                     }
+                    LOGS.d("sdkjfhsdkjfhsdkf  Week number$date- $weekNumber")
                 }
                 weekListReturn
             }
@@ -553,11 +560,9 @@ class OSPTrendsSharedViewModel @Inject constructor(
     fun getPrefixAndSuffixListTemp(
         dataList: ArrayList<ResultData>,
     ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
-        dataList.reversed()
         val list = java.util.ArrayList<ChartModel>()
         var max = 10
-        dataList.forEach {
-
+        dataList.reversed().forEach {
 
             val chartModel = ChartModel()
             chartModel.date = it.date

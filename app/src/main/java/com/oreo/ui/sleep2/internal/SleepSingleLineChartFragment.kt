@@ -3,8 +3,10 @@ package com.oreo.ui.sleep2.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.google.gson.Gson
 import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -30,6 +32,7 @@ class SleepSingleLineChartFragment :
 
         @JvmStatic
         fun newInstance(pageData: TrendsGraphData) = SleepSingleLineChartFragment().apply {
+            LOGS.d("sdkjfhsdkjfhsdkf ${Gson().toJson(pageData)}")
             arguments = Bundle().apply {
                 this.putParcelable(graphData, pageData)
             }

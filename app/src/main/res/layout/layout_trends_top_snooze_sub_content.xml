@@ -18,7 +18,7 @@
             layout="@layout/layout_divider"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/_24sdp"
+            android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="@id/lytHours"
             app:layout_constraintStart_toEndOf="@id/lytHours"
             app:layout_constraintTop_toTopOf="@id/lytHours" />
@@ -28,7 +28,7 @@
             layout="@layout/layout_trends_top_snooze_sub_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_24sdp"
+            android:layout_marginStart="6dp"
             app:layout_constraintStart_toEndOf="@id/divider1"
             app:layout_constraintTop_toTopOf="parent" />
 

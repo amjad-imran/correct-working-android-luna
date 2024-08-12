@@ -17,6 +17,14 @@
             tools:text="23 April - 30 May, 2024" />
 
         <include
+            android:id="@+id/lytPaginate"
+            layout="@layout/layout_change_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
             android:id="@+id/lytContentView"
             layout="@layout/layout_trends_top_snooze_sub_content"
             android:layout_width="match_parent"
