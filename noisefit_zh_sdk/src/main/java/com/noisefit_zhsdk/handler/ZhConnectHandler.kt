@@ -3,6 +3,7 @@ package com.noisefit_zhsdk.handler
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.ConnectionEventsConstants
 import com.noisefit_commans.constants.ConnectionEventsConstants.Connecting
 import com.noisefit_commans.constants.ConnectionEventsConstants.Disconnected
@@ -545,7 +546,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
         this.noiseFitDevice = noiseFitDevice
 
         AppLogs.sendAppLogs("ConnectDevice " + noiseFitDevice.address)
-        if (controlBleTools != null && controlBleTools!!.isInit) {
+        if (controlBleTools != null && controlBleTools!!.isSdkServiceRunning(NoisefitApplication.context)) {
             bindDeviceConnectDeviceCount = 0
 
             LOGS.i(
@@ -562,6 +563,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     connectDevice(noiseFitDevice)
                 }
             })
+            zhApplicationHandler.isInitSDK = false
             zhApplicationHandler.initSdk()
         }
     }
