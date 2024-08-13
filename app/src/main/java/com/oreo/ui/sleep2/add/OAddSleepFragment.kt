@@ -22,6 +22,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddSleep
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
 
 @AndroidEntryPoint
 class OAddSleepFragment :
@@ -46,7 +47,7 @@ class OAddSleepFragment :
             }
 
 
-            //viewModel.callApiToAddSleep()
+            viewModel.callApiToAddSleep()
         }
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -66,7 +67,16 @@ class OAddSleepFragment :
                         viewModel.endTimeSleep.day.equals("Today", true)
                     ) {
 
-                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                        val startTime = LocalTime.of(
+                            viewModel.startTimeSleep.hour.toInt(),
+                            viewModel.startTimeSleep.minute.toInt()
+                        )
+                        val endTime = LocalTime.of(
+                            viewModel.endTimeSleep.hour.toInt(),
+                            viewModel.endTimeSleep.minute.toInt()
+                        )
+
+                        if (startTime < endTime) {
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
@@ -75,8 +85,16 @@ class OAddSleepFragment :
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
+                        val startTime = LocalTime.of(
+                            viewModel.startTimeSleep.hour.toInt(),
+                            viewModel.startTimeSleep.minute.toInt()
+                        )
+                        val endTime = LocalTime.of(
+                            viewModel.endTimeSleep.hour.toInt(),
+                            viewModel.endTimeSleep.minute.toInt()
+                        )
 
-                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                        if (startTime < endTime) {
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
@@ -122,7 +140,15 @@ class OAddSleepFragment :
                     if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
                     ) {
-                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                        val startTime = LocalTime.of(
+                            viewModel.startTimeSleep.hour.toInt(),
+                            viewModel.startTimeSleep.minute.toInt()
+                        )
+                        val endTime = LocalTime.of(
+                            viewModel.endTimeSleep.hour.toInt(),
+                            viewModel.endTimeSleep.minute.toInt()
+                        )
+                        if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
                             uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
@@ -131,7 +157,15 @@ class OAddSleepFragment :
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
-                        if (viewModel.startTimeSleep.hour.toInt() < viewModel.endTimeSleep.hour.toInt()) {
+                        val startTime = LocalTime.of(
+                            viewModel.startTimeSleep.hour.toInt(),
+                            viewModel.startTimeSleep.minute.toInt()
+                        )
+                        val endTime = LocalTime.of(
+                            viewModel.endTimeSleep.hour.toInt(),
+                            viewModel.endTimeSleep.minute.toInt()
+                        )
+                        if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
                             uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
