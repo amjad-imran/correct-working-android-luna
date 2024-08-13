@@ -983,8 +983,8 @@ class OreoReadinessFragment :
         val sleepStartTime = it.start_time
         val sleepEndTime = it.end_time
 
-        showHeartRateGraph(it, sleepStartTime, sleepEndTime)
-        showHeartRateVariabilityGraph(it, sleepStartTime, sleepEndTime)
+        //showHeartRateGraph(it, sleepStartTime, sleepEndTime)
+        //showHeartRateVariabilityGraph(it, sleepStartTime, sleepEndTime)
 
 
         //set data on temperature
