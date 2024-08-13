@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
@@ -453,7 +454,11 @@ class SleepInternalDetailsFragment :
                         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE &&
                             viewModel.isDeviationSelected
                         ) {
-                            data?.value2
+                            if (sharedViewModel.sessionManager.isMetric()) {
+                                AppConversionUtils.fahrenheitToCelsius(32 + (data?.value2 ?: 0f))
+                            } else {
+                                data?.value2
+                            }
                         } else {
                             topContentData.dailyValue ?: data?.value1
                         }

@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit.luna.databinding.FragmentSleepTempDeviationBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
@@ -60,7 +61,7 @@ class SleepTempDeviationChartFragment :
             topGraphData.second
         )
 
-        pageData?.data?.firstOrNull()?.date?.let {
+        pageData?.data?.lastOrNull()?.date?.let {
             sharedViewModel.sendInteractDay(LocalDate.parse(it))
         }
 
@@ -89,7 +90,11 @@ class SleepTempDeviationChartFragment :
             ResultData(
                 date = it.date ?: "",
                 data = it.value1 ?: 0.0f,
-                deviation = it.value2
+                deviation = if (sharedViewModel.sessionManager.isMetric()) {
+                    AppConversionUtils.fahrenheitToCelsius(32 + (it.value2 ?: 0f))
+                } else {
+                    it.value2
+                }
             )
         } ?: ArrayList()
     }

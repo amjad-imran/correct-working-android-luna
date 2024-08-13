@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
@@ -31,6 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SleepInternalDetailsViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
+    val sessionManager: SessionManager,
     private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
@@ -320,6 +323,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepInternalLaunchState.SLEEP_TIME -> SleepTimeChartFragment.newInstance(
                         trendData
                     )
+
                     SleepInternalLaunchState.TIMING -> SleepTimingGraphFragment.newInstance(
                         trendData
                     )
@@ -572,7 +576,14 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.RESPIRATORY_RATE -> "rpm"
             SleepInternalLaunchState.RESTING_HEART_RATE -> "bpm"
             SleepInternalLaunchState.HRV -> "ms"
-            SleepInternalLaunchState.SKIN_TEMPERATURE -> "°F"
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                if (sessionManager.isMetric()) {
+                    "°C"
+                } else {
+                    "°F"
+                }
+            }
+
             SleepInternalLaunchState.BLOOD_OXYGEN -> "%"
         }
     }
