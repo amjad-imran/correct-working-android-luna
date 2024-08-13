@@ -577,7 +577,11 @@ class SleepInternalDetailsFragment :
             }
         }
 
-        val optimalRange = sharedViewModel.getOptimalRangeMinMax(viewModel.selectedLaunchMode)
+        val optimalRange = if(viewModel.selectedPeriod.value==InternalSelectedPeriod.DAY){
+            sharedViewModel.getOptimalRangeMinMax(viewModel.selectedLaunchMode)
+        }else{
+            null
+        }
         if (optimalRange == null) {
             binding.lytTopView.lytTopSingleView.ivCircle.gone()
             binding.lytTopView.lytTopSingleView.tvOptimalRangeLabel.gone()
@@ -748,11 +752,13 @@ class SleepInternalDetailsFragment :
             InternalSelectedPeriod.DAILY -> {
                 binding.lytSelector.tvDaily.setBackgroundResource(R.drawable.back_modal)
                 binding.lytSelector.tvDaily.setTextColor(resources.getColor(R.color.white))
+
             }
 
             InternalSelectedPeriod.DAY -> {
                 binding.lytSelector.tvDay.setBackgroundResource(R.drawable.back_modal)
                 binding.lytSelector.tvDay.setTextColor(resources.getColor(R.color.white))
+
             }
 
             InternalSelectedPeriod.WEEK -> {

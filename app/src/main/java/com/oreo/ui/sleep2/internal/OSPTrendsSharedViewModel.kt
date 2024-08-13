@@ -251,6 +251,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
      * Returns optimal range
      */
     fun getOptimalRangeMinMax(contributorType: SleepInternalLaunchState?): Pair<Float, Float>? {
+
         return when (contributorType) {
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> null
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> Pair(85f, 100f)

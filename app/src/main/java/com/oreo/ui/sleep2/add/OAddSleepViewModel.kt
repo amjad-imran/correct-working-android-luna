@@ -21,6 +21,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,20 +52,22 @@ constructor(
         }
 
         val startTime = if (startTimeSleep.day.equals("Today", true)) {
-            "${LocalDate.now()} ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                startTimeSleep.minute.toInt())}"
         } else {
             "${
                 LocalDate.now().minusDays(1)
-            } ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+            } ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(), startTimeSleep.minute.toInt())}"
         }
 
         val endTime = if (endTimeSleep.day.equals("Today", true)) {
-            "${LocalDate.now()} ${endTimeSleep.hour}:${(endTimeSleep.minute)}"
+            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(), 
+                endTimeSleep.minute.toInt())}"
         } else {
-
             "${
                 LocalDate.now().minusDays(1)
-            } ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+            } ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                endTimeSleep.minute.toInt())}"
         }
 
         totalDuration = Duration.between(
