@@ -3,10 +3,12 @@ package com.oreo.ui.sleep2.add
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddSleepBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.SLEEP_TIME_REQUEST_KEY
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
@@ -16,6 +18,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddSleep
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class OAddSleepFragment :
     BaseFragment<FragmentOAddSleepBinding>(FragmentOAddSleepBinding::inflate) {
     private val viewModel: OAddSleepViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
 
     override fun initListener() {
@@ -208,6 +212,7 @@ class OAddSleepFragment :
         viewModel.addSleepResponse.observe(this) { it1 ->
             it1?.getContent().let {
                 if (it == true) {
+                    mainViewModel.dashTodayReload.value = Event(true)
                     navigateUpSafe()
                 }
             }

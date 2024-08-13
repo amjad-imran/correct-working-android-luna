@@ -281,40 +281,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
         return selectedLaunchMode in healthTrends
     }
 
-
-    private fun loadTempDeviationFrag() {
-        val start = LocalDate.parse(startDate)
-        val end = LocalDate.now()
-
-        var current = start
-        val dataToDisplay = ArrayList<TrendsValues>()
-        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        while (current <= end) {
-            val data = trendsData[current]
-            dataToDisplay.add(
-                TrendsValues(
-                    date = current.format(dateFormat),
-                    value1 = data?.value1,
-                    value2 = data?.value2
-                )
-            )
-            current = current.plusDays(1)
-        }
-
-        val trendData = TrendsGraphData(
-            data = dataToDisplay
-        )
-        /* fragments.postValue(
-             arrayListOf(
-                 SleepTempDeviationChartFragment.newInstance(
-                     trendData
-                 )
-             )
-         )*/
-
-    }
-
-
     private fun getFragmentToAdd(trendData: TrendsGraphData): Fragment {
         trendData.contributorType = selectedLaunchMode
 
@@ -729,13 +695,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             TemporalAdjusters.previous(
                                 DayOfWeek.MONDAY
                             )
-                        ).minusWeeks(4)
+                        ).minusWeeks(5)
 
                         val endOfWeek = currentSelectedEndDate.with(
                             TemporalAdjusters.previous(
                                 DayOfWeek.SUNDAY
                             )
-                        ).minusWeeks(4)
+                        ).minusWeeks(5)
 
                         Pair(startOfWeek, endOfWeek)
                     } else {
@@ -743,13 +709,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             TemporalAdjusters.next(
                                 DayOfWeek.MONDAY
                             )
-                        ).plusWeeks(4)
+                        ).plusWeeks(5)
 
                         val endOfWeek = currentSelectedEndDate.with(
                             TemporalAdjusters.next(
                                 DayOfWeek.SUNDAY
                             )
-                        ).plusWeeks(4)
+                        ).plusWeeks(5)
 
                         if (startOfWeek > LocalDate.now()) {
                             return null
