@@ -24,7 +24,7 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
             if (selectedLaunchMode == resultData) {
                 binding.lytMain.setBackgroundResource(R.drawable.back_selected_drop_down)
             } else {
-                binding.lytMain.setBackgroundResource(R.drawable.back_non_selected_drop_down)
+                binding.lytMain.setBackgroundResource(0)
             }
 
             binding.root.setOnClickListener {

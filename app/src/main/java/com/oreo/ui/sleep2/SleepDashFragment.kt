@@ -796,7 +796,7 @@ class SleepDashFragment :
             }
         }
 
-        binding.lytHealthMonitor.ivArrow.setOnClickListener {
+        binding.lytHealthMonitor.root.setOnClickListener {
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data?.healthTrend)
             })
