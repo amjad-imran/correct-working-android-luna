@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepSleepTimeBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -50,14 +51,12 @@ class SleepSleepTImeChartFragment :
 
 
         val dataList = convertData(pageData?.data, pageData?.contributorType)
-
-
-        val yAxisRange = sharedViewModel.getYAxisRange(100f, pageData?.contributorType)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
 
         binding.graphBar.setDataSet(
-            dataList.first, dataList.second, xAxisRange,
-            pageData?.selectedPeriod
+            dataList.first, dataList.second, xAxisRange, dataList.third,
+            pageData?.selectedPeriod,
+            pageData?.contributorType
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)
@@ -82,7 +81,7 @@ class SleepSleepTImeChartFragment :
     private fun convertData(
         data: List<TrendsValues>?,
         contributorType: SleepInternalLaunchState?
-    ): Pair<List<SleepTimeModel>, List<Pair<Int, String>>> {
+    ): Triple<List<SleepTimeModel>, List<Pair<Int, String>>, LocalDateTime?> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val midTimeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -91,17 +90,18 @@ class SleepSleepTImeChartFragment :
 
         data?.forEach {
 
-            val startDate = if (contributorType == SleepInternalLaunchState.TIMING && it.master_mid_time != null) {
-                val midTime = LocalTime.parse(it.master_mid_time, midTimeFormat)
-                val dateToAppend = if (midTime.hour >= 20) {
-                    LocalDate.parse(it.date).minusDays(1).toString()
+            val startDate =
+                if (contributorType == SleepInternalLaunchState.TIMING && it.master_mid_time != null) {
+                    val midTime = LocalTime.parse(it.master_mid_time, midTimeFormat)
+                    val dateToAppend = if (midTime.hour >= 20) {
+                        LocalDate.parse(it.date).minusDays(1).toString()
+                    } else {
+                        it.date
+                    }
+                    "$dateToAppend ${it.master_mid_time}"
                 } else {
-                    it.date
+                    it.master_start_time
                 }
-                "$dateToAppend ${it.master_mid_time}"
-            } else {
-                it.master_start_time
-            }
 
             if (startDate != null) {
                 val currentDay = LocalDate.parse(it.date).atStartOfDay()
@@ -186,12 +186,12 @@ class SleepSleepTImeChartFragment :
                     } else {
                         1440 + difference
                     }
-
                     val sleepDifference = Duration.between(sleepEndTime, sleepStartTime).toMinutes()
 
                     val startTime = (newStartTime - (minValue ?: 0L))
 
                     val endTime = startTime + abs(sleepDifference)
+                    LOGS.d("dflkjgldkfgn $startTime =  $newStartTime - $minValue")
                     result.add(
                         SleepTimeModel(
                             startTime = startTime,
@@ -219,11 +219,11 @@ class SleepSleepTImeChartFragment :
         val offset = 60 * 6
 
         if (minStartTime != null) {
-            var minMinutes = ((minValue ?: 0) / 60).toInt() - offset
-            var current = minStartTime!!.minusMinutes(offset.toLong())
-            val max = current!!.plusHours(30)
+            var minMinutes = 0
+            var current = minStartTime!!
+            val max = current.plusHours(30)
 
-            val dispFormat = DateTimeFormatter.ofPattern("hh:mm")
+            val dispFormat = DateTimeFormatter.ofPattern("h:mm")
             while (current < max) {
 
                 yAxis.add(Pair(minMinutes, current.format(dispFormat)))
@@ -232,7 +232,7 @@ class SleepSleepTImeChartFragment :
             }
         }
 
-        return Pair(result, yAxis)
+        return Triple(result, yAxis, minStartTime)
     }
 
     override fun initListener() {
