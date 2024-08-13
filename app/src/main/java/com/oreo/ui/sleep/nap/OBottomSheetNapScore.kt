@@ -13,6 +13,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetONapScoreBinding
 import com.noisefit.ui.APP_EXIT
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.oreo.data.model.SlideUpNapScoreDataModel
 
@@ -54,10 +55,25 @@ class OBottomSheetNapScore :
                 R.drawable.ic_slide_up_nap_post_7_pm_bg_1
             )
         }
-        binding.tvOldSScore.text = mNapScoreDataModel?.oldSleepScore.toString()
-        binding.tvNewSScore.text = mNapScoreDataModel?.newSleepScore.toString()
-        binding.tvOldRScore.text = mNapScoreDataModel?.oldReadinessScore.toString()
-        binding.tvNewRScore.text = mNapScoreDataModel?.newReadinessScore.toString()
+
+
+        if (mNapScoreDataModel?.oldSleepScore == null || mNapScoreDataModel?.oldSleepScore == 0) {
+            binding.tvOldSScore.text = mNapScoreDataModel?.newSleepScore.toString()
+            binding.ivArrow1.invisible()
+            binding.tvNewSScore.invisible()
+        } else {
+            binding.tvOldSScore.text = mNapScoreDataModel?.oldSleepScore.toString()
+            binding.tvNewSScore.text = mNapScoreDataModel?.newSleepScore.toString()
+        }
+
+        if (mNapScoreDataModel?.oldReadinessScore == null || mNapScoreDataModel?.oldReadinessScore == 0) {
+            binding.tvOldRScore.text = mNapScoreDataModel?.newReadinessScore.toString()
+            binding.ivArrow2.invisible()
+            binding.tvNewRScore.invisible()
+        } else {
+            binding.tvOldRScore.text = mNapScoreDataModel?.oldReadinessScore.toString()
+            binding.tvNewRScore.text = mNapScoreDataModel?.newReadinessScore.toString()
+        }
     }
 
     override fun initListener() {

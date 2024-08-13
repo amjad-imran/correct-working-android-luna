@@ -196,6 +196,19 @@ class SleepDashViewModel @Inject constructor(
         return drawable
     }
 
+    fun getHealthTrendState(status: String?): Int {
+        val drawable: Int = if (status.equals("warning", true)) {
+           2
+        } else if (status.equals("good", true)) {
+            1
+        } else if (status.equals("optimal", true)) {
+            0
+        } else {
+            1
+        }
+        return drawable
+    }
+
     fun getContributorInfo() {
         viewModelScope.launch {
             userActivityRepository.getContributorDetailsInfo(

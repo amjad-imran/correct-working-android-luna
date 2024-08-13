@@ -676,7 +676,20 @@ class SleepDashFragment :
         }
 
         data?.healthTrend?.apply {
+            var outOfRangeCount = 0
+            var isSignificant = false
+            var trendName = ""
             if (!bloodOxy?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    bloodOxy?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Blood oxygen"
+                }
+                if(state==2){
+                    isSignificant = true
+                }
                 binding.lytHealthMonitor.imvSpo2.setImageResource(
                     viewModel.getHealthTrendIcon(
                         bloodOxy?.status
@@ -687,18 +700,48 @@ class SleepDashFragment :
             }
 
             if (!hrv?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    hrv?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "HRV"
+                }
+                if(state==2){
+                    isSignificant = true
+                }
                 binding.lytHealthMonitor.imvHrv.setImageResource(viewModel.getHealthTrendIcon(hrv?.status))
             } else {
                 binding.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
             }
 
             if (!rhr?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    rhr?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Resting HR"
+                }
+                if(state==2){
+                    isSignificant = true
+                }
                 binding.lytHealthMonitor.imvRHR.setImageResource(viewModel.getHealthTrendIcon(rhr?.status))
             } else {
                 binding.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
             }
 
             if (!skinTemp?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    skinTemp?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Skin temperature"
+                }
+                if(state==2){
+                    isSignificant = true
+                }
                 binding.lytHealthMonitor.imvSkin.setImageResource(
                     viewModel.getHealthTrendIcon(
                         skinTemp?.status
@@ -709,13 +752,48 @@ class SleepDashFragment :
             }
 
             if (!resp?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    resp?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Respiratory rate"
+                }
+                if(state==2){
+                    isSignificant = true
+                }
                 binding.lytHealthMonitor.imvResp.setImageResource(viewModel.getHealthTrendIcon(resp?.status))
             } else {
                 binding.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
             }
 
-        } ?: {
+            if (outOfRangeCount == 0) {
+                binding.lytHealthMonitor.tvNudge.invisible()
+            } else if (outOfRangeCount == 1) {
+                val text = if(isSignificant){
+                    "significantly"
+                }else{
+                    "slightly"
+                }
+                binding.lytHealthMonitor.tvNudge.visible()
+                binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text elevated"
+            } else {
+                binding.lytHealthMonitor.tvNudge.visible()
+                binding.lytHealthMonitor.tvNudge.text =
+                    "$outOfRangeCount/5 metrics are out of range"
+            }
+        }
 
+        if (hasNoData) {
+            binding.lytHealthMonitor.apply {
+                imvResp.setImageResource(R.drawable.ic_hm_check_default)
+                imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+                imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+                imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+                imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+                tvNudge.visible()
+                tvNudge.text = "No data so far"
+            }
         }
 
         binding.lytHealthMonitor.ivArrow.setOnClickListener {
@@ -759,20 +837,20 @@ class SleepDashFragment :
                     statusColor
                 )
 
-               /* val (startColor, endColor) = viewModel.getGradientColor(
-                    data.sleepScore?.status ?: ""
-                )*/
+                /* val (startColor, endColor) = viewModel.getGradientColor(
+                     data.sleepScore?.status ?: ""
+                 )*/
 
-               /* tvHour.setTextGradient(
-                    requireActivity().getColor(R.color.white),
-                    startColor,
-                    endColor
-                )
-                tvMin.setTextGradient(
-                    requireActivity().getColor(R.color.white),
-                    startColor,
-                    endColor
-                )*/
+                /* tvHour.setTextGradient(
+                     requireActivity().getColor(R.color.white),
+                     startColor,
+                     endColor
+                 )
+                 tvMin.setTextGradient(
+                     requireActivity().getColor(R.color.white),
+                     startColor,
+                     endColor
+                 )*/
             }
 
 
