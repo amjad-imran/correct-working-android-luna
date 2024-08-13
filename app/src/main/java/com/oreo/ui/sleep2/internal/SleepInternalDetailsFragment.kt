@@ -719,12 +719,12 @@ class SleepInternalDetailsFragment :
         }
     }
 
-    fun getRangeText(): String {
+    private fun getRangeText(): String {
         return when (viewModel.selectedPeriod.value) {
             InternalSelectedPeriod.DAILY -> ""
-            InternalSelectedPeriod.DAY -> "from yesterday"
-            InternalSelectedPeriod.WEEK -> "from last 6 week"
-            InternalSelectedPeriod.MONTH -> "from last 6 month"
+            InternalSelectedPeriod.DAY -> "from last week"
+            InternalSelectedPeriod.WEEK -> "from last 6 weeks"
+            InternalSelectedPeriod.MONTH -> "from last 6 months"
             null -> ""
         }
     }

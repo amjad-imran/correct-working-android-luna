@@ -475,6 +475,11 @@ class SleepDashFragment :
 
             mainViewModel.onCalendarDateSelected(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
+            mainViewModel.getUserHealthData(
+                mainViewModel.mStartDate,
+                mainViewModel.mEndDate
+            )
+
         }
     }
 

@@ -23,8 +23,11 @@ data class WelcomeData(
 
 data class ODashboardReadinessModel(
     val readinessScore: Int? = null,
-    val readinessNapScoreImpact: Int? = null,
+
     val noOfNaps: Int? = null,
+    val noOfSleeps: Int? = null,
+
+    val totalScoreImpact: Int? = null,
     val status: String? = "",
     val nudges: List<Nudges>? = null,
 
@@ -68,9 +71,9 @@ data class ODashboardSleepModel(
     val startTime: String? = "",
     @SerializedName("end_time")
     val endTime: String? = "",
-    @SerializedName("sleep_nap_score_impact")
-    val sleepNapScoreImpact: Int? = null,
+    val totalScoreImpact: Int? = null,
     @SerializedName("no_of_naps")
     val noOfNaps: Int? = null,
+    val noOfSleeps: Int? = null,
     val naps: List<Nap>? = null,
 )

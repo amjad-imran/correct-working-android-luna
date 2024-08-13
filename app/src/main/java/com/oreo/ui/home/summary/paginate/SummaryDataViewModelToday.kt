@@ -323,7 +323,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     }
 
                                     gotYourPeriodCard = OHealthOverview.GotYourPeriod(
-                                            dayMessage,
+                                        dayMessage,
                                         femaleData.currentDay
                                     )
                                 }
@@ -346,8 +346,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
                 nudges = healthData.readiness?.dashNudges,
-                readinessNapScoreImpact = healthData.readiness?.readinessNapScoreImpact,
-                noOfNaps = healthData.readiness?.noOfNaps
+                totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+                noOfNaps = healthData.sleep?.naps?.size ?: 0,
+                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
             )
 
             val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
@@ -390,8 +391,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
-                sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
-                noOfNaps = healthData.sleep?.noOfNaps ?: 0
+                totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+                noOfNaps = healthData.sleep?.naps?.size ?: 0,
+                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
             )
             val activityModal = ODashboardActivityModel(
                 activityScore = healthData.activity?.activityScore?.value,

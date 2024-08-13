@@ -102,91 +102,12 @@ class ONapDetailsFragment :
         } else {
             binding.lytNapTopView.lytImpact.root.visible()
             binding.lytNapTopView.lytImpactNoData.root.gone()
-        }
-        binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.prevSleepScore ?: 0}"
-        binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleepScore ?: 0}"
-        mViewModel.setTextGradient(
-            binding.lytNapTopView.lytImpact.tvNewSScore,
-            requireActivity().getColor(R.color.white_12_70),
-            requireActivity().getColor(R.color.nap_sleep_grad_end),
-            requireActivity().getColor(R.color.nap_sleep_grad_start)
-        )
-        val diffScore: String
-        val preFix: String
-        val newSScore = it.sleepScore
-        val oldSScore = it.prevSleepScore
-        var isScoreGreater = false
-        if (oldSScore != null && newSScore != null) {
-            if (newSScore > oldSScore) {
-                diffScore = (newSScore - oldSScore).toString()
-                preFix = "+"
-                binding.lytNapTopView.lytImpact.tvDiffSScore.setTextColor(
-                    binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
-                        R.color.steps_arc
-                    )
-                )
-                isScoreGreater = true
-            } else {
-                diffScore = (oldSScore - newSScore).toString()
-                preFix = "-"
-                binding.lytNapTopView.lytImpact.tvDiffSScore.setTextColor(
-                    binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
-                        R.color.nap_down
-                    )
-                )
-                isScoreGreater = false
-            }
-            binding.lytNapTopView.lytImpact.tvDiffSScore.visible()
-            binding.lytNapTopView.lytImpact.tvDiffSScore.text = "$preFix$diffScore"
-        } else {
-            binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
+
+            handleSleepScoreUi(it)
+            handleReadinessScoreUi(it)
         }
 
 
-        //nap readiness score
-        binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.prevReadinessScore ?: 0}"
-        binding.lytNapTopView.lytImpact.tvNewRScore.text = "${it.readinessScore ?: 0}"
-        mViewModel.setTextGradient(
-            binding.lytNapTopView.lytImpact.tvNewRScore,
-            requireActivity().getColor(R.color.white_12_70),
-            requireActivity().getColor(R.color.nap_readiness_grad_end),
-            requireActivity().getColor(R.color.nap_readiness_grad_start)
-        )
-
-        val diffRScore: String
-        val preFix2: String
-        val newRScore = it.readinessScore
-        val oldRScore = it.prevReadinessScore
-        if (oldRScore != null && newRScore != null) {
-            if (newRScore > oldRScore) {
-                diffRScore = (newRScore - oldRScore).toString()
-                preFix2 = "+"
-                binding.lytNapTopView.lytImpact.tvDiffRScore.setTextColor(
-                    binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
-                        R.color.steps_arc
-                    )
-                )
-                isScoreGreater = true
-            } else {
-                diffRScore = (oldRScore - newRScore).toString()
-                preFix2 = "-"
-                binding.lytNapTopView.lytImpact.tvDiffRScore.setTextColor(
-                    binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
-                        R.color.calories_arc
-                    )
-                )
-                isScoreGreater = false
-            }
-            binding.lytNapTopView.lytImpact.tvDiffRScore.visible()
-            binding.lytNapTopView.lytImpact.tvDiffRScore.text = "$preFix2$diffRScore"
-        } else {
-            binding.lytNapTopView.lytImpact.tvDiffRScore.invisible()
-        }
-        if (isScoreGreater) {
-            binding.lytNapTopView.rootView.setBackgroundResource(R.drawable.ic_nap_top_bg_positive)
-        } else {
-            binding.lytNapTopView.rootView.setBackgroundResource(R.drawable.ic_nap_top_bg_negative)
-        }
         //nap details
         val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
             it.duration?.toInt() ?: 0
@@ -333,6 +254,110 @@ class ONapDetailsFragment :
             sleepStartTime,
             sleepEndTime
         )
+    }
+
+    private fun handleReadinessScoreUi(it: OreoNapDetailsDataModel) {
+
+        if (it.prevReadinessScore == 0) {//only nap case
+            binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.readinessScore ?: 0}"
+            binding.lytNapTopView.lytImpact.tvNewRScore.invisible()
+            binding.lytNapTopView.lytImpact.ivArrow2.invisible()
+            binding.lytNapTopView.lytImpact.tvDiffRScore.invisible()
+
+        } else {
+            //nap readiness score
+            binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.prevReadinessScore ?: 0}"
+            binding.lytNapTopView.lytImpact.tvNewRScore.text = "${it.readinessScore ?: 0}"
+            mViewModel.setTextGradient(
+                binding.lytNapTopView.lytImpact.tvNewRScore,
+                requireActivity().getColor(R.color.white_12_70),
+                requireActivity().getColor(R.color.nap_readiness_grad_end),
+                requireActivity().getColor(R.color.nap_readiness_grad_start)
+            )
+
+            val diffRScore: String
+            val preFix2: String
+            val newRScore = it.readinessScore
+            val oldRScore = it.prevReadinessScore
+            if (oldRScore != null && newRScore != null) {
+                if (newRScore > oldRScore) {
+                    diffRScore = (newRScore - oldRScore).toString()
+                    preFix2 = "+"
+                    binding.lytNapTopView.lytImpact.tvDiffRScore.setTextColor(
+                        binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
+                            R.color.steps_arc
+                        )
+                    )
+                } else {
+                    diffRScore = (oldRScore - newRScore).toString()
+                    preFix2 = "-"
+                    binding.lytNapTopView.lytImpact.tvDiffRScore.setTextColor(
+                        binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
+                            R.color.calories_arc
+                        )
+                    )
+                }
+                binding.lytNapTopView.lytImpact.tvDiffRScore.visible()
+                binding.lytNapTopView.lytImpact.tvDiffRScore.text = "$preFix2$diffRScore"
+            } else {
+                binding.lytNapTopView.lytImpact.tvDiffRScore.invisible()
+            }
+        }
+    }
+
+    private fun handleSleepScoreUi(it: OreoNapDetailsDataModel) {
+
+        if (it.prevSleepScore == 0) {//only nap case
+            binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.sleepScore ?: 0}"
+            binding.lytNapTopView.lytImpact.tvNewSScore.invisible()
+            binding.lytNapTopView.lytImpact.ivArrow1.invisible()
+            binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
+        } else {
+            binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.prevSleepScore ?: 0}"
+            binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleepScore ?: 0}"
+            mViewModel.setTextGradient(
+                binding.lytNapTopView.lytImpact.tvNewSScore,
+                requireActivity().getColor(R.color.white_12_70),
+                requireActivity().getColor(R.color.nap_sleep_grad_end),
+                requireActivity().getColor(R.color.nap_sleep_grad_start)
+            )
+            val diffScore: String
+            val preFix: String
+            val newSScore = it.sleepScore
+            val oldSScore = it.prevSleepScore
+            var isScoreGreater = false
+            if (oldSScore != null && newSScore != null) {
+                if (newSScore > oldSScore) {
+                    diffScore = (newSScore - oldSScore).toString()
+                    preFix = "+"
+                    binding.lytNapTopView.lytImpact.tvDiffSScore.setTextColor(
+                        binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
+                            R.color.steps_arc
+                        )
+                    )
+                    isScoreGreater = true
+                } else {
+                    diffScore = (oldSScore - newSScore).toString()
+                    preFix = "-"
+                    binding.lytNapTopView.lytImpact.tvDiffSScore.setTextColor(
+                        binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
+                            R.color.nap_down
+                        )
+                    )
+                    isScoreGreater = false
+                }
+                binding.lytNapTopView.lytImpact.tvDiffSScore.visible()
+                binding.lytNapTopView.lytImpact.tvDiffSScore.text = "$preFix$diffScore"
+            } else {
+                binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
+            }
+            if (isScoreGreater) {
+                binding.lytNapTopView.rootView.setBackgroundResource(R.drawable.ic_nap_top_bg_positive)
+            } else {
+                binding.lytNapTopView.rootView.setBackgroundResource(R.drawable.ic_nap_top_bg_negative)
+            }
+        }
+
     }
 
     private fun showHeartRateGraph(
