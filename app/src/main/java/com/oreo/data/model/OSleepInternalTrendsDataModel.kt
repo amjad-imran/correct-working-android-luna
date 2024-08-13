@@ -43,6 +43,7 @@ data class TrendAverage(
     val avg: Float? = null,
     val avg_need: Float? = null,
     val avg_hour: Float? = null,
+    val timing_avg: String? = null,//for timing
     val nudge: String? = null,
     val percent: Int? = null,
     val percent_hour: Int? = null,

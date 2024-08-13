@@ -13,25 +13,29 @@ class ODropDownViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
     lateinit var selectedLaunchMode: SleepInternalLaunchState
+    var isFromHm = false
     fun fetchDropDownData(): Triple<ArrayList<SleepInternalLaunchState>, ArrayList<ODropDownDataModel>, ArrayList<ODropDownDataModel>> {
         val sleepData = ArrayList<SleepInternalLaunchState>()
-        sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
-        sleepData.add(SleepInternalLaunchState.REM_SLEEP)
-        sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
-        sleepData.add(SleepInternalLaunchState.EFFICIENCY)
-        sleepData.add(SleepInternalLaunchState.LATENCY)
-        sleepData.add(SleepInternalLaunchState.RESTFULNESS)
-        sleepData.add(SleepInternalLaunchState.SLEEP_PERFORMANCE)
-        sleepData.add(SleepInternalLaunchState.HOUR_VS_NEED)
-        sleepData.add(SleepInternalLaunchState.RESTORATIVE_SLEEP)
-        sleepData.add(SleepInternalLaunchState.SLEEP_TIME)
 
-        //health monitor trends
-        /*sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
-        sleepData.add(SleepInternalLaunchState.RESTING_HEART_RATE)
-        sleepData.add(SleepInternalLaunchState.HRV)
-        sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
-        sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)*/
+       if(isFromHm){
+           sleepData.add(SleepInternalLaunchState.RESPIRATORY_RATE)
+           sleepData.add(SleepInternalLaunchState.RESTING_HEART_RATE)
+           sleepData.add(SleepInternalLaunchState.HRV)
+           sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
+           sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)
+       }else{
+           sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
+           sleepData.add(SleepInternalLaunchState.REM_SLEEP)
+           sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
+           sleepData.add(SleepInternalLaunchState.EFFICIENCY)
+           sleepData.add(SleepInternalLaunchState.LATENCY)
+           sleepData.add(SleepInternalLaunchState.RESTFULNESS)
+           sleepData.add(SleepInternalLaunchState.SLEEP_PERFORMANCE)
+           sleepData.add(SleepInternalLaunchState.HOUR_VS_NEED)
+           sleepData.add(SleepInternalLaunchState.RESTORATIVE_SLEEP)
+           sleepData.add(SleepInternalLaunchState.SLEEP_TIME)
+
+       }
 
         val activityData = ArrayList<ODropDownDataModel>()
         activityData.add(ODropDownDataModel(R.drawable.ic_sleep_efficiency, "Efficiency"))

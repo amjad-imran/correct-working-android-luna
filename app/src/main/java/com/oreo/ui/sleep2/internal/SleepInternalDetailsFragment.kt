@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -168,7 +169,10 @@ class SleepInternalDetailsFragment :
                 viewModel.reloadFragment.postValue(Event(data))
             }
 
-            val (frag, bundle) = ODropDownFragment.getStartData(viewModel.selectedLaunchMode, false)
+            val (frag, bundle) = ODropDownFragment.getStartData(
+                viewModel.selectedLaunchMode,
+                viewModel.isHealthMonitorTrend()
+            )
             navigate(frag, bundle)
         }
         binding.lytSelector.tvDaily.setOnClickListener {
@@ -345,23 +349,41 @@ class SleepInternalDetailsFragment :
         }
     }
 
-    private fun setSingleData(avgValue: Float?, percent: Int?) {
+    private fun setSingleData(avgValue: Float?, percent: Int?, timingAvg: String?) {
         binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
-        if (avgValue == null) {
+        if (avgValue == null && timingAvg == null) {
             binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "--"
             binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text = viewModel.getUnit()
         } else {
 
-            val displayValue =
+            var unit  =  viewModel.getUnit()
+            val displayValue = if (timingAvg == null) {
                 if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP || viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP) {
-                    val minValue = ((avgValue) / 60).roundToInt()
+                    val minValue = ((avgValue!!) / 60).roundToInt()
                     "$minValue"
                 } else {
-                    "${avgValue.roundToInt()}"
+                    "${avgValue!!.roundToInt()}"
                 }
+            } else {
+                try {
+                    val time = LocalTime.parse(timingAvg,DateTimeFormatter.ofPattern("HH:mm"))
+                    unit = time.format(DateTimeFormatter.ofPattern("a"))
+                    time.format(DateTimeFormatter.ofPattern("hh:mm"))
+                }catch (exp:Exception){
+                    try {
+                        val time = LocalTime.parse(timingAvg,DateTimeFormatter.ofPattern("HH:mm:ss"))
+                        unit = time.format(DateTimeFormatter.ofPattern("a"))
+                        time.format(DateTimeFormatter.ofPattern("hh:mm"))
+                    }catch (exp:Exception){
+                        ""
+                    }
+                }
+
+            }
+
             binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "${displayValue}"
             binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
-                "${viewModel.getUnit()}"
+                "${unit}"
 
         }
 
@@ -435,7 +457,7 @@ class SleepInternalDetailsFragment :
                         } else {
                             topContentData.dailyValue ?: data?.value1
                         }
-                    setSingleData(value, null)
+                    setSingleData(value, null,data?.master_mid_time)
                 } else {
                     binding.lytTopView.lytTopSingleView.apply {
                         tvNudge.alpha = 1.0f
@@ -454,7 +476,9 @@ class SleepInternalDetailsFragment :
                         }
                     }
                     setSingleData(
-                        topContentData.trendsData?.avg, topContentData.trendsData?.percent
+                        topContentData.trendsData?.avg,
+                        topContentData.trendsData?.percent,
+                        topContentData.trendsData?.timing_avg
                     )
                 }
             }

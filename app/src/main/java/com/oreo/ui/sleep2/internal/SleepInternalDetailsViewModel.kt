@@ -354,6 +354,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepInternalLaunchState.SLEEP_TIME -> SleepTimeChartFragment.newInstance(
                         trendData
                     )
+                    SleepInternalLaunchState.TIMING -> SleepTimingGraphFragment.newInstance(
+                        trendData
+                    )
 
                     else -> SleepBarChartFragment.newInstance(trendData)
                 }
@@ -593,7 +596,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.SLEEP_PERFORMANCE -> "%"
             SleepInternalLaunchState.HOUR_VS_NEED -> ""
             SleepInternalLaunchState.SLEEP_TIME -> ""
-            SleepInternalLaunchState.TIMING -> "min"
+            SleepInternalLaunchState.TIMING -> ""
             SleepInternalLaunchState.EFFICIENCY -> "%"
             SleepInternalLaunchState.REM_SLEEP -> "min"
             SleepInternalLaunchState.DEEP_SLEEP -> "min"

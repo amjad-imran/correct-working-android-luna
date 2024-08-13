@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.math.abs
@@ -81,17 +82,23 @@ class SleepSleepTImeChartFragment :
     private fun convertData(
         data: List<TrendsValues>?,
         contributorType: SleepInternalLaunchState?
-    ):Pair<List<SleepTimeModel>, List<Pair<Int, String>>> {
+    ): Pair<List<SleepTimeModel>, List<Pair<Int, String>>> {
         //Get min start time based on day start time
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val minTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val midTimeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
         var minValue: Long? = null
         var minStartTime: LocalDateTime? = null
 
         data?.forEach {
 
-            val startDate = if (contributorType == SleepInternalLaunchState.TIMING) {
-                it.master_mid_time
+            val startDate = if (contributorType == SleepInternalLaunchState.TIMING && it.master_mid_time != null) {
+                val midTime = LocalTime.parse(it.master_mid_time, midTimeFormat)
+                val dateToAppend = if (midTime.hour >= 20) {
+                    LocalDate.parse(it.date).minusDays(1).toString()
+                } else {
+                    it.date
+                }
+                "$dateToAppend ${it.master_mid_time}"
             } else {
                 it.master_start_time
             }
@@ -111,10 +118,10 @@ class SleepSleepTImeChartFragment :
 
                 if (minValue == null) {
                     minValue = newStartTime
-                    minStartTime  = sleepStartTime
+                    minStartTime = sleepStartTime
                 } else if (newStartTime < minValue!!) {
                     minValue = newStartTime
-                    minStartTime  = sleepStartTime
+                    minStartTime = sleepStartTime
                 }
             }
         }
@@ -124,9 +131,18 @@ class SleepSleepTImeChartFragment :
             if (contributorType == SleepInternalLaunchState.TIMING) {
                 if (it.master_mid_time != null) {
                     val currentDay = LocalDate.parse(it.date).atStartOfDay()
+                    val midTime = LocalTime.parse(it.master_mid_time, midTimeFormat)
+                    val dateToAppend = if (midTime.hour >= 20) {
+                        LocalDate.parse(it.date).minusDays(1).toString()
+                    } else {
+                        it.date
+                    }
+
+                    val startDate = "$dateToAppend ${it.master_mid_time}"
+
                     val sleepStartTime =
-                        LocalDateTime.parse(it.master_mid_time, dateTimeFormatter)
-                    val sleepEndTime = LocalDateTime.parse(it.master_mid_time, dateTimeFormatter)
+                        LocalDateTime.parse(startDate, dateTimeFormatter)
+                    val sleepEndTime = LocalDateTime.parse(startDate, dateTimeFormatter)
 
                     val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
                     val newStartTime = if (difference < 0) {

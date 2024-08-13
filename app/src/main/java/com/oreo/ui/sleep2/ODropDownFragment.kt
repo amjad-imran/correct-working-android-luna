@@ -50,6 +50,7 @@ class ODropDownFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.selectedLaunchMode = args.launchMode
+        viewModel.isFromHm = args.isFromHm
         initUi()
     }
 
