@@ -64,6 +64,7 @@ import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.SleepHourlyBreakup
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -131,6 +132,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
+
+    val healthMonitorCardData = MutableLiveData<HealthTrend?>()
 
     var user: User? = null
     var gender: String? = null
@@ -686,6 +689,9 @@ class SummaryDataViewModelToday @Inject constructor(
             trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
             gotYourPeriodData.postValue(gotYourPeriodCard)
 
+            healthMonitorCardData.postValue(healthData.sleep?.healthTrend?.apply {
+                hasData = healthData.sleep?.sleep_score?.value != null && healthData.sleep?.sleep_score?.value != 0
+            })
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
@@ -1514,6 +1520,32 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
 
+    }
+
+    fun getHealthTrendState(status: String?): Int {
+        val drawable: Int = if (status.equals("warning", true)) {
+            2
+        } else if (status.equals("good", true)) {
+            1
+        } else if (status.equals("optimal", true)) {
+            0
+        } else {
+            1
+        }
+        return drawable
+    }
+
+    fun getHealthTrendIcon(status: String?): Int {
+        val drawable: Int = if (status.equals("warning", true)) {
+            R.drawable.ic_health_warning
+        } else if (status.equals("good", true)) {
+            R.drawable.ic_health_good
+        } else if (status.equals("optimal", true)) {
+            R.drawable.ic_health_optimal
+        } else {
+            R.drawable.ic_health_good
+        }
+        return drawable
     }
 
 

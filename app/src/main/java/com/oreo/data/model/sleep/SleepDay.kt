@@ -79,6 +79,9 @@ data class SleepSummaryValue(
 
 @Parcelize
 data class HealthTrend(
+
+    var hasData: Boolean = true,
+
     val resp: HealthTrendValue? = null,
     val rhr: HealthTrendValue? = null,
     val hrv: HealthTrendValue? = null,
@@ -94,6 +97,7 @@ data class HealthTrendValue(
     val text: String? = null,
     val status: String? = null
 ) : Parcelable
+
 data class MultiSleep(
     val start_time: String? = null,
     val end_time: String? = null,

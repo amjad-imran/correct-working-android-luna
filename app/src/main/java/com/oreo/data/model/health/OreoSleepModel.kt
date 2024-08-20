@@ -2,12 +2,15 @@ package com.oreo.data.model.health
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.oreo.data.model.sleep.HealthTrend
 import kotlinx.parcelize.Parcelize
 
 data class OreoSleepModel(
     var date: String,//YYYY-MM-DD
     val sleeps: List<MultiSleepModel>? = null,
     val avg_hrv:Int?=null,
+    @SerializedName("health_trend")
+    val healthTrend:HealthTrend?=null,
 
     var sleep_score: CommonDataModel? = null,
     var totalSleep: CommonDataModel? = null,

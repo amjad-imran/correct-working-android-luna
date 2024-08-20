@@ -48,6 +48,7 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.home.summary.AlertClickListener
@@ -389,6 +390,7 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
         binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }
@@ -510,6 +512,17 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.healthMonitorCardData.observe(this) { data ->
+            if (data == null) {
+                binding.contentMain.lytHealthMonitor.root.gone()
+            } else {
+                binding.contentMain.lytHealthMonitor.root.visible()
+                setHealthMonitorCardData(data)
+            }
+
+
+        }
 
         viewModel.gotYourPeriodData.observe(this) { data ->
             if (data == null) {
@@ -928,6 +941,151 @@ class SummaryDataFragmentToday :
                 else -> {}
             }
 
+        }
+
+    }
+
+    private fun setHealthMonitorCardData(data: HealthTrend?) {
+        val hasNoData = data?.hasData ?: false
+
+        data?.apply {
+            var outOfRangeCount = 0
+            var isSignificant = false
+            var trendName = ""
+            if (!bloodOxy?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    bloodOxy?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Blood oxygen"
+                }
+                if (state == 2) {
+                    isSignificant = true
+                }
+                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        bloodOxy?.status
+                    )
+                )
+            } else {
+                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!hrv?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    hrv?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "HRV"
+                }
+                if (state == 2) {
+                    isSignificant = true
+                }
+                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        hrv?.status
+                    )
+                )
+            } else {
+                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!rhr?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    rhr?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Resting HR"
+                }
+                if (state == 2) {
+                    isSignificant = true
+                }
+                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        rhr?.status
+                    )
+                )
+            } else {
+                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!skinTemp?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    skinTemp?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Skin temperature"
+                }
+                if (state == 2) {
+                    isSignificant = true
+                }
+                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        skinTemp?.status
+                    )
+                )
+            } else {
+                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!resp?.status.isNullOrEmpty()) {
+                val state = viewModel.getHealthTrendState(
+                    resp?.status
+                )
+                if (state == 2 || state == 1) {
+                    outOfRangeCount++
+                    trendName = "Respiratory rate"
+                }
+                if (state == 2) {
+                    isSignificant = true
+                }
+                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(
+                    viewModel.getHealthTrendIcon(
+                        resp?.status
+                    )
+                )
+            } else {
+                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (outOfRangeCount == 0) {
+                binding.contentMain.lytHealthMonitor.tvNudge.invisible()
+            } else if (outOfRangeCount == 1) {
+                val text = if (isSignificant) {
+                    "significantly"
+                } else {
+                    "slightly"
+                }
+                binding.contentMain.lytHealthMonitor.tvNudge.visible()
+                binding.contentMain.lytHealthMonitor.tvNudge.text =
+                    "Your $trendName is $text elevated"
+            } else {
+                binding.contentMain.lytHealthMonitor.tvNudge.visible()
+                binding.contentMain.lytHealthMonitor.tvNudge.text =
+                    "$outOfRangeCount/5 metrics are out of range"
+            }
+        }
+
+        if (hasNoData) {
+            binding.contentMain.lytHealthMonitor.apply {
+                imvResp.setImageResource(R.drawable.ic_hm_check_default)
+                imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+                imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+                imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+                imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+                tvNudge.visible()
+                tvNudge.text = "No data so far"
+            }
+        }
+
+        binding.contentMain.lytHealthMonitor.root.setOnClickListener {
+            navigate(R.id.healthMonitorInternal, Bundle().apply {
+                this.putParcelable("healthTrend", data)
+            })
         }
 
     }
