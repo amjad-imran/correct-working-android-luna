@@ -683,6 +683,8 @@ class SleepDashFragment :
             }
         }
 
+        var hasHealthData = viewModel.hasHealthData(data?.healthTrend)
+
         data?.healthTrend?.apply {
             var outOfRangeCount = 0
             var isSignificant = false
@@ -776,7 +778,8 @@ class SleepDashFragment :
             }
 
             if (outOfRangeCount == 0) {
-                binding.lytHealthMonitor.tvNudge.invisible()
+                binding.lytHealthMonitor.tvNudge.visible()
+                binding.lytHealthMonitor.tvNudge.text = "All readings are in your typical range"
             } else if (outOfRangeCount == 1) {
                 val text = if (isSignificant) {
                     "significantly"
@@ -792,7 +795,7 @@ class SleepDashFragment :
             }
         }
 
-        if (hasNoData) {
+        if (hasHealthData.not()) {
             binding.lytHealthMonitor.apply {
                 imvResp.setImageResource(R.drawable.ic_hm_check_default)
                 imvRHR.setImageResource(R.drawable.ic_hm_check_default)

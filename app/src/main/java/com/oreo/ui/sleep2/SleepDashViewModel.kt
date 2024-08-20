@@ -20,6 +20,7 @@ import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.sleep.MultiSleep
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -198,7 +199,7 @@ class SleepDashViewModel @Inject constructor(
 
     fun getHealthTrendState(status: String?): Int {
         val drawable: Int = if (status.equals("warning", true)) {
-           2
+            2
         } else if (status.equals("good", true)) {
             1
         } else if (status.equals("optimal", true)) {
@@ -682,8 +683,8 @@ class SleepDashViewModel @Inject constructor(
                 MultiSleepDisplay(
                     sleepStart = start.format(timeFormatter),
                     sleepTime = durationText,
-                    score = multiSleep.sleep_impact?:0,
-                    scoreImpact = multiSleep.sleep_impact?:0
+                    score = multiSleep.sleep_impact ?: 0,
+                    scoreImpact = multiSleep.sleep_impact ?: 0
                 )
             )
         }
@@ -747,6 +748,16 @@ class SleepDashViewModel @Inject constructor(
             SleepContributor.SKIN_TEMPERATURE -> SleepInternalLaunchState.SKIN_TEMPERATURE
             SleepContributor.BLOOD_OXYGEN -> SleepInternalLaunchState.BLOOD_OXYGEN
         }
+    }
+
+    fun hasHealthData(healthTrend: HealthTrend?): Boolean {
+        if (healthTrend == null) return false
+        return !(healthTrend.resp?.status.isNullOrEmpty() &&
+                healthTrend.rhr?.status.isNullOrEmpty() &&
+                healthTrend.bloodOxy?.status.isNullOrEmpty() &&
+                healthTrend.hrv?.status.isNullOrEmpty() &&
+                healthTrend.skinTemp?.status.isNullOrEmpty())
+
     }
 
 
