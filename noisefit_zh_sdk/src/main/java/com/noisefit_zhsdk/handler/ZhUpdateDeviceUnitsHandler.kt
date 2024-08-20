@@ -589,6 +589,10 @@ constructor(
 
                             //stopWorkout("Insufficient device memory")
                         }
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_CHARGE.reason -> {
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Charging")
+                            stopWorkout("Charging")
+                        }
                     }
                 }
 
