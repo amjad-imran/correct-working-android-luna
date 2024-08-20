@@ -87,81 +87,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         })
     }
 
-    private fun setTabDates(date: String?) {
-
-
-        /* var currentDayText = ""
-         val centerDate = pagerAdapter?.getDate(position)
-         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
-             currentDayText = "Today, "
-         }
-         LocalDate.MAX
-         binding.tabLayout.tvSelectedDate.text = "$currentDayText${
-             if (currentDayText.isEmpty()) {
-                 DateFormats.getOrdinalDate(
-                     centerDate,
-                     DateFormats.dateFormat3()
-                 )
-             } else {
-                 DateFormats.getOrdinalDateToday(
-                     centerDate,
-                     DateFormats.dateFormat3(),
-                 )
-             }
-         }"
-         val leftDate = pagerAdapter?.getDate(position - 1)
-         if (leftDate == null) {
-             binding.tabLayout.tvDateLeft.gone()
-         } else {
-             binding.tabLayout.tvDateLeft.visible()
-             binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
-                 leftDate,
-                 DateFormats.dateFormat3(),
-             )
-         }
-         val rightDate = pagerAdapter?.getDate(position + 1)
-         if (rightDate == null) {
-             binding.tabLayout.tvDateRight.gone()
-         } else {
-             var rightTodayText = ""
-             if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
-                 rightTodayText = "Today, "
-             }
-             binding.tabLayout.tvDateRight.visible()
-             binding.tabLayout.tvDateRight.text = "$rightTodayText${
-                 if (rightTodayText.isEmpty()) {
-                     DateFormats.getOrdinalDate(
-                         rightDate,
-                         DateFormats.dateFormat3(),
-                     )
-                 } else {
-
-                     DateFormats.getOrdinalDateToday(
-                         rightDate,
-                         DateFormats.dateFormat3(),
-                     )
-                 }
-             }"
-         }*/
-    }
-
     override fun initListener() {
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
-
-        /* binding.tabLayout.tvDateLeft.setOnClickListener {
-             val currentItem = binding.viewPagerSummary.currentItem
-             if (currentItem == 0) return@setOnClickListener
-             binding.viewPagerSummary.setCurrentItem((currentItem - 1), true)
-         }
-         binding.tabLayout.tvDateRight.setOnClickListener {
-             if (pagerAdapter == null) return@setOnClickListener
-             val currentItem = binding.viewPagerSummary.currentItem
-             if (currentItem == (pagerAdapter!!.itemCount - 1)) {
-                 return@setOnClickListener
-             }
-             binding.viewPagerSummary.setCurrentItem((currentItem + 1), true)
-         }*/
 
 
         binding.lytHeader.oreoStatus.setOnClickListener {

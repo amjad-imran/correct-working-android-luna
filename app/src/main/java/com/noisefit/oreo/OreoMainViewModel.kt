@@ -91,6 +91,7 @@ constructor(
     var enableAi: Boolean = false
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
+    val sleepDashTodayReload = MutableLiveData<Event<Boolean>>()
 
     var showChatUi = MutableLiveData<Event<String>>()
 
@@ -299,6 +300,7 @@ constructor(
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
                                 dashTodayReload.value = Event(true)
+                                sleepDashTodayReload.value = Event(true)
                             }
 
                             val todayData = userHealthData[getTodayDate()]
@@ -377,8 +379,6 @@ constructor(
         val isYesterdayDate = selectedDate.equals(DateFormats.getYesterdayDate())
 
         if (isYesterdayDate) return false
-
-        return false
 
         if ((sleepHistoryResponse.value!![sleepHistoryResponse.value!!.size - 2]).date.equals(
                 selectedDate

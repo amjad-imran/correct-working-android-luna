@@ -40,7 +40,7 @@ data class OreoSleepModel(
 )
 
 data class MultiSleepModel(
-    @SerializedName("total_duration") val totalDuration: Int,
+    @SerializedName("total_duration") val totalDuration: Int?=null,
     @SerializedName("start_time") val startTime: String,
     @SerializedName("end_time") val endTime: String,
     @SerializedName("sleep_score") val sleepScore: Int? = null,

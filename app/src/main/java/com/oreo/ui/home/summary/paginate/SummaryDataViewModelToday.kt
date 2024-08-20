@@ -366,7 +366,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (totalSleep == null) {
                     totalSleep = 0
                 }
-                totalSleep = totalSleep!! + it.totalDuration
+                totalSleep = totalSleep!! + (it.totalDuration?:0)
             }
 
             filteredNaps?.forEach {

@@ -230,122 +230,15 @@ class SleepDashFragment :
     }
 
 
-    private fun animateFabUp() {
-        binding.blurViewSelector.visible()
 
-        animateItemsUp(binding.lytAddSleep.ivRecordSleep, 200f)
-        animateItemsUp(binding.lytAddSleep.tvAddSleep, 200f)
-
-
-        val rotate =
-            ObjectAnimator.ofFloat(
-                binding.lytAddSleep.ivSleepClose,
-                View.ROTATION,
-                0f,
-                -45f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val alphaAdd =
-            ObjectAnimator.ofFloat(
-                binding.lytAddSleep.ivAddSleepBack,
-                View.ALPHA,
-                1f,
-                0f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val alphaBlurLayer =
-            ObjectAnimator.ofFloat(
-                binding.blurViewSelector,
-                View.ALPHA,
-                0f,
-                1f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val scaleDownX =
-            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 0f)
-        val scaleDownY =
-            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 0f)
-        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
-        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
-
-
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(rotate, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
-        animatorSet.start()
-
-
-    }
-
-    private fun animateFabDown() {
-        //binding.blurViewSelector.gone()
-
-        animateItemsDown(binding.lytAddSleep.ivRecordSleep, binding.lytAddSleep.ivSleepClose)
-        animateItemsDown(binding.lytAddSleep.tvAddSleep, binding.lytAddSleep.ivSleepClose)
-
-        val alpha =
-            ObjectAnimator.ofFloat(
-                binding.lytAddSleep.ivSleepClose,
-                View.ROTATION,
-                -45f,
-                0f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val alphaAdd =
-            ObjectAnimator.ofFloat(
-                binding.lytAddSleep.ivAddSleepBack,
-                View.ALPHA,
-                0f,
-                1f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val alphaBlurLayer =
-            ObjectAnimator.ofFloat(
-                binding.blurViewSelector,
-                View.ALPHA,
-                1f,
-                0.3f
-            )
-                .apply {
-                    this.duration = viewModel.FAB_ANIM_TIME
-                }
-
-        val scaleDownX =
-            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 1f)
-        val scaleDownY =
-            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 1f)
-        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
-        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
-
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alpha, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
-        animatorSet.start()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            try {
-                viewModel.addSleepCtaVisibility.value = (true)
-                binding.blurViewSelector.gone()
-            } catch (exp: Exception) {
-            }
-        }, viewModel.FAB_ANIM_TIME)
-
-    }
 
     override fun subscribeObservers() {
+
+        mainViewModel.sleepDashTodayReload.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                binding.vCalendar.scrollToDate(LocalDate.now())
+            }
+        }
 
         viewModel.addSleepCtaVisibility.observe(this) {
             if (it) {
@@ -481,6 +374,121 @@ class SleepDashFragment :
             )
 
         }
+    }
+
+    private fun animateFabUp() {
+        binding.blurViewSelector.visible()
+
+        animateItemsUp(binding.lytAddSleep.ivRecordSleep, 200f)
+        animateItemsUp(binding.lytAddSleep.tvAddSleep, 200f)
+
+
+        val rotate =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivSleepClose,
+                View.ROTATION,
+                0f,
+                -45f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivAddSleepBack,
+                View.ALPHA,
+                1f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 0f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 0f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(rotate, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
+        animatorSet.start()
+
+
+    }
+
+    private fun animateFabDown() {
+        //binding.blurViewSelector.gone()
+
+        animateItemsDown(binding.lytAddSleep.ivRecordSleep, binding.lytAddSleep.ivSleepClose)
+        animateItemsDown(binding.lytAddSleep.tvAddSleep, binding.lytAddSleep.ivSleepClose)
+
+        val alpha =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivSleepClose,
+                View.ROTATION,
+                -45f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddSleep.ivAddSleepBack,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                1f,
+                0.3f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_X, 1f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddSleep.ivAddSleepBack, View.SCALE_Y, 1f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(alpha, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
+        animatorSet.start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                viewModel.addSleepCtaVisibility.value = (true)
+                binding.blurViewSelector.gone()
+            } catch (exp: Exception) {
+            }
+        }, viewModel.FAB_ANIM_TIME)
+
     }
 
     private fun setRecycler() {
@@ -687,7 +695,7 @@ class SleepDashFragment :
                     outOfRangeCount++
                     trendName = "Blood oxygen"
                 }
-                if(state==2){
+                if (state == 2) {
                     isSignificant = true
                 }
                 binding.lytHealthMonitor.imvSpo2.setImageResource(
@@ -707,7 +715,7 @@ class SleepDashFragment :
                     outOfRangeCount++
                     trendName = "HRV"
                 }
-                if(state==2){
+                if (state == 2) {
                     isSignificant = true
                 }
                 binding.lytHealthMonitor.imvHrv.setImageResource(viewModel.getHealthTrendIcon(hrv?.status))
@@ -723,7 +731,7 @@ class SleepDashFragment :
                     outOfRangeCount++
                     trendName = "Resting HR"
                 }
-                if(state==2){
+                if (state == 2) {
                     isSignificant = true
                 }
                 binding.lytHealthMonitor.imvRHR.setImageResource(viewModel.getHealthTrendIcon(rhr?.status))
@@ -739,7 +747,7 @@ class SleepDashFragment :
                     outOfRangeCount++
                     trendName = "Skin temperature"
                 }
-                if(state==2){
+                if (state == 2) {
                     isSignificant = true
                 }
                 binding.lytHealthMonitor.imvSkin.setImageResource(
@@ -759,7 +767,7 @@ class SleepDashFragment :
                     outOfRangeCount++
                     trendName = "Respiratory rate"
                 }
-                if(state==2){
+                if (state == 2) {
                     isSignificant = true
                 }
                 binding.lytHealthMonitor.imvResp.setImageResource(viewModel.getHealthTrendIcon(resp?.status))
@@ -770,9 +778,9 @@ class SleepDashFragment :
             if (outOfRangeCount == 0) {
                 binding.lytHealthMonitor.tvNudge.invisible()
             } else if (outOfRangeCount == 1) {
-                val text = if(isSignificant){
+                val text = if (isSignificant) {
                     "significantly"
-                }else{
+                } else {
                     "slightly"
                 }
                 binding.lytHealthMonitor.tvNudge.visible()
