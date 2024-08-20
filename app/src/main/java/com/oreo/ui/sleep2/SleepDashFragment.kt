@@ -683,7 +683,7 @@ class SleepDashFragment :
             }
         }
 
-        var hasHealthData = viewModel.hasHealthData(data?.healthTrend)
+        val hasHealthData = viewModel.hasHealthData(data?.healthTrend)
 
         data?.healthTrend?.apply {
             var outOfRangeCount = 0

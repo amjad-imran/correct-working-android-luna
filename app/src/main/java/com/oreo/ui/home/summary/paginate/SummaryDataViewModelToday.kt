@@ -689,9 +689,7 @@ class SummaryDataViewModelToday @Inject constructor(
             trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
             gotYourPeriodData.postValue(gotYourPeriodCard)
 
-            healthMonitorCardData.postValue(healthData.sleep?.healthTrend?.apply {
-                hasData = healthData.sleep?.sleep_score?.value != null && healthData.sleep?.sleep_score?.value != 0
-            })
+            healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
@@ -745,6 +743,16 @@ class SummaryDataViewModelToday @Inject constructor(
                 background = R.drawable.back_card_ovulation_big
             )
         }
+    }
+
+    fun hasHealthData(healthTrend: HealthTrend?): Boolean {
+        if (healthTrend == null) return false
+        return !(healthTrend.resp?.status.isNullOrEmpty() &&
+                healthTrend.rhr?.status.isNullOrEmpty() &&
+                healthTrend.bloodOxy?.status.isNullOrEmpty() &&
+                healthTrend.hrv?.status.isNullOrEmpty() &&
+                healthTrend.skinTemp?.status.isNullOrEmpty())
+
     }
 
     private fun calculateTempVariance(list: List<TempPeriodData>?): Float? {

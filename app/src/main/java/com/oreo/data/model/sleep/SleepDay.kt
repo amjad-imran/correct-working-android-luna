@@ -79,9 +79,6 @@ data class SleepSummaryValue(
 
 @Parcelize
 data class HealthTrend(
-
-    var hasData: Boolean = true,
-
     val resp: HealthTrendValue? = null,
     val rhr: HealthTrendValue? = null,
     val hrv: HealthTrendValue? = null,

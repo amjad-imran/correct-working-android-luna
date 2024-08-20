@@ -946,8 +946,7 @@ class SummaryDataFragmentToday :
     }
 
     private fun setHealthMonitorCardData(data: HealthTrend?) {
-        val hasNoData = data?.hasData ?: false
-
+        val hasHealthData = viewModel.hasHealthData(data)
         data?.apply {
             var outOfRangeCount = 0
             var isSignificant = false
@@ -1053,7 +1052,8 @@ class SummaryDataFragmentToday :
             }
 
             if (outOfRangeCount == 0) {
-                binding.contentMain.lytHealthMonitor.tvNudge.invisible()
+                binding.contentMain.lytHealthMonitor.tvNudge.visible()
+                binding.contentMain.lytHealthMonitor.tvNudge.text = "All readings are in your typical range"
             } else if (outOfRangeCount == 1) {
                 val text = if (isSignificant) {
                     "significantly"
@@ -1070,7 +1070,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        if (hasNoData) {
+        if (hasHealthData.not()) {
             binding.contentMain.lytHealthMonitor.apply {
                 imvResp.setImageResource(R.drawable.ic_hm_check_default)
                 imvRHR.setImageResource(R.drawable.ic_hm_check_default)
