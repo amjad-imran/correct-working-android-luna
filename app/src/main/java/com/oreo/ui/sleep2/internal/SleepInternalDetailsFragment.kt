@@ -78,7 +78,8 @@ class SleepInternalDetailsFragment :
         setRecycler()
         initViewPager()
 
-        viewModel.loadGraphData(false)
+        viewModel.reloadData()
+        //viewModel.loadGraphData(false)
     }
 
     private fun initUi() {
