@@ -300,7 +300,7 @@ constructor(
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
                                 dashTodayReload.value = Event(true)
-                                sleepDashTodayReload.value = Event(true)
+                                //sleepDashTodayReload.value = Event(true)
                             }
 
                             val todayData = userHealthData[getTodayDate()]

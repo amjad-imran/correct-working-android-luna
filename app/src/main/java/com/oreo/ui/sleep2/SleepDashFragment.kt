@@ -38,6 +38,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.OHMDataModel
@@ -142,7 +143,6 @@ class SleepDashFragment :
 
         binding.blurViewSelector.setOnClickListener {
             animateFabDown()
-            //binding.blurViewSelector.gone()
         }
         binding.lytAddSleep.tvAddSleep.setOnClickListener {
             showAddSleep()
@@ -155,10 +155,7 @@ class SleepDashFragment :
         binding.btnAddWorkout.setOnClickListener {
             setBlurAddCta()
             viewModel.addSleepCtaVisibility.postValue(false)
-
             animateFabUp()
-
-            //binding.blurViewSelector.visible()
         }
 
 
@@ -233,12 +230,6 @@ class SleepDashFragment :
 
 
     override fun subscribeObservers() {
-
-        mainViewModel.sleepDashTodayReload.observe(viewLifecycleOwner) {
-            it.getContent()?.let {
-                binding.vCalendar.scrollToDate(LocalDate.now())
-            }
-        }
 
         viewModel.addSleepCtaVisibility.observe(this) {
             if (it) {

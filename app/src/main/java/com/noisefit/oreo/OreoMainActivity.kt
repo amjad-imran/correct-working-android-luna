@@ -56,6 +56,7 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -601,6 +602,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sleepDashTodayReload.observe(this) {
+            it.getContent()?.let {
+                if(navController?.currentDestination?.id == R.id.sleepDashFragment){
+                    navController?.popBackStack(R.id.sleepDashFragment, true)
+                    navController?.navigate(R.id.sleepDashFragment)
+                }
+            }
+        }
 
         viewModel.sessionManager.forceUpdateApp.observe(this) {
             it.getContent()?.let { isRequired->
