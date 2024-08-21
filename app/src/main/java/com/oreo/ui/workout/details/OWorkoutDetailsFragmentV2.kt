@@ -466,9 +466,14 @@ class OWorkoutDetailsFragmentV2 :
                     withContext(Dispatchers.Main) {
 
                         //googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-                        googleMap.animateCamera(
+                        googleMap.setOnMapLoadedCallback {
+                            googleMap.animateCamera(
+                                CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
+                            )
+                        }
+                        /*googleMap.animateCamera(
                             CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
-                        )
+                        )*/
 
                         nullableBinding?.lytTop?.map?.visible()
                     }
