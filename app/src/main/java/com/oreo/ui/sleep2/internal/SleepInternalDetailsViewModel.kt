@@ -158,11 +158,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
         currentSelectedStartDate = startDate
         currentSelectedEndDate = endDate
 
-        val period = if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-            InternalSelectedPeriod.DAY.name.lowercase()
-        } else {
-            selectedPeriod.value?.name?.lowercase()
-        }
+        val period =
+            if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE &&
+                (selectedPeriod.value == InternalSelectedPeriod.DAILY || selectedPeriod.value == InternalSelectedPeriod.DAY)) {
+                InternalSelectedPeriod.DAY.name.lowercase()
+            } else {
+                selectedPeriod.value?.name?.lowercase()
+            }
 
         viewModelScope.launch(Dispatchers.IO) {
             if (isHealthMonitorTrend()) {
@@ -593,10 +595,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.SLEEP_TIME -> {
                 TrendsTopState.SINGLE_DATE
             }
-            SleepInternalLaunchState.RESTORATIVE_SLEEP->{
-                if(interacting){
+
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                if (interacting) {
                     TrendsTopState.DOUBLE_DATE
-                }else{
+                } else {
                     TrendsTopState.SINGLE_DATE
                 }
             }
