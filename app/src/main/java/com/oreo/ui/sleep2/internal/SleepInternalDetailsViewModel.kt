@@ -12,7 +12,6 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
@@ -588,11 +587,18 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
     }
 
-    fun getTopState(): TrendsTopState {
+    fun getTopState(interacting: Boolean): TrendsTopState {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_DURATION,
             SleepInternalLaunchState.SLEEP_TIME -> {
                 TrendsTopState.SINGLE_DATE
+            }
+            SleepInternalLaunchState.RESTORATIVE_SLEEP->{
+                if(interacting){
+                    TrendsTopState.DOUBLE_DATE
+                }else{
+                    TrendsTopState.SINGLE_DATE
+                }
             }
 
             SleepInternalLaunchState.HOUR_VS_NEED -> {

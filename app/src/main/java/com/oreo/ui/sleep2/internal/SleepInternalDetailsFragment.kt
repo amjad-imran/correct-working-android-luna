@@ -8,7 +8,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit.util.ApplicationUtils
@@ -19,16 +18,13 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Duration
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -448,7 +444,7 @@ class SleepInternalDetailsFragment :
     }
 
     private fun showTopContent(topContentData: TopContentData) {
-        val topState = viewModel.getTopState()
+        val topState = viewModel.getTopState(topContentData.isInteracting)
         when (topState) {
             TrendsTopState.SINGLE -> {
                 binding.lytTopView.lytTopSingleView.root.visible()
@@ -561,6 +557,10 @@ class SleepInternalDetailsFragment :
             TrendsTopState.DOUBLE_DATE -> {
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopSingleView.root.gone()
+                binding.lytTopView.lytTopMultipleView.apply {
+                    this.lytContentView.lytNeed.root.visible()
+                    this.lytContentView.divider1.root.visible()
+                }
 
                 binding.lytTopView.lytTopMultipleView.tvNudge.text =
                     topContentData.trendsData?.nudge ?: ""
