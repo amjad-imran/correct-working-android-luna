@@ -261,6 +261,9 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
+                this@CycleLogFragment.navigateUpSafe()
+
+                return@registerForActivityResult
                 val data: Intent? = result.data
 
                 val periodStartDate =
