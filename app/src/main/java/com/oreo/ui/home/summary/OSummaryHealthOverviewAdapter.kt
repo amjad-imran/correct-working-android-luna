@@ -587,36 +587,42 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
                 binding.lytNapLabel.root.gone()
             } else {
-                binding.lytNapLabel.root.visible()
-                binding.lytNapLabel.tvNapUpdatedScore.text =
-                    if ((data.data.totalScoreImpact ?: 0) >= 0) {
-                        "+${data.data.totalScoreImpact}"
-                    } else {
-                        "${data.data.totalScoreImpact}"
-                    }
-                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                        R.color.nap_dash_readiness_score
-                    )
-                )
-
                 val napCount = data.data.noOfNaps ?: 0
                 val sleepCount = data.data.noOfSleeps ?: 0
-                val string = StringBuilder()
-                string.append("after ")
+                if ((napCount == 1 && sleepCount == 0) || (sleepCount == 1 && napCount == 0)) {
+                    binding.lytNapLabel.root.gone()
+                } else {
+                    binding.lytNapLabel.root.visible()
+                    binding.lytNapLabel.tvNapUpdatedScore.text =
+                        if ((data.data.totalScoreImpact ?: 0) >= 0) {
+                            "+${data.data.totalScoreImpact}"
+                        } else {
+                            "${data.data.totalScoreImpact}"
+                        }
+                    binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                        binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                            R.color.nap_dash_readiness_score
+                        )
+                    )
 
-                if (napCount > 0) {
-                    string.append("$napCount nap")
-                }
 
-                if (sleepCount > 1) {
+                    val string = StringBuilder()
+                    string.append("after ")
+
                     if (napCount > 0) {
-                        string.append(" & ")
+                        string.append("$napCount nap")
                     }
-                    string.append("${(sleepCount - 1)} sleep")
+
+                    if (sleepCount > 1) {
+                        if (napCount > 0) {
+                            string.append(" & ")
+                        }
+                        string.append("${(sleepCount - 1)} sleep")
+                    }
+
+                    binding.lytNapLabel.tvNapCountMsg.text = string.toString()
                 }
 
-                binding.lytNapLabel.tvNapCountMsg.text = string.toString()
 
             }
 
@@ -684,36 +690,44 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
                 binding.lytNapLabel.root.gone()
             } else {
-                binding.lytNapLabel.root.visible()
-                binding.lytNapLabel.tvNapUpdatedScore.text =
-                    if ((data.data.totalScoreImpact ?: 0) >= 0) {
-                        "+${data.data.totalScoreImpact}"
-                    } else {
-                        "${data.data.totalScoreImpact}"
-                    }
-                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                        R.color.nap_dash_readiness_score
-                    )
-                )
-
                 val napCount = data.data.noOfNaps ?: 0
                 val sleepCount = data.data.noOfSleeps ?: 0
-                val string = StringBuilder()
-                string.append("after ")
 
-                if (napCount > 0) {
-                    string.append("$napCount nap")
-                }
+                if ((napCount == 1 && sleepCount == 0) || (sleepCount == 1 && napCount == 0)) {
+                    binding.lytNapLabel.root.gone()
+                } else {
+                    binding.lytNapLabel.root.visible()
+                    binding.lytNapLabel.tvNapUpdatedScore.text =
+                        if ((data.data.totalScoreImpact ?: 0) >= 0) {
+                            "+${data.data.totalScoreImpact}"
+                        } else {
+                            "${data.data.totalScoreImpact}"
+                        }
+                    binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                        binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                            R.color.nap_dash_readiness_score
+                        )
+                    )
 
-                if (sleepCount > 1) {
+
+                    val string = StringBuilder()
+                    string.append("after ")
+
                     if (napCount > 0) {
-                        string.append(" & ")
+                        string.append("$napCount nap")
                     }
-                    string.append("${(sleepCount - 1)} sleep")
+
+                    if (sleepCount > 1) {
+                        if (napCount > 0) {
+                            string.append(" & ")
+                        }
+                        string.append("${(sleepCount - 1)} sleep")
+                    }
+
+                    binding.lytNapLabel.tvNapCountMsg.text = string.toString()
                 }
 
-                binding.lytNapLabel.tvNapCountMsg.text = string.toString()
+
             }
 
             binding.root.setOnClickListener {
@@ -757,37 +771,44 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
                 binding.lytNapLabel.root.gone()
             } else {
-                binding.lytNapLabel.root.visible()
-                binding.lytNapLabel.tvNapUpdatedScore.text =
-                    if ((data.data.totalScoreImpact ?: 0) >= 0) {
-                        "+${data.data.totalScoreImpact}"
-                    } else {
-                        "${data.data.totalScoreImpact}"
-                    }
-                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                        R.color.nap_dash_sleep_score
-                    )
-                )
-
                 val napCount = data.data.noOfNaps ?: 0
                 val sleepCount = data.data.noOfSleeps ?: 0
-                val string = StringBuilder()
-                string.append("after ")
 
-                if (napCount > 0) {
-                    string.append("$napCount nap")
-                }
+                if ((napCount == 1 && sleepCount == 0) || (sleepCount == 1 && napCount == 0)) {
+                    binding.lytNapLabel.root.gone()
+                } else {
+                    binding.lytNapLabel.root.visible()
+                    binding.lytNapLabel.tvNapUpdatedScore.text =
+                        if ((data.data.totalScoreImpact ?: 0) >= 0) {
+                            "+${data.data.totalScoreImpact}"
+                        } else {
+                            "${data.data.totalScoreImpact}"
+                        }
+                    binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                        binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                            R.color.nap_dash_sleep_score
+                        )
+                    )
 
-                if (sleepCount > 1) {
+
+                    val string = StringBuilder()
+                    string.append("after ")
+
                     if (napCount > 0) {
-                        string.append(" & ")
+                        string.append("$napCount nap")
                     }
-                    string.append("${(sleepCount - 1)} sleep")
+
+                    if (sleepCount > 1) {
+                        if (napCount > 0) {
+                            string.append(" & ")
+                        }
+                        string.append("${(sleepCount - 1)} sleep")
+                    }
+
+
+                    binding.lytNapLabel.tvNapCountMsg.text = string.toString()
                 }
 
-
-                binding.lytNapLabel.tvNapCountMsg.text = string.toString()
             }
 
             val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
@@ -894,41 +915,46 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
-
-
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
                 binding.lytNapLabel.root.gone()
             } else {
-                binding.lytNapLabel.root.visible()
-                binding.lytNapLabel.tvNapUpdatedScore.text =
-                    if ((data.data.totalScoreImpact ?: 0) >= 0) {
-                        "+${data.data.totalScoreImpact}"
-                    } else {
-                        "${data.data.totalScoreImpact}"
-                    }
-                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                        R.color.nap_dash_sleep_score
-                    )
-                )
 
                 val napCount = data.data.noOfNaps ?: 0
                 val sleepCount = data.data.noOfSleeps ?: 0
-                val string = StringBuilder()
-                string.append("after ")
 
-                if (napCount > 0) {
-                    string.append("$napCount nap")
-                }
+                if ((napCount == 1 && sleepCount == 0) || (sleepCount == 1 && napCount == 0)) {
+                    binding.lytNapLabel.root.gone()
+                } else {
+                    binding.lytNapLabel.root.visible()
+                    binding.lytNapLabel.tvNapUpdatedScore.text =
+                        if ((data.data.totalScoreImpact ?: 0) >= 0) {
+                            "+${data.data.totalScoreImpact}"
+                        } else {
+                            "${data.data.totalScoreImpact}"
+                        }
+                    binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                        binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                            R.color.nap_dash_sleep_score
+                        )
+                    )
 
-                if (sleepCount > 1) {
+                    val string = StringBuilder()
+                    string.append("after ")
+
                     if (napCount > 0) {
-                        string.append(" & ")
+                        string.append("$napCount nap")
                     }
-                    string.append("${(sleepCount - 1)} sleep")
+
+                    if (sleepCount > 1) {
+                        if (napCount > 0) {
+                            string.append(" & ")
+                        }
+                        string.append("${(sleepCount - 1)} sleep")
+                    }
+
+                    binding.lytNapLabel.tvNapCountMsg.text = string.toString()
                 }
 
-                binding.lytNapLabel.tvNapCountMsg.text = string.toString()
             }
 
             binding.root.setOnClickListener {
