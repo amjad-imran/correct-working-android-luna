@@ -98,6 +98,8 @@ class SleepBarChartFragment :
                     } else {
                         (it.value1 ?: 0.0f) / 60
                     }
+                }else if (pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE){
+                        if (it.value1 == 255f) null else it.value1
                 } else {
                     it.value1
                 }

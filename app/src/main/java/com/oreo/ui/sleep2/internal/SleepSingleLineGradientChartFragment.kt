@@ -116,6 +116,9 @@ class SleepSingleLineGradientChartFragment :
                     } else {
                         convertedValue
                     }
+                }else if (pageData?.contributorType == SleepInternalLaunchState.RESPIRATORY_RATE||
+                    pageData?.contributorType == SleepInternalLaunchState.HRV){
+                    if (it.value1 == 255f) null else it.value1
                 } else {
                     it.value1
                 }

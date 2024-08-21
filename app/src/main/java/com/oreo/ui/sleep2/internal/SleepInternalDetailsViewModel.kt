@@ -87,8 +87,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.getDailyTrendsData(
                 sDate.toString(), eDate.toString(), selectedLaunchMode.key.lowercase()
-            )
-                .collect { resource ->
+            ).collect { resource ->
                     when (resource) {
                         is Resource.GenericError -> {
                             sendMessage(resource.message)
@@ -159,8 +158,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
         currentSelectedEndDate = endDate
 
         val period =
-            if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE &&
-                (selectedPeriod.value == InternalSelectedPeriod.DAILY || selectedPeriod.value == InternalSelectedPeriod.DAY)) {
+            if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && (selectedPeriod.value == InternalSelectedPeriod.DAILY || selectedPeriod.value == InternalSelectedPeriod.DAY)) {
                 InternalSelectedPeriod.DAY.name.lowercase()
             } else {
                 selectedPeriod.value?.name?.lowercase()
@@ -228,8 +226,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     private fun generateFragment(
-        trends: HashMap<LocalDate, TrendsValues>,
-        avgValue: TrendAverage?
+        trends: HashMap<LocalDate, TrendsValues>, avgValue: TrendAverage?
     ) {
         val dataToDisplay = ArrayList<TrendsValues>()
 
@@ -256,8 +253,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
 
         val trendData = TrendsGraphData(
-            data = dataToDisplay,
-            avgValue = avgValue?.avg
+            data = dataToDisplay, avgValue = avgValue?.avg
         )
 
         getFragmentToAdd(trendData).let {
@@ -266,8 +262,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
             topContentData.postValue(
                 TopContentData(
-                    isInteracting = false,
-                    trendsData = avgValue
+                    isInteracting = false, trendsData = avgValue
                 )
             )
         }
@@ -297,19 +292,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
         when (selectedPeriod.value) {
             InternalSelectedPeriod.DAY, null -> {
                 return when (selectedLaunchMode) {
-                    SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP,
-                    SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.LATENCY,
-                    SleepInternalLaunchState.RESTFULNESS,
-                    SleepInternalLaunchState.SLEEP_PERFORMANCE -> SleepBarChartFragment.newInstance(
+                    SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.BLOOD_OXYGEN, SleepInternalLaunchState.LATENCY, SleepInternalLaunchState.RESTFULNESS, SleepInternalLaunchState.SLEEP_PERFORMANCE -> SleepBarChartFragment.newInstance(
                         trendData
                     )
 
-                    SleepInternalLaunchState.SLEEP_DURATION,
-                    SleepInternalLaunchState.HRV,
-                    SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.EFFICIENCY -> SleepSingleLineGradientChartFragment.newInstance(
+                    SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.HRV, SleepInternalLaunchState.RESTING_HEART_RATE, SleepInternalLaunchState.SKIN_TEMPERATURE, SleepInternalLaunchState.EFFICIENCY -> SleepSingleLineGradientChartFragment.newInstance(
                         trendData
                     )
 
@@ -347,10 +334,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         })
                     }
 
-                    SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.HRV -> {
+                    SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.RESTING_HEART_RATE, SleepInternalLaunchState.BLOOD_OXYGEN, SleepInternalLaunchState.SKIN_TEMPERATURE, SleepInternalLaunchState.HRV -> {
                         SleepSingleLineChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.WEEK
                         })
@@ -378,10 +362,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         })
                     }
 
-                    SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.HRV -> {
+                    SleepInternalLaunchState.RESPIRATORY_RATE, SleepInternalLaunchState.RESTING_HEART_RATE, SleepInternalLaunchState.BLOOD_OXYGEN, SleepInternalLaunchState.SKIN_TEMPERATURE, SleepInternalLaunchState.HRV -> {
                         SleepSingleLineChartFragment.newInstance(trendData.apply {
                             this.selectedPeriod = InternalSelectedPeriod.MONTH
                         })
@@ -496,8 +477,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.HRV -> Pair(
-                resourcesProvider.getString(R.string.text_hrv),
-                R.drawable.ic_hrv
+                resourcesProvider.getString(R.string.text_hrv), R.drawable.ic_hrv
             )
 
             SleepInternalLaunchState.SKIN_TEMPERATURE -> Pair(
@@ -506,8 +486,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.BLOOD_OXYGEN -> Pair(
-                resourcesProvider.getString(R.string.text_blood_oxygen),
-                R.drawable.ic_blood_oxygen
+                resourcesProvider.getString(R.string.text_blood_oxygen), R.drawable.ic_blood_oxygen
             )
         }
     }
@@ -591,8 +570,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun getTopState(interacting: Boolean): TrendsTopState {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION,
-            SleepInternalLaunchState.SLEEP_TIME -> {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.SLEEP_TIME -> {
                 TrendsTopState.SINGLE_DATE
             }
 
@@ -761,17 +739,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 if (hasData) {
                     if (loadPrev) {
                         //todo handle user data end
-                        val start =
-                            currentSelectedStartDate!!.minusMonths(6)
-                                .with(TemporalAdjusters.firstDayOfMonth())
+                        val start = currentSelectedStartDate!!.minusMonths(6)
+                            .with(TemporalAdjusters.firstDayOfMonth())
                         val end = currentSelectedStartDate!!.minusMonths(1)
                             .with(TemporalAdjusters.lastDayOfMonth())
 
                         Pair(start, end)
                     } else {
-                        val start =
-                            currentSelectedEndDate!!.plusMonths(1)
-                                .with(TemporalAdjusters.firstDayOfMonth())
+                        val start = currentSelectedEndDate!!.plusMonths(1)
+                            .with(TemporalAdjusters.firstDayOfMonth())
                         val end = start.plusMonths(5).with(TemporalAdjusters.lastDayOfMonth())
 
                         Pair(start, end)
@@ -800,10 +776,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
         } else {
             val format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             return Duration.between(
-                LocalDateTime.parse(startDate, format),
-                LocalDateTime.parse(endDate, format)
-            )
-                .toSeconds().toFloat()
+                LocalDateTime.parse(startDate, format), LocalDateTime.parse(endDate, format)
+            ).toSeconds().toFloat()
         }
     }
 
@@ -818,6 +792,14 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     format
                 )
             }"
+        }
+    }
+
+    fun handle255(value: Float?, selectedLaunchMode: SleepInternalLaunchState): Float? {
+        return if (selectedLaunchMode == SleepInternalLaunchState.RESPIRATORY_RATE || selectedLaunchMode == SleepInternalLaunchState.RESTING_HEART_RATE || selectedLaunchMode == SleepInternalLaunchState.HRV) {
+            if (value == 255f) null else value
+        } else {
+            value
         }
     }
 

@@ -99,7 +99,7 @@ class SleepSingleLineChartFragment :
                     if (it.value1 != null) {
                         (it.value1 ?: 0.0f) / 60
                     } else null
-                }else if (it.value1 != null && pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE && isMetric) {
+                } else if (it.value1 != null && pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE && isMetric) {
                     val convertedValue = AppConversionUtils.fahrenheitToCelsius(
                         it.value1!!
                     )
@@ -108,6 +108,11 @@ class SleepSingleLineChartFragment :
                     } else {
                         convertedValue
                     }
+                } else if (pageData?.contributorType == SleepInternalLaunchState.RESPIRATORY_RATE
+                    || pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE
+                    || pageData?.contributorType == SleepInternalLaunchState.HRV
+                ) {
+                    if (it.value1 == 255f) null else it.value1
                 } else {
                     it.value1
                 }

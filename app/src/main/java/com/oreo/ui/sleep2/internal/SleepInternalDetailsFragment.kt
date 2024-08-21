@@ -478,10 +478,16 @@ class SleepInternalDetailsFragment :
                                     data?.value2
                                 }
                             } else {
-                                topContentData.dailyValue ?: data?.value1!!
+                                viewModel.handle255(
+                                    topContentData.dailyValue ?: data?.value1,
+                                    viewModel.selectedLaunchMode
+                                )
                             }
                         } else {
-                            topContentData.dailyValue ?: data?.value1
+                            viewModel.handle255(
+                                topContentData.dailyValue ?: data?.value1,
+                                viewModel.selectedLaunchMode
+                            )
                         }
                     setSingleData(value, null, data?.master_mid_time)
                 } else {

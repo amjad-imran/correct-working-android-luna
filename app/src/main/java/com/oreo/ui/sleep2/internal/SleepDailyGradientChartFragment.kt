@@ -108,6 +108,11 @@ class SleepDailyGradientChartFragment :
                     } else {
                         convertedValue
                     }
+                } else if (contributorType == SleepInternalLaunchState.RESPIRATORY_RATE
+                    || contributorType == SleepInternalLaunchState.RESTING_HEART_RATE
+                    || contributorType == SleepInternalLaunchState.HRV
+                ) {
+                    if (it == 255f) null else it
                 } else {
                     it
                 }
