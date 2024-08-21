@@ -489,8 +489,15 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                     path.reset()
                     path.moveTo(start.toFloat(), pos)
                     path.lineTo(end, pos)
-                    path.lineTo(end, pos + dip2px(40f).toFloat())
-                    path.lineTo(start.toFloat(), pos + dip2px(40f).toFloat())
+
+                    var endY = pos + dip2px(40f).toFloat()
+
+                    if (endY > (height - bottomHeight)) {
+                        endY = (height - bottomHeight).toFloat()
+                    }
+
+                    path.lineTo(end, endY)
+                    path.lineTo(start.toFloat(), endY)
 
                     val gradient = LinearGradient(
                         0f,

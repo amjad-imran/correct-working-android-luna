@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.google.gson.Gson
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.averageWithZeroGenericFloat
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.averageWithoutZeroGeneric
 import com.noisefit_commans.common.averageWithoutZeroGenericFloat
@@ -231,9 +232,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             lastPos += dataSize
 
 
-            val avgValue = filterValues.mapNotNull { it.value1 }.averageWithoutZeroGenericFloat()
+            val avgValue = if (launchState == SleepInternalLaunchState.RESTFULNESS) {
+                filterValues.mapNotNull { it.value1 }.averageWithZeroGenericFloat()
+            } else {
+                filterValues.mapNotNull { it.value1 }.averageWithoutZeroGenericFloat()
+            }
 
-            if (avgValue != 0.0f) {
+            val zeroCondition = if (launchState == SleepInternalLaunchState.RESTFULNESS) {
+                true
+            } else {
+                avgValue != 0.0f
+            }
+
+            if (zeroCondition) {
 
                 val pos = getYAxisValue(avgValue.toFloat())
                 val end = start.toFloat() + stepWidth
@@ -289,8 +300,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 path.reset()
                 path.moveTo(start.toFloat(), pos)
                 path.lineTo(end, pos)
-                path.lineTo(end, pos + dip2px(40f).toFloat())
-                path.lineTo(start.toFloat(), pos + dip2px(40f).toFloat())
+                var endY = pos + dip2px(40f).toFloat()
+
+                if (endY > (height - bottomHeight)) {
+                    endY = (height - bottomHeight).toFloat()
+                }
+
+                path.lineTo(end, endY)
+                path.lineTo(start.toFloat(), endY)
 
                 avgLineFillPaint.setShader(gradient)
                 canvas.drawPath(path, avgLineFillPaint)
@@ -336,9 +353,17 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
         var isDataNull = true
+        val consider0 = launchState == SleepInternalLaunchState.RESTFULNESS
         dataSet.forEachIndexed { index, it ->
 
-            if (it.value1 != null && it.value1 != 0f) {
+
+            val zeroCond = if (consider0) {
+                true
+            } else {
+                it.value1 != 0f
+            }
+
+            if (it.value1 != null && zeroCond) {
                 isDataNull = false
                 val isSelectedPosition = selectedPosition == index
                 val actualPos = getYAxisValue(it.value1 ?: 0.0f)
@@ -346,7 +371,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 //dataPosition[index] = Pair(start, start + stepWidth)
                 dataPosition.add(Pair(index, start))
 
-                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && dataSet[index + 1].value1 != 0.0f) {
+                val zeroCondNext = if (consider0) {
+                    true
+                } else {
+                    (index + 1 < maxDataSize) && dataSet[index + 1].value1 != 0.0f
+                }
+
+                if (index + 1 < maxDataSize && dataSet[index + 1].value1 != null && zeroCondNext) {
                     val nextElement = dataSet[index + 1].value1
 
                     val actualPosNext = getYAxisValue(nextElement ?: 0.0f)
