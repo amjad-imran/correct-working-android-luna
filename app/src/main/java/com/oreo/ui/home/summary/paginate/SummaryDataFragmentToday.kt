@@ -478,7 +478,7 @@ class SummaryDataFragmentToday :
             viewModel.getContributorInfo("hr")
         }*/
 
-        binding.contentMain.lytReadinessAvg.root.setOnClickListener {
+        /*binding.contentMain.lytReadinessAvg.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_score_click)
             viewModel.getContributorInfo("readiness")
         }
@@ -492,7 +492,7 @@ class SummaryDataFragmentToday :
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_score_click)
             viewModel.getContributorInfo("activity")
-        }
+        }*/
 
     }
 
