@@ -91,7 +91,7 @@ class SummaryDataViewModel @Inject constructor(
                                 readinessScore = it?.readinessScore?.value,
                                 status = it?.readinessScore?.text?.capitalizeWords(),
                                 nudges = it?.dashNudges,
-                                totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+                                totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
                                 noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
                             )

@@ -349,7 +349,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
                 nudges = healthData.readiness?.dashNudges,
-                totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+                totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
                 noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
             )

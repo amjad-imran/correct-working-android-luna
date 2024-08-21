@@ -6,6 +6,10 @@ data class OreoReadinessModel(
     val date: String,//YYYY-MM-DD,
     val start_time: String,//YYYY-MM-DD,
     val end_time: String,//YYYY-MM-DD,
+
+    @SerializedName("total_score_impact") val totalScoreImpact: Int? = null,
+
+
     @SerializedName("readiness_score")
     val readinessScore: CommonDataModel? = null,
     val restingHr: UnitDataModel? = null,

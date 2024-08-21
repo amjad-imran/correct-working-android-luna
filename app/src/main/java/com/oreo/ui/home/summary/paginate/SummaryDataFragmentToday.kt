@@ -32,6 +32,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -65,6 +66,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
+import kotlin.math.abs
 
 
 @AndroidEntryPoint
@@ -1161,11 +1164,19 @@ class SummaryDataFragmentToday :
                 tvUnit.text = ""
                 "-"
             } else {
-                tvUnit.text = "°F"
-                if (data.data.temperatureVariation > 0) {
-                    "+${data.data.temperatureVariation}"
+
+                val tempVariation = if (viewModel.sessionManager.isMetric()) {
+                    tvUnit.text = "°C"
+                    AppConversionUtils.fahrenheitToCelsius(32 + data.data.temperatureVariation)
                 } else {
-                    "${data.data.temperatureVariation}"
+                    tvUnit.text = "°F"
+                    data.data.temperatureVariation
+                }
+
+                if (data.data.temperatureVariation > 0f) {
+                    "+${String.format(locale = Locale.US, "%.1f", tempVariation)}"
+                } else {
+                    "-${String.format(locale = Locale.US, "%.1f", abs(tempVariation))}"
                 }
             }
             this.imv.setBackgroundResource(data.data.background)
