@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepDailyGradientChartBinding
-import com.noisefit.luna.databinding.FragmentSleepSingleLineGradientChartBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
-import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,7 +45,7 @@ class SleepDailyGradientChartFragment :
             pageData = bundle.getParcelable(graphData)
         }
 
-        val dataList = convertData(pageData?.data)
+        val dataList = convertData(pageData?.data, pageData?.contributorType)
 
         val maxValue = sharedViewModel.getMaxValue(
             dataListType1 = dataList,
@@ -89,14 +88,29 @@ class SleepDailyGradientChartFragment :
         })
     }
 
-    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+    private fun convertData(
+        data: List<TrendsValues>?,
+        contributorType: SleepInternalLaunchState?
+    ): List<GraphDataModel> {
         val firstValue = data?.firstOrNull() ?: return ArrayList()
         val date = LocalDate.parse(firstValue.date)
 
+        val isMetric = sharedViewModel.sessionManager.isMetric()
         return firstValue.breakup?.map {
             GraphDataModel(
                 date = date,
-                value1 = it
+                value1 = if (contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE && isMetric) {
+                    val convertedValue = AppConversionUtils.fahrenheitToCelsius(
+                        it
+                    )
+                    if (convertedValue < 0) {
+                        0.0f
+                    } else {
+                        convertedValue
+                    }
+                } else {
+                    it
+                }
             )
         } ?: ArrayList()
     }

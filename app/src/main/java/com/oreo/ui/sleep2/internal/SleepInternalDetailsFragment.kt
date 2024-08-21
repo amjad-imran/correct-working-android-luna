@@ -8,6 +8,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit.util.ApplicationUtils
@@ -18,6 +19,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.ui.heartrate.OHRLearnMoreAdapter
 import com.oreo.ui.heartrate.OnItemClickListener
@@ -358,25 +360,42 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text = viewModel.getUnit()
         } else {
 
-            var unit  =  viewModel.getUnit()
+            var unit = viewModel.getUnit()
             val displayValue = if (timingAvg == null) {
-                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP || viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP) {
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.REM_SLEEP ||
+                    viewModel.selectedLaunchMode == SleepInternalLaunchState.DEEP_SLEEP
+                ) {
                     val minValue = ((avgValue!!) / 60).roundToInt()
                     "$minValue"
+                } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                    if (sharedViewModel.sessionManager.isMetric()) {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f",
+                            AppConversionUtils.fahrenheitToCelsius(avgValue!!)
+                        )
+                    } else {
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f",
+                            avgValue
+                        )
+                    }
                 } else {
                     "${avgValue!!.roundToInt()}"
                 }
             } else {
                 try {
-                    val time = LocalTime.parse(timingAvg,DateTimeFormatter.ofPattern("HH:mm"))
+                    val time = LocalTime.parse(timingAvg, DateTimeFormatter.ofPattern("HH:mm"))
                     unit = time.format(DateTimeFormatter.ofPattern("a"))
                     time.format(DateTimeFormatter.ofPattern("hh:mm"))
-                }catch (exp:Exception){
+                } catch (exp: Exception) {
                     try {
-                        val time = LocalTime.parse(timingAvg,DateTimeFormatter.ofPattern("HH:mm:ss"))
+                        val time =
+                            LocalTime.parse(timingAvg, DateTimeFormatter.ofPattern("HH:mm:ss"))
                         unit = time.format(DateTimeFormatter.ofPattern("a"))
                         time.format(DateTimeFormatter.ofPattern("hh:mm"))
-                    }catch (exp:Exception){
+                    } catch (exp: Exception) {
                         ""
                     }
                 }
@@ -452,18 +471,23 @@ class SleepInternalDetailsFragment :
                     val data = viewModel.trendsData[topContentData.date]
 
                     val value =
-                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE &&
-                            viewModel.isDeviationSelected
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
                         ) {
-                            if (sharedViewModel.sessionManager.isMetric()) {
-                                AppConversionUtils.fahrenheitToCelsius(32 + (data?.value2 ?: 0f))
+                            if (viewModel.isDeviationSelected) {
+                                if (sharedViewModel.sessionManager.isMetric()) {
+                                    AppConversionUtils.fahrenheitToCelsius(
+                                        32 + (data?.value2 ?: 0f)
+                                    )
+                                } else {
+                                    data?.value2
+                                }
                             } else {
-                                data?.value2
+                                topContentData.dailyValue ?: data?.value1!!
                             }
                         } else {
                             topContentData.dailyValue ?: data?.value1
                         }
-                    setSingleData(value, null,data?.master_mid_time)
+                    setSingleData(value, null, data?.master_mid_time)
                 } else {
                     binding.lytTopView.lytTopSingleView.apply {
                         tvNudge.alpha = 1.0f
@@ -583,9 +607,9 @@ class SleepInternalDetailsFragment :
             }
         }
 
-        val optimalRange = if(viewModel.selectedPeriod.value==InternalSelectedPeriod.DAY){
+        val optimalRange = if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAY) {
             sharedViewModel.getOptimalRangeMinMax(viewModel.selectedLaunchMode)
-        }else{
+        } else {
             null
         }
         if (optimalRange == null) {

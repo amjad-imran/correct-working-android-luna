@@ -30,6 +30,7 @@ class ODropDownViewModel @Inject constructor(
            sleepData.add(SleepInternalLaunchState.EFFICIENCY)
            sleepData.add(SleepInternalLaunchState.LATENCY)
            sleepData.add(SleepInternalLaunchState.RESTFULNESS)
+           sleepData.add(SleepInternalLaunchState.TIMING)
            sleepData.add(SleepInternalLaunchState.SLEEP_PERFORMANCE)
            sleepData.add(SleepInternalLaunchState.HOUR_VS_NEED)
            sleepData.add(SleepInternalLaunchState.RESTORATIVE_SLEEP)

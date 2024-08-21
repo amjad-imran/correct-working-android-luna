@@ -363,6 +363,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
             SleepSingleGradientChartType.DEFAULT -> return "${value.roundToInt()}"
+            SleepSingleGradientChartType.FLOAT -> return String.format(locale = Locale.US,"%.1f", value)
         }
 
     }
@@ -654,5 +655,5 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 }
 
 enum class SleepSingleGradientChartType {
-    TIME, PERCENT, DEFAULT
+    TIME, PERCENT, FLOAT, DEFAULT
 }

@@ -64,22 +64,42 @@ class OSPTrendsSharedViewModel @Inject constructor(
         )
         return when (contributorType) {
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
-                if (maxValue <= 120.0f) {
-                    return arrayListOf(
-                        Pair(0, "0"),
-                        Pair(30, "30"),
-                        Pair(60, "60"),
-                        Pair(90, "90"),
-                        Pair(120, "120")
-                    )
-                } else {
-                    return arrayListOf(
-                        Pair(0, "0"),
-                        Pair(40, "40"),
-                        Pair(80, "80"),
-                        Pair(120, "120"),
-                        Pair(160, "160")
-                    )
+                if(sessionManager.isMetric()){
+                    if (maxValue <= 48.0f) {
+                        return arrayListOf(
+                            Pair(0, "0"),
+                            Pair(12, "12"),
+                            Pair(24, "24"),
+                            Pair(36, "36"),
+                            Pair(48, "48")
+                        )
+                    } else {
+                        return arrayListOf(
+                            Pair(0, "0"),
+                            Pair(18, "18"),
+                            Pair(36, "36"),
+                            Pair(54, "54"),
+                            Pair(72, "72")
+                        )
+                    }
+                }else{
+                    if (maxValue <= 120.0f) {
+                        return arrayListOf(
+                            Pair(0, "0"),
+                            Pair(30, "30"),
+                            Pair(60, "60"),
+                            Pair(90, "90"),
+                            Pair(120, "120")
+                        )
+                    } else {
+                        return arrayListOf(
+                            Pair(0, "0"),
+                            Pair(40, "40"),
+                            Pair(80, "80"),
+                            Pair(120, "120"),
+                            Pair(160, "160")
+                        )
+                    }
                 }
             }
 
@@ -438,9 +458,25 @@ class OSPTrendsSharedViewModel @Inject constructor(
             }
 
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                val skinTemp = if (sessionManager.isMetric()) {
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        AppConversionUtils.fahrenheitToCelsius(
+                            value
+                        ),
+                    )
+                } else {
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        value
+                    )
+                }
+
                 Pair(
                     value,
-                    String.format(locale = Locale.US, "%.1f", value)
+                    skinTemp
                 )
             }
 

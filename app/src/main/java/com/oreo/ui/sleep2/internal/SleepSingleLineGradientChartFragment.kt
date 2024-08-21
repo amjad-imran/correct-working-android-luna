@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepSingleLineGradientChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
@@ -63,9 +64,10 @@ class SleepSingleLineGradientChartFragment :
             SleepSingleGradientChartType.TIME
         } else if (pageData?.contributorType == SleepInternalLaunchState.RESTING_HEART_RATE
             || pageData?.contributorType == SleepInternalLaunchState.HRV
-            || pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE
         ) {
             SleepSingleGradientChartType.DEFAULT
+        } else if (pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+            SleepSingleGradientChartType.FLOAT
         } else {
             SleepSingleGradientChartType.PERCENT
         }
@@ -96,6 +98,8 @@ class SleepSingleLineGradientChartFragment :
     }
 
     private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+        val isMetric = sharedViewModel.sessionManager.isMetric()
+
         return data?.map {
             GraphDataModel(
                 date = LocalDate.parse(it.date),
@@ -103,6 +107,15 @@ class SleepSingleLineGradientChartFragment :
                     if (it.value1 != null) {
                         (it.value1 ?: 0.0f) / 60
                     } else null
+                } else if (it.value1 != null && pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE && isMetric) {
+                    val convertedValue = AppConversionUtils.fahrenheitToCelsius(
+                        it.value1!!
+                    )
+                    if (convertedValue < 0) {
+                        0.0f
+                    } else {
+                        convertedValue
+                    }
                 } else {
                     it.value1
                 }

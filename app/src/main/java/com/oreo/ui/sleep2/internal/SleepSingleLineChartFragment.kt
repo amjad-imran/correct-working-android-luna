@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
 import com.noisefit.luna.databinding.FragmentSleepSingleLineChartBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
@@ -86,6 +87,8 @@ class SleepSingleLineChartFragment :
     }
 
     private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+        val isMetric = sharedViewModel.sessionManager.isMetric()
+
         return data?.map {
             GraphDataModel(
                 date = LocalDate.parse(it.date),
@@ -96,6 +99,15 @@ class SleepSingleLineChartFragment :
                     if (it.value1 != null) {
                         (it.value1 ?: 0.0f) / 60
                     } else null
+                }else if (it.value1 != null && pageData?.contributorType == SleepInternalLaunchState.SKIN_TEMPERATURE && isMetric) {
+                    val convertedValue = AppConversionUtils.fahrenheitToCelsius(
+                        it.value1!!
+                    )
+                    if (convertedValue < 0) {
+                        0.0f
+                    } else {
+                        convertedValue
+                    }
                 } else {
                     it.value1
                 }
