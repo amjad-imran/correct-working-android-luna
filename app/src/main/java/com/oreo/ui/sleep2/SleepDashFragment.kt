@@ -227,8 +227,6 @@ class SleepDashFragment :
     }
 
 
-
-
     override fun subscribeObservers() {
 
         viewModel.addSleepCtaVisibility.observe(this) {
@@ -673,6 +671,13 @@ class SleepDashFragment :
                 setTextColor(statusColor)
             }
         }
+
+        binding.lytScore.backScore.setBackgroundResource(
+            viewModel.getScoreBackground(
+                data?.sleepScore?.status ?: ""
+            )
+        )
+
 
         val hasHealthData = viewModel.hasHealthData(data?.healthTrend)
 

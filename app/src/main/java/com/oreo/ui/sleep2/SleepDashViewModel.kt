@@ -705,32 +705,34 @@ class SleepDashViewModel @Inject constructor(
         }
     }
 
-    fun getGradientColor(status: String): Pair<Int, Int> {
-        val color = if (status.equals("warning", true)) {
-            Pair(Color.parseColor("#ffc3ce"), Color.parseColor("#ff7c94"))
-        } else if (status.equals("good", true)) {
-            Pair(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"))
-        } else if (status.equals("optimal", true)) {
-            Pair(Color.parseColor("#aef8be"), Color.parseColor("#2fce77"))
-        } else {
-            Pair(Color.parseColor("#fffceb"), Color.parseColor("#fff3b5"))
-        }
-        return color
-    }
-
     fun getStatusColors(status: String): Int {
         val color: Int = if (status.equals("warning", true)) {
-            R.color.oreo_contributor_warning
+            R.color.sleep_warning
         } else if (status.equals("good", true)) {
-            R.color.steps_arc
+            R.color.sleep_good
         } else if (status.equals("optimal", true)) {
-            R.color.steps_arc
+            R.color.sleep_optimal
         } else if (status.equals("fair", true)) {
             R.color.color_fair
         } else {
             R.color.white_12_72
         }
         return color
+    }
+
+    fun getScoreBackground(status: String): Int {
+        val background: Int = if (status.equals("warning", true)) {
+            R.drawable.score_back_pay_attention
+        } else if (status.equals("good", true)) {
+            R.drawable.score_back_good
+        } else if (status.equals("optimal", true)) {
+            R.drawable.score_back_optimal
+        } else if (status.equals("fair", true)) {
+            R.drawable.score_back_fair
+        } else {
+            0
+        }
+        return background
     }
 
     fun getLaunchState(type: SleepContributor): SleepInternalLaunchState {

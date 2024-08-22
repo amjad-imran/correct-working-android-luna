@@ -18,6 +18,7 @@
     <color name="modal_color">#1AFFFFFF</color>
     <color name="errorRed">#ff4242</color>
     <color name="white_10">#20FFFFFF</color>
+    <color name="white_15">#26FFFFFF</color>
     <color name="white_12">#1effffff</color>
     <color name="white_12_72">#b8ffffff</color>
     <color name="white_12_70">#b3ffffff</color>
@@ -72,6 +73,7 @@
     <color name="oreo_sleep_text_color_optimal">#d9bdff</color>
     <color name="oreo_activity_bar_color_50">#804c7689</color>
     <color name="oreo_contributor_warning">#ff7c94</color>
+    <color name="sleep_warning">#ff6b7c</color>
     <color name="readiness_warning_text">#ffa8c3</color>
     <color name="readiness_warning_bar">#e34260</color>
 
@@ -152,6 +154,8 @@
     <color name="nap_down">#ff7c94</color>
 
     <color name="steps_arc">#29cc74</color>
+    <color name="sleep_good">#00cc88</color>
+    <color name="sleep_optimal">#00c750</color>
     <color name="color_fair">#e2cb78</color>
 
     <color name="distance_arc">#ffd230</color>

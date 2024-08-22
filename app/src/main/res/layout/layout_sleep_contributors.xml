@@ -19,7 +19,7 @@
         android:id="@+id/rvHm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,13 +48,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
         android:rotation="180"
-        android:src="@drawable/ic_o_dropdown"
+        android:src="@drawable/ic_o_dropdown_close"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/ivArrowOpen"
         app:layout_constraintEnd_toEndOf="@+id/ivArrowOpen"
         app:layout_constraintStart_toStartOf="@+id/ivArrowOpen"
-        app:layout_constraintTop_toTopOf="@+id/ivArrowOpen" />
+        app:layout_constraintTop_toTopOf="@+id/ivArrowOpen"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

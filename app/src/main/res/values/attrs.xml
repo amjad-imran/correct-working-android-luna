@@ -3,6 +3,7 @@
 
     <declare-styleable name="CircularProgressBar">
         <attr name="archWidth" format="dimension" />
+        <attr name="trackColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="CombineLineChart">

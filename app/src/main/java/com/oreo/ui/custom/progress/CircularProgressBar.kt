@@ -19,7 +19,7 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
 
     private var progress = 0
     private var max = 100
-    private val startAngle = -225f
+    private val startAngle = -210f
     private var rectF: RectF? = null
     lateinit var backgroundPaint: Paint
     lateinit var progressPaint: Paint
@@ -32,16 +32,24 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
     private fun init(attrs: AttributeSet?) {
 
         var strokeWidth = 10f
+        backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressBar)
             strokeWidth = ta.getDimension(R.styleable.CircularProgressBar_archWidth, 10f)
+            backgroundPaint.setColor(
+                ta.getColor(
+                    R.styleable.CircularProgressBar_trackColor,
+                    Color.parseColor("#4DC5A8ED")
+                )
+            )
+
             ta.recycle()
         }
 
         rectF = RectF()
 
-        backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        backgroundPaint.setColor(Color.parseColor("#19ffffff"))
+        //backgroundPaint.setColor(Color.parseColor("#4DC5A8ED"))
         backgroundPaint.style = Paint.Style.STROKE
         backgroundPaint.strokeWidth = strokeWidth
         backgroundPaint.strokeCap = Paint.Cap.BUTT
@@ -58,8 +66,8 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
         super.onSizeChanged(w, h, oldw, oldh)
 
         val colors = intArrayOf(
-            Color.parseColor("#725a93"),
-            Color.parseColor("#f0e4ff")
+            Color.parseColor("#C5A8ED"),
+            Color.parseColor("#C5A8ED")
         )
         val positions = floatArrayOf(0.0f, 1.0f)
         val sweepGradient = SweepGradient(width / 2F, height / 2F, colors, positions)
@@ -85,9 +93,9 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
         rectF!![width / 2 - radius + 30, height / 2 - radius + 30, width / 2 + radius - 30] =
             height / 2 + radius - 30
 
-        canvas.drawArc(rectF!!, startAngle, 270f, false, backgroundPaint)
+        canvas.drawArc(rectF!!, startAngle, 240f, false, backgroundPaint)
 
-        val sweepAngle = ((270 * progress) / max).toFloat()
+        val sweepAngle = ((240 * progress) / max).toFloat()
         canvas.drawArc(rectF!!, startAngle, sweepAngle, false, progressPaint)
 
     }

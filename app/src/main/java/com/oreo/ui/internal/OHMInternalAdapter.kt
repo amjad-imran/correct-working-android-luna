@@ -97,19 +97,19 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
 
                 "warning" -> Triple(
                     R.drawable.back_hm_warning,
-                    Color.parseColor("#ff7c94"),
+                    Color.parseColor("#ff557e"),
                     com.noisefit_commans.R.drawable.back_modal_new_warning
                 )
 
                 "optimal" -> Triple(
                     R.drawable.back_hm_optimal,
-                    Color.parseColor("#29cc74"),
+                    Color.parseColor("#00ff66"),
                     com.noisefit_commans.R.drawable.back_modal_new
                 )
 
                 "fair" -> Triple(
                     R.drawable.back_hm_fair,
-                    Color.parseColor("#d79d58"),
+                    Color.parseColor("#ffa800"),
                     com.noisefit_commans.R.drawable.back_modal_new
                 )
 

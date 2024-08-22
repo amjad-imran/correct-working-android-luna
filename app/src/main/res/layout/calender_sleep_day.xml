@@ -25,7 +25,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exSevenDayText" />
+            app:layout_constraintTop_toBottomOf="@+id/exSevenDayText"
+            app:trackColor="#4DC5A8ED" />
 
         <TextView
             android:id="@+id/exSevenDateText"

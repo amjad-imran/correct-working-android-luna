@@ -3,7 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#010614"
     tools:context="com.oreo.ui.sleep2.SleepDashFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dash_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/toolbar"
@@ -16,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="66dp"
         app:cv_daySize="seventhWidth"
+        android:layout_marginTop="8dp"
         app:cv_dayViewResource="@layout/calender_sleep_day"
         app:cv_orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
