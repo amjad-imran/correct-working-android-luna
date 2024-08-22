@@ -23,6 +23,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
@@ -1316,6 +1317,13 @@ class OreoUserActivityRepositoryImpl(
         val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
         oreoAutoSportDataImpl.deleteOldData(timeStamp)
         return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
+    }
+
+    override suspend fun getHrDataForToday(): OreoHeartRate? {
+        val todayDate = DateFormats.getTodaysDateString(10)
+        return heartRateDataImpl.getTodayData(
+            todayDate
+        )
     }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {

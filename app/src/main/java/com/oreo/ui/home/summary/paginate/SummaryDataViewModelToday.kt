@@ -74,6 +74,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -111,6 +112,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateGoogleFitCard = MutableLiveData<Boolean>()
     val napsList = MutableLiveData<List<OreoNapData>>()
 
+    val sleepAlert = MutableLiveData<SleepAlert?>()
 
     var contributorInfo: OContributorResponseModal? = null
     val hrInfo = MutableLiveData<Event<String>>()
@@ -187,6 +189,64 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         updateAlerts()
+
+
+    }
+
+    private fun showSleepAlerts(healthData: ServerUserHealthData) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            delay(3000)
+
+            //time check if after 6 am
+            //is alert already shown for today
+            val crossedDate = ringDataStore.sleepAlertCrossedForDate()
+            val isSleepAlertCrossed = if (crossedDate == null) {
+                false
+            } else {
+                val todayDate = LocalDate.now().toString()
+                crossedDate.equals(todayDate)
+            }
+
+            if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not()) {
+
+                val hrData = userRepository.getHrDataForToday()
+
+                val list = hrData?.breakUp?.replace("255", "0")
+                val breakupArray = Gson().fromJson<List<Int>>(list ?: "")
+
+                if (breakupArray.isNotEmpty()) {
+                    try {
+                        val listTill = breakupArray.subList(0, 72)
+                        val zeroList = listTill.filter { it == 0 }
+                        if (zeroList.isEmpty()) {
+                            //if sleep is not detected and hr is continuous
+                            sleepAlert.postValue(
+                                SleepAlert(
+                                    title = "Did you sleep last night",
+                                    message = "Our algorithm's couldn't detect sleep last night, if you did sleep, please add it here.",
+                                    addSleep = true
+                                )
+                            )
+                        } else {
+                            //if sleep is not detected and hr has break
+                            sleepAlert.postValue(
+                                SleepAlert(
+                                    title = "Did you sleep last night",
+                                    message = "Please make sure to wear your Luna ring when you go to bed to automatically detect your sleep. If you did sleep, please add it here.",
+                                    addSleep = true
+                                )
+                            )
+                        }
+                    } catch (ignored: Exception) {
+                    }
+                }
+            }
+
+            //case 3 Ring not connected
+            //pending from product
+
+        }
     }
 
     private fun handleGoogleFitCard() {
@@ -366,7 +426,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (totalSleep == null) {
                     totalSleep = 0
                 }
-                totalSleep = totalSleep!! + (it.totalDuration?:0)
+                totalSleep = totalSleep!! + (it.totalDuration ?: 0)
             }
 
             filteredNaps?.forEach {
@@ -692,6 +752,8 @@ class SummaryDataViewModelToday @Inject constructor(
             healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
+
+            showSleepAlerts(healthData)
 
         }
     }
@@ -1556,5 +1618,18 @@ class SummaryDataViewModelToday @Inject constructor(
         return drawable
     }
 
+    fun removeSleepAlert() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ringDataStore.removeSleepAlert(LocalDate.now().toString())
+            sleepAlert.postValue(null)
+        }
+    }
+
 
 }
+
+data class SleepAlert(
+    val title: String,
+    val message: String,
+    val addSleep: Boolean
+)

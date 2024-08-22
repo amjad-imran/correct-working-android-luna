@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -45,6 +46,7 @@ interface OreoUserActivityRepository {
         endDate: String? = null
     ): Flow<Resource<BaseApiResponse<SleepDataResponse>>>
 
+    suspend fun getHrDataForToday(): OreoHeartRate?
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 

@@ -97,6 +97,17 @@
             tools:visibility="visible" />
 
         <include
+            android:id="@+id/lytSleepAlert"
+            layout="@layout/layout_sleep_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <include
             android:id="@+id/lytAppUpdate"
             layout="@layout/layout_dash_app_update"
             android:layout_width="match_parent"

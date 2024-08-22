@@ -9,6 +9,7 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.utils.DateFormats
+import java.time.LocalDate
 import javax.inject.Inject
 
 private const val RING_DEVICE_INFO = "RING_DEVICE_INFO"
@@ -40,6 +41,7 @@ private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
 private const val FIRST_STRESS_DAY = "FIRST_STRESS_DAY"
 private const val STRESS_BETA_STATE = "STRESS_BETA_STATE"
 private const val ENABLE_AI_STATE_2 = "ENABLE_AI_STATE_2"
+private const val SLEEP_ALERT_REMOVE = "SLEEP_ALERT_REMOVE"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
@@ -51,6 +53,15 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun removeSleepAlert(date: String) {
+        mPrefs.edit()?.putString(SLEEP_ALERT_REMOVE, date)?.commit()
+    }
+
+    override fun sleepAlertCrossedForDate(): String? {
+        return mPrefs.getString(SLEEP_ALERT_REMOVE, null)
+    }
+
     override fun getEnableAiState(): Boolean {
         return mPrefs.getBoolean(ENABLE_AI_STATE_2, false)
 
@@ -74,7 +85,7 @@ class RingDataStoreImpl
     }
 
     override fun setStressBetaState(state: Boolean?) {
-        mPrefs.edit()?.putBoolean(STRESS_BETA_STATE, state?:false)?.commit()
+        mPrefs.edit()?.putBoolean(STRESS_BETA_STATE, state ?: false)?.commit()
     }
 
     override fun isUpdateUserDeviceDone(): Boolean {

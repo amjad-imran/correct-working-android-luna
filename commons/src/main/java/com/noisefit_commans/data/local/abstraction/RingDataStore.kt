@@ -87,4 +87,7 @@ interface RingDataStore {
     fun getEnableAiState(): Boolean
     fun setEnableAiState(state: Boolean)
 
+    fun removeSleepAlert(date: String)
+    fun sleepAlertCrossedForDate(): String?
+
 }

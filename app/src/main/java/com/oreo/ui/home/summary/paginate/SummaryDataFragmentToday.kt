@@ -516,6 +516,15 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sleepAlert.observe(this) {
+            if (it == null) {
+                binding.contentMain.lytSleepAlert.root.gone()
+            } else {
+                binding.contentMain.lytSleepAlert.root.visible()
+                setSleepAlertUi(it)
+            }
+        }
+
         viewModel.healthMonitorCardData.observe(this) { data ->
             if (data == null) {
                 binding.contentMain.lytHealthMonitor.root.gone()
@@ -948,6 +957,23 @@ class SummaryDataFragmentToday :
 
     }
 
+    private fun setSleepAlertUi(data: SleepAlert) {
+        binding.contentMain.lytSleepAlert.tvTitle.text = data.title
+        binding.contentMain.lytSleepAlert.tvMessage.text = data.message
+
+        if (data.addSleep) {
+            binding.contentMain.lytSleepAlert.btnDone.visible()
+            binding.contentMain.lytSleepAlert.btnDone.setOnClickListener {
+                navigate(R.id.fragmentAddSleep)
+            }
+            binding.contentMain.lytSleepAlert.ivClose.setOnClickListener {
+                viewModel.removeSleepAlert()
+            }
+        } else {
+            binding.contentMain.lytSleepAlert.btnDone.gone()
+        }
+    }
+
     private fun setHealthMonitorCardData(data: HealthTrend?) {
         val hasHealthData = viewModel.hasHealthData(data)
         data?.apply {
@@ -1056,7 +1082,8 @@ class SummaryDataFragmentToday :
 
             if (outOfRangeCount == 0) {
                 binding.contentMain.lytHealthMonitor.tvNudge.visible()
-                binding.contentMain.lytHealthMonitor.tvNudge.text = "All readings are in your typical range"
+                binding.contentMain.lytHealthMonitor.tvNudge.text =
+                    "All readings are in your typical range"
             } else if (outOfRangeCount == 1) {
                 val text = if (isSignificant) {
                     "significantly"
