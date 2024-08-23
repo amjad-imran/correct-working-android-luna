@@ -246,12 +246,28 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             if (zeroCondition) {
 
-                val pos = getYAxisValue(avgValue.toFloat())
+                val roundedAvg = if(launchState==SleepInternalLaunchState.SLEEP_DURATION||
+                    launchState == SleepInternalLaunchState.REM_SLEEP ||
+                    launchState == SleepInternalLaunchState.DEEP_SLEEP ||
+                    launchState == SleepInternalLaunchState.RESTFULNESS ||
+                    launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
+                    launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
+                    launchState == SleepInternalLaunchState.LATENCY
+                    ){
+                    avgValue.roundToInt().toFloat()
+                }else{
+                    avgValue
+                }
+
+
+
+
+                val pos = getYAxisValue(roundedAvg.toFloat())
                 val end = start.toFloat() + stepWidth
 
                 val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION) {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                        avgValue.roundToInt()
+                        roundedAvg.roundToInt()
                     )
                     String.format(locale = Locale.US, "%d:%02d", hour, minute)
                 } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
@@ -261,17 +277,17 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
-                    "${avgValue.roundToInt()}"
+                    "${roundedAvg.roundToInt()}"
                 } else if (
                     launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
                 ) {
-                    String.format(locale = Locale.US, "%.1f", avgValue)
+                    String.format(locale = Locale.US, "%.1f", roundedAvg)
                 } else {
-                    "${String.format(locale = Locale.US, "%.1f", avgValue)}%"
+                    "${String.format(locale = Locale.US, "%.1f", roundedAvg)}%"
                 }
 
 
-                val overlayColor = getAvgBarColor(avgValue, previousValue)
+                val overlayColor = getAvgBarColor(roundedAvg, previousValue)
                 val gradient = LinearGradient(
                     0f,
                     pos,
