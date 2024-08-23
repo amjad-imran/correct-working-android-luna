@@ -966,11 +966,11 @@ class SummaryDataFragmentToday :
             binding.contentMain.lytSleepAlert.btnDone.setOnClickListener {
                 navigate(R.id.fragmentAddSleep)
             }
-            binding.contentMain.lytSleepAlert.ivClose.setOnClickListener {
-                viewModel.removeSleepAlert()
-            }
         } else {
             binding.contentMain.lytSleepAlert.btnDone.gone()
+        }
+        binding.contentMain.lytSleepAlert.ivClose.setOnClickListener {
+            viewModel.removeSleepAlert()
         }
     }
 

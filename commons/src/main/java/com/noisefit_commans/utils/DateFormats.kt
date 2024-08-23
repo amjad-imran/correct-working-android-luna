@@ -1206,7 +1206,7 @@ object DateFormats {
 
     }
 
-    private fun getDateDiff(currentTimeStamp: Long, lastTimestamp: Long): Long {
+    fun getDateDiff(currentTimeStamp: Long, lastTimestamp: Long): Long {
         return TimeUnit.DAYS.convert(
             currentTimeStamp - lastTimestamp,
             TimeUnit.MILLISECONDS

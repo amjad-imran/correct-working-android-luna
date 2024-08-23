@@ -193,10 +193,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    private fun showSleepAlerts(healthData: ServerUserHealthData) {
+    private fun showSleepAlerts() {
         viewModelScope.launch(Dispatchers.IO) {
-
-            delay(3000)
 
             //time check if after 6 am
             //is alert already shown for today
@@ -208,6 +206,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 crossedDate.equals(todayDate)
             }
 
+            var sleepAlertToShow: SleepAlert? = null
+
+
             if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not()) {
 
                 val hrData = userRepository.getHrDataForToday()
@@ -215,27 +216,23 @@ class SummaryDataViewModelToday @Inject constructor(
                 val list = hrData?.breakUp?.replace("255", "0")
                 val breakupArray = Gson().fromJson<List<Int>>(list ?: "")
 
-                if (breakupArray.isNotEmpty()) {
+                if (breakupArray.isNullOrEmpty().not()) {
                     try {
                         val listTill = breakupArray.subList(0, 72)
                         val zeroList = listTill.filter { it == 0 }
                         if (zeroList.isEmpty()) {
                             //if sleep is not detected and hr is continuous
-                            sleepAlert.postValue(
-                                SleepAlert(
-                                    title = "Did you sleep last night",
-                                    message = "Our algorithm's couldn't detect sleep last night, if you did sleep, please add it here.",
-                                    addSleep = true
-                                )
+                            sleepAlertToShow = SleepAlert(
+                                title = "Did you sleep last night",
+                                message = "Our algorithm's couldn't detect sleep last night, if you did sleep, please add it here.",
+                                addSleep = true
                             )
                         } else {
                             //if sleep is not detected and hr has break
-                            sleepAlert.postValue(
-                                SleepAlert(
-                                    title = "Did you sleep last night",
-                                    message = "Please make sure to wear your Luna ring when you go to bed to automatically detect your sleep. If you did sleep, please add it here.",
-                                    addSleep = true
-                                )
+                            sleepAlertToShow = SleepAlert(
+                                title = "Did you sleep last night",
+                                message = "Please make sure to wear your Luna ring when you go to bed to automatically detect your sleep. If you did sleep, please add it here.",
+                                addSleep = true
                             )
                         }
                     } catch (ignored: Exception) {
@@ -243,8 +240,34 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            //case 3 Ring not connected
-            //pending from product
+            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
+                val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
+                val currentTimeStamp = DateFormats.getTimeStamp()
+                if (lastSyncTimestamp != null) {
+                    val lastSyncDays = DateFormats.getDateDiff(
+                        currentTimeStamp,
+                        lastSyncTimestamp
+                    )
+                    if (lastSyncDays > 0) {
+                        val daysString = if (lastSyncDays == 1L) {
+                            "1 day"
+                        } else {
+                            "$lastSyncDays days"
+                        }
+                        sleepAlertToShow = SleepAlert(
+                            title = "Missing data",
+                            message = "We haven’t received data in last $daysString. Remember to charge your ring and wear" +
+                                    " it regularly so you don’t miss out on your personalised insights!",
+                            addSleep = false
+                        )
+
+                    }
+                }
+            }
+
+            sleepAlert.postValue(
+                sleepAlertToShow
+            )
 
         }
     }
@@ -753,7 +776,7 @@ class SummaryDataViewModelToday @Inject constructor(
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
-            showSleepAlerts(healthData)
+            showSleepAlerts()
 
         }
     }
