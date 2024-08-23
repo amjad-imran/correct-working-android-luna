@@ -103,6 +103,15 @@
                 android:layout_marginTop="16dp" />
 
             <include
+                android:id="@+id/lytCalibrating"
+                layout="@layout/layout_calibrating"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <include
                 android:id="@+id/lytLegendRestorative"
                 layout="@layout/layout_restorative_legend"
                 android:layout_width="match_parent"

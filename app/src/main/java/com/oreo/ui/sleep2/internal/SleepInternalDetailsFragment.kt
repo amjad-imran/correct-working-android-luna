@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -37,6 +38,7 @@ class SleepInternalDetailsFragment :
 
     private val viewModel: SleepInternalDetailsViewModel by viewModels()
     private val sharedViewModel: OSPTrendsSharedViewModel by activityViewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
     private var pagerAdapter: InternalSleepVPAdapter? = null
 
@@ -66,6 +68,7 @@ class SleepInternalDetailsFragment :
         args.selectedDate?.let {
             viewModel.selectedDate = LocalDate.parse(it)
         }
+        viewModel.registerDate = mainViewModel.registerDate
 
         viewModel.startDate =
             sharedViewModel.calendarStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -207,9 +210,21 @@ class SleepInternalDetailsFragment :
 
 
         viewModel.currentFragment.observe(this) {
-            pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
-            binding.graphPager.adapter = pagerAdapter
-            pagerAdapter?.setDataSet(arrayListOf(it))
+            if(viewModel.showCalibrating()){
+                binding.lytCalibrating.root.visible()
+                binding.lytTopView.root.gone()
+                binding.graphPager.gone()
+            }else{
+                binding.lytCalibrating.root.gone()
+                binding.lytTopView.root.visible()
+                binding.graphPager.visible()
+                pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
+                binding.graphPager.adapter = pagerAdapter
+                pagerAdapter?.setDataSet(arrayListOf(it))
+            }
+
+
+
         }
 
         viewModel.reloadFragment.observe(this) {

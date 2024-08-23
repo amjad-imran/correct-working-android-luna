@@ -36,6 +36,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
+    var registerDate: Int = -1
+
     var isDeviationSelected = true
 
     lateinit var selectedLaunchMode: SleepInternalLaunchState
@@ -88,49 +90,49 @@ class SleepInternalDetailsViewModel @Inject constructor(
             userActivityRepository.getDailyTrendsData(
                 sDate.toString(), eDate.toString(), selectedLaunchMode.key.lowercase()
             ).collect { resource ->
-                    when (resource) {
-                        is Resource.GenericError -> {
-                            sendMessage(resource.message)
-                        }
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                        is Resource.Loading -> {
-                            setLoading(resource.loading)
-                        }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                        is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
-                                this.uiComponentType as UIComponentType.RetryApiDialog
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                    object : BinaryActionCallback {
-                                        override fun yes() {
-                                            getTrendsDailyData(sDate, eDate)
-                                        }
-
-                                        override fun no() {
-
-                                        }
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getTrendsDailyData(sDate, eDate)
                                     }
-                            })
-                        }
 
-                        is Resource.Success -> {
-                            resource.data?.data?.let {
+                                    override fun no() {
 
-                                hasData = true
-                                trendsData.clear()
-
-                                it.data?.forEach {
-                                    trendsData[LocalDate.parse(it.date)] = it
+                                    }
                                 }
-                                val firstDate = it.data?.firstOrNull()
-                                val avg = firstDate?.avg
-                                val nudge = firstDate?.nudge
+                        })
+                    }
 
-                                generateFragment(trendsData, TrendAverage(avg = avg, nudge = nudge))
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            hasData = true
+                            trendsData.clear()
+
+                            it.data?.forEach {
+                                trendsData[LocalDate.parse(it.date)] = it
                             }
+                            val firstDate = it.data?.firstOrNull()
+                            val avg = firstDate?.avg
+                            val nudge = firstDate?.nudge
+
+                            generateFragment(trendsData, TrendAverage(avg = avg, nudge = nudge))
                         }
                     }
                 }
+            }
         }
 
     }
@@ -801,6 +803,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
         } else {
             value
         }
+    }
+
+    fun showCalibrating(): Boolean {
+        return selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected && registerDate <= 7
     }
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@drawable/back_modal_new"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Processing data" />
+
+    <TextView
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="available after 7 days"
+        android:textColor="@color/white_40" />
+
+</LinearLayout>
