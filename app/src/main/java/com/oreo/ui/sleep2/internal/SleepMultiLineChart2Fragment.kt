@@ -47,7 +47,7 @@ class SleepMultiLineChart2Fragment :
         }
 
 
-        val dataList = convertData(pageData?.data)
+        val dataList = convertData(pageData?.data, pageData?.contributorType)
 
         val maxValue = sharedViewModel.getMaxValue(
             dataListType1 = dataList, contributorType = pageData?.contributorType
@@ -83,7 +83,10 @@ class SleepMultiLineChart2Fragment :
         })
     }
 
-    private fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+    private fun convertData(
+        data: List<TrendsValues>?,
+        contributorType: SleepInternalLaunchState?
+    ): List<GraphDataModel> {
         return data?.map {
             GraphDataModel(
                 date = LocalDate.parse(it.date),
@@ -95,7 +98,11 @@ class SleepMultiLineChart2Fragment :
                 value2 = if (it.value2 == null) {
                     null
                 } else {
-                    (it.value2 ?: 0.0f) / 60 + (it.value1 ?: 0.0f) / 60
+                    if (contributorType == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
+                        (it.value2 ?: 0.0f) / 60 + (it.value1 ?: 0.0f) / 60
+                    } else {
+                        (it.value2 ?: 0.0f) / 60
+                    }
                 }
             )
         } ?: ArrayList()

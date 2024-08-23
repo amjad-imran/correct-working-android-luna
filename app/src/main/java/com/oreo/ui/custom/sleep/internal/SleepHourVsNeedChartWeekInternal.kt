@@ -443,11 +443,15 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 }
 
 
-
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                canvas.drawRoundRect(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos - dip2px(2f),
+                    dip2px(2f).toFloat(),
+                    dip2px(2f).toFloat(),
+                    xOverlayLinePaint
                 )
-
                 previousValue = hour
             }
 
@@ -521,8 +525,14 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                     )
                 }
 
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                canvas.drawRoundRect(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos - dip2px(2f),
+                    dip2px(2f).toFloat(),
+                    dip2px(2f).toFloat(),
+                    xOverlayLinePaint
                 )
 
                 previousValue2 = need
