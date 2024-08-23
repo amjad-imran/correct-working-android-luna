@@ -322,7 +322,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
             SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
                 var mMax = 0.0f
                 dataListType1?.forEach {
-                    val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
+                    val sum = (it.value2 ?: 0.0f)
                     if (sum > mMax) {
                         mMax = sum
                     }

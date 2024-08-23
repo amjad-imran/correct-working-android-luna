@@ -1827,7 +1827,7 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun getUserNapData(napId: String): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/nap/$napId"
             remoteDataSource.getUserNapDetailsData(url)
         }
     }
