@@ -63,7 +63,7 @@ class OHMInternalViewModel @Inject constructor(
                 SleepContributor.RESPIRATORY_RATE,
                 value = resp,
                 valueTime = null,
-                unit = "/min",
+                unit = "rpm",
                 text = healthTrend?.resp?.text,
                 status = healthTrend?.resp?.status
             )

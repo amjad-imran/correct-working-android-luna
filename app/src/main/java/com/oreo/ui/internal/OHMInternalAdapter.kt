@@ -112,8 +112,13 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
                     Color.parseColor("#ffa800"),
                     com.noisefit_commans.R.drawable.back_modal_new
                 )
+                "calibrating" -> Triple(
+                    R.drawable.back_hm_fair,
+                    Color.parseColor("#8affffff"),
+                    com.noisefit_commans.R.drawable.back_modal_new
+                )
 
-                else -> Triple(0, R.color.white, com.noisefit_commans.R.drawable.back_modal_new)
+                else -> Triple(R.drawable.back_hm_fair, R.color.white, com.noisefit_commans.R.drawable.back_modal_new)
             }
         }
     }

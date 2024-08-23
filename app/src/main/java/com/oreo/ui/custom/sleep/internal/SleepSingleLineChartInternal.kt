@@ -246,20 +246,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             if (zeroCondition) {
 
-                val roundedAvg = if(launchState==SleepInternalLaunchState.SLEEP_DURATION||
+                val roundedAvg = if (launchState == SleepInternalLaunchState.SLEEP_DURATION ||
                     launchState == SleepInternalLaunchState.REM_SLEEP ||
                     launchState == SleepInternalLaunchState.DEEP_SLEEP ||
                     launchState == SleepInternalLaunchState.RESTFULNESS ||
                     launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
+                    launchState == SleepInternalLaunchState.EFFICIENCY ||
                     launchState == SleepInternalLaunchState.LATENCY
-                    ){
+                ) {
                     avgValue.roundToInt().toFloat()
-                }else{
+                } else {
                     avgValue
                 }
-
-
 
 
                 val pos = getYAxisValue(roundedAvg.toFloat())
@@ -275,6 +274,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     launchState == SleepInternalLaunchState.RESTFULNESS ||
                     launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
+                    launchState == SleepInternalLaunchState.EFFICIENCY ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
                     "${roundedAvg.roundToInt()}"

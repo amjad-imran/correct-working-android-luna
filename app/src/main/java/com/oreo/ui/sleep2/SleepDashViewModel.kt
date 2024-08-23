@@ -204,7 +204,9 @@ class SleepDashViewModel @Inject constructor(
             1
         } else if (status.equals("optimal", true)) {
             0
-        } else {
+        } else if (status.equals("calibrating", true)){
+            3
+        }else {
             1
         }
         return drawable

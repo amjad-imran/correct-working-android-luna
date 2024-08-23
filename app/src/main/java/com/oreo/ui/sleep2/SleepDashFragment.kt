@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
@@ -27,6 +28,7 @@ import com.noisefit.luna.databinding.FragmentSleepDashBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
@@ -46,6 +48,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.model.sleep.SleepSummary
 import com.oreo.ui.home.summary.DashNapAdapter
@@ -783,7 +786,11 @@ class SleepDashFragment :
                     "slightly"
                 }
                 binding.lytHealthMonitor.tvNudge.visible()
-                binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text elevated"
+                if (trendName.equals("Blood oxygen", true) || trendName.equals("HRV", true)) {
+                    binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text low"
+                }else{
+                    binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text elevated"
+                }
             } else {
                 binding.lytHealthMonitor.tvNudge.visible()
                 binding.lytHealthMonitor.tvNudge.text =

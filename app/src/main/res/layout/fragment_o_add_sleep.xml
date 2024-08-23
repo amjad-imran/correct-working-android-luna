@@ -38,7 +38,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytDuration"
-            android:text="Lorem ipsum dolor sit amet consectetur. Ornare nunc pellentesque nam interdum cras amet." />
+            android:text="@string/text_add_sleep_1" />
 
         <include
             android:id="@+id/lytAddTime"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytAddTime"
-            android:text="Lorem ipsum dolor sit amet consectetur. Ornare nunc pellentesque nam interdum cras amet." />
+            android:text="@string/text_add_sleep_2" />
 
         <TextView
             style="@style/H6"

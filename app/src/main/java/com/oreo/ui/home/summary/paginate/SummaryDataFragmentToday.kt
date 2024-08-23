@@ -52,6 +52,7 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
@@ -62,6 +63,8 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.ui.sleep2.help.LearnMoreFragment
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -395,10 +398,7 @@ class SummaryDataFragmentToday :
     override fun initListener() {
 
         binding.contentMain.lytHeartRate.root.setOnClickListener {
-            viewModel.sessionManager.postFirmwareDetailsOnDash = true
-            viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
-
-            //navigate(R.id.fragmentHeartRateDetails)
+            navigate(R.id.fragmentHeartRateDetails)
         }
 
         binding.contentMain.lytSplanner.ivMore.setOnClickListener {
