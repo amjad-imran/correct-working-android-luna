@@ -8,7 +8,7 @@
 
         <TextView
             android:id="@+id/tvHour"
-            style="@style/H3"
+            style="@style/S28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/lytTrendsHighlight"
@@ -18,17 +18,18 @@
 
         <TextView
             android:id="@+id/tvUnitHr"
-            style="@style/Small"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:text="@string/text_hr"
+            android:textColor="@color/white_48"
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintStart_toEndOf="@id/tvHour" />
 
         <TextView
             android:id="@+id/tvMin"
-            style="@style/H3"
+            style="@style/S28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -39,10 +40,11 @@
 
         <TextView
             android:id="@+id/tvUnitMin"
-            style="@style/Small"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
+            android:textColor="@color/white_48"
             android:text="@string/text_min"
             app:layout_constraintBaseline_toBaselineOf="@id/tvMin"
             app:layout_constraintStart_toEndOf="@id/tvMin" />

@@ -8,7 +8,7 @@
 
         <TextView
             android:id="@+id/tvDateTime"
-            style="@style/H6"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white_48"
@@ -29,7 +29,7 @@
             layout="@layout/layout_trends_top_snooze_sub_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDateTime" />

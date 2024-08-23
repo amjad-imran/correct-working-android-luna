@@ -95,7 +95,7 @@ class SleepMultiLineChart2Fragment :
                 value2 = if (it.value2 == null) {
                     null
                 } else {
-                    (it.value2 ?: 0.0f) / 60
+                    (it.value2 ?: 0.0f) / 60 + (it.value1 ?: 0.0f) / 60
                 }
             )
         } ?: ArrayList()

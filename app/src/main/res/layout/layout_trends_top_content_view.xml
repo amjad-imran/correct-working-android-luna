@@ -8,7 +8,7 @@
 
         <TextView
             android:id="@+id/tvDateTime"
-            style="@style/H6"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white_48"
@@ -29,13 +29,13 @@
             layout="@layout/layout_top_trends_percent_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="32dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDateTime"
             tools:visibility="visible" />
 
-        <include
+     <!--   <include
             android:id="@+id/lytTopHourView"
             layout="@layout/layout_top_trends_hour_min_view"
             android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytTopPercentView"
-            tools:visibility="visible" />
+            tools:visibility="visible" />-->
 
 
         <include
@@ -52,9 +52,8 @@
             layout="@layout/layout_trends_highlight_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytTopHourView" />
+            app:layout_constraintTop_toBottomOf="@id/lytTopPercentView" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivCircle"

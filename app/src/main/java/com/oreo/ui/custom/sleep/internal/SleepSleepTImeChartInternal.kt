@@ -157,7 +157,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         }
 
         linePaintHour = Paint().apply {
-            this.color = Color.parseColor("#465c8a")
+            this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintHourI = Paint().apply {
@@ -400,8 +400,18 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                     xOverlayLinePaint
                 )
 
-                canvas.drawLine(
+               /* canvas.drawLine(
                     start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )*/
+
+                canvas.drawRoundRect(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos - dip2px(2f),
+                    dip2px(2f).toFloat(),
+                    dip2px(2f).toFloat(),
+                    xOverlayLinePaint
                 )
 
             }
@@ -427,8 +437,18 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                     xOverlayLinePaint
                 )
 
-                canvas.drawLine(
+                /*canvas.drawLine(
                     start.toFloat(), pos, end, pos, xOverlayLinePaint
+                )*/
+
+                canvas.drawRoundRect(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos - dip2px(2f),
+                    dip2px(2f).toFloat(),
+                    dip2px(2f).toFloat(),
+                    xOverlayLinePaint
                 )
             }
 

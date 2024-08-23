@@ -154,7 +154,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         }
 
         linePaint = Paint().apply {
-            this.color = Color.parseColor("#465c8a")
+            this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintI = Paint().apply {
@@ -291,10 +291,15 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     xOverlayLinePaint
                 )
 
-                canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
+                canvas.drawRoundRect(
+                    start.toFloat(),
+                    pos,
+                    end,
+                    pos - dip2px(2f),
+                    dip2px(2f).toFloat(),
+                    dip2px(2f).toFloat(),
+                    xOverlayLinePaint
                 )
-
 
                 val path = Path()
                 path.reset()

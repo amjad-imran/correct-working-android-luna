@@ -22,9 +22,9 @@ class MultiSleepAdapter(val listener: MultiSleepAction) :
                 binding.tvScore.text = "Score ${data.score}"
 
                 binding.tvScore.setTextGradient(
-                    binding.tvScore.context.getColor(R.color.white),
-                    binding.tvScore.context.getColor(R.color.white),
-                    binding.tvScore.context.getColor(R.color.white),
+                    Color.parseColor("#c194ff"),
+                    Color.parseColor("#c194ff"),
+                    Color.parseColor("#c194ff")
                 )
 
             } else {
