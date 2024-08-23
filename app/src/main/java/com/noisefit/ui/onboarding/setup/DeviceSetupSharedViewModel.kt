@@ -50,6 +50,7 @@ class DeviceSetupSharedViewModel @Inject constructor(
     val firmwareDownloadProgress: LiveData<Event<Int>> = _firmwareDownloadProgress
 
     val navigateToDeviceUpToDate = MutableLiveData<Event<Boolean>>()
+    val unpairDevice = MutableLiveData<Event<Boolean>>()
     val navigateToUpdateAvailable = MutableLiveData<Event<Boolean>>()
 
     val navigateToDeviceSetupSuccess = MutableLiveData<Event<Boolean>>()
@@ -93,6 +94,12 @@ class DeviceSetupSharedViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             updateOtaData = it.firmwareVersion
+
+                            if (it.isBlacklistedRing == true) {
+                                unpairDevice.postValue(Event(true))
+                                return@collect
+                            }
+
                             if (it.firmwareVersion == null) {
                                 navigateToDeviceUpToDate.postValue(Event(true))
                             } else {

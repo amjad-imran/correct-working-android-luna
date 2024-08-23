@@ -29,6 +29,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -72,6 +73,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -1353,9 +1355,17 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
+                            if (it.isBlacklistedRing == true) {
+                                sendMessage("Content pending from product")
+                                withContext(Dispatchers.Main){
+                                    sessionManager.forceDisconnect.value = (Event(true))
+                                    sessionManager.setConnectStateRing(ConnectState.UnPaired())
+                                }
+                            } else {
+                                updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
 
-                            postUpdateOtaDataOffline()
+                                postUpdateOtaDataOffline()
+                            }
                         }
                     }
 

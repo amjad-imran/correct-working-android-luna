@@ -395,7 +395,10 @@ class SummaryDataFragmentToday :
     override fun initListener() {
 
         binding.contentMain.lytHeartRate.root.setOnClickListener {
-            navigate(R.id.fragmentHeartRateDetails)
+            viewModel.sessionManager.postFirmwareDetailsOnDash = true
+            viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+
+            //navigate(R.id.fragmentHeartRateDetails)
         }
 
         binding.contentMain.lytSplanner.ivMore.setOnClickListener {

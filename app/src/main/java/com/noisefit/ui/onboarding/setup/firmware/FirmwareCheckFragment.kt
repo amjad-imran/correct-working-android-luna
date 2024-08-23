@@ -9,8 +9,11 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFirmwareCheckBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.interfaces.QueryAction
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImageWithCache
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -87,6 +90,14 @@ class FirmwareCheckFragment :
         viewModel.navigateToDeviceUpToDate.observe(this) {
             it.getContent()?.let {
                 currentCheckState = 1
+            }
+        }
+        viewModel.unpairDevice.observe(this) {
+            it.getContent()?.let {
+                viewModel.sessionManager.forceDisconnect.value = (Event(true))
+                viewModel.sessionManager.setConnectStateRing(ConnectState.UnPaired())
+                context.showShortToast("Content pending from product")
+                activity?.finish()
             }
         }
         viewModel.navigateToUpdateAvailable.observe(this) {

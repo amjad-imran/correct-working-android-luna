@@ -9,4 +9,6 @@ data class UpdateResponseV2(
     val appVersion: AppUpdateModel?,
     @SerializedName("firmware_version")
     val firmwareVersion: OtaUpdateModel?,
+    @SerializedName("is_blacklisted_ring")
+    val isBlacklistedRing: Boolean?,
 )
