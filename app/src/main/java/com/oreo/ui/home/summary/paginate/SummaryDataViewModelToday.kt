@@ -115,6 +115,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val napsList = MutableLiveData<List<OreoNapData>>()
 
     val sleepAlert = MutableLiveData<SleepAlert?>()
+    val showBlackListDialog = MutableLiveData<Event<Boolean>>()
 
     var contributorInfo: OContributorResponseModal? = null
     val hrInfo = MutableLiveData<Event<String>>()
@@ -1356,11 +1357,13 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             if (it.isBlacklistedRing == true) {
-                                sendMessage("Content pending from product")
-                                withContext(Dispatchers.Main){
+                                withContext(Dispatchers.Main) {
                                     sessionManager.forceDisconnect.value = (Event(true))
                                     sessionManager.setConnectStateRing(ConnectState.UnPaired())
                                 }
+
+                                showBlackListDialog.postValue(Event(true))
+
                             } else {
                                 updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
 

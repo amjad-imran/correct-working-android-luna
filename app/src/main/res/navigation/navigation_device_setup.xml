@@ -108,7 +108,10 @@
             app:popUpTo="@id/firmwareUpdateSuccessFragment"
             app:popUpToInclusive="true" />
     </fragment>
-
+    <dialog
+        android:id="@+id/ringDisabledBottomSheet2"
+        android:name="com.noisefit.ui.common.bottomSheet.RingDisabledBottomSheet"
+        android:label="RingDisabledBottomSheet" />
 
 
 </navigation>

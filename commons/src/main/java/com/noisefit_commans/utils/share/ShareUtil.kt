@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.content.ContextCompat.startActivity
 
 
 object ShareUtil {
@@ -16,6 +17,7 @@ object ShareUtil {
     const val PACKAGE_PRIME = "com.noisefit.prime"
     const val PACKAGE_ACE = "com.noise.fit.ace"
     const val PACKAGE_APEX = "com.yc.noisefit"
+    const val SUPPORT_URL = "https://luna.freshdesk.com/support/home"
 
 
     fun composeEmail(context: Context, email: String, subject: String?) {
@@ -75,6 +77,15 @@ object ShareUtil {
         } catch (ex: ActivityNotFoundException) {
             //   context.showShortToast("Whatsapp Not installed")
             openPlayStore(context, "com.whatsapp")
+        }
+    }
+
+    fun openExternalUrl(context: Context, url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(url))
+            context.startActivity(intent)
+        } catch (exp: Exception) {
         }
     }
 

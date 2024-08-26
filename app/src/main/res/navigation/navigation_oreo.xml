@@ -1019,4 +1019,8 @@
             android:name="data"
             app:argType="com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel" />
     </fragment>
+    <dialog
+        android:id="@+id/ringDisabledBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.RingDisabledBottomSheet"
+        android:label="RingDisabledBottomSheet" />
 </navigation>
