@@ -23,6 +23,7 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
     private var rectF: RectF? = null
     lateinit var backgroundPaint: Paint
     lateinit var progressPaint: Paint
+    lateinit var strokePaint: Paint
 
 
     init {
@@ -52,12 +53,17 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
         //backgroundPaint.setColor(Color.parseColor("#4DC5A8ED"))
         backgroundPaint.style = Paint.Style.STROKE
         backgroundPaint.strokeWidth = strokeWidth
-        backgroundPaint.strokeCap = Paint.Cap.BUTT
+        backgroundPaint.strokeCap = Paint.Cap.ROUND
 
         progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         progressPaint.style = Paint.Style.STROKE
         progressPaint.strokeWidth = strokeWidth
-        progressPaint.strokeCap = Paint.Cap.BUTT
+        progressPaint.strokeCap = Paint.Cap.ROUND
+
+        strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        strokePaint.style = Paint.Style.STROKE
+        strokePaint.strokeWidth = 1f
+        strokePaint.strokeCap = Paint.Cap.BUTT
 
 
     }
@@ -97,6 +103,9 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
 
         val sweepAngle = ((240 * progress) / max).toFloat()
         canvas.drawArc(rectF!!, startAngle, sweepAngle, false, progressPaint)
+
+
+        //canvas.drawArc(rectF!!, startAngle, 240f, false, strokePaint)
 
     }
 
