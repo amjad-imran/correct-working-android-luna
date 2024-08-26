@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.OreoHrLearnMoreItemBinding
+import com.noisefit.luna.databinding.OreoSleepLearnMoreItemBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import kotlinx.parcelize.Parcelize
@@ -13,11 +14,10 @@ class SleepLearnMoreAdapter(val mListener: OnItemClickListener) :
     RecyclerView.Adapter<SleepLearnMoreAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<SleepLearnMoreDataModel>()
 
-    inner class ViewHolder(val binding: OreoHrLearnMoreItemBinding) :
+    inner class ViewHolder(val binding: OreoSleepLearnMoreItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: SleepLearnMoreDataModel) {
             binding.tvTitle.text = resultData.title
-            binding.textView2.gone()
 
             binding.imageView1.loadImage(binding.imageView1.context, resultData.img)
 
@@ -29,7 +29,7 @@ class SleepLearnMoreAdapter(val mListener: OnItemClickListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            OreoHrLearnMoreItemBinding.inflate(
+            OreoSleepLearnMoreItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

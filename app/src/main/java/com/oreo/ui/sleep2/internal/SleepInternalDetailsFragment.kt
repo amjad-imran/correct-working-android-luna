@@ -786,7 +786,14 @@ class SleepInternalDetailsFragment :
             isNestedScrollingEnabled = false
             adapter = learnMoreAdapter
         }
-        learnMoreAdapter.setData(viewModel.getLearnMoreData())
+        val data = viewModel.getLearnMoreData()
+        learnMoreAdapter.setData(data)
+
+        if (data.isEmpty()) {
+            binding.lytLearnMore.root.gone()
+        } else {
+            binding.lytLearnMore.root.visible()
+        }
     }
 
 
