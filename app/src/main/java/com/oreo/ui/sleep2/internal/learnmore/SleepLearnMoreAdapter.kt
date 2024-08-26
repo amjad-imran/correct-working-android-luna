@@ -57,7 +57,7 @@ interface OnItemClickListener {
 
 @Parcelize
 data class SleepLearnMoreDataModel(
-    val toolbarTitle:String,
+    val toolbarTitle: String,
     val title: String? = null,
     val content: String? = null,
     val img: Int? = null,
