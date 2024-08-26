@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -51,6 +52,8 @@ import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.model.sleep.SleepSummary
+import com.oreo.ui.calendar.BottomSheetCalendar
+import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
@@ -202,12 +205,22 @@ class SleepDashFragment :
         }
 
         binding.toolbar.viewBackCalendar.setOnClickListener {
-            resultLauncher.launch(
-                HistoryCalendarActivity.getStartIntent(
-                    requireContext(), viewModel.selectedDate.value.toString(),
-                    "ring"
+
+            setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+                val selectedDate =
+                    bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+                viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
+
+                binding.vCalendar.scrollToDate(
+                    viewModel.selectedDate.value ?: LocalDate.now()
                 )
-            )
+            }
+
+            navigate(R.id.bottomSheetCalendar, Bundle().apply {
+                this.putString("selectedDate", viewModel.selectedDate.value.toString())
+            })
+
         }
         binding.lytScore.ivInfo.setOnClickListener {
             navigate(R.id.sleepPlannerFragment)
@@ -788,7 +801,7 @@ class SleepDashFragment :
                 binding.lytHealthMonitor.tvNudge.visible()
                 if (trendName.equals("Blood oxygen", true) || trendName.equals("HRV", true)) {
                     binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text low"
-                }else{
+                } else {
                     binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text elevated"
                 }
             } else {

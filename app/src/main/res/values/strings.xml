@@ -1334,6 +1334,9 @@
     <string name="text_daily">Daily</string>
     <string name="text_add_sleep_1">We recommend wearing your Luna Ring regularly to automatically track your sleep. If any data is missed, you can manually add it here.</string>
     <string name="text_add_sleep_2">When you manually add sleep, your sleep score is calculated solely based on sleep duration.</string>
+    <string name="text_pay_attention">Pay attention</string>
+    <string name="text_good_fair">Good/Fair</string>
+    <string name="text_optimal">Optimal</string>
 
 
 </resources>

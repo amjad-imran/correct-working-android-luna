@@ -1019,4 +1019,12 @@
             android:name="launchState"
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetCalendar"
+        android:name="com.oreo.ui.calendar.BottomSheetCalendar"
+        android:label="BottomSheetCalendar" >
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
+    </dialog>
 </navigation>
