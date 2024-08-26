@@ -79,7 +79,7 @@
         layout="@layout/layout_hour_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="@+id/textView112"
         app:layout_constraintStart_toStartOf="@id/textView112"
         app:layout_constraintTop_toBottomOf="@id/textView112" />
@@ -114,7 +114,7 @@
         layout="@layout/layout_hour_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="@+id/textView111"
         app:layout_constraintStart_toStartOf="@id/textView111"
         app:layout_constraintTop_toBottomOf="@id/textView111" />

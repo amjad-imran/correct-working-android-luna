@@ -4,8 +4,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/ic_bg_hm_page"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_bg_hm_page">
 
         <include
             android:id="@+id/lytToolbar"
@@ -33,21 +33,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginEnd="26dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginEnd="26dp"
+                    android:text="@string/text_desc_msg"
                     android:textColor="@color/white_48"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/text_desc_msg" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHm"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/dimen_16dp"
-                    android:nestedScrollingEnabled="false"
                     android:layout_marginTop="30dp"
+                    android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -40,7 +40,7 @@ class OHMInternalViewModel @Inject constructor(
                     locale = Locale.US,
                     "%.1f",
                     AppConversionUtils.fahrenheitToCelsius(
-                        healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
+                        32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
                     ),
                 )
             } else {
@@ -73,7 +73,7 @@ class OHMInternalViewModel @Inject constructor(
                 SleepContributor.RESTING_HEART_RATE,
                 value = rhr,
                 valueTime = null,
-                unit = "bmp",
+                unit = "bpm",
                 text = healthTrend?.rhr?.text,
                 status = healthTrend?.rhr?.status
             )
