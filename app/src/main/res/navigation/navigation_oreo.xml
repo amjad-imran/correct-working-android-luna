@@ -1016,7 +1016,7 @@
         android:name="com.oreo.ui.sleep2.help.LearnMoreFragment"
         android:label="fragment_learn_more" >
         <argument
-            android:name="launchState"
-            app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
+            android:name="data"
+            app:argType="com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel" />
     </fragment>
 </navigation>

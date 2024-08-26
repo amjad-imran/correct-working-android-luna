@@ -2,25 +2,24 @@ package com.oreo.ui.sleep2.help
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLearnMoreBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import io.noties.markwon.Markwon
 
 
 class LearnMoreFragment :
     BaseFragment<FragmentLearnMoreBinding>(FragmentLearnMoreBinding::inflate) {
 
+    val args: LearnMoreFragmentArgs by navArgs()
+
     companion object {
 
-        /**
-         * /*val (frag, bundle) = LearnMoreFragment.getStartData(SleepInternalLaunchState.SLEEP_TIME)
-         *             navigate(frag,bundle)*/
-         */
-        fun getStartData(launchState: SleepInternalLaunchState): Pair<Int, Bundle?> {
+        fun getStartData(data: SleepLearnMoreDataModel): Pair<Int, Bundle?> {
             return Pair(R.id.learnMoreFragmentSleep, Bundle().apply {
-                putSerializable("launchState", launchState)
+                putParcelable("data", data)
             })
         }
     }
@@ -29,10 +28,16 @@ class LearnMoreFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-        setUi()
+        setUi(args.data)
     }
 
-    private fun setUi() {
+    private fun setUi(data: SleepLearnMoreDataModel) {
+
+        binding.toolbar.tvTitle.text = data.toolbarTitle
+
+        data.internalImg?.let {
+            binding.ivHeaderImage.setImageResource(it)
+        }
 
         val content = "**Introduction**  \n" +
                 "Sleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
@@ -53,8 +58,10 @@ class LearnMoreFragment :
                 "\n" +
                 "**Factors affecting sleep duration**  \n" +
                 "Several factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration."
+
+
         val markwon = Markwon.create(this.binding.tvContent.context)
-        markwon.setMarkdown(binding.tvContent, content)
+        markwon.setMarkdown(binding.tvContent, data.content ?: "")
     }
 
     override fun initListener() {

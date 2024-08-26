@@ -18,6 +18,7 @@ import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -497,40 +498,229 @@ class SleepInternalDetailsViewModel @Inject constructor(
         _titleUpdate.postValue(getTitle())
     }
 
-    fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
-        val dataList = ArrayList<LearnMoreDataModel>()
-        dataList.add(
-            LearnMoreDataModel(
-                title = "General heart rate terms",
-                msg = "2 min read",
-                img = R.drawable.img_hr_article_1,
-                type = 1
-            )
-        )
-        dataList.add(
-            LearnMoreDataModel(
-                title = "Normal heart rate for my age",
-                msg = "2 min read",
-                img = R.drawable.img_hr_article_2,
-                type = 2
-            )
-        )
-        dataList.add(
-            LearnMoreDataModel(
-                title = "What are heart rate zones ?",
-                msg = "2 min read",
-                img = R.drawable.img_hr_article_3,
-                type = 3
-            )
-        )
-        dataList.add(
-            LearnMoreDataModel(
-                title = "Heart rate during sleep",
-                msg = "2 min read",
-                img = R.drawable.img_hr_article_4,
-                type = 4
-            )
-        )
+    fun getLearnMoreData(): ArrayList<SleepLearnMoreDataModel> {
+        val dataList = ArrayList<SleepLearnMoreDataModel>()
+        when (selectedLaunchMode) {
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.HOUR_VS_NEED -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.SLEEP_TIME -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.TIMING -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.EFFICIENCY -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.REM_SLEEP -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.DEEP_SLEEP -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.SLEEP_DURATION -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "**Introduction**  \n" +
+                                "Sleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
+                                "\n" +
+                                "**The basics of sleep duration**  \n" +
+                                "Sleep duration is the amount of time spent asleep from the moment you fall asleep until you wake up. This period encompasses all stages of sleep, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each of which is vital for different aspects of physical and mental recovery.\n" +
+                                "\n" +
+                                "**Why sleep duration matters**  \n" +
+                                "Adequate sleep duration is necessary for the body to repair tissues, regulate hormones, and consolidate memories. Chronic sleep deprivation, where an individual consistently gets less sleep than needed, can lead to various health issues such as weakened immune function, increased risk of chronic diseases, impaired cognitive function, and mood disturbances.\n" +
+                                "\n" +
+                                "**Sleep duration across different age groups**  \n" +
+                                "Sleep needs are not static and change throughout the human lifespan.\n" +
+                                "\n" +
+                                "• **Infants and young children:** In the early stages of life, sleep is essential for growth and development. Infants typically require 14 to 17 hours of sleep, which gradually decreases as they grow older. By the time children reach school age, they generally need 9 to 11 hours of sleep.  \n" +
+                                "• **Teenagers:** Adolescents need about 8 to 10 hours of sleep to support their rapid physical and cognitive development. This stage often sees a shift in sleep patterns, with teenagers naturally inclined to stay up later, which can conflict with early school start times.  \n" +
+                                "• **Adults:** Most adults function best with 7 to 9 hours of sleep. This range helps maintain optimal cognitive performance, emotional stability, and physical health.  \n" +
+                                "• **Older adults:** Although the amount of sleep needed doesn’t drastically change in older age, sleep patterns can shift. Older adults may find it more challenging to achieve continuous, deep sleep, but it remains important to aim for 7 to 8 hours to support overall health.  \n" +
+                                "\n" +
+                                "**Factors affecting sleep duration**  \n" +
+                                "Several factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration.",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.LATENCY -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.RESTFULNESS -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.HRV -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+
+            SleepInternalLaunchState.BLOOD_OXYGEN -> {
+                dataList.add(
+                    SleepLearnMoreDataModel(
+                        toolbarTitle = "Sleep duration",
+                        title = "Understanding sleep duration",
+                        content = "2 min read",
+                        img = R.drawable.img_hr_article_1,
+                        internalImg = R.drawable.img_hr_article_1
+                    )
+                )
+            }
+        }
+
         return dataList
     }
 
