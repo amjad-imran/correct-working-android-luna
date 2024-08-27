@@ -544,9 +544,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepLearnMoreDataModel(
                         toolbarTitle = "Restorative sleep",
                         title = "The benefits of getting enough restorative sleep",
-                        content = "**Introduction** Restorative sleep, which includes deep sleep and REM sleep, is the most vital part of your sleep cycle. To feel truly rested, you should aim to spend 40-50% of your sleep in these stages. Getting enough restorative sleep offers numerous benefits for your body and mind, helping you maintain optimal health.\n" +
+                        content = "**Introduction**\n\n Restorative sleep, which includes deep sleep and REM sleep, is the most vital part of your sleep cycle. To feel truly rested, you should aim to spend 40-50% of your sleep in these stages. Getting enough restorative sleep offers numerous benefits for your body and mind, helping you maintain optimal health.\n" +
                                 "\n" +
-                                "**Why restorative sleep is key?**Restorative sleep is where the magic happens during your sleep cycle. It’s when your body heals and your mind recharges. Here’s why it’s important:\n" +
+                                "**Why restorative sleep is key?**\n\nRestorative sleep is where the magic happens during your sleep cycle. It’s when your body heals and your mind recharges. Here’s why it’s important:\n" +
                                 "\n" +
                                 "*   **Physical health:** During deep sleep, your body repairs tissues, builds muscle, and strengthens your immune system. This stage of sleep is critical for physical recovery, especially if you’re active or recovering from illness.\n" +
                                 "    \n" +
@@ -655,7 +655,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         title = "How to improve sleep performance?",
                         content = "Improving your sleep performance can lead to better health and well-being. Let's explore how you can enhance your sleep performance to feel your best every day.\n" +
                                 "\n" +
-                                "**Why improve sleep performance?**Increasing the percentage of sleep hours you get relative to your sleep need can enhance your physical health, mental well-being, and overall quality of life.\n" +
+                                "**Why improve sleep performance?**\n\nIncreasing the percentage of sleep hours you get relative to your sleep need can enhance your physical health, mental well-being, and overall quality of life.\n" +
                                 "\n" +
                                 "Tips for improving sleep performance\n" +
                                 "\n" +
@@ -702,7 +702,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "    *   **Benefit**: Personalized insights can help you make informed decisions to improve your sleep.\n" +
                                 "        \n" +
                                 "\n" +
-                                "**Conclusion**Improving sleep performance is about making small, consistent changes to your routine and environment. By optimizing your sleep habits and focusing on getting the right amount of sleep relative to your need, you can enjoy better health, improved mood, and higher productivity.\n",
+                                "**Conclusion**\n\nImproving sleep performance is about making small, consistent changes to your routine and environment. By optimizing your sleep habits and focusing on getting the right amount of sleep relative to your need, you can enjoy better health, improved mood, and higher productivity.\n",
                         img = R.drawable.image_learn_performance,
                         internalImg = R.drawable.image_learn_performance_int
                     )
@@ -875,7 +875,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepLearnMoreDataModel(
                         toolbarTitle = "Sleep consistency",
                         title = "The benefits of maintaining sleep consistency",
-                        content = "**Introduction** Sleep consistency is essential for achieving high-quality sleep and maintaining overall health. It refers to how regularly you go to bed and wake up at the same times each day. Ideally, your sleep and wake times should not vary by more than 60 minutes over a two-week period. Maintaining sleep consistency offers numerous benefits that can enhance your physical, mental, and emotional well-being.\n" +
+                        content = "**Introduction**\n\nSleep consistency is essential for achieving high-quality sleep and maintaining overall health. It refers to how regularly you go to bed and wake up at the same times each day. Ideally, your sleep and wake times should not vary by more than 60 minutes over a two-week period. Maintaining sleep consistency offers numerous benefits that can enhance your physical, mental, and emotional well-being.\n" +
                                 "\n" +
                                 "**Why sleep consistency is important** ?\n" +
                                 "\n" +
@@ -1075,7 +1075,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.REM_SLEEP -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "REM sleep",
                         title = "Understanding REM sleep",
                         content = "**What is REM sleep?**\n" +
                                 "\n" +
@@ -1112,7 +1112,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "REM sleep",
                         title = "The benefits of REM sleep",
                         content = "Although it occupies a smaller portion of the sleep cycle compared to other stages, REM sleep plays a vital role in cognitive function, emotional regulation, and overall health. Understanding the benefits of REM sleep can help individuals appreciate its importance and take steps to ensure they achieve sufficient REM sleep each night.\n" +
                                 "\n" +
@@ -1148,7 +1148,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.DEEP_SLEEP -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "Deep sleep",
                         title = "Understanding deep sleep",
                         content = "**What is deep sleep?**\n" +
                                 "\n" +
@@ -1187,7 +1187,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 )
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "Deep sleep",
                         title = "The benefits of Deep sleep",
                         content = "**Introduction**\n" +
                                 "\n" +
@@ -1229,11 +1229,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         title = "Understanding sleep duration",
                         content = "**Understanding sleep duration**\n" +
                                 "\n" +
-                                " **Introduction**Sleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
+                                " **Introduction**\n\nSleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
                                 "\n" +
-                                " **The basics of sleep duration** Sleep duration is the amount of time spent asleep from the moment you fall asleep until you wake up. This period encompasses all stages of sleep, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each of which is vital for different aspects of physical and mental recovery.\n" +
+                                " **The basics of sleep duration**\n\nSleep duration is the amount of time spent asleep from the moment you fall asleep until you wake up. This period encompasses all stages of sleep, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each of which is vital for different aspects of physical and mental recovery.\n" +
                                 "\n" +
-                                " **Why sleep duration matters** Adequate sleep duration is necessary for the body to repair tissues, regulate hormones, and consolidate memories. Chronic sleep deprivation, where an individual consistently gets less sleep than needed, can lead to various health issues such as weakened immune function, increased risk of chronic diseases, impaired cognitive function, and mood disturbances.\n" +
+                                " **Why sleep duration matters**\n\nAdequate sleep duration is necessary for the body to repair tissues, regulate hormones, and consolidate memories. Chronic sleep deprivation, where an individual consistently gets less sleep than needed, can lead to various health issues such as weakened immune function, increased risk of chronic diseases, impaired cognitive function, and mood disturbances.\n" +
                                 "\n" +
                                 " **Sleep duration across different age groups** Sleep needs are not static and change throughout the human lifespan.\n" +
                                 "\n" +

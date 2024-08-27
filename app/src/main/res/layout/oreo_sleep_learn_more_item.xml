@@ -36,8 +36,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
-            android:ellipsize="end"
-            android:maxLines="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/view1"
             app:layout_constraintStart_toStartOf="@id/view1"

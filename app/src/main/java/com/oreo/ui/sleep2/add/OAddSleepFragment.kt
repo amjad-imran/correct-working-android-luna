@@ -59,7 +59,14 @@ class OAddSleepFragment :
 
 
                 addSleep?.let {
+
                     viewModel.startTimeSleep = addSleep
+
+                    if (addSleep.hour.toInt() == 0) {
+                        viewModel.startTimeSleep = addSleep.apply {
+                            this.day = "Today"
+                        }
+                    }
 
                     if (viewModel.endTimeSleep.day.isEmpty()) {
                         setStartTimeBetween()
