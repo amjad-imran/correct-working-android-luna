@@ -64,6 +64,7 @@ import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
@@ -196,7 +197,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    private fun showSleepAlerts() {
+    private fun showSleepAlerts(healthData: OreoSleepModel?) {
         viewModelScope.launch(Dispatchers.IO) {
 
             //time check if after 6 am
@@ -211,8 +212,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
             var sleepAlertToShow: SleepAlert? = null
 
+            val sleepExists = checkIfSleepExists(healthData)
 
-            if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not()) {
+            if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not() && sleepExists.not()) {
 
                 val hrData = userRepository.getHrDataForToday()
 
@@ -273,6 +275,19 @@ class SummaryDataViewModelToday @Inject constructor(
             )
 
         }
+    }
+
+    private fun checkIfSleepExists(healthData: OreoSleepModel?): Boolean {
+        if (healthData == null) return false
+
+        val hasNaps = healthData.naps.isNullOrEmpty().not()
+        val hasSleep = healthData.sleeps.isNullOrEmpty().not()
+
+        if (hasSleep || hasNaps) {
+            return true
+        }
+
+        return false
     }
 
     private fun handleGoogleFitCard() {
@@ -779,7 +794,7 @@ class SummaryDataViewModelToday @Inject constructor(
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
-            showSleepAlerts()
+            showSleepAlerts(healthData.sleep)
 
         }
     }

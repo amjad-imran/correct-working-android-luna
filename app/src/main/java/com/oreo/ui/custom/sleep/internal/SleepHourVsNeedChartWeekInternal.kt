@@ -164,7 +164,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         }
 
         linePaintHour = Paint().apply {
-            this.color = Color.parseColor("#465c8a")
+            this.color = Color.parseColor("#66465c8a")
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintHourI = Paint().apply {
@@ -172,7 +172,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeed = Paint().apply {
-            this.color = Color.parseColor("#7858cc")
+            this.color = Color.parseColor("#667858cc")
             strokeWidth = dip2px(1f).toFloat()
         }
         linePaintNeedI = Paint().apply {
@@ -721,6 +721,19 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
         mSelectedPosition = selectedPosition
         mMax = maxValue
+
+
+        if(launchState==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+            linePaintHour = Paint().apply {
+                this.color = Color.parseColor("#66c3a3e3")
+                strokeWidth = dip2px(1f).toFloat()
+            }
+            linePaintHourI = Paint().apply {
+                this.color = Color.parseColor("#66c3a3e3")
+                strokeWidth = dip2px(1f).toFloat()
+            }
+        }
+
         invalidate()
     }
 

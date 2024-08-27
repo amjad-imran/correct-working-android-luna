@@ -278,7 +278,7 @@ class SleepDashViewModel @Inject constructor(
                 if (dayData.sleepPerformance == null) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_default)
                     hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
-                } else if (dayData.sleepPerformance!! > 70) {
+                } else if (dayData.sleepPerformance!! > 85) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_green)
                     hourVsNeedIcon.add(R.drawable.ic_trend_state_green)
                 } else {

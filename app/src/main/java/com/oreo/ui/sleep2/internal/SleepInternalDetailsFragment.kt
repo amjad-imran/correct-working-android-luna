@@ -532,6 +532,11 @@ class SleepInternalDetailsFragment :
             }
 
             TrendsTopState.SINGLE_DATE -> {
+
+                binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                    lytHours.textLegend.gone()
+                    lytHours.ivLegend.gone()
+                }
                 binding.lytTopView.lytTopSingleView.root.gone()
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopMultipleView.apply {
@@ -569,6 +574,8 @@ class SleepInternalDetailsFragment :
                         lytContentView.lytHours.lytTrendsHighlight.root.visible()
                         lytPaginate.root.visible()
                         lytPaginate.tvInterval.text = viewModel.getDisplayDate()
+                        lytContentView.lytHours.lytTrendsHighlight.root.alpha = 1f
+
                     }
                     showSingleDateData(
                         topContentData.trendsData?.avg, topContentData.trendsData?.percent
@@ -577,6 +584,30 @@ class SleepInternalDetailsFragment :
             }
 
             TrendsTopState.DOUBLE_DATE -> {
+
+                if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                    binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                        lytHours.textLegend.visible()
+                        lytHours.ivLegend.visible()
+                        lytHours.textLegend.text = "rem"
+                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
+
+                        lytNeed.textLegend.visible()
+                        lytNeed.ivLegend.visible()
+
+                        lytNeed.textLegend.text = "deep"
+                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
+                    }
+                }else{
+                    binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                        lytHours.textLegend.gone()
+                        lytHours.ivLegend.gone()
+
+                        lytNeed.textLegend.gone()
+                        lytNeed.ivLegend.gone()
+                    }
+                }
+
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopSingleView.root.gone()
                 binding.lytTopView.lytTopMultipleView.apply {

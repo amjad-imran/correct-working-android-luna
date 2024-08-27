@@ -114,10 +114,10 @@
             style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginBottom="2dp"
             android:text="@string/text_vs_previous_30_days"
             android:textColor="@color/white_60"
-            android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintBottom_toBottomOf="@+id/tvSummaryTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvSummaryTitle" />
