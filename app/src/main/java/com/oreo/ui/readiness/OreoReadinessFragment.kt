@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -35,6 +36,7 @@ import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.UnitDataModelArrayFloat
+import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
 import com.oreo.ui.custom.ScrollListener
@@ -584,14 +586,18 @@ class OreoReadinessFragment :
 
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_date_range_click)
 
-            resultLauncher.launch(
-                HistoryCalendarActivity.getStartIntent(
-                    requireContext(),
-                    /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
-                        ?:*/mainViewModel.selectedDate,
-                    "ring"
-                )
-            )
+            setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+                val selectedDate =
+                    bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+                mainViewModel.onCalendarDateSelected(selectedDate)
+                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+            }
+
+            navigate(R.id.bottomSheetCalendar, Bundle().apply {
+                this.putString("selectedDate", mainViewModel.selectedDate)
+                this.putString("launchedFrom", "readiness")
+            })
         }
 
         binding.lytRScoreData.root.setOnClickListener {

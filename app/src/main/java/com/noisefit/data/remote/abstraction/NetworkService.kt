@@ -27,6 +27,7 @@ import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.FemaleHealthIconsModel
+import com.oreo.data.model.HealthCalendar
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -444,6 +445,13 @@ interface NetworkService {
     suspend fun addSleep(
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>
+
+    @GET
+    suspend fun getCalendarData(
+        @Url url: String,
+        @Query("start_date") startDate: String?,
+        @Query("end_date") endDate: String?,
+    ): BaseApiResponse<List<HealthCalendar>>
 
     /**
      * ===================================

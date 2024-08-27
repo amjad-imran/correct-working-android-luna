@@ -219,6 +219,7 @@ class SleepDashFragment :
 
             navigate(R.id.bottomSheetCalendar, Bundle().apply {
                 this.putString("selectedDate", viewModel.selectedDate.value.toString())
+                this.putString("launchedFrom", "sleep")
             })
 
         }

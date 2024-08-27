@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -42,6 +43,7 @@ import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.health.ActivityScore
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
+import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.OnDayTimeClickAction
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
@@ -49,6 +51,7 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -780,14 +783,18 @@ class OreoActivityFragment :
         binding.lytToolbar.backBtn.invisible()
 
         binding.lytToolbar.view1.setOnClickListener {
-            resultLauncher.launch(
-                HistoryCalendarActivity.getStartIntent(
-                    requireContext(),
-                    /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
-                        ?:*/ mainViewModel.selectedDate,
-                    "ring"
-                )
-            )
+            setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+                val selectedDate =
+                    bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+                mainViewModel.onCalendarDateSelected(selectedDate)
+                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+            }
+
+            navigate(R.id.bottomSheetCalendar, Bundle().apply {
+                this.putString("selectedDate", mainViewModel.selectedDate)
+                this.putString("launchedFrom", "activity")
+            })
         }
 
         binding.lytWorkouts.viewAddWorkout.setOnClickListener {

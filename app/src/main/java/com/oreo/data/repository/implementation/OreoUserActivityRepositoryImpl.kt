@@ -44,6 +44,7 @@ import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.HealthCalendar
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -1923,6 +1924,16 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/addsleep"
             remoteDataSource.addSleep(url, request)
+        }
+    }
+
+    override suspend fun getCalendarData(
+        startDate: String,
+        endDate: String
+    ): Flow<Resource<BaseApiResponse<List<HealthCalendar>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/status"
+            remoteDataSource.getCalendarData(url, startDate, endDate)
         }
     }
 }

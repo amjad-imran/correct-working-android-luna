@@ -9,6 +9,7 @@ import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.HealthCalendar
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -147,6 +148,10 @@ interface OreoUserActivityRepository {
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>>
 
     suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
+
+
+    suspend fun getCalendarData(startDate:String,endDate: String): Flow<Resource<BaseApiResponse<List<HealthCalendar>>>>
+
 
 
 }

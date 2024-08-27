@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kizitonwose.calendar.core.CalendarDay
@@ -22,6 +23,7 @@ import com.noisefit.luna.databinding.BottomSheetCalendarBinding
 import com.noisefit.luna.databinding.CalendarDayBinding
 import com.noisefit.luna.databinding.CalendarHeaderNewBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -46,12 +48,15 @@ class BottomSheetCalendar :
     ) {
 
     private var selectedDate: String? = null
+    private val viewModel: HealthCalendarViewModel by viewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         selectedDate = arguments?.getString("selectedDate")
+
+        viewModel.launchedFrom = arguments?.getString("launchedFrom")
 
         initCalendar()
 
@@ -64,26 +69,41 @@ class BottomSheetCalendar :
     }
 
     override fun subscribeObservers() {
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
 
+        viewModel.datesToUpdate.observe(this) {
+            it.getContent()?.let {
+                it.forEach { date ->
+                    binding.calendar.notifyDateChanged(date)
+                }
+            }
+        }
     }
 
     private fun initCalendar() {
 
         val currentMonth = YearMonth.now()
+        val todayDate = LocalDate.now()
 
-        val selectedLocalDate = if (selectedDate.isNullOrEmpty()) {
+        val selectedLocalDate = /*if (selectedDate.isNullOrEmpty()) {*/
             LocalDate.now()
-        } else {
+        /*} else {
             val parsedDate = LocalDate.parse(
                 selectedDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
             )
             parsedDate
-        }
+        }*/
 
         val daysOfWeek = daysOfWeekFromLocale()
 
-        val startMonth = currentMonth.minusMonths(11)
+        val startMonth = viewModel.getCalendarStartDate()
 
         binding.calendar.setup(
             startMonth,
@@ -122,26 +142,32 @@ class BottomSheetCalendar :
                     dayLayoutMain.visible()
 
                     when (day.date) {
-                        selectedLocalDate -> {
-                            container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
+                        todayDate -> {
                             container.binding.dayBack.visible()
                         }
 
                         else -> {
-                            container.binding.tvDay.setTextColor(Color.parseColor("#66ffffff"))
                             container.binding.dayBack.invisible()
-
-                            /* if (selectedPreviousDates.contains(day.date)) {
-                                 container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
-                                 container.binding.dayBack.visible()
-                             }*/
                         }
                     }
+
                     if (isSunday(day.date)) {
                         container.binding.tvDay.setTextColor(Color.parseColor("#CCff2c52"))
                     }
+
+                    val status = viewModel.getStatusByDate(day.date)
+                    if (status.equals("optimal", true)) {
+                        container.binding.tvDay.setTextColor(Color.parseColor("#00ff66"))
+                    } else if (status.equals("warning", true)) {
+                        container.binding.tvDay.setTextColor(Color.parseColor("#ff557e"))
+                    } else if (status.equals("good", true) || status.equals("fair", true)) {
+                        container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
+                    } else {
+                        container.binding.tvDay.setTextColor(Color.parseColor("#66ffffff"))
+                    }
+
                     if (isAfterToday(day.date)) {
-                        container.binding.tvDay.setTextColor(Color.parseColor("#33ffffff"))
+                        container.binding.tvDay.setTextColor(Color.parseColor("#66ffffff"))
                     }
                 } else {
                     dayLayoutMain.invisible()
@@ -168,6 +194,9 @@ class BottomSheetCalendar :
 
         binding.calendar.monthScrollListener = object : MonthScrollListener {
             override fun invoke(p1: CalendarMonth) {
+
+                viewModel.checkAndLoadMoreData(p1)
+
                 LOGS.d(
                     "monthScrollListener ${
                         p1.yearMonth.month.value

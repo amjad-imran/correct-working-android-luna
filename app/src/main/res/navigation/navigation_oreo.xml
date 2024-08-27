@@ -1030,5 +1030,8 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
+        <argument
+            android:name="launchedFrom"
+            app:argType="string" />
     </dialog>
 </navigation>
