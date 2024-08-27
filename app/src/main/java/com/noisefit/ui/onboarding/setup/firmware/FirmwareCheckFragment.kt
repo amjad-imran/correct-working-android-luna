@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFirmwareCheckBinding
+import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -96,8 +97,8 @@ class FirmwareCheckFragment :
             it.getContent()?.let {
                 viewModel.sessionManager.forceDisconnect.value = (Event(true))
                 viewModel.sessionManager.setConnectStateRing(ConnectState.UnPaired())
-                context.showShortToast("Content pending from product")
-                activity?.finish()
+
+                showBlackListDialog()
             }
         }
         viewModel.navigateToUpdateAvailable.observe(this) {
@@ -106,6 +107,20 @@ class FirmwareCheckFragment :
             }
         }
 
+    }
+
+    private fun showBlackListDialog() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            RING_DISABLED_KEY,
+            viewLifecycleOwner
+        ) { key, bundle ->
+            val cancel = bundle.getBoolean("cancel")
+            if (cancel) {
+                activity?.finish()
+            }
+        }
+
+        navigate(R.id.ringDisabledBottomSheet2)
     }
 
 }

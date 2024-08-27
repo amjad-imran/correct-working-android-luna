@@ -47,7 +47,6 @@
         android:layout_height="36dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
-        android:rotation="180"
         android:src="@drawable/ic_o_dropdown_close"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/ivArrowOpen"

@@ -19,11 +19,12 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
-import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.ui.heartrate.OHRLearnMoreAdapter
-import com.oreo.ui.heartrate.OnItemClickListener
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
+import com.oreo.ui.sleep2.help.LearnMoreFragment
+import com.oreo.ui.sleep2.internal.learnmore.OnItemClickListener
+import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreAdapter
+import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
@@ -42,12 +43,13 @@ class SleepInternalDetailsFragment :
     private val args: SleepInternalDetailsFragmentArgs by navArgs()
     private var pagerAdapter: InternalSleepVPAdapter? = null
 
-    private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
-        OHRLearnMoreAdapter(object : OnItemClickListener {
-            override fun onItemClick(item: LearnMoreDataModel) {
+    private val learnMoreAdapter: SleepLearnMoreAdapter by lazy {
+        SleepLearnMoreAdapter(object : OnItemClickListener {
+            override fun onItemClick(data: SleepLearnMoreDataModel) {
+                val (frag, bundle) = LearnMoreFragment.getStartData(data)
+                navigate(frag, bundle)
 
             }
-
         })
     }
 
@@ -210,11 +212,11 @@ class SleepInternalDetailsFragment :
 
 
         viewModel.currentFragment.observe(this) {
-            if(viewModel.showCalibrating()){
+            if (viewModel.showCalibrating()) {
                 binding.lytCalibrating.root.visible()
                 binding.lytTopView.root.gone()
                 binding.graphPager.gone()
-            }else{
+            } else {
                 binding.lytCalibrating.root.gone()
                 binding.lytTopView.root.visible()
                 binding.graphPager.visible()
@@ -222,7 +224,6 @@ class SleepInternalDetailsFragment :
                 binding.graphPager.adapter = pagerAdapter
                 pagerAdapter?.setDataSet(arrayListOf(it))
             }
-
 
 
         }
@@ -531,6 +532,11 @@ class SleepInternalDetailsFragment :
             }
 
             TrendsTopState.SINGLE_DATE -> {
+
+                binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                    lytHours.textLegend.gone()
+                    lytHours.ivLegend.gone()
+                }
                 binding.lytTopView.lytTopSingleView.root.gone()
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopMultipleView.apply {
@@ -568,6 +574,8 @@ class SleepInternalDetailsFragment :
                         lytContentView.lytHours.lytTrendsHighlight.root.visible()
                         lytPaginate.root.visible()
                         lytPaginate.tvInterval.text = viewModel.getDisplayDate()
+                        lytContentView.lytHours.lytTrendsHighlight.root.alpha = 1f
+
                     }
                     showSingleDateData(
                         topContentData.trendsData?.avg, topContentData.trendsData?.percent
@@ -576,6 +584,30 @@ class SleepInternalDetailsFragment :
             }
 
             TrendsTopState.DOUBLE_DATE -> {
+
+                if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                    binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                        lytHours.textLegend.visible()
+                        lytHours.ivLegend.visible()
+                        lytHours.textLegend.text = "rem"
+                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
+
+                        lytNeed.textLegend.visible()
+                        lytNeed.ivLegend.visible()
+
+                        lytNeed.textLegend.text = "deep"
+                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
+                    }
+                }else{
+                    binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                        lytHours.textLegend.gone()
+                        lytHours.ivLegend.gone()
+
+                        lytNeed.textLegend.gone()
+                        lytNeed.ivLegend.gone()
+                    }
+                }
+
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopSingleView.root.gone()
                 binding.lytTopView.lytTopMultipleView.apply {
@@ -785,7 +817,14 @@ class SleepInternalDetailsFragment :
             isNestedScrollingEnabled = false
             adapter = learnMoreAdapter
         }
-        learnMoreAdapter.setData(viewModel.getLearnMoreData())
+        val data = viewModel.getLearnMoreData()
+        learnMoreAdapter.setData(data)
+
+        if (data.isEmpty()) {
+            binding.lytLearnMore.root.gone()
+        } else {
+            binding.lytLearnMore.root.visible()
+        }
     }
 
 

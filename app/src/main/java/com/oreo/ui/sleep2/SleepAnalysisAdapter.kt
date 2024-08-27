@@ -30,11 +30,20 @@ class SleepAnalysisAdapter :
                 binding.tvPercent.text = "${sleepAnalysis.currentValue}"
                 binding.tvPercentChange.text = "${sleepAnalysis.avgValue}%"
 
-                if (sleepAnalysis.currentValue >= sleepAnalysis.avgValue) {
-                    binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
+                if (sleepAnalysis.name.contains("awake", true)) {
+                    if (sleepAnalysis.currentValue <= sleepAnalysis.avgValue) {
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
+                    } else {
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_decrease)
+                    }
                 } else {
-                    binding.ivState.setImageResource(R.drawable.ic_arrow_decrease)
+                    if (sleepAnalysis.currentValue >= sleepAnalysis.avgValue) {
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
+                    } else {
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_decrease)
+                    }
                 }
+
             }
         }
     }

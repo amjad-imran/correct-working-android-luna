@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -38,6 +40,8 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.share.ShareUtil
+import com.noisefit_commans.utils.share.ShareUtil.SUPPORT_URL
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
@@ -519,6 +523,12 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.showBlackListDialog.observe(this) {
+            it.getContent()?.let {
+                showBlackListDialog()
+            }
+        }
+
         viewModel.sleepAlert.observe(this) {
             if (it == null) {
                 binding.contentMain.lytSleepAlert.root.gone()
@@ -958,6 +968,20 @@ class SummaryDataFragmentToday :
 
         }
 
+    }
+
+    private fun showBlackListDialog() {
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            RING_DISABLED_KEY,
+            viewLifecycleOwner
+        ) { key, bundle ->
+            val cancel = bundle.getBoolean("cancel")
+            if (cancel) {
+
+            }
+        }
+        navigate(R.id.ringDisabledBottomSheet)
     }
 
     private fun setSleepAlertUi(data: SleepAlert) {

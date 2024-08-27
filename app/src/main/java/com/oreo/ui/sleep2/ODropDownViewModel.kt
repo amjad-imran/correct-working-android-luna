@@ -24,10 +24,10 @@ class ODropDownViewModel @Inject constructor(
            sleepData.add(SleepInternalLaunchState.SKIN_TEMPERATURE)
            sleepData.add(SleepInternalLaunchState.BLOOD_OXYGEN)
        }else{
-           sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
            sleepData.add(SleepInternalLaunchState.REM_SLEEP)
            sleepData.add(SleepInternalLaunchState.DEEP_SLEEP)
            sleepData.add(SleepInternalLaunchState.EFFICIENCY)
+           sleepData.add(SleepInternalLaunchState.SLEEP_DURATION)
            sleepData.add(SleepInternalLaunchState.LATENCY)
            sleepData.add(SleepInternalLaunchState.RESTFULNESS)
            sleepData.add(SleepInternalLaunchState.TIMING)

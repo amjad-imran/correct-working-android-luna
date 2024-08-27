@@ -204,9 +204,9 @@ class SleepDashViewModel @Inject constructor(
             1
         } else if (status.equals("optimal", true)) {
             0
-        } else if (status.equals("calibrating", true)){
+        } else if (status.equals("calibrating", true)) {
             3
-        }else {
+        } else {
             1
         }
         return drawable
@@ -278,7 +278,7 @@ class SleepDashViewModel @Inject constructor(
                 if (dayData.sleepPerformance == null) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_default)
                     hourVsNeedIcon.add(R.drawable.ic_trend_state_default)
-                } else if (dayData.sleepPerformance!! > 70) {
+                } else if (dayData.sleepPerformance!! > 85) {
                     sleepPerformanceIcon.add(R.drawable.ic_trend_state_green)
                     hourVsNeedIcon.add(R.drawable.ic_trend_state_green)
                 } else {
@@ -576,11 +576,11 @@ class SleepDashViewModel @Inject constructor(
         val listData = ArrayList<OHMDataModel>()
 
         if (data?.sleepScore?.value == null) {
-            listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
             listData.add(OHMDataModel(SleepContributor.REM_SLEEP))
             listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP))
+            listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
             if (showAll) {
-                listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
+                listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
                 listData.add(OHMDataModel(SleepContributor.LATENCY))
                 listData.add(OHMDataModel(SleepContributor.RESTFULNESS))
                 listData.add(OHMDataModel(SleepContributor.TIMING))
@@ -589,14 +589,6 @@ class SleepDashViewModel @Inject constructor(
             return listData
         }
 
-
-
-        listData.add(
-            OHMDataModel(
-                SleepContributor.SLEEP_DURATION, valueTime = data.sleepDuration?.value,
-                status = data.sleepDuration?.status, text = data.sleepDuration?.text
-            )
-        )
 
         listData.add(
             OHMDataModel(
@@ -611,17 +603,24 @@ class SleepDashViewModel @Inject constructor(
                 status = data.deepSleep?.status, text = data.deepSleep?.text
             )
         )
+        listData.add(
+            OHMDataModel(
+                SleepContributor.EFFICIENCY,
+                value = if (data.efficiency?.value == null) null else "${data.efficiency?.value}",
+                unit = "%",
+                status = data.efficiency?.status,
+                text = data.efficiency?.text
+            )
+        )
 
         if (showAll) {
             listData.add(
                 OHMDataModel(
-                    SleepContributor.EFFICIENCY,
-                    value = if (data.efficiency?.value == null) null else "${data.efficiency?.value}",
-                    unit = "%",
-                    status = data.efficiency?.status,
-                    text = data.efficiency?.text
+                    SleepContributor.SLEEP_DURATION, valueTime = data.sleepDuration?.value,
+                    status = data.sleepDuration?.status, text = data.sleepDuration?.text
                 )
             )
+
             listData.add(
                 OHMDataModel(
                     SleepContributor.LATENCY, valueTime = data.latency?.value,
