@@ -49,13 +49,14 @@ class ChatGptViewModel
 
     var assistantId: String? = null
     var threadId: String? = null
+    var defaultMessage: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
 
 
     var lastApi: Pair<Int, String>? = null
-    private lateinit var initMessage: String
+    private var initMessage: String
 
     init {
         val user = localDataStore.getUser()
@@ -266,7 +267,12 @@ class ChatGptViewModel
 
     fun sendInitMessage() {
         viewModelScope.launch(Dispatchers.IO) {
-            addReceivedMessage(initMessage, false)
+            val message = if (defaultMessage.isNullOrEmpty().not()) {
+                defaultMessage
+            } else {
+                initMessage
+            }
+            addReceivedMessage(message ?: "", false)
         }
         return
     }

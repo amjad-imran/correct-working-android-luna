@@ -624,7 +624,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.showChatUi.observe(this) {
             it.getContent()?.let { threadId ->
-                val (frag, bundle) = ChatGptFragment.getStartData(threadId)
+                val (frag, bundle) = ChatGptFragment.getStartData(threadId,null)
                 navController?.navigate(frag, bundle)
             }
         }

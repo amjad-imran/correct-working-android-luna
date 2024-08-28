@@ -1334,5 +1334,6 @@
     <string name="text_daily">Daily</string>
     <string name="text_add_sleep_1">We recommend wearing your Luna Ring regularly to automatically track your sleep. If any data is missed, you can manually add it here.</string>
     <string name="text_add_sleep_2">When you manually add sleep, your sleep score is calculated solely based on sleep duration.</string>
+    <string name="sleep_ai_message">"Hi, I'm Luna AI. I can help you understand your sleep scores, provide insights on how to improve your sleep, and offer tips to enhance specific aspects of your sleep. I also provide guidance on exercises and nutrition to support better sleep. Feel free to ask me any questions about your sleep today! "</string>
 
 </resources>

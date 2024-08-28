@@ -51,6 +51,7 @@ import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.model.sleep.SleepSummary
+import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
@@ -143,6 +144,11 @@ class SleepDashFragment :
     }
 
     override fun initListener() {
+
+        binding.lytAINudge.root.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(null,getString(R.string.sleep_ai_message))
+            navigate(frag, bundle)
+        }
 
         binding.blurViewSelector.setOnClickListener {
             animateFabDown()
