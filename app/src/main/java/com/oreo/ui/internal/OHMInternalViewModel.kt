@@ -17,6 +17,8 @@ class OHMInternalViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var healthTrend: HealthTrend? = null
+    var selectedDate: String? = null
+
     fun getHealthMonitorData(): ArrayList<OHMDataModel> {
         val listData = ArrayList<OHMDataModel>()
         val resp = healthTrend?.resp?.value?.let {

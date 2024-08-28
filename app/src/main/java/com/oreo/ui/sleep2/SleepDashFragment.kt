@@ -788,7 +788,7 @@ class SleepDashFragment :
                 binding.lytHealthMonitor.tvNudge.visible()
                 if (trendName.equals("Blood oxygen", true) || trendName.equals("HRV", true)) {
                     binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text low"
-                }else{
+                } else {
                     binding.lytHealthMonitor.tvNudge.text = "Your $trendName is $text elevated"
                 }
             } else {
@@ -813,6 +813,7 @@ class SleepDashFragment :
         binding.lytHealthMonitor.root.setOnClickListener {
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data?.healthTrend)
+                this.putString("selectedDate", viewModel.selectedDate.value.toString())
             })
         }
 
