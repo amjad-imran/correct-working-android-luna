@@ -18,6 +18,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -532,7 +533,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 startX = event.x
 
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

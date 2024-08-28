@@ -1017,7 +1017,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                     touchX = event.x
                     handler.postDelayed(
                         mLongPressed,
-                        ViewConfiguration.getLongPressTimeout().toLong()
+                        200L
                     )
                     return true//super.onTouchEvent(event)
                 }

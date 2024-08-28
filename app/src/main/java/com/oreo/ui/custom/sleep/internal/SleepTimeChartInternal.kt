@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.sleep.SleepTimeModel
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 
 
 class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?) :
@@ -465,7 +466,7 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
                 startX = event.x
 
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

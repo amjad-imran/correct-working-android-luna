@@ -70,7 +70,6 @@
         android:text="@string/text_sleep_needed"
         android:textColor="@color/white_50"
         app:layout_constraintEnd_toStartOf="@+id/view35"
-        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view35" />
 

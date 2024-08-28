@@ -22,6 +22,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.ODayTimeActivitiesDataModel
+import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -541,16 +542,16 @@ class OreoActivityViewModel @Inject constructor(
                 )
             )
         }
-        if (sleep != null) {
-            if (sleep.hourly_breakup != null)
-                dataList.add(
-                    ODayTimeActivitiesDataModel(
-                        type = "Sleep",
-                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
-                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
-                        dateTime = "${sleep.hourly_breakup?.firstOrNull()?.start_time}"
-                    )
+
+        sleep?.sleeps?.forEach {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Sleep",
+                    startTime = it.startTime,
+                    endTime = it.endTime,
+                    dateTime = it.startTime
                 )
+            )
         }
 
         sleep?.naps?.forEach { nap ->

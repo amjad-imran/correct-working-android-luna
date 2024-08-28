@@ -22,6 +22,9 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+
+const val DEFAULT_LONG_PRESS_TIMEOUT = 200L
+
 @HiltViewModel
 class OSPTrendsSharedViewModel @Inject constructor(
     val sessionManager: SessionManager
