@@ -140,6 +140,7 @@ class SummaryDataFragmentToday :
 
         viewModel.getPeriodData()
         initSleepPlanerUi()
+
     }
 
     private fun initSleepPlanerUi() {

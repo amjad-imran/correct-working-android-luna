@@ -229,6 +229,8 @@ dependencies {
     implementation(libs.androidx.legacy.support)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.shimmer)
+
 
 //    implementation(CalenderView.calendarView)
     implementation(libs.calendarView)

@@ -1034,4 +1034,8 @@
             android:name="launchedFrom"
             app:argType="string" />
     </dialog>
+    <dialog
+        android:id="@+id/troubleShootBottomSheetFragment"
+        android:name="com.oreo.ui.info.troubleshoot.TroubleShootBottomSheetFragment"
+        android:label="TroubleShootBottomSheetFragment" />
 </navigation>
