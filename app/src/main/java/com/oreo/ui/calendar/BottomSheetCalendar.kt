@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -22,6 +23,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.databinding.BottomSheetCalendarBinding
 import com.noisefit.luna.databinding.CalendarDayBinding
 import com.noisefit.luna.databinding.CalendarHeaderNewBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -49,12 +51,14 @@ class BottomSheetCalendar :
 
     private var selectedDate: String? = null
     private val viewModel: HealthCalendarViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         selectedDate = arguments?.getString("selectedDate")
+        viewModel.registerDate = mainViewModel.registerDate
 
         viewModel.launchedFrom = arguments?.getString("launchedFrom")
 
@@ -109,6 +113,10 @@ class BottomSheetCalendar :
             startMonth,
             currentMonth.plusMonths(0), daysOfWeek.first()
         )
+        val userStartDate = viewModel.getUserStartDate()
+
+        LOGS.d("kjhgkjgksdjfsd startMonth $startMonth  userStartDate $userStartDate  registerDays ${viewModel.registerDate}")
+
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -117,7 +125,7 @@ class BottomSheetCalendar :
             init {
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        if (day.date <= LocalDate.now()) {
+                        if (day.date <= LocalDate.now() && day.date >= userStartDate) {
                             setFragmentResult(
                                 SELECTED_DATE,
                                 bundleOf("selected_date" to "${day.date}")

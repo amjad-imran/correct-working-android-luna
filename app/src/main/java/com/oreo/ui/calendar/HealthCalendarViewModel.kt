@@ -3,6 +3,7 @@ package com.oreo.ui.calendar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.yearMonth
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -23,6 +24,8 @@ import javax.inject.Inject
 class HealthCalendarViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
+
+    var registerDate: Int = -1
 
     var launchedFrom: String? = null
 
@@ -116,6 +119,20 @@ class HealthCalendarViewModel @Inject constructor(
     }
 
     fun getCalendarStartDate(): YearMonth {
-        return YearMonth.now().minusMonths(11)
+        if (registerDate == -1) {
+            return YearMonth.now().minusMonths(11)
+        } else {
+            val startDate = LocalDate.now().minusDays(registerDate.toLong())
+            val max = YearMonth.now().minusMonths(11)
+            return if (startDate.yearMonth < max) {
+                max
+            } else {
+                startDate.yearMonth
+            }
+        }
+    }
+
+    fun getUserStartDate(): LocalDate {
+        return LocalDate.now().minusDays(registerDate.toLong())
     }
 }
