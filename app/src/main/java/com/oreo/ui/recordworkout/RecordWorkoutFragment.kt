@@ -276,7 +276,11 @@ class RecordWorkoutFragment :
 
             binding.btnStartWorkout.gone()
 
-            startWorkoutAnim()
+            //startWorkoutAnim()
+
+            binding.lottieAnim.gone()
+            binding.btnStartWorkout.visible()
+            sendStartWorkoutCommand()
 
         }
 
@@ -351,7 +355,12 @@ class RecordWorkoutFragment :
             } else {
                 binding.btnStartWorkout.gone()
                 viewModel.workout?.isGpsRequired = 0
-                this@RecordWorkoutFragment.startWorkoutAnim()
+
+                binding.lottieAnim.gone()
+                binding.btnStartWorkout.visible()
+                sendStartWorkoutCommand()
+
+                //this@RecordWorkoutFragment.startWorkoutAnim()
             }
         }
         navigate(R.id.bottomSheetLocationPermissionRequest)
