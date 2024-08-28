@@ -38,19 +38,38 @@ class OHMInternalViewModel @Inject constructor(
 
         val skinTemp = if (healthTrend?.skinTemp?.value != null) {
             if (sessionManager.isMetric()) {
-                String.format(
-                    locale = Locale.US,
-                    "%.1f",
-                    AppConversionUtils.fahrenheitToCelsius(
-                        32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
-                    ),
+                val convertedVal = AppConversionUtils.fahrenheitToCelsius(
+                    32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
                 )
+
+                if(convertedVal>0){
+                    String.format(
+                        locale = Locale.US,
+                        "+%.1f",
+                        convertedVal,
+                    )
+                }else{
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        convertedVal,
+                    )
+                }
             } else {
-                String.format(
-                    locale = Locale.US,
-                    "%.1f",
-                    healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
-                )
+                val value = healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
+                if(value>0){
+                    String.format(
+                        locale = Locale.US,
+                        "+%.1f",
+                        value,
+                    )
+                }else{
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        value,
+                    )
+                }
             }
         } else {
             null

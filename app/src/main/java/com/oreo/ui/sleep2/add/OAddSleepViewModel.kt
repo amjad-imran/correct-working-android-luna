@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
@@ -12,6 +13,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddSleep
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -92,20 +94,23 @@ constructor(
 
 
                         val startTime = if (startTimeSleep.day.equals("Today", true)) {
-                            "${LocalDate.now()} ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+                            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                                startTimeSleep.minute.toInt())}"
                         } else {
                             "${
                                 LocalDate.now().minusDays(1)
-                            } ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+                            } ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                                startTimeSleep.minute.toInt())}"
                         }
 
                         val endTime = if (endTimeSleep.day.equals("Today", true)) {
-                            "${LocalDate.now()} ${endTimeSleep.hour}:${(endTimeSleep.minute)}"
+                            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                                endTimeSleep.minute.toInt())}"
                         } else {
-
                             "${
                                 LocalDate.now().minusDays(1)
-                            } ${startTimeSleep.hour}:${(startTimeSleep.minute)}"
+                            } ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                                endTimeSleep.minute.toInt())}"
                         }
                         val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
                         jsonObject.addProperty(
@@ -123,6 +128,10 @@ constructor(
 
                         val jsonArray = JsonArray()
                         jsonArray.add(jsonFinalObject)
+
+
+                        LOGS.d("fdgkdfjgkdfg ${Gson().toJson(jsonArray)}")
+                        return@collect
                         userActivityRepository.addManualSleep(
                             jsonArray,date
                         ).collect { resource ->

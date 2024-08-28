@@ -64,7 +64,7 @@ class DashNapAdapter(
             }
 
 
-            if (nap.sleepScoreImpact == 0) {
+            if (nap.prev_sleep_score == 0) {
                 binding.ivSleep.visible()
                 binding.ivSleepSeperator.visible()
                 binding.tvSleepScoreChange.text = "${nap.sleepScore}"
@@ -99,7 +99,7 @@ class DashNapAdapter(
             }
 
 
-            if (nap.readinessScoreImpact == 0) {
+            if (nap.prev_sleep_score == 0) {
                 binding.ivReadiness.visible()
                 binding.ivReadinessSeparator.visible()
                 binding.tvReadinessScoreChange.text = "${nap.readinessScore}"

@@ -383,17 +383,55 @@ class SleepInternalDetailsFragment :
                     "$minValue"
                 } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
                     if (sharedViewModel.sessionManager.isMetric()) {
-                        String.format(
-                            locale = Locale.US,
-                            "%.1f",
-                            AppConversionUtils.fahrenheitToCelsius(avgValue!!)
-                        )
+                        if (viewModel.isDeviationSelected) {
+                            val convertedValue =
+                                AppConversionUtils.fahrenheitToCelsius(32 + avgValue!!)
+
+                            if (convertedValue >= 0) {
+                                String.format(
+                                    locale = Locale.US,
+                                    "+%.1f",
+                                    convertedValue
+                                )
+                            } else {
+                                String.format(
+                                    locale = Locale.US,
+                                    "%.1f",
+                                    convertedValue
+                                )
+                            }
+
+                        } else {
+                            val convertedValue =
+                                AppConversionUtils.fahrenheitToCelsius(avgValue!!)
+                            String.format(
+                                locale = Locale.US,
+                                "%.1f",
+                                convertedValue
+                            )
+                        }
                     } else {
-                        String.format(
-                            locale = Locale.US,
-                            "%.1f",
-                            avgValue
-                        )
+                        if (viewModel.isDeviationSelected) {
+                            if (avgValue!! >= 0) {
+                                String.format(
+                                    locale = Locale.US,
+                                    "+%.1f",
+                                    avgValue
+                                )
+                            } else {
+                                String.format(
+                                    locale = Locale.US,
+                                    "%.1f",
+                                    avgValue
+                                )
+                            }
+                        }else{
+                            String.format(
+                                locale = Locale.US,
+                                "%.1f",
+                                avgValue
+                            )
+                        }
                     }
                 } else {
                     "${avgValue!!.roundToInt()}"
@@ -478,12 +516,18 @@ class SleepInternalDetailsFragment :
                         lytHighlightTrends.root.alpha = 0.5f
 
                         tvDateTime.text =
-                            if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
-                                topContentData.time ?: ""
-                            } else {
+                            if(viewModel.isDeviationSelected){
                                 val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
-                                topContentData.date?.format(dayFormat)
+                                "Deviation on ${topContentData.date?.format(dayFormat)}"
+                            }else{
+                                if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+                                    topContentData.time ?: ""
+                                } else {
+                                    val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                    topContentData.date?.format(dayFormat)
+                                }
                             }
+
 
                         lytPaginate.root.gone()
                     }
@@ -606,8 +650,8 @@ class SleepInternalDetailsFragment :
                         lytNeed.textLegend.text = "deep"
                         lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
                     }
-                }else if(viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
-                    if(topContentData.isInteracting){
+                } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
+                    if (topContentData.isInteracting) {
                         binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                             lytHours.textLegend.visible()
                             lytHours.ivLegend.visible()
@@ -624,7 +668,7 @@ class SleepInternalDetailsFragment :
                             lytNeed.tvAvg.gone()
 
                         }
-                    }else{
+                    } else {
                         binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                             lytHours.textLegend.gone()
                             lytHours.ivLegend.gone()
