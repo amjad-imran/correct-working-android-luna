@@ -73,6 +73,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import java.util.Locale
 import kotlin.math.abs
 
@@ -1142,6 +1143,7 @@ class SummaryDataFragmentToday :
         binding.contentMain.lytHealthMonitor.root.setOnClickListener {
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data)
+                this.putString("selectedDate", LocalDate.now().toString())
             })
         }
 
