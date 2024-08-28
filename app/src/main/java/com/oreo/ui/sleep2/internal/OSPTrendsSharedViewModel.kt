@@ -30,12 +30,16 @@ class OSPTrendsSharedViewModel @Inject constructor(
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
 
+    /**
+     * Triple(Date,data,time)
+     */
     private val _interactGraphDataDaily =
-        MutableLiveData<Pair<LocalDate?, Float?>?>()
+        MutableLiveData<Triple<LocalDate?, Float?, String?>?>()
 
     val interactGraphData: LiveData<LocalDate?> = _interactGraphData
 
-    val interactGraphDataDaily: LiveData<Pair<LocalDate?, Float?>?> = _interactGraphDataDaily
+    val interactGraphDataDaily: LiveData<Triple<LocalDate?, Float?, String?>?> =
+        _interactGraphDataDaily
 
     var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
 
@@ -43,11 +47,11 @@ class OSPTrendsSharedViewModel @Inject constructor(
         _interactGraphData.postValue(day)
     }
 
-    fun sendInteractDaily(day: LocalDate?, data: Float?) {
+    fun sendInteractDaily(day: LocalDate?, data: Float?, time: String?) {
         if (day == null) {
             _interactGraphDataDaily.postValue(null)
         } else {
-            _interactGraphDataDaily.postValue(Pair(day, data))
+            _interactGraphDataDaily.postValue(Triple(day, data, time))
         }
     }
 
@@ -64,7 +68,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
         )
         return when (contributorType) {
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
-                if(sessionManager.isMetric()){
+                if (sessionManager.isMetric()) {
                     if (maxValue <= 48.0f) {
                         return arrayListOf(
                             Pair(0, "0"),
@@ -82,7 +86,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                             Pair(72, "72")
                         )
                     }
-                }else{
+                } else {
                     if (maxValue <= 120.0f) {
                         return arrayListOf(
                             Pair(0, "0"),

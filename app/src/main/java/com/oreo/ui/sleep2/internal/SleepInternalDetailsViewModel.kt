@@ -1737,6 +1737,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 data class TopContentData(
     val isInteracting: Boolean,
     val date: LocalDate? = null,
+    val time: String? = null,
     val trendsData: TrendAverage? = null,
     val dailyValue: Float? = null,
 )

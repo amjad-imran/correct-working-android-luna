@@ -268,6 +268,7 @@ class SleepInternalDetailsFragment :
                         isInteracting = true,
                         date = it.first,
                         dailyValue = it.second,
+                        time = it.third,
                         trendsData = viewModel.topContentDataAverage
                     )
                 )
@@ -475,8 +476,14 @@ class SleepInternalDetailsFragment :
                         ivCircle.alpha = 0.5f
                         lytHighlightTrends.root.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
-                        tvDateTime.text = topContentData.date?.format(dayFormat)
+                        tvDateTime.text =
+                            if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+                                topContentData.time ?: ""
+                            } else {
+                                val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                                topContentData.date?.format(dayFormat)
+                            }
+
                         lytPaginate.root.gone()
                     }
 
@@ -585,7 +592,7 @@ class SleepInternalDetailsFragment :
 
             TrendsTopState.DOUBLE_DATE -> {
 
-                if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
                     binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                         lytHours.textLegend.visible()
                         lytHours.ivLegend.visible()
@@ -598,7 +605,7 @@ class SleepInternalDetailsFragment :
                         lytNeed.textLegend.text = "deep"
                         lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
                     }
-                }else{
+                } else {
                     binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                         lytHours.textLegend.gone()
                         lytHours.ivLegend.gone()
