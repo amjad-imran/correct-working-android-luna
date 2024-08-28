@@ -209,34 +209,6 @@ class RecordWorkoutFragment :
         }
     }
 
-
-    private fun startWorkoutAnim() {
-        binding.lottieAnim.visible()
-        binding.lottieAnim.setAnimation(R.raw.anim_3_2_1_go)
-        binding.lottieAnim.playAnimation()
-        binding.lottieAnim.repeatCount = 0
-
-        binding.lottieAnim.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator) {
-
-            }
-
-            override fun onAnimationEnd(p0: Animator) {
-                binding.lottieAnim.gone()
-                binding.btnStartWorkout.visible()
-                sendStartWorkoutCommand()
-            }
-
-            override fun onAnimationCancel(p0: Animator) {
-
-            }
-
-            override fun onAnimationRepeat(p0: Animator) {
-
-            }
-        })
-    }
-
     fun sendStartWorkoutCommand() {
         binding.progressBar.root.visible()
         viewModel.sportStartTime = viewModel.getCurrentTimeStamp()
