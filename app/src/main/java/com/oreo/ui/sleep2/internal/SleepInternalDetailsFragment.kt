@@ -323,7 +323,7 @@ class SleepInternalDetailsFragment :
             )
 
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "$hour"
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = "$minute"
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = String.format("%02d", minute)
         }
 
         val singleBind =

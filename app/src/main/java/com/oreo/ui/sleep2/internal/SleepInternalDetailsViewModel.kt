@@ -1494,7 +1494,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun getTopState(interacting: Boolean): TrendsTopState {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.SLEEP_TIME -> {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.SLEEP_TIME,
+            SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
                 TrendsTopState.SINGLE_DATE
             }
 

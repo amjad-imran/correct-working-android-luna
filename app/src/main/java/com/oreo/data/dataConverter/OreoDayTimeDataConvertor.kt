@@ -77,7 +77,19 @@ class OreoDayTimeDataConvertor @Inject constructor() {
             }
         }
 
-        getSleepSection(dayData.sleep, dayData.date)?.let { pos ->
+        /*getSleepSection(dayData.sleep, dayData.date)?.let { pos ->
+            sections.add(
+                Section(
+                    "sleep",
+                    pos.first,
+                    pos.second,
+                    Color.parseColor("#4cc5a8ed"),
+                    R.drawable.icon_stress_sleep
+                )
+            )
+        }*/
+
+        getSleepSections(dayData.sleep).forEach {pos->
             sections.add(
                 Section(
                     "sleep",
@@ -315,11 +327,77 @@ class OreoDayTimeDataConvertor @Inject constructor() {
 
     }
 
+    private fun getSleepSections(sleep: OreoSleepModel?): List<Pair<Int, Int>> {
+        val returnData = ArrayList<Pair<Int, Int>>()
+        sleep?.sleeps?.forEach {
+            getSleepSection(it.startTime, it.endTime)?.let {
+                returnData.add(it)
+            }
+        }
+        return returnData
+    }
+
     /**
      * "start_time":"2024-01-29 23:34:00",
      * "end_time":"2024-01-29 23:43:30",
      */
-    private fun getSleepSection(sleep: OreoSleepModel?, date: String): Pair<Int, Int>? {
+    private fun getSleepSection(startTime: String?, endTime: String?): Pair<Int, Int>? {
+        if (startTime == null || endTime == null) return null
+
+        val sleepStartDate = startTime.split(" ")[0]
+        val sleepEndDate = endTime.split(" ")[0]
+
+        if (sleepStartDate.equals(sleepEndDate)) {
+            //Same day Sleep
+            val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                startTime,
+                DateFormats.dateTimeFormat5()
+            ) ?: return null
+            val day1Minutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
+            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+            val startPos = (day1MinutesCeil / 15 - 1).toInt()
+
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5()
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
+            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
+            if (endPos > 95) {
+                endPos = 95
+            }
+
+            return Pair(startPos, endPos)
+
+
+        } else {
+            //Multi day sleep
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5()
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
+            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
+            if (endPos > 95) {
+                endPos = 95
+            }
+
+            return Pair(0, endPos)
+        }
+    }
+
+    /**
+     * "start_time":"2024-01-29 23:34:00",
+     * "end_time":"2024-01-29 23:43:30",
+     */
+    /*private fun getSleepSection(sleep: OreoSleepModel?, date: String): Pair<Int, Int>? {
         val startTime = sleep?.hourly_breakup?.firstOrNull()?.start_time
         val endTime = sleep?.hourly_breakup?.lastOrNull()?.end_time
         if (startTime == null || endTime == null) return null
@@ -371,6 +449,6 @@ class OreoDayTimeDataConvertor @Inject constructor() {
 
             return Pair(0, endPos)
         }
-    }
+    }*/
 
 }
