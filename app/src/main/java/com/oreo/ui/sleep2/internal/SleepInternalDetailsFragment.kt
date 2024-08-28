@@ -425,7 +425,7 @@ class SleepInternalDetailsFragment :
                                     avgValue
                                 )
                             }
-                        }else{
+                        } else {
                             String.format(
                                 locale = Locale.US,
                                 "%.1f",
@@ -516,14 +516,15 @@ class SleepInternalDetailsFragment :
                         lytHighlightTrends.root.alpha = 0.5f
 
                         tvDateTime.text =
-                            if(viewModel.isDeviationSelected){
+                            if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
                                 val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
                                 "Deviation on ${topContentData.date?.format(dayFormat)}"
-                            }else{
+                            } else {
                                 if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
                                     topContentData.time ?: ""
                                 } else {
-                                    val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                    val dayFormat =
+                                        DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
                                     topContentData.date?.format(dayFormat)
                                 }
                             }

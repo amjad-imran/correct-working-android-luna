@@ -609,7 +609,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0) {
+                    if (napCount > 0 && sleepCount<1) {
+                        string.append("${(napCount-1)} nap")
+                    }else{
                         string.append("$napCount nap")
                     }
 
@@ -713,7 +715,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0) {
+                    if (napCount > 0 && sleepCount<1) {
+                        string.append("${(napCount-1)} nap")
+                    }else{
                         string.append("$napCount nap")
                     }
 
@@ -794,7 +798,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0) {
+                    if (napCount > 0 && sleepCount<1) {
+                        string.append("${(napCount-1)} nap")
+                    }else{
                         string.append("$napCount nap")
                     }
 
@@ -941,7 +947,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0) {
+                    if (napCount > 0 && sleepCount<1) {
+                        string.append("${(napCount-1)} nap")
+                    }else{
                         string.append("$napCount nap")
                     }
 
