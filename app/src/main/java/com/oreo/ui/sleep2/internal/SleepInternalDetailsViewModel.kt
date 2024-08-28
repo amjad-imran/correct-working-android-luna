@@ -1246,7 +1246,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 " *   **Older adults:** Although the amount of sleep needed doesn’t drastically change in older age, sleep patterns can shift. Older adults may find it more challenging to achieve continuous, deep sleep, but it remains important to aim for 7 to 8 hours to support overall health.\n" +
                                 " \t\n" +
                                 "\n" +
-                                " **Factors affecting sleep duration** Several factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration.",
+                                " **Factors affecting sleep duration**\n\nSeveral factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration.",
                         img = R.drawable.image_learn_common,
                         internalImg = R.drawable.image_learn_common_int
                     )
@@ -1287,7 +1287,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 " \t\n" +
                                 " *   **Limit exposure to blue light:** Blue light from screens can interfere with melatonin production. Limiting screen time before bed can help improve sleep quality and duration.\n" +
                                 " \t\n" +
-                                " *   **Manage stress effectively:** Chronic stress increases levels of **cortisol**, a hormone that can disrupt sleep if elevated at night. Techniques such as mindfulness, deep breathing, and regular physical activity can help manage stress",
+                                " *   **Manage stress effectively:**Chronic stress increases levels of **cortisol**, a hormone that can disrupt sleep if elevated at night. Techniques such as mindfulness, deep breathing, and regular physical activity can help manage stress",
                         img = R.drawable.image_learn_duration,
                         internalImg = R.drawable.image_learn_duration_int
                     )
@@ -1418,8 +1418,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "4.  **Lower stress levels:** High movements during sleep are often linked to stress. By reducing these movements, you help your body stay in a relaxed state throughout the night, which can lower overall stress levels and contribute to a more peaceful waking experience.\n" +
                                 "    \n" +
                                 "5.  **Long-term health benefits:** Consistently achieving sleep with fewer than three high movements can reduce the risk of chronic conditions like heart disease, obesity, and diabetes. Better restfulness leads to better overall health outcomes.\n",
-                        img = R.drawable.image_learn_restorative,
-                        internalImg = R.drawable.image_learn_restorative_int
+                        img = R.drawable.image_learn_restfulness,
+                        internalImg = R.drawable.image_learn_restfulness_int
                     )
                 )
             }

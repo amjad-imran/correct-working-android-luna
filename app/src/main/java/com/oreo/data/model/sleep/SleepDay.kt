@@ -92,6 +92,7 @@ data class HealthTrend(
 data class HealthTrendValue(
     val value: Double? = null,
     val text: String? = null,
+    val textC: String? = null,
     val status: String? = null
 ) : Parcelable
 
