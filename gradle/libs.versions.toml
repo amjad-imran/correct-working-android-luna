@@ -36,6 +36,7 @@ oksse = "0.9.0"
 pagingCommonKtx = "3.3.0"
 runner = "1.5.2"
 sdpAndroid = "1.1.0"
+shimmer = "0.5.0"
 tensorflowLite = "2.6.0"
 tensorflowLiteGpu = "2.6.0"
 ticker = "2.0.4"
@@ -140,6 +141,7 @@ mockito-android = { module = "org.mockito:mockito-android", version.ref = "mocki
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 oksse = { module = "com.github.heremaps:oksse", version.ref = "oksse" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
 ticker = { module = "com.robinhood.ticker:ticker", version.ref = "ticker" }
