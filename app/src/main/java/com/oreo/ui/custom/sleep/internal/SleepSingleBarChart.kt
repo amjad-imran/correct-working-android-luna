@@ -67,6 +67,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     var mMax = 0
     var mAverage: Pair<Float, String>? = null
+    var nonNullDataCount: Int = 0
 
 
     init {
@@ -369,7 +370,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null) {
+        if (mAverage != null && nonNullDataCount > 1) {
             val textBounds = Rect()
 
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
@@ -404,8 +405,11 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 getYAxisValue(mAverage!!.first),
                 avgLinePaint
             )
-        } else {
+        }
+
+        if (nonNullDataCount == 0) {
             showNoRecordAvailable(canvas, availableWidth)
+
         }
     }
 
@@ -504,7 +508,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         contributorType: SleepInternalLaunchState?,
-        optimalRange: Pair<Float, Float>?
+        optimalRange: Pair<Float, Float>?,
+        nonNullDataCount: Int
     ) {
         dataPosition.clear()
         dataSet.clear()
@@ -512,6 +517,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         mSelectedPosition = selectedPosition
         this.contributorType = contributorType
         this.optimalRange = optimalRange
+        this.nonNullDataCount = nonNullDataCount
 
 
         this.yAxisRange.clear()

@@ -47,6 +47,8 @@ class SleepSingleLineGradientChartFragment :
         }
 
         val dataList = convertData(pageData?.data)
+        val nonNullDataCount =
+            sharedViewModel.getNonNullDataCount(pageData?.contributorType, dataList)
 
         val maxValue = sharedViewModel.getMaxValue(
             dataListType1 = dataList,
@@ -75,7 +77,8 @@ class SleepSingleLineGradientChartFragment :
         binding.graphBar.setDataSet(
             dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1,
             type,
-            optimalRange
+            optimalRange,
+            nonNullDataCount
         )
 
         binding.graphBar.setVibrationUtil(vibrationUtils)

@@ -39,7 +39,7 @@ class SleepAnalysisAdapter :
                         binding.ivState.setImageResource(R.drawable.ic_arrow_decrease_green)
                     }
                 } else {
-                    if (sleepAnalysis.currentValue >= sleepAnalysis.avgValue) {
+                    if (sleepAnalysis.currentValue > sleepAnalysis.avgValue) {
                         binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
                     } else if (sleepAnalysis.currentValue == sleepAnalysis.avgValue) {
                         binding.ivState.setImageResource(R.drawable.ic_state_equal)

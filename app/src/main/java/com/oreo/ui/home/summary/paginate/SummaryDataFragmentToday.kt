@@ -394,6 +394,13 @@ class SummaryDataFragmentToday :
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {
                     //viewModel.onGotPeriodClicked(type.status)
                 }
+
+                is OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked -> {
+                    navigate(R.id.healthMonitorInternal, Bundle().apply {
+                        this.putParcelable("healthTrend", type.data)
+                        this.putString("selectedDate", LocalDate.now().toString())
+                    })
+                }
             }
         }
 

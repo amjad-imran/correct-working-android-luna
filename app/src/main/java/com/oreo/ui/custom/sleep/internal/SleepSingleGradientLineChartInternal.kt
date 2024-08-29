@@ -77,6 +77,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
     private val endPadding = dip2px(30f)
     private var mAverage: Pair<Float, String>? = null
+    private var nonNullDataCount: Int = 0
     private var optimalRange: Pair<Float, Float>? = null
     private var chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.PERCENT
 
@@ -364,7 +365,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
             SleepSingleGradientChartType.DEFAULT -> return "${value.roundToInt()}"
-            SleepSingleGradientChartType.FLOAT -> return String.format(locale = Locale.US,"%.1f", value)
+            SleepSingleGradientChartType.FLOAT -> return String.format(
+                locale = Locale.US,
+                "%.1f",
+                value
+            )
         }
 
     }
@@ -383,7 +388,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null && mAverage?.first != 0.0f) {
+        if (mAverage != null && mAverage?.first != 0.0f && nonNullDataCount > 1) {
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
@@ -417,6 +422,9 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 avgLinePaint
             )
         } else {
+        }
+
+        if (nonNullDataCount == 0) {
             showNoRecordAvailable(canvas, availableWidth)
         }
     }
@@ -574,7 +582,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         chartType: SleepSingleGradientChartType,
-        optimalRange: Pair<Float, Float>?
+        optimalRange: Pair<Float, Float>?,
+        nonNullDataCount: Int
     ) {
         dataPosition.clear()
         this.chartType = chartType
@@ -591,6 +600,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         mSelectedPosition = selectedPosition
         mMax = maxValue
         mAverage = avgValue
+        this.nonNullDataCount = nonNullDataCount
 
         invalidate()
     }

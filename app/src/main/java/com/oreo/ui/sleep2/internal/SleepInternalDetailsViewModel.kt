@@ -13,12 +13,11 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
+import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

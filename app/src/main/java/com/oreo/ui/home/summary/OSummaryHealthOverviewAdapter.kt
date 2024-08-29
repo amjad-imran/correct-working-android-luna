@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.LayoutChatCardDashBinding
+import com.noisefit.luna.databinding.LayoutDashHealthMonitorBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -48,6 +49,7 @@ import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -64,6 +66,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 
     object OnAiCardClicked : OSummaryHealthOverviewClickEnum()
+    class OnHealthMonitorCardClicked(val data: HealthTrend) : OSummaryHealthOverviewClickEnum()
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
 
     object WorkoutAlertWhatisThis : OSummaryHealthOverviewClickEnum()
@@ -99,6 +102,13 @@ class OSummaryHealthOverviewAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.layout_dash_health_monitor -> HomeRecyclerViewHolder.DashHealthMonitorViewHolder(
+                LayoutDashHealthMonitorBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
             R.layout.layout_chat_card_dash -> HomeRecyclerViewHolder.AiCardViewHolder(
                 LayoutChatCardDashBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -362,6 +372,9 @@ class OSummaryHealthOverviewAdapter() :
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
+            is HomeRecyclerViewHolder.DashHealthMonitorViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.HealthMonitorCard)
+            }
         }
     }
 
@@ -397,6 +410,7 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.CycleTrackerCardBig -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
             is OHealthOverview.GotYourPeriod -> R.layout.list_dash_got_period
+            is OHealthOverview.HealthMonitorCard -> R.layout.layout_dash_health_monitor
         }
     }
 
@@ -428,6 +442,186 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
+    class DashHealthMonitorViewHolder(private val binding: LayoutDashHealthMonitorBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.HealthMonitorCard,
+        ) {
+            val hasHealthData = hasHealthData(data.data)
+
+            if(hasHealthData){
+                var outOfRangeCount = 0
+                var isSignificant = false
+                var trendName = ""
+                if (!data.data.bloodOxy?.status.isNullOrEmpty()) {
+                    val state = getHealthTrendState(
+                        data.data.bloodOxy?.status
+                    )
+                    if (state == 2 || state == 1) {
+                        outOfRangeCount++
+                        trendName = "Blood oxygen"
+                    }
+                    if (state == 2) {
+                        isSignificant = true
+                    }
+                    binding.imvSpo2.setImageResource(
+                        getHealthTrendIcon(
+                            data.data.bloodOxy?.status
+                        )
+                    )
+                } else {
+                    binding.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+                }
+
+                if (!data.data.hrv?.status.isNullOrEmpty()) {
+                    val state = getHealthTrendState(
+                        data.data.hrv?.status
+                    )
+                    if (state == 2 || state == 1) {
+                        outOfRangeCount++
+                        trendName = "HRV"
+                    }
+                    if (state == 2) {
+                        isSignificant = true
+                    }
+                    binding.imvHrv.setImageResource(
+                        getHealthTrendIcon(
+                            data.data.hrv?.status
+                        )
+                    )
+                } else {
+                    binding.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+                }
+
+                if (!data.data.rhr?.status.isNullOrEmpty()) {
+                    val state = getHealthTrendState(
+                        data.data.rhr?.status
+                    )
+                    if (state == 2 || state == 1) {
+                        outOfRangeCount++
+                        trendName = "Resting HR"
+                    }
+                    if (state == 2) {
+                        isSignificant = true
+                    }
+                    binding.imvRHR.setImageResource(
+                        getHealthTrendIcon(
+                            data.data.rhr?.status
+                        )
+                    )
+                } else {
+                    binding.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+                }
+
+                if (!data.data.skinTemp?.status.isNullOrEmpty()) {
+                    val state = getHealthTrendState(
+                        data.data.skinTemp?.status
+                    )
+                    if (state == 2 || state == 1) {
+                        outOfRangeCount++
+                        trendName = "Skin temperature"
+                    }
+                    if (state == 2) {
+                        isSignificant = true
+                    }
+                    binding.imvSkin.setImageResource(
+                        getHealthTrendIcon(
+                            data.data.skinTemp?.status
+                        )
+                    )
+                } else {
+                    binding.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+                }
+
+                if (!data.data.resp?.status.isNullOrEmpty()) {
+                    val state = getHealthTrendState(
+                        data.data.resp?.status
+                    )
+                    if (state == 2 || state == 1) {
+                        outOfRangeCount++
+                        trendName = "Respiratory rate"
+                    }
+                    if (state == 2) {
+                        isSignificant = true
+                    }
+                    binding.imvResp.setImageResource(
+                        getHealthTrendIcon(
+                            data.data.resp?.status
+                        )
+                    )
+                } else {
+                    binding.imvResp.setImageResource(R.drawable.ic_hm_check_default)
+                }
+
+                if (outOfRangeCount == 0) {
+                    binding.tvNudge.visible()
+                    binding.tvNudge.text =
+                        "All readings are in your typical range"
+                } else if (outOfRangeCount == 1) {
+                    val text = if (isSignificant) {
+                        "significantly"
+                    } else {
+                        "slightly"
+                    }
+                    binding.tvNudge.visible()
+                    binding.tvNudge.text =
+                        "Your $trendName is $text elevated"
+                } else {
+                    binding.tvNudge.visible()
+                    binding.tvNudge.text =
+                        "$outOfRangeCount/5 metrics are out of range"
+                }
+            }else{
+                binding.apply {
+                    imvResp.setImageResource(R.drawable.ic_hm_check_default)
+                    imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+                    imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+                    imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+                    imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+                    tvNudge.visible()
+                    tvNudge.text = "No data so far"
+                }
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked(data.data))
+            }
+        }
+        fun hasHealthData(healthTrend: HealthTrend?): Boolean {
+            if (healthTrend == null) return false
+            return !(healthTrend.resp?.status.isNullOrEmpty() &&
+                    healthTrend.rhr?.status.isNullOrEmpty() &&
+                    healthTrend.bloodOxy?.status.isNullOrEmpty() &&
+                    healthTrend.hrv?.status.isNullOrEmpty() &&
+                    healthTrend.skinTemp?.status.isNullOrEmpty())
+
+        }
+        fun getHealthTrendState(status: String?): Int {
+            val drawable: Int = if (status.equals("warning", true)) {
+                2
+            } else if (status.equals("good", true)) {
+                1
+            } else if (status.equals("optimal", true)) {
+                0
+            } else {
+                1
+            }
+            return drawable
+        }
+
+        fun getHealthTrendIcon(status: String?): Int {
+            val drawable: Int = if (status.equals("warning", true)) {
+                R.drawable.ic_health_warning
+            } else if (status.equals("good", true)) {
+                R.drawable.ic_health_good
+            } else if (status.equals("optimal", true)) {
+                R.drawable.ic_health_optimal
+            } else {
+                R.drawable.ic_health_good
+            }
+            return drawable
+        }
+    }
     class AiCardViewHolder(private val binding: LayoutChatCardDashBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
@@ -609,10 +803,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0 && sleepCount<1) {
-                        string.append("${(napCount-1)} nap")
-                    }else{
-                        string.append("$napCount nap")
+                    if (napCount > 0) {
+                        if (sleepCount == 0) {
+                            string.append("${(napCount - 1)} nap")
+                        } else {
+                            string.append("$napCount nap")
+                        }
                     }
 
                     if (sleepCount > 1) {
@@ -715,10 +911,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0 && sleepCount<1) {
-                        string.append("${(napCount-1)} nap")
-                    }else{
-                        string.append("$napCount nap")
+                    if (napCount > 0) {
+                        if (sleepCount == 0) {
+                            string.append("${(napCount - 1)} nap")
+                        } else {
+                            string.append("$napCount nap")
+                        }
                     }
 
                     if (sleepCount > 1) {
@@ -798,10 +996,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0 && sleepCount<1) {
-                        string.append("${(napCount-1)} nap")
-                    }else{
-                        string.append("$napCount nap")
+                    if (napCount > 0) {
+                        if (sleepCount == 0) {
+                            string.append("${(napCount - 1)} nap")
+                        } else {
+                            string.append("$napCount nap")
+                        }
                     }
 
                     if (sleepCount > 1) {
@@ -947,10 +1147,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val string = StringBuilder()
                     string.append("after ")
 
-                    if (napCount > 0 && sleepCount<1) {
-                        string.append("${(napCount-1)} nap")
-                    }else{
-                        string.append("$napCount nap")
+                    if (napCount > 0) {
+                        if (sleepCount == 0) {
+                            string.append("${(napCount - 1)} nap")
+                        } else {
+                            string.append("$napCount nap")
+                        }
                     }
 
                     if (sleepCount > 1) {

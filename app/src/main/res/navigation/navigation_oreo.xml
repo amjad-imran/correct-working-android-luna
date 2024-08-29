@@ -1023,7 +1023,7 @@
         android:label="fragment_learn_more" >
         <argument
             android:name="data"
-            app:argType="com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel" />
+            app:argType="com.oreo.data.model.sleep.SleepLearnMoreDataModel" />
     </fragment>
     <dialog
         android:id="@+id/ringDisabledBottomSheet"

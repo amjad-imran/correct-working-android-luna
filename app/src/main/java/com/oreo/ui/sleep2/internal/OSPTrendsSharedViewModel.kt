@@ -652,4 +652,26 @@ class OSPTrendsSharedViewModel @Inject constructor(
         return Triple(Pair(list, max), suffix, prefix)
     }
 
+    fun getNonNullDataCount(
+        contributorType: SleepInternalLaunchState?,
+        dataList: List<GraphDataModel>
+    ): Int {
+
+        if (contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+            contributorType == SleepInternalLaunchState.REM_SLEEP ||
+            contributorType == SleepInternalLaunchState.DEEP_SLEEP
+        ) {
+            val filteredData = dataList.filter {
+                it.value1 != null && it.value1 != 0.0f
+            }
+            return filteredData.size
+
+        } else {
+            val filteredData = dataList.filter {
+                it.value1 != null
+            }
+            return filteredData.size
+        }
+    }
+
 }

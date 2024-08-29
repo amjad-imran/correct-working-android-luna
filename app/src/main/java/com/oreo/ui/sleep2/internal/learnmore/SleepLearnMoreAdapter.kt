@@ -1,14 +1,11 @@
 package com.oreo.ui.sleep2.internal.learnmore
 
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.luna.databinding.OreoHrLearnMoreItemBinding
 import com.noisefit.luna.databinding.OreoSleepLearnMoreItemBinding
-import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
-import kotlinx.parcelize.Parcelize
+import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 
 class SleepLearnMoreAdapter(val mListener: OnItemClickListener) :
     RecyclerView.Adapter<SleepLearnMoreAdapter.ViewHolder>() {
@@ -54,12 +51,3 @@ class SleepLearnMoreAdapter(val mListener: OnItemClickListener) :
 interface OnItemClickListener {
     fun onItemClick(item: SleepLearnMoreDataModel)
 }
-
-@Parcelize
-data class SleepLearnMoreDataModel(
-    val toolbarTitle: String,
-    val title: String? = null,
-    val content: String? = null,
-    val img: Int? = null,
-    val internalImg: Int? = null,
-) : Parcelable

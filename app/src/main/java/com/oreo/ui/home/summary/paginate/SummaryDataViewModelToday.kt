@@ -389,6 +389,8 @@ class SummaryDataViewModelToday @Inject constructor(
             var cycleTrackerCardBig: OHealthOverview.CycleTrackerCardBig? = null
             var cycleTrackerCardSmall: OHealthOverview.CycleTrackerCardSmall? = null
 
+            val isAfter12 = checkIfIsAfter12()
+
             femaleHealthData.let {
                 val (hasDataLoaded, femaleData) = it
 
@@ -552,6 +554,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if(isAfter12.not()){
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         } else {
                             if (enableAi) {
@@ -591,6 +598,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if(isAfter12.not()){
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         } else {
                             if (enableAi) {
@@ -651,6 +663,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if(isAfter12.not()){
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -719,6 +736,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel, makeSleepArray(newSleepArray)
                                     )
                                 )
+                                if(isAfter12.not()){
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
@@ -753,6 +775,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         )
                                     )
                                 }
+                                if(isAfter12.not()){
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
@@ -773,6 +800,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
             if (shouldShowStressCard) {
                 val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+
+                if(isAfter12){
+                    healthData.sleep?.healthTrend?.let {
+                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                    }
+                }
                 userActivities.add(
                     OHealthOverview.StressGraph(
                         combinedData,
@@ -807,13 +840,18 @@ class SummaryDataViewModelToday @Inject constructor(
             trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
             gotYourPeriodData.postValue(gotYourPeriodCard)
 
-            healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
+            //healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
             showSleepAlerts(healthData.sleep)
 
         }
+    }
+
+    private fun checkIfIsAfter12(): Boolean {
+        return LocalDateTime.now().hour >= 12
+
     }
 
     private fun calculateDaysLeft(dateString: String): Long {

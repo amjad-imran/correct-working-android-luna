@@ -87,6 +87,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private val endPadding = dip2px(30f)
     private var mAverage: Pair<Float, String>? = null
     private var showOverlay = false
+    private var nonNullDataCount: Int = 0
     private var launchState: SleepInternalLaunchState? = null
     private var selectedPeriod: InternalSelectedPeriod? = null
 
@@ -460,7 +461,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null) {
+        if (mAverage != null && nonNullDataCount > 1) {
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
@@ -630,11 +631,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         selectedPosition: Int,
         showOverlay: Boolean = false,
         launchState: SleepInternalLaunchState?,
-        selectedPeriod: InternalSelectedPeriod?
+        selectedPeriod: InternalSelectedPeriod?,
+        nonNullDataCount: Int
     ) {
         this.showOverlay = showOverlay
         this.launchState = launchState
         this.selectedPeriod = selectedPeriod
+        this.nonNullDataCount = nonNullDataCount
 
         dataPosition.clear()
 

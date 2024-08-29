@@ -45,6 +45,9 @@ class SleepBarChartFragment :
 
         val dataList = convertData(pageData?.data)
 
+        val nonNullDataCount =
+            sharedViewModel.getNonNullDataCount(pageData?.contributorType, dataList)
+
         val maxValue = sharedViewModel.getMaxValue(
             dataListType1 = dataList,
             contributorType = pageData?.contributorType
@@ -65,7 +68,8 @@ class SleepBarChartFragment :
             avgValue,
             -1,
             pageData?.contributorType,
-            optimalRange
+            optimalRange,
+            nonNullDataCount
         )
         binding.graphBar.setVibrationUtil(vibrationUtils)
 

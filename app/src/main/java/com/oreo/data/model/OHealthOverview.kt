@@ -7,6 +7,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.custom.StressCombineModel
 
 
@@ -31,6 +32,10 @@ sealed class OHealthOverview {
 
 
     class LunaAiCard(
+    ) : OHealthOverview()
+
+    class HealthMonitorCard(
+        val data: HealthTrend
     ) : OHealthOverview()
 
     class AutoSport(
