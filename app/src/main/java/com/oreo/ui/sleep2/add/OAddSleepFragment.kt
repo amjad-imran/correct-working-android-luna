@@ -133,7 +133,7 @@ class OAddSleepFragment :
             )
         }
         binding.lytAddTime.lytEndTime.root.setOnClickListener {
-            if (binding.lytAddTime.lytStartTime.tvTimeValue.text == getString(R.string.text_enter)) {
+            if (binding.lytAddTime.lytStartTime.tvTimeValue.text == getString(R.string.text_enter)) {curl
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
             }

@@ -57,6 +57,7 @@ import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.sleep2.help.LearnMoreFragment
 import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -216,7 +217,8 @@ class SleepDashFragment :
             )
         }
         binding.lytScore.ivInfo.setOnClickListener {
-            navigate(R.id.sleepPlannerFragment)
+            val (frag, bundle) = LearnMoreFragment.getStartData(viewModel.getInfoLearnMore())
+            navigate(frag, bundle)
         }
 
 

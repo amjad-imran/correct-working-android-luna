@@ -130,8 +130,6 @@ constructor(
                         jsonArray.add(jsonFinalObject)
 
 
-                        LOGS.d("fdgkdfjgkdfg ${Gson().toJson(jsonArray)}")
-                        return@collect
                         userActivityRepository.addManualSleep(
                             jsonArray,date
                         ).collect { resource ->
