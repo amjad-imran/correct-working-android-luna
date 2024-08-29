@@ -44,6 +44,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
@@ -808,6 +809,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         binding.progressBar.root.gone()
 
                         viewModel.reloadTodaysData()
+                        viewModel.sleepDashTodayReload.value = Event(true)
+
                         //sendLogs()
                     }
                 }
