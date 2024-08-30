@@ -624,9 +624,9 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 )
 
             chartModel.valueFloat =
-                if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
+                /*if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
                     32 + (it.deviation ?: 0.0f)
-                ) else it.deviation ?: 0.0f
+                ) else*/ it.deviation ?: 0.0f
 
             list.add(chartModel)
         }

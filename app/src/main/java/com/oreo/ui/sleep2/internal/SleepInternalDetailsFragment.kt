@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
@@ -578,13 +579,16 @@ class SleepInternalDetailsFragment :
                         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
                         ) {
                             if (viewModel.isDeviationSelected) {
-                                if (sharedViewModel.sessionManager.isMetric()) {
+                                /*if (sharedViewModel.sessionManager.isMetric()) {
+                                    LOGS.d("dnmfgbmndfgbmndf ${data?.value2} ->${AppConversionUtils.fahrenheitToCelsius(
+                                        32 + (data?.value2 ?: 0f)
+                                    )}")
                                     AppConversionUtils.fahrenheitToCelsius(
                                         32 + (data?.value2 ?: 0f)
                                     )
-                                } else {
+                                } else {*/
                                     data?.value2
-                                }
+                                /*}*/
                             } else {
                                 viewModel.handle255(
                                     topContentData.dailyValue ?: data?.value1,
