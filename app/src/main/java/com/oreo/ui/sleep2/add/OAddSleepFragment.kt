@@ -253,7 +253,7 @@ class OAddSleepFragment :
         viewModel.addSleepResponse.observe(this) { it1 ->
             it1?.getContent().let {
                 if (it == true) {
-                    mainViewModel.dashTodayReload.value = Event(true)
+                    mainViewModel.sessionManager.reloadTodayData.value = Event(true)
                     mainViewModel.sleepDashTodayReload.value = Event(true)
                     navigateUpSafe()
                 }

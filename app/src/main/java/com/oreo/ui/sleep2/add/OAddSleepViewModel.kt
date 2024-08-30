@@ -18,6 +18,7 @@ import com.oreo.data.model.OAddSleep
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -54,22 +55,41 @@ constructor(
         }
 
         val startTime = if (startTimeSleep.day.equals("Today", true)) {
-            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
-                startTimeSleep.minute.toInt())}"
+            "${LocalDate.now()} ${
+                String.format(
+                    locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                    startTimeSleep.minute.toInt()
+                )
+            }"
         } else {
             "${
                 LocalDate.now().minusDays(1)
-            } ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(), startTimeSleep.minute.toInt())}"
+            } ${
+                String.format(
+                    locale = Locale.US,
+                    "%02d:%02d",
+                    startTimeSleep.hour.toInt(),
+                    startTimeSleep.minute.toInt()
+                )
+            }"
         }
 
         val endTime = if (endTimeSleep.day.equals("Today", true)) {
-            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(), 
-                endTimeSleep.minute.toInt())}"
+            "${LocalDate.now()} ${
+                String.format(
+                    locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                    endTimeSleep.minute.toInt()
+                )
+            }"
         } else {
             "${
                 LocalDate.now().minusDays(1)
-            } ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
-                endTimeSleep.minute.toInt())}"
+            } ${
+                String.format(
+                    locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                    endTimeSleep.minute.toInt()
+                )
+            }"
         }
 
         totalDuration = Duration.between(
@@ -94,23 +114,39 @@ constructor(
 
 
                         val startTime = if (startTimeSleep.day.equals("Today", true)) {
-                            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
-                                startTimeSleep.minute.toInt())}"
+                            "${LocalDate.now()} ${
+                                String.format(
+                                    locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                                    startTimeSleep.minute.toInt()
+                                )
+                            }"
                         } else {
                             "${
                                 LocalDate.now().minusDays(1)
-                            } ${String.format(locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
-                                startTimeSleep.minute.toInt())}"
+                            } ${
+                                String.format(
+                                    locale = Locale.US, "%02d:%02d", startTimeSleep.hour.toInt(),
+                                    startTimeSleep.minute.toInt()
+                                )
+                            }"
                         }
 
                         val endTime = if (endTimeSleep.day.equals("Today", true)) {
-                            "${LocalDate.now()} ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
-                                endTimeSleep.minute.toInt())}"
+                            "${LocalDate.now()} ${
+                                String.format(
+                                    locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                                    endTimeSleep.minute.toInt()
+                                )
+                            }"
                         } else {
                             "${
                                 LocalDate.now().minusDays(1)
-                            } ${String.format(locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
-                                endTimeSleep.minute.toInt())}"
+                            } ${
+                                String.format(
+                                    locale = Locale.US, "%02d:%02d", endTimeSleep.hour.toInt(),
+                                    endTimeSleep.minute.toInt()
+                                )
+                            }"
                         }
                         val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
                         jsonObject.addProperty(
@@ -131,7 +167,7 @@ constructor(
 
 
                         userActivityRepository.addManualSleep(
-                            jsonArray,date
+                            jsonArray, date
                         ).collect { resource ->
                             when (resource) {
                                 is Resource.GenericError -> {

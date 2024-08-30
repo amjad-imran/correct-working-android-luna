@@ -465,37 +465,76 @@ class SleepInternalDetailsFragment :
             singleBind.root.invisible()
         } else {
             singleBind.root.visible()
-            if (percent > 0) {
-                singleBind.apply {
-                    tvRangeValue.text = "${percent}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_up
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
-                }
-            } else if (percent == 0) {
-                singleBind.apply {
-                    tvRangeValue.text = "${percent}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        0
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(1)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+            if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTING_HEART_RATE ||
+                viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS ||
+                viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
+            ) {
+                if (percent > 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up_red
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else if (percent == 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            0
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else {
+                    singleBind.apply {
+                        tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down_green
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
                 }
             } else {
-                singleBind.apply {
-                    tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_down
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+                if (percent > 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else if (percent == 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            0
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else {
+                    singleBind.apply {
+                        tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
                 }
             }
+
+
         }
     }
 

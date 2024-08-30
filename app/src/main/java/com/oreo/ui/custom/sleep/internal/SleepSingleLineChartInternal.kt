@@ -734,7 +734,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             launchState == SleepInternalLaunchState.RESTFULNESS ||
             launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
         ) {
-            if (currentValue < previousValue) {
+            if (currentValue <= previousValue) {
                 return Color.parseColor("#29cc74")
             }
 
@@ -743,7 +743,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
             return if (currentPercentRaise < 0) {//green
                 Color.parseColor("#29cc74")
-            } else if (currentPercentRaise > 2) {//yellow
+            } else if (currentPercentRaise >= 0 && currentPercentRaise < 2) {//yellow
                 Color.parseColor("#ffbb6b")
             } else {//red
                 Color.parseColor("#ff7c94")
