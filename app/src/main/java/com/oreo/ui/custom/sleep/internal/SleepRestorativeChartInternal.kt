@@ -321,6 +321,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         val availableWidth = width.toFloat() - endPadding
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -330,7 +331,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -345,7 +346,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -361,7 +362,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

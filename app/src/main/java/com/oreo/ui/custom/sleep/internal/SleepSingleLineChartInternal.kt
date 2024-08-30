@@ -534,6 +534,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -543,7 +545,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -558,7 +560,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -574,7 +576,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -730,16 +732,21 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
 
+        val formattedCurrentVal = String.format(locale = Locale.US, "%.1f", currentValue).toFloat()
+        val formattedPreviousVal =
+            String.format(locale = Locale.US, "%.1f", previousValue).toFloat()
+
+
         if (launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
             launchState == SleepInternalLaunchState.RESTFULNESS ||
             launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
         ) {
-            if (currentValue <= previousValue) {
+            if (formattedCurrentVal <= formattedPreviousVal) {
                 return Color.parseColor("#29cc74")
             }
 
             val currentPercentRaise =
-                ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+                ((formattedCurrentVal - formattedPreviousVal) / formattedPreviousVal) * 100
 
             return if (currentPercentRaise < 0) {//green
                 Color.parseColor("#29cc74")
@@ -749,12 +756,12 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 Color.parseColor("#ff7c94")
             }
         } else {
-            if (currentValue >= previousValue) {
+            if (formattedCurrentVal >= formattedPreviousVal) {
                 return Color.parseColor("#29cc74")
             }
 
             val currentPercentRaise =
-                ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+                ((formattedCurrentVal - formattedPreviousVal) / formattedPreviousVal) * 100
 
             return if (currentPercentRaise >= 0) {//green
                 Color.parseColor("#29cc74")

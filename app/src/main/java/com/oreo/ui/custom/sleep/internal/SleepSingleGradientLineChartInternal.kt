@@ -488,6 +488,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -497,13 +499,13 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toFloat())-offsetWidth,
                     availableWidth,
                     getYAxisValue(value.first.toFloat()),
                     xLinePaint
@@ -512,7 +514,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -528,7 +530,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

@@ -364,10 +364,10 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
 
         return if (value > 0) {
             val percent = (abs(value) / maxDeviation.toFloat()) * 100
-            center - ((center-topHeight) * percent / 100)
+            center - ((center - topHeight) * percent / 100)
         } else {
             val percent = (abs(value) / maxDeviation.toFloat()) * 100
-            center + ((center-topHeight) * percent / 100)
+            center + ((center - topHeight) * percent / 100)
         }
     }
 
@@ -407,6 +407,8 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -416,7 +418,7 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -431,7 +433,7 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -447,7 +449,7 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

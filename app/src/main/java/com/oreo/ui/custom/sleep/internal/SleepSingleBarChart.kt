@@ -417,6 +417,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         val availableWidth = width.toFloat() - endPadding
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -427,7 +428,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -442,7 +443,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -460,7 +461,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
