@@ -123,7 +123,7 @@ class ODropDownAdapter(val listener: ODDItemClickListener) :
             )
 
             SleepInternalLaunchState.TIMING -> Pair(
-                context.getString(R.string.text_timing),
+                context.getString(R.string.text_cmp),
                 R.drawable.ic_clock_off_sleep
             )
 

@@ -112,7 +112,7 @@ class ODropDownViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.TIMING -> Pair(
-                resourcesProvider.getString(R.string.text_timing),
+                resourcesProvider.getString(R.string.text_cmp),
                 R.drawable.ic_clock_off_sleep
             )
             SleepInternalLaunchState.RESPIRATORY_RATE -> Pair(

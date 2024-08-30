@@ -277,6 +277,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
                     launchState == SleepInternalLaunchState.EFFICIENCY ||
+                    launchState == SleepInternalLaunchState.HRV ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
                     "${roundedAvg.roundToInt()}"
@@ -729,19 +730,39 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
 
-        if (currentValue >= previousValue) {
-            return Color.parseColor("#29cc74")
-        }
+        if (launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
+            launchState == SleepInternalLaunchState.RESTFULNESS ||
+            launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
+        ) {
+            if (currentValue < previousValue) {
+                return Color.parseColor("#29cc74")
+            }
 
-        val currentPercentRaise =
-            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+            val currentPercentRaise =
+                ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
 
-        return if (currentPercentRaise >= 0) {//green
-            Color.parseColor("#29cc74")
-        } else if (currentPercentRaise > -2) {//yellow
-            Color.parseColor("#ffbb6b")
-        } else {//red
-            Color.parseColor("#ff7c94")
+            return if (currentPercentRaise < 0) {//green
+                Color.parseColor("#29cc74")
+            } else if (currentPercentRaise > 2) {//yellow
+                Color.parseColor("#ffbb6b")
+            } else {//red
+                Color.parseColor("#ff7c94")
+            }
+        } else {
+            if (currentValue >= previousValue) {
+                return Color.parseColor("#29cc74")
+            }
+
+            val currentPercentRaise =
+                ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
+
+            return if (currentPercentRaise >= 0) {//green
+                Color.parseColor("#29cc74")
+            } else if (currentPercentRaise > -2) {//yellow
+                Color.parseColor("#ffbb6b")
+            } else {//red
+                Color.parseColor("#ff7c94")
+            }
         }
     }
 

@@ -248,10 +248,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
+            if (ringDataStore.getRingDevice() != null && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
                 val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
                 val currentTimeStamp = DateFormats.getTimeStamp()
-                if (lastSyncTimestamp != null) {
+                if (lastSyncTimestamp != null && lastSyncTimestamp != -1L) {
                     val lastSyncDays = DateFormats.getDateDiff(
                         currentTimeStamp,
                         lastSyncTimestamp
@@ -554,7 +554,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
-                                if(isAfter12.not()){
+                                if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
                                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                                     }
@@ -598,7 +598,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
-                                if(isAfter12.not()){
+                                if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
                                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                                     }
@@ -663,7 +663,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
-                                if(isAfter12.not()){
+                                if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
                                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                                     }
@@ -736,7 +736,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel, makeSleepArray(newSleepArray)
                                     )
                                 )
-                                if(isAfter12.not()){
+                                if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
                                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                                     }
@@ -775,7 +775,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         )
                                     )
                                 }
-                                if(isAfter12.not()){
+                                if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
                                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                                     }
@@ -801,7 +801,7 @@ class SummaryDataViewModelToday @Inject constructor(
             if (shouldShowStressCard) {
                 val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
 
-                if(isAfter12){
+                if (isAfter12) {
                     healthData.sleep?.healthTrend?.let {
                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                     }
