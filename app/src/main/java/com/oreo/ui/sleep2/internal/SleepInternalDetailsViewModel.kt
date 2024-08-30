@@ -1090,15 +1090,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "\n" +
                                 " Want to boost your REM sleep for better mental and emotional health? Let’s explore some effective strategies to help you increase your REM sleep and wake up feeling more refreshed.\n" +
                                 "\n" +
-                                " *   **Maintain a consistent sleep schedule**Go to bed and wake up at the same time every day, even on weekends. This helps regulate your sleep cycles.\n" +
+                                " *   **Maintain a consistent sleep schedule** Go to bed and wake up at the same time every day, even on weekends. This helps regulate your sleep cycles.\n" +
                                 " \t\n" +
-                                " *   **Create a relaxing bedtime routine**Engage in calming activities before bed, such as reading or taking a warm bath.\n" +
+                                " *   **Create a relaxing bedtime routine** Engage in calming activities before bed, such as reading or taking a warm bath.\n" +
                                 " \t\n" +
-                                " *   **Optimize your sleep environment**Ensure your bedroom is cool, dark, and quiet. Invest in a comfortable mattress and pillows.\n" +
+                                " *   **Optimize your sleep environment** Ensure your bedroom is cool, dark, and quiet. Invest in a comfortable mattress and pillows.\n" +
                                 " \t\n" +
-                                " *   **Limit exposure to screens**Reduce screen time at least an hour before bed. The blue light from screens can interfere with your body’s production of melatonin.\n" +
+                                " *   **Limit exposure to screens** Reduce screen time at least an hour before bed. The blue light from screens can interfere with your body’s production of melatonin.\n" +
                                 " \t\n" +
-                                " *   **Monitor your diet and exercise**Avoid heavy meals, caffeine, and alcohol close to bedtime. Regular physical activity can also promote better sleep.\n" +
+                                " *   **Monitor your diet and exercise** Avoid heavy meals, caffeine, and alcohol close to bedtime. Regular physical activity can also promote better sleep.\n" +
                                 " \t\n" +
                                 "\n" +
                                 " **Conclusion**\n" +
