@@ -911,8 +911,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.TIMING -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep timing",
-                        title = "Understanding sleep timing",
+                        toolbarTitle = "Circadian mid-point",
+                        title = "Understanding circadian mid-point",
                         content = "Sleep timing refers to when your sleep occurs within the 24-hour day, and the most crucial part of this is the midpoint of sleep. The midpoint of your sleep is the time halfway between when you fall asleep and when you wake up. For optimal health, this midpoint should ideally fall between 12 a.m. and 3 a.m. Understanding sleep timing can help you align your sleep with your body’s natural rhythms, leading to better rest and overall well-being.\n" +
                                 "\n" +
                                 "**What is the midpoint of sleep?**\n" +
@@ -945,8 +945,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 )
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep timing",
-                        title = "The benefits of aligning your sleep timing",
+                        toolbarTitle = "Circadian mid-point",
+                        title = "The benefits of aligning your circadian mid-point",
                         content = "**Midpoint of sleep is crucial**\n" +
                                 "\n" +
                                 "Your body’s internal clock, known as the circadian rhythm, is designed to follow the natural cycle of day and night. When your midpoint of sleep falls between 12 a.m. and 3 a.m., you are more in sync with your circadian rhythm. This alignment is crucial for several reasons:\n" +

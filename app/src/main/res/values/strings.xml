@@ -737,7 +737,7 @@
     <string name="text_total_sleep">Total sleep</string>
     <string name="text_sleep_duration">Sleep duration</string>
     <string name="text_timing">Timing</string>
-    <string name="text_cmp">Circadian Mid-Point</string>
+    <string name="text_cmp">Circadian mid-point</string>
     <string name="text_sleep_contributors">Sleep contributors</string>
     <string name="text_time_in_bed">Time in bed</string>
     <string name="text_sleep_efficiency">Sleep efficiency</string>

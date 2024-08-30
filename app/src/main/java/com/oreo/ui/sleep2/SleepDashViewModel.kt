@@ -833,7 +833,7 @@ enum class SleepContributor(val displayName: String, val icon: Int) {
     EFFICIENCY("Efficiency", R.drawable.ic_sleep_efficiency),
     LATENCY("Latency", R.drawable.ic_sleep_latency),
     RESTFULNESS("Restfulness", R.drawable.ic_sleep_restfulness),
-    TIMING("Circadian Mid-Point", R.drawable.ic_sleep_timing),
+    TIMING("Circadian mid-point", R.drawable.ic_sleep_timing),
     RESPIRATORY_RATE("Respiratory rate", R.drawable.ic_respiratory_rate),
     RESTING_HEART_RATE("Resting heart rate", R.drawable.ic_resting_hr),
     HRV("HRV", R.drawable.ic_hrv),
