@@ -291,6 +291,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
                 val overlayColor = getAvgBarColor(roundedAvg, previousValue)
+                LOGS.d("sdfjkhsdkfjhsdf $roundedAvg - $previousValue")
                 val gradient = LinearGradient(
                     0f,
                     pos,
@@ -335,7 +336,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
                 avgLineFillPaint.setShader(gradient)
                 canvas.drawPath(path, avgLineFillPaint)
-                previousValue = avgValue
+                previousValue = roundedAvg
             }
 
             start += stepWidth.toInt()

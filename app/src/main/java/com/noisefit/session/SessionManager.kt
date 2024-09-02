@@ -643,6 +643,7 @@ class SessionManager
                     LocationUtils.startLocationService()
                 }
             } else {
+                ringDataStore.deleteOngoingRecordWorkout()
                 LocationUtils.stopLocationService()
                 sendUpdateQueryAction(UpdateDeviceAction.SetAutoWorkoutStatus(true))
             }
