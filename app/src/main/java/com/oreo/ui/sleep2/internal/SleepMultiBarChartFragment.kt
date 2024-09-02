@@ -87,16 +87,15 @@ class SleepMultiBarChartFragment :
         return data?.map {
             GraphDataModel(
                 date = LocalDate.parse(it.date),
-                value1 =
-                if (it.value1 == null) {
-                    null
-                } else {
-                    (it.value1 ?: 0.0f) / 60
-                },
-                value2 = if (it.value2 == null) {
+                value1 =if (it.value2 == null) {
                     null
                 } else {
                     (it.value2 ?: 0.0f) / 60
+                },
+                value2 = if (it.value1 == null) {
+                    null
+                } else {
+                    (it.value1 ?: 0.0f) / 60
                 }
             )
         } ?: ArrayList()

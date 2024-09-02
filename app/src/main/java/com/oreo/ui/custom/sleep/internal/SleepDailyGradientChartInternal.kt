@@ -443,6 +443,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
 
 
         val textBounds = Rect()
+        val textPadding = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -452,7 +453,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -467,7 +468,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -483,7 +484,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

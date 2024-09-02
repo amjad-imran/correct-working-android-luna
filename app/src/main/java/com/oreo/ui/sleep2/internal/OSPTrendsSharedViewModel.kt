@@ -465,26 +465,29 @@ class OSPTrendsSharedViewModel @Inject constructor(
             }
 
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
-                val skinTemp = if (sessionManager.isMetric()) {
-                    String.format(
-                        locale = Locale.US,
-                        "%.1f",
-                        AppConversionUtils.fahrenheitToCelsius(
-                            value
-                        ),
-                    )
-                } else {
-                    String.format(
-                        locale = Locale.US,
-                        "%.1f",
+               if (sessionManager.isMetric()) {
+                    val convertedValue = AppConversionUtils.fahrenheitToCelsius(
                         value
                     )
-                }
 
-                Pair(
-                    value,
-                    skinTemp
-                )
+                    Pair(
+                        convertedValue,
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f",
+                            convertedValue,
+                        )
+                    )
+                } else {
+                   Pair(
+                       value,
+                       String.format(
+                           locale = Locale.US,
+                           "%.1f",
+                           value
+                       )
+                   )
+                }
             }
 
             SleepInternalLaunchState.RESTING_HEART_RATE,

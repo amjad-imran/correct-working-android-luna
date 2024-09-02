@@ -319,8 +319,8 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "-"
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = "-"
         } else {
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                (avgValue / 60).roundToInt() ?: 0
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                avgValue.roundToInt() ?: 0
             )
 
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "$hour"
@@ -685,14 +685,14 @@ class SleepInternalDetailsFragment :
                     binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                         lytHours.textLegend.visible()
                         lytHours.ivLegend.visible()
-                        lytHours.textLegend.text = "rem"
-                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
+                        lytNeed.textLegend.text = "rem"
+                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
 
                         lytNeed.textLegend.visible()
                         lytNeed.ivLegend.visible()
 
-                        lytNeed.textLegend.text = "deep"
-                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
+                        lytHours.textLegend.text = "deep"
+                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
                     }
                 } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
                     if (topContentData.isInteracting) {
@@ -828,8 +828,17 @@ class SleepInternalDetailsFragment :
                 tvMin.text = "-"
             }
         } else {
-            val hours = value1
-            val need = value2
+            val hours = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                value2
+            }else{
+                value1
+            }
+            val need = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                value1
+            }else{
+                value2
+            }
+
             if (hours != null) {
                 binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
@@ -864,6 +873,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight
         if (percent1 == null) {
             singleBind.root.gone()
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
         } else {
             singleBind.root.visible()
             if (percent1 > 0) {
@@ -933,6 +943,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight
         if (percent2 == null) {
             singleBind2.root.gone()
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
         } else {
             singleBind2.root.visible()
             if (percent2 > 0) {
