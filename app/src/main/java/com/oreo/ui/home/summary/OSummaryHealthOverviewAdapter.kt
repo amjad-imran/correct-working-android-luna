@@ -109,6 +109,7 @@ class OSummaryHealthOverviewAdapter() :
                     false
                 )
             )
+
             R.layout.layout_chat_card_dash -> HomeRecyclerViewHolder.AiCardViewHolder(
                 LayoutChatCardDashBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -372,6 +373,7 @@ class OSummaryHealthOverviewAdapter() :
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
+
             is HomeRecyclerViewHolder.DashHealthMonitorViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.HealthMonitorCard)
             }
@@ -449,7 +451,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             val hasHealthData = hasHealthData(data.data)
 
-            if(hasHealthData){
+            if (hasHealthData) {
                 var outOfRangeCount = 0
                 var isSignificant = false
                 var trendName = ""
@@ -564,14 +566,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         "slightly"
                     }
                     binding.tvNudge.visible()
-                    binding.tvNudge.text =
-                        "Your $trendName is $text elevated"
+                    if (trendName.equals("Blood oxygen", true) || trendName.equals("HRV", true)) {
+                        binding.tvNudge.text = "Your $trendName is $text low"
+                    } else {
+                        binding.tvNudge.text = "Your $trendName is $text elevated"
+                    }
                 } else {
                     binding.tvNudge.visible()
                     binding.tvNudge.text =
                         "$outOfRangeCount/5 metrics are out of range"
                 }
-            }else{
+            } else {
                 binding.apply {
                     imvResp.setImageResource(R.drawable.ic_hm_check_default)
                     imvRHR.setImageResource(R.drawable.ic_hm_check_default)
@@ -584,9 +589,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked(data.data))
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked(
+                        data.data
+                    )
+                )
             }
         }
+
         fun hasHealthData(healthTrend: HealthTrend?): Boolean {
             if (healthTrend == null) return false
             return !(healthTrend.resp?.status.isNullOrEmpty() &&
@@ -596,6 +606,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     healthTrend.skinTemp?.status.isNullOrEmpty())
 
         }
+
         fun getHealthTrendState(status: String?): Int {
             val drawable: Int = if (status.equals("warning", true)) {
                 2
@@ -622,6 +633,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             return drawable
         }
     }
+
     class AiCardViewHolder(private val binding: LayoutChatCardDashBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
