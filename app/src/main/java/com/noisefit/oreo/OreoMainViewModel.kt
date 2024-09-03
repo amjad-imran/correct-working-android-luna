@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
@@ -16,6 +17,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
@@ -62,11 +64,13 @@ constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val ringDataStore: RingDataStore,
+    val watchDataStore: WatchDataStore,
     val syncRepository: OreoSyncRepository,
     val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
     val locationDataSource: LocationDataSource,
     val userActivityRepository: OreoUserActivityRepository,
+    val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 
@@ -916,6 +920,36 @@ constructor(
                 sessionManager.forceUpdateApp.postValue(Event(true))
             } else {
                 sessionManager.forceUpdateApp.postValue(Event(false))
+            }
+        }
+    }
+
+    fun updateRingLocation(location: Pair<Double, Double>) {
+        viewModelScope.launch {
+            val mac = ringDataStore.getRingDevice()?.address
+            val batteryPercent = watchDataStore.getBatteryPercentRing()
+
+
+            val request = JsonObject().apply {
+                this.addProperty("latitude", location.first)
+                this.addProperty("longitude", location.second)
+                this.addProperty("battery_percentage", batteryPercent)
+                this.addProperty("mac_address", mac)
+            }
+
+            userRepository.setRingLastLocation(
+                request
+            ).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+
+                    else -> {}
+                }
             }
         }
     }

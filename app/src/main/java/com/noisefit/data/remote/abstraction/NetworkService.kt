@@ -1,6 +1,7 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -229,6 +230,17 @@ interface NetworkService {
     suspend fun getCityList(
         @Url string: String,
     ): BaseApiResponse<List<CityData>>
+
+    @GET
+    suspend fun getRingLastLocation(
+        @Url string: String,
+    ): BaseApiResponse<List<RingLocationData>>
+
+    @POST
+    suspend fun setRingLastLocation(
+        @Url string: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
 
 
     @POST

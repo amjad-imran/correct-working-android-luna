@@ -22,6 +22,7 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
@@ -45,6 +46,7 @@ import com.noisefit.watch.DeviceQueryHandler
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.constants.ConnectionEventsConstants
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
@@ -95,6 +97,7 @@ import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -222,11 +225,13 @@ constructor() : LifecycleService() {
                     startForeground(
                         NOTIFICATION_ID_MAIN_OREO,
                         it,
-                        ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
-                }else {
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                    )
+                } else {
                     startForeground(
                         NOTIFICATION_ID_MAIN_OREO,
-                        it)
+                        it
+                    )
                 }
             }
 
@@ -257,11 +262,13 @@ constructor() : LifecycleService() {
                                 startForeground(
                                     NOTIFICATION_ID_MAIN_OREO,
                                     it,
-                                    ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
-                            }else {
+                                    ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                                )
+                            } else {
                                 startForeground(
                                     NOTIFICATION_ID_MAIN_OREO,
-                                    it)
+                                    it
+                                )
                             }
                         }
 
@@ -301,11 +308,13 @@ constructor() : LifecycleService() {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
                             it,
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
-                    }else {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                        )
+                    } else {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
-                            it)
+                            it
+                        )
                     }
                 }
                 isStopServiceCalled = true
@@ -323,11 +332,13 @@ constructor() : LifecycleService() {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
                             it,
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
-                    }else {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                        )
+                    } else {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
-                            it)
+                            it
+                        )
                     }
 
                 }
@@ -706,6 +717,17 @@ constructor() : LifecycleService() {
 
                                 }
 
+                                LOGS.d("sdfkjsk failed - >${connectState.status}")
+
+                                //TODO handling for disconnect case
+                                /*if (connectState.status.equals(
+                                        ConnectionEventsConstants.Disconnected,
+                                        true
+                                    )
+                                ) {*/
+                                    onRingDisconnected()
+                                //}
+
                                 if (status != "failed") {
                                     logConnectionEvents(
                                         InsiderAppEvents.ConnectionEvents.wn_connect_reconnect_failed,
@@ -816,6 +838,16 @@ constructor() : LifecycleService() {
 
             setISConnected(colorFitDevice)
         } ?: LOGS.d(TAG, "Connected device is null")
+    }
+
+    private fun onRingDisconnected() {
+
+        GlobalScope.launch(Dispatchers.IO) {
+            //todo handle is disconnected location already sent
+            LOGS.d("sdfkjsk onRingDisconnected")
+            //sessionManager.updateRingLocation.postValue(Event(true))
+        }
+
     }
 
     private fun setRealTimeDataState() {
@@ -1413,11 +1445,13 @@ constructor() : LifecycleService() {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
                             it,
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
-                    }else {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                        )
+                    } else {
                         startForeground(
                             NOTIFICATION_ID_MAIN_OREO,
-                            it)
+                            it
+                        )
                     }
 
                 }

@@ -1337,5 +1337,8 @@
     <string name="text_pay_attention">Pay attention</string>
     <string name="text_good_fair">Good/Fair</string>
     <string name="text_optimal">Optimal</string>
+    <string name="text_ring_location_message">This is the latest location where your ring connected with the app. Note that this may not be the current location of your ring.</string>
+    <string name="text_directions">Directions</string>
+    <string name="text_choose_map">Choose map</string>
 
 </resources>

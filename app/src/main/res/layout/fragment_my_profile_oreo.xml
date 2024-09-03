@@ -19,8 +19,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvLogout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/backBtn">
@@ -140,6 +141,17 @@
                     app:text="Get support" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowFindMyRing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_support"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowSupport"
+                    app:text="Find my ring" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowAbout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +159,7 @@
                     app:image="@drawable/ic_info_black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowSupport"
+                    app:layout_constraintTop_toBottomOf="@+id/rowFindMyRing"
                     app:text="@string/text_about" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow

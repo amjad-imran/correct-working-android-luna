@@ -67,6 +67,7 @@ class SessionManager
 
     }
 
+    val updateRingLocation = MutableLiveData<Event<Boolean>>()
     val forceUpdateApp =  MutableLiveData<Event<Boolean>>()
 
     /**

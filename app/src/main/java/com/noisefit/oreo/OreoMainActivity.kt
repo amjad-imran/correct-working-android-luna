@@ -41,6 +41,8 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.location.LocationService2
+import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -603,9 +605,24 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
+        viewModel.sessionManager.updateRingLocation.observe(this) {
+            it.getContent()?.let {
+                LOGS.d("sdfkjsk Get location")
+                LocationUtils2.startLocationService()
+            }
+        }
+
+        LocationService2.locationBroadCastFindMyRing.observe(this){
+            it.getContent()?.let {
+                LOGS.d("sdfkjsk updating location")
+                viewModel.updateRingLocation(it)
+            }
+        }
+
+
         viewModel.sleepDashTodayReload.observe(this) {
             it.getContent()?.let {
-                if(navController?.currentDestination?.id == R.id.sleepDashFragment){
+                if (navController?.currentDestination?.id == R.id.sleepDashFragment) {
                     navController?.popBackStack(R.id.sleepDashFragment, true)
                     navController?.navigate(R.id.sleepDashFragment)
                 }
@@ -613,7 +630,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         viewModel.sessionManager.forceUpdateApp.observe(this) {
-            it.getContent()?.let { isRequired->
+            it.getContent()?.let { isRequired ->
                 if (isRequired) {
                     if (navController?.currentDestination?.id != R.id.bottomSheetForceUpdate) {
                         navController?.navigate(R.id.bottomSheetForceUpdate)

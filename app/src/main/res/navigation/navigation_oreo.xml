@@ -1038,4 +1038,8 @@
         android:id="@+id/troubleShootBottomSheetFragment"
         android:name="com.oreo.ui.info.troubleshoot.TroubleShootBottomSheetFragment"
         android:label="TroubleShootBottomSheetFragment" />
+    <fragment
+        android:id="@+id/ringLocationFragment"
+        android:name="com.oreo.ui.findmyring.RingLocationFragment"
+        android:label="fragment_ring_location" />
 </navigation>

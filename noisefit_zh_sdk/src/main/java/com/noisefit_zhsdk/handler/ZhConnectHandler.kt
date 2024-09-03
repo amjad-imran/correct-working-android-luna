@@ -125,6 +125,8 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     if (!noiseFitDevice?.watchToken.isNullOrEmpty() && !isDisconnect) {
                         return
                     }
+                    LOGS.d("sdfkjsk STATE_DISCONNECTED")
+
                     baseConnectionCallbacks?.onConnect(
                         ConnectState.ConnectFailed(
                             noiseFitDevice,

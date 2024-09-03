@@ -3,6 +3,7 @@ package com.noisefit.data.repository.abstraction
 import android.net.Uri
 import com.google.gson.JsonObject
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -48,4 +49,9 @@ interface UserRepository {
     suspend fun saveUserLocation(request: JsonObject): Flow<Resource<BaseApiResponse<UserLocationUpdatedResponse>>>
     suspend fun getStateList(): Flow<Resource<BaseApiResponse<List<StateData>>>>
     suspend fun getCityList(stateId: Int): Flow<Resource<BaseApiResponse<List<CityData>>>>
+
+    suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<List<RingLocationData>>>>
+    suspend fun setRingLastLocation(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+
 }

@@ -7,6 +7,7 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -71,6 +72,22 @@ class UserRepositoryImpl(
             val url =
                 "${BuildConfig.BASE_URL_NEW}/master/location/city_list/$stateId"
             remoteDataSource.getCityList(url)
+        }
+    }
+
+    override suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<List<RingLocationData>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/user_detail/ring/get/last-disconnect/location/$mac"
+            remoteDataSource.getRingLastLocation(url)
+        }
+    }
+
+    override suspend fun setRingLastLocation(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/user_detail/ring/last-disconnect/location"
+            remoteDataSource.setRingLastLocation(url, request)
         }
     }
 
