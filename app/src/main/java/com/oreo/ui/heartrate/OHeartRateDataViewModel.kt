@@ -210,16 +210,18 @@ class OHeartRateDataViewModel @Inject constructor(
                 )
             )
         }
-        if (sleep != null) {
-            if (sleep.hourly_breakup != null)
-                dataList.add(
-                    ODayTimeActivitiesDataModel(
-                        type = "Sleep",
-                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
-                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
-                    )
+
+        sleep?.sleeps?.forEach {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Sleep",
+                    startTime = it.startTime,
+                    endTime = it.endTime,
+                    dateTime = it.startTime
                 )
+            )
         }
+
         sleep?.naps?.forEach { nap ->
             if (nap.date.equals(dayData.date) && !nap.isNextDayNap) {
                 dataList.add(

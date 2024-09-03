@@ -119,16 +119,16 @@ constructor(
                 )
             )
         }
-        if (sleep != null) {
-            if (sleep.hourly_breakup != null)
-                dataList.add(
-                    OStressActivitiesDataModel(
-                        type = "Sleep",
-                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
-                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
-                        dateTime = "${sleep.hourly_breakup?.firstOrNull()?.start_time}"
-                    )
+
+        sleep?.sleeps?.forEach {
+            dataList.add(
+                OStressActivitiesDataModel(
+                    type = "Sleep",
+                    startTime = it.startTime,
+                    endTime = it.endTime,
+                    dateTime = it.startTime
                 )
+            )
         }
 
         sleep?.naps?.forEach { nap ->

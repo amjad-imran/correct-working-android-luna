@@ -8,7 +8,7 @@
 
         <TextView
             android:id="@+id/tvHour"
-            style="@style/S28"
+            style="@style/S24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/tvUnitHr"
-            style="@style/S16"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/tvMin"
-            style="@style/S28"
+            style="@style/S24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/tvUnitMin"
-            style="@style/S16"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
@@ -55,18 +55,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvHour" />
 
+        <TextView
+            android:id="@+id/tvAvg"
+            style="@style/S12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/white_60"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/lytTrendsHighlight"
+            app:layout_constraintStart_toEndOf="@id/lytTrendsHighlight"
+            app:layout_constraintTop_toTopOf="@id/lytTrendsHighlight"
+            tools:text="avg hours" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivLegend"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:background="#7858cc"
-            app:layout_constraintTop_toBottomOf="@id/lytTrendsHighlight"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toStartOf="@+id/textLegend"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
-            tools:layout_editor_absoluteY="83dp" />
+            app:layout_constraintTop_toBottomOf="@id/lytTrendsHighlight"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
         <TextView
             android:id="@+id/textLegend"

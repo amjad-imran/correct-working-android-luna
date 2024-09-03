@@ -24,6 +24,7 @@ import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
@@ -297,7 +298,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                     canvas.drawLine(
                         start,
                         actualPos,
-                        start + dataStepWidth ,
+                        start + dataStepWidth,
                         actualPosNext,
                         if (isInteracting) linePaintHourI else linePaintHour
                     )
@@ -601,6 +602,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -610,7 +612,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -625,7 +627,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -641,7 +643,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -723,7 +725,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         mMax = maxValue
 
 
-        if(launchState==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+        if (launchState == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
             linePaintHour = Paint().apply {
                 this.color = Color.parseColor("#66c3a3e3")
                 strokeWidth = dip2px(1f).toFloat()
@@ -747,7 +749,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
                 startX = event.x
                 touchX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

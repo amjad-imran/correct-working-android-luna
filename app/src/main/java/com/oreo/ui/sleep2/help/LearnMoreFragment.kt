@@ -6,7 +6,7 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLearnMoreBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
+import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import io.noties.markwon.Markwon
 
 

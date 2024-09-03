@@ -13,12 +13,11 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
+import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -464,7 +463,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             )
 
             SleepInternalLaunchState.TIMING -> Pair(
-                resourcesProvider.getString(R.string.text_timing), R.drawable.ic_clock_off_sleep
+                resourcesProvider.getString(R.string.text_cmp), R.drawable.ic_clock_off_sleep
             )
 
             SleepInternalLaunchState.RESPIRATORY_RATE -> {
@@ -544,9 +543,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepLearnMoreDataModel(
                         toolbarTitle = "Restorative sleep",
                         title = "The benefits of getting enough restorative sleep",
-                        content = "**Introduction** Restorative sleep, which includes deep sleep and REM sleep, is the most vital part of your sleep cycle. To feel truly rested, you should aim to spend 40-50% of your sleep in these stages. Getting enough restorative sleep offers numerous benefits for your body and mind, helping you maintain optimal health.\n" +
+                        content = "**Introduction**\n\n Restorative sleep, which includes deep sleep and REM sleep, is the most vital part of your sleep cycle. To feel truly rested, you should aim to spend 40-50% of your sleep in these stages. Getting enough restorative sleep offers numerous benefits for your body and mind, helping you maintain optimal health.\n" +
                                 "\n" +
-                                "**Why restorative sleep is key?**Restorative sleep is where the magic happens during your sleep cycle. It’s when your body heals and your mind recharges. Here’s why it’s important:\n" +
+                                "**Why restorative sleep is key?**\n\nRestorative sleep is where the magic happens during your sleep cycle. It’s when your body heals and your mind recharges. Here’s why it’s important:\n" +
                                 "\n" +
                                 "*   **Physical health:** During deep sleep, your body repairs tissues, builds muscle, and strengthens your immune system. This stage of sleep is critical for physical recovery, especially if you’re active or recovering from illness.\n" +
                                 "    \n" +
@@ -655,7 +654,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         title = "How to improve sleep performance?",
                         content = "Improving your sleep performance can lead to better health and well-being. Let's explore how you can enhance your sleep performance to feel your best every day.\n" +
                                 "\n" +
-                                "**Why improve sleep performance?**Increasing the percentage of sleep hours you get relative to your sleep need can enhance your physical health, mental well-being, and overall quality of life.\n" +
+                                "**Why improve sleep performance?**\n\nIncreasing the percentage of sleep hours you get relative to your sleep need can enhance your physical health, mental well-being, and overall quality of life.\n" +
                                 "\n" +
                                 "Tips for improving sleep performance\n" +
                                 "\n" +
@@ -702,7 +701,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "    *   **Benefit**: Personalized insights can help you make informed decisions to improve your sleep.\n" +
                                 "        \n" +
                                 "\n" +
-                                "**Conclusion**Improving sleep performance is about making small, consistent changes to your routine and environment. By optimizing your sleep habits and focusing on getting the right amount of sleep relative to your need, you can enjoy better health, improved mood, and higher productivity.\n",
+                                "**Conclusion**\n\nImproving sleep performance is about making small, consistent changes to your routine and environment. By optimizing your sleep habits and focusing on getting the right amount of sleep relative to your need, you can enjoy better health, improved mood, and higher productivity.\n",
                         img = R.drawable.image_learn_performance,
                         internalImg = R.drawable.image_learn_performance_int
                     )
@@ -875,7 +874,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     SleepLearnMoreDataModel(
                         toolbarTitle = "Sleep consistency",
                         title = "The benefits of maintaining sleep consistency",
-                        content = "**Introduction** Sleep consistency is essential for achieving high-quality sleep and maintaining overall health. It refers to how regularly you go to bed and wake up at the same times each day. Ideally, your sleep and wake times should not vary by more than 60 minutes over a two-week period. Maintaining sleep consistency offers numerous benefits that can enhance your physical, mental, and emotional well-being.\n" +
+                        content = "**Introduction**\n\nSleep consistency is essential for achieving high-quality sleep and maintaining overall health. It refers to how regularly you go to bed and wake up at the same times each day. Ideally, your sleep and wake times should not vary by more than 60 minutes over a two-week period. Maintaining sleep consistency offers numerous benefits that can enhance your physical, mental, and emotional well-being.\n" +
                                 "\n" +
                                 "**Why sleep consistency is important** ?\n" +
                                 "\n" +
@@ -912,8 +911,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.TIMING -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep timing",
-                        title = "Understanding sleep timing",
+                        toolbarTitle = "Circadian mid-point",
+                        title = "Understanding circadian mid-point",
                         content = "Sleep timing refers to when your sleep occurs within the 24-hour day, and the most crucial part of this is the midpoint of sleep. The midpoint of your sleep is the time halfway between when you fall asleep and when you wake up. For optimal health, this midpoint should ideally fall between 12 a.m. and 3 a.m. Understanding sleep timing can help you align your sleep with your body’s natural rhythms, leading to better rest and overall well-being.\n" +
                                 "\n" +
                                 "**What is the midpoint of sleep?**\n" +
@@ -946,8 +945,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 )
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep timing",
-                        title = "The benefits of aligning your sleep timing",
+                        toolbarTitle = "Circadian mid-point",
+                        title = "The benefits of aligning your circadian mid-point",
                         content = "**Midpoint of sleep is crucial**\n" +
                                 "\n" +
                                 "Your body’s internal clock, known as the circadian rhythm, is designed to follow the natural cycle of day and night. When your midpoint of sleep falls between 12 a.m. and 3 a.m., you are more in sync with your circadian rhythm. This alignment is crucial for several reasons:\n" +
@@ -1075,7 +1074,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.REM_SLEEP -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "REM sleep",
                         title = "Understanding REM sleep",
                         content = "**What is REM sleep?**\n" +
                                 "\n" +
@@ -1091,15 +1090,15 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "\n" +
                                 " Want to boost your REM sleep for better mental and emotional health? Let’s explore some effective strategies to help you increase your REM sleep and wake up feeling more refreshed.\n" +
                                 "\n" +
-                                " *   **Maintain a consistent sleep schedule**Go to bed and wake up at the same time every day, even on weekends. This helps regulate your sleep cycles.\n" +
+                                " *   **Maintain a consistent sleep schedule** Go to bed and wake up at the same time every day, even on weekends. This helps regulate your sleep cycles.\n" +
                                 " \t\n" +
-                                " *   **Create a relaxing bedtime routine**Engage in calming activities before bed, such as reading or taking a warm bath.\n" +
+                                " *   **Create a relaxing bedtime routine** Engage in calming activities before bed, such as reading or taking a warm bath.\n" +
                                 " \t\n" +
-                                " *   **Optimize your sleep environment**Ensure your bedroom is cool, dark, and quiet. Invest in a comfortable mattress and pillows.\n" +
+                                " *   **Optimize your sleep environment** Ensure your bedroom is cool, dark, and quiet. Invest in a comfortable mattress and pillows.\n" +
                                 " \t\n" +
-                                " *   **Limit exposure to screens**Reduce screen time at least an hour before bed. The blue light from screens can interfere with your body’s production of melatonin.\n" +
+                                " *   **Limit exposure to screens** Reduce screen time at least an hour before bed. The blue light from screens can interfere with your body’s production of melatonin.\n" +
                                 " \t\n" +
-                                " *   **Monitor your diet and exercise**Avoid heavy meals, caffeine, and alcohol close to bedtime. Regular physical activity can also promote better sleep.\n" +
+                                " *   **Monitor your diet and exercise** Avoid heavy meals, caffeine, and alcohol close to bedtime. Regular physical activity can also promote better sleep.\n" +
                                 " \t\n" +
                                 "\n" +
                                 " **Conclusion**\n" +
@@ -1112,7 +1111,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "REM sleep",
                         title = "The benefits of REM sleep",
                         content = "Although it occupies a smaller portion of the sleep cycle compared to other stages, REM sleep plays a vital role in cognitive function, emotional regulation, and overall health. Understanding the benefits of REM sleep can help individuals appreciate its importance and take steps to ensure they achieve sufficient REM sleep each night.\n" +
                                 "\n" +
@@ -1148,7 +1147,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             SleepInternalLaunchState.DEEP_SLEEP -> {
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "Deep sleep",
                         title = "Understanding deep sleep",
                         content = "**What is deep sleep?**\n" +
                                 "\n" +
@@ -1187,7 +1186,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 )
                 dataList.add(
                     SleepLearnMoreDataModel(
-                        toolbarTitle = "Sleep duration",
+                        toolbarTitle = "Deep sleep",
                         title = "The benefits of Deep sleep",
                         content = "**Introduction**\n" +
                                 "\n" +
@@ -1229,11 +1228,11 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         title = "Understanding sleep duration",
                         content = "**Understanding sleep duration**\n" +
                                 "\n" +
-                                " **Introduction**Sleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
+                                " **Introduction**\n\nSleep duration is a critical component of overall health and well-being. It refers to the total amount of sleep an individual gets each night and plays a crucial role in various bodily functions, including cognitive performance, physical recovery, and emotional regulation. Understanding the concept of sleep duration and how it varies across different stages of life is essential for optimizing health.\n" +
                                 "\n" +
-                                " **The basics of sleep duration** Sleep duration is the amount of time spent asleep from the moment you fall asleep until you wake up. This period encompasses all stages of sleep, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each of which is vital for different aspects of physical and mental recovery.\n" +
+                                " **The basics of sleep duration**\n\nSleep duration is the amount of time spent asleep from the moment you fall asleep until you wake up. This period encompasses all stages of sleep, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each of which is vital for different aspects of physical and mental recovery.\n" +
                                 "\n" +
-                                " **Why sleep duration matters** Adequate sleep duration is necessary for the body to repair tissues, regulate hormones, and consolidate memories. Chronic sleep deprivation, where an individual consistently gets less sleep than needed, can lead to various health issues such as weakened immune function, increased risk of chronic diseases, impaired cognitive function, and mood disturbances.\n" +
+                                " **Why sleep duration matters**\n\nAdequate sleep duration is necessary for the body to repair tissues, regulate hormones, and consolidate memories. Chronic sleep deprivation, where an individual consistently gets less sleep than needed, can lead to various health issues such as weakened immune function, increased risk of chronic diseases, impaired cognitive function, and mood disturbances.\n" +
                                 "\n" +
                                 " **Sleep duration across different age groups** Sleep needs are not static and change throughout the human lifespan.\n" +
                                 "\n" +
@@ -1246,7 +1245,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 " *   **Older adults:** Although the amount of sleep needed doesn’t drastically change in older age, sleep patterns can shift. Older adults may find it more challenging to achieve continuous, deep sleep, but it remains important to aim for 7 to 8 hours to support overall health.\n" +
                                 " \t\n" +
                                 "\n" +
-                                " **Factors affecting sleep duration** Several factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration.",
+                                " **Factors affecting sleep duration**\n\nSeveral factors can influence how much sleep you get, including lifestyle choices, sleep environment, and health conditions. Stress, caffeine, screen time, and irregular sleep schedules can all negatively impact sleep duration. Understanding these factors and how they affect your sleep can help you make adjustments to improve your sleep quality and duration.",
                         img = R.drawable.image_learn_common,
                         internalImg = R.drawable.image_learn_common_int
                     )
@@ -1287,7 +1286,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 " \t\n" +
                                 " *   **Limit exposure to blue light:** Blue light from screens can interfere with melatonin production. Limiting screen time before bed can help improve sleep quality and duration.\n" +
                                 " \t\n" +
-                                " *   **Manage stress effectively:** Chronic stress increases levels of **cortisol**, a hormone that can disrupt sleep if elevated at night. Techniques such as mindfulness, deep breathing, and regular physical activity can help manage stress",
+                                " *   **Manage stress effectively:**Chronic stress increases levels of **cortisol**, a hormone that can disrupt sleep if elevated at night. Techniques such as mindfulness, deep breathing, and regular physical activity can help manage stress",
                         img = R.drawable.image_learn_duration,
                         internalImg = R.drawable.image_learn_duration_int
                     )
@@ -1418,8 +1417,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 "4.  **Lower stress levels:** High movements during sleep are often linked to stress. By reducing these movements, you help your body stay in a relaxed state throughout the night, which can lower overall stress levels and contribute to a more peaceful waking experience.\n" +
                                 "    \n" +
                                 "5.  **Long-term health benefits:** Consistently achieving sleep with fewer than three high movements can reduce the risk of chronic conditions like heart disease, obesity, and diabetes. Better restfulness leads to better overall health outcomes.\n",
-                        img = R.drawable.image_learn_restorative,
-                        internalImg = R.drawable.image_learn_restorative_int
+                        img = R.drawable.image_learn_restfulness,
+                        internalImg = R.drawable.image_learn_restfulness_int
                     )
                 )
             }
@@ -1494,7 +1493,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun getTopState(interacting: Boolean): TrendsTopState {
         return when (selectedLaunchMode) {
-            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.SLEEP_TIME -> {
+            SleepInternalLaunchState.SLEEP_DURATION, SleepInternalLaunchState.SLEEP_TIME,
+            SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
                 TrendsTopState.SINGLE_DATE
             }
 
@@ -1737,6 +1737,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 data class TopContentData(
     val isInteracting: Boolean,
     val date: LocalDate? = null,
+    val time: String? = null,
     val trendsData: TrendAverage? = null,
     val dailyValue: Float? = null,
 )

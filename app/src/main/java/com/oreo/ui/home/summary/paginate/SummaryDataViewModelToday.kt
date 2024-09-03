@@ -29,7 +29,6 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -44,7 +43,6 @@ import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
-import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
@@ -57,6 +55,7 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
@@ -76,13 +75,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
+
 
 @HiltViewModel
 class SummaryDataViewModelToday @Inject constructor(
@@ -213,8 +215,9 @@ class SummaryDataViewModelToday @Inject constructor(
             var sleepAlertToShow: SleepAlert? = null
 
             val sleepExists = checkIfSleepExists(healthData)
+            val isSyncedAfter6 = checkIsSyncedAfterSix()
 
-            if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not() && sleepExists.not()) {
+            if (LocalDateTime.now().hour > 6 && isSleepAlertCrossed.not() && sleepExists.not() && isSyncedAfter6) {
 
                 val hrData = userRepository.getHrDataForToday()
 
@@ -245,10 +248,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
+            if (ringDataStore.getRingDevice() != null && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
                 val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
                 val currentTimeStamp = DateFormats.getTimeStamp()
-                if (lastSyncTimestamp != null) {
+                if (lastSyncTimestamp != null && lastSyncTimestamp != -1L) {
                     val lastSyncDays = DateFormats.getDateDiff(
                         currentTimeStamp,
                         lastSyncTimestamp
@@ -275,6 +278,20 @@ class SummaryDataViewModelToday @Inject constructor(
             )
 
         }
+    }
+
+    private fun checkIsSyncedAfterSix(): Boolean {
+        val lastSync = ringDataStore.getLastSyncTimeStamp()
+        if (lastSync == null || lastSync == -1L) {
+            return false
+        }
+
+        val instant: Instant = Instant.ofEpochMilli(lastSync)
+        val zoneId = ZoneId.systemDefault() // Use the system default time zone
+        val lastSyncTime = instant.atZone(zoneId).toLocalDateTime()
+        val sixAmTime = LocalDateTime.now().withHour(6).withMinute(0).withSecond(0)
+
+        return lastSyncTime > sixAmTime
     }
 
     private fun checkIfSleepExists(healthData: OreoSleepModel?): Boolean {
@@ -371,6 +388,8 @@ class SummaryDataViewModelToday @Inject constructor(
             var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
             var cycleTrackerCardBig: OHealthOverview.CycleTrackerCardBig? = null
             var cycleTrackerCardSmall: OHealthOverview.CycleTrackerCardSmall? = null
+
+            val isAfter12 = checkIfIsAfter12()
 
             femaleHealthData.let {
                 val (hasDataLoaded, femaleData) = it
@@ -535,6 +554,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if (isAfter12.not()) {
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         } else {
                             if (enableAi) {
@@ -574,6 +598,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if (isAfter12.not()) {
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         } else {
                             if (enableAi) {
@@ -634,6 +663,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
+                                if (isAfter12.not()) {
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -702,6 +736,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel, makeSleepArray(newSleepArray)
                                     )
                                 )
+                                if (isAfter12.not()) {
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
@@ -736,6 +775,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         )
                                     )
                                 }
+                                if (isAfter12.not()) {
+                                    healthData.sleep?.healthTrend?.let {
+                                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                                    }
+                                }
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
@@ -756,6 +800,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
             if (shouldShowStressCard) {
                 val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+
+                if (isAfter12) {
+                    healthData.sleep?.healthTrend?.let {
+                        userActivities.add(OHealthOverview.HealthMonitorCard(it))
+                    }
+                }
                 userActivities.add(
                     OHealthOverview.StressGraph(
                         combinedData,
@@ -790,13 +840,18 @@ class SummaryDataViewModelToday @Inject constructor(
             trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
             gotYourPeriodData.postValue(gotYourPeriodCard)
 
-            healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
+            //healthMonitorCardData.postValue(healthData.sleep?.healthTrend)
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
             showSleepAlerts(healthData.sleep)
 
         }
+    }
+
+    private fun checkIfIsAfter12(): Boolean {
+        return LocalDateTime.now().hour >= 12
+
     }
 
     private fun calculateDaysLeft(dateString: String): Long {
@@ -1298,7 +1353,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun postUpdateOtaDataOffline(): Boolean {
         val firmwareObj = ringDataStore.getNewOtaVersion()
-        LOGS.d("postUpdateOtaDataOffline ${Gson().toJson(firmwareObj)}")
+        //LOGS.d("postUpdateOtaDataOffline ${Gson().toJson(firmwareObj)}")
         if (firmwareObj?.first != null) {
 
             val lastSaveTimeStamp = firmwareObj.third
@@ -1321,9 +1376,6 @@ class SummaryDataViewModelToday @Inject constructor(
             return false
         } else {
             val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
-            LOGS.d(
-                "" + " ${lastCheckTimestamp}"
-            )
             return if (lastCheckTimestamp == 0L) {
                 true
             } else {

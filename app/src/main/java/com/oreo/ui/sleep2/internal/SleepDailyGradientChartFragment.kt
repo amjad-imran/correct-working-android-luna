@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepDailyGradientChartBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.AppConversionUtils
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -13,6 +14,11 @@ import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.Locale
 import javax.inject.Inject
 
@@ -75,14 +81,37 @@ class SleepDailyGradientChartFragment :
                     val firstValue = pageData?.data?.firstOrNull()
                     val date = firstValue?.date
                     val value = firstValue?.breakup?.get(position)
-                    sharedViewModel.sendInteractDaily(LocalDate.parse(date), value)
+
+                    val currentTime = if (firstData?.start_time == null) {
+                        null
+                    } else {
+                        val time = LocalDateTime.parse(
+                            firstData.start_time,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                        val multiplier =
+                            if (pageData?.contributorType == SleepInternalLaunchState.BLOOD_OXYGEN) {
+                                15
+                            } else {
+                                5
+                            }
+                        time.plus((multiplier * position).toLong(), ChronoUnit.MINUTES).format(
+                            DateTimeFormatter.ofPattern("hh:mm a")
+                        )
+                    }
+
+                    sharedViewModel.sendInteractDaily(
+                        LocalDate.parse(date),
+                        value,
+                        currentTime.toString()
+                    )
                 } catch (exp: Exception) {
-                    sharedViewModel.sendInteractDaily(null, null)
+                    sharedViewModel.sendInteractDaily(null, null, null)
                 }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-                sharedViewModel.sendInteractDaily(null, null)
+                sharedViewModel.sendInteractDaily(null, null, null)
             }
 
         })

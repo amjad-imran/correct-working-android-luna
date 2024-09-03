@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -442,6 +443,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
 
 
         val textBounds = Rect()
+        val textPadding = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -451,7 +453,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -466,7 +468,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -482,7 +484,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -577,7 +579,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 startX = event.x
                 touchX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

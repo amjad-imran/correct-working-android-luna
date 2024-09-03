@@ -426,8 +426,8 @@ class BarChartTemp : View {
                         current.valueFloat
                     }
                 } else if (max == 5.0f) {
-                    if (current.valueFloat > 5) {
-                        5.0f
+                    if (current.valueFloat > 6.25) {
+                        6.25f
                     } else {
                         current.valueFloat
                     }
@@ -537,8 +537,8 @@ class BarChartTemp : View {
                         list[position].valueFloat
                     }
                 } else if (max == 5.0f) {
-                    if (list[position].valueFloat > 5) {
-                        5.0f
+                    if (list[position].valueFloat > 6.25) {
+                        6.25f
                     } else {
                         list[position].valueFloat
                     }

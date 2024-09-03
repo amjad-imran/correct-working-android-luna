@@ -516,6 +516,7 @@ constructor() : LifecycleService() {
         localDataStore.setServiceState(ServiceState.STOPPED)
         WatchInfoGlobals.resetData()
         sessionManager.clearSessionManager()
+        ringDataStore.cleaNewOtaVersion()
         sessionManager.setConnectStateRing(ConnectState.UnPaired())
         stopSelf()
     }

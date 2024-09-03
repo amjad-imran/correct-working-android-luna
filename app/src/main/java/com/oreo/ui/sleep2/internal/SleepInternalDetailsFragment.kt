@@ -19,12 +19,13 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import com.oreo.ui.sleep2.help.LearnMoreFragment
 import com.oreo.ui.sleep2.internal.learnmore.OnItemClickListener
 import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreAdapter
-import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreDataModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
@@ -268,6 +269,7 @@ class SleepInternalDetailsFragment :
                         isInteracting = true,
                         date = it.first,
                         dailyValue = it.second,
+                        time = it.third,
                         trendsData = viewModel.topContentDataAverage
                     )
                 )
@@ -317,12 +319,13 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "-"
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = "-"
         } else {
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                (avgValue / 60).roundToInt() ?: 0
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                avgValue.roundToInt() ?: 0
             )
 
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "$hour"
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = "$minute"
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text =
+                String.format("%02d", minute)
         }
 
         val singleBind =
@@ -381,17 +384,55 @@ class SleepInternalDetailsFragment :
                     "$minValue"
                 } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
                     if (sharedViewModel.sessionManager.isMetric()) {
-                        String.format(
-                            locale = Locale.US,
-                            "%.1f",
-                            AppConversionUtils.fahrenheitToCelsius(avgValue!!)
-                        )
+                        if (viewModel.isDeviationSelected) {
+                            val convertedValue =
+                                AppConversionUtils.fahrenheitToCelsius(32 + avgValue!!)
+
+                            if (convertedValue >= 0) {
+                                String.format(
+                                    locale = Locale.US,
+                                    "+%.1f",
+                                    convertedValue
+                                )
+                            } else {
+                                String.format(
+                                    locale = Locale.US,
+                                    "%.1f",
+                                    convertedValue
+                                )
+                            }
+
+                        } else {
+                            val convertedValue =
+                                AppConversionUtils.fahrenheitToCelsius(avgValue!!)
+                            String.format(
+                                locale = Locale.US,
+                                "%.1f",
+                                convertedValue
+                            )
+                        }
                     } else {
-                        String.format(
-                            locale = Locale.US,
-                            "%.1f",
-                            avgValue
-                        )
+                        if (viewModel.isDeviationSelected) {
+                            if (avgValue!! >= 0) {
+                                String.format(
+                                    locale = Locale.US,
+                                    "+%.1f",
+                                    avgValue
+                                )
+                            } else {
+                                String.format(
+                                    locale = Locale.US,
+                                    "%.1f",
+                                    avgValue
+                                )
+                            }
+                        } else {
+                            String.format(
+                                locale = Locale.US,
+                                "%.1f",
+                                avgValue
+                            )
+                        }
                     }
                 } else {
                     "${avgValue!!.roundToInt()}"
@@ -425,37 +466,76 @@ class SleepInternalDetailsFragment :
             singleBind.root.invisible()
         } else {
             singleBind.root.visible()
-            if (percent > 0) {
-                singleBind.apply {
-                    tvRangeValue.text = "${percent}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_up
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
-                }
-            } else if (percent == 0) {
-                singleBind.apply {
-                    tvRangeValue.text = "${percent}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        0
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(1)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+            if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTING_HEART_RATE ||
+                viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS ||
+                viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
+            ) {
+                if (percent > 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up_red
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else if (percent == 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            0
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else {
+                    singleBind.apply {
+                        tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down_green
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
                 }
             } else {
-                singleBind.apply {
-                    tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_down
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+                if (percent > 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else if (percent == 0) {
+                    singleBind.apply {
+                        tvRangeValue.text = "${percent}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            0
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(1)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+                } else {
+                    singleBind.apply {
+                        tvRangeValue.text = "${abs(percent)}% ${getRangeText()}"
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
                 }
             }
+
+
         }
     }
 
@@ -475,8 +555,21 @@ class SleepInternalDetailsFragment :
                         ivCircle.alpha = 0.5f
                         lytHighlightTrends.root.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
-                        tvDateTime.text = topContentData.date?.format(dayFormat)
+                        tvDateTime.text =
+                            if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                                val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                "Deviation on ${topContentData.date?.format(dayFormat)}"
+                            } else {
+                                if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+                                    topContentData.time ?: ""
+                                } else {
+                                    val dayFormat =
+                                        DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                    topContentData.date?.format(dayFormat)
+                                }
+                            }
+
+
                         lytPaginate.root.gone()
                     }
 
@@ -486,13 +579,16 @@ class SleepInternalDetailsFragment :
                         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
                         ) {
                             if (viewModel.isDeviationSelected) {
-                                if (sharedViewModel.sessionManager.isMetric()) {
+                                /*if (sharedViewModel.sessionManager.isMetric()) {
+                                    LOGS.d("dnmfgbmndfgbmndf ${data?.value2} ->${AppConversionUtils.fahrenheitToCelsius(
+                                        32 + (data?.value2 ?: 0f)
+                                    )}")
                                     AppConversionUtils.fahrenheitToCelsius(
                                         32 + (data?.value2 ?: 0f)
                                     )
-                                } else {
+                                } else {*/
                                     data?.value2
-                                }
+                                /*}*/
                             } else {
                                 viewModel.handle255(
                                     topContentData.dailyValue ?: data?.value1,
@@ -552,7 +648,7 @@ class SleepInternalDetailsFragment :
                         tvOptimalRangeLabel.alpha = 0.5f
                         ivCircle.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytContentView.lytHours.lytTrendsHighlight.root.invisible()
                         lytPaginate.root.gone()
@@ -585,20 +681,46 @@ class SleepInternalDetailsFragment :
 
             TrendsTopState.DOUBLE_DATE -> {
 
-                if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
                     binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                         lytHours.textLegend.visible()
                         lytHours.ivLegend.visible()
-                        lytHours.textLegend.text = "rem"
-                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
+                        lytNeed.textLegend.text = "rem"
+                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#c3a3e3"))
 
                         lytNeed.textLegend.visible()
                         lytNeed.ivLegend.visible()
 
-                        lytNeed.textLegend.text = "deep"
-                        lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
+                        lytHours.textLegend.text = "deep"
+                        lytHours.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
                     }
-                }else{
+                } else if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
+                    if (topContentData.isInteracting) {
+                        binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                            lytHours.textLegend.visible()
+                            lytHours.ivLegend.visible()
+                            lytHours.textLegend.text = "hours"
+                            lytHours.ivLegend.setBackgroundColor(Color.parseColor("#465c8a"))
+
+                            lytNeed.textLegend.visible()
+                            lytNeed.ivLegend.visible()
+
+                            lytNeed.textLegend.text = "need"
+                            lytNeed.ivLegend.setBackgroundColor(Color.parseColor("#7858cc"))
+
+                            lytHours.tvAvg.gone()
+                            lytNeed.tvAvg.gone()
+
+                        }
+                    } else {
+                        binding.lytTopView.lytTopMultipleView.lytContentView.apply {
+                            lytHours.textLegend.gone()
+                            lytHours.ivLegend.gone()
+                            lytNeed.textLegend.gone()
+                            lytNeed.ivLegend.gone()
+                        }
+                    }
+                } else {
                     binding.lytTopView.lytTopMultipleView.lytContentView.apply {
                         lytHours.textLegend.gone()
                         lytHours.ivLegend.gone()
@@ -628,13 +750,20 @@ class SleepInternalDetailsFragment :
                         lytContentView.lytHours.lytTrendsHighlight.root.alpha = 0.5f
                         lytContentView.lytNeed.lytTrendsHighlight.root.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE dd MMMM, yyyy")
+
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytPaginate.root.gone()
 
                     }
                     val data = viewModel.trendsData[topContentData.date]
-                    showDoubleDateData(data?.value1, data?.value2, null, null)
+                    showDoubleDateData(
+                        data?.value1,
+                        data?.value2,
+                        null,
+                        null,
+                        topContentData.isInteracting
+                    )
 
                 } else {
                     binding.lytTopView.lytTopMultipleView.apply {
@@ -654,6 +783,7 @@ class SleepInternalDetailsFragment :
                         topContentData.trendsData?.avg_need,
                         topContentData.trendsData?.percent_hour,
                         topContentData.trendsData?.percent_need,
+                        topContentData.isInteracting
                     )
 
                 }
@@ -680,7 +810,14 @@ class SleepInternalDetailsFragment :
         }
     }
 
-    private fun showDoubleDateData(value1: Float?, value2: Float?, percent1: Int?, percent2: Int?) {
+
+    private fun showDoubleDateData(
+        value1: Float?,
+        value2: Float?,
+        percent1: Int?,
+        percent2: Int?,
+        isInteracting: Boolean
+    ) {
         if (value1 == null && value2 == null) {
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                 tvHour.text = "-"
@@ -691,8 +828,17 @@ class SleepInternalDetailsFragment :
                 tvMin.text = "-"
             }
         } else {
-            val hours = value1
-            val need = value2
+            val hours = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                value2
+            }else{
+                value1
+            }
+            val need = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
+                value1
+            }else{
+                value2
+            }
+
             if (hours != null) {
                 binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
@@ -726,12 +872,23 @@ class SleepInternalDetailsFragment :
         val singleBind =
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight
         if (percent1 == null) {
-            singleBind.root.invisible()
+            singleBind.root.gone()
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
         } else {
             singleBind.root.visible()
             if (percent1 > 0) {
                 singleBind.apply {
-                    tvRangeValue.text = "${percent1}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
+                                visible()
+                                text = "avg hours"
+                            }
+                            "${percent1}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
+                            "${percent1}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         R.drawable.ic_trend_up
                     )
@@ -741,7 +898,17 @@ class SleepInternalDetailsFragment :
                 }
             } else if (percent1 == 0) {
                 singleBind.apply {
-                    tvRangeValue.text = "${percent1}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
+                                visible()
+                                text = "avg hours"
+                            }
+                            "${percent1}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
+                            "${percent1}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         0
                     )
@@ -751,7 +918,17 @@ class SleepInternalDetailsFragment :
                 }
             } else {
                 singleBind.apply {
-                    tvRangeValue.text = "${abs(percent1)}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
+                                visible()
+                                text = "avg hours"
+                            }
+                            "${abs(percent1)}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
+                            "${abs(percent1)}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         R.drawable.ic_trend_down
                     )
@@ -765,12 +942,23 @@ class SleepInternalDetailsFragment :
         val singleBind2 =
             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight
         if (percent2 == null) {
-            singleBind2.root.invisible()
+            singleBind2.root.gone()
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
         } else {
             singleBind2.root.visible()
             if (percent2 > 0) {
                 singleBind2.apply {
-                    tvRangeValue.text = "${percent2}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
+                                visible()
+                                text = "avg need"
+                            }
+                            "${percent2}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
+                            "${percent2}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         R.drawable.ic_trend_up
                     )
@@ -780,7 +968,17 @@ class SleepInternalDetailsFragment :
                 }
             } else if (percent2 == 0) {
                 singleBind2.apply {
-                    tvRangeValue.text = "${percent2}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
+                                visible()
+                                text = "avg need"
+                            }
+                            "${percent2}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
+                            "${percent2}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         0
                     )
@@ -790,7 +988,17 @@ class SleepInternalDetailsFragment :
                 }
             } else {
                 singleBind2.apply {
-                    tvRangeValue.text = "${abs(percent2)}% ${getRangeText()}"
+                    tvRangeValue.text =
+                        if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
+                                visible()
+                                text = "avg need"
+                            }
+                            "${abs(percent2)}%"
+                        } else {
+                            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
+                            "${abs(percent2)}% ${getRangeText()}"
+                        }
                     ivTick.setImageResource(
                         R.drawable.ic_trend_down
                     )

@@ -7,8 +7,8 @@ import kotlinx.parcelize.Parcelize
 data class OAddSleep(
     var title: String = "",
     var duration: Int = 0,
-    var hour: String = "0",
-    var minute: String = "0",
+    var hour: String = "00",
+    var minute: String = "00",
     var day: String = "",
     var unit: String = "",
 ) : Parcelable

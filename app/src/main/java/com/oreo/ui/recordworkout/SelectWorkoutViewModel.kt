@@ -10,10 +10,12 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +29,8 @@ constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val sessionManager: SessionManager,
     private val watchDataStore: WatchDataStore,
-    private val keyValueDataSource: KeyValueDataSource
+    private val keyValueDataSource: KeyValueDataSource,
+    private val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
 
@@ -98,6 +101,11 @@ constructor(
     fun isBatteryLow(): Boolean {
         val batteryPercentage = watchDataStore.getBatteryPercentRing()
         return batteryPercentage <= 5
+    }
+
+    fun isWorkoutOngoing(): Boolean {
+        val workout = ringDataStore.getOngoingRecordWorkout()
+        return workout != null
     }
 
 

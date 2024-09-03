@@ -24,9 +24,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
     companion object {
-        fun getStartData(threadId: String?): Pair<Int, Bundle?> {
+        fun getStartData(threadId: String?,defaultMessage:String?): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
+                putString("defaultMessage", defaultMessage ?: "")
             })
         }
     }
@@ -42,6 +43,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadId = args.threadId
+        viewModel.defaultMessage = args.defaultMessage
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
 
@@ -87,7 +89,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
         binding.lytChatBox.btnNewChat.setOnClickListener {
-            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf(""))
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf("",""))
         }
 
         binding.lytChatBox.btnSendMessage.setOnClickListener {

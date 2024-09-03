@@ -70,6 +70,7 @@ import com.oreo.ui.DataType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -1379,6 +1380,7 @@ class OreoUserActivityRepositoryImpl(
         //TODO clear today data
         return safeApiCallFlow(dispatcher) {
             userHealthDataSource.clearDataByDates(arrayListOf(date))
+            delay(200)//time for clearing the data from local db
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/add/manual"
             val requestObject = JsonObject().apply {
                 this.add("sleeps", request)

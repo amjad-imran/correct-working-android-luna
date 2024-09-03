@@ -22,6 +22,9 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+
+const val DEFAULT_LONG_PRESS_TIMEOUT = 200L
+
 @HiltViewModel
 class OSPTrendsSharedViewModel @Inject constructor(
     val sessionManager: SessionManager
@@ -30,12 +33,16 @@ class OSPTrendsSharedViewModel @Inject constructor(
     private val _interactGraphData =
         MutableLiveData<LocalDate?>()
 
+    /**
+     * Triple(Date,data,time)
+     */
     private val _interactGraphDataDaily =
-        MutableLiveData<Pair<LocalDate?, Float?>?>()
+        MutableLiveData<Triple<LocalDate?, Float?, String?>?>()
 
     val interactGraphData: LiveData<LocalDate?> = _interactGraphData
 
-    val interactGraphDataDaily: LiveData<Pair<LocalDate?, Float?>?> = _interactGraphDataDaily
+    val interactGraphDataDaily: LiveData<Triple<LocalDate?, Float?, String?>?> =
+        _interactGraphDataDaily
 
     var calendarStartDate: LocalDate = LocalDate.now().minusMonths(1)
 
@@ -43,11 +50,11 @@ class OSPTrendsSharedViewModel @Inject constructor(
         _interactGraphData.postValue(day)
     }
 
-    fun sendInteractDaily(day: LocalDate?, data: Float?) {
+    fun sendInteractDaily(day: LocalDate?, data: Float?, time: String?) {
         if (day == null) {
             _interactGraphDataDaily.postValue(null)
         } else {
-            _interactGraphDataDaily.postValue(Pair(day, data))
+            _interactGraphDataDaily.postValue(Triple(day, data, time))
         }
     }
 
@@ -64,7 +71,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
         )
         return when (contributorType) {
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
-                if(sessionManager.isMetric()){
+                if (sessionManager.isMetric()) {
                     if (maxValue <= 48.0f) {
                         return arrayListOf(
                             Pair(0, "0"),
@@ -82,7 +89,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                             Pair(72, "72")
                         )
                     }
-                }else{
+                } else {
                     if (maxValue <= 120.0f) {
                         return arrayListOf(
                             Pair(0, "0"),
@@ -458,26 +465,29 @@ class OSPTrendsSharedViewModel @Inject constructor(
             }
 
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
-                val skinTemp = if (sessionManager.isMetric()) {
-                    String.format(
-                        locale = Locale.US,
-                        "%.1f",
-                        AppConversionUtils.fahrenheitToCelsius(
-                            value
-                        ),
-                    )
-                } else {
-                    String.format(
-                        locale = Locale.US,
-                        "%.1f",
+               if (sessionManager.isMetric()) {
+                    val convertedValue = AppConversionUtils.fahrenheitToCelsius(
                         value
                     )
-                }
 
-                Pair(
-                    value,
-                    skinTemp
-                )
+                    Pair(
+                        convertedValue,
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f",
+                            convertedValue,
+                        )
+                    )
+                } else {
+                   Pair(
+                       value,
+                       String.format(
+                           locale = Locale.US,
+                           "%.1f",
+                           value
+                       )
+                   )
+                }
             }
 
             SleepInternalLaunchState.RESTING_HEART_RATE,
@@ -617,9 +627,9 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 )
 
             chartModel.valueFloat =
-                if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
+                /*if (sessionManager.isMetric()) AppConversionUtils.fahrenheitToCelsius(
                     32 + (it.deviation ?: 0.0f)
-                ) else it.deviation ?: 0.0f
+                ) else*/ it.deviation ?: 0.0f
 
             list.add(chartModel)
         }
@@ -643,6 +653,28 @@ class OSPTrendsSharedViewModel @Inject constructor(
             prefix.add(chartModel)
         }
         return Triple(Pair(list, max), suffix, prefix)
+    }
+
+    fun getNonNullDataCount(
+        contributorType: SleepInternalLaunchState?,
+        dataList: List<GraphDataModel>
+    ): Int {
+
+        if (contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+            contributorType == SleepInternalLaunchState.REM_SLEEP ||
+            contributorType == SleepInternalLaunchState.DEEP_SLEEP
+        ) {
+            val filteredData = dataList.filter {
+                it.value1 != null && it.value1 != 0.0f
+            }
+            return filteredData.size
+
+        } else {
+            val filteredData = dataList.filter {
+                it.value1 != null
+            }
+            return filteredData.size
+        }
     }
 
 }

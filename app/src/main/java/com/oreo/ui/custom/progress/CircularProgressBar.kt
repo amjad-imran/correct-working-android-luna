@@ -24,6 +24,7 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
     lateinit var backgroundPaint: Paint
     lateinit var progressPaint: Paint
     lateinit var strokePaint: Paint
+    private var mStrokeWidth:Float = 10f
 
 
     init {
@@ -32,12 +33,11 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
 
     private fun init(attrs: AttributeSet?) {
 
-        var strokeWidth = 10f
         backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressBar)
-            strokeWidth = ta.getDimension(R.styleable.CircularProgressBar_archWidth, 10f)
+            mStrokeWidth = ta.getDimension(R.styleable.CircularProgressBar_archWidth, 10f)
             backgroundPaint.setColor(
                 ta.getColor(
                     R.styleable.CircularProgressBar_trackColor,
@@ -52,17 +52,18 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
 
         //backgroundPaint.setColor(Color.parseColor("#4DC5A8ED"))
         backgroundPaint.style = Paint.Style.STROKE
-        backgroundPaint.strokeWidth = strokeWidth
+        backgroundPaint.strokeWidth = mStrokeWidth
         backgroundPaint.strokeCap = Paint.Cap.ROUND
 
         progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         progressPaint.style = Paint.Style.STROKE
-        progressPaint.strokeWidth = strokeWidth
+        progressPaint.strokeWidth = mStrokeWidth
         progressPaint.strokeCap = Paint.Cap.ROUND
 
         strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         strokePaint.style = Paint.Style.STROKE
         strokePaint.strokeWidth = 1f
+        strokePaint.setColor(Color.parseColor("#FFFFFF"))
         strokePaint.strokeCap = Paint.Cap.BUTT
 
 
@@ -96,8 +97,10 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
 
         val radius = (min(width.toDouble(), height.toDouble()) / 2).toFloat()
 
-        rectF!![width / 2 - radius + 30, height / 2 - radius + 30, width / 2 + radius - 30] =
+        rectF!!.set(
+            width / 2 - radius + 30, height / 2 - radius + 30, width / 2 + radius - 30,
             height / 2 + radius - 30
+        )
 
         canvas.drawArc(rectF!!, startAngle, 240f, false, backgroundPaint)
 
@@ -105,7 +108,7 @@ class CircularProgressBar constructor(context: Context?, attrs: AttributeSet?) :
         canvas.drawArc(rectF!!, startAngle, sweepAngle, false, progressPaint)
 
 
-        //canvas.drawArc(rectF!!, startAngle, 240f, false, strokePaint)
+        //canvas.drawArc(outerRect, startAngle, 240f, false, strokePaint)
 
     }
 

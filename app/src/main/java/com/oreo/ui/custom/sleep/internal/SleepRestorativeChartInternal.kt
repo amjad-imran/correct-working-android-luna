@@ -21,6 +21,7 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import kotlin.math.roundToInt
 
 
@@ -320,6 +321,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         val availableWidth = width.toFloat() - endPadding
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -329,7 +331,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -344,7 +346,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -360,7 +362,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -492,7 +494,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 touchX = event.x
                 startX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

@@ -28,6 +28,7 @@ import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
@@ -86,6 +87,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private val endPadding = dip2px(30f)
     private var mAverage: Pair<Float, String>? = null
     private var showOverlay = false
+    private var nonNullDataCount: Int = 0
     private var launchState: SleepInternalLaunchState? = null
     private var selectedPeriod: InternalSelectedPeriod? = null
 
@@ -275,6 +277,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                     launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
                     launchState == SleepInternalLaunchState.EFFICIENCY ||
+                    launchState == SleepInternalLaunchState.HRV ||
                     launchState == SleepInternalLaunchState.LATENCY
                 ) {
                     "${roundedAvg.roundToInt()}"
@@ -288,6 +291,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
                 val overlayColor = getAvgBarColor(roundedAvg, previousValue)
+                LOGS.d("sdfjkhsdkfjhsdf $roundedAvg - $previousValue")
                 val gradient = LinearGradient(
                     0f,
                     pos,
@@ -332,7 +336,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
                 avgLineFillPaint.setShader(gradient)
                 canvas.drawPath(path, avgLineFillPaint)
-                previousValue = avgValue
+                previousValue = roundedAvg
             }
 
             start += stepWidth.toInt()
@@ -459,7 +463,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null) {
+        if (mAverage != null && nonNullDataCount > 1) {
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
@@ -531,6 +535,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -540,7 +546,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -555,7 +561,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -571,7 +577,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -629,11 +635,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         selectedPosition: Int,
         showOverlay: Boolean = false,
         launchState: SleepInternalLaunchState?,
-        selectedPeriod: InternalSelectedPeriod?
+        selectedPeriod: InternalSelectedPeriod?,
+        nonNullDataCount: Int
     ) {
         this.showOverlay = showOverlay
         this.launchState = launchState
         this.selectedPeriod = selectedPeriod
+        this.nonNullDataCount = nonNullDataCount
 
         dataPosition.clear()
 
@@ -662,7 +670,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 startX = event.x
                 touchX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }
@@ -725,19 +733,44 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         if (currentValue == null) return Color.WHITE
         if (previousValue == null) return Color.WHITE
 
-        if (currentValue >= previousValue) {
-            return Color.parseColor("#29cc74")
-        }
+        val formattedCurrentVal = String.format(locale = Locale.US, "%.1f", currentValue).toFloat()
+        val formattedPreviousVal =
+            String.format(locale = Locale.US, "%.1f", previousValue).toFloat()
 
-        val currentPercentRaise =
-            ((currentValue.toFloat() - previousValue.toFloat()) / previousValue) * 100
 
-        return if (currentPercentRaise >= 0) {//green
-            Color.parseColor("#29cc74")
-        } else if (currentPercentRaise > -2) {//yellow
-            Color.parseColor("#ffbb6b")
-        } else {//red
-            Color.parseColor("#ff7c94")
+        if (launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||
+            launchState == SleepInternalLaunchState.RESTFULNESS ||
+            launchState == SleepInternalLaunchState.SKIN_TEMPERATURE
+        ) {
+            if (formattedCurrentVal <= formattedPreviousVal) {
+                return Color.parseColor("#29cc74")
+            }
+
+            val currentPercentRaise =
+                ((formattedCurrentVal - formattedPreviousVal) / formattedPreviousVal) * 100
+
+            return if (currentPercentRaise < 0) {//green
+                Color.parseColor("#29cc74")
+            } else if (currentPercentRaise >= 0 && currentPercentRaise <= 2) {//yellow
+                Color.parseColor("#ffbb6b")
+            } else {//red
+                Color.parseColor("#ff7c94")
+            }
+        } else {
+            if (formattedCurrentVal >= formattedPreviousVal) {
+                return Color.parseColor("#29cc74")
+            }
+
+            val currentPercentRaise =
+                ((formattedCurrentVal - formattedPreviousVal) / formattedPreviousVal) * 100
+
+            return if (currentPercentRaise >= 0) {//green
+                Color.parseColor("#29cc74")
+            } else if (currentPercentRaise >= -2) {//yellow
+                Color.parseColor("#ffbb6b")
+            } else {//red
+                Color.parseColor("#ff7c94")
+            }
         }
     }
 

@@ -79,7 +79,6 @@
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/side_margin"
-        android:layout_marginBottom="@dimen/_24sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

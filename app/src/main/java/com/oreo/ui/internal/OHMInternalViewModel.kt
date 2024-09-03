@@ -17,6 +17,8 @@ class OHMInternalViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var healthTrend: HealthTrend? = null
+    var selectedDate: String? = null
+
     fun getHealthMonitorData(): ArrayList<OHMDataModel> {
         val listData = ArrayList<OHMDataModel>()
         val resp = healthTrend?.resp?.value?.let {
@@ -36,19 +38,38 @@ class OHMInternalViewModel @Inject constructor(
 
         val skinTemp = if (healthTrend?.skinTemp?.value != null) {
             if (sessionManager.isMetric()) {
-                String.format(
-                    locale = Locale.US,
-                    "%.1f",
-                    AppConversionUtils.fahrenheitToCelsius(
-                        32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
-                    ),
+                val convertedVal = AppConversionUtils.fahrenheitToCelsius(
+                    32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
                 )
+
+                if(convertedVal>0){
+                    String.format(
+                        locale = Locale.US,
+                        "+%.1f",
+                        convertedVal,
+                    )
+                }else{
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        convertedVal,
+                    )
+                }
             } else {
-                String.format(
-                    locale = Locale.US,
-                    "%.1f",
-                    healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
-                )
+                val value = healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
+                if(value>0){
+                    String.format(
+                        locale = Locale.US,
+                        "+%.1f",
+                        value,
+                    )
+                }else{
+                    String.format(
+                        locale = Locale.US,
+                        "%.1f",
+                        value,
+                    )
+                }
             }
         } else {
             null
@@ -94,7 +115,11 @@ class OHMInternalViewModel @Inject constructor(
                 value = skinTemp,
                 valueTime = null,
                 unit = if (sessionManager.isMetric()) "°C" else "°F",
-                text = healthTrend?.skinTemp?.text,
+                text = if (sessionManager.isMetric()) {
+                    healthTrend?.skinTemp?.textC
+                } else {
+                    healthTrend?.skinTemp?.text
+                },
                 status = healthTrend?.skinTemp?.status
             )
         )

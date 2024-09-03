@@ -21,6 +21,7 @@ import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import kotlin.math.roundToInt
 
 
@@ -404,6 +405,8 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -413,7 +416,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -428,7 +431,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -444,7 +447,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -518,7 +521,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
                 startX = event.x
                 touchX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

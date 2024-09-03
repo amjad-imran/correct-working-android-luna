@@ -18,6 +18,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
 import kotlin.math.roundToInt
@@ -66,6 +67,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     var mMax = 0
     var mAverage: Pair<Float, String>? = null
+    var nonNullDataCount: Int = 0
 
 
     init {
@@ -368,7 +370,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null) {
+        if (mAverage != null && nonNullDataCount > 1) {
             val textBounds = Rect()
 
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
@@ -403,8 +405,11 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 getYAxisValue(mAverage!!.first),
                 avgLinePaint
             )
-        } else {
+        }
+
+        if (nonNullDataCount == 0) {
             showNoRecordAvailable(canvas, availableWidth)
+
         }
     }
 
@@ -412,6 +417,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         val availableWidth = width.toFloat() - endPadding
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -422,7 +428,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 gridLinePaint.strokeWidth = dip2px(1f).toFloat()
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -437,7 +443,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -455,7 +461,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -503,7 +509,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         contributorType: SleepInternalLaunchState?,
-        optimalRange: Pair<Float, Float>?
+        optimalRange: Pair<Float, Float>?,
+        nonNullDataCount: Int
     ) {
         dataPosition.clear()
         dataSet.clear()
@@ -511,6 +518,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         mSelectedPosition = selectedPosition
         this.contributorType = contributorType
         this.optimalRange = optimalRange
+        this.nonNullDataCount = nonNullDataCount
 
 
         this.yAxisRange.clear()
@@ -532,7 +540,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                 startX = event.x
 
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

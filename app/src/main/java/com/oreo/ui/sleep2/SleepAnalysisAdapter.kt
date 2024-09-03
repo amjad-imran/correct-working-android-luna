@@ -31,18 +31,23 @@ class SleepAnalysisAdapter :
                 binding.tvPercentChange.text = "${sleepAnalysis.avgValue}%"
 
                 if (sleepAnalysis.name.contains("awake", true)) {
-                    if (sleepAnalysis.currentValue <= sleepAnalysis.avgValue) {
-                        binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
+                    if (sleepAnalysis.currentValue > sleepAnalysis.avgValue) {
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_increase_red)
+                    } else if (sleepAnalysis.currentValue == sleepAnalysis.avgValue) {
+                        binding.ivState.setImageResource(R.drawable.ic_state_equal)
                     } else {
-                        binding.ivState.setImageResource(R.drawable.ic_arrow_decrease)
+                        binding.ivState.setImageResource(R.drawable.ic_arrow_decrease_green)
                     }
                 } else {
-                    if (sleepAnalysis.currentValue >= sleepAnalysis.avgValue) {
+                    if (sleepAnalysis.currentValue > sleepAnalysis.avgValue) {
                         binding.ivState.setImageResource(R.drawable.ic_arrow_increase)
+                    } else if (sleepAnalysis.currentValue == sleepAnalysis.avgValue) {
+                        binding.ivState.setImageResource(R.drawable.ic_state_equal)
                     } else {
                         binding.ivState.setImageResource(R.drawable.ic_arrow_decrease)
                     }
                 }
+
 
             }
         }

@@ -52,6 +52,7 @@ data class Nap(
     val date: String,
     val id: String,
     @SerializedName("start_time") val startTime: String,
+    val prev_sleep_score: Int? = null,
     @SerializedName("sleep_score_impact") val sleepScoreImpact: Int? = null,
     @SerializedName("sleep_score") val sleepScore: Int? = null,
     @SerializedName("after_7pm") val after7pm: String,

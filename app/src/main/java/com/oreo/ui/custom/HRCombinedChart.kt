@@ -34,6 +34,7 @@ import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import kotlin.math.roundToInt
@@ -1012,7 +1013,7 @@ class HRCombinedChart : View {
                     touchX = event.x
                     handler.postDelayed(
                         mLongPressed,
-                        ViewConfiguration.getLongPressTimeout().toLong()
+                        DEFAULT_LONG_PRESS_TIMEOUT
                     )
                     return true
                 }

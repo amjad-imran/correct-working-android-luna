@@ -29,6 +29,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.LowestIntervalValue
 import com.oreo.data.model.SleepChartModel
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
@@ -562,7 +563,7 @@ class LineChartView : View {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
                     handler.postDelayed(
-                        mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                        mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                     )
                     return true
                 }

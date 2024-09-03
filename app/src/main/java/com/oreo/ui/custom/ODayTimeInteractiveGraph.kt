@@ -35,6 +35,7 @@ import com.oreo.data.model.DayTimeXYDataModel
 import com.oreo.data.model.Item
 import com.oreo.data.model.Section
 import com.oreo.ui.activity.dpToPx
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 
 class ODayTimeInteractiveGraph : View {
     private var bgColor = 0
@@ -723,7 +724,7 @@ class ODayTimeInteractiveGraph : View {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
                     handler.postDelayed(
-                        mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                        mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                     )
                     return true
                 }

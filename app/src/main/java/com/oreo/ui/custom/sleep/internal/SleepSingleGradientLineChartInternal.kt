@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -76,6 +77,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
     private val endPadding = dip2px(30f)
     private var mAverage: Pair<Float, String>? = null
+    private var nonNullDataCount: Int = 0
     private var optimalRange: Pair<Float, Float>? = null
     private var chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.PERCENT
 
@@ -363,7 +365,11 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             }
 
             SleepSingleGradientChartType.DEFAULT -> return "${value.roundToInt()}"
-            SleepSingleGradientChartType.FLOAT -> return String.format(locale = Locale.US,"%.1f", value)
+            SleepSingleGradientChartType.FLOAT -> return String.format(
+                locale = Locale.US,
+                "%.1f",
+                value
+            )
         }
 
     }
@@ -382,7 +388,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
     }
 
     private fun showAverage(canvas: Canvas, availableWidth: Float) {
-        if (mAverage != null && mAverage?.first != 0.0f) {
+        if (mAverage != null && mAverage?.first != 0.0f && nonNullDataCount > 1) {
             val textBounds = Rect()
             avgTextPaint.getTextBounds(mAverage!!.second, 0, mAverage!!.second.length, textBounds)
 
@@ -416,6 +422,9 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 avgLinePaint
             )
         } else {
+        }
+
+        if (nonNullDataCount == 0) {
             showNoRecordAvailable(canvas, availableWidth)
         }
     }
@@ -479,6 +488,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
 
 
         val textBounds = Rect()
+        val offsetWidth = dip2px(2f)
+
 
         yAxisRange.forEachIndexed { index, value ->
 
@@ -488,13 +499,13 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat()),
+                    getYAxisValue(value.first.toFloat())-offsetWidth,
                     availableWidth,
                     getYAxisValue(value.first.toFloat()),
                     xLinePaint
@@ -503,7 +514,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -519,7 +530,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat(),
+                    width - textBounds.width().toFloat()-offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -573,7 +584,8 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         chartType: SleepSingleGradientChartType,
-        optimalRange: Pair<Float, Float>?
+        optimalRange: Pair<Float, Float>?,
+        nonNullDataCount: Int
     ) {
         dataPosition.clear()
         this.chartType = chartType
@@ -590,6 +602,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         mSelectedPosition = selectedPosition
         mMax = maxValue
         mAverage = avgValue
+        this.nonNullDataCount = nonNullDataCount
 
         invalidate()
     }
@@ -603,7 +616,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 startX = event.x
                 touchX = event.x
                 handler.postDelayed(
-                    mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
+                    mLongPressed, DEFAULT_LONG_PRESS_TIMEOUT
                 )
                 return true
             }

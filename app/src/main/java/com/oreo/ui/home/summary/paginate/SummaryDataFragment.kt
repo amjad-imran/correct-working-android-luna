@@ -66,7 +66,6 @@ class SummaryDataFragment :
         val date = arguments?.getString("ARGS_DATE")
         viewModel.date = date
         viewModel.user = mainViewModel.user
-        LOGS.d("CREATED_WITH_DATE $date")
         loadData()
 
 
@@ -77,7 +76,6 @@ class SummaryDataFragment :
 
         mainViewModel.dataReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                LOGS.d(TAG, "data reload")
                 loadData()
             }
         }
@@ -161,6 +159,7 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
                 OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked -> TODO()
             }
         }
 

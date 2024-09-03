@@ -54,11 +54,13 @@ import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.model.sleep.SleepSummary
 import com.oreo.ui.calendar.BottomSheetCalendar
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.sleep2.help.LearnMoreFragment
 import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -147,6 +149,11 @@ class SleepDashFragment :
 
     override fun initListener() {
 
+        binding.lytAINudge.root.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(null,getString(R.string.sleep_ai_message))
+            navigate(frag, bundle)
+        }
+
         binding.blurViewSelector.setOnClickListener {
             animateFabDown()
         }
@@ -224,7 +231,8 @@ class SleepDashFragment :
 
         }
         binding.lytScore.ivInfo.setOnClickListener {
-            navigate(R.id.sleepPlannerFragment)
+            val (frag, bundle) = LearnMoreFragment.getStartData(viewModel.getInfoLearnMore())
+            navigate(frag, bundle)
         }
 
 
@@ -827,6 +835,7 @@ class SleepDashFragment :
         binding.lytHealthMonitor.root.setOnClickListener {
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data?.healthTrend)
+                this.putString("selectedDate", viewModel.selectedDate.value.toString())
             })
         }
 

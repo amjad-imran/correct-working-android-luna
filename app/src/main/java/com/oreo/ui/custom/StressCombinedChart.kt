@@ -33,6 +33,7 @@ import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.stress.OnStressClickAction
 
 
@@ -897,7 +898,7 @@ class StressCombinedChart : View {
                     touchX = event.x
                     handler.postDelayed(
                         mLongPressed,
-                        ViewConfiguration.getLongPressTimeout().toLong()
+                        DEFAULT_LONG_PRESS_TIMEOUT
                     )
                     return true
                 }

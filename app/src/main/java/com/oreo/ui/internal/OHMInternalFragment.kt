@@ -27,20 +27,22 @@ class OHMInternalFragment :
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
                 val launchType = sleepDashViewModel.getLaunchState(resultData.type)
-              /*  val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
-                    launchType
-                )
-                navigate(frag, bundle)*/
+                /*  val (frag, bundle) = SkinTempInternalDetailsFragment.getStartData(
+                      launchType
+                  )
+                  navigate(frag, bundle)*/
 
-                showInternalTrend(launchType)
+                showInternalTrend(launchType,
+                    viewModel.selectedDate ?: LocalDate.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
             }
         })
     }
 
-    fun showInternalTrend(state: SleepInternalLaunchState) {
+    fun showInternalTrend(state: SleepInternalLaunchState, selectedDate: String) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state,LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            state, selectedDate
         )
         navigate(frag, bundle)
     }
@@ -50,6 +52,7 @@ class OHMInternalFragment :
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             viewModel.healthTrend = args.healthTrend
+            viewModel.selectedDate = args.selectedDate
         }
         setupUI()
     }

@@ -59,7 +59,14 @@ class OAddSleepFragment :
 
 
                 addSleep?.let {
+
                     viewModel.startTimeSleep = addSleep
+
+                    if (addSleep.hour.toInt() == 0) {
+                        viewModel.startTimeSleep = addSleep.apply {
+                            this.day = "Today"
+                        }
+                    }
 
                     if (viewModel.endTimeSleep.day.isEmpty()) {
                         setStartTimeBetween()
@@ -246,7 +253,7 @@ class OAddSleepFragment :
         viewModel.addSleepResponse.observe(this) { it1 ->
             it1?.getContent().let {
                 if (it == true) {
-                    mainViewModel.dashTodayReload.value = Event(true)
+                    mainViewModel.sessionManager.reloadTodayData.value = Event(true)
                     mainViewModel.sleepDashTodayReload.value = Event(true)
                     navigateUpSafe()
                 }
