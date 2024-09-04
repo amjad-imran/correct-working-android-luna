@@ -37,6 +37,7 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.UnitDataModelArrayFloat
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.custom.LineChartAction
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
 import com.oreo.ui.custom.ScrollListener
@@ -506,8 +507,26 @@ class OreoReadinessFragment :
 
     }
 
+    private fun showCalendar(){
+        setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+            val selectedDate =
+                bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+            mainViewModel.onCalendarDateSelected(selectedDate)
+            mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+        }
+
+        navigate(R.id.bottomSheetCalendar, Bundle().apply {
+            this.putString("selectedDate", mainViewModel.selectedDate)
+            this.putString("launchedFrom", "readiness")
+        })
+    }
+
     private fun setRecycler() {
         binding.rvTopGraph.setOnChartScrollChangedListener(this)
+
+
+        binding.rvTopGraph.setOnDateClickListener { showCalendar() }
 
         //  mAdapter.setData(mViewModel.getDummyData())
         with(binding.lytRContributor.rvContributor) {
@@ -583,21 +602,8 @@ class OreoReadinessFragment :
         binding.lytToolbar.backBtn.invisible()
 
         binding.lytToolbar.view1.setOnClickListener {
-
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_date_range_click)
-
-            setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
-                val selectedDate =
-                    bundle.getString("selected_date") ?: return@setFragmentResultListener
-
-                mainViewModel.onCalendarDateSelected(selectedDate)
-                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
-            }
-
-            navigate(R.id.bottomSheetCalendar, Bundle().apply {
-                this.putString("selectedDate", mainViewModel.selectedDate)
-                this.putString("launchedFrom", "readiness")
-            })
+            showCalendar()
         }
 
         binding.lytRScoreData.root.setOnClickListener {

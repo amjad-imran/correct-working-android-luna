@@ -10,3 +10,4 @@ public interface ScrollListener {
     public void onScrolling(int position, ChartModel chartModel);
 
 }
+

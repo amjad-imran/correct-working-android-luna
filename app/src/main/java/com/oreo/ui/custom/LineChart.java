@@ -95,6 +95,7 @@ public class LineChart extends View {
     private Paint scaleNodePaint;
     private Bitmap glowDotBitmap;
     private ScrollListener onChartScrollChangedListener;
+    private LineChartAction actionListener;
     private Path path = new Path();
     private Path fillPath = new Path();
     private float unitHLenth;
@@ -376,7 +377,7 @@ public class LineChart extends View {
         postInvalidate();
     }
 
-    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList,Integer currentPos) {
+    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, Integer currentPos) {
 
         list.clear();
         list.addAll(prefixList);
@@ -428,7 +429,7 @@ public class LineChart extends View {
 //        }
 
         xMax = 120;
-        if(currentPos!=-1){
+        if (currentPos != -1) {
             mCurrentPos = currentPos;
             moveToPosition(currentPos);
         }
@@ -504,7 +505,7 @@ public class LineChart extends View {
     }
 
     public void moveToPosition(int position) {
-        LOGS.INSTANCE.w("moveToPosition "+position +"     "+list.size());
+        LOGS.INSTANCE.w("moveToPosition " + position + "     " + list.size());
         if (position < 0 || position >= list.size()) {
             // Invalid position, do nothing or handle the error as needed
             return;
@@ -529,9 +530,9 @@ public class LineChart extends View {
         mHeight = h;
 
         unitHLenth = (mWith - leftWith - rightWith) / hCount;
-        if(mCurrentPos!=-1){
-           offSet = mCurrentPos* unitHLenth;
-        }else {
+        if (mCurrentPos != -1) {
+            offSet = mCurrentPos * unitHLenth;
+        } else {
             offSet = prefixCount * unitHLenth;
         }
 
@@ -540,9 +541,9 @@ public class LineChart extends View {
         } else {
             indicatorUnitLength = titleWidth;
         }
-        if(mCurrentPos!=-1){
+        if (mCurrentPos != -1) {
             indicatorOffSet = mCurrentPos * indicatorUnitLength;
-        }else {
+        } else {
             indicatorOffSet = prefixCount * indicatorUnitLength;
         }
 
@@ -783,12 +784,15 @@ public class LineChart extends View {
                 float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - position * indicatorUnitLength;
                 xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
                 canvas.drawText(title, xInd - xTextBounds.width() / 2f, topWith / 2 + xTextBounds.height() / 2f, xTextPaint);
+
+
             }
         }
     }
 
 
     private float xDown;
+    private float yDown;
     private float moveOffSet;
 
     @Override
@@ -798,8 +802,10 @@ public class LineChart extends View {
         }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_DOWN");
                 getParent().requestDisallowInterceptTouchEvent(true);
                 xDown = event.getX();
+                yDown = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
                 moveOffSet = event.getX() - xDown;
@@ -814,6 +820,16 @@ public class LineChart extends View {
                 LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_UP");
                 callBack(true);
                 invalidate();
+
+              /*  LOGS.INSTANCE.d("sdfjhsdkfjhsdfjsdf xDown" + xDown
+                        + "  event.getX()-> "
+                        + event.getX() + "   moveOffSet-> " + moveOffSet +" yDown->"+yDown);
+
+                if (event.getY() < dip2px(50f) && (yDown==event.getY()) && (xDown==event.getX())) {
+                    if (actionListener != null) {
+                        actionListener.onDateClicked();
+                    }
+                }*/
                 break;
             default:
                 break;
@@ -887,4 +903,11 @@ public class LineChart extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    public void setOnDateClickListener(LineChartAction actionListener) {
+        this.actionListener = actionListener;
+    }
 }
+
+
+
+
