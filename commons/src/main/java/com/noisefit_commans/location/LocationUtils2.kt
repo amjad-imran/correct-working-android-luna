@@ -9,14 +9,15 @@ import com.noisefit_commans.utils.LOGS
 
 object LocationUtils2 {
 
-    fun startLocationService() {
+    fun startLocationService(postOnMain: Boolean = true) {
         val context = NoisefitApplication.context ?: return
         LOGS.d("LOCATION_lOG starting service")
 
         //todo check permissions
         if (isMyServiceRunning(LocationService2::class.java, context).not()) {
             Intent(context, LocationService2::class.java).apply {
-                action = LocationService2.ACTION_START
+                action =
+                    if (postOnMain) LocationService2.ACTION_START else LocationService2.ACTION_START_2
                 context.startService(this)
             }
             AppLogs.sendAppLogs("Start Location tracking")

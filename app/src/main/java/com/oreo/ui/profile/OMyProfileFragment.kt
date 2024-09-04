@@ -56,9 +56,6 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
-        binding.rowFindMyRing.setOnClickListener {
-            navigate(R.id.ringLocationFragment)
-        }
 
         binding.rowCycleTracker.setOnClickListener {
             viewModel.getCycleTrackerInfo()

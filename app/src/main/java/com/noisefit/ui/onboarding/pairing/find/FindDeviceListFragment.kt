@@ -100,17 +100,7 @@ class FindDeviceListFragment :
         setRecycler()
         viewModel.fetchDeviceList()
 
-        /*
-        id=7
-        title=Ring Bluetooth Scanning Issues
-        depend on categories api last item, once changed, value changes required here
-         */
-        binding.tvTroubleShoot.setOnClickListener {
-            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Get Started")
-                putString("id", "1")
-            })
-        }
+
 
         if (PairDeviceActivity.showBack) {
             binding.backBtn.visible()
@@ -330,6 +320,10 @@ class FindDeviceListFragment :
 
 
     override fun initListener() {
+
+        binding.tvTroubleShoot.setOnClickListener {
+            navigate(R.id.troubleShootBottomSheetFragment)
+        }
 
         binding.ivRefresh.setOnClickListener {
             viewModel.fetchDeviceList()

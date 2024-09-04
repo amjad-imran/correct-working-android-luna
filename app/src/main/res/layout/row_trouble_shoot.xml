@@ -56,16 +56,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMain">
+        app:layout_constraintTop_toBottomOf="@+id/ivMain"
+        app:shimmer_duration="1500">
+
         <TextView
             android:id="@+id/tvCta"
             style="@style/S14"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="24dp"
-            android:textColor="#80aaff"
             android:layout_marginBottom="24dp"
             android:gravity="center"
+            android:textColor="#80aaff"
             tools:text="Contact us" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 

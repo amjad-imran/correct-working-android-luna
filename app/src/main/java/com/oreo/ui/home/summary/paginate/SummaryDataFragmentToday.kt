@@ -478,10 +478,7 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
-            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Battery & Charging")
-                putString("id", "6")
-            })
+            navigate(R.id.troubleShootBottomSheetFragment)
         }
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {

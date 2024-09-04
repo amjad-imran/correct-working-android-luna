@@ -45,7 +45,7 @@ class TroubleShootBottomSheetFragment :
     private fun handleActionClick(action: TroubleShootActionType) {
         when(action){
             TroubleShootActionType.LAST_LOCATION -> {
-
+                navigate(R.id.ringLocationFragment)
             }
             TroubleShootActionType.BLUETOOTH -> {
                 tryCatch {

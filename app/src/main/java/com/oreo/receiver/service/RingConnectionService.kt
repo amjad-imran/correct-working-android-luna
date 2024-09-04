@@ -718,16 +718,16 @@ constructor() : LifecycleService() {
 
                                 }
 
-                                LOGS.d("sdfkjsk failed - >${connectState.status}")
+                                LOGS.d("sdfkjsk failed ring connection service - >${connectState.status}")
 
                                 //TODO handling for disconnect case
-                                /*if (connectState.status.equals(
+                                if (connectState.status.equals(
                                         ConnectionEventsConstants.Disconnected,
                                         true
                                     )
-                                ) {*/
+                                ) {
                                     onRingDisconnected()
-                                //}
+                                }
 
                                 if (status != "failed") {
                                     logConnectionEvents(
@@ -846,7 +846,7 @@ constructor() : LifecycleService() {
         GlobalScope.launch(Dispatchers.IO) {
             //todo handle is disconnected location already sent
             LOGS.d("sdfkjsk onRingDisconnected")
-            //sessionManager.updateRingLocation.postValue(Event(true))
+            sessionManager.updateRingLocation.postValue(Event(true))
         }
 
     }

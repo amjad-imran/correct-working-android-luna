@@ -60,6 +60,9 @@ class OreoMyDeviceFragment :
 
         binding.rowAboutDevice.setUpdateAvailable(mViewModel.ringDataStore.isNewOtaAvailable())
 
+        binding.rowFindMyRing.setOnClickListener {
+            navigate(R.id.ringLocationFragment)
+        }
 
         binding.backBtn.setOnClickListener { navigateUpSafe() }
         binding.rowSettings.setOnClickListener {

@@ -11,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
@@ -18,10 +19,13 @@ import com.noisefit.data.model.RingLocationData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingLocationBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.location.LocationService2
+import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +45,14 @@ class RingLocationFragment :
         MapsInitializer.initialize(requireContext(), MapsInitializer.Renderer.LATEST, this)
 
         setUpMaps()
-        viewModel.getRingLastLocation()
+
+        //Check for permissions
+        if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+            viewModel.setLoading(true)
+            LocationUtils2.startLocationService(false)
+        } else {
+            viewModel.getRingLastLocation()
+        }
 
     }
 
@@ -75,8 +86,14 @@ class RingLocationFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.ringLocationData.observe(this) {
+        LocationService2.locationBroadCastFindMyRing2.observe(this) {
+            it.getContent()?.let {
+                viewModel.updateRingLocation(it)
+                viewModel.setLoading(false)
+            }
+        }
 
+        viewModel.ringLocationData.observe(this) {
             setLocationData(it)
             setBottomSheetData(it)
         }
@@ -103,6 +120,13 @@ class RingLocationFragment :
             }
         }
 
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
     }
 
     private fun setBottomSheetData(ringLocationData: RingLocationData?) {
@@ -128,7 +152,17 @@ class RingLocationFragment :
                 tvAddress.text = it
             }
 
-            tvLastSyncedAt.text = "Last Synced"
+            val lastSync = ringLocationData?.last_sync
+            if (lastSync.isNullOrEmpty().not()) {
+                val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                    lastSync!!,
+                    DateFormats.dateTimeFormat5()
+                )
+
+                tvLastSyncedAt.text = "Last Synced ${DateFormats.getRelativeTime(startTimeStamp)}"
+            } else {
+                tvLastSyncedAt.text = ""
+            }
         }
     }
 
@@ -144,7 +178,7 @@ class RingLocationFragment :
             googleMap.addMarker(
                 MarkerOptions()
                     .position(currentLoc)
-                    .title("Last Location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map_ring_marker))
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
         }

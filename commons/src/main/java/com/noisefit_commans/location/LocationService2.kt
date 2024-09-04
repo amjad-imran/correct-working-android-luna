@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,6 +39,7 @@ class LocationService2 : Service() {
     private val NOTIFICATION_ID = 6667
     private val CHANNEL_ID = "location_find_my_ring"
     private val LOCATION_UPDATE_INTERVAL = 10 * 1000L
+    private var postOnDash = true
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -54,8 +56,11 @@ class LocationService2 : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            ACTION_START -> start()
+            ACTION_START, ACTION_START_2 -> start()
             ACTION_STOP -> stop()
+        }
+        if (intent?.action == ACTION_START_2) {
+            postOnDash = false
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -93,7 +98,11 @@ class LocationService2 : Service() {
 
                 LOGS.d("LOCATION_lOG Lat->$lat Long->$long Accuracy->${location.accuracy} altitude ->$altitude | timestamp ${DateFormats.getTimeStamp()}")
 
-                locationBroadCastFindMyRing.postValue(Event(Pair(lat, long)))
+                if(postOnDash){
+                    locationBroadCastFindMyRing.postValue(Event(Pair(lat, long)))
+                }else{
+                    locationBroadCastFindMyRing2.postValue(Event(Pair(lat, long)))
+                }
 
                 stop()
             }
@@ -103,11 +112,13 @@ class LocationService2 : Service() {
             startForeground(
                 NOTIFICATION_ID,
                 notification.build(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
-        }else {
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+            )
+        } else {
             startForeground(
                 NOTIFICATION_ID,
-                notification.build())
+                notification.build()
+            )
         }
 
         LOGS.d("LOCATION_lOG Start foreground")
@@ -133,9 +144,11 @@ class LocationService2 : Service() {
 
     companion object {
         const val ACTION_START = "ACTION_START"
+        const val ACTION_START_2 = "ACTION_START_2"
         const val ACTION_STOP = "ACTION_STOP"
 
         //Think of any other way
         val locationBroadCastFindMyRing = MutableLiveData<Event<Pair<Double, Double>>>()
+        val locationBroadCastFindMyRing2 = MutableLiveData<Event<Pair<Double, Double>>>()
     }
 }

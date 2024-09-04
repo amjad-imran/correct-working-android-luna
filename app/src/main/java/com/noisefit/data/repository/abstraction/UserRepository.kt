@@ -50,7 +50,7 @@ interface UserRepository {
     suspend fun getStateList(): Flow<Resource<BaseApiResponse<List<StateData>>>>
     suspend fun getCityList(stateId: Int): Flow<Resource<BaseApiResponse<List<CityData>>>>
 
-    suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<List<RingLocationData>>>>
+    suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<RingLocationData>>>
     suspend fun setRingLastLocation(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
 

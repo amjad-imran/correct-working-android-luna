@@ -56,8 +56,8 @@
                     android:layout_marginTop="@dimen/dimen_24dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     android:lineSpacingExtra="6sp"
-                    android:textColor="@color/white_80"
                     android:text="@string/text_ring_message_find_device"
+                    android:textColor="@color/white_80"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textView"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -109,8 +109,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:visibility="gone"
                     android:src="@drawable/ic_refresh_ring"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/tvDevicesFound"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tvDevicesFound" />
@@ -178,31 +178,38 @@
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:text="@string/text_pair_later"
-                    android:visibility="gone"
                     android:textAllCaps="false"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toTopOf="@+id/tvTroubleShoot"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvTroubleShoot"
-                    style="@style/Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                <!--<com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/lytTroubleShoot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:gravity="center"
-                    android:textColor="@color/link_color"
-                    android:visibility="visible"
-                    android:text="@string/text_unable_to_search_or_pair_your_device"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent">-->
 
+                    <TextView
+                        android:id="@+id/tvTroubleShoot"
+                        style="@style/Small"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_height="36dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:gravity="center"
+                        android:text="@string/text_ring_not_connecting"
+                        android:textColor="#6b9cfd" />
+               <!-- </com.facebook.shimmer.ShimmerFrameLayout>-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.core.widget.NestedScrollView>
 
         <include

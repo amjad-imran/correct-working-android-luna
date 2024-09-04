@@ -234,7 +234,7 @@ interface NetworkService {
     @GET
     suspend fun getRingLastLocation(
         @Url string: String,
-    ): BaseApiResponse<List<RingLocationData>>
+    ): BaseApiResponse<RingLocationData>
 
     @POST
     suspend fun setRingLastLocation(
