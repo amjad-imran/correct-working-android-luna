@@ -54,6 +54,8 @@ interface DataStoredInterface {
     fun getWeatherSwitch(): Boolean?
     fun getPreferencesWatchLogsName(default_value: String?): String?
     fun saveUserInfo(user: User)
+    fun getFemaleHealthStatus(): Boolean
+    fun setFemaleHealthStatus(status: Boolean)
     fun deleteUserInfo()
     fun deleteUserToken()
     fun setFcmToken(token: String)

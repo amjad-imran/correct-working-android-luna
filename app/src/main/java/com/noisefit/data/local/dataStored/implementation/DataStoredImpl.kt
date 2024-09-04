@@ -49,6 +49,7 @@ private const val LAST_SYNC = "LAST_SYNC"
 private const val LAST_SYNC_WEATHER = "LAST_SYNC_WEATHER"
 private const val SYNC_USER_INFO = "SYNC_USER_INFO"
 private const val USER_INFO = "user_info"
+private const val FEMALE_STATUS = "FEMALE_STATUS"
 private const val USER_INFO_SYNCED = "USER_INFO_SYNCED"
 private const val USER_PROFILE = "user_profile"
 private const val FCM_LAST_TOKEN = "FCM_LAST_TOKEN"
@@ -1294,6 +1295,15 @@ class DataStoredImpl
 
     override fun saveUserInfo(user: User) {
         mPrefs.edit()?.putString(USER_INFO, gson.toJson(user))?.commit()
+        mPrefs.edit()?.putBoolean(FEMALE_STATUS, user.female_status ?: true)?.commit()
+    }
+
+    override fun setFemaleHealthStatus(status: Boolean) {
+        mPrefs.edit()?.putBoolean(FEMALE_STATUS, status)?.commit()
+    }
+
+    override fun getFemaleHealthStatus(): Boolean {
+        return mPrefs.getBoolean(FEMALE_STATUS, true)
     }
 
     override fun deleteUserInfo() {

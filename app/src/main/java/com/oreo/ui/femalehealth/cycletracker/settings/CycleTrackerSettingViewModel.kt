@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
@@ -17,8 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleTrackerSettingViewModel @Inject constructor(
-    private val femaleHealthRepository: FemaleHealthRepository
+    private val femaleHealthRepository: FemaleHealthRepository,
+    private val localDataStore: DataStoredInterface,
 ) : BaseViewModel() {
+
+    val cycleTrackerEnabled = MutableLiveData<Boolean>()
+
     var cycleTrackerInfo: FemaleCycleTrackInfoModel? = null
     var lastSelectedGoal: String? = null
     var lastSelectedPeriodLength: String? = null
@@ -80,6 +85,17 @@ class CycleTrackerSettingViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updatePeriodToggle(isChecked: Boolean) {
+        localDataStore.setFemaleHealthStatus(isChecked)
+        cycleTrackerEnabled.postValue(isChecked)
+    }
+
+    fun getPeriodTrackerStatus() {
+        cycleTrackerEnabled.postValue(
+            localDataStore.getFemaleHealthStatus()
+        )
     }
 
 }

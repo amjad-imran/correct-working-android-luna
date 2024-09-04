@@ -1343,5 +1343,6 @@
     <string name="text_choose_map">Choose map</string>
     <string name="sleep_ai_message">"Hi, I'm Luna AI. I can help you understand your sleep scores, provide insights on how to improve your sleep, and offer tips to enhance specific aspects of your sleep. I also provide guidance on exercises and nutrition to support better sleep. Feel free to ask me any questions about your sleep today! "</string>
     <string name="text_ring_not_connecting">Ring not connecting ?</string>
+    <string name="text_enable_cycle_tracker">Enable cycle tracker</string>
 
 </resources>

@@ -22,6 +22,7 @@ class CycleTrackerSettingsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.cycleTrackerInfo = args.data
+        viewModel.getPeriodTrackerStatus()
 
         updateUI()
     }
@@ -169,9 +170,24 @@ class CycleTrackerSettingsFragment :
                 })
         }
 
+        binding.sCycleTracker.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                viewModel.updatePeriodToggle(isChecked)
+            }
+        }
     }
 
     override fun subscribeObservers() {
+        viewModel.cycleTrackerEnabled.observe(this) {
+            if (it) {
+                binding.sCycleTracker.isChecked = true
+                binding.groupData.visible()
+            } else {
+                binding.sCycleTracker.isChecked = false
+                binding.groupData.gone()
+            }
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)

@@ -17,6 +17,7 @@ data class User(
     @SerializedName("country_code")
     @Expose
     var countryCode: String? = null,
+    var female_status: Boolean? = true,
     @SerializedName("email")
     @Expose
     var email: String? = null,
