@@ -27,10 +27,12 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import kotlin.math.roundToInt
 
 const val ADD_WORKOUT_REQUEST_KEY = "ADD_WORKOUT_REQUEST_KEY"
 
@@ -125,6 +127,34 @@ class OAddWorkoutFragment :
         }
 
 
+        binding.lytStartEnd.lytDate.root.setOnClickListener {
+            setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
+                val selectedValue = bundle.getString("selectedValue")
+                selectedValue?.let { it1 ->
+                    LOGS.d("sdfklsdjklfsdf $it1")
+                    val parsedDate = LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                    viewModel.addWorkout.date =parsedDate
+
+
+                    val todayDate = LocalDate.now().toString()
+                    if(parsedDate.equals(todayDate)){
+                        resetData()
+                    }
+                    setDate()
+                }
+            }
+            val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
+            navigate(
+                OAddWorkoutFragmentDirections.actionAddWorkoutFragmentToValueSelectorBottomSheet(
+                    if (viewModel.addWorkout.date == null) null else LocalDate.parse(viewModel.addWorkout.date)
+                        .format(format),
+                    viewModel.getWorkoutDates(),
+                    getString(R.string.text_date)
+                )
+            )
+
+        }
 
 
         binding.lytStartEnd.lytStartTime.root.setOnClickListener {
@@ -137,47 +167,80 @@ class OAddWorkoutFragment :
 
                 val calendar = Calendar.getInstance()
 
-                if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE)
-                    ) >= 0
-                ) {
-                    context.showShortToast(getString(R.string.text_start_time_less_then_current_time))
-                } else if (DateFormats.compareTime(
-                        hourOfDay,
-                        minute,
-                        viewModel.addWorkout.endHour,
-                        viewModel.addWorkout.endMinute
-                    ) >= 0
-                ) {
-                    context.showShortToast(getString(R.string.text_start_time_less))
-                } else if (hourOfDay == viewModel.addWorkout.endHour && minute == viewModel.addWorkout.endMinute) {
-                    context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
-                } else if (!DateFormats.checkDifferenceInBtwInterval(
-                        hourOfDay,
-                        minute,
-                        viewModel.addWorkout.endHour,
-                        viewModel.addWorkout.endMinute,
-                        viewModel.minimumWorkoutTime
+                val todayDate = LocalDate.now().toString()
+                if (viewModel.addWorkout.date?.equals(todayDate) == true) {
+                    if (DateFormats.compareTime(
+                            hourOfDay,
+                            minute,
+                            viewModel.addWorkout.endHour,
+                            viewModel.addWorkout.endMinute
+                        ) >= 0
+                    ) {
+                        context.showShortToast(getString(R.string.text_start_time_less))
+                    } else if (hourOfDay == viewModel.addWorkout.endHour && minute == viewModel.addWorkout.endMinute) {
+                        context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
+                    } else if (!DateFormats.checkDifferenceInBtwInterval(
+                            hourOfDay,
+                            minute,
+                            viewModel.addWorkout.endHour,
+                            viewModel.addWorkout.endMinute,
+                            viewModel.minimumWorkoutTime
 
-                    )
-                ) {
-                    context.showShortToast(
-                        getString(
-                            R.string.text_start_and_end_time_should_be_greater_than_frequency,
-                            viewModel.minimumWorkoutTime.toString()
                         )
-                    )
+                    ) {
+                        context.showShortToast(
+                            getString(
+                                R.string.text_start_and_end_time_should_be_greater_than_frequency,
+                                viewModel.minimumWorkoutTime.toString()
+                            )
+                        )
+                    } else {
+                        viewModel.addWorkout.startHour = hourOfDay
+                        viewModel.addWorkout.startMinute = minute
+                        setStartTimeBetween()
+                    }
                 } else {
-                    viewModel.addWorkout.startHour = hourOfDay
-                    viewModel.addWorkout.startMinute = minute
-                    setStartTimeBetween()
+                    if (DateFormats.compareTime(
+                            hourOfDay,
+                            minute,
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE)
+                        ) >= 0
+                    ) {
+                        context.showShortToast(getString(R.string.text_start_time_less_then_current_time))
+                    } else if (DateFormats.compareTime(
+                            hourOfDay,
+                            minute,
+                            viewModel.addWorkout.endHour,
+                            viewModel.addWorkout.endMinute
+                        ) >= 0
+                    ) {
+                        context.showShortToast(getString(R.string.text_start_time_less))
+                    } else if (hourOfDay == viewModel.addWorkout.endHour && minute == viewModel.addWorkout.endMinute) {
+                        context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
+                    } else if (!DateFormats.checkDifferenceInBtwInterval(
+                            hourOfDay,
+                            minute,
+                            viewModel.addWorkout.endHour,
+                            viewModel.addWorkout.endMinute,
+                            viewModel.minimumWorkoutTime
+
+                        )
+                    ) {
+                        context.showShortToast(
+                            getString(
+                                R.string.text_start_and_end_time_should_be_greater_than_frequency,
+                                viewModel.minimumWorkoutTime.toString()
+                            )
+                        )
+                    } else {
+                        viewModel.addWorkout.startHour = hourOfDay
+                        viewModel.addWorkout.startMinute = minute
+                        setStartTimeBetween()
+                    }
                 }
 
                 updateCalculatedData()
-
 
             }
 
@@ -209,6 +272,9 @@ class OAddWorkoutFragment :
                 if (viewModel.isAutoWorkout()) {
                     val todayData = DateFormats.getCurrentDate(DateFormats.dateFormat3())
                     isTodayWorkout = viewModel.preFilledOreoAutoSportData?.date.equals(todayData)
+                } else {
+                    val todayDate = LocalDate.now().toString()
+                    isTodayWorkout = viewModel.addWorkout.date?.equals(todayDate) == true
                 }
 
                 if (isTodayWorkout && DateFormats.compareTime(
@@ -396,6 +462,21 @@ class OAddWorkoutFragment :
         binding.lytIntensity.lytItem.tvTimeValue.text = intensity
     }
 
+    private fun setDate() {
+        var date = "Enter"
+
+        if (viewModel.addWorkout.date.isNullOrEmpty().not()) {
+            setTextWhite(binding.lytIntensity.lytItem.tvTimeValue)
+            date = LocalDate.parse(viewModel.addWorkout.date)
+                .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+        } else {
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
+            viewModel.addWorkout.date = LocalDate.now().toString()
+        }
+
+        binding.lytStartEnd.lytDate.tvTimeValue.text = date
+    }
+
 
     private fun setTextWhite(textView: TextView) {
         textView.setTextColor(Color.WHITE)
@@ -468,35 +549,60 @@ class OAddWorkoutFragment :
 
     }
 
+    fun setDefaultData(oWorkoutListModal: OWorkoutListModal) {
+        //set intensity
+        viewModel.addWorkout.intensity = "Moderate"
+        setDate()
+        setIntensity()
+
+        //set start time and end time
+        val calStart = Calendar.getInstance()
+
+        viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
+        viewModel.addWorkout.endMinute = calStart.get(Calendar.MINUTE)
+
+        if (calStart.get(Calendar.HOUR_OF_DAY) == 0) {
+            calStart.add(Calendar.MINUTE, -calStart.get(Calendar.MINUTE))
+        } else {
+            calStart.add(Calendar.MINUTE, -60)
+        }
+        viewModel.addWorkout.startHour = calStart.get(Calendar.HOUR_OF_DAY)
+        viewModel.addWorkout.startMinute = calStart.get(Calendar.MINUTE)
+        setStartTimeBetween()
+
+        setEndTimeBetween()
+
+
+        //set workout
+        setWorkout(oWorkoutListModal)
+
+    }
+
+    fun resetData(){
+        //set start time and end time
+        val calStart = Calendar.getInstance()
+        viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
+        viewModel.addWorkout.endMinute = calStart.get(Calendar.MINUTE)
+        if (calStart.get(Calendar.HOUR_OF_DAY) == 0) {
+            calStart.add(Calendar.MINUTE, -calStart.get(Calendar.MINUTE))
+        } else {
+            calStart.add(Calendar.MINUTE, -60)
+        }
+        viewModel.addWorkout.startHour = calStart.get(Calendar.HOUR_OF_DAY)
+        viewModel.addWorkout.startMinute = calStart.get(Calendar.MINUTE)
+        setStartTimeBetween()
+
+        setEndTimeBetween()
+        updateCalculatedData()
+
+    }
+
     override fun subscribeObservers() {
 
         viewModel.updateDefaultWorkout.observe(viewLifecycleOwner) {
             it.getContent()?.let {
 
-                //set intensity
-                viewModel.addWorkout.intensity = "Moderate"
-                setIntensity()
-
-                //set start time and end time
-                val calStart = Calendar.getInstance()
-
-                viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
-                viewModel.addWorkout.endMinute = calStart.get(Calendar.MINUTE)
-
-                if (calStart.get(Calendar.HOUR_OF_DAY) == 0) {
-                    calStart.add(Calendar.MINUTE, -calStart.get(Calendar.MINUTE))
-                } else {
-                    calStart.add(Calendar.MINUTE, -60)
-                }
-                viewModel.addWorkout.startHour = calStart.get(Calendar.HOUR_OF_DAY)
-                viewModel.addWorkout.startMinute = calStart.get(Calendar.MINUTE)
-                setStartTimeBetween()
-
-                setEndTimeBetween()
-
-
-                //set workout
-                setWorkout(it)
+                setDefaultData(it)
             }
         }
 

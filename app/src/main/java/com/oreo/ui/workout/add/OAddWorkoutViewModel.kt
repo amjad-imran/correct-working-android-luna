@@ -33,6 +33,8 @@ import kotlinx.coroutines.launch
 import org.joda.time.Interval
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -253,7 +255,8 @@ class OAddWorkoutViewModel
             activityType
         }
 
-        val existMessage = checkIfAnyEventExists(addWorkout.startTimeIn24H, addWorkout.endTimeIn24H)
+        val existMessage = if (addWorkout.date?.equals(LocalDate.now().toString()) == true)
+            checkIfAnyEventExists(addWorkout.startTimeIn24H, addWorkout.endTimeIn24H) else null
 
         if (existMessage.isNullOrEmpty().not()) {
             sendMessage(existMessage)
@@ -279,6 +282,7 @@ class OAddWorkoutViewModel
                     this.addProperty("date", addWorkout.date)
                 } else {
                     this.addProperty("type", "manual")
+                    this.addProperty("date", addWorkout.date)
                 }
 
                 this.addProperty("start_time", addWorkout.startTimeIn24H)
@@ -528,5 +532,17 @@ class OAddWorkoutViewModel
         } catch (exp: Exception) {
             return HashSet()
         }
+    }
+
+    fun getWorkoutDates(): Array<String> {
+        val dates = mutableListOf<String>()
+        val dateToday = LocalDate.now()
+        val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
+        dates.add(dateToday.format(format).toString())
+        dates.add(dateToday.minusDays(1).format(format).toString())
+        dates.add(dateToday.minusDays(2).format(format).toString())
+        dates.add(dateToday.minusDays(3).format(format).toString())
+        return dates.toTypedArray()
+
     }
 }
