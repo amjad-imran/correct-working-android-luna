@@ -624,8 +624,11 @@ class SleepDashViewModel @Inject constructor(
 
             listData.add(
                 OHMDataModel(
-                    SleepContributor.LATENCY, valueTime = data.latency?.value,
-                    status = data.latency?.status, text = data.latency?.text
+                    SleepContributor.LATENCY,
+                    value = if (data.latency?.value == null) null else "${data.latency?.value}",
+                    unit = "min",
+                    status = data.latency?.status,
+                    text = data.latency?.text
                 )
             )
 
