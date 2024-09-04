@@ -339,4 +339,8 @@ dependencies {
     implementation(moengage.geofence)
     implementation(moengage.inboxCore)
 
+    //freshchat
+    implementation(libs.freshchat.android)
+
+
 }

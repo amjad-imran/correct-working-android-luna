@@ -1337,5 +1337,7 @@
     <string name="text_pay_attention">Pay attention</string>
     <string name="text_good_fair">Good/Fair</string>
     <string name="text_optimal">Optimal</string>
+    <string name="freshchat_file_provider_authority">com.noisefit.luna.provider</string>
+
 
 </resources>

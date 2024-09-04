@@ -15,6 +15,7 @@ desugar_jdk_libs = "2.0.4"
 elvishewXlog = "1.10.1"
 agp = "8.4.1"
 flexbox = "3.0.0"
+freshchatAndroid = "6.2.9"
 gradle = "8.4.1"
 hiltAndroidCompiler = "2.51"
 kotlin = "1.9.22"
@@ -127,6 +128,7 @@ core = { module = "io.noties.markwon:core", version.ref = "core" }
 curlloggerinterceptor = { module = "com.github.grapesnberries:curlloggerinterceptor", version.ref = "curlloggerinterceptor" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+freshchat-android = { module = "com.github.freshworks:freshchat-android", version.ref = "freshchatAndroid" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidCompiler" }

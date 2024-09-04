@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.ui.onboarding.OnBoardActivity
@@ -61,9 +62,10 @@ class OMyProfileFragment :
 //            navigate(R.id.cycleTrackerStreakFragment)
         }
         binding.rowSupport.setOnClickListener {
-            context?.let {
+            /*context?.let {
                 ShareUtil.openExternalUrl(it, SUPPORT_URL)
-            }
+            }*/
+            Freshchat.showConversations(requireContext())
         }
 
         binding.rowSettings.setOnClickListener {
