@@ -1295,7 +1295,7 @@ class DataStoredImpl
 
     override fun saveUserInfo(user: User) {
         mPrefs.edit()?.putString(USER_INFO, gson.toJson(user))?.commit()
-        mPrefs.edit()?.putBoolean(FEMALE_STATUS, user.female_status ?: true)?.commit()
+        mPrefs.edit()?.putBoolean(FEMALE_STATUS, user.female_health_toggle ?: true)?.commit()
     }
 
     override fun setFemaleHealthStatus(status: Boolean) {
