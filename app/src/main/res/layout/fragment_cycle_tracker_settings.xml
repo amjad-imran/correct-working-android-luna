@@ -51,6 +51,23 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/textOffMessage"
+            style="@style/S12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/text_enable_cycle_tracker_message"
+            android:textColor="@color/white_50"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToggle"
+            tools:visibility="visible" />
+
+        <TextView
             android:id="@+id/textView1"
             style="@style/H5"
             android:layout_width="match_parent"

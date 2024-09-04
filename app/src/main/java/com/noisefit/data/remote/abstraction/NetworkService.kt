@@ -537,6 +537,11 @@ interface NetworkService {
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<Any>
 
+    @POST
+    suspend fun updateCycleTrackerToggle(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
+
 
     /**
      * ---------------------------------------------------------------------------------

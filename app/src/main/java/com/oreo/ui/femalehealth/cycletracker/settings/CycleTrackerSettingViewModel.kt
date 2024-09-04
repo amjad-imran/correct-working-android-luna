@@ -88,8 +88,47 @@ class CycleTrackerSettingViewModel @Inject constructor(
     }
 
     fun updatePeriodToggle(isChecked: Boolean) {
-        localDataStore.setFemaleHealthStatus(isChecked)
-        cycleTrackerEnabled.postValue(isChecked)
+        viewModelScope.launch {
+            val requestObj = JsonObject().apply {
+                this.addProperty("status", isChecked)
+            }
+            femaleHealthRepository.updateCycleTrackerToggle(requestObj).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                        cycleTrackerEnabled.postValue(isChecked.not())
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        cycleTrackerEnabled.postValue(isChecked.not())
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        updatePeriodToggle(isChecked)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            localDataStore.setFemaleHealthStatus(isChecked)
+                            cycleTrackerEnabled.postValue(isChecked)
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     fun getPeriodTrackerStatus() {

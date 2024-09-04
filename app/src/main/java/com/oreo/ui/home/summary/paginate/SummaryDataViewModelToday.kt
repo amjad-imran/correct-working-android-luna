@@ -1603,6 +1603,8 @@ class SummaryDataViewModelToday @Inject constructor(
             gender = localDataStore.getUser()?.userInfo?.gender
             if (gender.equals("male", true)) return@launch
 
+            if(localDataStore.getFemaleHealthStatus().not()) return@launch
+
             femaleHealthRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {

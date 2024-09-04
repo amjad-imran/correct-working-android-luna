@@ -368,6 +368,13 @@ class FemaleHealthRepositoryImpl(
         }
     }
 
+    override suspend fun updateCycleTrackerToggle(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/female-status"
+            remoteDataSource.updateCycleTrackerToggle(url, jsonObject)
+        }
+    }
+
     override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
         return flow {
             emit(Resource.Loading(true))

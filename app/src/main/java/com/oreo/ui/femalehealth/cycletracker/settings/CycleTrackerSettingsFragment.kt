@@ -181,9 +181,11 @@ class CycleTrackerSettingsFragment :
         viewModel.cycleTrackerEnabled.observe(this) {
             if (it) {
                 binding.sCycleTracker.isChecked = true
+                binding.textOffMessage.gone()
                 binding.groupData.visible()
             } else {
                 binding.sCycleTracker.isChecked = false
+                binding.textOffMessage.visible()
                 binding.groupData.gone()
             }
         }

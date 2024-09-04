@@ -29,6 +29,10 @@ interface FemaleHealthRepository {
         id: Long
     ): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun updateCycleTrackerToggle(
+        jsonObject: JsonObject,
+    ): Flow<Resource<BaseApiResponse<Any>>>
+
     suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>>
 
     suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>>
