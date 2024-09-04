@@ -1,10 +1,16 @@
 package com.oreo.ui.findmyring
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,6 +30,7 @@ import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -46,7 +53,6 @@ class RingLocationFragment :
 
         setUpMaps()
 
-        //Check for permissions
         if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
             viewModel.setLoading(true)
             LocationUtils2.startLocationService(false)
@@ -55,6 +61,7 @@ class RingLocationFragment :
         }
 
     }
+
 
     override fun initListener() {
         binding.backBtn.setOnClickListener {
@@ -125,6 +132,90 @@ class RingLocationFragment :
                 binding.progressBar.root.visible()
             } else {
                 binding.progressBar.root.gone()
+            }
+        }
+    }
+
+    private fun hasGpsPermission(): Boolean {
+        val permissionAccessFineLocationApproved =
+            (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+                    == PackageManager.PERMISSION_GRANTED)
+
+        val backgroundLocationPermissionApproved =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            } else {
+                true
+            }
+
+        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
+    }
+
+    private fun showLocationPermissionDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        } else {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            )
+        }
+
+    }
+
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+
+        var openSettings = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) && permissions.getOrDefault(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
+
+                else -> {
+                    openSettings = true
+                }
+            }
+        } else {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
+
+                else -> {
+                    openSettings = true
+                }
+            }
+        }
+        if (openSettings) {
+            tryCatch {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
             }
         }
     }

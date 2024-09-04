@@ -1,8 +1,13 @@
 package com.noisefit_commans.location
 
+import android.Manifest
 import android.app.ActivityManager
+import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
@@ -12,8 +17,11 @@ object LocationUtils2 {
     fun startLocationService(postOnMain: Boolean = true) {
         val context = NoisefitApplication.context ?: return
         LOGS.d("LOCATION_lOG starting service")
+        if (hasGpsPermission(context).not()) {
+            return
+        }
 
-        //todo check permissions
+
         if (isMyServiceRunning(LocationService2::class.java, context).not()) {
             Intent(context, LocationService2::class.java).apply {
                 action =
@@ -24,6 +32,27 @@ object LocationUtils2 {
         } else {
             AppLogs.sendAppLogs("Start Location tracking - already running")
         }
+    }
+
+    private fun hasGpsPermission(context: Application): Boolean {
+        val permissionAccessFineLocationApproved =
+            (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+                    == PackageManager.PERMISSION_GRANTED)
+
+        val backgroundLocationPermissionApproved =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            } else {
+                true
+            }
+
+        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
     }
 
     fun stopLocationService() {
