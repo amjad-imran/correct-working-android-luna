@@ -7,6 +7,7 @@ import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.ConnectionEventsConstants
 import com.noisefit_commans.constants.ConnectionEventsConstants.Connecting
 import com.noisefit_commans.constants.ConnectionEventsConstants.Disconnected
+import com.noisefit_commans.constants.ConnectionEventsConstants.RING_DISCONNECT
 import com.noisefit_commans.constants.ConnectionEventsConstants.Timeout
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.interfaces.QueryCallback
@@ -121,11 +122,17 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
 
                 BleCommonAttributes.STATE_DISCONNECTED -> {
                     AppLogs.sendAppLogs("$TAG :onConnectState disconnected")
+                    LOGS.d("sdfkjsk STATE_DISCONNECTED")
+                    baseConnectionCallbacks?.onConnect(
+                        ConnectState.ConnectFailed(
+                            noiseFitDevice,
+                            RING_DISCONNECT
+                        )
+                    )
 
                     if (!noiseFitDevice?.watchToken.isNullOrEmpty() && !isDisconnect) {
                         return
                     }
-                    LOGS.d("sdfkjsk STATE_DISCONNECTED")
 
                     baseConnectionCallbacks?.onConnect(
                         ConnectState.ConnectFailed(

@@ -722,7 +722,7 @@ constructor() : LifecycleService() {
 
                                 //TODO handling for disconnect case
                                 if (connectState.status.equals(
-                                        ConnectionEventsConstants.Disconnected,
+                                        ConnectionEventsConstants.RING_DISCONNECT,
                                         true
                                     )
                                 ) {
@@ -842,7 +842,6 @@ constructor() : LifecycleService() {
     }
 
     private fun onRingDisconnected() {
-
         GlobalScope.launch(Dispatchers.IO) {
             //todo handle is disconnected location already sent
             LOGS.d("sdfkjsk onRingDisconnected")

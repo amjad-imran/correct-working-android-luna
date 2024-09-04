@@ -15,6 +15,7 @@ object ConnectionEventsConstants {
     const val Connecting = "connecting"
     const val Failed = "failed"
     const val Disconnected = "disconnected"
+    const val RING_DISCONNECT = "RING_DISCONNECT"
     const val Timeout = "timeout"
     const val Retry = "retry"
 }
