@@ -160,7 +160,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
         currentSelectedEndDate = endDate
 
         val period =
-            if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && (selectedPeriod.value == InternalSelectedPeriod.DAILY || selectedPeriod.value == InternalSelectedPeriod.DAY)) {
+            if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE &&
+                (selectedPeriod.value == InternalSelectedPeriod.DAILY || selectedPeriod.value == InternalSelectedPeriod.DAY)
+            ) {
                 InternalSelectedPeriod.DAY.name.lowercase()
             } else {
                 selectedPeriod.value?.name?.lowercase()
@@ -172,7 +174,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     startDate.toString(),
                     getCalculatedEnd(endDate).toString(),
                     selectedLaunchMode.key.lowercase(),
-                    period
+                    if(isDeviationSelected) "deviation" else period
                 )
             } else {
                 userActivityRepository.getSleepInternalTrendsPagesData(
