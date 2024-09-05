@@ -1,10 +1,13 @@
 package com.oreo.ui.findmyring
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.viewModels
@@ -145,6 +148,7 @@ class RingLocationFragment :
     }
 
     fun bottomSheetToggle(hideData: Boolean) {
+        LOGS.d("sdfjhsdkjfhsdkjf $hideData")
         if (hideData) {
             binding.lytLocationData.apply {
                 tvAddress.gone()
@@ -158,7 +162,42 @@ class RingLocationFragment :
                 textDisclaimer.visible()
             }
         }
+        return
 
+        if (hideData) {
+            binding.lytLocationData.apply {
+                animateViewOut(this.root)
+
+                /*animateViewOut(tvAddress)
+                animateViewOut(tvLastSyncedAt)
+                animateViewOut(textDisclaimer)*/
+            }
+        } else {
+            binding.lytLocationData.apply {
+                animateViewIn(this.root)
+                /*                animateViewIn(tvAddress)
+                                animateViewIn(tvLastSyncedAt)
+                                animateViewIn(textDisclaimer)*/
+            }
+        }
+
+    }
+
+    private fun animateViewOut(view: View) {
+        val translateHeight = view.height.toFloat() - 98f.dpToPixel()
+        ObjectAnimator.ofFloat(view, "translationY", 0f, translateHeight).apply {
+            duration = 300
+            start()
+        }
+    }
+
+    private fun animateViewIn(view: View) {
+        val translateHeight = view.height.toFloat() - 98f.dpToPixel()
+        ObjectAnimator.ofFloat(view, "translationY", translateHeight/*view.height.toFloat()*/, 0f)
+            .apply {
+                duration = 300
+                start()
+            }
     }
 
     private fun setBottomSheetData(ringLocationData: RingLocationData?) {
@@ -197,7 +236,11 @@ class RingLocationFragment :
             }
         }
 
-        bottomSheetToggle(true)
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.isDataHidden = true
+            bottomSheetToggle(true)
+        }, 200)
+
     }
 
     private fun setLocationData(ringLocationData: RingLocationData?) {

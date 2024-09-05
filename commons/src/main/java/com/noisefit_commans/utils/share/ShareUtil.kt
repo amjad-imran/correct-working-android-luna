@@ -17,7 +17,7 @@ object ShareUtil {
     const val PACKAGE_PRIME = "com.noisefit.prime"
     const val PACKAGE_ACE = "com.noise.fit.ace"
     const val PACKAGE_APEX = "com.yc.noisefit"
-    const val SUPPORT_URL = "https://luna.freshdesk.com/support/home"
+    const val SUPPORT_URL = "https://luna.freshdesk.com/support/tickets/new"
 
 
     fun composeEmail(context: Context, email: String, subject: String?) {
