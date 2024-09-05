@@ -14,18 +14,13 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:nestedScrollingEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/backBtn"
-            style="@style/ToolbarBackButton"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +35,7 @@
             android:paddingHorizontal="18dp"
             android:paddingVertical="10dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/bottom_sheet"
+            app:layout_constraintBottom_toTopOf="@id/lytLocationData"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible">
 
@@ -56,9 +51,7 @@
                 android:layout_marginStart="6dp"
                 android:text="@string/text_directions"
                 android:textColor="#8ed3f1" />
-
         </LinearLayout>
-
 
         <include
             android:id="@+id/lytMapControls"
@@ -71,28 +64,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/image_back_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/bottom_sheet"
+        <include
+            android:id="@+id/lytLocationData"
+            layout="@layout/layout_find_ring_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
-            app:behavior_hideable="false"
-            app:behavior_peekHeight="50dp"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <include
-                android:id="@+id/lytLocationData"
-                layout="@layout/layout_find_ring_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible" />
-        </FrameLayout>
-
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/progressBar"

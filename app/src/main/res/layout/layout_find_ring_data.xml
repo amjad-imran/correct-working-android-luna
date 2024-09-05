@@ -1,150 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ModalStyleDialogNoStrokeTopRound"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="22dp"
+    tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
 
-    <RelativeLayout
+    <View
+        android:id="@+id/view37"
+        android:layout_width="80dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:alpha="0.5"
+        android:background="@drawable/back_bottom_sheet_drag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/ivRing"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view37" />
+
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/S20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivRing"
+        app:layout_constraintTop_toTopOf="@+id/ivRing"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Sai’s Luna Ring " />
+
+    <ImageView
+        android:id="@+id/imageView44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_battery_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/ivRing"
+        app:layout_constraintStart_toStartOf="@+id/tvName"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+    <TextView
+        android:id="@+id/tvBatteryPercentage"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView44"
+        app:layout_constraintStart_toEndOf="@+id/imageView44"
+        app:layout_constraintTop_toTopOf="@+id/imageView44"
+        tools:text="21%" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeableImageView10"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="6dp"
+        android:background="#d9d9d9"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView44"
+        app:layout_constraintStart_toEndOf="@+id/tvBatteryPercentage"
+        app:layout_constraintTop_toTopOf="@+id/imageView44"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+
+    <TextView
+        android:id="@+id/tvConnectionState"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:textColor="@color/white_64"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView44"
+        app:layout_constraintStart_toEndOf="@+id/shapeableImageView10"
+        app:layout_constraintTop_toTopOf="@+id/imageView44"
+        tools:text="Not connected" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        style="@style/S14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="32dp"
+        android:lineSpacingExtra="6sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivRing"
+        tools:text="Sector 43, Gurugram 122002, Haryana" />
+
+    <TextView
+        android:id="@+id/tvLastSyncedAt"
+        style="@style/S14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:textColor="#8ed3f1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+        tools:text="Last Synced at 10 June 2024 at 7:38" />
+
+    <TextView
+        android:id="@+id/textDisclaimer"
+        style="@style/S12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/text_ring_location_message"
+        android:textColor="#8a8c8e"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLastSyncedAt" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/list"
-            style="@style/ModalStyleDialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="12dp"
-            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
-            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
-
-            <View
-                android:id="@+id/view37"
-                android:layout_width="80dp"
-                android:layout_height="2dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0.5"
-                android:background="@drawable/back_bottom_sheet_drag"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageView
-                android:id="@+id/ivRing"
-                android:layout_width="54dp"
-                android:layout_height="54dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="28dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view37" />
-
-            <TextView
-                android:id="@+id/tvName"
-                style="@style/S20"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintBottom_toTopOf="@+id/imageView44"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivRing"
-                app:layout_constraintTop_toTopOf="@+id/ivRing"
-                app:layout_constraintVertical_chainStyle="packed"
-                tools:text="Sai’s Luna Ring " />
-
-            <ImageView
-                android:id="@+id/imageView44"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_battery_yellow"
-                app:layout_constraintBottom_toBottomOf="@+id/ivRing"
-                app:layout_constraintStart_toStartOf="@+id/tvName"
-                app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-            <TextView
-                android:id="@+id/tvBatteryPercentage"
-                style="@style/S12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView44"
-                app:layout_constraintStart_toEndOf="@+id/imageView44"
-                app:layout_constraintTop_toTopOf="@+id/imageView44"
-                tools:text="21%" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView10"
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_marginStart="6dp"
-                android:background="#d9d9d9"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView44"
-                app:layout_constraintStart_toEndOf="@+id/tvBatteryPercentage"
-                app:layout_constraintTop_toTopOf="@+id/imageView44"
-                app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
-
-
-            <TextView
-                android:id="@+id/tvConnectionState"
-                style="@style/S12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:textColor="@color/white_64"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView44"
-                app:layout_constraintStart_toEndOf="@+id/shapeableImageView10"
-                app:layout_constraintTop_toTopOf="@+id/imageView44"
-                tools:text="Not connected" />
-
-            <TextView
-                android:id="@+id/tvAddress"
-                style="@style/S14"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginEnd="32dp"
-                android:lineSpacingExtra="6sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivRing"
-                tools:text="Sector 43, Gurugram 122002, Haryana" />
-
-            <TextView
-                android:id="@+id/tvLastSyncedAt"
-                style="@style/S14"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:textColor="#8ed3f1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAddress"
-                tools:text="Last Synced at 10 June 2024 at 7:38" />
-
-            <TextView
-                android:id="@+id/textDisclaimer"
-                style="@style/S12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="22dp"
-                android:text="@string/text_ring_location_message"
-                android:textColor="#8a8c8e"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLastSyncedAt" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </RelativeLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

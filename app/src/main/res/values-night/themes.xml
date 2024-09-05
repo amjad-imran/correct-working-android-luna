@@ -146,7 +146,7 @@
     </style>
 
     <style name="ModalStyleDialogNew">
-        <item name="android:background">@drawable/back_modal_dialog_nap</item>
+        <item name="android:background">@drawable/back_modal_dialog_top_round</item>
     </style>
 
 

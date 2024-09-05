@@ -32,6 +32,8 @@ class RingLocationViewModel @Inject constructor(
     private val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
+    var isDataHidden: Boolean = true
+
     val ringLocationData = MutableLiveData<RingLocationData?>()
 
 

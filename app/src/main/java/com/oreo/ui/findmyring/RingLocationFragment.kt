@@ -20,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.noisefit.data.model.RingLocationData
 import com.noisefit.luna.R
@@ -54,16 +55,25 @@ class RingLocationFragment :
         setUpMaps()
 
         if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
-            viewModel.setLoading(true)
             LocationUtils2.startLocationService(false)
+            viewModel.setLoading(true)
         } else {
             viewModel.getRingLastLocation()
         }
-
     }
 
 
     override fun initListener() {
+
+        binding.lytLocationData.root.setOnClickListener {
+            if (viewModel.isDataHidden) {
+                bottomSheetToggle(false)
+            } else {
+                bottomSheetToggle(true)
+            }
+            viewModel.isDataHidden = viewModel.isDataHidden.not()
+        }
+
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -220,6 +230,23 @@ class RingLocationFragment :
         }
     }
 
+    fun bottomSheetToggle(hideData: Boolean) {
+        if (hideData) {
+            binding.lytLocationData.apply {
+                tvAddress.gone()
+                tvLastSyncedAt.gone()
+                textDisclaimer.gone()
+            }
+        } else {
+            binding.lytLocationData.apply {
+                tvAddress.visible()
+                tvLastSyncedAt.visible()
+                textDisclaimer.visible()
+            }
+        }
+
+    }
+
     private fun setBottomSheetData(ringLocationData: RingLocationData?) {
         if (ringLocationData == null) {
             binding.lytLocationData.root.gone()
@@ -255,6 +282,8 @@ class RingLocationFragment :
                 tvLastSyncedAt.text = ""
             }
         }
+
+        bottomSheetToggle(true)
     }
 
     private fun setLocationData(ringLocationData: RingLocationData?) {
@@ -282,23 +311,21 @@ class RingLocationFragment :
         mapFragment.getMapAsync { googleMap ->
             setMap(googleMap)
             this.googleMap = googleMap
+
+            googleMap.setOnMapClickListener {
+                bottomSheetToggle(true)
+                viewModel.isDataHidden = true
+            }
+
+            googleMap.setOnCameraMoveStartedListener {
+                bottomSheetToggle(true)
+                viewModel.isDataHidden = true
+            }
         }
     }
 
     private fun setMap(map: GoogleMap) {
-        try {
-            val success: Boolean = map.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    requireContext(), R.raw.google_maps_workout
-                )
-            )
-            if (!success) {
-                LOGS.e("Style parsing failed.")
-            }
-        } catch (e: Resources.NotFoundException) {
-            e.printStackTrace()
-            LOGS.e("Can't find style. Error: $e")
-        }
+
         map.isBuildingsEnabled = false
 
         map.uiSettings.apply {

@@ -73,6 +73,11 @@ val TEXT_GRADIENT_STYLE_2 = intArrayOf(
     Color.parseColor("#88ebeb")
 )
 
+fun Float.dpToPixel(): Float {
+    val density = NoisefitApplication.context?.resources?.displayMetrics?.density ?: 0f
+    return this * density
+}
+
 fun TextView.paintText(
     colorList: IntArray = TEXT_GRADIENT_STYLE_1
 ) {

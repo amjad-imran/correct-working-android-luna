@@ -454,6 +454,10 @@
         <item name="android:background">@drawable/back_modal_dialog_10</item>
     </style>
 
+    <style name="ModalStyleDialogNoStrokeTopRound">
+        <item name="android:background">@drawable/back_modal_dialog_nap</item>
+    </style>
+
     <style name="Theme.NoiseFit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
