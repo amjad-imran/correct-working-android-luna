@@ -1,17 +1,16 @@
 package com.oreo.ui.findmyring
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -19,8 +18,6 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.noisefit.data.model.RingLocationData
 import com.noisefit.luna.R
@@ -29,13 +26,14 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.location.LocationService2
 import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -146,90 +144,6 @@ class RingLocationFragment :
         }
     }
 
-    private fun hasGpsPermission(): Boolean {
-        val permissionAccessFineLocationApproved =
-            (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-                    == PackageManager.PERMISSION_GRANTED)
-
-        val backgroundLocationPermissionApproved =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED)
-            } else {
-                true
-            }
-
-        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
-    }
-
-    private fun showLocationPermissionDialog() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            locationPermissionRequest.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            )
-        } else {
-            locationPermissionRequest.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            )
-        }
-
-    }
-
-    private val locationPermissionRequest = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-
-        var openSettings = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            when {
-                permissions.getOrDefault(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    false
-                ) && permissions.getOrDefault(
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                    false
-                ) -> {
-                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
-                }
-
-                else -> {
-                    openSettings = true
-                }
-            }
-        } else {
-            when {
-                permissions.getOrDefault(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    false
-                ) -> {
-                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
-                }
-
-                else -> {
-                    openSettings = true
-                }
-            }
-        }
-        if (openSettings) {
-            tryCatch {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", requireContext().packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-        }
-    }
-
     fun bottomSheetToggle(hideData: Boolean) {
         if (hideData) {
             binding.lytLocationData.apply {
@@ -294,14 +208,60 @@ class RingLocationFragment :
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             googleMap.clear()
-            val currentLoc = LatLng(ringLocationData.latitude, ringLocationData.longitude)
-            googleMap.addMarker(
-                MarkerOptions()
-                    .position(currentLoc)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map_ring_marker))
-            )
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
+            loadMarker(googleMap, ringLocationData.latitude, ringLocationData.longitude)
         }
+    }
+
+    private fun loadMarker(googleMap: GoogleMap, latitude: Double, longitude: Double) {
+
+        val currentLoc = LatLng(latitude, longitude)
+
+        val ringImage = viewModel.getRingImage()
+
+        val markerView: View = layoutInflater.inflate(
+            R.layout.layout_custom_marker,
+            null,
+            false
+        )
+        val imageView = markerView.findViewById<ImageView>(R.id.ivRingImage)
+
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(currentLoc)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map_ring_marker))
+        )
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
+
+        Glide.with(imageView.context)
+            .asBitmap()
+            .load(ringImage)
+            .into(object : CustomTarget<Bitmap?>(
+                56f.dpToPixel().roundToInt(),
+                56f.dpToPixel().roundToInt()
+            ) {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap?>?
+                ) {
+                    googleMap.clear()
+                    imageView.setImageBitmap(resource)
+
+                    val bitmap = viewModel.getBitmapFromLayout(requireActivity(), markerView)
+
+                    bitmap?.let {
+                        googleMap.addMarker(
+                            MarkerOptions()
+                                .position(currentLoc)
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(bitmap)
+                                )
+                        )
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
     }
 
     private fun setUpMaps() {

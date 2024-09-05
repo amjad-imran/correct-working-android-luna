@@ -1,7 +1,14 @@
 package com.oreo.ui.findmyring
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Build
+import android.util.DisplayMetrics
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
@@ -16,11 +23,12 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.OHealthOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 
 @HiltViewModel
 class RingLocationViewModel @Inject constructor(
@@ -150,6 +158,32 @@ class RingLocationViewModel @Inject constructor(
                     else -> {}
                 }
             }
+        }
+    }
+
+    fun getBitmapFromLayout(context: Activity, view: View): Bitmap? {
+        try {
+            val displayMetrics = DisplayMetrics()
+            context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
+            view.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+            view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+            view.buildDrawingCache()
+            val bitmap =
+                Bitmap.createBitmap(
+                    view.measuredWidth,
+                    view.measuredHeight,
+                    Bitmap.Config.ARGB_8888
+                )
+
+            val canvas = Canvas(bitmap)
+            view.draw(canvas)
+            return bitmap
+        } catch (exp: Exception) {
+            return null
         }
     }
 
