@@ -890,7 +890,7 @@
     <fragment
         android:id="@+id/healthMonitorInternal"
         android:name="com.oreo.ui.internal.OHMInternalFragment"
-        android:label="fragment_health_monitor_internal" >
+        android:label="fragment_health_monitor_internal">
         <argument
             android:name="healthTrend"
             app:argType="com.oreo.data.model.sleep.HealthTrend"
@@ -945,8 +945,8 @@
             app:argType="com.oreo.ui.sleep2.internal.SleepInternalLaunchState" />
         <argument
             android:name="isFromHm"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -1014,13 +1014,12 @@
             app:argType="com.oreo.data.model.OAddSleep" />
         <argument
             android:name="isStartDateToday"
-            app:argType="boolean"
-           />
+            app:argType="boolean" />
     </dialog>
     <fragment
         android:id="@+id/learnMoreFragmentSleep"
         android:name="com.oreo.ui.sleep2.help.LearnMoreFragment"
-        android:label="fragment_learn_more" >
+        android:label="fragment_learn_more">
         <argument
             android:name="data"
             app:argType="com.oreo.data.model.sleep.SleepLearnMoreDataModel" />
@@ -1032,7 +1031,7 @@
     <dialog
         android:id="@+id/bottomSheetCalendar"
         android:name="com.oreo.ui.calendar.BottomSheetCalendar"
-        android:label="BottomSheetCalendar" >
+        android:label="BottomSheetCalendar">
         <argument
             android:name="selectedDate"
             app:argType="string" />
@@ -1043,7 +1042,12 @@
     <dialog
         android:id="@+id/troubleShootBottomSheetFragment"
         android:name="com.oreo.ui.info.troubleshoot.TroubleShootBottomSheetFragment"
-        android:label="TroubleShootBottomSheetFragment" />
+        android:label="TroubleShootBottomSheetFragment">
+        <argument
+            android:name="showLastLocation"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </dialog>
     <fragment
         android:id="@+id/ringLocationFragment"
         android:name="com.oreo.ui.findmyring.RingLocationFragment"

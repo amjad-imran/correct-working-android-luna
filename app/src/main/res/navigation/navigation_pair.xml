@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/connectRingFragment"
         android:name="com.noisefit.ui.onboarding.pairing.ConnectRingFragment"
-        android:label="ConnectRingFragment" >
+        android:label="ConnectRingFragment">
         <action
             android:id="@+id/action_connectRingFragment_to_findDeviceListFragment"
             app:destination="@id/findDeviceListFragment"
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/findDeviceListFragment"
         android:name="com.noisefit.ui.onboarding.pairing.find.FindDeviceListFragment"
-        android:label="FindDeviceListFragment" >
+        android:label="FindDeviceListFragment">
         <action
             android:id="@+id/action_navigation_find_device_list_to_support_list_fragment"
             app:destination="@+id/helpAndSupportListFragment" />
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/pairingFragment"
         android:name="com.noisefit.ui.onboarding.pairing.pair.PairingFragment"
-        android:label="PairingFragment" >
+        android:label="PairingFragment">
 
         <action
             android:id="@+id/action_navigation_pairing_to_support_list_fragment"
@@ -57,12 +57,16 @@
     <dialog
         android:id="@+id/troubleShootBottomSheetFragment"
         android:name="com.oreo.ui.info.troubleshoot.TroubleShootBottomSheetFragment"
-        android:label="TroubleShootBottomSheetFragment" />
+        android:label="TroubleShootBottomSheetFragment">
+        <argument
+            android:name="showLastLocation"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </dialog>
     <dialog
         android:id="@+id/badRatingBottomSheet"
         android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
         android:label="BadRatingBottomSheet" />
-
 
 
 </navigation>

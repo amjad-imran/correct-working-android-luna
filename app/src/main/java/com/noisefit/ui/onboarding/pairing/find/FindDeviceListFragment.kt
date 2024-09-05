@@ -19,6 +19,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -322,7 +323,7 @@ class FindDeviceListFragment :
     override fun initListener() {
 
         binding.tvTroubleShoot.setOnClickListener {
-            navigate(R.id.troubleShootBottomSheetFragment)
+            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to false))
         }
 
         binding.ivRefresh.setOnClickListener {

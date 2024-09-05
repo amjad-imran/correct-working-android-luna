@@ -248,7 +248,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if (ringDataStore.getRingDevice() != null && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
+            if (ringDataStore.getRingDevice() != null
+                && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
                 val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
                 val currentTimeStamp = DateFormats.getTimeStamp()
                 if (lastSyncTimestamp != null && lastSyncTimestamp != -1L) {

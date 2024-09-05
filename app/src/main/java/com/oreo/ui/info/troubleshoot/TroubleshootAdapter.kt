@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowTroubleShootBinding
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 
 class TroubleshootAdapter(val listener: TroubleShootAction) :
     RecyclerView.Adapter<TroubleshootAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<TroubleShootData>()
+    private var showLocation = true
 
     inner class ViewHolder(private val binding: RowTroubleShootBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -18,7 +21,11 @@ class TroubleshootAdapter(val listener: TroubleShootAction) :
             binding.ivMain.setImageResource(data.image)
             binding.tvCta.text = data.ctaText
 
-
+            if (data.action == TroubleShootActionType.LAST_LOCATION && showLocation.not()) {
+                binding.tvCta.invisible()
+            } else {
+                binding.tvCta.visible()
+            }
 
             binding.tvCta.setOnClickListener {
                 listener.onClicked(data.action)
@@ -45,9 +52,10 @@ class TroubleshootAdapter(val listener: TroubleShootAction) :
         holder.bind(mDataSet[position])
     }
 
-    fun setDataSet(dataSet: ArrayList<TroubleShootData>) {
+    fun setDataSet(dataSet: ArrayList<TroubleShootData>, showLocation: Boolean) {
         mDataSet.clear()
         mDataSet.addAll(dataSet)
+        this.showLocation = showLocation
         notifyDataSetChanged()
     }
 }

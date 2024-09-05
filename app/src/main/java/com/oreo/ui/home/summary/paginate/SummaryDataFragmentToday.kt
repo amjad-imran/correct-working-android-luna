@@ -478,7 +478,7 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
-            navigate(R.id.troubleShootBottomSheetFragment)
+            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to true))
         }
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {

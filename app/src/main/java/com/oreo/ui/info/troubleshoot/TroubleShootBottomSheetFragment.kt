@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.FrameLayout
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -27,6 +28,9 @@ class TroubleShootBottomSheetFragment :
     BaseBottomSheetWithTransparent<BottomSheetTroubleshootBinding>(
         BottomSheetTroubleshootBinding::inflate
     ) {
+
+    private val args: TroubleShootBottomSheetFragmentArgs by navArgs()
+
     private val descriptionSliderAdapter by lazy {
         TroubleshootAdapter(object : TroubleShootAction {
             override fun onClicked(action: TroubleShootActionType) {
@@ -38,21 +42,25 @@ class TroubleShootBottomSheetFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setViewpager()
+        val showLocation = args.showLastLocation
+
+        setViewpager(showLocation)
 
     }
 
     private fun handleActionClick(action: TroubleShootActionType) {
-        when(action){
+        when (action) {
             TroubleShootActionType.LAST_LOCATION -> {
                 navigate(R.id.ringLocationFragment)
             }
+
             TroubleShootActionType.BLUETOOTH -> {
                 tryCatch {
                     val settingsIntent = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
                     startActivity(settingsIntent)
                 }
             }
+
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
                     ShareUtil.openExternalUrl(it, SUPPORT_URL)
@@ -61,7 +69,7 @@ class TroubleShootBottomSheetFragment :
         }
     }
 
-    private fun setViewpager() {
+    private fun setViewpager(showLocation: Boolean) {
         binding.vpImageSlider.apply {
             clipToPadding = false
             clipChildren = false
@@ -74,7 +82,7 @@ class TroubleShootBottomSheetFragment :
             binding.vpImageSlider
         ) { _, _ -> }.attach()
 
-        descriptionSliderAdapter.setDataSet(generateDataSet())
+        descriptionSliderAdapter.setDataSet(generateDataSet(),showLocation)
 
         binding.vpImageSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
