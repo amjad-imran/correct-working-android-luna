@@ -10,6 +10,7 @@ import com.noisefit.luna.databinding.FragmentCycleTrackerSettingsBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerSettingsNewBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.FemaleHealthCardState
@@ -52,6 +53,9 @@ class CycleTrackerSettingsNewFragment :
     private fun setFemaleGetStartedUI() {
         binding.lytFemaleHealthGetStarted.apply {
             root.visible()
+            ivCross.invisible()
+            tvRemindMeLater.gone()
+            lytDummyView.visible()
             this.btnGetStarted.text =
                 this.btnGetStarted.context.getString(R.string.text_get_started)
             this.textView92.text =
@@ -60,15 +64,6 @@ class CycleTrackerSettingsNewFragment :
             this.btnGetStarted.setOnClickListener {
                 navigate(CycleTrackerSettingsNewFragmentDirections.actionCycleTrackerSettingsNewFragmentToFemaleHealthSplashFragment())
             }
-            this.tvRemindMeLater.setOnClickListener {
-                //viewModel.localDataStore.setFMHRemindLater()
-                //viewModel.trackFemaleHealthCardData.postValue(null)
-            }
-            this.ivCross.setOnClickListener {
-                //viewModel.localDataStore.setFMHRemindLater()
-                //viewModel.trackFemaleHealthCardData.postValue(null)
-            }
-
         }
     }
 

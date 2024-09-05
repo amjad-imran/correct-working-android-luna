@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginTop="24dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imv"
@@ -65,7 +65,17 @@
         android:text="@string/text_get_started"
         app:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView92" />
+
+    <View
+        android:id="@+id/lytDummyView"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGetStarted" />
 
 
     <TextView
@@ -79,7 +89,7 @@
         android:textColor="@color/carolina_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetStarted" />
+        app:layout_constraintTop_toBottomOf="@+id/lytDummyView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
