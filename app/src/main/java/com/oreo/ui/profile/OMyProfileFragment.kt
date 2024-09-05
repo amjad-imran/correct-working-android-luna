@@ -171,7 +171,7 @@ class OMyProfileFragment :
         viewModel.showFemaleHealthSplash.observe(this) {
             it?.getContent()?.let {
                 if (it) {
-                    navigate(R.id.femaleHealthSplashFragment)
+                    navigate(R.id.cycleTrackerSettingsNewFragment)
                 }
             }
         }

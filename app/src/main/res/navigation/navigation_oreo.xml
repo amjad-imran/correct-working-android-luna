@@ -1052,4 +1052,14 @@
         android:id="@+id/ringLocationFragment"
         android:name="com.oreo.ui.findmyring.RingLocationFragment"
         android:label="fragment_ring_location" />
+    <fragment
+        android:id="@+id/cycleTrackerSettingsNewFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.settings.CycleTrackerSettingsNewFragment"
+        android:label="CycleTrackerSettingsNewFragment" >
+        <action
+            android:id="@+id/action_cycleTrackerSettingsNewFragment_to_femaleHealthSplashFragment"
+            app:destination="@id/femaleHealthSplashFragment"
+            app:popUpTo="@id/cycleTrackerSettingsNewFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
