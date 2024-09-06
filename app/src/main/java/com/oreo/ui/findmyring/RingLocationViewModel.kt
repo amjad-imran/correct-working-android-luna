@@ -23,6 +23,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OHealthOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +41,7 @@ class RingLocationViewModel @Inject constructor(
     private val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
-    var isDataHidden: Boolean = true
+    var isDataHidden: Boolean = false
 
     val ringLocationData = MutableLiveData<RingLocationData?>()
 
@@ -75,9 +76,13 @@ class RingLocationViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
-                            ringLocationData.postValue(it)
-
+                            setLoading(true)
+                            getAddress(it.latitude, it.longitude) { address ->
+                                setLoading(false)
+                                ringLocationData.postValue(it.apply {
+                                    this.address = address
+                                })
+                            }
                         }
                     }
                 }
@@ -99,7 +104,10 @@ class RingLocationViewModel @Inject constructor(
 
 
     fun getAddress(lat: Double?, long: Double?, onAddressFetched: (String?) -> Unit) {
-        if (lat == null || long == null) return
+        if (lat == null || long == null) {
+            onAddressFetched(null)
+            return
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             geoCoder.getFromLocation(
@@ -126,15 +134,20 @@ class RingLocationViewModel @Inject constructor(
         viewModelScope.launch {
             val mac = ringDataStore.getRingDevice()?.address
             val batteryPercent = watchDataStore.getBatteryPercentRing()
+            setLoading(true)
 
-            ringLocationData.postValue(
-                RingLocationData(
-                    location.first,
-                    location.second,
-                    batteryPercent,
-                    DateFormats.getCurrentDate(DateFormats.dateTimeFormat5())
+            getAddress(location.first, location.second) { address ->
+                setLoading(false)
+                ringLocationData.postValue(
+                    RingLocationData(
+                        location.first,
+                        location.second,
+                        batteryPercent,
+                        DateFormats.getCurrentDate(DateFormats.dateTimeFormat5()),
+                        address
+                    )
                 )
-            )
+            }
 
 
             val request = JsonObject().apply {

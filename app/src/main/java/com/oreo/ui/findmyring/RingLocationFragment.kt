@@ -147,37 +147,16 @@ class RingLocationFragment :
         }
     }
 
-    fun bottomSheetToggle(hideData: Boolean) {
-        LOGS.d("sdfjhsdkjfhsdkjf $hideData")
-        if (hideData) {
-            binding.lytLocationData.apply {
-                tvAddress.gone()
-                tvLastSyncedAt.gone()
-                textDisclaimer.gone()
-            }
-        } else {
-            binding.lytLocationData.apply {
-                tvAddress.visible()
-                tvLastSyncedAt.visible()
-                textDisclaimer.visible()
-            }
-        }
-        return
+    private fun bottomSheetToggle(hideData: Boolean) {
+        if (viewModel.isDataHidden == hideData) return
 
         if (hideData) {
             binding.lytLocationData.apply {
                 animateViewOut(this.root)
-
-                /*animateViewOut(tvAddress)
-                animateViewOut(tvLastSyncedAt)
-                animateViewOut(textDisclaimer)*/
             }
         } else {
             binding.lytLocationData.apply {
                 animateViewIn(this.root)
-                /*                animateViewIn(tvAddress)
-                                animateViewIn(tvLastSyncedAt)
-                                animateViewIn(textDisclaimer)*/
             }
         }
 
@@ -186,16 +165,16 @@ class RingLocationFragment :
     private fun animateViewOut(view: View) {
         val translateHeight = view.height.toFloat() - 98f.dpToPixel()
         ObjectAnimator.ofFloat(view, "translationY", 0f, translateHeight).apply {
-            duration = 300
+            duration = 400
             start()
         }
     }
 
     private fun animateViewIn(view: View) {
         val translateHeight = view.height.toFloat() - 98f.dpToPixel()
-        ObjectAnimator.ofFloat(view, "translationY", translateHeight/*view.height.toFloat()*/, 0f)
+        ObjectAnimator.ofFloat(view, "translationY", translateHeight, 0f)
             .apply {
-                duration = 300
+                duration = 400
                 start()
             }
     }
@@ -204,6 +183,7 @@ class RingLocationFragment :
         if (ringLocationData == null) {
             binding.lytLocationData.root.gone()
             binding.lytDirections.gone()
+            return
         } else {
             binding.lytLocationData.root.visible()
             binding.lytDirections.visible()
@@ -219,9 +199,7 @@ class RingLocationFragment :
             tvBatteryPercentage.text =
                 if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
 
-            viewModel.getAddress(ringLocationData?.latitude, ringLocationData?.longitude) {
-                tvAddress.text = it
-            }
+            tvAddress.text = ringLocationData?.address
 
             val lastSync = ringLocationData?.last_sync
             if (lastSync.isNullOrEmpty().not()) {
@@ -234,13 +212,13 @@ class RingLocationFragment :
             } else {
                 tvLastSyncedAt.text = ""
             }
+
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                bottomSheetToggle(true)
+                viewModel.isDataHidden = true
+            }, 200)
         }
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.isDataHidden = true
-            bottomSheetToggle(true)
-        }, 200)
-
     }
 
     private fun setLocationData(ringLocationData: RingLocationData?) {
