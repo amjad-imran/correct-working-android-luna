@@ -792,6 +792,8 @@ public class LineChart extends View {
 
 
     private float xDown;
+    private float lastX;
+    private float lastY;
     private float yDown;
     private float moveOffSet;
 
@@ -802,10 +804,12 @@ public class LineChart extends View {
         }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                xDown = event.getX();
                 LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_DOWN");
                 getParent().requestDisallowInterceptTouchEvent(true);
-                xDown = event.getX();
                 yDown = event.getY();
+                lastX = event.getX(0);
+                lastY = event.getY(0);
                 break;
             case MotionEvent.ACTION_MOVE:
                 moveOffSet = event.getX() - xDown;
@@ -821,15 +825,13 @@ public class LineChart extends View {
                 callBack(true);
                 invalidate();
 
-              /*  LOGS.INSTANCE.d("sdfjhsdkfjhsdfjsdf xDown" + xDown
-                        + "  event.getX()-> "
-                        + event.getX() + "   moveOffSet-> " + moveOffSet +" yDown->"+yDown);
+                LOGS.INSTANCE.d("dsfsdfdsfdf " +lastX +"  " +event.getX() +"  " +lastY +"  " +event.getY());
 
-                if (event.getY() < dip2px(50f) && (yDown==event.getY()) && (xDown==event.getX())) {
+                if (event.getY() < dip2px(50f) && (lastX==event.getX()) && (lastY==event.getY())) {
                     if (actionListener != null) {
                         actionListener.onDateClicked();
                     }
-                }*/
+                }
                 break;
             default:
                 break;

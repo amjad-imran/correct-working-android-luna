@@ -593,8 +593,25 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec1.lytBpmView.tvUnit.gone()
     }
 
+
+    private fun showCalendar(){
+        setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+            val selectedDate =
+                bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+            mainViewModel.onCalendarDateSelected(selectedDate)
+            mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+        }
+
+        navigate(R.id.bottomSheetCalendar, Bundle().apply {
+            this.putString("selectedDate", mainViewModel.selectedDate)
+            this.putString("launchedFrom", "activity")
+        })
+    }
     private fun setRecyclerView() {
         binding.rvTopGraph.setOnChartScrollChangedListener(this)
+
+        binding.rvTopGraph.setOnDateClickListener { showCalendar() }
 
         with(binding.lytAContributor.rvContributor) {
             adapter = mActivityAdapter
@@ -783,18 +800,8 @@ class OreoActivityFragment :
         binding.lytToolbar.backBtn.invisible()
 
         binding.lytToolbar.view1.setOnClickListener {
-            setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
-                val selectedDate =
-                    bundle.getString("selected_date") ?: return@setFragmentResultListener
+            showCalendar()
 
-                mainViewModel.onCalendarDateSelected(selectedDate)
-                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
-            }
-
-            navigate(R.id.bottomSheetCalendar, Bundle().apply {
-                this.putString("selectedDate", mainViewModel.selectedDate)
-                this.putString("launchedFrom", "activity")
-            })
         }
 
         binding.lytWorkouts.viewAddWorkout.setOnClickListener {
