@@ -115,9 +115,6 @@ class BottomSheetCalendar :
         )
         val userStartDate = viewModel.getUserStartDate()
 
-        LOGS.d("kjhgkjgksdjfsd startMonth $startMonth  userStartDate $userStartDate  registerDays ${viewModel.registerDate}")
-
-
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
             val binding = CalendarDayBinding.bind(view)
@@ -202,16 +199,7 @@ class BottomSheetCalendar :
 
         binding.calendar.monthScrollListener = object : MonthScrollListener {
             override fun invoke(p1: CalendarMonth) {
-
                 viewModel.checkAndLoadMoreData(p1)
-
-                LOGS.d(
-                    "monthScrollListener ${
-                        p1.yearMonth.month.value
-                    } ${
-                        p1.yearMonth.year
-                    }"
-                )
             }
 
         }
@@ -230,8 +218,6 @@ class BottomSheetCalendar :
     fun daysOfWeekFromLocale(): Array<DayOfWeek> {
         val firstDayOfWeek = WeekFields.of(DateFormats.defaultLocale).firstDayOfWeek
         var daysOfWeek = DayOfWeek.values()
-        // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
-        // Only necessary if firstDayOfWeek != DayOfWeek.MONDAY which has ordinal 0.
         if (firstDayOfWeek != DayOfWeek.MONDAY) {
             val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
             val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)

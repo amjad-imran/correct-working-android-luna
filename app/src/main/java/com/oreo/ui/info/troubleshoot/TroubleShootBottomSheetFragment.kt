@@ -123,21 +123,21 @@ class TroubleShootBottomSheetFragment :
         return arrayListOf(
             TroubleShootData(
                 title = "Steps to follow",
-                message = "Try reconnecting your ring for few minutes until it’s connected",
+                message = "Try keeping your ring on the charger for few minutes until it gets connected.",
                 image = R.drawable.image_ts_1,
                 ctaText = "Check last synced location",
                 action = TroubleShootActionType.LAST_LOCATION
             ),
             TroubleShootData(
                 title = "Steps to follow",
-                message = "Ensure your ring and your phone is within 1 metre distance",
+                message = "Ensure your ring and your phone are within 1 metre distance",
                 image = R.drawable.image_ts_2,
                 ctaText = "Check last synced location",
                 action = TroubleShootActionType.LAST_LOCATION
             ),
             TroubleShootData(
                 title = "Steps to follow",
-                message = "Try turning off the bluetooth and reconnect again to the ring",
+                message = "Try turning on/off the bluetooth until the ring gets connected.",
                 image = R.drawable.image_ts_3,
                 ctaText = "Turn on bluetooth",
                 action = TroubleShootActionType.BLUETOOTH

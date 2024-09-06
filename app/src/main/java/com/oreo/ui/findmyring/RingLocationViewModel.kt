@@ -200,4 +200,8 @@ class RingLocationViewModel @Inject constructor(
         }
     }
 
+    fun formatRelativeTime(timestamp: Long) :String{
+        return DateFormats.getRelativeTime(timestamp).replace("minute","min")
+    }
+
 }

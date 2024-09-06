@@ -149,6 +149,7 @@ class RingLocationFragment :
 
     private fun bottomSheetToggle(hideData: Boolean) {
         if (viewModel.isDataHidden == hideData) return
+        LOGS.d("dkjfhksjdfksdf $hideData")
 
         if (hideData) {
             binding.lytLocationData.apply {
@@ -208,7 +209,7 @@ class RingLocationFragment :
                     DateFormats.dateTimeFormat5()
                 )
 
-                tvLastSyncedAt.text = "Last Synced ${DateFormats.getRelativeTime(startTimeStamp)}"
+                tvLastSyncedAt.text = "Last Synced ${viewModel.formatRelativeTime(startTimeStamp)}"
             } else {
                 tvLastSyncedAt.text = ""
             }

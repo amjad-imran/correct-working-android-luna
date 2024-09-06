@@ -133,6 +133,6 @@ class HealthCalendarViewModel @Inject constructor(
     }
 
     fun getUserStartDate(): LocalDate {
-        return LocalDate.now().minusDays(registerDate.toLong())
+        return LocalDate.now().minusDays(registerDate.toLong()).minusDays(1)
     }
 }

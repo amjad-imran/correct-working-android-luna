@@ -14,6 +14,7 @@ import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.ui.tryCatch
 import com.oreo.data.db.OreoDataBase
 import dagger.Module
 import dagger.Provides
@@ -66,7 +67,9 @@ object NetworkModule {
         .apply {
             if (BuildConfig.DEBUG) {
                 this.addInterceptor(logger)
-                this.addInterceptor(CurlLoggerInterceptor("CURL"))
+                tryCatch {
+                    this.addInterceptor(CurlLoggerInterceptor("CURL"))
+                }
             }
         }
         .build()
