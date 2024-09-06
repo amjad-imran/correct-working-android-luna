@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -149,35 +151,42 @@ class RingLocationFragment :
 
     private fun bottomSheetToggle(hideData: Boolean) {
         if (viewModel.isDataHidden == hideData) return
-        LOGS.d("dkjfhksjdfksdf $hideData")
 
         if (hideData) {
             binding.lytLocationData.apply {
-                animateViewOut(this.root)
+                animateViewOut(this.root, binding.lytDirections)
             }
         } else {
             binding.lytLocationData.apply {
-                animateViewIn(this.root)
+                animateViewIn(this.root, binding.lytDirections)
             }
         }
 
     }
 
-    private fun animateViewOut(view: View) {
+    private fun animateViewOut(view: View, lytDirections: LinearLayout) {
         val translateHeight = view.height.toFloat() - 98f.dpToPixel()
         ObjectAnimator.ofFloat(view, "translationY", 0f, translateHeight).apply {
             duration = 400
             start()
         }
+        ObjectAnimator.ofFloat(lytDirections, "translationY", 0f, translateHeight).apply {
+            duration = 400
+            start()
+        }
     }
 
-    private fun animateViewIn(view: View) {
+    private fun animateViewIn(view: View, lytDirections: LinearLayout) {
         val translateHeight = view.height.toFloat() - 98f.dpToPixel()
-        ObjectAnimator.ofFloat(view, "translationY", translateHeight, 0f)
-            .apply {
-                duration = 400
-                start()
-            }
+        ObjectAnimator.ofFloat(view, "translationY", translateHeight, 0f).apply {
+            duration = 400
+            start()
+        }
+        ObjectAnimator.ofFloat(lytDirections, "translationY", translateHeight, 0f).apply {
+            duration = 400
+            start()
+        }
+
     }
 
     private fun setBottomSheetData(ringLocationData: RingLocationData?) {
@@ -218,7 +227,7 @@ class RingLocationFragment :
             Handler(Looper.getMainLooper()).postDelayed({
                 bottomSheetToggle(true)
                 viewModel.isDataHidden = true
-            }, 200)
+            }, 400)
         }
     }
 
@@ -293,6 +302,7 @@ class RingLocationFragment :
         mapFragment.getMapAsync { googleMap ->
             setMap(googleMap)
             this.googleMap = googleMap
+            moveToDefaultLocation(googleMap)
 
             googleMap.setOnMapClickListener {
                 bottomSheetToggle(true)
@@ -304,6 +314,12 @@ class RingLocationFragment :
                 viewModel.isDataHidden = true
             }
         }
+    }
+
+    private fun moveToDefaultLocation(googleMap: GoogleMap) {
+        val latLng = LatLng(28.4511716, 77.0968891)
+        val zoom = 4f
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
     private fun setMap(map: GoogleMap) {

@@ -172,6 +172,14 @@ class OAddWorkoutFragment :
                     if (DateFormats.compareTime(
                             hourOfDay,
                             minute,
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE)
+                        ) >= 0
+                    ) {
+                        context.showShortToast(getString(R.string.text_start_time_less_then_current_time))
+                    } else if (DateFormats.compareTime(
+                            hourOfDay,
+                            minute,
                             viewModel.addWorkout.endHour,
                             viewModel.addWorkout.endMinute
                         ) >= 0
@@ -201,14 +209,6 @@ class OAddWorkoutFragment :
                     }
                 } else {
                     if (DateFormats.compareTime(
-                            hourOfDay,
-                            minute,
-                            calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.MINUTE)
-                        ) >= 0
-                    ) {
-                        context.showShortToast(getString(R.string.text_start_time_less_then_current_time))
-                    } else if (DateFormats.compareTime(
                             hourOfDay,
                             minute,
                             viewModel.addWorkout.endHour,
