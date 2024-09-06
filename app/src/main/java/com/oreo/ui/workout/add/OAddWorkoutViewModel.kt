@@ -325,11 +325,12 @@ class OAddWorkoutViewModel
                             }
 
                             val isAuto = autoSport.value != null
-                            val date = if (isAuto) {
+                            val date = /*if (isAuto) {*/
                                 addWorkout.date ?: DateFormats.getTodaysDateString(10)
-                            } else {
+                            /*} else {
                                 DateFormats.getTodaysDateString(10)
-                            }
+                            }*/
+
                             userHealthDataDataSource.clearDataByDates(listOf(date))
                             delay(100)
 
@@ -542,7 +543,7 @@ class OAddWorkoutViewModel
         dates.add(dateToday.minusDays(1).format(format).toString())
         dates.add(dateToday.minusDays(2).format(format).toString())
         dates.add(dateToday.minusDays(3).format(format).toString())
-        return dates.toTypedArray()
+        return dates.reversed().toTypedArray()
 
     }
 }

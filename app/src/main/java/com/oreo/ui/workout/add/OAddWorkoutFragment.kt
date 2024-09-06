@@ -131,7 +131,6 @@ class OAddWorkoutFragment :
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 selectedValue?.let { it1 ->
-                    LOGS.d("sdfklsdjklfsdf $it1")
                     val parsedDate = LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
                     viewModel.addWorkout.date =parsedDate
