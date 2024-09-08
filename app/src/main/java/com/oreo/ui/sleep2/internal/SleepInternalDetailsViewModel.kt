@@ -174,7 +174,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     startDate.toString(),
                     getCalculatedEnd(endDate).toString(),
                     selectedLaunchMode.key.lowercase(),
-                    if(isDeviationSelected) "deviation" else period
+                    if(selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) "deviation" else period
                 )
             } else {
                 userActivityRepository.getSleepInternalTrendsPagesData(
