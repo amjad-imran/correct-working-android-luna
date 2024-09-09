@@ -511,6 +511,7 @@ constructor() : LifecycleService() {
             applicationContext.cacheDir?.deleteRecursively()
         } ?: LOGS.d(TAG, "getConnectedDevice is null")
         unregisterReceivers()
+        ringDataStore.deleteOngoingRecordWorkout()
         reconnectHandler.removeCallbacks(bluetoothReconnectRunnable)
         isServiceStarted = false
         localDataStore.setServiceState(ServiceState.STOPPED)
