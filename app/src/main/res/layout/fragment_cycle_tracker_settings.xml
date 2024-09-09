@@ -234,7 +234,6 @@
             android:visibility="gone"
             app:constraint_referenced_ids="textView1,
             tvTrackMyPeriod,tvGetPregnant,tvAvoidPregnancy,
-            divider1,
-            tvFollowPregnancy,tvYourCycle,view1,lytPeriodDuration,divider2,lytCycleLength" />
+            divider1,tvYourCycle,view1,lytPeriodDuration,divider2,lytCycleLength" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

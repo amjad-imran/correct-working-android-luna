@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.luna.databinding.BottomSheetLocationPermBinding
 import com.noisefit.luna.databinding.BottomSheetLocationPermFindMyRingBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint

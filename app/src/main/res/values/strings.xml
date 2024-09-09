@@ -1345,6 +1345,6 @@
     <string name="text_ring_not_connecting">Ring not connecting ?</string>
     <string name="text_enable_cycle_tracker">Enable cycle tracker</string>
     <string name="text_enable_cycle_tracker_message">Enable cycle tracking to understand your menstrual cycle and know when your next period or ovulation might start.</string>
-    <string name="text_find_ring_message_location">To enhance your outdoor workout experience, we need permission to access your location at all times. This allows us to provide real-time tracking and tailored fitness advice based on your exact route and conditions. Do you agree to allow Luna to access your location during your workouts?</string>
+    <string name="text_find_ring_message_location">To use the \'Find My Ring\' feature, we need permission to access your location in the background. This allows us to provide real-time tracking of your Luna ring whenever it gets disconnected with your Luna App. Do you agree to allow Luna App to access your location whenever the Luna ring gets disconnected?</string>
 
 </resources>
