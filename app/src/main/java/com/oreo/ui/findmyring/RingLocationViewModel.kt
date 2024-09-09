@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Build
+import android.text.format.DateUtils
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,10 @@ import com.oreo.data.model.OHealthOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -202,8 +207,39 @@ class RingLocationViewModel @Inject constructor(
         }
     }
 
-    fun formatRelativeTime(timestamp: Long) :String{
-        return DateFormats.getRelativeTime(timestamp).replace("minute","min")
+    fun formatRelativeTime(timestamp: Long): String {
+        val currentTimeStamp = System.currentTimeMillis()
+
+        val relativeTime = if (timestamp + 60000 > currentTimeStamp) {
+            "Just Now"
+        } else {
+            if (timestamp + 24 * 60 * 60 * 1000 >= currentTimeStamp) {
+                val totalSecs = (currentTimeStamp - timestamp) / 1000
+                val hours = totalSecs / 3600;
+                val minutes = (totalSecs % 3600) / 60;
+
+                if (hours == 0L) {
+                    if (minutes == 1L) {
+                        String.format("%02d min ago", minutes);
+                    } else {
+                        String.format("%02d mins ago", minutes);
+                    }
+                } else {
+                    String.format("%02d hr %02d mins ago", hours, minutes);
+                }
+            } else {
+                val dt = Instant.ofEpochMilli(timestamp)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+
+                "at ${dt.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))} at ${
+                    dt.format(
+                        DateTimeFormatter.ofPattern("hh:mm a")
+                    )
+                }"
+            }
+        }
+        return relativeTime
     }
 
 }
