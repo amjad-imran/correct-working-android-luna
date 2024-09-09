@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -165,28 +165,31 @@ class RingLocationFragment :
     }
 
     private fun animateViewOut(view: View, lytDirections: LinearLayout) {
-        val translateHeight = view.height.toFloat() - 98f.dpToPixel()
-        ObjectAnimator.ofFloat(view, "translationY", 0f, translateHeight).apply {
-            duration = 400
-            start()
-        }
-        ObjectAnimator.ofFloat(lytDirections, "translationY", 0f, translateHeight).apply {
-            duration = 400
-            start()
+        view.post {
+            val translateHeight = view.measuredHeight.toFloat() - 98f.dpToPixel()
+            ObjectAnimator.ofFloat(view, "translationY", 0f, translateHeight).apply {
+                duration = 400
+                start()
+            }
+            ObjectAnimator.ofFloat(lytDirections, "translationY", 0f, translateHeight).apply {
+                duration = 400
+                start()
+            }
         }
     }
 
     private fun animateViewIn(view: View, lytDirections: LinearLayout) {
-        val translateHeight = view.height.toFloat() - 98f.dpToPixel()
-        ObjectAnimator.ofFloat(view, "translationY", translateHeight, 0f).apply {
-            duration = 400
-            start()
+        view.post {
+            val translateHeight = view.height.toFloat() - 98f.dpToPixel()
+            ObjectAnimator.ofFloat(view, "translationY", translateHeight, 0f).apply {
+                duration = 400
+                start()
+            }
+            ObjectAnimator.ofFloat(lytDirections, "translationY", translateHeight, 0f).apply {
+                duration = 400
+                start()
+            }
         }
-        ObjectAnimator.ofFloat(lytDirections, "translationY", translateHeight, 0f).apply {
-            duration = 400
-            start()
-        }
-
     }
 
     private fun setBottomSheetData(ringLocationData: RingLocationData?) {
@@ -194,10 +197,11 @@ class RingLocationFragment :
             binding.lytLocationData.root.gone()
             binding.lytDirections.gone()
             return
-        } else {
-            binding.lytLocationData.root.visible()
-            binding.lytDirections.visible()
         }
+
+        binding.lytLocationData.root.visible()
+        binding.lytDirections.visible()
+
 
         binding.lytLocationData.apply {
             tvName.text = "${viewModel.getUserName()}Luna Ring"
@@ -214,21 +218,21 @@ class RingLocationFragment :
             val lastSync = ringLocationData?.last_sync
             if (lastSync.isNullOrEmpty().not()) {
                 val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
-                    lastSync!!,
-                    DateFormats.dateTimeFormat5()
+                    lastSync!!, DateFormats.dateTimeFormat5()
                 )
 
                 tvLastSyncedAt.text = "Last Synced ${viewModel.formatRelativeTime(startTimeStamp)}"
             } else {
                 tvLastSyncedAt.text = ""
             }
-
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                bottomSheetToggle(true)
-                viewModel.isDataHidden = true
-            }, 400)
         }
+
+        if (viewModel.isInitialMove.not()) {
+            bottomSheetToggle(true)
+            viewModel.isDataHidden = true
+            viewModel.isInitialMove = true
+        }
+
     }
 
     private fun setLocationData(ringLocationData: RingLocationData?) {
@@ -250,30 +254,23 @@ class RingLocationFragment :
         val ringImage = viewModel.getRingImage()
 
         val markerView: View = layoutInflater.inflate(
-            R.layout.layout_custom_marker,
-            null,
-            false
+            R.layout.layout_custom_marker, null, false
         )
         val imageView = markerView.findViewById<ImageView>(R.id.ivRingImage)
 
         googleMap.addMarker(
-            MarkerOptions()
-                .position(currentLoc)
+            MarkerOptions().position(currentLoc)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map_ring_marker))
         )
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
 
-        Glide.with(imageView.context)
-            .asBitmap()
-            .load(ringImage)
+        Glide.with(imageView.context).asBitmap().load(ringImage)
             .into(object : CustomTarget<Bitmap?>(
-                56f.dpToPixel().roundToInt(),
-                56f.dpToPixel().roundToInt()
+                56f.dpToPixel().roundToInt(), 56f.dpToPixel().roundToInt()
             ) {
                 override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: Transition<in Bitmap?>?
+                    resource: Bitmap, transition: Transition<in Bitmap?>?
                 ) {
                     googleMap.clear()
                     imageView.setImageBitmap(resource)
@@ -282,11 +279,9 @@ class RingLocationFragment :
 
                     bitmap?.let {
                         googleMap.addMarker(
-                            MarkerOptions()
-                                .position(currentLoc)
-                                .icon(
-                                    BitmapDescriptorFactory.fromBitmap(bitmap)
-                                )
+                            MarkerOptions().position(currentLoc).icon(
+                                BitmapDescriptorFactory.fromBitmap(bitmap)
+                            )
                         )
                     }
                 }

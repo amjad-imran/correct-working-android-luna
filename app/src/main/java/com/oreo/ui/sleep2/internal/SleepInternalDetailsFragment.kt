@@ -550,10 +550,16 @@ class SleepInternalDetailsFragment :
 
                 if (topContentData.isInteracting) {
                     binding.lytTopView.lytTopSingleView.apply {
-                        tvNudge.alpha = 0.5f
                         tvOptimalRangeLabel.alpha = 0.5f
                         ivCircle.alpha = 0.5f
                         lytHighlightTrends.root.alpha = 0.5f
+
+
+                        if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                            tvNudge.alpha = 1f
+                        } else {
+                            tvNudge.alpha = 0.5f
+                        }
 
                         tvDateTime.text =
                             if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
@@ -587,7 +593,7 @@ class SleepInternalDetailsFragment :
                                         32 + (data?.value2 ?: 0f)
                                     )
                                 } else {*/
-                                    data?.value2
+                                data?.value2
                                 /*}*/
                             } else {
                                 viewModel.handle255(
@@ -828,16 +834,18 @@ class SleepInternalDetailsFragment :
                 tvMin.text = "-"
             }
         } else {
-            val hours = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
-                value2
-            }else{
-                value1
-            }
-            val need = if(viewModel.selectedLaunchMode==SleepInternalLaunchState.RESTORATIVE_SLEEP){
-                value1
-            }else{
-                value2
-            }
+            val hours =
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
+                    value2
+                } else {
+                    value1
+                }
+            val need =
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTORATIVE_SLEEP) {
+                    value1
+                } else {
+                    value2
+                }
 
             if (hours != null) {
                 binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {

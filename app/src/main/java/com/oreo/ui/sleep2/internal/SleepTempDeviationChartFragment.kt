@@ -73,7 +73,7 @@ class SleepTempDeviationChartFragment :
                     val date = pageData?.data?.get(calcPos)?.date
                     sharedViewModel.sendInteractDay(LocalDate.parse(date))
                 } catch (exp: Exception) {
-                    sharedViewModel.sendInteractDay(null)
+                    //sharedViewModel.sendInteractDay(null)
                 }
             }
 
