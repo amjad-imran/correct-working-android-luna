@@ -33,6 +33,7 @@ import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -210,21 +211,43 @@ class RingLocationFragment :
                 ivRing.context, viewModel.getRingImage()
             )
 
-            tvBatteryPercentage.text =
-                if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
+            if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
+                tvAddress.text = "Location not found"
 
-            tvAddress.text = ringLocationData?.address
+                tvLastSyncedAt.gone()
+                tvBatteryPercentage.gone()
+                imageView44.gone()
+                shapeableImageView10.gone()
+                tvConnectionState.gone()
+                tvConnectionStateNoData.visible()
 
-            val lastSync = ringLocationData?.last_sync
-            if (lastSync.isNullOrEmpty().not()) {
-                val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
-                    lastSync!!, DateFormats.dateTimeFormat5()
-                )
-
-                tvLastSyncedAt.text = "Last Synced ${viewModel.formatRelativeTime(startTimeStamp)}"
             } else {
-                tvLastSyncedAt.text = ""
+
+                tvLastSyncedAt.visible()
+                tvBatteryPercentage.visible()
+                imageView44.visible()
+                shapeableImageView10.visible()
+                tvConnectionState.visible()
+                tvConnectionStateNoData.gone()
+
+                tvBatteryPercentage.text =
+                    if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
+
+                tvAddress.text = ringLocationData?.address
+
+                val lastSync = ringLocationData?.last_sync
+                if (lastSync.isNullOrEmpty().not()) {
+                    val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                        lastSync!!, DateFormats.dateTimeFormat5()
+                    )
+
+                    tvLastSyncedAt.text =
+                        "Last Synced ${viewModel.formatRelativeTime(startTimeStamp)}"
+                } else {
+                    tvLastSyncedAt.text = ""
+                }
             }
+
         }
 
         if (viewModel.isInitialMove.not()) {
@@ -243,7 +266,15 @@ class RingLocationFragment :
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             googleMap.clear()
-            loadMarker(googleMap, ringLocationData.latitude, ringLocationData.longitude)
+
+            if(viewModel.bottomSheetState==BottomSheetState.NO_DATA){
+                val currentLoc = LatLng(ringLocationData.latitude, ringLocationData.longitude)
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
+
+            }else{
+                loadMarker(googleMap, ringLocationData.latitude, ringLocationData.longitude)
+
+            }
         }
     }
 

@@ -22,6 +22,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -49,6 +50,7 @@ class RingLocationViewModel @Inject constructor(
     var isInitialMove: Boolean = false
 
     var isDataHidden: Boolean = false
+    var bottomSheetState: BottomSheetState = BottomSheetState.DEFAULT
 
     val ringLocationData = MutableLiveData<RingLocationData?>()
 
@@ -61,13 +63,17 @@ class RingLocationViewModel @Inject constructor(
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
+                        setLoading(false)
                     }
 
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        if(resource.loading){
+                            setLoading(true)
+                        }
                     }
 
                     is Resource.NetworkError -> {
+                        setLoading(false)
                         setApiErrors(resource.response.apply {
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object :
@@ -82,8 +88,16 @@ class RingLocationViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.data.let {
                             setLoading(true)
+                            if (it == null) {
+                                bottomSheetState = BottomSheetState.NO_DATA
+                                LocationUtils2.startLocationService(false)
+                                return@collect
+                            }
+
+                            bottomSheetState = BottomSheetState.HAS_DATA
+
                             getAddress(it.latitude, it.longitude) { address ->
                                 setLoading(false)
                                 ringLocationData.postValue(it.apply {
@@ -142,7 +156,6 @@ class RingLocationViewModel @Inject constructor(
             val mac = ringDataStore.getRingDevice()?.address
             val batteryPercent = watchDataStore.getBatteryPercentRing()
             setLoading(true)
-
             getAddress(location.first, location.second) { address ->
                 setLoading(false)
                 ringLocationData.postValue(
@@ -154,6 +167,10 @@ class RingLocationViewModel @Inject constructor(
                         address
                     )
                 )
+            }
+
+            if (bottomSheetState == BottomSheetState.NO_DATA) {
+                return@launch
             }
 
 
@@ -242,4 +259,8 @@ class RingLocationViewModel @Inject constructor(
         return relativeTime
     }
 
+}
+
+enum class BottomSheetState {
+    HAS_DATA, NO_DATA, DEFAULT
 }

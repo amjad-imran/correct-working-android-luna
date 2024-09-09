@@ -1102,7 +1102,7 @@
     <string name="text_location_perm_message">Our app utilizes the fitness.activity.read and fitness.activity.write scopes to provide users with a comprehensive view of their daily activities. Users can log and track workouts, monitor step count, and analyze calories burned.</string>
     <string name="text_location_perm_message_2">Our app uses background location data to enhance your fitness tracking experience by accurately recording routes and distances for outdoor activities such as running, walking, and cycling. This allows for precise step count monitoring and calorie burn analysis, helping users gain comprehensive insights into their daily activities and overall fitness. We prioritize user privacy and ensure that location data is handled securely to provide the best possible fitness tracking experience.</string>
     <string name="text_no">No</string>
-    <string name="text_permission_to_use_your_location">Permission to Use Your Location</string>
+    <string name="text_permission_to_use_your_location">Permissions to use your location</string>
     <string name="text_don_t_allow">Don’t Allow</string>
     <string name="text_stress_w_title_1">What is Stress?</string>
     <string name="text_stress_w_title_2">How does the Luna Ring measure stress?</string>
@@ -1345,5 +1345,6 @@
     <string name="text_ring_not_connecting">Ring not connecting ?</string>
     <string name="text_enable_cycle_tracker">Enable cycle tracker</string>
     <string name="text_enable_cycle_tracker_message">Enable cycle tracking to understand your menstrual cycle and know when your next period or ovulation might start.</string>
+    <string name="text_find_ring_message_location">To enhance your outdoor workout experience, we need permission to access your location at all times. This allows us to provide real-time tracking and tailored fitness advice based on your exact route and conditions. Do you agree to allow Luna to access your location during your workouts?</string>
 
 </resources>

@@ -56,6 +56,18 @@
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
     <TextView
+        android:id="@+id/tvConnectionStateNoData"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_64"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/ivRing"
+        app:layout_constraintStart_toStartOf="@+id/tvName"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        android:text="Not connected" />
+
+    <TextView
         android:id="@+id/tvBatteryPercentage"
         style="@style/S12"
         android:layout_width="wrap_content"
