@@ -1062,4 +1062,8 @@
             app:popUpTo="@id/cycleTrackerSettingsNewFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetLocationPermissionFindMyRing"
+        android:name="com.oreo.ui.device.BottomSheetLocationPermissionFindMyRing"
+        android:label="BottomSheetLocationPermissionFindMyRing" />
 </navigation>

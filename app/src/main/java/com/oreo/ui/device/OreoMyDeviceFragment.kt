@@ -52,6 +52,7 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
+import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -81,7 +82,7 @@ class OreoMyDeviceFragment :
         binding.rowFindMyRing.setOnClickListener {
 
             if (hasGpsPermission().not()) {
-                showLocationPermissionDialog()
+                showPermDetailsDialog()
             } else {
                 if (!isGpsTurnedOn()) {
                     return@setOnClickListener
@@ -406,6 +407,16 @@ class OreoMyDeviceFragment :
             }
 
         return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
+    }
+
+    private fun showPermDetailsDialog() {
+        setFragmentResultListener(FIND_RING_LOCATION_PERM_REQUEST) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+            if (allow) {
+                this@OreoMyDeviceFragment.showLocationPermissionDialog()
+            }
+        }
+        navigate(R.id.bottomSheetLocationPermissionFindMyRing)
     }
 
     private fun showLocationPermissionDialog() {
