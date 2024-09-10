@@ -1065,5 +1065,10 @@
     <dialog
         android:id="@+id/bottomSheetLocationPermissionFindMyRing"
         android:name="com.oreo.ui.device.BottomSheetLocationPermissionFindMyRing"
-        android:label="BottomSheetLocationPermissionFindMyRing" />
+        android:label="BottomSheetLocationPermissionFindMyRing" >
+        <argument
+            android:name="postOnActivity"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </dialog>
 </navigation>

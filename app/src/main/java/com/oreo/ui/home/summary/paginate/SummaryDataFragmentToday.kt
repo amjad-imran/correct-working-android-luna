@@ -1,9 +1,17 @@
 package com.oreo.ui.home.summary.paginate
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -33,6 +41,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
@@ -56,7 +65,7 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
-import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
+import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
@@ -67,8 +76,6 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.ui.sleep2.help.LearnMoreFragment
-import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -226,8 +233,10 @@ class SummaryDataFragmentToday :
         viewModel.checkForNewAppVersion()
         viewModel.checkForNewOtaVersion()
 
+        handleFindMyRingCard()
 
     }
+
 
     fun loadData() {
         LOGS.d(TAG, "Today Load data")
@@ -410,6 +419,13 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
+            viewModel.hideFindMyRingPermCard()
+        }
+        binding.contentMain.lytFindMyRingAlert.tvTurnOn.setOnClickListener {
+            showPermDetailsDialog()
+        }
+
         binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }
@@ -528,6 +544,14 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.findMyRingCard.observe(this) {
+            if (it == true) {
+                binding.contentMain.lytFindMyRingAlert.root.visible()
+            } else {
+                binding.contentMain.lytFindMyRingAlert.root.gone()
+            }
+        }
 
         viewModel.showBlackListDialog.observe(this) {
             it.getContent()?.let {
@@ -1638,5 +1662,113 @@ class SummaryDataFragmentToday :
 
     private fun logFirebaseAppEvent(eventName: String, params: HashMap<String, Any>) {
         viewModel.sessionManager.logFirebaseEvent(eventName, params)
+    }
+
+
+    private fun handleFindMyRingCard() {
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            val isFindMyRingCrossed = viewModel.localDataStore.isFindMyRingLocationCardHidden()
+            if (hasGpsPermission().not() && isFindMyRingCrossed.not()) {
+                viewModel.findMyRingCard.postValue(true)
+            } else {
+                viewModel.findMyRingCard.postValue(false)
+            }
+        }
+
+    }
+
+
+    private fun hasGpsPermission(): Boolean {
+        val permissionAccessFineLocationApproved =
+            (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+                    == PackageManager.PERMISSION_GRANTED)
+
+        val backgroundLocationPermissionApproved =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            } else {
+                true
+            }
+
+        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
+    }
+
+    private fun showLocationPermissionDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        } else {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            )
+        }
+
+    }
+
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+
+        var openSettings = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) && permissions.getOrDefault(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
+
+                else -> {
+                    openSettings = true
+                }
+            }
+        } else {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
+
+                else -> {
+                    openSettings = true
+                }
+            }
+        }
+        if (openSettings) {
+            tryCatch {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun showPermDetailsDialog() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(FIND_RING_LOCATION_PERM_REQUEST,this) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+            if (allow) {
+                showLocationPermissionDialog()
+            }
+        }
+        navigate(R.id.bottomSheetLocationPermissionFindMyRing, bundleOf("postOnActivity" to true))
     }
 }

@@ -207,6 +207,7 @@ private const val APP_VERSION_CURRENT = "APP_VERSION_CURRENT"
 private const val FORCE_UPDATE_REQUIRED_VERSION = "FORCE_UPDATE_REQUIRED_VERSION"
 
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
+private const val FMR_CARD_LOCATION = "FMR_CARD_LOCATION"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -215,6 +216,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun hideFindMyRingLocationCard() {
+        mPrefs.edit()?.putBoolean(FMR_CARD_LOCATION, true)?.commit()
+    }
+
+    override fun isFindMyRingLocationCardHidden(): Boolean {
+        return mPrefs.getBoolean(FMR_CARD_LOCATION, false)
+    }
 
     override fun setForceUpdateRequired() {
         mPrefs.edit()?.putInt(FORCE_UPDATE_REQUIRED_VERSION, BuildConfig.VERSION_CODE)?.commit()
@@ -384,6 +393,7 @@ class DataStoredImpl
     }
 
     override fun clearUserLogoutData() {
+        mPrefs.edit()?.remove(FMR_CARD_LOCATION)?.apply()
         mPrefs.edit()?.remove(GOT_PERIOD_CLICKED)?.apply()
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
         mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()

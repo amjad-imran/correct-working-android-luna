@@ -100,6 +100,7 @@ constructor(
     var showChatUi = MutableLiveData<Event<String>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
+
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
     }
