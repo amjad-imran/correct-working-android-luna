@@ -304,15 +304,20 @@ class SleepDashViewModel @Inject constructor(
                 } else {
 
                     val resSleep = (rem ?: 0) + (deep ?: 0)
-                    val total = dayData.timeInBed ?: 0
-                    val percent = (resSleep.toFloat() / total.toFloat()) * 100
-                    val isInIdealRange = percent in 40f..50f
-
-                    if (isInIdealRange) {
-                        restorativeIcon.add(R.drawable.ic_trend_state_green)
-                    } else {
+                    if (resSleep <= 180) {
                         restorativeIcon.add(R.drawable.ic_trend_state_red)
+                    } else {
+                        val total = dayData.timeInBed ?: 0
+                        val percent = (resSleep.toFloat() / total.toFloat()) * 100
+                        val isInIdealRange = percent in 40f..50f
+
+                        if (isInIdealRange) {
+                            restorativeIcon.add(R.drawable.ic_trend_state_green)
+                        } else {
+                            restorativeIcon.add(R.drawable.ic_trend_state_red)
+                        }
                     }
+
                 }
 
             } else {
