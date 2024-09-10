@@ -82,7 +82,6 @@ class SleepInternalDetailsFragment :
         initViewPager()
 
         viewModel.reloadData()
-        //viewModel.loadGraphData(false)
     }
 
     private fun initUi() {
