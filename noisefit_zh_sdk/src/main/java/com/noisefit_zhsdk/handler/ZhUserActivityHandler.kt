@@ -429,6 +429,9 @@ constructor(
                 AppLogs.sendAppLogs("Sent Offline Blood Oxygen Data")
             }
 
+            /**
+             * HRV
+             */
             override fun onContinuousPressureData(data: ContinuousPressureBean) {
                 LOGS.d(TAG, "onOfflinePressureData : $data ${data.date}")
                 if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {

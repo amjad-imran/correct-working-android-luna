@@ -495,8 +495,8 @@ constructor(
         stressData.date = DateFormats.dateFormat3().format(startDayTimeStamp)
 
         //stressData.breakUp = gson.toJson(bean.pressureData)
-        val averageOutData = getAveragedOutHrvData(bean.pressureData)
-        stressData.breakUp = gson.toJson(averageOutData)
+        //val averageOutData = getAveragedOutHrvData(bean.pressureData)
+        stressData.breakUp = gson.toJson(bean.pressureData)
 
         /*val lastDayDate = DateFormats.getYesterdayDate()
         LOGS.w("lastDayDate $lastDayDate")
