@@ -241,6 +241,12 @@ class RingLocationFragment :
                 tvBatteryPercentage.text =
                     if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
 
+                imageView44.setImageResource(
+                    viewModel.getBatteryImage(
+                        ringLocationData.battery_percentage ?: 100
+                    )
+                )
+
                 tvAddress.text = ringLocationData?.address
 
                 val lastSync = ringLocationData?.last_sync

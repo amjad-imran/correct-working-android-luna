@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/back_battery_info"
+        android:src="@drawable/back_find_my_ring"
         app:layout_constraintBottom_toBottomOf="@+id/tvTurnOn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -16,6 +16,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.model.RingLocationData
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -67,7 +68,7 @@ class RingLocationViewModel @Inject constructor(
                     }
 
                     is Resource.Loading -> {
-                        if(resource.loading){
+                        if (resource.loading) {
                             setLoading(true)
                         }
                     }
@@ -257,6 +258,17 @@ class RingLocationViewModel @Inject constructor(
             }
         }
         return relativeTime
+    }
+
+    fun getBatteryImage(batteryPercentage: Int): Int {
+        return when (batteryPercentage) {
+            in 0..24 -> R.drawable.battery_level_25
+            in 25..39 -> R.drawable.battery_level_40
+            in 40..69 -> R.drawable.battery_level_70
+            in 70..100 -> R.drawable.battery_level_100
+            else -> R.drawable.battery_level_100
+        }
+
     }
 
 }

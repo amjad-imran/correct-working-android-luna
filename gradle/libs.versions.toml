@@ -37,6 +37,7 @@ pagingCommonKtx = "3.3.0"
 runner = "1.5.2"
 sdpAndroid = "1.1.0"
 shimmer = "0.5.0"
+shimmertextviewVersion = "1.0.1"
 tensorflowLite = "2.6.0"
 tensorflowLiteGpu = "2.6.0"
 ticker = "2.0.4"
@@ -137,6 +138,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 elvishew-xlog = { group = "com.elvishew", name = "xlog", version.ref = "elvishewXlog" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 material-v161 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+mindinventory-shimmertextview = { module = "com.github.Mindinventory:ShimmerTextView", version.ref = "shimmertextviewVersion" }
 mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockitoAndroid" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 oksse = { module = "com.github.heremaps:oksse", version.ref = "oksse" }
