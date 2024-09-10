@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -213,6 +214,10 @@ class RingLocationFragment :
 
             if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
                 tvAddress.text = "Location not found"
+                tvAddress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+
+                textDisclaimer.text =
+                    "This is the latest phone location. Note that this may not be the current location of your ring."
 
                 tvLastSyncedAt.gone()
                 tvBatteryPercentage.gone()
@@ -223,12 +228,15 @@ class RingLocationFragment :
 
             } else {
 
+
                 tvLastSyncedAt.visible()
                 tvBatteryPercentage.visible()
                 imageView44.visible()
                 shapeableImageView10.visible()
                 tvConnectionState.visible()
                 tvConnectionStateNoData.gone()
+
+                textDisclaimer.text = getString(R.string.text_ring_location_message)
 
                 tvBatteryPercentage.text =
                     if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
@@ -267,11 +275,11 @@ class RingLocationFragment :
         mapFragment.getMapAsync { googleMap ->
             googleMap.clear()
 
-            if(viewModel.bottomSheetState==BottomSheetState.NO_DATA){
+            if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
                 val currentLoc = LatLng(ringLocationData.latitude, ringLocationData.longitude)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
 
-            }else{
+            } else {
                 loadMarker(googleMap, ringLocationData.latitude, ringLocationData.longitude)
 
             }
