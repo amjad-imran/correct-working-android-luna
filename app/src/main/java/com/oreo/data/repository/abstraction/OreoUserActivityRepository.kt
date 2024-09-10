@@ -49,6 +49,11 @@ interface OreoUserActivityRepository {
 
     suspend fun getHrDataForToday(): OreoHeartRate?
 
+    /**
+     * @param date - YYYY-MM-dd
+     */
+    suspend fun getHrDataByDate(date:String): OreoHeartRate?
+
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
     suspend fun getSummaryAutoWorkoutCount(): Int

@@ -199,7 +199,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    private fun showSleepAlerts(healthData: OreoSleepModel?) {
+    private fun handleSleepAlert(healthData: OreoSleepModel?) {
         viewModelScope.launch(Dispatchers.IO) {
 
             //time check if after 6 am
@@ -231,15 +231,15 @@ class SummaryDataViewModelToday @Inject constructor(
                         if (zeroList.isEmpty()) {
                             //if sleep is not detected and hr is continuous
                             sleepAlertToShow = SleepAlert(
-                                title = "Did you sleep last night",
+                                title = "Did you sleep yesterday?",
                                 message = "Our algorithm's couldn't detect sleep last night, if you did sleep, please add it here.",
                                 addSleep = true
                             )
                         } else {
                             //if sleep is not detected and hr has break
                             sleepAlertToShow = SleepAlert(
-                                title = "Did you sleep last night",
-                                message = "Please make sure to wear your Luna ring when you go to bed to automatically detect your sleep. If you did sleep, please add it here.",
+                                title = "Did you sleep yesterday?",
+                                message = "Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.",
                                 addSleep = true
                             )
                         }
@@ -249,8 +249,40 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             if (ringDataStore.getRingDevice() != null
-                && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()) {
-                val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
+                && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()
+            ) {
+
+                val isTodayHrDataEmpty = checkIfHrDataEmpty(LocalDate.now().toString())
+                val yesterdayDate = LocalDate.now().minusDays(1).toString()
+                val isYesterdayHrDataEmpty = checkIfHrDataEmpty(yesterdayDate)
+                val pairDate = ringDataStore.getRingPairedDate()
+
+                var shouldCheck = true
+                if (pairDate != null) {
+                    val pairedDate =
+                        LocalDate.parse(pairDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    if (pairedDate == LocalDate.now()) {
+                        shouldCheck = false
+                    }
+                }
+
+                if (isTodayHrDataEmpty && shouldCheck) {
+                    if (isYesterdayHrDataEmpty) {
+                        sleepAlertToShow = SleepAlert(
+                            title = "Missing data",
+                            message = "We haven’t received data from a while. Remember to charge your ring and wear it regularly so you don’t miss out on your personalised insights!",
+                            addSleep = false
+                        )
+                    } else {
+                        sleepAlertToShow = SleepAlert(
+                            title = "Did you sleep yesterday?",
+                            message = "Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.",
+                            addSleep = true
+                        )
+                    }
+                }
+
+                /*val lastSyncTimestamp = ringDataStore.getLastSyncTimeStamp()
                 val currentTimeStamp = DateFormats.getTimeStamp()
                 if (lastSyncTimestamp != null && lastSyncTimestamp != -1L) {
                     val lastSyncDays = DateFormats.getDateDiff(
@@ -271,7 +303,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         )
 
                     }
-                }
+                }*/
             }
 
             sleepAlert.postValue(
@@ -279,6 +311,15 @@ class SummaryDataViewModelToday @Inject constructor(
             )
 
         }
+    }
+
+    private suspend fun checkIfHrDataEmpty(date: String): Boolean {
+        val hrData = userRepository.getHrDataByDate(date)
+        val formattedData = hrData?.breakUp?.replace("255", "0")
+        val hrBreakup = Gson().fromJson<List<Int>>(formattedData ?: "")
+        if (hrBreakup.isNullOrEmpty()) return true
+        val nonZeroList = hrBreakup.filter { it != 0 }
+        return nonZeroList.isEmpty()
     }
 
     private fun checkIsSyncedAfterSix(): Boolean {
@@ -845,7 +886,7 @@ class SummaryDataViewModelToday @Inject constructor(
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
-            showSleepAlerts(healthData.sleep)
+            handleSleepAlert(healthData.sleep)
 
         }
     }
@@ -1604,7 +1645,7 @@ class SummaryDataViewModelToday @Inject constructor(
             gender = localDataStore.getUser()?.userInfo?.gender
             if (gender.equals("male", true)) return@launch
 
-            if(localDataStore.getFemaleHealthStatus().not()) return@launch
+            if (localDataStore.getFemaleHealthStatus().not()) return@launch
 
             femaleHealthRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
                 when (resource) {

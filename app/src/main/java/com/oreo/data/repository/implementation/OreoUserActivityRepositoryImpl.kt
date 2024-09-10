@@ -1328,6 +1328,12 @@ class OreoUserActivityRepositoryImpl(
         )
     }
 
+    override suspend fun getHrDataByDate(date: String): OreoHeartRate? {
+        return heartRateDataImpl.getTodayData(
+            date
+        )
+    }
+
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)

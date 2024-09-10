@@ -90,4 +90,7 @@ interface RingDataStore {
     fun removeSleepAlert(date: String)
     fun sleepAlertCrossedForDate(): String?
 
+    fun saveRingPairedDate()
+    fun getRingPairedDate():String?
+
 }

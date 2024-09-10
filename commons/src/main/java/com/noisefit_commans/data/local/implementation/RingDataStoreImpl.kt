@@ -42,6 +42,7 @@ private const val FIRST_STRESS_DAY = "FIRST_STRESS_DAY"
 private const val STRESS_BETA_STATE = "STRESS_BETA_STATE"
 private const val ENABLE_AI_STATE_2 = "ENABLE_AI_STATE_2"
 private const val SLEEP_ALERT_REMOVE = "SLEEP_ALERT_REMOVE"
+private const val RING_PAIR_DATE = "RING_PAIR_DATE"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
@@ -53,6 +54,14 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun saveRingPairedDate() {
+        mPrefs.edit()?.putString(RING_PAIR_DATE, LocalDate.now().toString())?.commit()
+    }
+
+    override fun getRingPairedDate(): String? {
+        return mPrefs.getString(RING_PAIR_DATE, null)
+    }
 
     override fun removeSleepAlert(date: String) {
         mPrefs.edit()?.putString(SLEEP_ALERT_REMOVE, date)?.commit()
@@ -219,6 +228,7 @@ class RingDataStoreImpl
 
     override fun clearConnectedDevice() {
         mPrefs.edit().remove(RING_DEVICE_INFO).commit()
+        mPrefs.edit().remove(RING_PAIR_DATE).commit()
         mPrefs.edit().remove(UPDATE_USER_DEVICE_STATUS).commit()
 
     }

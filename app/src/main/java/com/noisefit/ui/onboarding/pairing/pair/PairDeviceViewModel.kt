@@ -81,6 +81,7 @@ class PairDeviceViewModel @Inject constructor(
     private fun saveColorFitDevice(colorFitDevice: ColorFitDevice) {
         val isSaved: Boolean =
             ringDataStore.saveRingDevice(colorFitDevice)
+        ringDataStore.saveRingPairedDate()
         LOGS.d("CONNECT_STATE", "Device Saved $isSaved")
     }
 
