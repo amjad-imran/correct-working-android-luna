@@ -39,9 +39,9 @@
     <ImageView
         android:id="@+id/ivMain"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="24dp"
         android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,26 +51,23 @@
 
     <!--  app:shimmer_colored="true"
            app:shimmer_highlight_color="#ffffff"-->
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerContainer"
+    <com.app.shimmertextview.ShimmerTextView
+        android:id="@+id/tvCta"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        app:shimmer_base_color="#80aaff"
+        app:shimmer_colored="true"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_duration="2000"
+        app:shimmer_highlight_color="@color/white"
+        android:gravity="center"
+        tools:text="Contact us"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMain">
+        app:layout_constraintTop_toBottomOf="@+id/ivMain"/>
 
-        <TextView
-            android:id="@+id/tvCta"
-            style="@style/S14"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:textColor="#80aaff"
-            tools:text="Contact us" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

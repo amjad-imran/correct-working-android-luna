@@ -33,7 +33,7 @@
             android:background="@drawable/back_modal_dialog"
             android:orientation="horizontal"
             android:paddingHorizontal="18dp"
-            android:paddingVertical="10dp"
+            android:paddingVertical="12dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/lytLocationData"
             app:layout_constraintStart_toStartOf="parent"

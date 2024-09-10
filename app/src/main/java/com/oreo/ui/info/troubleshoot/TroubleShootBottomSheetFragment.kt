@@ -93,6 +93,7 @@ class TroubleShootBottomSheetFragment :
             }
         }
     }
+
     fun isGpsTurnedOn(): Boolean {
         if (!ApplicationUtils.isLocationProviderEnabled(requireContext())) {
             val locationRequest: LocationRequest = LocationRequest.create()
@@ -111,6 +112,7 @@ class TroubleShootBottomSheetFragment :
             return true
         }
     }
+
     private fun hasGpsPermission(): Boolean {
         val permissionAccessFineLocationApproved =
             (ActivityCompat.checkSelfPermission(
@@ -218,7 +220,12 @@ class TroubleShootBottomSheetFragment :
             binding.vpImageSlider
         ) { _, _ -> }.attach()
 
-        descriptionSliderAdapter.setDataSet(generateDataSet(),showLocation)
+        descriptionSliderAdapter.setDataSet(generateDataSet(), showLocation)
+
+        binding.vpImageSlider?.post {
+            binding?.vpImageSlider?.requestLayout()
+            binding?.vpImageSlider?.requestTransform()
+        }
 
         binding.vpImageSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -245,6 +252,10 @@ class TroubleShootBottomSheetFragment :
                     binding.ivNext.visible()
                 }
 
+                binding.vpImageSlider?.post {
+                    binding?.vpImageSlider?.requestLayout()
+                    binding?.vpImageSlider?.requestTransform()
+                }
 
             }
 
@@ -319,6 +330,7 @@ class TroubleShootBottomSheetFragment :
                 isDraggable = true
                 isCancelable = true
             }
+            dialog.window?.setDimAmount(0.9f)
             bottomSheet.setBackgroundResource(android.R.color.transparent)
         }
         return bottomSheetDialog
