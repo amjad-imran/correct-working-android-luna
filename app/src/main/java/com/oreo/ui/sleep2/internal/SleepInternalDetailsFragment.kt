@@ -72,9 +72,8 @@ class SleepInternalDetailsFragment :
             viewModel.selectedDate = LocalDate.parse(it)
         }
         viewModel.registerDate = mainViewModel.registerDate
-
-        viewModel.startDate =
-            sharedViewModel.calendarStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        viewModel.startDate = LocalDate.now().minusDays(mainViewModel.registerDate.toLong())
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
 

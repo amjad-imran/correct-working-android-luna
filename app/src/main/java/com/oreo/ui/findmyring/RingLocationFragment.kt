@@ -275,6 +275,8 @@ class RingLocationFragment :
         mapFragment.getMapAsync { googleMap ->
             googleMap.clear()
 
+            binding.map.visible()
+
             if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
                 val currentLoc = LatLng(ringLocationData.latitude, ringLocationData.longitude)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
