@@ -42,12 +42,10 @@ class AiChatOnboardFragment :
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                AiChatOnboardScreen(onButtonClick = {
+                ScreenAiChatOnboard(onButtonClick = {
                     localDataStore.setAiChatSplashShown()
                     navigate(
-                        AiChatOnboardFragmentDirections.actionAiChatOnboardFragmentToChatGptFragment(
-                            "",
-                            ""
+                        AiChatOnboardFragmentDirections.actionAiChatOnboardFragmentToAiTopQuestionsFragment(
                         )
                     )
                 })
@@ -65,7 +63,7 @@ class AiChatOnboardFragment :
 }
 
 @Composable
-fun AiChatOnboardScreen(onButtonClick: () -> Unit) {
+fun ScreenAiChatOnboard(onButtonClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -105,9 +103,9 @@ fun AiChatOnboardScreen(onButtonClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Image(
-                    modifier = Modifier.height(28.dp),
+                    modifier = Modifier.height(22.dp),
                     contentDescription = "",
-                    painter = painterResource(R.drawable.image_back_beta)
+                    painter = painterResource(R.drawable.image_luna_ai_version)
                 )
 
             }
@@ -147,7 +145,7 @@ fun AiChatOnboardScreen(onButtonClick: () -> Unit) {
 @Preview
 @Composable
 fun AiChatOnboardScreenPreview() {
-    AiChatOnboardScreen(onButtonClick = {
+    ScreenAiChatOnboard(onButtonClick = {
 
     })
 }

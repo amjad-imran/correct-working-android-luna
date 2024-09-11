@@ -14,10 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.noisefit.luna.R
+import com.oreo.ui.compose.styles.FontStyle
 
 @Preview
 @Composable
@@ -62,8 +67,14 @@ fun ButtonBlue(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                fontSize = 16.sp,
+                style = FontStyle.FontSize16,
                 color = Color.White,
+                fontFamily = FontFamily(
+                    Font(
+                        com.noisefit_commans.R.font.gilroy_medium,
+                        FontWeight.Normal
+                    )
+                ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
