@@ -375,7 +375,8 @@ class SummaryDataFragmentToday :
                     if (viewModel.isChatSplashShown()) {
                         mainViewModel.getChatHistoryToday()
                     } else {
-                        navigate(R.id.chatSplashFragment)
+                        navigate(R.id.aiChatOnboardFragment)
+                        //navigate(R.id.chatSplashFragment)
                     }
                 }
 
