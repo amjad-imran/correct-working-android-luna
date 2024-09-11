@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import com.noisefit_commans.NoisefitApplication
@@ -20,7 +21,13 @@ object LocationUtils2 {
         if (hasGpsPermission(context).not()) {
             return
         }
-
+        val locationManager =
+            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (isGpsEnabled.not()) {
+            LOGS.i("GPS not enabled")
+            return
+        }
 
         if (isMyServiceRunning(LocationService2::class.java, context).not()) {
             Intent(context, LocationService2::class.java).apply {

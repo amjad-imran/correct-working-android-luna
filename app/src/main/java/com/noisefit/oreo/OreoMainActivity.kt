@@ -605,22 +605,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
-
-        viewModel.sessionManager.updateRingLocation.observe(this) {
-            it.getContent()?.let {
-                LOGS.d("sdfkjsk Get location")
-                LocationUtils2.startLocationService()
-            }
-        }
-
-        LocationService2.locationBroadCastFindMyRing.observe(this){
-            it.getContent()?.let {
-                LOGS.d("sdfkjsk updating location")
-                viewModel.updateRingLocation(it)
-            }
-        }
-
-
         viewModel.sleepDashTodayReload.observe(this) {
             it.getContent()?.let {
                 if (navController?.currentDestination?.id == R.id.sleepDashFragment) {

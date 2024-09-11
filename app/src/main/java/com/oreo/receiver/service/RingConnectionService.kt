@@ -23,6 +23,7 @@ import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
@@ -30,6 +31,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.session.SessionManager
@@ -71,6 +73,8 @@ import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
+import com.noisefit_commans.location.LocationService2
+import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
@@ -153,6 +157,9 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var userActivityRepository: OreoUserActivityRepository
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     @Inject
     lateinit var userHealthDataDataSource: OreoUserHealthDataDataSource
@@ -456,6 +463,21 @@ constructor() : LifecycleService() {
         setConnection()
         setQueryObserver()
         updateNotification()
+        setLocationObserver()
+    }
+
+    private fun setLocationObserver() {
+        sessionManager.updateRingLocation.observe(this) {
+            it.getContent()?.let {
+                LocationUtils2.startLocationService()
+            }
+        }
+
+        LocationService2.locationBroadCastFindMyRing.observe(this) {
+            it.getContent()?.let {
+                updateRingLocation(it)
+            }
+        }
     }
 
 
@@ -1414,7 +1436,6 @@ constructor() : LifecycleService() {
 
     fun postWorkout(workoutId: String) {
         sessionManager.lastOngoingWorkoutTimestamp = 0L
-        LOGS.d("sdkjfhskdfj received $workoutId")
         AppLogs.sendAppLogs("postWorkout $workoutId")
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -1867,4 +1888,33 @@ constructor() : LifecycleService() {
             }
         }
     }
+
+    private fun updateRingLocation(location: Pair<Double, Double>) {
+        GlobalScope.launch {
+            val mac = ringDataStore.getRingDevice()?.address
+            val batteryPercent = watchDataStore.getBatteryPercentRing()
+            val request = JsonObject().apply {
+                this.addProperty("latitude", location.first)
+                this.addProperty("longitude", location.second)
+                this.addProperty("battery_percentage", batteryPercent)
+                this.addProperty("mac_address", mac)
+            }
+
+            userRepository.setRingLastLocation(
+                request
+            ).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
 }
