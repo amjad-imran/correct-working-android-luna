@@ -11,13 +11,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
-            style="@style/ModalStyleDialog"
+            style="@style/ModalStyleDialogNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_12dp"
-            android:layout_marginTop="@dimen/dimen_12dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
-            android:layout_marginBottom="@dimen/dimen_12dp"
             tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
 
             <View
@@ -33,7 +29,7 @@
 
             <TextView
                 android:id="@+id/tvTitle"
-                style="@style/H4"
+                style="@style/S16"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
@@ -59,8 +55,10 @@
             <com.kizitonwose.calendar.view.CalendarView
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="500dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 app:cv_dayViewResource="@layout/calendar_day"
                 app:cv_monthHeaderResource="@layout/calendar_header_new"
                 app:cv_orientation="vertical"
@@ -75,7 +73,6 @@
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/calendar" />
