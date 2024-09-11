@@ -15,9 +15,9 @@ desugar_jdk_libs = "2.0.4"
 elvishewXlog = "1.10.1"
 agp = "8.4.1"
 flexbox = "3.0.0"
-gradle = "8.4.1"
+gradle = "8.4.2"
 hiltAndroidCompiler = "2.51"
-kotlin = "1.9.22"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -107,6 +107,8 @@ navigation-safe-args-gradle-plugin = "2.7.7"
 hilt-android-gradle-plugin = "2.51.1"
 firebase-crashlytics-gradle = "3.0.1"
 reviewKtx = "2.0.1"
+activityComposeVersion = "1.9.0"
+composeBomVersion = "2024.04.01"
 
 
 [libraries]
@@ -227,9 +229,20 @@ googleDaggerHiltAndroidGradlePlugin = { group = "com.google.dagger", name = "hil
 googleFirebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
 review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "reviewKtx" }
 calendarView = { module = "com.kizitonwose.calendar:view", version.ref = "calendar-view" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 
 
