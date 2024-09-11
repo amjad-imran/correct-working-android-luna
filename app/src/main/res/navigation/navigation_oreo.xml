@@ -608,7 +608,14 @@
     <dialog
         android:id="@+id/workoutStopRingBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
-        android:label="WorkoutStopRingBottomSheet" />
+        android:label="WorkoutStopRingBottomSheet" >
+        <argument
+            android:name="showSave"
+            app:argType="boolean" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </dialog>
     <dialog
         android:id="@+id/bottomSheetDayTimeActivity"
         android:name="com.oreo.ui.activity.BottomSheetDayTimeActivities"

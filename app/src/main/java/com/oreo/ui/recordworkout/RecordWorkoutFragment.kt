@@ -485,7 +485,7 @@ class RecordWorkoutFragment :
         }
 
         viewModel.showWorkoutStoppedByRingDialog.observe(viewLifecycleOwner) {
-            it.getContent()?.let {
+            it.getContent()?.let { error ->
 
                 setFragmentResultListener(
                     WORKOUT_STOP_KEY,
@@ -509,8 +509,18 @@ class RecordWorkoutFragment :
                     }
                 }
                 viewModel.stopTimer()
+                var showSave = true
+                if (viewModel.workoutDuration < 60L) {
+                    showSave = false
+                }
 
-                navigate(R.id.workoutStopRingBottomSheet)
+                navigate(
+                    R.id.workoutStopRingBottomSheet,
+                    bundleOf(
+                        "showSave" to showSave,
+                        "message" to viewModel.getStoppedByRingMessage(error, showSave)
+                    )
+                )
             }
         }
 
@@ -577,7 +587,7 @@ class RecordWorkoutFragment :
                     is UpdateDeviceDataCallback.WorkoutStoppedByRing -> {
                         binding.progressBar.root.gone()
 
-                        viewModel.showWorkoutStoppedByRingDialog.postValue(Event(true))
+                        viewModel.showWorkoutStoppedByRingDialog.postValue(Event(it.error))
 
                     }
 

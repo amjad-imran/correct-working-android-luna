@@ -554,7 +554,8 @@ class SleepInternalDetailsFragment :
 
 
                         if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-                            tvNudge.alpha = 1f
+                            val todayDate = LocalDate.now()
+                            tvNudge.alpha = if (todayDate == topContentData.date) 1f else 0.5f
                         } else {
                             tvNudge.alpha = 0.5f
                         }

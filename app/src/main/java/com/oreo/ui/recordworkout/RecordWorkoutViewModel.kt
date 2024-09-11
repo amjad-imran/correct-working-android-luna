@@ -4,8 +4,10 @@ import android.location.Geocoder
 import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.implementation.WeatherRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -32,11 +34,12 @@ class RecordWorkoutViewModel @Inject constructor(
     val locationDataSource: LocationDataSource,
     val weatherRepository: WeatherRepository,
     val ringDataStore: RingDataStore,
-    val geoCoder: Geocoder
+    val geoCoder: Geocoder,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
 
-    val showWorkoutStoppedByRingDialog = MutableLiveData<Event<Boolean>>()
+    val showWorkoutStoppedByRingDialog = MutableLiveData<Event<String>>()
     var markedDeleted: Boolean = false
     var workout: OWorkoutListModal? = null
     var sportStartTime = 0L
@@ -65,9 +68,9 @@ class RecordWorkoutViewModel @Inject constructor(
         val seconds = workoutDuration % 60
 
         val timeString = if (hours == 0L) {
-            String.format(locale = Locale.US,"%02d:%02d", minutes, seconds)
+            String.format(locale = Locale.US, "%02d:%02d", minutes, seconds)
         } else {
-            String.format(locale = Locale.US,"%02d:%02d:%02d", hours, minutes, seconds)
+            String.format(locale = Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
         }
         displayTimer.postValue(timeString)
     }
@@ -258,5 +261,17 @@ class RecordWorkoutViewModel @Inject constructor(
             workout = newModel
         }
 
+    }
+
+    fun getStoppedByRingMessage(error: String, showSave: Boolean): String {
+        return if (error.equals("charging",true)) {
+            if (showSave) {
+                "Your workout has ended because you have kept your ring on charging. Make sure you wear your ring on your finger while doing workout. Do you want to save your current progress?"
+            } else {
+                "Your workout has ended because you have kept your ring on charging. Make sure you wear your ring on your finger while doing workout. Since your workout last less than 1 minute, it won't be saved."
+            }
+        } else {
+            resourcesProvider.getString(R.string.text_ring_lo_battert_stop_message)
+        }
     }
 }
