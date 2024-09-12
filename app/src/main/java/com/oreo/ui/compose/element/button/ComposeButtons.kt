@@ -67,7 +67,7 @@ fun ButtonBlue(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                style = FontStyle.FontSize16,
+                style = FontStyle.SIZE_16,
                 color = Color.White,
                 fontFamily = FontFamily(
                     Font(
