@@ -6,11 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -25,7 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.noisefit.data.model.RingLocationData
+import com.oreo.data.model.RingLocationData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingLocationBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -34,8 +31,8 @@ import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -147,6 +144,17 @@ class RingLocationFragment :
                 binding.progressBar.root.visible()
             } else {
                 binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getMessages().observe(this){
+            it.getContent()?.let {
+                context.showShortToast(it)
+            }
+        }
+
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
             }
         }
     }
