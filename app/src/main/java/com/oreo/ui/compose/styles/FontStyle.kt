@@ -30,5 +30,16 @@ object FontStyle {
         fontSize = 14.sp
     )
 
+    val SIZE_24 = TextStyle(
+        fontFamily = FontFamily(
+            Font(
+                com.noisefit_commans.R.font.gilroy_medium,
+                FontWeight.Normal
+            )
+        ),
+        color = Color.White,
+        fontSize = 24.sp
+    )
+
 
 }

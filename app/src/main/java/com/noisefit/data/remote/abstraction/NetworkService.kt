@@ -453,6 +453,11 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<ChatMessagesResponse>
 
+    @GET
+    suspend fun getAiTopQuestions(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
     @POST
     suspend fun addSleep(
         @Url url: String, @Body jsonObject: JsonObject

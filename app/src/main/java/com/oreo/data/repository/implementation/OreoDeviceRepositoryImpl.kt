@@ -82,4 +82,11 @@ class OreoDeviceRepositoryImpl(
             remoteDataSource.loadMessagesByThreadId(url)
         }
     }
+
+    override suspend fun getAiTopQuestions(): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/suggested-questions"
+            remoteDataSource.getAiTopQuestions(url)
+        }
+    }
 }

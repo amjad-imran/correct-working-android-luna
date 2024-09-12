@@ -2,12 +2,15 @@ package com.oreo.ui.chatGpt.topquestions
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +24,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.compose.styles.FontStyle
@@ -37,17 +41,13 @@ class AiTopQuestionsFragment :
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                ScreenAiTopQuestion(
-                    onBackClicked = {
-                        navigateUpSafe()
-                    },
-                    onHistoryClicked = {
+                ScreenAiTopQuestion(onBackClicked = {
+                    navigateUpSafe()
+                }, onHistoryClicked = {
 
-                    },
-                    onQuestionSelected = {
+                }, onQuestionSelected = {
 
-                    }
-                )
+                })
             }
         }
     }
@@ -68,21 +68,21 @@ fun ScreenAiTopQuestion(
     onHistoryClicked: () -> Unit,
     onQuestionSelected: (question: String) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
         Text(
-            text = "Hi Amit,\n" +
-                    "Ask me anything !",
+            text = "Hi Amit,\n" + "Ask me anything !",
+            style = FontStyle.SIZE_24,
+            lineHeight = 32.sp
+        )
 
-            )
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+        QuestionList(arrayListOf("Question 1", "Question 2", "Question 3"))
     }
 }
 
-
-@Preview
-@Composable
-fun QuestionListPreview() {
-    QuestionList(arrayListOf("Ques 1", "Ques 2", "Ques 3"))
-}
 
 @Composable
 fun QuestionList(questions: List<String>) {
@@ -102,17 +102,20 @@ fun QuestionItem(quest: String) {
 
     Surface(
         shape = RoundedCornerShape(16.dp),  // Adjust corner radius as needed
-        color = backgroundColor,
-        modifier = Modifier.fillMaxWidth()
+        color = backgroundColor, modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = quest,
-            style = FontStyle.SIZE_14,
-            modifier = Modifier.padding(14.dp)
+            text = quest, style = FontStyle.SIZE_14, modifier = Modifier.padding(14.dp)
         )
     }
 }
 
+
+/*@Preview
+@Composable
+fun QuestionListPreview() {
+    QuestionList(arrayListOf("Ques 1", "Ques 2", "Ques 3"))
+}*/
 
 @Preview
 @Composable
