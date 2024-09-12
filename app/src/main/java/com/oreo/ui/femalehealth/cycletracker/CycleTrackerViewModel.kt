@@ -277,6 +277,10 @@ class CycleTrackerViewModel @Inject constructor(
             "Low chance of pregnancy"
         } else if (text.equals("fertile", true)) {
             "Your body is at it’s most fertile today"
+        } else if (text.equals("incr", true)) {
+            "Increasing chance of pregnancy"
+        } else if (text.equals("decr", true)) {
+            "decreasing chance of pregnancy"
         } else {
             ""
         }
