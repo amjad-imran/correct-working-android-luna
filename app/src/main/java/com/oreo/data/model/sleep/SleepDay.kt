@@ -79,6 +79,7 @@ data class SleepSummaryValue(
 
 @Parcelize
 data class HealthTrend(
+    val nudge: String? = null,
     val resp: HealthTrendValue? = null,
     val rhr: HealthTrendValue? = null,
     val hrv: HealthTrendValue? = null,

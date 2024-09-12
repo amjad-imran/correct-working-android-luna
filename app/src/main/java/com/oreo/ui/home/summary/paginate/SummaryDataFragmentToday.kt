@@ -1011,20 +1011,10 @@ class SummaryDataFragmentToday :
     private fun setHealthMonitorCardData(data: HealthTrend?) {
         val hasHealthData = viewModel.hasHealthData(data)
         data?.apply {
-            var outOfRangeCount = 0
-            var isSignificant = false
-            var trendName = ""
+            binding.contentMain.lytHealthMonitor.tvNudge.visible()
+            binding.contentMain.lytHealthMonitor.tvNudge.text = nudge
+
             if (!bloodOxy?.status.isNullOrEmpty()) {
-                val state = viewModel.getHealthTrendState(
-                    bloodOxy?.status
-                )
-                if (state == 2 || state == 1) {
-                    outOfRangeCount++
-                    trendName = "Blood oxygen"
-                }
-                if (state == 2) {
-                    isSignificant = true
-                }
                 binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(
                     viewModel.getHealthTrendIcon(
                         bloodOxy?.status
@@ -1035,16 +1025,6 @@ class SummaryDataFragmentToday :
             }
 
             if (!hrv?.status.isNullOrEmpty()) {
-                val state = viewModel.getHealthTrendState(
-                    hrv?.status
-                )
-                if (state == 2 || state == 1) {
-                    outOfRangeCount++
-                    trendName = "HRV"
-                }
-                if (state == 2) {
-                    isSignificant = true
-                }
                 binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(
                     viewModel.getHealthTrendIcon(
                         hrv?.status
@@ -1055,16 +1035,6 @@ class SummaryDataFragmentToday :
             }
 
             if (!rhr?.status.isNullOrEmpty()) {
-                val state = viewModel.getHealthTrendState(
-                    rhr?.status
-                )
-                if (state == 2 || state == 1) {
-                    outOfRangeCount++
-                    trendName = "Resting HR"
-                }
-                if (state == 2) {
-                    isSignificant = true
-                }
                 binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(
                     viewModel.getHealthTrendIcon(
                         rhr?.status
@@ -1075,16 +1045,6 @@ class SummaryDataFragmentToday :
             }
 
             if (!skinTemp?.status.isNullOrEmpty()) {
-                val state = viewModel.getHealthTrendState(
-                    skinTemp?.status
-                )
-                if (state == 2 || state == 1) {
-                    outOfRangeCount++
-                    trendName = "Skin temperature"
-                }
-                if (state == 2) {
-                    isSignificant = true
-                }
                 binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(
                     viewModel.getHealthTrendIcon(
                         skinTemp?.status
@@ -1095,16 +1055,6 @@ class SummaryDataFragmentToday :
             }
 
             if (!resp?.status.isNullOrEmpty()) {
-                val state = viewModel.getHealthTrendState(
-                    resp?.status
-                )
-                if (state == 2 || state == 1) {
-                    outOfRangeCount++
-                    trendName = "Respiratory rate"
-                }
-                if (state == 2) {
-                    isSignificant = true
-                }
                 binding.contentMain.lytHealthMonitor.imvResp.setImageResource(
                     viewModel.getHealthTrendIcon(
                         resp?.status
@@ -1112,25 +1062,6 @@ class SummaryDataFragmentToday :
                 )
             } else {
                 binding.contentMain.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
-            }
-
-            if (outOfRangeCount == 0) {
-                binding.contentMain.lytHealthMonitor.tvNudge.visible()
-                binding.contentMain.lytHealthMonitor.tvNudge.text =
-                    "All readings are in your typical range"
-            } else if (outOfRangeCount == 1) {
-                val text = if (isSignificant) {
-                    "significantly"
-                } else {
-                    "slightly"
-                }
-                binding.contentMain.lytHealthMonitor.tvNudge.visible()
-                binding.contentMain.lytHealthMonitor.tvNudge.text =
-                    "Your $trendName is $text elevated"
-            } else {
-                binding.contentMain.lytHealthMonitor.tvNudge.visible()
-                binding.contentMain.lytHealthMonitor.tvNudge.text =
-                    "$outOfRangeCount/5 metrics are out of range"
             }
         }
 
