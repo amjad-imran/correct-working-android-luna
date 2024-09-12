@@ -16,8 +16,12 @@ class AiTopQuestionsViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository
 ) : BaseViewModel() {
 
+    init {
+        getWorkoutList()
+    }
 
-    fun getWorkoutList(postValue: Boolean) {
+
+    fun getWorkoutList() {
         viewModelScope.launch {
             oreoDeviceRepository.getAiTopQuestions().collect { resource ->
                 when (resource) {
@@ -35,7 +39,7 @@ class AiTopQuestionsViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getWorkoutList(postValue)
+                                        getWorkoutList()
                                     }
 
                                     override fun no() {
@@ -47,21 +51,8 @@ class AiTopQuestionsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if (postValue) {
-                                _oWorkoutListModalResponse.postValue(it)
-                            } else {
-                                val walkingWorkout =
-                                    it.find { it.activityType.equals("walking", true) }
-                                if (autoSport.value == null) {
 
-                                    walkingWorkout?.let { walk ->
-                                        updateDefaultWorkout.postValue(Event(walk))
-                                    }
-                                } else {
-                                    workoutListModal = walkingWorkout
-                                }
 
-                            }
                         }
                     }
                 }
