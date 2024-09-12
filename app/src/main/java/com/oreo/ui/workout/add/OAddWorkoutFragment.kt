@@ -168,7 +168,7 @@ class OAddWorkoutFragment :
                 val calendar = Calendar.getInstance()
 
                 val todayDate = LocalDate.now().toString()
-                if (viewModel.addWorkout.date?.equals(todayDate) == true) {
+                if (viewModel.addWorkout.date?.equals(todayDate) == true || viewModel.isAutoWorkout()) {
                     if (DateFormats.compareTime(
                             hourOfDay,
                             minute,

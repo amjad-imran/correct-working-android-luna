@@ -162,9 +162,9 @@ class BottomSheetCalendar :
 
                     val status = viewModel.getStatusByDate(day.date)
                     if (status.equals("optimal", true)) {
-                        container.binding.tvDay.setTextColor(Color.parseColor("#00ff66"))
+                        container.binding.tvDay.setTextColor(Color.GREEN/*Color.parseColor("#00ff66")*/)
                     } else if (status.equals("warning", true)) {
-                        container.binding.tvDay.setTextColor(Color.parseColor("#ff557e"))
+                        container.binding.tvDay.setTextColor(Color.RED/*Color.parseColor("#ff557e")*/)
                     } else if (status.equals("good", true) || status.equals("fair", true)) {
                         container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
                     } else {
