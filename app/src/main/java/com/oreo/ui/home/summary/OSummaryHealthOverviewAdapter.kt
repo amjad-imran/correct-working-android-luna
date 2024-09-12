@@ -79,8 +79,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 }
 
-class OSummaryHealthOverviewAdapter() :
-    RecyclerView.Adapter<HomeRecyclerViewHolder>() {
+class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
     var devicePaired = false
     var lastPosition = -1
@@ -96,170 +95,129 @@ class OSummaryHealthOverviewAdapter() :
             }
         }
 
-    var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? =
-        null
+    var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
             R.layout.layout_dash_health_monitor -> HomeRecyclerViewHolder.DashHealthMonitorViewHolder(
                 LayoutDashHealthMonitorBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.layout_chat_card_dash -> HomeRecyclerViewHolder.AiCardViewHolder(
                 LayoutChatCardDashBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_dash_nap -> HomeRecyclerViewHolder.NapWidgetCardViewHolder(
                 ListDashNapBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.item_stress_graph -> HomeRecyclerViewHolder.StressGraphViewHolder(
                 ItemStressGraphBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_video_info_card -> HomeRecyclerViewHolder.InfoVideoCardViewHolder(
                 ListVideoInfoCardBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_welcome_card -> HomeRecyclerViewHolder.InfoWelcomeCardViewHolder(
                 ListWelcomeCardBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_ring_care -> HomeRecyclerViewHolder.InfoRingCareViewHolder(
                 ListRingCareBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_readiness_card_item -> HomeRecyclerViewHolder.ReadinessViewHolder(
                 ListReadinessCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_sleep_card_item -> HomeRecyclerViewHolder.SleepViewHolder(
                 ListSleepCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_sleep_minimal_item -> HomeRecyclerViewHolder.SleepMinimalViewHolder(
                 ListSleepMinimalItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_sleep_waiting_card_item -> HomeRecyclerViewHolder.SleepWaitingViewHolder(
                 ListSleepWaitingCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_activity_burn_card_item -> HomeRecyclerViewHolder.ActivityViewHolder(
                 ListActivityBurnCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_activity_burn_card_item_2 -> HomeRecyclerViewHolder.ActivityViewHolder2(
                 ListActivityBurnCardItem2Binding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_activity_minimal_item -> HomeRecyclerViewHolder.ActivityMinimalViewHolder(
                 ListActivityMinimalItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_readiness_minimal_card_item -> HomeRecyclerViewHolder.ReadinessMinimalViewHolder(
                 ListReadinessMinimalCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
 
             R.layout.list_o_w_alert_card_item -> HomeRecyclerViewHolder.AutoSportViewHolder(
                 ListOWAlertCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_cycle_tracker_prediction -> HomeRecyclerViewHolder.CycleTrackerCardSmallViewHolder(
                 ListCycleTrackerPredictionBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_cycle_tracker_ongoing -> HomeRecyclerViewHolder.CycleTrackerCardBigViewHolder(
                 ListCycleTrackerOngoingBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.card_track_fm_health -> HomeRecyclerViewHolder.TrackYourCycleViewHolder(
                 CardTrackFmHealthBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
             R.layout.list_dash_got_period -> HomeRecyclerViewHolder.GotYourPeriodViewHolder(
                 ListDashGotPeriodBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
 
@@ -294,17 +252,11 @@ class OSummaryHealthOverviewAdapter() :
 
 
             is HomeRecyclerViewHolder.ActivityViewHolder -> holder.bind(
-                items[position] as OHealthOverview.Activity,
-                position,
-                lastPosition,
-                devicePaired
+                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired
             )
 
             is HomeRecyclerViewHolder.ActivityViewHolder2 -> holder.bind(
-                items[position] as OHealthOverview.Activity,
-                position,
-                lastPosition,
-                devicePaired
+                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired
             )
 
             is HomeRecyclerViewHolder.ActivityMinimalViewHolder -> holder.bind(
@@ -322,17 +274,11 @@ class OSummaryHealthOverviewAdapter() :
             )
 
             is HomeRecyclerViewHolder.ReadinessViewHolder -> holder.bind(
-                items[position] as OHealthOverview.Readiness,
-                position,
-                lastPosition,
-                devicePaired
+                items[position] as OHealthOverview.Readiness, position, lastPosition, devicePaired
             )
 
             is HomeRecyclerViewHolder.SleepViewHolder -> holder.bind(
-                items[position] as OHealthOverview.Sleep,
-                position,
-                lastPosition,
-                devicePaired
+                items[position] as OHealthOverview.Sleep, position, lastPosition, devicePaired
             )
 
             is HomeRecyclerViewHolder.SleepMinimalViewHolder -> holder.bind(
@@ -557,8 +503,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 if (outOfRangeCount == 0) {
                     binding.tvNudge.visible()
-                    binding.tvNudge.text =
-                        "All readings are in your typical range"
+                    binding.tvNudge.text = "All readings are in your typical range"
                 } else if (outOfRangeCount == 1) {
                     val text = if (isSignificant) {
                         "significantly"
@@ -573,8 +518,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
                 } else {
                     binding.tvNudge.visible()
-                    binding.tvNudge.text =
-                        "$outOfRangeCount/5 metrics are out of range"
+                    binding.tvNudge.text = "$outOfRangeCount/5 metrics are out of range"
                 }
             } else {
                 binding.apply {
@@ -599,11 +543,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         fun hasHealthData(healthTrend: HealthTrend?): Boolean {
             if (healthTrend == null) return false
-            return !(healthTrend.resp?.status.isNullOrEmpty() &&
-                    healthTrend.rhr?.status.isNullOrEmpty() &&
-                    healthTrend.bloodOxy?.status.isNullOrEmpty() &&
-                    healthTrend.hrv?.status.isNullOrEmpty() &&
-                    healthTrend.skinTemp?.status.isNullOrEmpty())
+            return !(healthTrend.resp?.status.isNullOrEmpty() && healthTrend.rhr?.status.isNullOrEmpty() && healthTrend.bloodOxy?.status.isNullOrEmpty() && healthTrend.hrv?.status.isNullOrEmpty() && healthTrend.skinTemp?.status.isNullOrEmpty())
 
         }
 
@@ -678,8 +618,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
             binding.ivBack.loadImage(
-                binding.ivBack.context,
-                when (data.type) {
+                binding.ivBack.context, when (data.type) {
                     VideoInfoType.SLEEP -> R.drawable.back_info_sleep
                     VideoInfoType.READINESS -> R.drawable.back_info_readiness
                     VideoInfoType.ACTIVITY -> R.drawable.back_info_activity
@@ -689,8 +628,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(
                     OSummaryHealthOverviewClickEnum.VideoInfoClicked(
-                        data.type,
-                        data.data.url
+                        data.type, data.data.url
                     )
                 )
             }
@@ -846,10 +784,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ReadinessViewHolder(private val binding: ListReadinessCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Readiness,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
+            data: OHealthOverview.Readiness, position: Int, lastPosition: Int, devicePaired: Boolean
         ) {
 
             //binding.imv.loadImage(binding.imv.context, R.drawable.ic_readiness_card_bg1)
@@ -1036,14 +971,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             sleepDayGraphView.setData(data.sleepArray)
 
             binding.tvSleepStart.text = DateFormats.formatDate(
-                data.data.startTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.time12Meridian()
+                data.data.startTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
             )
             binding.tvSleepEnd.text = DateFormats.formatDate(
-                data.data.endTime,
-                DateFormats.dateTimeFormat5(),
-                DateFormats.time12Meridian()
+                data.data.endTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
             )
 
             binding.root.setOnClickListener {
@@ -1057,10 +988,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class SleepViewHolder(private val binding: ListSleepCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Sleep,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
+            data: OHealthOverview.Sleep, position: Int, lastPosition: Int, devicePaired: Boolean
         ) {
             //binding.imv.loadImage(binding.imv.context, R.drawable.ic_sleep_card_bg1)
             val scoreValue = data.data.sleepScore ?: 0
@@ -1083,21 +1011,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
 
                 binding.tvSleepStart.text = DateFormats.formatDate(
-                    data.startTime,
-                    DateFormats.dateTimeFormat5(),
-                    DateFormats.time12Meridian()
+                    data.startTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
                 )
                 binding.tvSleepEnd.text = DateFormats.formatDate(
-                    data.endTime,
-                    DateFormats.dateTimeFormat5(),
-                    DateFormats.time12Meridian()
+                    data.endTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
                 )
 
-                binding.tvHrValue.text = if (data.data.restingHr == null) {
-                    "--"
-                } else {
-                    data.data.restingHr.toString()
-                }
+                binding.tvHrValue.text =
+                    if (data.data.restingHr == null || data.data.restingHr == 0) {
+                        "--"
+                    } else {
+                        data.data.restingHr.toString()
+                    }
 
                 binding.tvSleepHour.text = hourTimeInBed.toString()
                 binding.tvSleepMinute.text = minuteTimeInBed.toString()
@@ -1225,10 +1150,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ActivityViewHolder2(private val binding: ListActivityBurnCardItem2Binding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Activity,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
+            data: OHealthOverview.Activity, position: Int, lastPosition: Int, devicePaired: Boolean
         ) {
             val scoreValue = data.data.activityScore
 
@@ -1278,8 +1200,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.dynamicArcView.addEvent(
-                DecoEvent.Builder(caloriesPercent).setIndex(distanceIndex)
-                    .setDuration(1000L).build()
+                DecoEvent.Builder(caloriesPercent).setIndex(distanceIndex).setDuration(1000L)
+                    .build()
             )
 
             binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
@@ -1322,10 +1244,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ActivityViewHolder(private val binding: ListActivityBurnCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Activity,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
+            data: OHealthOverview.Activity, position: Int, lastPosition: Int, devicePaired: Boolean
         ) {
             //binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
             val scoreValue = data.data.activityScore
@@ -1370,8 +1289,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             var caloriesProgress = data.data.activeCalories?.toFloat() ?: 0f
             val caloriesGoal = data.caloriesGoal.toFloat()
-            caloriesProgress = (if (caloriesProgress > caloriesGoal) 100f else
-                caloriesProgress.calculatePercentage(
+            caloriesProgress =
+                (if (caloriesProgress > caloriesGoal) 100f else caloriesProgress.calculatePercentage(
                     caloriesGoal
                 ))
 
@@ -1470,12 +1389,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view =
-                RowDashAlertBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
+            val view = RowDashAlertBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
             return ViewHolder(view)
         }
 
