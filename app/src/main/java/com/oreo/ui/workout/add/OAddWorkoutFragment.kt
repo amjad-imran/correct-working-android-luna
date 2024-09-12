@@ -464,17 +464,6 @@ class OAddWorkoutFragment :
 
     }
 
-    private fun setDuration() {
-        val duration = viewModel.getWorkoutDuration()
-        //setCalories()
-        if (duration > 0) {
-            viewModel.addWorkout.duration = duration
-            binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
-            enableSaveBtn()
-
-        }
-    }
-
     private fun setIntensity() {
         var intensity = "Enter"
 
@@ -524,7 +513,10 @@ class OAddWorkoutFragment :
 
     }
 
-    private fun enableSaveBtn(forceSave: Boolean = false) {
+    private fun enableSaveBtn() {
+
+        val forceSave = viewModel.isAutoWorkout()
+
         if ((viewModel.addWorkout.duration > 0 &&
                     viewModel.addWorkout.intensity.isNotEmpty() &&
                     viewModel.workoutListModal != null) || forceSave
@@ -534,10 +526,10 @@ class OAddWorkoutFragment :
                 binding.lytToolbar.tvSave.alpha = 1f
 
             }
-        }else{
+        } else {
             binding.lytToolbar.apply {
                 tvSave.disable()
-                binding.lytToolbar.tvSave.alpha = 1f
+                binding.lytToolbar.tvSave.alpha = 0.5f
 
             }
         }
@@ -551,7 +543,7 @@ class OAddWorkoutFragment :
     }
 
     private fun setPrefillData() {
-        enableSaveBtn(true)
+        enableSaveBtn()
         setIntensity()
 
         binding.lytCaloriesBurn.tvCalBurnValue.text = viewModel.addWorkout.calories.toString()
@@ -647,6 +639,9 @@ class OAddWorkoutFragment :
                 if (it) {
                     viewModel.userDayData = mainViewModel.userHealthData[viewModel.addWorkout.date]
                     setPrefillData()
+
+                    binding.lytStartEnd.lytDate.root.gone()
+                    binding.lytStartEnd.divider0.root.gone()
                     //disableSelection()
                 }
             }
