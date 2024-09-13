@@ -24,6 +24,27 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/iv_log_period_fab"
         android:layout_marginBottom="-12dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivRecordSleep"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAddSleep"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:gravity="center_vertical|end"
+        android:text="@string/text_add_sleep"
+        app:layout_constraintBottom_toBottomOf="@+id/ivRecordSleep"
+        app:layout_constraintEnd_toStartOf="@+id/ivRecordSleep"
+        app:layout_constraintTop_toTopOf="@+id/ivRecordSleep"/>
+
+    <ImageView
+        android:id="@+id/ivRecordSleep"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_add_sleep"
+        android:layout_marginBottom="-12dp"
         app:layout_constraintBottom_toTopOf="@+id/ivAddWorkoutManual"
         app:layout_constraintEnd_toEndOf="parent" />
 

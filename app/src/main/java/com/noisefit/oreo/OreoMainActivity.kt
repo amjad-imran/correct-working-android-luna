@@ -205,12 +205,21 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.layoutRetry.root.gone()
             viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
         }
+
         binding.lytAddWorkoutSelector.tvLogPeriod.setOnClickListener {
             onLogPeriodClicked()
         }
         binding.lytAddWorkoutSelector.ivLogPeriod.setOnClickListener {
             onLogPeriodClicked()
         }
+
+        binding.lytAddWorkoutSelector.tvAddSleep.setOnClickListener {
+            showAddSleep()
+        }
+        binding.lytAddWorkoutSelector.ivRecordSleep.setOnClickListener {
+            showAddSleep()
+        }
+
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
             if (viewModel.isActivityWorkAdd)
@@ -269,6 +278,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
           }*/
     }
 
+    private fun showAddSleep() {
+        binding.blurViewSelector.gone()
+        navController?.navigate(R.id.fragmentAddSleep)
+    }
+
     private fun onLogPeriodClicked() {
         binding.blurViewSelector.gone()
         val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate)
@@ -303,6 +317,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
+        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
 
         val lastDestination = navController?.currentDestination
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
@@ -371,6 +387,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
         animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
         animateItemsDown(binding.lytAddWorkoutSelector.tvRecordWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvAddSleep)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivRecordSleep)
         animateItemsDown(binding.lytAddWorkoutSelector.tvLogPeriod)
         animateItemsDown(binding.lytAddWorkoutSelector.ivLogPeriod)
 
@@ -613,7 +631,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
 
-        LocationService2.locationBroadCastFindMyRing.observe(this){
+        LocationService2.locationBroadCastFindMyRing.observe(this) {
             it.getContent()?.let {
                 LOGS.d("sdfkjsk updating location")
                 viewModel.updateRingLocation(it)
@@ -642,7 +660,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.showChatUi.observe(this) {
             it.getContent()?.let { threadId ->
-                val (frag, bundle) = ChatGptFragment.getStartData(threadId,null)
+                val (frag, bundle) = ChatGptFragment.getStartData(threadId, null)
                 navController?.navigate(frag, bundle)
             }
         }
