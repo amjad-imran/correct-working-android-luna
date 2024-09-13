@@ -242,8 +242,7 @@ class OreoOnlineDataMapper
                 oxyBreakup = sleepOverlayData.spo2Breakup,
                 avgTemp = avgTemp.toFloat(),
                 avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
-                avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
-                    .roundToInt() ?: 0,
+                avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.averageWithoutZero(),
                 maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
                 avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
                 readinessScore = sleepData.readinessScore ?: 0

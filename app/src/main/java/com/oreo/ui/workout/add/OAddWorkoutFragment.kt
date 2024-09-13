@@ -131,13 +131,14 @@ class OAddWorkoutFragment :
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 selectedValue?.let { it1 ->
-                    val parsedDate = LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
-                    viewModel.addWorkout.date =parsedDate
+                    val parsedDate =
+                        LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                    viewModel.addWorkout.date = parsedDate
 
 
                     val todayDate = LocalDate.now().toString()
-                    if(parsedDate.equals(todayDate)){
+                    if (parsedDate.equals(todayDate)) {
                         resetData()
                     }
                     setDate()
@@ -167,7 +168,7 @@ class OAddWorkoutFragment :
                 val calendar = Calendar.getInstance()
 
                 val todayDate = LocalDate.now().toString()
-                if (viewModel.addWorkout.date?.equals(todayDate) == true) {
+                if (viewModel.addWorkout.date?.equals(todayDate) == true || viewModel.isAutoWorkout()) {
                     if (DateFormats.compareTime(
                             hourOfDay,
                             minute,
@@ -179,8 +180,8 @@ class OAddWorkoutFragment :
                     } else if (DateFormats.compareTime(
                             hourOfDay,
                             minute,
-                            viewModel.addWorkout.endHour,
-                            viewModel.addWorkout.endMinute
+                            viewModel.addWorkout.endHour!!,
+                            viewModel.addWorkout.endMinute!!
                         ) >= 0
                     ) {
                         context.showShortToast(getString(R.string.text_start_time_less))
@@ -189,8 +190,8 @@ class OAddWorkoutFragment :
                     } else if (!DateFormats.checkDifferenceInBtwInterval(
                             hourOfDay,
                             minute,
-                            viewModel.addWorkout.endHour,
-                            viewModel.addWorkout.endMinute,
+                            viewModel.addWorkout.endHour!!,
+                            viewModel.addWorkout.endMinute!!,
                             viewModel.minimumWorkoutTime
 
                         )
@@ -207,48 +208,63 @@ class OAddWorkoutFragment :
                         setStartTimeBetween()
                     }
                 } else {
-                    if (DateFormats.compareTime(
-                            hourOfDay,
-                            minute,
-                            viewModel.addWorkout.endHour,
-                            viewModel.addWorkout.endMinute
-                        ) >= 0
-                    ) {
-                        context.showShortToast(getString(R.string.text_start_time_less))
-                    } else if (hourOfDay == viewModel.addWorkout.endHour && minute == viewModel.addWorkout.endMinute) {
-                        context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
-                    } else if (!DateFormats.checkDifferenceInBtwInterval(
-                            hourOfDay,
-                            minute,
-                            viewModel.addWorkout.endHour,
-                            viewModel.addWorkout.endMinute,
-                            viewModel.minimumWorkoutTime
-
-                        )
-                    ) {
-                        context.showShortToast(
-                            getString(
-                                R.string.text_start_and_end_time_should_be_greater_than_frequency,
-                                viewModel.minimumWorkoutTime.toString()
-                            )
-                        )
-                    } else {
+                    if (viewModel.addWorkout.endHour == null || viewModel.addWorkout.endMinute == null) {
                         viewModel.addWorkout.startHour = hourOfDay
                         viewModel.addWorkout.startMinute = minute
+
                         setStartTimeBetween()
+                        setEndTimeBetween()
+                    } else {
+                        if (DateFormats.compareTime(
+                                hourOfDay,
+                                minute,
+                                viewModel.addWorkout.endHour!!,
+                                viewModel.addWorkout.endMinute!!
+                            ) >= 0
+                        ) {
+                            viewModel.addWorkout.startHour = hourOfDay
+                            viewModel.addWorkout.startMinute = minute
+                            viewModel.addWorkout.endHour = null
+                            viewModel.addWorkout.endMinute = null
+
+                            setStartTimeBetween()
+                            setEndTimeBetween()
+
+                            //context.showShortToast(getString(R.string.text_start_time_less))
+                        } else if (hourOfDay == viewModel.addWorkout.endHour && minute == viewModel.addWorkout.endMinute) {
+                            context.showShortToast(getString(R.string.text_start_end_time_should_be_different))
+                        } else if (!DateFormats.checkDifferenceInBtwInterval(
+                                hourOfDay,
+                                minute,
+                                viewModel.addWorkout.endHour!!,
+                                viewModel.addWorkout.endMinute!!,
+                                viewModel.minimumWorkoutTime
+
+                            )
+                        ) {
+                            context.showShortToast(
+                                getString(
+                                    R.string.text_start_and_end_time_should_be_greater_than_frequency,
+                                    viewModel.minimumWorkoutTime.toString()
+                                )
+                            )
+                        } else {
+                            viewModel.addWorkout.startHour = hourOfDay
+                            viewModel.addWorkout.startMinute = minute
+                            setStartTimeBetween()
+                        }
                     }
+
                 }
-
                 updateCalculatedData()
-
             }
 
             navigate(
                 OAddWorkoutFragmentDirections.actionAddWorkoutFragmentToTimeBottomSheet(
                     viewModel.addWorkout.startHour,
                     viewModel.addWorkout.startMinute,
-                    viewModel.addWorkout.endHour,
-                    viewModel.addWorkout.endMinute,
+                    viewModel.addWorkout.endHour ?: 0,
+                    viewModel.addWorkout.endMinute ?: 0,
                     1,
                     1,
                     getString(R.string.text_start_time)
@@ -336,8 +352,8 @@ class OAddWorkoutFragment :
 
             navigate(
                 OAddWorkoutFragmentDirections.actionAddWorkoutFragmentToTimeBottomSheet(
-                    viewModel.addWorkout.endHour,
-                    viewModel.addWorkout.endMinute,
+                    viewModel.addWorkout.endHour ?: 0,
+                    viewModel.addWorkout.endMinute ?: 0,
                     viewModel.addWorkout.startHour,
                     viewModel.addWorkout.startMinute,
                     0,
@@ -376,6 +392,9 @@ class OAddWorkoutFragment :
         if (duration > 0) {
             viewModel.addWorkout.duration = duration
             binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
+        } else {
+            viewModel.addWorkout.duration = 0
+            binding.lytCaloriesBurn.tvDurationValue.text = "-"
         }
 
         val calories = viewModel.getCaloriesBurnt()
@@ -422,32 +441,27 @@ class OAddWorkoutFragment :
     }
 
     private fun setEndTimeBetween(ignoreDuration: Boolean = true) {
-        val endTime = DateFormats.formatTimeWithAmPm(
-            viewModel.addWorkout.endHour,
-            viewModel.addWorkout.endMinute
-        )
+        if (viewModel.addWorkout.endHour == null || viewModel.addWorkout.endMinute == null) {
+            viewModel.isEndTimeSelected = false
+            binding.lytStartEnd.lytEndTime.tvTimeValue.text = "Enter"
+        } else {
+            val endTime = DateFormats.formatTimeWithAmPm(
+                viewModel.addWorkout.endHour!!,
+                viewModel.addWorkout.endMinute!!
+            )
 
-        setTextWhite(binding.lytStartEnd.lytEndTime.tvTimeValue)
-        viewModel.addWorkout.endTimeIn24H = DateFormats.formatTime(
-            viewModel.addWorkout.endHour,
-            viewModel.addWorkout.endMinute
-        )
-        /*if (ignoreDuration) {
-            setDuration()
-        }*/
-        viewModel.isEndTimeSelected = true
-        binding.lytStartEnd.lytEndTime.tvTimeValue.text = endTime
-    }
-
-    private fun setDuration() {
-        val duration = viewModel.getWorkoutDuration()
-        //setCalories()
-        if (duration > 0) {
-            viewModel.addWorkout.duration = duration
-            binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
-            enableSaveBtn()
-
+            setTextWhite(binding.lytStartEnd.lytEndTime.tvTimeValue)
+            viewModel.addWorkout.endTimeIn24H = DateFormats.formatTime(
+                viewModel.addWorkout.endHour!!,
+                viewModel.addWorkout.endMinute!!
+            )
+            /*if (ignoreDuration) {
+                setDuration()
+            }*/
+            viewModel.isEndTimeSelected = true
+            binding.lytStartEnd.lytEndTime.tvTimeValue.text = endTime
         }
+
     }
 
     private fun setIntensity() {
@@ -499,7 +513,10 @@ class OAddWorkoutFragment :
 
     }
 
-    private fun enableSaveBtn(forceSave: Boolean = false) {
+    private fun enableSaveBtn() {
+
+        val forceSave = viewModel.isAutoWorkout()
+
         if ((viewModel.addWorkout.duration > 0 &&
                     viewModel.addWorkout.intensity.isNotEmpty() &&
                     viewModel.workoutListModal != null) || forceSave
@@ -507,6 +524,12 @@ class OAddWorkoutFragment :
             binding.lytToolbar.apply {
                 tvSave.enable()
                 binding.lytToolbar.tvSave.alpha = 1f
+
+            }
+        } else {
+            binding.lytToolbar.apply {
+                tvSave.disable()
+                binding.lytToolbar.tvSave.alpha = 0.5f
 
             }
         }
@@ -520,7 +543,7 @@ class OAddWorkoutFragment :
     }
 
     private fun setPrefillData() {
-        enableSaveBtn(true)
+        enableSaveBtn()
         setIntensity()
 
         binding.lytCaloriesBurn.tvCalBurnValue.text = viewModel.addWorkout.calories.toString()
@@ -577,7 +600,7 @@ class OAddWorkoutFragment :
 
     }
 
-    fun resetData(){
+    fun resetData() {
         //set start time and end time
         val calStart = Calendar.getInstance()
         viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
@@ -616,6 +639,9 @@ class OAddWorkoutFragment :
                 if (it) {
                     viewModel.userDayData = mainViewModel.userHealthData[viewModel.addWorkout.date]
                     setPrefillData()
+
+                    binding.lytStartEnd.lytDate.root.gone()
+                    binding.lytStartEnd.divider0.root.gone()
                     //disableSelection()
                 }
             }

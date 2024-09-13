@@ -464,4 +464,7 @@ interface DataStoredInterface {
     fun setForceUpdateRequired()
     fun getForceUpdateRequired(): Boolean
     fun clearForceUpdateRequired()
+
+    fun hideFindMyRingLocationCard()
+    fun isFindMyRingLocationCardHidden():Boolean
 }

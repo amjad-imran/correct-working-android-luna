@@ -6,11 +6,14 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetAlertTextBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import dagger.hilt.android.AndroidEntryPoint
 
 const val WORKOUT_STOP_KEY = "WORKOUT_STOP_KEY"
@@ -21,16 +24,22 @@ class WorkoutStopRingBottomSheet :
         BottomSheetAlertTextBinding::inflate
     ) {
 
+    private val args: WorkoutStopRingBottomSheetArgs by navArgs()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvTitle.text = getString(R.string.text_end_workout)
-        binding.tvDesc.text =
-            getString(R.string.text_ring_lo_battert_stop_message)
+        binding.tvDesc.text = args.message
+
+        getString(R.string.text_ring_lo_battert_stop_message)
 
         binding.btnAllow.text = getString(R.string.text_save)
         binding.btnCancel.text = getString(R.string.text_delete)
+        if (args.showSave.not()) {
+            binding.btnAllow.gone()
+        }
     }
 
 

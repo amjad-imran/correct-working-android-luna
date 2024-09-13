@@ -3,7 +3,6 @@ package com.oreo.ui.info.troubleshoot
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.shimmer.Shimmer
 import com.noisefit.luna.databinding.RowTroubleShootBinding
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
@@ -26,18 +25,6 @@ class TroubleshootAdapter(val listener: TroubleShootAction) :
                 binding.tvCta.invisible()
             } else {
                 binding.tvCta.visible()
-
-                val shimmerBuilder = Shimmer.AlphaHighlightBuilder().apply {
-                    setBaseAlpha(0.5f)
-                    setDuration(1500L)
-                    setDropoff(0.2f)
-                    setIntensity(0.35f)
-                    setShape(Shimmer.Shape.RADIAL)
-                }
-
-                binding.shimmerContainer.setShimmer(
-                    shimmerBuilder.build()
-                )
             }
 
             binding.tvCta.setOnClickListener {

@@ -1,21 +1,21 @@
 package com.oreo.ui.findmyring
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Geocoder
 import android.os.Build
-import android.text.format.DateUtils
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.noisefit.data.model.RingLocationData
+import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -25,15 +25,12 @@ import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.OHealthOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -67,7 +64,7 @@ class RingLocationViewModel @Inject constructor(
                     }
 
                     is Resource.Loading -> {
-                        if(resource.loading){
+                        if (resource.loading) {
                             setLoading(true)
                         }
                     }
@@ -257,6 +254,17 @@ class RingLocationViewModel @Inject constructor(
             }
         }
         return relativeTime
+    }
+
+    fun getBatteryImage(batteryPercentage: Int): Int {
+        return when (batteryPercentage) {
+            in 0..24 -> R.drawable.battery_level_25
+            in 25..39 -> R.drawable.battery_level_40
+            in 40..69 -> R.drawable.battery_level_70
+            in 70..100 -> R.drawable.battery_level_100
+            else -> R.drawable.battery_level_100
+        }
+
     }
 
 }

@@ -23,7 +23,7 @@ sealed class UpdateDeviceDataCallback {
     class WorkoutPaused(val success: Boolean) : UpdateDeviceDataCallback()
     class WorkoutResumed(val success: Boolean) : UpdateDeviceDataCallback()
     class WorkoutStopped(val success: Boolean) : UpdateDeviceDataCallback()
-    class WorkoutStoppedByRing(error: String) : UpdateDeviceDataCallback()
+    class WorkoutStoppedByRing(val error: String) : UpdateDeviceDataCallback()
 
     class AlarmUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class LanguageUpdated(val success: Boolean) : UpdateDeviceDataCallback()

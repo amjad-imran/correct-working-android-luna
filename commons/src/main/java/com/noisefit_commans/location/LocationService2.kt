@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
 
@@ -98,9 +100,9 @@ class LocationService2 : Service() {
 
                 LOGS.d("LOCATION_lOG Lat->$lat Long->$long Accuracy->${location.accuracy} altitude ->$altitude | timestamp ${DateFormats.getTimeStamp()}")
 
-                if(postOnDash){
+                if (postOnDash) {
                     locationBroadCastFindMyRing.postValue(Event(Pair(lat, long)))
-                }else{
+                } else {
                     locationBroadCastFindMyRing2.postValue(Event(Pair(lat, long)))
                 }
 

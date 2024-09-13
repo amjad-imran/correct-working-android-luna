@@ -6,10 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.TypedValue
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -24,7 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.noisefit.data.model.RingLocationData
+import com.oreo.data.model.RingLocationData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingLocationBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -33,8 +31,8 @@ import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -148,6 +146,17 @@ class RingLocationFragment :
                 binding.progressBar.root.gone()
             }
         }
+        viewModel.getMessages().observe(this){
+            it.getContent()?.let {
+                context.showShortToast(it)
+            }
+        }
+
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
     }
 
     private fun bottomSheetToggle(hideData: Boolean) {
@@ -213,6 +222,10 @@ class RingLocationFragment :
 
             if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
                 tvAddress.text = "Location not found"
+                tvAddress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+
+                textDisclaimer.text =
+                    "This is the latest phone location. Note that this may not be the current location of your ring."
 
                 tvLastSyncedAt.gone()
                 tvBatteryPercentage.gone()
@@ -223,6 +236,7 @@ class RingLocationFragment :
 
             } else {
 
+
                 tvLastSyncedAt.visible()
                 tvBatteryPercentage.visible()
                 imageView44.visible()
@@ -230,8 +244,16 @@ class RingLocationFragment :
                 tvConnectionState.visible()
                 tvConnectionStateNoData.gone()
 
+                textDisclaimer.text = getString(R.string.text_ring_location_message)
+
                 tvBatteryPercentage.text =
                     if (ringLocationData?.battery_percentage == null) "-" else "${ringLocationData.battery_percentage}%"
+
+                imageView44.setImageResource(
+                    viewModel.getBatteryImage(
+                        ringLocationData.battery_percentage ?: 100
+                    )
+                )
 
                 tvAddress.text = ringLocationData?.address
 
@@ -267,11 +289,13 @@ class RingLocationFragment :
         mapFragment.getMapAsync { googleMap ->
             googleMap.clear()
 
-            if(viewModel.bottomSheetState==BottomSheetState.NO_DATA){
+            binding.map.visible()
+
+            if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
                 val currentLoc = LatLng(ringLocationData.latitude, ringLocationData.longitude)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f))
 
-            }else{
+            } else {
                 loadMarker(googleMap, ringLocationData.latitude, ringLocationData.longitude)
 
             }

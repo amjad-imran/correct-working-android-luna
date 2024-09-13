@@ -141,6 +141,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
 
+    val findMyRingCard = MutableLiveData<Boolean?>()
+
     val healthMonitorCardData = MutableLiveData<HealthTrend?>()
 
     var user: User? = null
@@ -1769,6 +1771,14 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             ringDataStore.removeSleepAlert(LocalDate.now().toString())
             sleepAlert.postValue(null)
+        }
+    }
+
+    fun hideFindMyRingPermCard() {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataStore.hideFindMyRingLocationCard()
+            findMyRingCard.postValue(false)
+
         }
     }
 

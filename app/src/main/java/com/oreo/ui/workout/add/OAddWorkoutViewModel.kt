@@ -374,10 +374,13 @@ class OAddWorkoutViewModel
         if (!isStartTimeSelected || !isEndTimeSelected) {
             return 0
         }
+        if (addWorkout.endHour == null || addWorkout.endMinute == null) {
+            return 0
+        }
 
-        val diffInHours = addWorkout.endHour - addWorkout.startHour
+        val diffInHours = addWorkout.endHour!! - addWorkout.startHour
 
-        return (diffInHours * 60) + (addWorkout.endMinute - addWorkout.startMinute)
+        return (diffInHours * 60) + (addWorkout.endMinute!! - addWorkout.startMinute)
     }
 
     private fun getIntensity(intensity: Int): String {
@@ -514,7 +517,7 @@ class OAddWorkoutViewModel
     fun getHighlightedPoints(): HashSet<Int> {
         try {
             val startMinutes = addWorkout.startHour * 60 + addWorkout.startMinute
-            val endMinutes = addWorkout.endHour * 60 + addWorkout.endMinute
+            val endMinutes = addWorkout.endHour!! * 60 + addWorkout.endMinute!!
             var start = startMinutes / 15
             val end = endMinutes / 15
 

@@ -1346,6 +1346,9 @@
     <string name="text_enable_cycle_tracker">Enable cycle tracker</string>
     <string name="text_enable_cycle_tracker_message">Enable cycle tracking to understand your menstrual cycle and know when your next period or ovulation might start.</string>
     <string name="text_find_ring_message_location">To use the \'Find My Ring\' feature, we need permission to access your location in the background. This allows us to provide real-time tracking of your Luna ring whenever it gets disconnected with your Luna App. Do you agree to allow Luna App to access your location whenever the Luna ring gets disconnected?</string>
+    <string name="text_enable_find_my_ring">Enable “Find My Ring”</string>
+    <string name="text_dash_find_ring_message">Allow Luna Ring to access your location to enable “Find My Ring”.</string>
+    <string name="text_turn_on_location_permissions">Turn on location permissions</string>
     <string name="title_activity_compose">ComposeActivity</string>
 
 </resources>

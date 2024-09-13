@@ -1,7 +1,7 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
-import com.noisefit.data.model.RingLocationData
+import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -52,14 +52,12 @@ import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.sleep.SleepDataResponse
-import com.oreo.data.model.sleep.SleepDay
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT

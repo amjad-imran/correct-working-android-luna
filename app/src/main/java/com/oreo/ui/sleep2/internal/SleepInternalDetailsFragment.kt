@@ -72,9 +72,8 @@ class SleepInternalDetailsFragment :
             viewModel.selectedDate = LocalDate.parse(it)
         }
         viewModel.registerDate = mainViewModel.registerDate
-
-        viewModel.startDate =
-            sharedViewModel.calendarStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        viewModel.startDate = LocalDate.now().minusDays(mainViewModel.registerDate.toLong())
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         binding.toolbar.tvTitle.text = getString(R.string.text_trends_view)
 
@@ -83,7 +82,6 @@ class SleepInternalDetailsFragment :
         initViewPager()
 
         viewModel.reloadData()
-        //viewModel.loadGraphData(false)
     }
 
     private fun initUi() {
@@ -556,7 +554,8 @@ class SleepInternalDetailsFragment :
 
 
                         if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-                            tvNudge.alpha = 1f
+                            val todayDate = LocalDate.now()
+                            tvNudge.alpha = if (todayDate == topContentData.date) 1f else 0.5f
                         } else {
                             tvNudge.alpha = 0.5f
                         }

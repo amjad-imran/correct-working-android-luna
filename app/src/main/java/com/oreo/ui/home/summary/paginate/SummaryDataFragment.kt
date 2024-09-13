@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -14,6 +15,7 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -21,6 +23,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
@@ -313,4 +316,6 @@ class SummaryDataFragment :
 
 
     }
+
+
 }

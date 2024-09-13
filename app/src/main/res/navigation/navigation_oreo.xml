@@ -608,7 +608,14 @@
     <dialog
         android:id="@+id/workoutStopRingBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
-        android:label="WorkoutStopRingBottomSheet" />
+        android:label="WorkoutStopRingBottomSheet" >
+        <argument
+            android:name="showSave"
+            app:argType="boolean" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </dialog>
     <dialog
         android:id="@+id/bottomSheetDayTimeActivity"
         android:name="com.oreo.ui.activity.BottomSheetDayTimeActivities"
@@ -1065,7 +1072,11 @@
     <dialog
         android:id="@+id/bottomSheetLocationPermissionFindMyRing"
         android:name="com.oreo.ui.device.BottomSheetLocationPermissionFindMyRing"
-        android:label="BottomSheetLocationPermissionFindMyRing" />
+        android:label="BottomSheetLocationPermissionFindMyRing" >
+        <argument
+            android:name="postOnActivity"
+            app:argType="boolean"
+            android:defaultValue="false" />
     <fragment
         android:id="@+id/aiChatOnboardFragment"
         android:name="com.oreo.ui.chatGpt.splash.AiChatOnboardFragment"

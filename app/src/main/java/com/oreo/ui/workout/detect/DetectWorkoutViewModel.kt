@@ -198,8 +198,8 @@ constructor(
                 startMinute
             )
             endTimeIn24H = DateFormats.formatTime(
-                endHour,
-                endMinute
+                endHour!!,
+                endMinute!!
             )
 
         }
