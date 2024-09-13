@@ -1383,7 +1383,6 @@ class OreoUserActivityRepositoryImpl(
         date: String
     ): Flow<Resource<BaseApiResponseData<Any>>> {
 
-        //TODO clear today data
         return safeApiCallFlow(dispatcher) {
             userHealthDataSource.clearDataByDates(arrayListOf(date))
             delay(200)//time for clearing the data from local db
@@ -1847,6 +1846,21 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/nap"
             remoteDataSource.addNapServer(url, napRequest)
+        }
+    }
+
+    override suspend fun addManualNap(
+        request: JsonArray,
+        date: String
+    ): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            userHealthDataSource.clearDataByDates(arrayListOf(date))
+            delay(200)//time for clearing the data from local db
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/nap"
+            val requestObject = JsonObject().apply {
+                this.add("naps", request)
+            }
+            remoteDataSource.addGFitWorkout(url, requestObject)
         }
     }
 

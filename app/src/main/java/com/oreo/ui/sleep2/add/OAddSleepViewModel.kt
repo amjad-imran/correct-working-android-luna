@@ -2,7 +2,6 @@ package com.oreo.ui.sleep2.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
@@ -10,15 +9,15 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.OreoNapNetworkEntity
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddSleep
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -148,58 +147,41 @@ constructor(
                                 )
                             }"
                         }
-                        val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
-                        jsonObject.addProperty(
-                            "date",
-                            date
-                        )
-                        jsonObject.addProperty("end_time", endTime)
-                        jsonObject.addProperty("start_time", startTime)
-                        jsonObject.addProperty("total_duration", totalDuration)
-                        jsonObject.addProperty("active_calories", activeCalories)
-
-                        val jsonFinalObject = JsonObject()
-                        jsonFinalObject.add("day_break_up", jsonObject)
 
 
-                        val jsonArray = JsonArray()
-                        jsonArray.add(jsonFinalObject)
+                        if (totalDuration <= (3 * 60 * 60)) {
+                            //NAP
+                            val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+                            jsonObject.addProperty(
+                                "date",
+                                date
+                            )
+                            jsonObject.addProperty("end_time", "$endTime:00")
+                            jsonObject.addProperty("start_time", "$startTime:00")
+                            jsonObject.addProperty("duration", totalDuration / 60)
 
+                            val jsonArray = JsonArray()
+                            jsonArray.add(jsonObject)
 
-                        userActivityRepository.addManualSleep(
-                            jsonArray, date
-                        ).collect { resource ->
-                            when (resource) {
-                                is Resource.GenericError -> {
-                                    sendMessage(resource.message)
-                                }
+                            addNapApi(jsonArray, date)
+                        } else {
+                            //Sleep
 
-                                is Resource.Loading -> {
-                                    setLoading(resource.loading)
-                                }
+                            val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+                            jsonObject.addProperty(
+                                "date",
+                                date
+                            )
+                            jsonObject.addProperty("end_time", endTime)
+                            jsonObject.addProperty("start_time", startTime)
+                            jsonObject.addProperty("total_duration", totalDuration)
+                            jsonObject.addProperty("active_calories", activeCalories)
 
-                                is Resource.NetworkError -> {
-                                    setApiErrors(resource.response.apply {
-                                        this.uiComponentType as UIComponentType.RetryApiDialog
-                                        (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                            object : BinaryActionCallback {
-                                                override fun yes() {
-                                                    callApiToAddSleep()
-                                                }
-
-                                                override fun no() {
-
-                                                }
-                                            }
-                                    })
-                                }
-
-                                is Resource.Success -> {
-                                    resource.data?.data?.let {
-                                        _addSleepResponse.postValue(Event(true))
-                                    }
-                                }
-                            }
+                            val jsonFinalObject = JsonObject()
+                            jsonFinalObject.add("day_break_up", jsonObject)
+                            val jsonArray = JsonArray()
+                            jsonArray.add(jsonFinalObject)
+                            addSleepApi(jsonArray, date)
                         }
 
                     }
@@ -213,6 +195,87 @@ constructor(
 
         }
 
+    }
+
+
+    private fun addSleepApi(jsonArray: JsonArray, date: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.addManualSleep(
+                jsonArray, date
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        addSleepApi(jsonArray, date)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _addSleepResponse.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addNapApi(jsonArray: JsonArray, date: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.addManualNap(
+                jsonArray, date
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        addNapApi(jsonArray, date)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _addSleepResponse.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun isStartDateToday(): Boolean {

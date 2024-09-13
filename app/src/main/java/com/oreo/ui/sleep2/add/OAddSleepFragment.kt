@@ -41,10 +41,10 @@ class OAddSleepFragment :
                 uiController.onDisplayError("Please select end time")
                 return@setOnClickListener
             }
-            if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
+            /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
                 uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
-            }
+            }*/
 
 
             viewModel.callApiToAddSleep()

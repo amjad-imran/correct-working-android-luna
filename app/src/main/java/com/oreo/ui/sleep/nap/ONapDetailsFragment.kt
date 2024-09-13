@@ -180,7 +180,6 @@ class ONapDetailsFragment :
         } else {
             heartRateDefaultView()
         }
-        //todo will change startTime, endTime
         val sleepStartTime = it.startTime
         val sleepEndTime = it.endTime
 
@@ -224,7 +223,6 @@ class ONapDetailsFragment :
         } else {
             hrvDefaultView()
         }
-        //todo will change startTime, endTime
         showHeartRateVariabilityGraph(
             if (isHrvDataNull) null else it.hrvBreakUp?.value,
             it.hrvBreakUp?.avg ?: 0,
@@ -248,7 +246,6 @@ class ONapDetailsFragment :
         } else {
             temperatureGraphDefaultView()
         }
-        //todo will change startTime, endTime
         showTemperatureGraph(
             if (isTempDataNull) null else it.temperatureBreakup?.value,
             sleepStartTime,
@@ -264,6 +261,12 @@ class ONapDetailsFragment :
             binding.lytNapTopView.lytImpact.ivArrow2.invisible()
             binding.lytNapTopView.lytImpact.tvDiffRScore.invisible()
 
+            mViewModel.setTextGradient(
+                binding.lytNapTopView.lytImpact.tvOldRScore,
+                requireActivity().getColor(R.color.white_12_70),
+                requireActivity().getColor(R.color.nap_readiness_grad_end),
+                requireActivity().getColor(R.color.nap_readiness_grad_start)
+            )
         } else {
             //nap readiness score
             binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.prevReadinessScore ?: 0}"
@@ -312,6 +315,13 @@ class ONapDetailsFragment :
             binding.lytNapTopView.lytImpact.tvNewSScore.invisible()
             binding.lytNapTopView.lytImpact.ivArrow1.invisible()
             binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
+
+            mViewModel.setTextGradient(
+                binding.lytNapTopView.lytImpact.tvOldSScore,
+                requireActivity().getColor(R.color.white_12_70),
+                requireActivity().getColor(R.color.nap_sleep_grad_end),
+                requireActivity().getColor(R.color.nap_sleep_grad_start)
+            )
         } else {
             binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.prevSleepScore ?: 0}"
             binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleepScore ?: 0}"
