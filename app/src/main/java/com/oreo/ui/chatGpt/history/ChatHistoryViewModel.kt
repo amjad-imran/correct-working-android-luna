@@ -12,6 +12,7 @@ import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +53,7 @@ class ChatHistoryViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.let {
-                            generateData(it.data?:ArrayList())
+                            generateData(it.data ?: ArrayList())
                         }
                     }
                 }
@@ -64,13 +65,29 @@ class ChatHistoryViewModel @Inject constructor(
 
         val result = ArrayList<ChatHistoryItem>()
         val datesSet = HashSet<String>()
+        val todayDate = LocalDate.now().toString()
+        val yesterdayDate = LocalDate.now().minusDays(1).toString()
 
         data.forEach {
             it.date ?: return@forEach
 
             if (!datesSet.contains(it.date)) {
                 datesSet.add(it.date!!)
-                result.add(ChatHistoryItem(isHeader = true, date = it.date))
+
+                val headerOther = if (it.date.equals(todayDate)) {
+                    "Today"
+                } else if (it.date.equals(yesterdayDate)) {
+                    "Yesterday"
+                } else {
+                    null
+                }
+                result.add(
+                    ChatHistoryItem(
+                        isHeader = true,
+                        date = it.date,
+                        headerOther = headerOther
+                    )
+                )
             }
 
             result.add(it.apply {

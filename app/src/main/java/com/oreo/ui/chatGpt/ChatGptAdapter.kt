@@ -144,11 +144,11 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.SentMessage,
             position: Int
         ) {
-            binding.logo.loadImageWithCache(
+            /*binding.logo.loadImageWithCache(
                 binding.logo.context,
                 data.userImage,
                 R.drawable.ic_default_profile_image
-            )
+            )*/
             binding.tvMessage.text = data.message
         }
     }
@@ -187,7 +187,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     .build()*/
 
                 markwon.setMarkdown(tvMessage, data.message)
-                logo.visible()
+                //logo.visible()
             }
         }
 

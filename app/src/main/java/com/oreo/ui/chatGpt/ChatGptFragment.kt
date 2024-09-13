@@ -88,9 +88,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
         }
 
-        binding.lytChatBox.btnNewChat.setOnClickListener {
+       /* binding.lytChatBox.btnNewChat.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf("",""))
-        }
+        }*/
 
         binding.lytChatBox.btnSendMessage.setOnClickListener {
             if (viewModel.fetchInProgress.value == true) return@setOnClickListener

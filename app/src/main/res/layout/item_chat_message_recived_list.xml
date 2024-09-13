@@ -14,17 +14,20 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="@dimen/dimen_8dp"
+        android:visibility="gone"
         android:src="@drawable/image_ai_message_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvMessage"
-        style="@style/S14"
+        style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:background="@drawable/back_chat_assitant_message"
         android:layout_marginEnd="16dp"
         android:lineSpacingExtra="6sp"
         tools:text="@tools:sample/lorem"

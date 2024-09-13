@@ -8,5 +8,6 @@ data class ChatHistoryItem(
     @SerializedName("thread_id")
     val threadId: String? = null,
     val title: String? = null,
-    var isHeader: Boolean = false
+    var isHeader: Boolean = false,
+    var headerOther: String? = null
 )
