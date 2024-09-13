@@ -3,30 +3,45 @@ package com.oreo.ui.chatGpt.topquestions
 import android.os.Bundle
 import android.view.View
 import android.widget.Space
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.oreo.data.model.ai.TopQuestions
+import com.oreo.ui.compose.element.button.CircularBackButton
+import com.oreo.ui.compose.element.button.CircularHistoryButton
+import com.oreo.ui.compose.element.button.Loading
 import com.oreo.ui.compose.styles.FontStyle
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,19 +50,28 @@ import dagger.hilt.android.AndroidEntryPoint
 class AiTopQuestionsFragment :
     BaseFragment<FragmentAiTopQuestionsBinding>(FragmentAiTopQuestionsBinding::inflate) {
 
+    val viewModel: AiTopQuestionsViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                ScreenAiTopQuestion(onBackClicked = {
-                    navigateUpSafe()
-                }, onHistoryClicked = {
-
-                }, onQuestionSelected = {
-
-                })
+                ScreenAiTopQuestion(
+                    viewModel = hiltViewModel(),
+                    onBackClicked = {
+                        navigateUpSafe()
+                    }, onHistoryClicked = {
+                        navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
+                    }, onQuestionSelected = {ques->
+                        navigate(
+                            AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatGptFragment(
+                                "",
+                                ques
+                            )
+                        )
+                    })
             }
         }
     }
@@ -64,50 +88,132 @@ class AiTopQuestionsFragment :
 
 @Composable
 fun ScreenAiTopQuestion(
+    viewModel: AiTopQuestionsViewModel,
     onBackClicked: () -> Unit,
     onHistoryClicked: () -> Unit,
     onQuestionSelected: (question: String) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
-        Text(
-            text = "Hi Amit,\n" + "Ask me anything !",
-            style = FontStyle.SIZE_24,
-            lineHeight = 32.sp
-        )
 
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
+    val questions by viewModel.questions.collectAsState()
+    val showHistoryIcon by viewModel.showHistoryIcon.collectAsState()
+    val loading by viewModel.getLoading().collectAsState()
 
-        QuestionList(arrayListOf("Question 1", "Question 2", "Question 3"))
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+            AiHistoryToolbar(
+                showHistoryIcon,
+                onBackClicked = onBackClicked,
+                onHistoryClicked = onHistoryClicked
+            )
+            Spacer(
+                modifier = Modifier.height(32.dp)
+            )
+            Text(
+                modifier = Modifier.padding(
+                    horizontal = 26.dp
+                ),
+                text = "Hi Amit,\n" + "Ask me anything !",
+                style = FontStyle.SIZE_24,
+                lineHeight = 32.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            QuestionList(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                questions
+            ) { selectedQues ->
+                onQuestionSelected(selectedQues)
+            }
+        }
+
+        if (loading) {
+            Loading()
+        }
     }
+
 }
 
 
 @Composable
-fun QuestionList(questions: List<String>) {
+fun QuestionList(
+    modifier: Modifier, questions: List<TopQuestions>, onQuesClicked: (ques: String) -> Unit
+) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(questions) { ques ->
-            QuestionItem(ques)
+            QuestionItem(ques) { selectedQues ->
+                onQuesClicked(selectedQues)
+            }
         }
     }
 }
 
 @Composable
-fun QuestionItem(quest: String) {
+fun QuestionItem(quest: TopQuestions, onQuesClicked: (ques: String) -> Unit) {
     val backgroundColor = Color(0xFF162536)
 
     Surface(
         shape = RoundedCornerShape(16.dp),  // Adjust corner radius as needed
-        color = backgroundColor, modifier = Modifier.fillMaxWidth()
+        color = backgroundColor, modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onQuesClicked(quest.question ?: "")
+            }
     ) {
         Text(
-            text = quest, style = FontStyle.SIZE_14, modifier = Modifier.padding(14.dp)
+            text = quest.question ?: "",
+            style = FontStyle.SIZE_14,
+            modifier = Modifier.padding(14.dp)
         )
     }
+}
+
+@Composable
+fun AiHistoryToolbar(
+    showHistoryIcon: Boolean,
+    onBackClicked: () -> Unit, onHistoryClicked: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp,
+                vertical = 16.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CircularBackButton(onClick = onBackClicked)
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(R.drawable.image_luna_ai_logo),
+                modifier = Modifier.height(16.dp),
+                contentDescription = "Luna Ai image"
+            )
+            Spacer(
+                modifier = Modifier.width(6.dp)
+            )
+            Image(
+                painter = painterResource(R.drawable.image_luna_ai_version),
+                modifier = Modifier.height(12.dp),
+                contentDescription = "Ai version"
+            )
+        }
+        if (showHistoryIcon) {
+            CircularHistoryButton(onClick = onHistoryClicked)
+        } else {
+            Spacer(modifier = Modifier.width(38.dp))//width to be same as icon
+        }
+    }
+
 }
 
 
@@ -120,5 +226,9 @@ fun QuestionListPreview() {
 @Preview
 @Composable
 fun ScreenAiTopQuestionPreview() {
-    ScreenAiTopQuestion(onBackClicked = {}, onHistoryClicked = {}, onQuestionSelected = {})
+    ScreenAiTopQuestion(
+        viewModel = hiltViewModel(),
+        onBackClicked = {},
+        onHistoryClicked = {},
+        onQuestionSelected = {})
 }

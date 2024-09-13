@@ -24,8 +24,6 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 kotlinBom = "1.8.22"
 lifecycleRuntimeKtx = "2.8.0"
-activityCompose = "1.9.0"
-composeBom = "2024.05.00"
 materialVersion = "1.6.1"
 mockitoAndroid = "3.10.0"
 mockitoCore = "5.6.0"
@@ -108,14 +106,15 @@ navigation-safe-args-gradle-plugin = "2.7.7"
 hilt-android-gradle-plugin = "2.51.1"
 firebase-crashlytics-gradle = "3.0.1"
 reviewKtx = "2.0.1"
-activityComposeVersion = "1.9.0"
-composeBomVersion = "2024.04.01"
+activityComposeVersion = "1.9.2"
+composeBomVersion = "2024.09.01"
 
 
 [libraries]
 android-decoview-charting = { module = "com.github.bmarrdev:android-DecoView-charting", version.ref = "androidDecoviewCharting" }
 android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compiler" }
 androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingCommonKtx" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 anrwatchdog = { group = "com.github.anrwatchdog", name = "anrwatchdog", version.ref = "anrwatchdog" }

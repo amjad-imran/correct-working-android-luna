@@ -608,7 +608,7 @@
     <dialog
         android:id="@+id/workoutStopRingBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
-        android:label="WorkoutStopRingBottomSheet" >
+        android:label="WorkoutStopRingBottomSheet">
         <argument
             android:name="showSave"
             app:argType="boolean" />
@@ -1062,7 +1062,7 @@
     <fragment
         android:id="@+id/cycleTrackerSettingsNewFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.settings.CycleTrackerSettingsNewFragment"
-        android:label="CycleTrackerSettingsNewFragment" >
+        android:label="CycleTrackerSettingsNewFragment">
         <action
             android:id="@+id/action_cycleTrackerSettingsNewFragment_to_femaleHealthSplashFragment"
             app:destination="@id/femaleHealthSplashFragment"
@@ -1072,15 +1072,16 @@
     <dialog
         android:id="@+id/bottomSheetLocationPermissionFindMyRing"
         android:name="com.oreo.ui.device.BottomSheetLocationPermissionFindMyRing"
-        android:label="BottomSheetLocationPermissionFindMyRing" >
+        android:label="BottomSheetLocationPermissionFindMyRing">
         <argument
             android:name="postOnActivity"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </dialog>
     <fragment
         android:id="@+id/aiChatOnboardFragment"
         android:name="com.oreo.ui.chatGpt.splash.AiChatOnboardFragment"
-        android:label="fragment_ai_chat_onboard" >
+        android:label="fragment_ai_chat_onboard">
         <action
             android:id="@+id/action_aiChatOnboardFragment_to_aiTopQuestionsFragment"
             app:destination="@id/aiTopQuestionsFragment"
@@ -1094,6 +1095,11 @@
         <action
             android:id="@+id/action_aiTopQuestionsFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
+            app:popUpTo="@id/aiTopQuestionsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_aiTopQuestionsFragment_to_chatHistoryFragment"
+            app:destination="@id/chatHistoryFragment"
             app:popUpTo="@id/aiTopQuestionsFragment"
             app:popUpToInclusive="true" />
     </fragment>

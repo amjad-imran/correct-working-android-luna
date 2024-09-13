@@ -1350,5 +1350,6 @@
     <string name="text_dash_find_ring_message">Allow Luna Ring to access your location to enable “Find My Ring”.</string>
     <string name="text_turn_on_location_permissions">Turn on location permissions</string>
     <string name="title_activity_compose">ComposeActivity</string>
+    <string name="text_please_wait">Please Wait</string>
 
 </resources>

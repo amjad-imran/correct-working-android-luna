@@ -11,6 +11,7 @@ import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
+import com.oreo.data.model.ai.TopQuestionsResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +84,7 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getAiTopQuestions(): Flow<Resource<BaseApiResponse<Any>?>> {
+    override suspend fun getAiTopQuestions(): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/suggested-questions"
             remoteDataSource.getAiTopQuestions(url)
