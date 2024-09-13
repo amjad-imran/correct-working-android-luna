@@ -3,6 +3,7 @@ package com.noisefit.session
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
@@ -34,16 +35,15 @@ import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserLocation
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.MoEngageAppEventAttributes
 import com.oreo.receiver.workManager.HealthOverviewDataType
-import kotlinx.coroutines.Dispatchers
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -67,7 +67,7 @@ class SessionManager
 
     }
 
-    val forceUpdateApp =  MutableLiveData<Event<Boolean>>()
+    val forceUpdateApp = MutableLiveData<Event<Boolean>>()
 
     /**
      * Get app Foreground status
@@ -400,18 +400,21 @@ class SessionManager
 
     fun addUserAttributeToMoEngage(isLogin: Boolean, data: HashMap<String, Any>) {
         val firebaseInstance = Firebase.analytics
+        val fUser = Freshchat.getInstance(context).user
         data.forEach { (key, value) ->
             when (value) {
                 is String -> {
                     if (key.equals("name", true)) {
                         MoEAnalyticsHelper.setFirstName(context, value)
                         firebaseInstance.setUserProperty(key, value)
+                        fUser.firstName = value
                     } else if (key.equals("gender", true)) {
-                        if (value.lowercase() == Gender.MALE.name.lowercase()) MoEAnalyticsHelper.setGender(
-                            context,
-                            UserGender.MALE
-                        )
-                        else if (value.lowercase() == Gender.FEMALE.name.lowercase()) MoEAnalyticsHelper.setGender(
+                        if (value.lowercase() == Gender.MALE.name.lowercase()) {
+                            MoEAnalyticsHelper.setGender(
+                                context,
+                                UserGender.MALE
+                            )
+                        } else if (value.lowercase() == Gender.FEMALE.name.lowercase()) MoEAnalyticsHelper.setGender(
                             context,
                             UserGender.FEMALE
                         )
@@ -462,10 +465,13 @@ class SessionManager
             val user = localDataStore.getUser()
             MoEAnalyticsHelper.setUniqueId(context, user?.id.toString())
             MoEAnalyticsHelper.setEmailId(context, user?.email.toString())
+            fUser.email = user?.email
             if (!user?.mobile.isNullOrEmpty()) {
                 val phoneNumber: String = "+91" + user?.mobile.toString()
                 MoEAnalyticsHelper.setMobileNumber(context, phoneNumber.trim())
+                fUser.setPhone("+91", user?.mobile)
             }
+
 
         }
 
