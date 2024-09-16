@@ -26,8 +26,8 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
 
             val minutes = "${TimeUnit.SECONDS.toMinutes(resultData.duration.toLong())} mins"
             binding.tvMin.text = minutes
-            val calories = "${resultData.calories} kcal"
-            binding.tvCalories.text = calories
+            //val calories = "${resultData.calories} kcal"
+            //binding.tvCalories.text = calories
 
             binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0)
 
