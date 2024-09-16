@@ -77,10 +77,27 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun loadMessagesByThreadId(threadId:String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>> {
+    override suspend fun loadMessagesByThreadId(threadId: String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat?thread_id=$threadId"
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat?thread_id=$threadId"
             remoteDataSource.loadMessagesByThreadId(url)
+        }
+    }
+
+    override suspend fun generateThreadTitle(ques: String): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/generateTitle?message=$ques"
+            remoteDataSource.generateThreadTitle(url)
+        }
+    }
+
+    override suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/stopStream?thread_id=$threadId"
+            remoteDataSource.stopResponseGeneration(url)
         }
     }
 

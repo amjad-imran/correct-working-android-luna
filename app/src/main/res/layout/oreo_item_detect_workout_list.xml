@@ -132,6 +132,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginStart="12dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout4"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
             app:layout_constraintHorizontal_bias="0.5"

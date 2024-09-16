@@ -2,7 +2,6 @@ package com.oreo.ui.chatGpt.topquestions
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,15 +20,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,16 +63,16 @@ class AiTopQuestionsFragment :
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ScreenAiTopQuestion(
-                    viewModel = hiltViewModel(),
                     onBackClicked = {
                         navigateUpSafe()
                     }, onHistoryClicked = {
                         navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
-                    }, onQuestionSelected = {ques->
+                    }, onQuestionSelected = { ques ->
                         navigate(
                             AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatGptFragment(
                                 "",
-                                ques
+                                "",
+                                ques,
                             )
                         )
                     })
@@ -88,19 +92,47 @@ class AiTopQuestionsFragment :
 
 @Composable
 fun ScreenAiTopQuestion(
-    viewModel: AiTopQuestionsViewModel,
     onBackClicked: () -> Unit,
     onHistoryClicked: () -> Unit,
     onQuestionSelected: (question: String) -> Unit
 ) {
+    val viewModel: AiTopQuestionsViewModel = hiltViewModel()
 
     val questions by viewModel.questions.collectAsState()
     val showHistoryIcon by viewModel.showHistoryIcon.collectAsState()
     val loading by viewModel.getLoading().collectAsState()
+    val userName by viewModel.userName.collectAsState()
+
+    AiTopQuestionMain(
+        questions,
+        showHistoryIcon,
+        loading,
+        userName,
+        onBackClicked,
+        onHistoryClicked,
+        onQuestionSelected
+    )
 
 
+}
+
+@Composable
+fun AiTopQuestionMain(
+    questions: List<TopQuestions>,
+    showHistoryIcon: Boolean,
+    loading: Boolean,
+    userName: String,
+    onBackClicked: () -> Unit,
+    onHistoryClicked: () -> Unit,
+    onQuestionSelected: (question: String) -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 88.dp),
+            verticalArrangement = Arrangement.Top
+        ) {
             AiHistoryToolbar(
                 showHistoryIcon,
                 onBackClicked = onBackClicked,
@@ -113,7 +145,11 @@ fun ScreenAiTopQuestion(
                 modifier = Modifier.padding(
                     horizontal = 26.dp
                 ),
-                text = "Hi Amit,\n" + "Ask me anything !",
+                text = if (userName.isEmpty()) {
+                    "Hi,\n" + "Ask me anything !"
+                } else {
+                    "Hi $userName,\n" + "Ask me anything !"
+                },
                 style = FontStyle.SIZE_24,
                 lineHeight = 32.sp
             )
@@ -128,13 +164,67 @@ fun ScreenAiTopQuestion(
             ) { selectedQues ->
                 onQuestionSelected(selectedQues)
             }
+
+
         }
+
+        AskQuestion(
+            Modifier
+                .padding(bottom = 32.dp)
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(52.dp)
+                .padding(horizontal = 16.dp),
+            onSendClicked = {
+                onQuestionSelected(it)
+            }
+        )
 
         if (loading) {
             Loading()
         }
     }
 
+}
+
+@Composable
+fun AskQuestion(
+    modifier: Modifier,
+    onSendClicked: (String) -> Unit
+) {
+
+    var text by remember { mutableStateOf("") }
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        placeholder = { Text(text = "Type something", color = Color.LightGray) },
+        textStyle = FontStyle.SIZE_16,
+        singleLine = true,
+        shape = RoundedCornerShape(52.dp),
+        modifier = modifier,
+        trailingIcon = {
+            if (text.isNotEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.ic_ai_send_message),
+                    modifier = Modifier.clickable {
+                        onSendClicked(text)
+                    },
+                    contentDescription = "Send"
+                )
+            }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xc009284c),
+            unfocusedContainerColor = Color(0xc009284c),
+            cursorColor = Color(0xFFb0e3ff),
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White,
+            focusedPlaceholderColor = Color(0X2effffff),
+            unfocusedPlaceholderColor = Color(0x2effffff),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
 }
 
 
@@ -223,11 +313,21 @@ fun QuestionListPreview() {
     QuestionList(arrayListOf("Ques 1", "Ques 2", "Ques 3"))
 }*/
 
-@Preview
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ScreenAiTopQuestionPreview() {
-    ScreenAiTopQuestion(
-        viewModel = hiltViewModel(),
+fun AiTopQuestionMainPreview() {
+    AiTopQuestionMain(
+        arrayListOf(
+            TopQuestions("Ques 1"), TopQuestions("Ques 2"),
+            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
+            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
+            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
+            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
+            TopQuestions("Ques 3"),
+        ),
+        true,
+        false,
+        "Deepak",
         onBackClicked = {},
         onHistoryClicked = {},
         onQuestionSelected = {})

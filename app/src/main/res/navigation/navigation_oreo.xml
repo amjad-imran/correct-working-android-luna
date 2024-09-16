@@ -874,6 +874,9 @@
         <argument
             android:name="defaultMessage"
             app:argType="string" />
+        <argument
+            android:name="userMessage"
+            app:argType="string" />
         <action
             android:id="@+id/action_chatGptFragment_to_chatHistoryFragment"
             app:destination="@id/chatHistoryFragment"

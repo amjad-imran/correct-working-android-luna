@@ -23,6 +23,7 @@ import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
@@ -47,9 +48,11 @@ class ChatGptViewModel
     val scrollToBottom: LiveData<Event<Boolean>>
         get() = _scrollToBottom
 
-    var assistantId: String? = null
+    val threadTitle = MutableLiveData<String>()
+
     var threadId: String? = null
     var defaultMessage: String? = null
+    var userMessage: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
@@ -150,9 +153,12 @@ class ChatGptViewModel
                         resource.data?.data?.let {
                             it.threadId?.let { id ->
                                 threadId = id
-                                sendInitMessage()
+                                if (userMessage.isNullOrEmpty().not()) {
+                                    sendUserInitMessage(userMessage ?: "")
+                                } else {
+                                    sendInitMessage()
+                                }
                             }
-
                         }
                     }
                 }
@@ -162,6 +168,8 @@ class ChatGptViewModel
 
     }
 
+
+    var serverSentEvent: ServerSentEvent? = null
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
@@ -183,9 +191,8 @@ class ChatGptViewModel
                         }
                     }.build()
 
-            LOGS.d("streammmmmm request -> ${Gson().toJson(request)}")
             val okSse = OkSse()
-            val sse = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
+            serverSentEvent = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
                     // When the channel is opened
                     //LOGS.d("streammmmmm onOpen()")
@@ -228,7 +235,6 @@ class ChatGptViewModel
                     throwable: Throwable?,
                     response: Response?
                 ): Boolean {
-                    LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
                     if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
@@ -265,7 +271,7 @@ class ChatGptViewModel
             .replace(Regex(sourcePattern), "")
     }
 
-    fun sendInitMessage() {
+    private fun sendInitMessage() {
         viewModelScope.launch(Dispatchers.IO) {
             val message = if (defaultMessage.isNullOrEmpty().not()) {
                 defaultMessage
@@ -273,6 +279,16 @@ class ChatGptViewModel
                 initMessage
             }
             addReceivedMessage(message ?: "", false)
+        }
+        return
+    }
+
+    private fun sendUserInitMessage(userMessage: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            addSentMessage(userMessage)
+            addThinkingMessage()
+            askQuestionStream(userMessage)
+            generateThreadTitle(userMessage)
         }
         return
     }
@@ -315,6 +331,45 @@ class ChatGptViewModel
         }
     }
 
+    private fun generateThreadTitle(ques: String) {
+        viewModelScope.launch {
+            oreoDeviceRepository.generateThreadTitle(ques).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        generateThreadTitle(ques)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            threadTitle.postValue("Title here")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     private fun generateMessages(messages: List<ChatMessage>?) {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
@@ -332,6 +387,49 @@ class ChatGptViewModel
             setLoading(false)
             _chatGptOverview.postValue(tempMessage)
             _scrollToBottom.postValue(Event(true))
+        }
+    }
+
+    fun stopResponseGeneration() {
+        if (threadId == null) return
+
+
+
+        viewModelScope.launch {
+            oreoDeviceRepository.generateThreadTitle(threadId!!).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        stopResponseGeneration()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            fetchInProgress.postValue(false)
+                            serverSentEvent?.close()
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
     companion object {
-        fun getStartData(threadId: String?,defaultMessage:String?): Pair<Int, Bundle?> {
+        fun getStartData(threadId: String?, defaultMessage: String?, userMessage: String?): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
                 putString("defaultMessage", defaultMessage ?: "")
+                putString("userMessage", userMessage ?: "")
             })
         }
     }
@@ -44,6 +46,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadId = args.threadId
         viewModel.defaultMessage = args.defaultMessage
+        viewModel.userMessage = args.userMessage
+
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
 
@@ -88,21 +92,22 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
         }
 
-       /* binding.lytChatBox.btnNewChat.setOnClickListener {
-            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf("",""))
-        }*/
+        /* binding.lytChatBox.btnNewChat.setOnClickListener {
+             navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf("",""))
+         }*/
 
         binding.lytChatBox.btnSendMessage.setOnClickListener {
-            if (viewModel.fetchInProgress.value == true) return@setOnClickListener
-            sendMessage()
+            if (viewModel.fetchInProgress.value == true) {
+                viewModel.stopResponseGeneration()
+            } else {
+                if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
+                    sendMessage()
+                }
+            }
         }
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
-        }
-
-        binding.lytChatWelcome.btnContinue.setOnClickListener {
-            binding.lytChatWelcome.root.gone()
         }
 
 
@@ -135,11 +140,24 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun subscribeObservers() {
 
+        viewModel.threadTitle.observe(this) {
+            binding.tvTitle.apply {
+                text = it
+                visible()
+            }
+        }
+
         viewModel.fetchInProgress.observe(this) {
             if (it) {
                 binding.lytChatBox.chatEtx.isEnabled = false
+                binding.lytChatBox.chatEtx.setText(getString(R.string.text_generating_data))
+                binding.lytChatBox.chatEtx.setTextColor(android.graphics.Color.parseColor("#9ecfff"))
+                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_round_stop_circle)
             } else {
                 binding.lytChatBox.chatEtx.isEnabled = true
+                binding.lytChatBox.chatEtx.setText("")
+                binding.lytChatBox.chatEtx.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
+                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
             }
         }
 

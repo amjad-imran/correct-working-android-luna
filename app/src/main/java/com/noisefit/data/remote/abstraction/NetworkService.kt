@@ -457,6 +457,16 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<TopQuestionsResponse>
 
+    @GET
+    suspend fun generateThreadTitle(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun stopResponseGeneration(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
     @POST
     suspend fun addSleep(
         @Url url: String, @Body jsonObject: JsonObject

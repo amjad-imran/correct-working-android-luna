@@ -152,7 +152,8 @@ class SleepDashFragment :
         binding.lytAINudge.root.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
-                getString(R.string.sleep_ai_message)
+                getString(R.string.sleep_ai_message),
+                ""
             )
             navigate(frag, bundle)
         }

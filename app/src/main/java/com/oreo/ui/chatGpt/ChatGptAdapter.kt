@@ -1,9 +1,7 @@
 package com.oreo.ui.chatGpt
 
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieDrawable
@@ -13,12 +11,9 @@ import com.noisefit.luna.databinding.ItemChatMessageRetryBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
 import com.noisefit.luna.databinding.ItemChatMessageThinkingBinding
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import io.noties.markwon.Markwon
-import io.noties.markwon.SoftBreakAddsNewLinePlugin
 
 
 class ChatGptAdapter :
@@ -191,35 +186,6 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             }
         }
 
-        fun TextView.animateTextWithUnderscore(mText: CharSequence, delayMillis: Long = 15) {
-            text = null
-            var mTextView = this
-            var index = 0
-            val handler = Handler()
-
-            val typewriterRunnable = object : Runnable {
-                override fun run() {
-                    val newText = "${mText.subSequence(0, index)}_"// <-- underscore is optioanal
-                    text = newText
-
-                    if (index < mText.length) {
-                        handler.postDelayed(this, delayMillis)
-                    }
-                    index++
-                    LOGS.d("SDAsdasdasdasdasda $index --> ${mText.length + 1}")
-                    if (index == mText.length) {
-                        LOGS.d("SDAsdasdasdasdasda")
-                        mTextView.clearAnimation()
-                        text = null
-
-                    }
-                }
-            }
-
-            handler.postDelayed(typewriterRunnable, delayMillis)
-        }
-
-
     }
 
     class ChatThinkingViewHolder(private val binding: ItemChatMessageThinkingBinding) :
@@ -235,35 +201,6 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                 lottie.playAnimation()
             }
         }
-
-        fun TextView.animateTextWithUnderscore(mText: CharSequence, delayMillis: Long = 15) {
-            text = null
-            var mTextView = this
-            var index = 0
-            val handler = Handler()
-
-            val typewriterRunnable = object : Runnable {
-                override fun run() {
-                    val newText = "${mText.subSequence(0, index)}_"// <-- underscore is optioanal
-                    text = newText
-
-                    if (index < mText.length) {
-                        handler.postDelayed(this, delayMillis)
-                    }
-                    index++
-                    LOGS.d("SDAsdasdasdasdasda $index --> ${mText.length + 1}")
-                    if (index == mText.length) {
-                        LOGS.d("SDAsdasdasdasdasda")
-                        mTextView.clearAnimation()
-                        text = null
-
-                    }
-                }
-            }
-
-            handler.postDelayed(typewriterRunnable, delayMillis)
-        }
-
 
     }
 
