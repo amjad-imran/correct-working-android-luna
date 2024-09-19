@@ -620,6 +620,11 @@ class OAddWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.updateCalculatedData.observe(this) {
+            it.getContent()?.let {
+                updateCalculatedData()
+            }
+        }
 
         viewModel.updateDefaultWorkout.observe(viewLifecycleOwner) {
             it.getContent()?.let {

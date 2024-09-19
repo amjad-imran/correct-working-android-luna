@@ -68,7 +68,9 @@ class OAddWorkoutViewModel
     var autoWorkoutId: Int? = null
     var movementList: List<Int>? = null
     var preFilledOreoAutoSportData: OreoAutoSportData? = null
-    var autoWorkoutUnitCalorie = 0f
+
+    //var autoWorkoutUnitCalorie = 0f
+    var updateCalculatedData = MutableLiveData<Event<Boolean>>()
 
 
     var isStartTimeSelected = false
@@ -94,7 +96,7 @@ class OAddWorkoutViewModel
         addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3())
         activityType = "Walking"/*data.type*/
 
-        autoWorkoutUnitCalorie = (addWorkout.calories).toFloat() / addWorkout.duration
+        //autoWorkoutUnitCalorie = (addWorkout.calories).toFloat() / addWorkout.duration
 
         tryCatch {
             val startTime =
@@ -411,35 +413,45 @@ class OAddWorkoutViewModel
         }
 
 
-        if (isAutoWorkout()) {
-            val calculatedCalories = (autoWorkoutUnitCalorie * addWorkout.duration).roundToInt()
-            addWorkout.extraCalories =
-                calculatedCalories - (preFilledOreoAutoSportData?.calories ?: 0)
-            return calculatedCalories
-        }
+
         if (workoutListModal == null) {
             return 0
         }
 
         val weight = localDatSource.getUser()?.userInfo?.weight ?: 1
 
-        when (addWorkout.intensity.lowercase()) {
+        /*if (isAutoWorkout()) {
+            val calculatedCalories = (autoWorkoutUnitCalorie * addWorkout.duration).roundToInt()
+            addWorkout.extraCalories =
+                calculatedCalories - (preFilledOreoAutoSportData?.calories ?: 0)
+            return calculatedCalories
+        }*/
+
+        val newCalories = when (addWorkout.intensity.lowercase()) {
             "easy" -> {
-                return (addWorkout.duration * (workoutListModal?.lowIntensity
+                (addWorkout.duration * (workoutListModal?.lowIntensity
                     ?: 0f) * weight).roundToInt()
             }
 
             "moderate" -> {
-                return (addWorkout.duration * (workoutListModal?.mediumIntensity
+                (addWorkout.duration * (workoutListModal?.mediumIntensity
                     ?: 0f) * weight).roundToInt()
             }
 
             "hard" -> {
-                return (addWorkout.duration * (workoutListModal?.highIntensity
+                (addWorkout.duration * (workoutListModal?.highIntensity
                     ?: 0f) * weight).roundToInt()
             }
+
+            else -> {
+                0
+            }
         }
-        return 0
+        if (isAutoWorkout()) {
+            addWorkout.extraCalories =
+                newCalories - (preFilledOreoAutoSportData?.calories ?: 0)
+        }
+        return newCalories
     }
 
     fun getWorkoutList(postValue: Boolean) {
@@ -485,6 +497,7 @@ class OAddWorkoutViewModel
                                     }
                                 } else {
                                     workoutListModal = walkingWorkout
+                                    updateCalculatedData.postValue(Event(true))
                                 }
 
                             }
