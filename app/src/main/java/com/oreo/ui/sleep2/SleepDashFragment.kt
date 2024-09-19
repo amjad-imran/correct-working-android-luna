@@ -153,7 +153,8 @@ class SleepDashFragment :
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 getString(R.string.sleep_ai_message),
-                ""
+                "",
+                null
             )
             navigate(frag, bundle)
         }

@@ -361,7 +361,7 @@ class ChatGptViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            threadTitle.postValue("Title here")
+                            threadTitle.postValue(cleanServerResponse(it))
                         }
                     }
                 }
@@ -393,10 +393,8 @@ class ChatGptViewModel
     fun stopResponseGeneration() {
         if (threadId == null) return
 
-
-
         viewModelScope.launch {
-            oreoDeviceRepository.generateThreadTitle(threadId!!).collect { resource ->
+            oreoDeviceRepository.stopResponseGeneration(threadId!!).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

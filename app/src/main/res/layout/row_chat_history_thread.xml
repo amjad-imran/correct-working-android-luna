@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_info_activity"
+        android:background="@drawable/back_ai_chat_history"
         android:padding="12dp">
 
 

@@ -31,11 +31,11 @@ class ChatHistoryFragment :
 
     private val mAdapter: ChatHistoryAdapter by lazy {
         ChatHistoryAdapter(object : ChatHistoryInteraction {
-            override fun onThreadClicked(threadId: String) {
+            override fun onThreadClicked(threadId: String, title: String) {
 
                 navigate(
                     ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId,"",""
+                        threadId, "", "", title
                     )
                 )
             }

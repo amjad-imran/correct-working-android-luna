@@ -460,7 +460,7 @@ interface NetworkService {
     @GET
     suspend fun generateThreadTitle(
         @Url url: String
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<String>
 
     @GET
     suspend fun stopResponseGeneration(

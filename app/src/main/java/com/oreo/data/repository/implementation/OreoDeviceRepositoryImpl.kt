@@ -85,7 +85,7 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun generateThreadTitle(ques: String): Flow<Resource<BaseApiResponse<Any>?>> {
+    override suspend fun generateThreadTitle(ques: String): Flow<Resource<BaseApiResponse<String>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/generateTitle?message=$ques"

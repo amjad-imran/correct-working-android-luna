@@ -2,9 +2,12 @@ package com.oreo.ui.chatGpt
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +28,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
     companion object {
-        fun getStartData(threadId: String?, defaultMessage: String?, userMessage: String?): Pair<Int, Bundle?> {
+        fun getStartData(
+            threadId: String?,
+            defaultMessage: String?,
+            userMessage: String?,
+            title: String?
+        ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
                 putString("defaultMessage", defaultMessage ?: "")
                 putString("userMessage", userMessage ?: "")
+                putString("title", title ?: "")
             })
         }
     }
@@ -55,6 +64,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.generateThreadId()
         } else {
             viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+            viewModel.threadTitle.postValue(args.title)
         }
     }
 
@@ -138,12 +148,34 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     }
 
+    private var keyboardListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireView().viewTreeObserver.removeOnGlobalLayoutListener(keyboardListener)
+    }
+
     override fun subscribeObservers() {
 
+        keyboardListener = ViewTreeObserver.OnGlobalLayoutListener {
+            view?.let {
+                val insets = ViewCompat.getRootWindowInsets(it)
+                val isKeyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime())
+                if (viewModel.threadTitle.value.isNullOrEmpty().not()) {
+                    if (isKeyboardVisible == true) {
+                        binding.tvChatTitle.gone()
+                    } else {
+                        binding.tvChatTitle.visible()
+                    }
+                }
+            }
+        }
+        requireView().viewTreeObserver.addOnGlobalLayoutListener(keyboardListener)
+
         viewModel.threadTitle.observe(this) {
-            binding.tvTitle.apply {
-                text = it
+            binding.tvChatTitle.apply {
                 visible()
+                text = it
             }
         }
 

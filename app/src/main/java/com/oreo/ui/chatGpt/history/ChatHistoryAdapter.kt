@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt.history
 
+import android.icu.text.CaseMap.Title
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +39,7 @@ class ChatHistoryAdapter(
 
             binding.root.setOnClickListener {
                 data.threadId?.let {
-                    listener.onThreadClicked(it)
+                    listener.onThreadClicked(it, data.title?:"")
                 }
             }
         }
@@ -97,5 +98,5 @@ enum class ChaHistoryViewType(val type: Int) {
 }
 
 interface ChatHistoryInteraction {
-    fun onThreadClicked(threadId: String)
+    fun onThreadClicked(threadId: String, title: String)
 }

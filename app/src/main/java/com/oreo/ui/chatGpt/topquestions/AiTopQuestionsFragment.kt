@@ -73,6 +73,7 @@ class AiTopQuestionsFragment :
                                 "",
                                 "",
                                 ques,
+                                ""
                             )
                         )
                     })
