@@ -137,6 +137,11 @@ constructor(
             AppLogs.sendAppLogs("OreoSyncDataWork: No Internet Access!!, Sync to server failed")
             return success.invoke()
         }
+        if (ringDataStore.getRingDevice() == null) {
+            LOGS.d(TAG, "OreoSyncDataWork: No Device paired")
+            AppLogs.sendAppLogs("OreoSyncDataWork: No device paired")
+            return success.invoke()
+        }
 
         /*if (!shouldSync()) {
             LOGS.d(
