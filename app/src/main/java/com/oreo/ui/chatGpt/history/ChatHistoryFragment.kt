@@ -55,6 +55,14 @@ class ChatHistoryFragment :
             navigateUpSafe()
         }
 
+        binding.ivNew.setOnClickListener {
+            navigate(
+                ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
+                    "", "", "", ""
+                )
+            )
+        }
+
     }
 
     override fun subscribeObservers() {

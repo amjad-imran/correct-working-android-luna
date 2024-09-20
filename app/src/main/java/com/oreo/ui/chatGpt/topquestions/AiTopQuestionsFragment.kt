@@ -66,7 +66,8 @@ class AiTopQuestionsFragment :
                     onBackClicked = {
                         navigateUpSafe()
                     }, onHistoryClicked = {
-                        navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
+                        navigate(R.id.chatHistoryFragment)
+                        //navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
                     }, onQuestionSelected = { ques ->
                         navigate(
                             AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatGptFragment(

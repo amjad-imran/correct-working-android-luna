@@ -3,6 +3,7 @@ package com.oreo.ui.chatGpt.splash
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,8 @@ import com.noisefit.luna.databinding.FragmentAiChatOnboardBinding
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.compose.element.button.ButtonBlue
+import com.oreo.ui.compose.element.button.CircularBackButton
+import com.oreo.ui.compose.element.button.CircularHistoryButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,6 +51,8 @@ class AiChatOnboardFragment :
                         AiChatOnboardFragmentDirections.actionAiChatOnboardFragmentToAiTopQuestionsFragment(
                         )
                     )
+                }, onBackClicked = {
+                    navigateUpSafe()
                 })
             }
         }
@@ -63,10 +68,26 @@ class AiChatOnboardFragment :
 }
 
 @Composable
-fun ScreenAiChatOnboard(onButtonClick: () -> Unit) {
-    Box(
+fun AiOnboardToolbar(
+    onBackClicked: () -> Unit
+) {
+    Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp, vertical = 16.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CircularBackButton(onClick = onBackClicked)
+    }
+}
+
+@Composable
+fun ScreenAiChatOnboard(onButtonClick: () -> Unit, onBackClicked: () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
         Image(
             modifier = Modifier
@@ -76,10 +97,9 @@ fun ScreenAiChatOnboard(onButtonClick: () -> Unit) {
             contentDescription = "",
             painter = painterResource(R.drawable.luna_ai_splash_back)
         )
-
+        AiOnboardToolbar(onBackClicked)
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(
                 modifier = Modifier.height(164.dp)
@@ -126,12 +146,9 @@ fun ScreenAiChatOnboard(onButtonClick: () -> Unit) {
                 modifier = Modifier.height(54.dp)
             )
 
-            ButtonBlue(
-                text = "Ask Luna AI anything",
-                onClick = {
-                    onButtonClick()
-                }
-            )
+            ButtonBlue(text = "Ask Luna AI anything", onClick = {
+                onButtonClick()
+            })
 
             Spacer(
                 modifier = Modifier.height(32.dp)
@@ -146,6 +163,8 @@ fun ScreenAiChatOnboard(onButtonClick: () -> Unit) {
 @Composable
 fun AiChatOnboardScreenPreview() {
     ScreenAiChatOnboard(onButtonClick = {
+
+    }, onBackClicked = {
 
     })
 }

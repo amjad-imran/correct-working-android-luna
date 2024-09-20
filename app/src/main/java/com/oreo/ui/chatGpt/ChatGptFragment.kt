@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -179,6 +180,19 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             }
         }
 
+        binding.lytChatBox.chatEtx.doOnTextChanged { text, start, before, count ->
+            if (viewModel.fetchInProgress.value == true) return@doOnTextChanged
+
+            if (text.isNullOrEmpty()) {
+                binding.lytChatBox.btnSendMessage.setImageResource(0)
+                binding.vOverlay.gone()
+            } else {
+                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
+                binding.vOverlay.visible()
+            }
+
+        }
+
         viewModel.fetchInProgress.observe(this) {
             if (it) {
                 binding.lytChatBox.chatEtx.isEnabled = false
@@ -189,7 +203,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 binding.lytChatBox.chatEtx.isEnabled = true
                 binding.lytChatBox.chatEtx.setText("")
                 binding.lytChatBox.chatEtx.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
-                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
+                binding.lytChatBox.btnSendMessage.setImageResource(0)
             }
         }
 

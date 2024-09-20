@@ -32,7 +32,6 @@
         android:layout_height="36dp"
         android:layout_marginEnd="10dp"
         android:padding="6dp"
-        android:src="@drawable/ic_ai_send_message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

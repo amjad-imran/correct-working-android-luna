@@ -113,6 +113,16 @@ class ChatGptViewModel
         }
     }
 
+    fun removeThinkingState() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val messages = _chatGptOverview.value ?: ArrayList()
+            messages.removeAll {
+                it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
+            }
+            _chatGptOverview.postValue(messages)
+        }
+    }
+
     fun retryApi() {
         addThinkingMessage()
         lastApi?.let {
@@ -170,6 +180,7 @@ class ChatGptViewModel
 
 
     var serverSentEvent: ServerSentEvent? = null
+    val okSse = OkSse()
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
@@ -191,7 +202,6 @@ class ChatGptViewModel
                         }
                     }.build()
 
-            val okSse = OkSse()
             serverSentEvent = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
                     // When the channel is opened
@@ -235,6 +245,8 @@ class ChatGptViewModel
                     throwable: Throwable?,
                     response: Response?
                 ): Boolean {
+                    if (fetchInProgress.value == false) return false
+
                     fetchInProgress.postValue(false)
                     if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
@@ -394,8 +406,12 @@ class ChatGptViewModel
         if (threadId == null) return
 
         viewModelScope.launch {
+            removeThinkingState()
+            fetchInProgress.postValue(false)
+            serverSentEvent?.close()
+
             oreoDeviceRepository.stopResponseGeneration(threadId!!).collect { resource ->
-                when (resource) {
+                /*when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
                     }
@@ -421,12 +437,13 @@ class ChatGptViewModel
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.let {
+                            removeThinkingState()
                             fetchInProgress.postValue(false)
                             serverSentEvent?.close()
                         }
                     }
-                }
+                }*/
             }
         }
     }

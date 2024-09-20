@@ -37,13 +37,12 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView32"
-        app:layout_constraintTop_toTopOf="@+id/imageView32" />
+        app:layout_constraintStart_toEndOf="@+id/imageView32" />
 
     <View
         android:id="@+id/view39"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/back_modal_new_round"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
@@ -108,8 +107,11 @@
         tools:visibility="visible" />
 
     <View
+        android:id="@+id/vOverlay"
         android:layout_width="match_parent"
         android:layout_height="222dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:background="@drawable/back_ai_chat_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
