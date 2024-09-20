@@ -218,8 +218,13 @@ class OreoOnlineDataMapper
                 )
             }
             var dayBreakup: OreoSleepNetworkEntity.OreoDayBreakup? = null
+            val tempNewArray = filterTempArray(sleepOverlayData.tempBreakup)
             val avgTemp =
-                String.format(locale = Locale.US,"%.1f", sleepOverlayData.tempBreakup.averageWithoutZeroFloat())
+                String.format(
+                    locale = Locale.US,
+                    "%.1f",
+                    tempNewArray.averageWithoutZeroFloat()
+                )
 
             dayBreakup = OreoSleepNetworkEntity.OreoDayBreakup(
                 totalDeep = sleepData.deep,
@@ -243,7 +248,7 @@ class OreoOnlineDataMapper
                 avgTemp = avgTemp.toFloat(),
                 avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
                 avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.averageWithoutZero(),
-                maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
+                maxTemp = tempNewArray.maxOrNull() ?: 0f,
                 avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
                 readinessScore = sleepData.readinessScore ?: 0
             )
@@ -260,10 +265,20 @@ class OreoOnlineDataMapper
 
     }
 
+    private fun filterTempArray(tempBreakup: List<Float>): List<Float> {
+        return tempBreakup.filter { it != 0f && it != 255f && it in 90f..110f }
+    }
+
 
     suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
         val overlayData = getNapOverlayData(nap)
-        val avgTemp = String.format(locale = Locale.US,"%.1f", overlayData.tempBreakup.averageWithoutZeroFloat())
+        val tempNewArray = filterTempArray(overlayData.tempBreakup)
+
+        val avgTemp = String.format(
+            locale = Locale.US,
+            "%.1f",
+            tempNewArray.averageWithoutZeroFloat()
+        )
 
         val napObject = OreoNapNetworkObjEntity(
             startTime = nap.startTime ?: "",
