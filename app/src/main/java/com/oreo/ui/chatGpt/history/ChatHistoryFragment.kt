@@ -56,11 +56,7 @@ class ChatHistoryFragment :
         }
 
         binding.ivNew.setOnClickListener {
-            navigate(
-                ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                    "", "", "", ""
-                )
-            )
+            navigate(ChatHistoryFragmentDirections.actionChatHistoryFragmentToAiTopQuestionsFragment())
         }
 
     }
