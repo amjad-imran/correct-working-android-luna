@@ -266,14 +266,15 @@ constructor(
 
     private val autoSportsCallback: AutoSportDataCallBack = AutoSportDataCallBack { p0 ->
 
-      /*  val dataList = ArrayList<OreoAutoSportData>()
-        val timestamp = 1726719780 * 1000L
+        /*val dataList = ArrayList<OreoAutoSportData>()
+        val timestamp = 1727063971 * 1000L
         dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"walking",null))
         userActivityDataCallbacks?.onUserActivityDataReceived(
             UserActivityCallback.AutoSportDataObtained(
                 dataList
             )
-        )*/
+        )
+        return@AutoSportDataCallBack*/
         //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
 
         /*  val dataList = ArrayList<OreoAutoSportData>()

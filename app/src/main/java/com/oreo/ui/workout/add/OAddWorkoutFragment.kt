@@ -546,7 +546,15 @@ class OAddWorkoutFragment :
         enableSaveBtn()
         setIntensity()
 
-        binding.lytCaloriesBurn.tvCalBurnValue.text = viewModel.addWorkout.calories.toString()
+        binding.lytCaloriesBurn.tvCalBurnValue.text = if (viewModel.isAutoWorkout()) {
+            if (viewModel.updateCalculatedData.value?.peekContent() == true) {
+                viewModel.addWorkout.calories.toString()
+            } else {
+                "--"
+            }
+        } else {
+            viewModel.addWorkout.calories.toString()
+        }
         binding.lytCaloriesBurn.tvDurationValue.text = viewModel.addWorkout.duration.toString()
         setStartTimeBetween()
         setEndTimeBetween(false)
