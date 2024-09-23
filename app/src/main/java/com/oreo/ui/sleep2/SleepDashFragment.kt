@@ -150,13 +150,15 @@ class SleepDashFragment :
     override fun initListener() {
 
         binding.lytAINudge.root.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
+            navigate(R.id.aiTopQuestionsFragment)
+
+            /*val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 getString(R.string.sleep_ai_message),
                 "",
                 null
             )
-            navigate(frag, bundle)
+            navigate(frag, bundle)*/
         }
 
         binding.blurViewSelector.setOnClickListener {
