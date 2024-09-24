@@ -247,6 +247,15 @@
             android:exported="false"
             android:grantUriPermissions="false"
             android:initOrder="101" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.noisefit.luna.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/freshchat_file_provider_paths" />
+        </provider>
 
         <receiver
             android:name="com.noisefit.receiver.broadcastReceiver.AlarmReceiver"

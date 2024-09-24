@@ -1354,5 +1354,7 @@
     <string name="text_chat_history">Chat history</string>
     <string name="text_ask_me_anything_you_want_regarding_your_health">Ask me anything you want regarding your health</string>
     <string name="text_generating_data">Generating data</string>
+    <string name="freshchat_file_provider_authority">com.noisefit.luna.provider</string>
+
 
 </resources>

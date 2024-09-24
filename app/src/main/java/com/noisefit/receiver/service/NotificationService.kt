@@ -5,6 +5,7 @@ package com.noisefit.receiver.service
 import android.content.Intent
 import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.moengage.core.internal.logger.Logger
@@ -51,11 +52,17 @@ constructor() : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         LOGS.d(TAG, "onNewToken event received $token")
-        MoEFireBaseHelper.getInstance().passPushToken(applicationContext,token)
+        MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
         val newTokenEvent = Intent(NEW_TOKEN_EVENT)
         LocalBroadcastManager
             .getInstance(this)
             .sendBroadcast(newTokenEvent)
+        //freshchat
+        sendRegistrationToServer(token)
+    }
+
+    private fun sendRegistrationToServer(token: String) {
+        Freshchat.getInstance(this).setPushRegistrationToken(token)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -67,6 +74,8 @@ constructor() : FirebaseMessagingService() {
                     Logger.print { "$TAG onMessageReceived() : Will try to show push" }
                     MoEFireBaseHelper.getInstance()
                         .passPushPayload(applicationContext, pushPayload)
+                } else if (Freshchat.isFreshchatNotification(message)) {
+                    Freshchat.handleFcmMessage(this@NotificationService, message)
                 } else {
                     Logger.print { "$TAG onMessageReceived() : Not a MoEngage Payload." }
                     val extras = Bundle()

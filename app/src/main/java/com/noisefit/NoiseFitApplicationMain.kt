@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.freshchat.consumer.sdk.Freshchat
+import com.freshchat.consumer.sdk.FreshchatConfig
 import com.github.anrwatchdog.ANRWatchDog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.moengage.core.DataCenter
@@ -54,6 +56,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         var context: Application? = null
     }
 
+    private var freshchat: Freshchat? = null
     override fun onCreate() {
 //        ActivityLifecycleCallback.register(this)
         super.onCreate()
@@ -67,6 +70,8 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         // TODO: Please change with your partner name.
         // Make sure that all the letters are lowercase.
 
+        //freshchat initialization
+        initialiseFreshChat()
 
 
         if (BuildConfig.DEBUG) {
@@ -76,6 +81,21 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
                     error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
                 }.start();
         }
+    }
+
+    private fun initialiseFreshChat() {
+        val freshchatConfig = FreshchatConfig(
+            "a75cade2-33cb-453a-9e2c-9091c550484c",
+            "3a653bd1-bfda-4213-8649-a2b79b4f7b06"
+        )
+        freshchatConfig.domain = "msdk.in.freshchat.com"
+        getFreshChatInstance(applicationContext)?.init(freshchatConfig)
+    }
+    private fun getFreshChatInstance(context: Context): Freshchat? {
+        if (freshchat == null) {
+            freshchat = Freshchat.getInstance(context)
+        }
+        return freshchat
     }
 
     private fun initMoEngage() {
