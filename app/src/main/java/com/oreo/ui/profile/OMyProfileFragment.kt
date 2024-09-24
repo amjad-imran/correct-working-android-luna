@@ -66,8 +66,8 @@ class OMyProfileFragment :
             /*context?.let {
                 ShareUtil.openExternalUrl(it, SUPPORT_URL)
             }*/
-            Freshchat.showFAQs(requireContext())
-//            Freshchat.showConversations(requireContext())
+            //Freshchat.showFAQs(requireContext())
+            Freshchat.showConversations(requireContext())
         }
 
         binding.rowSettings.setOnClickListener {

@@ -46,6 +46,11 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
 
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.ConversationDetailActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+
         <service
             android:name="com.noisefit_commans.location.LocationService"
             android:foregroundServiceType="location" />
