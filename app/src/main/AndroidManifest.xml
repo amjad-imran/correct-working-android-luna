@@ -265,6 +265,7 @@
         <activity
             android:name="com.noisefit.oreo.OreoMainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentBgTheme">

@@ -321,12 +321,21 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
 
         val lastDestination = navController?.currentDestination
+
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
+            binding.lytAddWorkoutSelector.tvAddSleep.visible()
+            binding.lytAddWorkoutSelector.ivRecordSleep.visible()
+            animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
+            animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
+
             binding.lytAddWorkoutSelector.ivLogPeriod.visible()
             binding.lytAddWorkoutSelector.tvLogPeriod.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)
             animateItemsUp(binding.lytAddWorkoutSelector.tvLogPeriod, 400f)
         } else {
+            binding.lytAddWorkoutSelector.tvAddSleep.gone()
+            binding.lytAddWorkoutSelector.ivRecordSleep.gone()
+
             binding.lytAddWorkoutSelector.ivLogPeriod.gone()
             binding.lytAddWorkoutSelector.tvLogPeriod.gone()
         }
