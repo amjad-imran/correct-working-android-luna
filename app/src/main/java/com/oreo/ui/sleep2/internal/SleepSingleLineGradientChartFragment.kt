@@ -50,11 +50,12 @@ class SleepSingleLineGradientChartFragment :
         val nonNullDataCount =
             sharedViewModel.getNonNullDataCount(pageData?.contributorType, dataList)
 
-        val maxValue = sharedViewModel.getMaxValue(
+        val minMax = sharedViewModel.getMinMaxValue(
             dataListType1 = dataList,
             contributorType = pageData?.contributorType
         )
-        val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
+        val yAxisRange =
+            sharedViewModel.getYAxisRange(minMax.second, pageData?.contributorType, minMax.first)
         val xAxisRange = sharedViewModel.getXAxisRange(pageData)
         val avgValue = sharedViewModel.getAvgValuePair(
             pageData?.avgValue,
@@ -75,7 +76,7 @@ class SleepSingleLineGradientChartFragment :
         }
 
         binding.graphBar.setDataSet(
-            dataList, yAxisRange, xAxisRange, yAxisRange.last().first, avgValue, -1,
+            dataList, yAxisRange, xAxisRange, avgValue, -1,
             type,
             optimalRange,
             nonNullDataCount
@@ -119,8 +120,9 @@ class SleepSingleLineGradientChartFragment :
                     } else {
                         convertedValue
                     }
-                }else if (pageData?.contributorType == SleepInternalLaunchState.RESPIRATORY_RATE||
-                    pageData?.contributorType == SleepInternalLaunchState.HRV){
+                } else if (pageData?.contributorType == SleepInternalLaunchState.RESPIRATORY_RATE ||
+                    pageData?.contributorType == SleepInternalLaunchState.HRV
+                ) {
                     if (it.value1 == 255f) null else it.value1
                 } else {
                     it.value1

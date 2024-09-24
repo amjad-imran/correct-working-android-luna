@@ -25,6 +25,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -59,6 +60,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
     private var mHeight = 0
 
     var mMax = 0
+    var mMin = 0
 
     private var isInteracting = false
     private var vibrationUtils: VibrationUtils? = null
@@ -402,7 +404,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
     }
 
     private fun getYAxisValue(value: Float): Float {
-        val percent = (value / mMax.toFloat()) * 100
+        val percent = ((value - mMin) / (mMax - mMin).toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -453,7 +455,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-textPadding,
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
@@ -468,7 +470,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-textPadding,
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -484,7 +486,7 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-textPadding,
+                    width - textBounds.width().toFloat() - textPadding,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )
@@ -546,7 +548,6 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
     fun setDataSet(
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
-        maxValue: Int,
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         optimalRange: Pair<Float, Float>?,
@@ -564,7 +565,8 @@ class SleepDailyGradientChartInternal constructor(context: Context?, attrs: Attr
         dataSet.addAll(list)
 
         mSelectedPosition = selectedPosition
-        mMax = maxValue
+        mMax = yAxisRange.last().first
+        mMin = yAxisRange.first().first
         mAverage = avgValue
 
         invalidate()

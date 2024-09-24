@@ -53,11 +53,11 @@ class SleepDailyGradientChartFragment :
 
         val dataList = convertData(pageData?.data, pageData?.contributorType)
 
-        val maxValue = sharedViewModel.getMaxValue(
+        val minMax = sharedViewModel.getMinMaxValue(
             dataListType1 = dataList,
             contributorType = pageData?.contributorType
         )
-        val yAxisRange = sharedViewModel.getYAxisRange(maxValue, pageData?.contributorType)
+        val yAxisRange = sharedViewModel.getYAxisRange(minMax.second, pageData?.contributorType, minValue = minMax.first)
 
         val avgValue = sharedViewModel.getAvgValuePair(
             pageData?.avgValue,
@@ -67,7 +67,7 @@ class SleepDailyGradientChartFragment :
 
         val firstData = pageData?.data?.firstOrNull()
         binding.graphBar.setDataSet(
-            dataList, yAxisRange, yAxisRange.last().first, avgValue, -1,
+            dataList, yAxisRange, avgValue, -1,
             optimalRange,
             firstData?.start_time,
             firstData?.end_time,

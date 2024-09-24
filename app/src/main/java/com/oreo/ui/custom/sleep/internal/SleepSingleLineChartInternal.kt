@@ -67,6 +67,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var mHeight = 0
 
     var mMax = 0
+    var mMin = 0
 
     private var isInteracting = false
     private var vibrationUtils: VibrationUtils? = null
@@ -512,7 +513,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun getYAxisValue(value: Float): Float {
-        val percent = (value / mMax.toFloat()) * 100
+        val percent = ((value - mMin) / (mMax - mMin).toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -630,7 +631,6 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         xAxisRange: List<LocalDate>,
-        maxValue: Int,
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         showOverlay: Boolean = false,
@@ -655,7 +655,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         dataSet.addAll(list)
 
         mSelectedPosition = selectedPosition
-        mMax = maxValue
+        mMax = yAxisRange.last().first
+        mMin = yAxisRange.first().first
         mAverage = avgValue
 
         invalidate()
