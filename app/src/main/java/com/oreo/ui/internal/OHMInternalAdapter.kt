@@ -107,7 +107,7 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
                     com.noisefit_commans.R.drawable.back_modal_new
                 )
 
-                "fair" -> Triple(
+                "fair","good" -> Triple(
                     R.drawable.back_hm_fair,
                     Color.parseColor("#ffa800"),
                     com.noisefit_commans.R.drawable.back_modal_new
