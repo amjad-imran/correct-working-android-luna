@@ -66,6 +66,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private val yAxisRange = ArrayList<Pair<Int, String>>()
     var mMax = 0
+    var mMin = 0
     var mAverage: Pair<Float, String>? = null
     var nonNullDataCount: Int = 0
 
@@ -335,7 +336,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     }
 
     fun getYAxisValue(value: Float): Float {
-        val percent = (value / mMax.toFloat()) * 100
+        val percent = ((value - mMin) / (mMax - mMin).toFloat()) * 100
         val availableHeight = height - bottomHeight - topHeight
         return topHeight + availableHeight - (availableHeight * percent / 100)
     }
@@ -505,7 +506,6 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     fun setDataSet(
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
-        maxValue: Int,
         avgValue: Pair<Float, String>?,
         selectedPosition: Int,
         contributorType: SleepInternalLaunchState?,
@@ -524,7 +524,8 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
         mAverage = avgValue
-        mMax = maxValue
+        mMax = yAxisRange.last().first
+        mMin = yAxisRange.first().first
 
         invalidate()
     }

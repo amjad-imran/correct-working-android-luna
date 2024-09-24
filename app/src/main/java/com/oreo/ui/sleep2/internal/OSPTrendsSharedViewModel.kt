@@ -427,7 +427,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 60.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -443,7 +443,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 25.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -451,7 +451,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 4.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -459,7 +459,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 20.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -467,7 +467,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 80.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -479,7 +479,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                         Pair(0f, 120.0f)
                     }
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
@@ -489,7 +489,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 100.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.min(), nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
                 }
             }
 
