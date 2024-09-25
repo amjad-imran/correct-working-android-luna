@@ -393,7 +393,7 @@ class ChatGptViewModel
     private fun ignoreQues(ques: String): Boolean {
         val quesList = arrayListOf(
             "Hi", "Hey", "Hey there", "Hi there",
-            "Namaste", "Hola", "Hi Luna", "hiluna", "how are you", "howdie", "who are you",
+            "Namaste", "Hola", "Hi Luna", "Hey Luna", "hiluna", "how are you", "howdie", "who are you",
             "dear", "hi dear", "hi sir", "hi mam", "sir", "mam", "hello"
         )
         return quesList.any { it.equals(ques, true) }
