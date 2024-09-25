@@ -57,7 +57,7 @@ class SleepBarChartFragment :
             pageData?.avgValue,
             contributorType = pageData?.contributorType
         )
-        val yAxisRange = sharedViewModel.getYAxisRange(minMax.second, pageData?.contributorType, minValue = minMax.first)
+        val yAxisRange = sharedViewModel.getYAxisRange(minMax.second, pageData?.contributorType/*, minValue = minMax.first*/)
         val optimalRange = sharedViewModel.getOptimalRangeMinMax(pageData?.contributorType)
 
 
