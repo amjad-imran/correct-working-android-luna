@@ -153,11 +153,11 @@ constructor(
 
     private fun getIntensity(intensity: Int): String {
         return when (intensity) {
-            0 -> {
+            0, 1 -> {
                 "Easy"
             }
 
-            1 -> {
+            2 -> {
                 "Moderate"
             }
 
