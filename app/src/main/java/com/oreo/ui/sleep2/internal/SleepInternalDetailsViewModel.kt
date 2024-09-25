@@ -388,11 +388,6 @@ class SleepInternalDetailsViewModel @Inject constructor(
         }
     }
 
-    /*
-            * 0-up
-            * 1-warning
-            * 2-red alert
-            * */
     fun getHighlightBackType(type: Int): Pair<Int, Int> {
         val background: Int
         val textColor: Int
@@ -403,7 +398,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
             }
 
             1 -> {
-                background = R.drawable.back_hm_fair
+                background = R.drawable.back_hm_white
                 textColor = Color.parseColor("#ffffff")
             }
 

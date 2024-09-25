@@ -138,6 +138,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.addSentMessage(message)
             viewModel.addThinkingMessage()
 
+
+
             //viewModel.addReceivedMessage("", true)
             binding.lytChatBox.chatEtx.setText("")
 

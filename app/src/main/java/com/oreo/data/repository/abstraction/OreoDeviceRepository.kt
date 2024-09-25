@@ -28,7 +28,7 @@ interface OreoDeviceRepository {
 
     suspend fun loadMessagesByThreadId(threadId: String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>>
 
-    suspend fun generateThreadTitle(ques: String): Flow<Resource<BaseApiResponse<String>?>>
+    suspend fun generateThreadTitle(ques: String,threadId:String): Flow<Resource<BaseApiResponse<String>?>>
 
     suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
 

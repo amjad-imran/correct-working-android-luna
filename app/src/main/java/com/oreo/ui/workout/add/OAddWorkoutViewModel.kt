@@ -91,7 +91,7 @@ class OAddWorkoutViewModel
         addWorkout.duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
         val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, addWorkout.duration)
         addWorkout.calories = data.calories
-        addWorkout.intensity = getIntensity(data.intensity ?: 0)
+        addWorkout.intensity = getIntensityAutoWorkout(data.intensity ?: 0)
         addWorkout.steps = data.steps
         addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3())
         activityType = "Walking"/*data.type*/
@@ -385,6 +385,21 @@ class OAddWorkoutViewModel
         return (diffInHours * 60) + (addWorkout.endMinute!! - addWorkout.startMinute)
     }
 
+    private fun getIntensityAutoWorkout(intensity: Int): String {
+        return when (intensity) {
+            0,1 -> {
+                "Easy"
+            }
+
+            2 -> {
+                "Moderate"
+            }
+
+            else -> {
+                "Hard"
+            }
+        }
+    }
     private fun getIntensity(intensity: Int): String {
         return when (intensity) {
             0 -> {
