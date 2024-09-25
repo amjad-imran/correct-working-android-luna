@@ -137,7 +137,15 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 val step = ((newMax - newMin) / 4).roundToInt()
                 val yAxis = (0..4).map { i ->
                     val value = (newMin + i * step).roundToInt()
-                    value to value.toString()
+
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value)
+                    val text = if (hour == 0) {
+                        "${minute}m"
+                    } else {
+                        "${hour}h${minute}m"
+                    }
+
+                    value to text
                 }
                 return yAxis
             }
@@ -179,23 +187,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
             }
 
             SleepInternalLaunchState.RESTFULNESS -> {
-               /* if (maxValue <= 4.0f) {
-                    return arrayListOf(
-                        Pair(0, "0"),
-                        Pair(1, "1"),
-                        Pair(2, "2"),
-                        Pair(3, "3"),
-                        Pair(4, "4")
-                    )
-                } else {
-                    return arrayListOf(
-                        Pair(0, "0"),
-                        Pair(3, "3"),
-                        Pair(6, "6"),
-                        Pair(9, "9"),
-                        Pair(12, "12")
-                    )
-                }*/
+
                 val newMax = maxValue + offset
                 var newMin = minValue - offset
                 if (newMin < 0) {
@@ -210,8 +202,8 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return yAxis
             }
 
-            SleepInternalLaunchState.BLOOD_OXYGEN ,
-            SleepInternalLaunchState.SLEEP_PERFORMANCE ,
+            SleepInternalLaunchState.BLOOD_OXYGEN,
+            SleepInternalLaunchState.SLEEP_PERFORMANCE,
             SleepInternalLaunchState.EFFICIENCY -> {
                 var newMax = maxValue + offset
                 if (newMax > 100f) {
@@ -427,7 +419,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 60.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
@@ -443,7 +435,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 25.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
@@ -451,7 +443,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 4.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
@@ -459,7 +451,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 20.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
@@ -467,29 +459,29 @@ class OSPTrendsSharedViewModel @Inject constructor(
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 80.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
             SleepInternalLaunchState.SKIN_TEMPERATURE -> {
                 return if (nonNullValues.isNullOrEmpty()) {
-                    if(sessionManager.isMetric()){
+                    if (sessionManager.isMetric()) {
                         Pair(0f, 48.0f)
-                    }else{
+                    } else {
                         Pair(0f, 120.0f)
                     }
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
             SleepInternalLaunchState.SLEEP_PERFORMANCE,
             SleepInternalLaunchState.BLOOD_OXYGEN,
-            SleepInternalLaunchState.EFFICIENCY-> {
+            SleepInternalLaunchState.EFFICIENCY -> {
                 return if (nonNullValues.isNullOrEmpty()) {
                     Pair(0f, 100.0f)
                 } else {
-                    Pair(nonNullValues.filter { it != 0f }.minOrNull()?:0f, nonNullValues.max())
+                    Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
                 }
             }
 
@@ -520,7 +512,13 @@ class OSPTrendsSharedViewModel @Inject constructor(
 
             SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
                 val min = value.div(60)
-                Pair(min, "${min.roundToInt()}min")
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(min.roundToInt())
+                val text = if (hour == 0) {
+                    "${minute}m"
+                } else {
+                    "${hour}h${minute}m"
+                }
+                Pair(min, text)
             }
 
             SleepInternalLaunchState.LATENCY -> {
