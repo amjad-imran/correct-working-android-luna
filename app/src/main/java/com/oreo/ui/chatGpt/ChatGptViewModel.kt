@@ -76,6 +76,9 @@ class ChatGptViewModel
         messages.add(ChatGptOverview.SentMessage(message, userImage))
         _chatGptOverview.value = (messages)
         //_chatGptOverview.postValue(messages)
+
+        generateThreadTitle(message)
+
     }
 
     fun addThinkingMessage() {
@@ -344,8 +347,14 @@ class ChatGptViewModel
     }
 
     private fun generateThreadTitle(ques: String) {
+
+        if (threadTitle.value.isNullOrEmpty().not()) return
+
+        if (ignoreQues(ques)) return
+        if (threadId == null) return
+
         viewModelScope.launch {
-            oreoDeviceRepository.generateThreadTitle(ques).collect { resource ->
+            oreoDeviceRepository.generateThreadTitle(ques, threadId!!).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -379,6 +388,15 @@ class ChatGptViewModel
                 }
             }
         }
+    }
+
+    private fun ignoreQues(ques: String): Boolean {
+        val quesList = arrayListOf(
+            "Hi", "Hey", "Hey there", "Hi there",
+            "Namaste", "Hola", "Hi Luna", "hiluna", "how are you", "howdie", "who are you",
+            "dear", "hi dear", "hi sir", "hi mam", "sir", "mam", "hello"
+        )
+        return quesList.any { it.equals(ques, true) }
     }
 
 

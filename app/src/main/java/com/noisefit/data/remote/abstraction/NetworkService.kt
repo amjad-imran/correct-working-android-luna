@@ -459,7 +459,9 @@ interface NetworkService {
 
     @GET
     suspend fun generateThreadTitle(
-        @Url url: String
+        @Url url: String,
+        @Query("message") message: String?,
+        @Query("thread_id") thread_id: String?,
     ): BaseApiResponse<String>
 
     @GET
