@@ -317,25 +317,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
-        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
+        /*animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
+        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)*/
 
         val lastDestination = navController?.currentDestination
 
-        if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
+        if(lastDestination?.id == R.id.navigation_oreo_home){
             binding.lytAddWorkoutSelector.tvAddSleep.visible()
             binding.lytAddWorkoutSelector.ivRecordSleep.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
             animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
+        }else{
+            binding.lytAddWorkoutSelector.tvAddSleep.gone()
+            binding.lytAddWorkoutSelector.ivRecordSleep.gone()
+        }
 
+        if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.ivLogPeriod.visible()
             binding.lytAddWorkoutSelector.tvLogPeriod.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.ivLogPeriod, 400f)
             animateItemsUp(binding.lytAddWorkoutSelector.tvLogPeriod, 400f)
         } else {
-            binding.lytAddWorkoutSelector.tvAddSleep.gone()
-            binding.lytAddWorkoutSelector.ivRecordSleep.gone()
-
             binding.lytAddWorkoutSelector.ivLogPeriod.gone()
             binding.lytAddWorkoutSelector.tvLogPeriod.gone()
         }
