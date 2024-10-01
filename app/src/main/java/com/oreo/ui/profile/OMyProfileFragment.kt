@@ -58,6 +58,10 @@ class OMyProfileFragment :
 
     override fun initListener() {
 
+        binding.rowReferral.setOnClickListener {
+            navigate(R.id.referralFragment)
+        }
+
         binding.rowCycleTracker.setOnClickListener {
             viewModel.getCycleTrackerInfo()
 //            navigate(R.id.cycleTrackerStreakFragment)

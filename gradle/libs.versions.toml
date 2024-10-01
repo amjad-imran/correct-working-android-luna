@@ -8,6 +8,7 @@ carouselView = "1.1.1"
 chatapi = "overseas_1.0.014"
 circleimageview = "3.1.0"
 circleindicator = "2.1.6"
+constraintlayoutCompose = "1.0.1"
 core = "4.6.2"
 coreTesting = "2.2.0"
 curlloggerinterceptor = "0.1"
@@ -115,6 +116,7 @@ composeBomVersion = "2024.09.01"
 android-decoview-charting = { module = "com.github.bmarrdev:android-DecoView-charting", version.ref = "androidDecoviewCharting" }
 android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compiler" }
 androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingCommonKtx" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }

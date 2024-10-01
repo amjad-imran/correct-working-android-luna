@@ -258,6 +258,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.constraintlayout.compose)
+
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
