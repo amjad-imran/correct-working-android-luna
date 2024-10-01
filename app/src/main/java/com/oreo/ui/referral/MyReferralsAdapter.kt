@@ -16,6 +16,9 @@ class MyReferralsAdapter : RecyclerView.Adapter<MyReferralsAdapter.ViewHolder>()
         fun bind(referralsMain: ReferralsMain) {
 
             binding.rvReferrals.layoutManager = LinearLayoutManager(binding.rvReferrals.context)
+            binding.rvReferrals.adapter = ReferralsInternalAdapter().apply {
+                this.setDataSet(referralsMain.referrals ?: ArrayList())
+            }
 
         }
 

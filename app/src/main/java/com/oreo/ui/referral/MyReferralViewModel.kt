@@ -5,9 +5,10 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.referral.Referral
 import com.oreo.data.model.referral.ReferralsMain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class MyReferralViewModel : BaseViewModel() {
+class MyReferralViewModel @Inject constructor() : BaseViewModel() {
 
     val myReferrals = MutableLiveData<List<ReferralsMain>>()
 
