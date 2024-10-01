@@ -5,7 +5,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.referral.type.ReferralPrizeFragment
@@ -26,6 +28,24 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
         val pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, lifecycle)
         binding.vpMain.adapter = pagerAdapter
         pagerAdapter.setDataSet()
+
+        binding.vpMain.apply {
+            // Reduce the page size to show a partial view of the next item
+            val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
+            val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
+
+            setPageTransformer { page, position ->
+                val offset = position * -(2 * offsetPx + pageMarginPx)
+                if (position <= 1) {
+                    page.translationX = offset
+                }
+            }
+
+            // Reduce the side padding of the viewpager2 to show partial next view
+            val recyclerView = getChildAt(0) as RecyclerView
+            recyclerView.setPadding(offsetPx, 0, offsetPx, 0)
+            recyclerView.clipToPadding = false
+        }
     }
 
     override fun initListener() {

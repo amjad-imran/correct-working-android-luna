@@ -11,6 +11,7 @@ import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.ui.profile.ProfileViewModel
+import com.noisefit.ui.profile.ReferralRunningState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -58,7 +59,7 @@ class OMyProfileFragment :
 
     override fun initListener() {
 
-        binding.rowReferral.setOnClickListener {
+        binding.lytReferralAvailable.tvRefer.setOnClickListener {
             navigate(R.id.referralFragment)
         }
 
@@ -168,6 +169,25 @@ class OMyProfileFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.referralRunningState.observe(this) {
+            when (it) {
+                is ReferralRunningState.Available -> {
+                    binding.lytReferralAvailable.root.visible()
+                    binding.lytReferralNo.root.gone()
+                }
+
+                ReferralRunningState.Default -> {
+                    binding.lytReferralAvailable.root.gone()
+                    binding.lytReferralNo.root.gone()
+                }
+
+                ReferralRunningState.NotAvailable -> {
+                    binding.lytReferralAvailable.root.gone()
+                    binding.lytReferralNo.root.visible()
+                }
+            }
+        }
+
         viewModel.cycleTrackInfo.observe(this) {
             it?.getContent()?.let {
                 navigate(R.id.cycleTrackerSettingFragment, Bundle().apply {

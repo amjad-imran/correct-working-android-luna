@@ -42,4 +42,6 @@
     <dimen name="dimen_30dp">30dp</dimen>
     <dimen name="dimen_160dp">160dp</dimen>
     <dimen name="dimen_200dp">200dp</dimen>
+    <dimen name="pageMargin">16dp</dimen>
+    <dimen name="offset">40dp</dimen>
 </resources>

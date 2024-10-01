@@ -55,6 +55,8 @@ constructor(
     val trophies: MutableLiveData<List<TrophyBadge>> = MutableLiveData<List<TrophyBadge>>()
     var unit = Units.METRIC
 
+    val referralRunningState = MutableLiveData<ReferralRunningState>(ReferralRunningState.Default)
+
     fun getUser(): LiveData<User> = _user
     fun getStats(): LiveData<UserStats> = _userStats
     fun logoutSuccess(): LiveData<Boolean> = _logoutSuccess
@@ -75,6 +77,10 @@ constructor(
             return "Not Set"
         }
         return "Not Set"
+    }
+
+    init {
+        referralRunningState.postValue(ReferralRunningState.Available("", ""))
     }
 
     fun getUnitValueForRecentTrophy(): Units {
@@ -283,4 +289,10 @@ constructor(
     }
 
 
+}
+
+sealed class ReferralRunningState {
+    data class Available(val prizeImageUrl: String, val prizeTitle: String) : ReferralRunningState()
+    data object NotAvailable : ReferralRunningState()
+    data object Default : ReferralRunningState()
 }
