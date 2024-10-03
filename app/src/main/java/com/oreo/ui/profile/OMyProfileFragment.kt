@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import com.freshchat.consumer.sdk.FaqOptions
 import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
@@ -67,7 +68,11 @@ class OMyProfileFragment :
                 ShareUtil.openExternalUrl(it, SUPPORT_URL)
             }*/
             //Freshchat.showFAQs(requireContext())
-            Freshchat.showConversations(requireContext())
+            //Freshchat.showConversations(requireContext())
+
+            Freshchat.showFAQs(requireContext(), FaqOptions().apply {
+                showFaqCategoriesAsGrid(false)
+            })
         }
 
         binding.rowSettings.setOnClickListener {

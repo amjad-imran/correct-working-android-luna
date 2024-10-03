@@ -304,29 +304,5 @@
         <item name="track">@drawable/custom_track_3</item>
     </style>
 
-    <style name="MyCustomThemeChat" parent="Theme.Freshchat.Light.DarkActionBar">
-        <item name="freshchatSendIcon">@drawable/ic_ai_send_message</item>
-       <!-- <item name="freshchatMessageReplyInputViewStyle">@style/ChatEditText</item>-->
 
-    </style>
-
-    <style name="ChatEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/back_chat_message_send</item>
-        <item name="android:hint">Type comething</item>
-        <item name="android:inputType">textMultiLine|textCapSentences</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:minHeight">52dp</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">#4cffffff</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textDirection">firstStrong</item>
-        <item name="android:textAlignment">viewStart</item>
-    </style>
 </resources>
