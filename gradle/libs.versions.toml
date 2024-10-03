@@ -18,6 +18,7 @@ flexbox = "3.0.0"
 gradle = "8.4.2"
 freshchatAndroid = "6.2.9"
 hiltAndroidCompiler = "2.51"
+jjwtVersion = "0.7.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -134,6 +135,7 @@ freshchat-android = { module = "com.github.freshworks:freshchat-android", versio
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidCompiler" }
+jjwt = { module = "io.jsonwebtoken:jjwt", version.ref = "jjwtVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

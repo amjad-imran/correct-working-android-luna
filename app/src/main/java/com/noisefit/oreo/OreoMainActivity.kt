@@ -22,6 +22,7 @@ import androidx.core.os.postDelayed
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
@@ -957,6 +958,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         //viewModel.shouldResetMasterDates()
+
+
+        viewModel.loginFreshChatUser()
+
+
 
     }
 

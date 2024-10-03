@@ -1,14 +1,19 @@
 package com.noisefit.oreo
 
+import android.os.Build
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.freshchat.consumer.sdk.Freshchat
+import com.freshchat.consumer.sdk.FreshchatUser
 import com.google.gson.JsonObject
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
@@ -18,13 +23,11 @@ import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
-import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
@@ -43,6 +46,8 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -953,6 +958,56 @@ constructor(
                 }
             }
         }
+    }
+
+    fun loginFreshChatUser() {
+        NoiseFitApplicationMain.context?.let {
+            val user = localDataStore.getUser()
+            val pairedDevice = ringDataStore.getRingDevice()
+
+            /*val freshChatUserId = Freshchat.getInstance(it).freshchatUserId
+
+
+            val jwt =
+                Jwts.builder().claim("first_name", user?.firstName)
+                    .claim("email_id", user?.email)
+                    .claim("phone_no", user?.mobile)
+                    .claim("profile_image", user?.imageUrl)
+                    .claim("freshchat_uuid", freshChatUserId)
+                    .signWith(SignatureAlgorithm.HS256, "secret".toByteArray())
+                    .compact()
+            LOGS.d("JWT : - ", jwt)
+            LOGS.d("JWT : - ", freshChatUserId)
+            Freshchat.getInstance(it).setUser(jwt)
+
+*/
+
+            val freshchatUser: FreshchatUser = Freshchat.getInstance(it).user
+            freshchatUser.apply {
+                firstName = user?.firstName
+                email = user?.email
+                setPhone("+91", user?.mobile)
+            }
+
+            Freshchat.getInstance(it).setUser(freshchatUser)
+
+            val userMeta: MutableMap<String, String> = HashMap()
+            userMeta["userName"] = user?.firstName ?: ""
+            if (pairedDevice != null) {
+                userMeta["ringSNo"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
+                userMeta["ringColor"] = pairedDevice.ringInfo?.color ?: ""
+                userMeta["ringSize"] = "${pairedDevice.ringInfo?.size}"
+                userMeta["currentFwVersion"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
+            }
+            userMeta["currentAppVersion"] = BuildConfig.VERSION_NAME
+            userMeta["os"] = "Android"
+            userMeta["phoneOsVersion"] = Build.VERSION.RELEASE
+            userMeta["phoneModel"] = Build.MODEL
+            userMeta["profileImage"] = user?.imageUrl ?: ""
+
+            Freshchat.getInstance(it).setUserProperties(userMeta)
+        }
+
     }
 
 }

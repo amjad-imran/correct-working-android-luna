@@ -56,7 +56,6 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         var context: Application? = null
     }
 
-    private var freshchat: Freshchat? = null
     override fun onCreate() {
 //        ActivityLifecycleCallback.register(this)
         super.onCreate()
@@ -89,13 +88,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             "3a653bd1-bfda-4213-8649-a2b79b4f7b06"
         )
         freshchatConfig.domain = "msdk.in.freshchat.com"
-        getFreshChatInstance(applicationContext)?.init(freshchatConfig)
-    }
-    private fun getFreshChatInstance(context: Context): Freshchat? {
-        if (freshchat == null) {
-            freshchat = Freshchat.getInstance(context)
-        }
-        return freshchat
+        Freshchat.getInstance(applicationContext).init(freshchatConfig)
     }
 
     private fun initMoEngage() {
