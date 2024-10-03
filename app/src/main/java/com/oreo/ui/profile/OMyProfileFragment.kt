@@ -73,7 +73,11 @@ class OMyProfileFragment :
                 ShareUtil.openExternalUrl(it, SUPPORT_URL)
             }*/
             //Freshchat.showFAQs(requireContext())
-            Freshchat.showConversations(requireContext())
+            //Freshchat.showConversations(requireContext())
+
+            Freshchat.showFAQs(requireContext(), FaqOptions().apply {
+                showFaqCategoriesAsGrid(false)
+            })
         }
 
         binding.rowSettings.setOnClickListener {

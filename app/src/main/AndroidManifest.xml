@@ -279,16 +279,47 @@
         <activity
             android:name="com.noisefit.oreo.OreoMainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/TransparentBgTheme">
+            android:theme="@style/TransparentBgTheme"
+            android:windowSoftInputMode="adjustResize">
             <nav-graph android:value="@navigation/navigation_oreo" />
         </activity>
         <activity
             android:name="com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+
+        <!--Freshchat Activities-->
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.FAQListActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.FAQCategoriesActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.FAQDetailsActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.FAQSearchActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.BotFaqDetailsActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.ArticleListActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.CategoryListActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
     </application>
 
 </manifest>
