@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:paddingBottom="16dp">
 
-
     <TextView
         android:id="@+id/tvReferralName"
         style="@style/S16"

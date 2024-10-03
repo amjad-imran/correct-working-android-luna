@@ -3,6 +3,7 @@ package com.oreo.ui.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.freshchat.consumer.sdk.FaqOptions
@@ -15,6 +16,7 @@ import com.noisefit.ui.profile.ProfileViewModel
 import com.noisefit.ui.profile.ReferralRunningState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageAppEventParams
@@ -28,13 +30,6 @@ class OMyProfileFragment :
     BaseFragment<FragmentMyProfileOreoBinding>(FragmentMyProfileOreoBinding::inflate) {
 
     private val viewModel: ProfileViewModel by viewModels()
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
 
     override fun onResume() {
         super.onResume()
@@ -59,9 +54,14 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
+        binding.lytReferralNo.tvMyReferrals.setOnClickListener {
+            navigate(R.id.myReferralsFragment)
+        }
 
         binding.lytReferralAvailable.tvRefer.setOnClickListener {
-            navigate(R.id.referralFragment)
+            viewModel.referralResponse?.let {
+                navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
+            }
         }
 
         binding.rowCycleTracker.setOnClickListener {
@@ -69,12 +69,6 @@ class OMyProfileFragment :
 //            navigate(R.id.cycleTrackerStreakFragment)
         }
         binding.rowSupport.setOnClickListener {
-            /*context?.let {
-                ShareUtil.openExternalUrl(it, SUPPORT_URL)
-            }*/
-            //Freshchat.showFAQs(requireContext())
-            //Freshchat.showConversations(requireContext())
-
             Freshchat.showFAQs(requireContext(), FaqOptions().apply {
                 showFaqCategoriesAsGrid(false)
             })
@@ -179,6 +173,9 @@ class OMyProfileFragment :
                 is ReferralRunningState.Available -> {
                     binding.lytReferralAvailable.root.visible()
                     binding.lytReferralNo.root.gone()
+                    binding.lytReferralAvailable.apply {
+                        this.ivMain.loadImageWithCache(this.root.context, it.prizeImageUrl)
+                    }
                 }
 
                 ReferralRunningState.Default -> {

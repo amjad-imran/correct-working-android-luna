@@ -240,6 +240,16 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun providerReferralRepository(
+        remoteDataSource: NetworkService,
+    ): ReferralRepository =
+        ReferralRepositoryImpl(
+            remoteDataSource
+        )
+
+
+    @Singleton
+    @Provides
     fun providerOreoDeviceRepository(
         localDataSource: DataStoredInterface,
         remoteDataSource: NetworkService,

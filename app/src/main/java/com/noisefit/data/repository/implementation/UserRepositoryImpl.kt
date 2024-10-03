@@ -64,7 +64,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<RingLocationData>>> {
+    override suspend fun getRingLastLocation(mac: String): Flow<Resource<BaseApiResponse<RingLocationData>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.BASE_URL_NEW}/user_detail/ring/get/last-disconnect/location/$mac"

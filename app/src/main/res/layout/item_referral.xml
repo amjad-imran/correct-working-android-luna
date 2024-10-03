@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:background="@drawable/back_modal_dialog_10">
+    android:background="@drawable/back_modal_dialog_referral">
 
     <TextView
         android:id="@+id/tvName"
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivPurchased"
         app:layout_constraintStart_toEndOf="@+id/ivPurchased"
         app:layout_constraintTop_toTopOf="@+id/ivPurchased"
-        tools:text="Ring purchased" />
+        android:text="@string/text_ring_purchased" />
 
     <ImageView
         android:id="@+id/imageView53"
@@ -85,7 +85,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivDelivered"
         app:layout_constraintStart_toEndOf="@+id/ivDelivered"
         app:layout_constraintTop_toTopOf="@+id/ivDelivered"
-        tools:text="Ring delivered" />
+        android:text="@string/text_ring_delivered" />
 
     <TextView
         style="@style/S12"

@@ -100,7 +100,7 @@ object ShareUtil {
         val share = Intent(Intent.ACTION_SEND)
         share.type = "text/plain"
         share.putExtra(Intent.EXTRA_TEXT, msg)
-        context.startActivity(Intent.createChooser(share, "Invite With"))
+        context.startActivity(Intent.createChooser(share, null))
     }
 
     fun shareCrashLog(context: Context, content: String?) {

@@ -1118,5 +1118,13 @@
     <fragment
         android:id="@+id/referralFragment"
         android:name="com.oreo.ui.referral.ReferralFragment"
-        android:label="fragment_referral" />
+        android:label="fragment_referral">
+        <argument
+            android:name="referralInfo"
+            app:argType="com.noisefit.data.model.referral.ReferralInfoResponse" />
+    </fragment>
+    <fragment
+        android:id="@+id/myReferralsFragment"
+        android:name="com.oreo.ui.referral.MyReferralsFragment"
+        android:label="fragment_my_referrals" />
 </navigation>

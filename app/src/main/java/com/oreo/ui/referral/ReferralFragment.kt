@@ -4,32 +4,38 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.oreo.ui.referral.type.ReferralPrizeFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralBinding::inflate) {
 
+    private val viewModel: ReferralViewModel by viewModels()
+    private val args: ReferralFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setViewPager()
+        viewModel.referralInfo.postValue(args.referralInfo)
     }
 
-    private fun setViewPager() {
+    private fun setViewPager(referralInfoResponse: ReferralInfoResponse) {
         val pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, lifecycle)
         binding.vpMain.adapter = pagerAdapter
-        pagerAdapter.setDataSet()
+        pagerAdapter.setDataSet(viewModel.getCards(referralInfoResponse))
 
-        binding.vpMain.apply {
+        /*binding.vpMain.apply {
             // Reduce the page size to show a partial view of the next item
             val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
             val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
@@ -45,15 +51,70 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             val recyclerView = getChildAt(0) as RecyclerView
             recyclerView.setPadding(offsetPx, 0, offsetPx, 0)
             recyclerView.clipToPadding = false
-        }
+        }*/
     }
 
     override fun initListener() {
+        binding.bClaimCode.setOnClickListener {
+            if (viewModel.referralCode.value?.referralCode.isNullOrEmpty()) {
+                viewModel.getReferCode()
+            } else {
+                context?.let { ctx ->
+                    viewModel.referralCode.value?.shareMessage?.let {
+                        ShareUtil.shareText(ctx, it)
+                    }
+                }
+            }
+        }
+
+        binding.tvReferrals.setOnClickListener {
+            navigate(R.id.myReferralsFragment)
+        }
 
     }
 
     override fun subscribeObservers() {
+        viewModel.referralInfo.observe(this) {
+            setViewPager(it)
+            binding.tvReferralTitle.text = it.referralTitle
+            binding.tvName.text = "Hello ${viewModel.getUserName()}"
 
+            val remainingDays = it.remainingDays ?: 1
+
+            binding.tvDaysLeft.text = if (remainingDays == 1) {
+                "$remainingDays day left"
+            } else {
+                "$remainingDays days left"
+            }
+        }
+
+
+        viewModel.referralCode.observe(this) {
+            if (it?.referralCode.isNullOrEmpty()) {
+                binding.bClaimCode.text = getString(R.string.text_claim_code)
+            } else {
+                binding.bClaimCode.text = "Share code \"${it.referralCode}\""
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
     }
 
 
@@ -67,14 +128,12 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
         override fun createFragment(position: Int): Fragment = fragments[position]
 
-        fun setDataSet() {
-            this.fragments.add(ReferralPrizeFragment())
-            this.fragments.add(ReferralPrizeFragment())
-            this.fragments.add(ReferralPrizeFragment())
-            this.fragments.add(ReferralPrizeFragment())
-            this.fragments.add(ReferralPrizeFragment())
+        fun setDataSet(fragments: List<Fragment>) {
+            this.fragments.clear()
+            this.fragments.addAll(fragments)
             notifyDataSetChanged()
         }
+
     }
 }
 /*

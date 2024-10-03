@@ -1,6 +1,8 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.referral.ReferralCodeResponse
+import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -52,6 +54,7 @@ import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.model.referral.ReferralsMain
 import com.oreo.data.model.sleep.SleepDataResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -557,6 +560,28 @@ interface NetworkService {
     suspend fun updateCycleTrackerToggle(
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<Any>
+
+
+    /**
+     * Referral Urls
+     */
+    @GET
+    suspend fun getReferCode(
+        @Url url: String
+    ): BaseApiResponse<ReferralCodeResponse>
+
+
+    @GET
+    suspend fun getReferralInfo(
+        @Url url: String
+    ): BaseApiResponse<ReferralInfoResponse>
+
+  @GET
+    suspend fun getReferralHistory(
+        @Url url: String
+    ): BaseApiResponse<List<ReferralsMain>>
+
+
 
 
     /**

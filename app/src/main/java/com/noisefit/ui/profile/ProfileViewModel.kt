@@ -1,14 +1,13 @@
 package com.noisefit.ui.profile
 
 import android.text.TextUtils
-import android.util.DisplayMetrics
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
+import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.ConnectionHandler
@@ -17,17 +16,13 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.data.model.UserStats
-import com.noisefit_commans.data.model.trophies.TrophyBadge
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.BuildUtils
-import com.noisefit_commans.utils.ConnectionUtil
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
-import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,25 +37,24 @@ constructor(
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
+    private val referralRepository: ReferralRepository,
     private val femaleHealthRepository: FemaleHealthRepository,
 ) : BaseViewModel() {
 
     private var _user = MutableLiveData<User>()
-    private var _userStats = MutableLiveData<UserStats>()
-    private val _orderUrl = MutableLiveData<Event<String>>()
     private var _logoutSuccess = MutableLiveData<Boolean>()
     var numberAvailable = MutableLiveData<Boolean>()
-    val defaultInterestSymbol = "-"
 
-    val trophies: MutableLiveData<List<TrophyBadge>> = MutableLiveData<List<TrophyBadge>>()
     var unit = Units.METRIC
 
+
     val referralRunningState = MutableLiveData<ReferralRunningState>(ReferralRunningState.Default)
+    var referralResponse: ReferralInfoResponse? = null
+
 
     fun getUser(): LiveData<User> = _user
-    fun getStats(): LiveData<UserStats> = _userStats
     fun logoutSuccess(): LiveData<Boolean> = _logoutSuccess
-    fun orderUrl(): LiveData<Event<String>> = _orderUrl
+
     fun getEndGameValue(): String {
         val endGameKey = localDataStore.getUser()?.endGame
         val endGameList = localDataStore.getEndGameList()
@@ -77,24 +71,6 @@ constructor(
             return "Not Set"
         }
         return "Not Set"
-    }
-
-    init {
-        referralRunningState.postValue(ReferralRunningState.Available("", ""))
-    }
-
-    fun getUnitValueForRecentTrophy(): Units {
-        unit = localDataStore.getUnit()
-        return unit
-    }
-
-    fun getDeviceWidth(context: FragmentActivity): Int {
-        val displaymetrics = DisplayMetrics()
-        context.windowManager.defaultDisplay.getMetrics(displaymetrics)
-        //if you need three fix imageview in width
-        //if you need three fix imageview in width
-        return displaymetrics.widthPixels / 3
-
     }
 
     fun getUnitValue(): String {
@@ -114,6 +90,7 @@ constructor(
 
     init {
         numberAvailable.value = !localDataStore.getUser()?.mobile.isNullOrEmpty()
+        getReferralInfo()
     }
 
 
@@ -288,11 +265,65 @@ constructor(
         }
     }
 
+    private fun getReferralInfo() {
+        viewModelScope.launch {
+            referralRepository.getReferralInfo().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getReferralInfo()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+
+                            referralResponse = it
+                            referralRunningState.postValue(getReferralRunningState(it))
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getReferralRunningState(referralInfoResponse: ReferralInfoResponse?): ReferralRunningState {
+        if (referralInfoResponse == null) return ReferralRunningState.Default
+
+        return if (referralInfoResponse.banner.isNullOrEmpty()) {
+            ReferralRunningState.NotAvailable
+        } else {
+            ReferralRunningState.Available(
+                referralInfoResponse.referralImage,
+                referralInfoResponse.referralText
+            )
+        }
+    }
+
 
 }
 
 sealed class ReferralRunningState {
-    data class Available(val prizeImageUrl: String, val prizeTitle: String) : ReferralRunningState()
+    data class Available(val prizeImageUrl: String? = null, val prizeTitle: String? = null) :
+        ReferralRunningState()
+
     data object NotAvailable : ReferralRunningState()
     data object Default : ReferralRunningState()
 }

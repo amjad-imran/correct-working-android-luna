@@ -6,6 +6,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.databinding.FragmentMyReferralsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -22,6 +25,7 @@ class MyReferralsFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setRecycler()
+        viewModel.getMyReferralHistory()
     }
 
     private fun setRecycler() {
@@ -37,6 +41,25 @@ class MyReferralsFragment :
     override fun subscribeObservers() {
         viewModel.myReferrals.observe(this){
             adapter.setDataSet(it)
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
         }
 
     }

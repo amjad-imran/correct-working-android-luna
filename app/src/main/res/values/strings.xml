@@ -1361,6 +1361,9 @@
     <string name="text_my_referrals">My referrals</string>
     <string name="text_refer_now">Refer Now</string>
     <string name="text_status">Status :</string>
+    <string name="text_ring_purchased">Ring purchased</string>
+    <string name="text_ring_delivered">Ring delivered</string>
+    <string name="text_pending">Pending</string>
 
 
 </resources>
