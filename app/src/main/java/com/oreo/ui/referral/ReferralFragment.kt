@@ -126,7 +126,6 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             indicators.add(indicator)
             binding.indicatorLayout.addView(indicator)
         }
-        binding.indicatorLayout.requestLayout()
     }
 
     override fun initListener() {
