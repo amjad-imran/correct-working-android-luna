@@ -44,4 +44,8 @@
     <dimen name="dimen_200dp">200dp</dimen>
     <dimen name="pageMargin">16dp</dimen>
     <dimen name="offset">40dp</dimen>
+    <dimen name="horizontal_margin">20dp</dimen>
+    <dimen name="indicator_width_active">46dp</dimen>
+    <dimen name="indicator_width_inactive">16dp</dimen>
+    <dimen name="indicator_height">2dp</dimen>
 </resources>

@@ -24,8 +24,11 @@ data class ReferralInfoResponse(
 data class Referral(
     val type: String,
     val title: String? = null,
+    val name: String? = null,
     @SerializedName("sub_title")
     val subTitle: String? = null,
+    val status: String? = null,//todo check
+    val date: String? = null,
     val prize: String? = null,
     @SerializedName("image_url")
     val imageUrl: String? = null,
@@ -43,5 +46,17 @@ data class CardStyle1(
 data class CardStyle2(
     val title: String? = null,
     val subTitle: String? = null,
+    val backgroundRes: Int,
+    val textColor: Int
+) : Parcelable
+
+@Parcelize
+data class CardStyle3(
+    val name: String? = null,
+    val date: String? = null,
+    val status: String? = null,
+    val textColor: Int,
+    val selectedRingRes: Int,
+    val defaultRing: Int,
     val backgroundRes: Int
 ) : Parcelable

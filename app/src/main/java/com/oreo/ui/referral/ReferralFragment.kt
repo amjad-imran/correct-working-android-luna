@@ -2,21 +2,28 @@ package com.oreo.ui.referral
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notify
 
 
 @AndroidEntryPoint
@@ -24,6 +31,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
     private val viewModel: ReferralViewModel by viewModels()
     private val args: ReferralFragmentArgs by navArgs()
+    private val indicators = ArrayList<View>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,8 +40,27 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
     private fun setViewPager(referralInfoResponse: ReferralInfoResponse) {
         val pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, lifecycle)
-        binding.vpMain.adapter = pagerAdapter
-        pagerAdapter.setDataSet(viewModel.getCards(referralInfoResponse))
+
+        binding.vpMain.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(20))
+            })
+            adapter = pagerAdapter
+        }
+
+        val dataList = viewModel.getCards(referralInfoResponse)
+        binding.vpMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateIndicators(dataList.size, position)
+            }
+        })
+        pagerAdapter.setDataSet(dataList)
+        updateIndicators(dataList.size, 0)
+
 
         /*binding.vpMain.apply {
             // Reduce the page size to show a partial view of the next item
@@ -52,6 +79,54 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             recyclerView.setPadding(offsetPx, 0, offsetPx, 0)
             recyclerView.clipToPadding = false
         }*/
+    }
+
+    private fun setupIndicators(count: Int) {
+        indicators.clear()
+        binding.indicatorLayout.removeAllViews()
+        for (i in 0 until count) {
+            val indicator = View(this@ReferralFragment.context)
+            val params = LinearLayout.LayoutParams(
+                R.dimen.indicator_width_active,
+                R.dimen.indicator_height
+            )
+            params.setMargins(8, 0, 8, 0)
+            indicator.layoutParams = params
+            indicator.setBackgroundResource(R.drawable.indicator_inactive)
+            indicators.add(indicator)
+            binding.indicatorLayout.addView(indicator)
+        }
+
+        if (indicators.isNotEmpty()) {
+            indicators[0].setBackgroundResource(R.drawable.indicator_active)
+        }
+    }
+
+    private fun updateIndicators(count: Int, position: Int) {
+        LOGS.d("sdfjhsdkfjhksd $count -  $position")
+        indicators.clear()
+        binding.indicatorLayout.removeAllViews()
+        for (i in 0 until count) {
+            val indicator = View(this@ReferralFragment.context)
+            val params = LinearLayout.LayoutParams(
+                if (position == i) {
+                    46f.dpToPixel().toInt()
+                } else {
+                    16f.dpToPixel().toInt()
+                },
+                2f.dpToPixel().toInt()
+            )
+            params.setMargins(4, 0, 4, 0)
+            indicator.layoutParams = params
+            if (position == i) {
+                indicator.setBackgroundResource(R.drawable.indicator_active)
+            } else {
+                indicator.setBackgroundResource(R.drawable.indicator_inactive)
+            }
+            indicators.add(indicator)
+            binding.indicatorLayout.addView(indicator)
+        }
+        binding.indicatorLayout.requestLayout()
     }
 
     override fun initListener() {

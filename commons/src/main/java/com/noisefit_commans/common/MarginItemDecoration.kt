@@ -81,3 +81,16 @@ class MarginLeftRightItemDecoration(val spaceHeight: Int) : ItemDecoration() {
 
 }
 
+class HorizontalMarginItemDecoration(private val horizontalMargin: Int) : ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect, view: View,
+        parent: RecyclerView, state: RecyclerView.State
+    ) {
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.left = horizontalMargin
+        } else if (parent.getChildAdapterPosition(view) == state.itemCount - 1) {
+            outRect.right = horizontalMargin
+        }
+    }
+}
+

@@ -1,0 +1,94 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg_ref_2"
+    tools:context="com.oreo.ui.referral.type.ReferralPrizeFragment">
+
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/S18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="What will I get ?" />
+
+
+    <ImageView
+        android:id="@+id/ivPurchased"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivConnector"
+        app:layout_constraintEnd_toStartOf="@+id/textPurchased"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:src="@drawable/ic_ref_status_filled" />
+
+    <TextView
+        android:id="@+id/textPurchased"
+        style="@style/S22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="@string/text_ring_purchased"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPurchased"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivPurchased"
+        app:layout_constraintTop_toTopOf="@+id/ivPurchased" />
+
+    <ImageView
+        android:id="@+id/ivConnector"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivDelivered"
+        app:layout_constraintEnd_toEndOf="@+id/ivPurchased"
+        app:layout_constraintStart_toStartOf="@+id/ivPurchased"
+        app:layout_constraintTop_toBottomOf="@+id/ivPurchased"
+        tools:src="@drawable/ic_ref_status_connect" />
+
+    <ImageView
+        android:id="@+id/ivDelivered"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ivPurchased"
+        app:layout_constraintStart_toStartOf="@+id/ivPurchased"
+        app:layout_constraintTop_toBottomOf="@+id/ivConnector"
+        tools:src="@drawable/ic_ref_status_ring" />
+
+
+    <TextView
+        android:id="@+id/textDelivered"
+        style="@style/S22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_ring_delivered"
+        app:layout_constraintBottom_toBottomOf="@+id/ivDelivered"
+        app:layout_constraintStart_toStartOf="@+id/textPurchased"
+        app:layout_constraintTop_toBottomOf="@+id/ivConnector" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/S18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="12 Sep 2024" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

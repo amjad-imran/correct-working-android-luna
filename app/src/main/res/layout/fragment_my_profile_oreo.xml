@@ -22,14 +22,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/lytReferralAvailable"
+            app:layout_constraintBottom_toTopOf="@+id/tvLogout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/backBtn">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <!--                <ImageView-->
                 <!--                    android:id="@+id/imvProfile"-->
@@ -64,6 +65,31 @@
                 <!--                    app:layout_constraintBottom_toBottomOf="@+id/imvProfile"-->
                 <!--                    app:layout_constraintEnd_toEndOf="parent"-->
                 <!--                    app:layout_constraintTop_toTopOf="@+id/imvProfile" />-->
+
+                <include
+                    android:id="@+id/lytReferralAvailable"
+                    layout="@layout/layout_settings_referral_available"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <include
+                    android:id="@+id/lytReferralNo"
+                    layout="@layout/layout_settings_referral_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/tvLogout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:visibility="visible" />
 
                 <include
                     android:id="@+id/include14"
@@ -199,37 +225,8 @@
                 <!--                    app:layout_constraintStart_toStartOf="parent"-->
                 <!--                    app:layout_constraintTop_toBottomOf="@+id/tvLogout" />-->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </ScrollView>
-
-
-        <include
-            android:id="@+id/lytReferralAvailable"
-            layout="@layout/layout_settings_referral_available"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="36dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/lytReferralNo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible" />
-
-        <include
-            android:id="@+id/lytReferralNo"
-            layout="@layout/layout_settings_referral_no"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="36dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/tvLogout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible" />
 
 
         <TextView

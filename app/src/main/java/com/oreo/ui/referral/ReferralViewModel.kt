@@ -1,10 +1,12 @@
 package com.oreo.ui.referral
 
+import android.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.model.referral.CardStyle1
 import com.noisefit.data.model.referral.CardStyle2
+import com.noisefit.data.model.referral.CardStyle3
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
@@ -16,6 +18,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.ui.referral.type.ReferralPrizeFragment
 import com.oreo.ui.referral.type.ReferralType2Fragment
+import com.oreo.ui.referral.type.ReferralType3Fragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -86,7 +89,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_2
+                            backgroundRes = R.drawable.bg_ref_2,
+                            textColor = Color.parseColor("#f6ed89")
                         )
                     )
                 )
@@ -96,7 +100,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_3
+                            backgroundRes = R.drawable.bg_ref_3,
+                            textColor = Color.parseColor("#ffffff")
                         )
                     )
                 )
@@ -106,6 +111,32 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
+                            backgroundRes = R.drawable.bg_ref_4,
+                            textColor = Color.parseColor("#bcf04c")
+                        )
+                    )
+                )
+            } else if (it.type.equals("share", true)) {
+                cards.add(
+                    ReferralType2Fragment.getInstance(
+                        CardStyle2(
+                            title = it.title,
+                            subTitle = it.subTitle,
+                            backgroundRes = R.drawable.bg_ref_6,
+                            textColor = Color.parseColor("#000000")
+                        )
+                    )
+                )
+            } else if (it.type.equals("referred", true)) {//TODO check type
+                cards.add(
+                    ReferralType3Fragment.getInstance(
+                        CardStyle3(
+                            name = it.name,
+                            date = it.date,
+                            status = it.status,
+                            textColor = R.color.white,
+                            selectedRingRes = R.drawable.ic_ref_status_filled,
+                            defaultRing = R.drawable.ic_ref_status_ring,
                             backgroundRes = R.drawable.bg_ref_4
                         )
                     )

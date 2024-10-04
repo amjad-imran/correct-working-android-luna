@@ -30,7 +30,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/image_article_3_banner_1"
+        tools:background="@drawable/image_article_3_banner_1"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/textView132"
         app:layout_constraintEnd_toEndOf="parent"

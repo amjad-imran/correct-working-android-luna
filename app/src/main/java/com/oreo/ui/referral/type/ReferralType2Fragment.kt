@@ -36,6 +36,9 @@ class ReferralType2Fragment :
         binding.tvTitle.text = cardData.title
         binding.tvSubTitle.text = cardData.subTitle
         binding.rootView.setBackgroundResource(cardData.backgroundRes)
+
+        binding.tvTitle.setTextColor(cardData.textColor)
+        binding.tvSubTitle.setTextColor(cardData.textColor)
     }
 
     override fun initListener() {
