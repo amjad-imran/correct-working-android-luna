@@ -461,7 +461,7 @@
     <style name="Theme.NoiseFit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-<!--        <item name="android:windowBackground">@drawable/custom_alert_rounded_corner</item>-->
+        <!--        <item name="android:windowBackground">@drawable/custom_alert_rounded_corner</item>-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
@@ -475,10 +475,24 @@
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="freshchatChatBubbleLeft">@drawable/back_chat_support</item>
         <item name="freshchatChatBubbleRight">@drawable/back_chat_support</item>
-        <item name="freshchatTeamMemberMessageTextStyle">@style/ChatTeamMemberMessageTextStyle</item>
+        <item name="freshchatTeamMemberMessageTextStyle">@style/ChatTeamMemberMessageTextStyle
+        </item>
         <item name="freshchatUserMessageTextStyle">@style/ChatTeamMemberMessageTextStyle</item>
         <item name="freshchatUserMessageTimeTextStyle">@style/ChatUserMessageTimeTextStyle</item>
+        <item name="freshchatMessageReplyViewStyle">@style/MessageReplyView</item>
+        <!-- <item name="freshchatTeamMemberAvatarStyle">@style/TeamMemberStyle</item>-->
 
+    </style>
+
+    <style name='MessageReplyView' parent='Widget.Freshchat.MessageReplyView'>
+        <item name="android:background">#c009284c</item>
+    </style>
+
+
+    <style name="TeamMemberStyle">
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
     </style>
 
     <style name="ChatUserMessageTimeTextStyle">
@@ -492,26 +506,27 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorLink">@color/freshchat_text_color_link</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
     </style>
 
     <style name="ChatContactUsStyle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textDirection">firstStrong</item>
-        <item name="android:background">@drawable/btn_primary_bg_selector</item>
-        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/back_primary_btn_solid</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">10dp</item>
         <item name="android:text">Chat with an expert</item>
     </style>
 
-    <style name="ChatEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/back_chat_message_send</item>
-        <item name="android:hint">Type comething</item>
+    <style name="ChatEditText">
+        <item name="android:hint">Type something</item>
         <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
