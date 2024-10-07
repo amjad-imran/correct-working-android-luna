@@ -17,7 +17,15 @@ data class ReferralInfoResponse(
     val referralText: String? = null,
     @SerializedName("referral_image")
     val referralImage: String? = null,
-    val banner: List<Referral>? = null
+    val banner: List<Referral>? = null,
+    val prize:Prize?=null
+) : Parcelable
+
+
+@Parcelize
+data class Prize(
+    val image: String? = null,
+    val text: String? = null,
 ) : Parcelable
 
 @Parcelize
@@ -58,5 +66,6 @@ data class CardStyle3(
     val textColor: Int,
     val selectedRingRes: Int,
     val defaultRing: Int,
-    val backgroundRes: Int
+    val backgroundRes: Int,
+    val ringConnectRes: Int,
 ) : Parcelable

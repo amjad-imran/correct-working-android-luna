@@ -18,6 +18,7 @@ import com.noisefit.luna.databinding.FragmentReferralBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -59,51 +60,12 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             }
         })
         pagerAdapter.setDataSet(dataList)
-        updateIndicators(dataList.size, 0)
-
-
-        /*binding.vpMain.apply {
-            // Reduce the page size to show a partial view of the next item
-            val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
-            val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
-
-            setPageTransformer { page, position ->
-                val offset = position * -(2 * offsetPx + pageMarginPx)
-                if (position <= 1) {
-                    page.translationX = offset
-                }
-            }
-
-            // Reduce the side padding of the viewpager2 to show partial next view
-            val recyclerView = getChildAt(0) as RecyclerView
-            recyclerView.setPadding(offsetPx, 0, offsetPx, 0)
-            recyclerView.clipToPadding = false
-        }*/
-    }
-
-    private fun setupIndicators(count: Int) {
-        indicators.clear()
-        binding.indicatorLayout.removeAllViews()
-        for (i in 0 until count) {
-            val indicator = View(this@ReferralFragment.context)
-            val params = LinearLayout.LayoutParams(
-                R.dimen.indicator_width_active,
-                R.dimen.indicator_height
-            )
-            params.setMargins(8, 0, 8, 0)
-            indicator.layoutParams = params
-            indicator.setBackgroundResource(R.drawable.indicator_inactive)
-            indicators.add(indicator)
-            binding.indicatorLayout.addView(indicator)
-        }
-
-        if (indicators.isNotEmpty()) {
-            indicators[0].setBackgroundResource(R.drawable.indicator_active)
+        binding.vpMain.post {
+            updateIndicators(dataList.size, 0)
         }
     }
 
     private fun updateIndicators(count: Int, position: Int) {
-        LOGS.d("sdfjhsdkfjhksd $count -  $position")
         indicators.clear()
         binding.indicatorLayout.removeAllViews()
         for (i in 0 until count) {
@@ -141,6 +103,10 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             }
         }
 
+        binding.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.tvReferrals.setOnClickListener {
             navigate(R.id.myReferralsFragment)
         }
@@ -149,16 +115,37 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
     override fun subscribeObservers() {
         viewModel.referralInfo.observe(this) {
-            setViewPager(it)
+
             binding.tvReferralTitle.text = it.referralTitle
             binding.tvName.text = "Hello ${viewModel.getUserName()}"
 
-            val remainingDays = it.remainingDays ?: 1
 
-            binding.tvDaysLeft.text = if (remainingDays == 1) {
-                "$remainingDays day left"
+            if (it.banner.isNullOrEmpty().not()) {
+                binding.vpMain.visible()
+                binding.tvDaysLeft.visible()
+                binding.bClaimCode.visible()
+                binding.indicatorLayout.visible()
+
+                setViewPager(it)
+                val remainingDays = it.remainingDays ?: 1
+                binding.tvDaysLeft.text = if (remainingDays == 1) {
+                    "$remainingDays day left"
+                } else {
+                    "$remainingDays days left"
+                }
             } else {
-                "$remainingDays days left"
+                binding.vpMain.gone()
+                binding.tvDaysLeft.gone()
+                binding.bClaimCode.gone()
+                binding.indicatorLayout.gone()
+
+                if (it.prize != null) {
+                    binding.lytPrize.apply {
+                        root.visible()
+                        tvPrizeText.text = it.prize.text
+                        ivPrize.loadImageWithCache(ivPrize.context, it.prize.image)
+                    }
+                }
             }
         }
 

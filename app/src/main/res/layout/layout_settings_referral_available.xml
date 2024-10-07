@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_ref_1">
+    android:background="@drawable/back_corner_white">
 
     <ImageView
         android:id="@+id/ivMain"
         android:layout_width="92dp"
         android:layout_height="92dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_default_profile_image" />
 
     <TextView
-        android:id="@+id/textView134"
+        android:id="@+id/tvReferralMessage"
         style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         android:text="@string/text_refer_now"
         app:layout_constraintBottom_toBottomOf="@+id/ivMain"
         app:layout_constraintStart_toEndOf="@+id/ivMain"
-        app:layout_constraintTop_toBottomOf="@+id/textView134" />
+        app:layout_constraintTop_toBottomOf="@+id/tvReferralMessage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,6 @@ class MyReferralsAdapter : RecyclerView.Adapter<MyReferralsAdapter.ViewHolder>()
 
             binding.tvReferralName.text = referralsMain.referralName
 
-
             if (referralsMain.status.equals("won", true)) {
                 binding.tvMessage.setTextColor(android.graphics.Color.parseColor("#6bff9d"))
             } else {
@@ -34,12 +33,10 @@ class MyReferralsAdapter : RecyclerView.Adapter<MyReferralsAdapter.ViewHolder>()
                 binding.tvMessage.text = referralsMain.message
             }
 
-
             binding.rvReferrals.layoutManager = LinearLayoutManager(binding.rvReferrals.context)
             binding.rvReferrals.adapter = ReferralsInternalAdapter().apply {
                 this.setDataSet(referralsMain.referred ?: ArrayList())
             }
-
         }
 
     }

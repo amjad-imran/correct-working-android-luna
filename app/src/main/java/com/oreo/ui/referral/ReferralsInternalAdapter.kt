@@ -31,7 +31,12 @@ class ReferralsInternalAdapter : RecyclerView.Adapter<ReferralsInternalAdapter.V
                 binding.ivDelivered.setImageResource(R.drawable.ic_ref_status_filled)
                 binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_done)
                 binding.tvStatus.setTextColor(Color.parseColor("#6bff9d"))
-            } else {
+            } else if(referralsMain.status.equals("cancelled")) {
+                binding.ivPurchased.setImageResource(R.drawable.ic_ref_status_ring)
+                binding.ivDelivered.setImageResource(R.drawable.ic_ref_status_ring)
+                binding.tvStatus.text = "Cancelled"
+                binding.tvStatus.setTextColor(Color.parseColor("#ff4062"))
+            }else {
                 binding.ivPurchased.setImageResource(R.drawable.ic_ref_status_ring)
                 binding.ivDelivered.setImageResource(R.drawable.ic_ref_status_ring)
                 binding.tvStatus.text = "-"

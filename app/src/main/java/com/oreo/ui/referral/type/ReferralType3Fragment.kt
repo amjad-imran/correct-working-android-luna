@@ -56,6 +56,7 @@ class ReferralType3Fragment :
             binding.textPurchased.alpha = 0.5f
             binding.textDelivered.alpha = 0.5f
         }
+        binding.ivConnector.setImageResource(cardData.ringConnectRes)
 
         binding.tvDate.setTextColor(cardData.textColor)
         binding.tvName.setTextColor(cardData.textColor)

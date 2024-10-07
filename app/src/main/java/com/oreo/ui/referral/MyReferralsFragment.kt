@@ -35,7 +35,9 @@ class MyReferralsFragment :
     }
 
     override fun initListener() {
-
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
     }
 
     override fun subscribeObservers() {

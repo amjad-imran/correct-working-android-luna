@@ -174,6 +174,7 @@ class OMyProfileFragment :
                     binding.lytReferralAvailable.root.visible()
                     binding.lytReferralNo.root.gone()
                     binding.lytReferralAvailable.apply {
+                        tvReferralMessage.text = it.prizeTitle
                         this.ivMain.loadImageWithCache(this.root.context, it.prizeImageUrl)
                     }
                 }

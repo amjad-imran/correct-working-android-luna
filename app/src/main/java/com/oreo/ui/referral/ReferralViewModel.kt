@@ -71,6 +71,8 @@ class ReferralViewModel @Inject constructor(
     fun getCards(referralInfoResponse: ReferralInfoResponse): List<Fragment> {
         val cards = ArrayList<Fragment>()
 
+        var referredCount = 0
+
         referralInfoResponse.banner?.forEach {
             if (it.type.equals("prize", true)) {
                 cards.add(
@@ -127,23 +129,77 @@ class ReferralViewModel @Inject constructor(
                         )
                     )
                 )
-            } else if (it.type.equals("referred", true)) {//TODO check type
+            } else if (it.type.equals("referred", true)) {
+                val drawables = getFriendsCard(referredCount)
+                val rings = getRadioButtons(referredCount)
+                referredCount += 1
+
                 cards.add(
                     ReferralType3Fragment.getInstance(
                         CardStyle3(
                             name = it.name,
                             date = it.date,
                             status = it.status,
-                            textColor = R.color.white,
-                            selectedRingRes = R.drawable.ic_ref_status_filled,
-                            defaultRing = R.drawable.ic_ref_status_ring,
-                            backgroundRes = R.drawable.bg_ref_4
+                            textColor = drawables.second,
+                            selectedRingRes = rings.first,
+                            defaultRing = rings.second,
+                            backgroundRes = drawables.first,
+                            ringConnectRes = rings.third
                         )
                     )
                 )
             }
         }
         return cards
+    }
+
+    private fun getFriendsCard(referredCount: Int): Pair<Int, Int> {
+        val modVal = referredCount % 4
+        return when (modVal) {
+            0 -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
+            1 -> Pair(R.drawable.bg_ref_3, Color.parseColor("#dffc79"))
+            2 -> Pair(R.drawable.bg_ref_4, Color.parseColor("#bcf04c"))
+            3 -> Pair(R.drawable.bg_ref_5, Color.parseColor("#f2efe7"))
+            else -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
+        }
+    }
+
+    /**
+     * Ring filled, default, join drawable
+     */
+    private fun getRadioButtons(referredCount: Int): Triple<Int, Int, Int> {
+        val modVal = referredCount % 4
+        return when (modVal) {
+            0 -> Triple(
+                R.drawable.ic_ref_status_filled_2,
+                R.drawable.ic_ref_status_ring_2,
+                R.drawable.ic_ring_join_2
+            )
+
+            1 -> Triple(
+                R.drawable.ic_ref_status_filled_2,
+                R.drawable.ic_ref_status_ring_2,
+                R.drawable.ic_ring_join_2
+            )
+
+            2 -> Triple(
+                R.drawable.ic_ref_status_filled_3,
+                R.drawable.ic_ref_status_ring_3,
+                R.drawable.ic_ring_join_3
+            )
+
+            3 -> Triple(
+                R.drawable.ic_ref_status_filled,
+                R.drawable.ic_ref_status_ring,
+                R.drawable.ic_ring_join_white
+            )
+
+            else -> Triple(
+                R.drawable.ic_ref_status_filled,
+                R.drawable.ic_ref_status_ring,
+                R.drawable.ic_ring_join_white
+            )
+        }
     }
 
     fun getUserName(): String {
