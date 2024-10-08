@@ -238,4 +238,9 @@
     <color name="color_trends_warning">#d79d58</color>
 
 
+    <color name="freshchat_message_list_reply_view_divider">#00000000</color>
+    <color name="freshchat_voting_view_divider">#00000000</color>
+    <color name="freshchat_article_list_divider">#19ffffff</color>
+
+
 </resources>

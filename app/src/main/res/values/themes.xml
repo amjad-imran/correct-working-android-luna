@@ -469,6 +469,7 @@
 
     <style name="MyCustomThemeChat" parent="Theme.Freshchat.Light.DarkActionBar">
         <item name="freshchatSendIcon">@drawable/ic_ai_send_message</item>
+        <!-- <item name="freshchatAttachIcon">@drawable/ic_ai_send_message</item>-->
         <item name="freshchatMessageReplyInputViewStyle">@style/ChatEditText</item>
         <item name="freshchatContactUsTextStyle">@style/ChatContactUsStyle</item>
         <item name="android:windowBackground">@android:color/black</item>
@@ -480,11 +481,110 @@
         <item name="freshchatUserMessageTextStyle">@style/ChatTeamMemberMessageTextStyle</item>
         <item name="freshchatUserMessageTimeTextStyle">@style/ChatUserMessageTimeTextStyle</item>
         <item name="freshchatMessageReplyViewStyle">@style/MessageReplyView</item>
+        <item name="freshchatMessageListStyle">@style/ConversationMessageStyle</item>
+        <item name="freshchatFAQCategoryListItemStyle">@style/CategoryListStyle</item>
+        <item name="freshchatFAQCategoryNameTextStyle">@style/faqCategoryNameTextStyle</item>
+        <item name="freshchatFAQListItemStyle">@style/freshchatFAQListIStyle</item>
+        <item name="freshchatFAQVotingPromptTextStyle">@style/freshchatFAQVotingPromptTextStyle
+        </item>
+        <item name="freshchatFAQVotingPromptViewStyle">@style/freshchatFAQVotingPromptViewStyle
+        </item>
+        <item name="freshchatFAQDownvoteButtonStyle">@style/freshchatFAQDownvoteButtonStyle</item>
+        <item name="freshchatFAQUpvoteButtonStyle">@style/freshchatFAQUpvoteButtonStyle</item>
         <!-- <item name="freshchatTeamMemberAvatarStyle">@style/TeamMemberStyle</item>-->
 
     </style>
 
-    <style name='MessageReplyView' parent='Widget.Freshchat.MessageReplyView'>
+    <style name="freshchatFAQDownvoteButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/back_modal_faq_cta</item>
+        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:text">@string/freshchat_faq_downvote</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="freshchatFAQUpvoteButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/back_modal_faq_cta</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:text">@string/freshchat_faq_upvote</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="freshchatFAQVotingPromptViewStyle">
+        <item name="android:background">#162536</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="freshchatFAQVotingPromptTextStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:text">Did we address your concerns ?</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="freshchatFAQListIStyle">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="faqCategoryNameTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:drawableEnd">@drawable/ic_page_arrow_right</item>
+    </style>
+
+    <style name="CategoryListStyle">
+        <item name="android:background">@drawable/bg_freshchat_faq_cat</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <style name="ConversationMessageStyle">
+        <item name="android:background">@android:color/black</item>
+        <item name="stackFromEnd">true</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarStyle">insideOverlay</item>
+    </style>
+
+    <style name='MessageReplyView'>
         <item name="android:background">#c009284c</item>
     </style>
 
@@ -506,8 +606,6 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorLink">@color/freshchat_text_color_link</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:layout_margin">16dp</item>
-        <item name="android:padding">16dp</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
     </style>
 

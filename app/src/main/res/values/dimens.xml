@@ -42,4 +42,7 @@
     <dimen name="dimen_30dp">30dp</dimen>
     <dimen name="dimen_160dp">160dp</dimen>
     <dimen name="dimen_200dp">200dp</dimen>
+
+    <dimen name="freshchat_message_send_icon_size">40dp</dimen>
+    <dimen name="freshchat_message_attach_icon_size">40dp</dimen>
 </resources>
