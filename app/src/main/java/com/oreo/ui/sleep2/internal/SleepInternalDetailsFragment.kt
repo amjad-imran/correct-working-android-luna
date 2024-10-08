@@ -366,6 +366,84 @@ class SleepInternalDetailsFragment :
         }
     }
 
+    fun setSingleDataDaily(
+        avgValue: Float? = null, status: String? = null, text: String? = null,
+        textC: String? = null
+    ) {
+        binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
+        if (avgValue == null) {
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "--"
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text = viewModel.getUnit()
+        } else {
+            val unit = viewModel.getUnit()
+
+            val displayValue =
+                if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+
+                    if (sharedViewModel.sessionManager.isMetric()) {
+                        val convertedValue =
+                            AppConversionUtils.fahrenheitToCelsius(avgValue)
+                        String.format(
+                            locale = Locale.US,
+                            "%.1f",
+                            convertedValue
+                        )
+                    } else {
+                        String.format(
+                            locale = Locale.US,
+                            "+%.1f",
+                            avgValue
+                        )
+                    }
+                } else {
+                    avgValue.roundToInt()
+                }
+
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvScore.text = "${displayValue}"
+            binding.lytTopView.lytTopSingleView.lytTopPercentView.tvUnit.text =
+                "${unit}"
+        }
+
+        val singleBind = binding.lytTopView.lytTopSingleView.lytHighlightTrends
+        val displayNudge =
+            if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                if (sharedViewModel.sessionManager.isMetric()) {
+                    textC
+                } else {
+                    text
+                }
+            } else {
+                text
+            }
+
+
+
+        if (displayNudge.isNullOrEmpty()) {
+            singleBind.root.invisible()
+        } else {
+            singleBind.root.visible()
+            singleBind.apply {
+                tvRangeValue.text = displayNudge
+                ivTick.setImageResource(
+                    0
+                )
+
+                val (bgColor, textColor) = viewModel.getHighlightBackType(
+                    if (status.equals("warning")) {
+                        2
+                    } else if (status.equals("optimal")) {
+                        0
+                    } else {
+                        1
+                    }
+                )
+                bgImage.setBackgroundResource(bgColor)
+                tvRangeValue.setTextColor(textColor)
+            }
+        }
+
+    }
+
     private fun setSingleData(avgValue: Float?, percent: Int?, timingAvg: String?) {
         binding.lytTopView.lytTopSingleView.lytTopPercentView.root.visible()
         if (avgValue == null && timingAvg == null) {
@@ -624,11 +702,24 @@ class SleepInternalDetailsFragment :
                             lytPaginate.tvInterval.text = viewModel.getDisplayDate()
                         }
                     }
-                    setSingleData(
-                        topContentData.trendsData?.avg,
-                        topContentData.trendsData?.percent,
-                        topContentData.trendsData?.timing_avg
-                    )
+
+
+                    if (viewModel.selectedPeriod.value == InternalSelectedPeriod.DAILY) {
+                        setSingleDataDaily(
+                            topContentData.trendsData?.avg,
+                            topContentData.trendsData?.status,
+                            topContentData.trendsData?.dailyText,
+                            topContentData.trendsData?.dailyTextTempC
+                        )
+                    } else {
+                        setSingleData(
+                            topContentData.trendsData?.avg,
+                            topContentData.trendsData?.percent,
+                            topContentData.trendsData?.timing_avg
+                        )
+                    }
+
+
                 }
             }
 

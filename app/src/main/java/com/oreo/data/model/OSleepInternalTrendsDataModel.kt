@@ -35,6 +35,9 @@ data class TrendsValues(
     //For daily
     val avg: Float? = null,
     val nudge: String? = null,
+    val text: String? = null,
+    val textC: String? = null,
+    val status: String? = null,
     val breakup: List<Float>? = null
 ) : Parcelable
 
@@ -48,14 +51,17 @@ data class TrendAverage(
     val percent: Int? = null,
     val percent_hour: Int? = null,
     val percent_need: Int? = null,
-    val status: String? = null
+    val status: String? = null,
+
+    val dailyText: String? = null,
+    val dailyTextTempC: String? = null
 ) : Parcelable
 
 
 @Parcelize
 data class TrendsGraphData(
     var data: List<TrendsValues>? = null,
-    val avgValue:Float?=null,
+    val avgValue: Float? = null,
     var contributorType: SleepInternalLaunchState? = null,
     var selectedPeriod: InternalSelectedPeriod = InternalSelectedPeriod.DAY
 ) : Parcelable
