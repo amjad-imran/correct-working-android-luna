@@ -268,7 +268,9 @@ class OreoOnlineDataMapper
     private fun filterTempArray(tempBreakup: List<Float>): List<Float> {
         return tempBreakup.filter { it != 0f && it != 255f && it in 90f..110f }
     }
-
+    private fun filterHealthData(breakup: List<Int>, min: Int, max: Int): List<Int> {
+        return breakup.filter { it != 0 && it != 255 && it in min..max }
+    }
 
     suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
         val overlayData = getNapOverlayData(nap)
@@ -280,24 +282,35 @@ class OreoOnlineDataMapper
             tempNewArray.averageWithoutZeroFloat()
         )
 
+        val filteredHrData = filterHealthData(overlayData.hrBreakup,40,220)
+        val filteredHrvData = filterHealthData(overlayData.hrBreakup,5,100)
+        val filteredRespData = filterHealthData(overlayData.respBreakup,5,25)
+        val filteredOxyData = filterHealthData(overlayData.spo2Breakup,70,100)
+
         val napObject = OreoNapNetworkObjEntity(
             startTime = nap.startTime ?: "",
             endTime = nap.endTime ?: "",
             duration = nap.duration,
             date = nap.date ?: "",
-            avgHrv = overlayData.hrvBreakup.minWithoutZero(),
+            avgHrv = filteredHrvData.minWithoutZero(),
             temperature = overlayData.tempBreakup,
             avgTemp = avgTemp.toFloat(),
             hr = overlayData.hrBreakup,
             hrv = overlayData.hrvBreakup,
-            avgHr = overlayData.hrBreakup.averageWithoutZero(),
-            lowHr = overlayData.hrBreakup.minWithoutZero(),
-            maxHrv = overlayData.hrvBreakup.maxOrNull() ?: 0
+            avgHr = filteredHrData.minWithoutZero(),
+            lowHr =filteredHrData.minWithoutZero(),
+            maxHrv = filteredHrvData.maxOrNull() ?: 0,
+            respiration = overlayData.respBreakup,
+            oxygen = overlayData.spo2Breakup,
+            avgOxy = filteredOxyData.averageWithoutZero(),
+            avgResp = filteredRespData.averageWithoutZero()
         )
         return OreoNapNetworkEntity(
             naps = arrayListOf(napObject)
         )
     }
+
+
 
     private suspend fun getNapOverlayData(napData: OreoNapData): NapOverlayData {
         //val startTime = napData.startTime!!
