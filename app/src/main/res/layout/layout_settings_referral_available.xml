@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/ivMain"
-        android:layout_width="92dp"
-        android:layout_height="92dp"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
@@ -41,7 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginBottom="6dp"
         android:background="@drawable/back_my_referral_red"
         android:paddingHorizontal="12dp"
         android:paddingVertical="6dp"

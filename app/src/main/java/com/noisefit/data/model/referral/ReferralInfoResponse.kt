@@ -7,6 +7,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ReferralInfoResponse(
+    @SerializedName("has_notification")
+    val hasNotification: Boolean,
     @SerializedName("has_referral")
     val hasReferral: Boolean,
     @SerializedName("remaining_days")

@@ -120,6 +120,12 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             binding.tvName.text = "Hello ${viewModel.getUserName()}"
 
 
+            if (it.hasNotification) {
+                binding.ivHasNotification.visible()
+            } else {
+                binding.ivHasNotification.gone()
+            }
+
             if (it.banner.isNullOrEmpty().not()) {
                 binding.vpMain.visible()
                 binding.tvDaysLeft.visible()
