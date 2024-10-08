@@ -214,16 +214,17 @@ class OSPTrendsSharedViewModel @Inject constructor(
                     newMin = 0f
                 }
 
+                val yAxis = ArrayList<Pair<Int, String>>()
                 val step = ((newMax - newMin) / 4).roundToInt()
-                val yAxis = (0..4).map { i ->
-                    val value = (newMin + i * step).roundToInt()
-                    if (value > 100) {
-                        100 to "100%"
-                    } else {
-                        value to "$value%"
+                var lastValue = newMax.roundToInt()
+                for (i in 4 downTo 0) {
+                    if (lastValue >= 0) {
+                        yAxis.add(Pair(lastValue, "$lastValue%"))
                     }
+                    val value = lastValue - step
+                    lastValue = value
                 }
-                return yAxis
+                return yAxis.reversed()
             }
 
             else -> default
