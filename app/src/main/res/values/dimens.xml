@@ -48,4 +48,6 @@
     <dimen name="indicator_width_active">46dp</dimen>
     <dimen name="indicator_width_inactive">16dp</dimen>
     <dimen name="indicator_height">2dp</dimen>
+    <dimen name="freshchat_message_send_icon_size">40dp</dimen>
+    <dimen name="freshchat_message_attach_icon_size">40dp</dimen>
 </resources>

@@ -5,11 +5,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="sdjfkhskdjf"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
             style="@style/ModalStyleDialog"
             android:layout_width="match_parent"
@@ -69,6 +76,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
     </RelativeLayout>
 </layout>

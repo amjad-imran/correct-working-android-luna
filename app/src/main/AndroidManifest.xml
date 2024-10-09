@@ -317,6 +317,10 @@
             android:theme="@style/MyCustomThemeChat"
             tools:replace="android:theme" />
         <activity
+            android:name="com.freshchat.consumer.sdk.activity.ArticleDetailActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+        <activity
             android:name="com.freshchat.consumer.sdk.activity.CategoryListActivity"
             android:theme="@style/MyCustomThemeChat"
             tools:replace="android:theme" />

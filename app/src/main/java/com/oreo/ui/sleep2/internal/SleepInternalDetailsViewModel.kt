@@ -125,10 +125,16 @@ class SleepInternalDetailsViewModel @Inject constructor(
                                 trendsData[LocalDate.parse(it.date)] = it
                             }
                             val firstDate = it.data?.firstOrNull()
-                            val avg = firstDate?.avg
-                            val nudge = firstDate?.nudge
 
-                            generateFragment(trendsData, TrendAverage(avg = avg, nudge = nudge))
+                            generateFragment(
+                                trendsData, TrendAverage(
+                                    avg = firstDate?.avg,
+                                    nudge = firstDate?.nudge,
+                                    status = firstDate?.status,
+                                    dailyText = firstDate?.text,
+                                    dailyTextTempC = firstDate?.textC
+                                )
+                            )
                         }
                     }
                 }
@@ -174,7 +180,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     startDate.toString(),
                     getCalculatedEnd(endDate).toString(),
                     selectedLaunchMode.key.lowercase(),
-                    if(selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) "deviation" else period
+                    if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) "deviation" else period
                 )
             } else {
                 userActivityRepository.getSleepInternalTrendsPagesData(

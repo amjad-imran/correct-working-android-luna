@@ -56,8 +56,12 @@ data class OreoNapNetworkObjEntity(
     @SerializedName("low_hr") var lowHr: Int,
     @SerializedName("avg_hr") var avgHr: Int,
     @SerializedName("avg_hrv") var avgHrv: Int,
+    @SerializedName("avg_resp") var avgResp: Int,
+    @SerializedName("avg_oxy") var avgOxy: Int,
     @SerializedName("hr") var hr: List<Int>,
     @SerializedName("hrv") var hrv: List<Int>,
+    @SerializedName("respiration") var respiration: List<Int>,
+    @SerializedName("oxygen") var oxygen: List<Int>,
 )
 
 data class OreoSleepNetworkEntity(

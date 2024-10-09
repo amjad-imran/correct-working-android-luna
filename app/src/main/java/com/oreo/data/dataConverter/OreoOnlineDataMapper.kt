@@ -226,6 +226,11 @@ class OreoOnlineDataMapper
                     tempNewArray.averageWithoutZeroFloat()
                 )
 
+            val filteredHrvData = filterHealthData(sleepOverlayData.stressBreakup, 5, 100)
+            val filteredRespData = filterHealthData(sleepOverlayData.respBreakup, 5, 25)
+            val filteredOxyData = filterHealthData(sleepOverlayData.spo2Breakup, 70, 100)
+
+
             dayBreakup = OreoSleepNetworkEntity.OreoDayBreakup(
                 totalDeep = sleepData.deep,
                 totalLight = sleepData.light,
@@ -246,10 +251,10 @@ class OreoOnlineDataMapper
                 tempBreakup = sleepOverlayData.tempBreakup,
                 oxyBreakup = sleepOverlayData.spo2Breakup,
                 avgTemp = avgTemp.toFloat(),
-                avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
-                avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.averageWithoutZero(),
+                avgOxy = if (filteredOxyData.isEmpty()) 0 else filteredOxyData.averageWithoutZero(),
+                avgResp = if (filteredRespData.isEmpty()) 0 else filteredRespData.averageWithoutZero(),
                 maxTemp = tempNewArray.maxOrNull() ?: 0f,
-                avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
+                avgHrv = filteredHrvData.averageWithoutZero(),
                 readinessScore = sleepData.readinessScore ?: 0
             )
 
@@ -269,6 +274,9 @@ class OreoOnlineDataMapper
         return tempBreakup.filter { it != 0f && it != 255f && it in 90f..110f }
     }
 
+    private fun filterHealthData(breakup: List<Int>, min: Int, max: Int): List<Int> {
+        return breakup.filter { it != 0 && it != 255 && it in min..max }
+    }
 
     suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
         val overlayData = getNapOverlayData(nap)
@@ -280,24 +288,34 @@ class OreoOnlineDataMapper
             tempNewArray.averageWithoutZeroFloat()
         )
 
+        val filteredHrData = filterHealthData(overlayData.hrBreakup, 40, 220)
+        val filteredHrvData = filterHealthData(overlayData.hrvBreakup, 5, 100)
+        val filteredRespData = filterHealthData(overlayData.respBreakup, 5, 25)
+        val filteredOxyData = filterHealthData(overlayData.spo2Breakup, 70, 100)
+
         val napObject = OreoNapNetworkObjEntity(
             startTime = nap.startTime ?: "",
             endTime = nap.endTime ?: "",
             duration = nap.duration,
             date = nap.date ?: "",
-            avgHrv = overlayData.hrvBreakup.minWithoutZero(),
+            avgHrv = filteredHrvData.minWithoutZero(),
             temperature = overlayData.tempBreakup,
             avgTemp = avgTemp.toFloat(),
             hr = overlayData.hrBreakup,
             hrv = overlayData.hrvBreakup,
-            avgHr = overlayData.hrBreakup.averageWithoutZero(),
-            lowHr = overlayData.hrBreakup.minWithoutZero(),
-            maxHrv = overlayData.hrvBreakup.maxOrNull() ?: 0
+            avgHr = filteredHrData.minWithoutZero(),
+            lowHr = filteredHrData.minWithoutZero(),
+            maxHrv = filteredHrvData.maxOrNull() ?: 0,
+            respiration = overlayData.respBreakup,
+            oxygen = overlayData.spo2Breakup,
+            avgOxy = filteredOxyData.averageWithoutZero(),
+            avgResp = filteredRespData.averageWithoutZero()
         )
         return OreoNapNetworkEntity(
             naps = arrayListOf(napObject)
         )
     }
+
 
     private suspend fun getNapOverlayData(napData: OreoNapData): NapOverlayData {
         //val startTime = napData.startTime!!

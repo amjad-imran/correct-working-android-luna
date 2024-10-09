@@ -267,13 +267,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 val pos = getYAxisValue(roundedAvg.toFloat())
                 val end = start.toFloat() + stepWidth
 
-                val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION) {
+                val text = if (launchState == SleepInternalLaunchState.SLEEP_DURATION
+                    || launchState == SleepInternalLaunchState.REM_SLEEP ||
+                    launchState == SleepInternalLaunchState.DEEP_SLEEP) {
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
                         roundedAvg.roundToInt()
                     )
                     String.format(locale = Locale.US, "%d:%02d", hour, minute)
-                } else if (launchState == SleepInternalLaunchState.REM_SLEEP ||
-                    launchState == SleepInternalLaunchState.DEEP_SLEEP ||
+                } else if (
                     launchState == SleepInternalLaunchState.RESTFULNESS ||
                     launchState == SleepInternalLaunchState.RESPIRATORY_RATE ||
                     launchState == SleepInternalLaunchState.RESTING_HEART_RATE ||

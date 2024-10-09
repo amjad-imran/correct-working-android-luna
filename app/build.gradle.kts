@@ -363,6 +363,8 @@ dependencies {
 
     //freshchat
     implementation(libs.freshchat.android)
+    implementation(libs.jjwt)
+
 
 
 }

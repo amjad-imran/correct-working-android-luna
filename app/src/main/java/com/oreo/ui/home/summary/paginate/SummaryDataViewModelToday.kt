@@ -251,8 +251,8 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             if (ringDataStore.getRingDevice() != null
-                && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess && isSleepAlertCrossed.not()
-            ) {
+                && sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess
+                && isSleepAlertCrossed.not() && sleepExists.not()) {
 
                 val isTodayHrDataEmpty = checkIfHrDataEmpty(LocalDate.now().toString())
                 val yesterdayDate = LocalDate.now().minusDays(1).toString()

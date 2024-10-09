@@ -46,8 +46,12 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
@@ -143,6 +147,13 @@ class OreoReadinessFragment :
             showWalkAround(true)
         }
 
+    }
+
+    fun showInternalTrend(state: SleepInternalLaunchState, selectedDate: String) {
+        val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
+            state, selectedDate
+        )
+        navigate(frag, bundle)
     }
 
     private fun showWalkAround(show: Boolean) {
@@ -507,7 +518,7 @@ class OreoReadinessFragment :
 
     }
 
-    private fun showCalendar(){
+    private fun showCalendar() {
         setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
             val selectedDate =
                 bundle.getString("selected_date") ?: return@setFragmentResultListener
@@ -621,11 +632,17 @@ class OreoReadinessFragment :
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+            /*navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.resting_hr_top)
                 putString("date", mainViewModel.selectedDate)
-            })
+            })*/
+            showInternalTrend(
+                SleepInternalLaunchState.RESTING_HEART_RATE,
+                mainViewModel.selectedDate ?: LocalDate.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )
+
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_resting_hr_click)
 
         }
@@ -633,11 +650,13 @@ class OreoReadinessFragment :
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.hrv)
-                putString("date", mainViewModel.selectedDate)
-            })
+
+            showInternalTrend(
+                SleepInternalLaunchState.HRV,
+                mainViewModel.selectedDate ?: LocalDate.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )
+
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hr_variability_click)
         }
 
@@ -658,33 +677,26 @@ class OreoReadinessFragment :
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.READINESS.name
                 mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
-                /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                      putString("viewType", "readiness")
-                      putString("infoData", mViewModel.contributorInfo.value?.temperature)
-                      putString("date", mainViewModel.selectedDate)
-                  })*/
-
-                navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
-                    putString("date", mainViewModel.selectedDate)
-                    putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
-                })
+                showInternalTrend(
+                    SleepInternalLaunchState.SKIN_TEMPERATURE,
+                    mainViewModel.selectedDate ?: LocalDate.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                )
 
                 mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_skin_temp_click)
 
             }
-
-
         }
 
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.respiration)
-                putString("date", mainViewModel.selectedDate)
-            })
+            showInternalTrend(
+                SleepInternalLaunchState.RESPIRATORY_RATE,
+                mainViewModel.selectedDate ?: LocalDate.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_respiratory_rate_click)
         }
 
