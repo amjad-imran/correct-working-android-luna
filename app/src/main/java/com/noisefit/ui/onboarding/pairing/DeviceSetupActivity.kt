@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
 const val SETUP_DEVICE = "SETUP_DEVICE"
-
+@Deprecated("")
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     private var setupStarted = false
