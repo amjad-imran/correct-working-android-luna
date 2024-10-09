@@ -860,7 +860,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
 
                 is ConnectState.ConnectSuccess -> {
-
+                    viewModel.checkOnGoingWorkout()
                 }
 
                 is ConnectState.UnPaired -> {

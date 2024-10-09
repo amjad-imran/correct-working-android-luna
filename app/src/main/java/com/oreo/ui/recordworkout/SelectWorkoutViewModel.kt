@@ -1,5 +1,6 @@
 package com.oreo.ui.recordworkout
 
+import android.media.metrics.Event
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -36,6 +37,8 @@ constructor(
 
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
+
+    val startWorkout = MutableLiveData<com.noisefit_commans.utils.Event<OWorkoutListModal>>()
 
 
     fun isDeviceConnected(): Boolean {
@@ -101,6 +104,14 @@ constructor(
     fun isBatteryLow(): Boolean {
         val batteryPercentage = watchDataStore.getBatteryPercentRing()
         return batteryPercentage <= 5
+    }
+
+    fun stopWorkout() {
+        ringDataStore.deleteOngoingRecordWorkout()
+    }
+
+    fun getCurrentTimeStamp(): Long {
+        return System.currentTimeMillis() / 1000
     }
 
     fun isWorkoutOngoing(): Boolean {

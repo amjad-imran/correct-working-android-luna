@@ -362,7 +362,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     mainViewModel.onRingConnected()
 
                     //condition to be called once only
-                    mainViewModel.checkOnGoingWorkout()
+                    //mainViewModel.checkOnGoingWorkout()
 
                 }
 

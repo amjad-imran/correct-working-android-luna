@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
@@ -13,6 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.oreo.ui.workout.add.OSelectWorkoutAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,18 +61,33 @@ class SelectWorkoutFragment :
             return
         }
 
-        /*if (viewModel.isWorkoutOngoing()) {
-            context.showShortToast("Workout is already in progress")
+        if (viewModel.isWorkoutOngoing()) {
+
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                BOTTOM_SHEET_WORKOUT_IN_PROGRESS,
+                this
+            ) { key, bundle ->
+                val allow = bundle.getBoolean("allow")
+                viewModel.stopWorkout()
+                if (allow) {
+                    viewModel.startWorkout.postValue(Event(oWorkoutListModal))
+                }
+            }
+            navigate(R.id.bottomSheetWorkoutInProgress)
             return
-        }*/
+        }
+
+        startWorkout(oWorkoutListModal)
 
 
-        navigateUpSafe()
-        requireActivity().supportFragmentManager.setFragmentResult(
+    }
+
+    private fun startWorkout(oWorkoutListModal: OWorkoutListModal) {
+        this@SelectWorkoutFragment.navigateUpSafe()
+        this@SelectWorkoutFragment.requireActivity().supportFragmentManager.setFragmentResult(
             SELECT_RECORD_WORKOUT,
             bundleOf("workout" to oWorkoutListModal)
         )
-
     }
 
 
@@ -100,6 +117,12 @@ class SelectWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.startWorkout.observe(this) {
+            it.getContent()?.let {
+                startWorkout(it)
+            }
+        }
 
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
