@@ -208,7 +208,7 @@ class ChatGptViewModel
             serverSentEvent = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
                 override fun onOpen(sse: ServerSentEvent?, response: Response?) {
                     // When the channel is opened
-                    //LOGS.d("streammmmmm onOpen()")
+                    //LOGS.d("streammmmmm onOpen() $response")
                 }
 
                 override fun onMessage(
