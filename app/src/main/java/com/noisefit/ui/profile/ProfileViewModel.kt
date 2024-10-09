@@ -308,7 +308,14 @@ constructor(
         if (referralInfoResponse == null) return ReferralRunningState.Default
 
         return if (referralInfoResponse.banner.isNullOrEmpty()) {
-            ReferralRunningState.NotAvailable
+            if(referralInfoResponse.prize!=null){
+                ReferralRunningState.Available(
+                    referralInfoResponse.referralImage,
+                    referralInfoResponse.referralText
+                )
+            }else{
+                ReferralRunningState.NotAvailable
+            }
         } else {
             ReferralRunningState.Available(
                 referralInfoResponse.referralImage,

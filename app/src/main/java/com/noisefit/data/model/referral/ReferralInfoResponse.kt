@@ -26,6 +26,7 @@ data class ReferralInfoResponse(
 
 @Parcelize
 data class Prize(
+    @SerializedName("image_url")
     val image: String? = null,
     val text: String? = null,
 ) : Parcelable
