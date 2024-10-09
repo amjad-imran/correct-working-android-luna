@@ -491,8 +491,133 @@
         </item>
         <item name="freshchatFAQDownvoteButtonStyle">@style/freshchatFAQDownvoteButtonStyle</item>
         <item name="freshchatFAQUpvoteButtonStyle">@style/freshchatFAQUpvoteButtonStyle</item>
+        <item name="freshchatChannelNameTextStyle">@style/freshchatChannelNameTextStyle</item>
+        <item name="freshchatChannelDescriptionTextStyle">@style/freshchatChannelDescriptionTextStyle</item>
+        <item name="freshchatChannelLastUpdatedAtTextStyle">@style/freshchatChannelLastUpdatedAtTextStyle</item>
+        <item name="freshchatChannelUnreadCountTextStyle">@style/freshchatChannelUnreadCountTextStyle</item>
+        <item name="freshchatChannelListItemStyle">@style/freshchatChannelListItemStyle</item>
+        <item name="freshchatChannelAltIconStyle">@style/freshchatChannelAltIconStyle</item>
         <!-- <item name="freshchatTeamMemberAvatarStyle">@style/TeamMemberStyle</item>-->
 
+
+        <!--Customer Survey Dialog-->
+        <item name="freshchatCustomerSurveyDialog">@style/freshchatCustomerSurveyDialog</item>
+        <item name="freshchatCustomerSurveyQuestionTextStyle">@style/freshchatCustomerSurveyQuestionTextStyle</item>
+        <!--<item name="freshchatCustomerSurveyRatingBarStyle">@style/freshchatCustomerSurveyRatingBarStyle</item>-->
+        <item name="freshchatCustomerSurveyCommentsInputViewStyle">@style/freshchatCustomerSurveyCommentsInputViewStyle</item>
+
+
+    </style>
+
+    <style name="freshchatCustomerSurveyDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Action button text color -->
+        <!--<item name="colorAccent">@color/holo_orange_dark</item>-->
+        <!-- Dialog background-->
+        <item name="android:windowBackground">#162536</item>
+        <!-- Dialog action button bar style -->
+        <!--<item name="android:buttonBarStyle">@style/ButtonBarStyle</item>-->
+        <!-- Dialog action button style -->
+        <!--<item name="android:borderlessButtonStyle">@style/BorderlessButtonStyle</item>-->
+
+    </style>
+
+    <style name="freshchatCustomerSurveyCommentsInputViewStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:hint">@string/freshchat_chat_resolution_user_comments_hint</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="freshchatCustomerSurveyQuestionTextStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">@integer/freshchat_custsat_question_max_lines</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="freshchatChannelAltIconStyle">
+        <item name="android:layout_height">@dimen/freshchat_channel_icon_alt_view_size</item>
+        <item name="android:layout_width">@dimen/freshchat_channel_icon_alt_view_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/freshchat_channel_alt_text_bg</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:layout_margin">@dimen/freshchat_channel_icon_padding</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="freshchatChannelListItemStyle">
+        <item name="android:background">@drawable/bg_freshchat_faq_cat</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="freshchatChannelUnreadCountTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.Freshchat.Medium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="freshchatChannelLastUpdatedAtTextStyle">
+        <item name="android:textAppearance">@style/TextAppearance.Freshchat.Small</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="freshchatChannelDescriptionTextStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">@integer/freshchat_channel_desc_max_lines</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAppearance">@style/TextAppearance.Freshchat.Medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="freshchatChannelNameTextStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">@integer/freshchat_channel_name_max_lines</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Freshchat.Medium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="freshchatFAQDownvoteButtonStyle" parent="Widget.AppCompat.Button">
