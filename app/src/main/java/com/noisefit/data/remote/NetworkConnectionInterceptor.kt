@@ -7,6 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import com.freshchat.consumer.sdk.Freshchat
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.NetworkErrors.FORCE_UPDATE
@@ -89,6 +91,9 @@ class NetworkConnectionInterceptor(
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))
         }
+
+        Freshchat.resetUser(NoiseFitApplicationMain.context)
+
 
 
         //Insider app event on device session expiry
