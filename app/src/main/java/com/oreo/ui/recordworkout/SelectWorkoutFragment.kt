@@ -59,10 +59,10 @@ class SelectWorkoutFragment :
             return
         }
 
-        if (viewModel.isWorkoutOngoing()) {
+        /*if (viewModel.isWorkoutOngoing()) {
             context.showShortToast("Workout is already in progress")
             return
-        }
+        }*/
 
 
         navigateUpSafe()
