@@ -38,88 +38,104 @@
         tools:visibility="visible" />
 
 
-    <TextView
-        android:id="@+id/tvName"
-        style="@style/S20"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:letterSpacing="0.02"
-        android:textColor="#63f2f1e9"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/bClaimCode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn"
-        tools:text="Hello Amit" />
+        app:layout_constraintTop_toBottomOf="@+id/backBtn">
 
-    <TextView
-        android:id="@+id/tvReferralTitle"
-        style="@style/S20"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:letterSpacing="0.02"
-        android:singleLine="true"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvDaysLeft"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName"
-        tools:text="Referral month" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvDaysLeft"
-        style="@style/S12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/back_modal_new_round"
-        android:padding="8dp"
-        android:textColor="#f4eded"
-        app:layout_constraintBottom_toBottomOf="@+id/tvReferralTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvReferralTitle"
-        tools:text="3 days left" />
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/S20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:letterSpacing="0.02"
+                android:textColor="#63f2f1e9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Hello Amit" />
 
+            <TextView
+                android:id="@+id/tvReferralTitle"
+                style="@style/S20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:letterSpacing="0.02"
+                android:singleLine="true"
+                android:textSize="36sp"
+                app:layout_constraintEnd_toStartOf="@+id/tvDaysLeft"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                tools:text="Referral month" />
 
-    <include
-        android:id="@+id/lytPrize"
-        layout="@layout/layout_referral_prize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvReferralTitle" />
+            <TextView
+                android:id="@+id/tvDaysLeft"
+                style="@style/S12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/back_modal_new_round"
+                android:padding="8dp"
+                android:textColor="#f4eded"
+                app:layout_constraintBottom_toBottomOf="@+id/tvReferralTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvReferralTitle"
+                tools:text="3 days left" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpMain"
-        android:layout_width="match_parent"
-        android:layout_height="376dp"
-        android:layout_marginTop="32dp"
-        android:overScrollMode="never"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvReferralTitle" />
+            <include
+                android:id="@+id/lytPrize"
+                layout="@layout/layout_referral_prize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReferralTitle" />
 
-    <LinearLayout
-        android:id="@+id/indicatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vpMain" />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vpMain"
+                android:layout_width="match_parent"
+                android:layout_height="376dp"
+                android:layout_marginTop="32dp"
+                android:overScrollMode="never"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvReferralTitle" />
+
+            <LinearLayout
+                android:id="@+id/indicatorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="48dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vpMain" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bClaimCode"

@@ -119,10 +119,15 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             binding.tvReferralTitle.text = it.referralTitle
             binding.tvName.text = "Hello ${viewModel.getUserName()}"
 
-
-            if (it.hasNotification) {
-                binding.ivHasNotification.visible()
+            if (it.hasReferral) {
+                binding.tvReferrals.visible()
+                if (it.hasNotification) {
+                    binding.ivHasNotification.visible()
+                } else {
+                    binding.ivHasNotification.gone()
+                }
             } else {
+                binding.tvReferrals.gone()
                 binding.ivHasNotification.gone()
             }
 
