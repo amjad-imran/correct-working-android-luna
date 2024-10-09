@@ -178,6 +178,7 @@ class AuthViewModel @Inject constructor(
 
                         resource.data?.data?.let {
 
+                            ringDataStore.setUpdateUserDeviceStatus(false)
                             if (it.user == null) {
                                 //New user case
                                 isNewUser = true
@@ -191,7 +192,6 @@ class AuthViewModel @Inject constructor(
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
 
                             localDataStore.updateUserToken(it.token)
-                            ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
                             loginSuccessEvent()
 
@@ -319,6 +319,7 @@ class AuthViewModel @Inject constructor(
                             it.user?.let { user ->
                                 val isOutSideIndia = ApplicationUtils.isOutSideIndia()
 
+                                ringDataStore.setUpdateUserDeviceStatus(false)
                                 if (isOutSideIndia) {
                                     if (it.user != null) {
                                         localDataStore.saveUserInfo(it.user!!)
@@ -326,7 +327,6 @@ class AuthViewModel @Inject constructor(
                                         sessionManager.updateGender(it.user?.userInfo?.gender)
                                         sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
-                                        ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
                                     }
@@ -341,7 +341,6 @@ class AuthViewModel @Inject constructor(
                                         sessionManager.updateGender(it.user?.userInfo?.gender)
                                         sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
-                                        ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
                                     }
@@ -494,6 +493,7 @@ class AuthViewModel @Inject constructor(
 
                         resource.data?.data?.let {
                             val isOutSideIndia = ApplicationUtils.isOutSideIndia()
+                            ringDataStore.setUpdateUserDeviceStatus(false)
 
                             if (it.user == null) {
                                 //CASE New User
@@ -526,7 +526,6 @@ class AuthViewModel @Inject constructor(
                             sessionManager.updateGender(it.user?.userInfo?.gender)
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                             localDataStore.updateUserToken(it.token)
-                            ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
                             loginSuccessEvent()
 

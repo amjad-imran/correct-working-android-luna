@@ -46,10 +46,6 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
 
-        <activity
-            android:name="com.freshchat.consumer.sdk.activity.ConversationDetailActivity"
-            android:theme="@style/MyCustomThemeChat"
-            tools:replace="android:theme" />
 
         <service
             android:name="com.noisefit_commans.location.LocationService"
@@ -324,6 +320,16 @@
             android:name="com.freshchat.consumer.sdk.activity.CategoryListActivity"
             android:theme="@style/MyCustomThemeChat"
             tools:replace="android:theme" />
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.ConversationDetailActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+
+        <activity
+            android:name="com.freshchat.consumer.sdk.activity.ChannelListActivity"
+            android:theme="@style/MyCustomThemeChat"
+            tools:replace="android:theme" />
+
     </application>
 
 </manifest>

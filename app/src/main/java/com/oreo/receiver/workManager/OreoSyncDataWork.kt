@@ -143,6 +143,11 @@ constructor(
             return success.invoke()
         }
 
+        if (ringDataStore.isUpdateUserDeviceDone().not()) {
+            AppLogs.sendAppLogs("OreoSyncDataWork: Ring token setup pending")
+            return success.invoke()
+        }
+
         /*if (!shouldSync()) {
             LOGS.d(
                 TAG, "OreoSyncDataWork: No time to sync(die)" +
