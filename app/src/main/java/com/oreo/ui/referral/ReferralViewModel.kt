@@ -177,8 +177,8 @@ class ReferralViewModel @Inject constructor(
             )
 
             1 -> Triple(
-                R.drawable.ic_ref_status_filled_2,
-                R.drawable.ic_ref_status_ring_2,
+                R.drawable.ic_ref_status_filled_4,
+                R.drawable.ic_ref_status_ring_4,
                 R.drawable.ic_ring_join_2
             )
 
