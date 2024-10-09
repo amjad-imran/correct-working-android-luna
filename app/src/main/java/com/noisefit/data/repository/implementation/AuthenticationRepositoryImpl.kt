@@ -1,7 +1,9 @@
 package com.noisefit.data.repository.implementation
 
 //import com.clevertap.android.sdk.CleverTapAPI
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.gson.JsonObject
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit_commans.data.model.User
@@ -86,6 +88,9 @@ class AuthenticationRepositoryImpl(
             GlobalScope.launch(Dispatchers.IO) {
                 removeOfflineUserData()
             }
+
+            Freshchat.resetUser(NoiseFitApplicationMain.context)
+
 
             localDataSource.setVerifyMobileNumberStatus(false)
             localDataSource.setUserDataSynced(false)
