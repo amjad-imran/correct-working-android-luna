@@ -1356,5 +1356,8 @@
     <string name="text_generating_data">Generating data</string>
     <string name="freshchat_file_provider_authority">com.noisefit.luna.provider</string>
 
+    <string name="text_ongoing_workout_detected">Ongoing workout detected!</string>
+    <string name="text_ongoing_message">Looks like last workout didn\'t end properly.\nWant to finish it and start fresh?</string>
+    <string name="text_end_start_new"><![CDATA[End & start new]]></string>
 
 </resources>

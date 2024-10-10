@@ -5,14 +5,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.oreo.ui.workout.add.OSelectWorkoutAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,17 +63,32 @@ class SelectWorkoutFragment :
         }
 
         if (viewModel.isWorkoutOngoing()) {
-            context.showShortToast("Workout is already in progress")
+
+            requireActivity().supportFragmentManager.setFragmentResultListener(
+                BOTTOM_SHEET_WORKOUT_IN_PROGRESS,
+                this
+            ) { key, bundle ->
+                val allow = bundle.getBoolean("allow")
+                viewModel.stopWorkout()
+                if (allow) {
+                    viewModel.startWorkout.postValue(Event(oWorkoutListModal))
+                }
+            }
+            navigate(R.id.bottomSheetWorkoutInProgress)
             return
         }
 
+        startWorkout(oWorkoutListModal)
 
-        navigateUpSafe()
-        requireActivity().supportFragmentManager.setFragmentResult(
+
+    }
+
+    private fun startWorkout(oWorkoutListModal: OWorkoutListModal) {
+        this@SelectWorkoutFragment.navigateUpSafe()
+        this@SelectWorkoutFragment.requireActivity().supportFragmentManager.setFragmentResult(
             SELECT_RECORD_WORKOUT,
             bundleOf("workout" to oWorkoutListModal)
         )
-
     }
 
 
@@ -101,6 +119,12 @@ class SelectWorkoutFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.startWorkout.observe(this) {
+            it.getContent()?.let {
+                startWorkout(it)
+            }
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -126,6 +150,28 @@ class SelectWorkoutFragment :
                 selectWorkoutAdapter.setData(it)
             }
         }
+
+        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+            when (connectedState) {
+                is ConnectState.ConnectFailed -> {}
+
+                is ConnectState.Connecting -> {}
+
+                is ConnectState.ConnectSuccess -> {
+                    //condition to be called once only
+                    viewModel.checkOnGoingWorkout()
+
+                }
+
+                is ConnectState.UnPaired -> {
+
+                }
+
+                else -> {}
+            }
+
+        }
+
     }
 
 }
