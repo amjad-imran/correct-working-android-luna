@@ -1924,7 +1924,7 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<OSleepInternalTrendsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v2/daily/trends/$filterType"
+                "${BuildConfig.OREO_BASE_URL}/sleep/v2/daily/trends-new/$filterType"
             remoteDataSource.getDailyTrendsData(url, startDate, endDate)
         }
     }
