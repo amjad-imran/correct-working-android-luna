@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -149,6 +150,28 @@ class SelectWorkoutFragment :
                 selectWorkoutAdapter.setData(it)
             }
         }
+
+        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+            when (connectedState) {
+                is ConnectState.ConnectFailed -> {}
+
+                is ConnectState.Connecting -> {}
+
+                is ConnectState.ConnectSuccess -> {
+                    //condition to be called once only
+                    viewModel.checkOnGoingWorkout()
+
+                }
+
+                is ConnectState.UnPaired -> {
+
+                }
+
+                else -> {}
+            }
+
+        }
+
     }
 
 }

@@ -28,7 +28,7 @@ import javax.inject.Inject
 class SelectWorkoutViewModel @Inject
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
-    private val sessionManager: SessionManager,
+    val sessionManager: SessionManager,
     private val watchDataStore: WatchDataStore,
     private val keyValueDataSource: KeyValueDataSource,
     private val ringDataStore: RingDataStore,
@@ -117,6 +117,15 @@ constructor(
     fun isWorkoutOngoing(): Boolean {
         val workout = ringDataStore.getOngoingRecordWorkout()
         return workout != null
+    }
+
+    fun checkOnGoingWorkout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val workout = ringDataStore.getOngoingRecordWorkout()
+            if (workout != null) {
+                sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
+            }
+        }
     }
 
 
