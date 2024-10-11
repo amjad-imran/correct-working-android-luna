@@ -1,6 +1,7 @@
 package com.noisefit.data.remote
 
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import okhttp3.Headers
 import okhttp3.Request
@@ -123,5 +124,6 @@ object AppLogger {
 
     private fun logNetwork(msg: String) {
         LOGS.d(msg)
+        AppLogs.sendAppLogs(msg)
     }
 }
