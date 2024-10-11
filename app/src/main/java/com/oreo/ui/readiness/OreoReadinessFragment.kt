@@ -809,8 +809,8 @@ class OreoReadinessFragment :
 
     private fun updateUiRead(it: OreoReadinessModel) {
         binding.lytRScoreData.lytScore.tvTitle.text = getString(R.string.text_readiness_score)
-        binding.lytRScoreData.lytSec1.tvTitle.text = getString(R.string.text_resting_hr)
-        binding.lytRScoreData.lytSec2.tvTitle.text = getString(R.string.text_hr_variability)
+        binding.lytRScoreData.lytSec1.tvTitle.text = getString(R.string.text_resting_heart_rate)
+        binding.lytRScoreData.lytSec2.tvTitle.text = getString(R.string.text_hrv)
         binding.lytRScoreData.lytSec3.tvTitle.text = getString(R.string.text_skin_temperature)
         binding.lytRScoreData.lytSec4.tvTitle.text = getString(R.string.text_respiratory_rate)
 

@@ -469,7 +469,7 @@
 
     <style name="MyCustomThemeChat" parent="Theme.Freshchat.Light.DarkActionBar">
         <item name="freshchatSendIcon">@drawable/ic_ai_send_message</item>
-        <!-- <item name="freshchatAttachIcon">@drawable/ic_ai_send_message</item>-->
+         <item name="freshchatAttachIcon">@drawable/ic_fc_attach_file</item>
         <item name="freshchatMessageReplyInputViewStyle">@style/ChatEditText</item>
         <item name="freshchatContactUsTextStyle">@style/ChatContactUsStyle</item>
         <item name="android:windowBackground">@android:color/black</item>
@@ -491,6 +491,8 @@
         </item>
         <item name="freshchatFAQDownvoteButtonStyle">@style/freshchatFAQDownvoteButtonStyle</item>
         <item name="freshchatFAQUpvoteButtonStyle">@style/freshchatFAQUpvoteButtonStyle</item>
+
+        <!--Conversation list-->
         <item name="freshchatChannelNameTextStyle">@style/freshchatChannelNameTextStyle</item>
         <item name="freshchatChannelDescriptionTextStyle">@style/freshchatChannelDescriptionTextStyle</item>
         <item name="freshchatChannelLastUpdatedAtTextStyle">@style/freshchatChannelLastUpdatedAtTextStyle</item>
@@ -557,8 +559,8 @@
     </style>
 
     <style name="freshchatChannelAltIconStyle">
-        <item name="android:layout_height">@dimen/freshchat_channel_icon_alt_view_size</item>
-        <item name="android:layout_width">@dimen/freshchat_channel_icon_alt_view_size</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@drawable/freshchat_channel_alt_text_bg</item>
@@ -583,7 +585,8 @@
     <style name="freshchatChannelLastUpdatedAtTextStyle">
         <item name="android:textAppearance">@style/TextAppearance.Freshchat.Small</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textColor">#70ffffff</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
@@ -597,9 +600,10 @@
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingEnd">8dp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:textColor">#70ffffff</item>
         <item name="android:textAppearance">@style/TextAppearance.Freshchat.Medium</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
@@ -613,8 +617,9 @@
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingEnd">8dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:textAppearance">@style/TextAppearance.Freshchat.Medium</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">#e6ffffff</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>

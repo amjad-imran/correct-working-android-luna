@@ -38,7 +38,17 @@ data class TrendsValues(
     val text: String? = null,
     val textC: String? = null,
     val status: String? = null,
-    val breakup: List<Float>? = null
+    val breakups: List<Breakups>? = null,
+
+
+    val breakup: List<Float>? = null//For graph
+) : Parcelable
+
+@Parcelize
+data class Breakups(
+    val start_time: String? = null,
+    val end_time: String? = null,
+    val breakup: List<Float>? = null,
 ) : Parcelable
 
 @Parcelize

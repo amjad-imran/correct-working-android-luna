@@ -13,6 +13,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.oreo.data.model.Breakups
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -27,6 +28,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
+import java.util.Collections
 import javax.inject.Inject
 
 @HiltViewModel
@@ -245,14 +247,16 @@ class SleepInternalDetailsViewModel @Inject constructor(
         while (current!! <= currentSelectedEndDate!!) {
 
             val data = trends[current]
+            val combinedData = generateBreakup(data?.breakups)
+
             dataToDisplay.add(
                 TrendsValues(
                     date = current.format(dateFormat),
                     value1 = data?.value1,
                     value2 = data?.value2,
-                    breakup = data?.breakup,
-                    start_time = data?.start_time,
-                    end_time = data?.end_time,
+                    breakup = combinedData?.first,
+                    start_time = data?.start_time ?: combinedData?.second,
+                    end_time = data?.end_time ?: combinedData?.third,
                     master_start_time = data?.master_start_time,
                     master_end_time = data?.master_end_time,
                     master_mid_time = data?.master_mid_time
@@ -276,6 +280,62 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    /**
+     * Returns Triple(Breakup, startTime, endTime)
+     */
+    private fun generateBreakup(breakups: List<Breakups>?): Triple<List<Float>?, String?, String?>? {
+        if (breakups.isNullOrEmpty()) return null
+
+        if (breakups.size == 1) {
+            val first = breakups.first()
+            return Triple(first.breakup, first.start_time, first.end_time)
+        }
+
+        val dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val sleepSections = breakups.map {
+            SleepSections(
+                startTime = LocalDateTime.parse(it.start_time ?: "", dateTimeFormat),
+                endTime = LocalDateTime.parse(it.end_time ?: "", dateTimeFormat),
+                breakup = it.breakup ?: ArrayList()
+            )
+        }
+
+        val sortedData = sleepSections.sortedBy {
+            it.startTime
+        }
+
+        val newBreakup = ArrayList<Float>()
+
+        sortedData.forEachIndexed { index, sleepSection ->
+            newBreakup.addAll(sleepSection.breakup)
+
+            if (index != (sortedData.size - 1)) {
+                val nextSection = sortedData[index + 1]
+                val currentEndTime = sleepSection.endTime
+                val nextStartTime = nextSection.startTime
+
+                val minutesDifference =
+                    Duration.between(currentEndTime, nextStartTime).abs().toMinutes()
+
+                val valuesRequired =
+                    if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                        (minutesDifference / 15).toInt()
+                    } else {
+                        (minutesDifference / 5).toInt()
+                    }
+
+                newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+            }
+
+        }
+
+
+        return Triple(
+            newBreakup, sortedData.first().startTime.format(dateTimeFormat),
+            sortedData.last().endTime.format(dateTimeFormat)
+        )
     }
 
 
@@ -1752,3 +1812,9 @@ enum class InternalSelectedPeriod {
 enum class TrendsTopState {
     SINGLE, SINGLE_DATE, DOUBLE_DATE
 }
+
+data class SleepSections(
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
+    val breakup: List<Float>,
+)

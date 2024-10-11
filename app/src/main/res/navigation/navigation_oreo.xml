@@ -574,6 +574,10 @@
         android:name="com.oreo.ui.recordworkout.BottomSheetRingBatteryLow"
         android:label="BottomSheetRingBatteryLow" />
     <dialog
+        android:id="@+id/bottomSheetWorkoutInProgress"
+        android:name="com.oreo.ui.recordworkout.BottomSheetWorkoutInProgress"/>
+
+    <dialog
         android:id="@+id/bottomSheetRingCharging"
         android:name="com.oreo.ui.recordworkout.BottomSheetRingCharging"
         android:label="BottomSheetRingCharging" />

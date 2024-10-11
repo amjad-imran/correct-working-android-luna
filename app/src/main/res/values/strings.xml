@@ -1365,5 +1365,8 @@
     <string name="text_ring_delivered">Ring delivered</string>
     <string name="text_pending">Pending</string>
 
+    <string name="text_ongoing_workout_detected">Ongoing workout detected!</string>
+    <string name="text_ongoing_message">Looks like last workout didn\'t end properly.\nWant to finish it and start fresh?</string>
+    <string name="text_end_start_new"><![CDATA[End & start new]]></string>
 
 </resources>

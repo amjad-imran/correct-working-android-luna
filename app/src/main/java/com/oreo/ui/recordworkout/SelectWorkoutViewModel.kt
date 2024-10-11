@@ -1,5 +1,6 @@
 package com.oreo.ui.recordworkout
 
+import android.media.metrics.Event
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,7 @@ import javax.inject.Inject
 class SelectWorkoutViewModel @Inject
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
-    private val sessionManager: SessionManager,
+    val sessionManager: SessionManager,
     private val watchDataStore: WatchDataStore,
     private val keyValueDataSource: KeyValueDataSource,
     private val ringDataStore: RingDataStore,
@@ -36,6 +37,8 @@ constructor(
 
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
+
+    val startWorkout = MutableLiveData<com.noisefit_commans.utils.Event<OWorkoutListModal>>()
 
 
     fun isDeviceConnected(): Boolean {
@@ -103,9 +106,26 @@ constructor(
         return batteryPercentage <= 5
     }
 
+    fun stopWorkout() {
+        ringDataStore.deleteOngoingRecordWorkout()
+    }
+
+    fun getCurrentTimeStamp(): Long {
+        return System.currentTimeMillis() / 1000
+    }
+
     fun isWorkoutOngoing(): Boolean {
         val workout = ringDataStore.getOngoingRecordWorkout()
         return workout != null
+    }
+
+    fun checkOnGoingWorkout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val workout = ringDataStore.getOngoingRecordWorkout()
+            if (workout != null) {
+                sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
+            }
+        }
     }
 
 
