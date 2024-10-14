@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="376dp"
                 android:layout_marginTop="32dp"
-                android:overScrollMode="never"
+                android:overScrollMode="always"
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
                 app:layout_constraintEnd_toEndOf="parent"

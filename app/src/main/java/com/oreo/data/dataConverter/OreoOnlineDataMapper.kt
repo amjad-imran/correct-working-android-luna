@@ -226,6 +226,7 @@ class OreoOnlineDataMapper
                     tempNewArray.averageWithoutZeroFloat()
                 )
 
+            val filteredHrData = filterHealthData(sleepOverlayData.hrBreakup, 40, 220)
             val filteredHrvData = filterHealthData(sleepOverlayData.stressBreakup, 5, 100)
             val filteredRespData = filterHealthData(sleepOverlayData.respBreakup, 5, 25)
             val filteredOxyData = filterHealthData(sleepOverlayData.spo2Breakup, 70, 100)
@@ -243,7 +244,7 @@ class OreoOnlineDataMapper
                 totalRem = sleepData.remCount,
                 sleepScore = sleepData.sleepScore,
                 sleepEfficiency = sleepData.sleepEfficiency,
-                restingHr = sleepOverlayData.hrBreakup.averageWithoutZero(),
+                restingHr = filteredHrData.averageWithoutZero(),
                 sleepLatency = sleepData.sleepLatency,
                 hrBreakup = sleepOverlayData.hrBreakup,
                 hrvBreakup = sleepOverlayData.stressBreakup,

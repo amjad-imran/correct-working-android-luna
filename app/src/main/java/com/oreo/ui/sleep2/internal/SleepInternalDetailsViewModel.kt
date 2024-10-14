@@ -255,8 +255,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
                     value1 = data?.value1,
                     value2 = data?.value2,
                     breakup = combinedData?.first,
-                    start_time = data?.start_time ?: combinedData?.second,
-                    end_time = data?.end_time ?: combinedData?.third,
+                    start_time = combinedData?.second ?: data?.start_time,
+                    end_time = combinedData?.third ?: data?.end_time,
                     master_start_time = data?.master_start_time,
                     master_end_time = data?.master_end_time,
                     master_mid_time = data?.master_mid_time
@@ -309,24 +309,31 @@ class SleepInternalDetailsViewModel @Inject constructor(
         val newBreakup = ArrayList<Float>()
 
         sortedData.forEachIndexed { index, sleepSection ->
-            newBreakup.addAll(sleepSection.breakup)
+            if (sleepSection.breakup.isNotEmpty()) {
+                newBreakup.addAll(sleepSection.breakup)
+            } else {
+                val durationMin =
+                    Duration.between(sleepSection.startTime, sleepSection.endTime).abs().toMinutes()
+
+                val valuesRequired = (durationMin / 5).toInt()
+                newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+            }
 
             if (index != (sortedData.size - 1)) {
                 val nextSection = sortedData[index + 1]
                 val currentEndTime = sleepSection.endTime
                 val nextStartTime = nextSection.startTime
 
-                val minutesDifference =
-                    Duration.between(currentEndTime, nextStartTime).abs().toMinutes()
+                if (nextStartTime > currentEndTime) {
+                    val minutesDifference =
+                        Duration.between(currentEndTime, nextStartTime).abs().toMinutes()
 
-                val valuesRequired =
-                    if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-                        (minutesDifference / 15).toInt()
-                    } else {
+                    val valuesRequired =
                         (minutesDifference / 5).toInt()
-                    }
 
-                newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+                    newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+                }
+
             }
 
         }

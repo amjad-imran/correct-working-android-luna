@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -45,10 +46,11 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
         binding.vpMain.apply {
             clipToPadding = false
             clipChildren = false
-            offscreenPageLimit = 3
+            offscreenPageLimit = 2
             setPageTransformer(CompositePageTransformer().apply {
                 addTransformer(MarginPageTransformer(20))
             })
+            (getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             adapter = pagerAdapter
         }
 

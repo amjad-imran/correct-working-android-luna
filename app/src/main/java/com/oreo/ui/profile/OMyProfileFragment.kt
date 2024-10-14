@@ -21,8 +21,6 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.share.ShareUtil
-import com.noisefit_commans.utils.share.ShareUtil.SUPPORT_URL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
