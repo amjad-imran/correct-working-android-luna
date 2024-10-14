@@ -199,7 +199,13 @@ fun AskQuestion(
     TextField(
         value = text,
         onValueChange = { text = it },
-        placeholder = { Text(text = "Type something", color = Color.LightGray) },
+        placeholder = {
+            Text(
+                text = "Type something",
+                style = FontStyle.SIZE_16,
+                color = Color.LightGray
+            )
+        },
         textStyle = FontStyle.SIZE_16,
         singleLine = true,
         shape = RoundedCornerShape(52.dp),
