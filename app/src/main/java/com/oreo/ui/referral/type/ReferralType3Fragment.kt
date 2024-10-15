@@ -40,12 +40,12 @@ class ReferralType3Fragment :
         binding.rootView.setBackgroundResource(cardData.backgroundRes)
         binding.tvName.text = cardData.name
 
-        if (cardData.status.equals("purchased")) {
+        if (cardData.status.equals("purchased",true)) {
             binding.ivPurchased.setImageResource(cardData.selectedRingRes)
             binding.ivDelivered.setImageResource(cardData.defaultRing)
             binding.textPurchased.alpha = 1f
             binding.textDelivered.alpha = 0.5f
-        } else if (cardData.status.equals("delivered")) {
+        } else if (cardData.status.equals("delivered",true)) {
             binding.ivPurchased.setImageResource(cardData.selectedRingRes)
             binding.ivDelivered.setImageResource(cardData.selectedRingRes)
             binding.textPurchased.alpha = 1f
