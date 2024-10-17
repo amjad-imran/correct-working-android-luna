@@ -13,6 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.noisefit.data.model.referral.Prize
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralBinding
