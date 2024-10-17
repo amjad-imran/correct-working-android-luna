@@ -141,7 +141,9 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
                 setViewPager(it)
                 val remainingDays = it.remainingDays ?: 1
-                binding.tvDaysLeft.text = if (remainingDays == 1) {
+                binding.tvDaysLeft.text = if(remainingDays==0){
+                    getString(R.string.text_ends_today)
+                }else if (remainingDays == 1) {
                     "$remainingDays day left"
                 } else {
                     "$remainingDays days left"
