@@ -42,7 +42,9 @@ import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.WorkoutTypes
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.OnHeartRateChartClickAction
+import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -214,8 +216,9 @@ class OWorkoutDetailsFragmentV2 :
         } else {
             val (hour, minute, seconds) = ApplicationUtils.getFormattedDuration(it.durationSeconds)
             binding.lytTop.lytActivityItem.tvDurationValue.text =
-                String.format(locale = Locale.US,"%02d:%02d", hour, minute)
-            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format(locale = Locale.US,":%02d", seconds)
+                String.format(locale = Locale.US, "%02d:%02d", hour, minute)
+            binding.lytTop.lytActivityItem.tvDurationUnit.text =
+                String.format(locale = Locale.US, ":%02d", seconds)
         }
 
         //binding.lytTop.lytActivityItem.tvDurationValue.paintText()
@@ -389,7 +392,15 @@ class OWorkoutDetailsFragmentV2 :
         }
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it,NudgeBgColor.NONE))
+            fragments.add(WorkoutNudgeFragment.newInstance(it, NudgeBgColor.NONE ,object :
+                NudgeBannerListener {
+                override fun onAiClicked() {
+                    navigate(
+                        R.id.aiTopQuestionsFragment,
+                        bundleOf("aiTopic" to AITopics.WORKOUT)
+                    )
+                }
+            }))
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytTop.lytCues.vpBannerSlider.apply {

@@ -63,6 +63,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
@@ -382,7 +383,10 @@ class SummaryDataFragmentToday :
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
 
                     if (viewModel.isChatSplashShown()) {
-                        navigate(R.id.aiTopQuestionsFragment)
+                        navigate(
+                            R.id.aiTopQuestionsFragment,
+                            bundleOf("aiTopic" to AITopics.READINESS)
+                        )
                         //mainViewModel.getChatHistoryToday()
                     } else {
                         navigate(R.id.aiChatOnboardFragment)
@@ -1696,7 +1700,10 @@ class SummaryDataFragmentToday :
     }
 
     private fun showPermDetailsDialog() {
-        requireActivity().supportFragmentManager.setFragmentResultListener(FIND_RING_LOCATION_PERM_REQUEST,this) { _, bundle ->
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            FIND_RING_LOCATION_PERM_REQUEST,
+            this
+        ) { _, bundle ->
             val allow = bundle.getBoolean("allow")
             if (allow) {
                 showLocationPermissionDialog()

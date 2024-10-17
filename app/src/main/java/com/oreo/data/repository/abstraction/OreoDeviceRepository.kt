@@ -8,6 +8,7 @@ import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.ai.TopQuestionsResponse
+import com.oreo.ui.chatGpt.AITopics
 import kotlinx.coroutines.flow.Flow
 
 interface OreoDeviceRepository {
@@ -32,6 +33,6 @@ interface OreoDeviceRepository {
 
     suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
 
-    suspend fun getAiTopQuestions(): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
+    suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
 
 }

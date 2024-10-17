@@ -33,13 +33,15 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             threadId: String?,
             defaultMessage: String?,
             userMessage: String?,
-            title: String?
+            title: String?,
+            aiTopic: AITopics
         ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
                 putString("defaultMessage", defaultMessage ?: "")
                 putString("userMessage", userMessage ?: "")
                 putString("title", title ?: "")
+                putSerializable("aiTopic", aiTopic)
             })
         }
     }
@@ -137,7 +139,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         if (message.isNotEmpty()) {
             viewModel.addSentMessage(message)
             viewModel.addThinkingMessage()
-
 
 
             //viewModel.addReceivedMessage("", true)
@@ -240,4 +241,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
     }
 
+}
+
+enum class AITopics {
+    SLEEP, READINESS, ACTIVITY, STRESS, MENSTRUAL_HEALTH, WORKOUT, GENERAL
 }

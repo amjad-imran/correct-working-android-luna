@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.ScreenUtils
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +36,7 @@ class ChatHistoryFragment :
 
                 navigate(
                     ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId, "", "", title
+                        threadId, "", "", title, AITopics.GENERAL
                     )
                 )
             }
@@ -56,7 +57,11 @@ class ChatHistoryFragment :
         }
 
         binding.ivNew.setOnClickListener {
-            navigate(ChatHistoryFragmentDirections.actionChatHistoryFragmentToAiTopQuestionsFragment())
+            navigate(
+                ChatHistoryFragmentDirections.actionChatHistoryFragmentToAiTopQuestionsFragment(
+                    AITopics.GENERAL
+                )
+            )
         }
 
     }

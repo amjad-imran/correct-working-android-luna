@@ -13,6 +13,7 @@ import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.ai.TopQuestionsResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.ui.chatGpt.AITopics
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -92,7 +93,7 @@ class OreoDeviceRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/generateTitle"
-            remoteDataSource.generateThreadTitle(url,ques,threadId)
+            remoteDataSource.generateThreadTitle(url, ques, threadId)
         }
     }
 
@@ -104,9 +105,10 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getAiTopQuestions(): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>> {
+    override suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/suggested-questions"
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/suggested-questions?type=${aiTopic.name.lowercase()}"
             remoteDataSource.getAiTopQuestions(url)
         }
     }

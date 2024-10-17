@@ -1369,5 +1369,6 @@
     <string name="text_ongoing_message">Looks like last workout didn\'t end properly.\nWant to finish it and start fresh?</string>
     <string name="text_end_start_new"><![CDATA[End & start new]]></string>
     <string name="text_ends_today">Ends today</string>
+    <string name="text_know_more_with_luna_ai">Know more with Luna AI</string>
 
 </resources>

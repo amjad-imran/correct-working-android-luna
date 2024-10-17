@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.cycletracker
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -29,10 +30,12 @@ import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
+import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.NudgeBgColor
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
@@ -648,7 +651,15 @@ class CycleTrackerFragment :
 
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor))
+            fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor, object :
+                NudgeBannerListener {
+                override fun onAiClicked() {
+                    navigate(
+                        R.id.aiTopQuestionsFragment,
+                        bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
+                    )
+                }
+            }))
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytCues.vpBannerSlider.apply {

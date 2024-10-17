@@ -8,21 +8,22 @@ import com.noisefit.luna.databinding.FragmentOreoStressBannerBinding
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.StressNudge
+import com.oreo.ui.readiness.NudgeBannerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
 const val STRESS_BANNER = "STRESS_BANNER"
 
 @AndroidEntryPoint
-class OreoStressBannerFragment :
+class OreoStressBannerFragment(private val listener: NudgeBannerListener) :
     BaseFragment<FragmentOreoStressBannerBinding>(FragmentOreoStressBannerBinding::inflate) {
 
     private var bannerData: StressNudge? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: StressNudge) =
-            OreoStressBannerFragment().apply {
+        fun newInstance(data: StressNudge, listener: NudgeBannerListener) =
+            OreoStressBannerFragment(listener).apply {
                 arguments = Bundle().apply {
                     putParcelable(STRESS_BANNER, data)
 
@@ -58,7 +59,9 @@ class OreoStressBannerFragment :
     }
 
     override fun initListener() {
-
+        binding.tvLunaAi.setOnClickListener {
+            listener.onAiClicked()
+        }
     }
 
     override fun subscribeObservers() {

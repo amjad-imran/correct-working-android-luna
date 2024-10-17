@@ -54,6 +54,7 @@ import com.oreo.data.model.sleep.SleepDay
 import com.oreo.data.model.sleep.SleepSummary
 import com.oreo.ui.calendar.BottomSheetCalendar
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
@@ -150,7 +151,7 @@ class SleepDashFragment :
     override fun initListener() {
 
         binding.lytAINudge.root.setOnClickListener {
-            navigate(R.id.aiTopQuestionsFragment)
+            navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.SLEEP))
 
             /*val (frag, bundle) = ChatGptFragment.getStartData(
                 null,

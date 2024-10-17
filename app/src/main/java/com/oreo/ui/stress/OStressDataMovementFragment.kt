@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,8 @@ import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
 import com.oreo.ui.stress.help.StressInfoCardAction
@@ -327,7 +330,7 @@ class OStressDataMovementFragment :
                 highlights, resources.getColor(color, null)
             )
         }
-        mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_movement_click   )
+        mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_movement_click)
     }
 
     private fun handleProgress(pgbr: ProgressBar, progress: Int) {
@@ -601,7 +604,7 @@ class OStressDataMovementFragment :
                     message = "There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress"
                 )
             )
-        }else{
+        } else {
             nudgeList.addAll(data)
         }
 
@@ -611,7 +614,11 @@ class OStressDataMovementFragment :
         val fragments = ArrayList<OreoStressBannerFragment>()
 
         nudgeList.forEach {
-            fragments.add(OreoStressBannerFragment.newInstance(it))
+            fragments.add(OreoStressBannerFragment.newInstance(it, object : NudgeBannerListener {
+                override fun onAiClicked() {
+                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.STRESS))
+                }
+            }))
         }
 
         val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)

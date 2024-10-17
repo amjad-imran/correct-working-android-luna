@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -37,6 +38,8 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.UnitDataModelArrayFloat
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.custom.LineChartAction
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
@@ -176,7 +179,11 @@ class OreoReadinessFragment :
         }
         val fragments = ArrayList<OreoReadinessBannerFragment>()
         data.forEach {
-            fragments.add(OreoReadinessBannerFragment.newInstance(it))
+            fragments.add(OreoReadinessBannerFragment.newInstance(it, object : NudgeBannerListener {
+                override fun onAiClicked() {
+                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.READINESS))
+                }
+            }))
         }
         val sleepBannerAdapter =
             OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)

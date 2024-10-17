@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -44,8 +45,10 @@ import com.oreo.data.model.health.ActivityScore
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.OnDayTimeClickAction
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
@@ -175,7 +178,11 @@ class OreoActivityFragment :
         }
         val fragments = ArrayList<OreoActivityBannerFragment>()
         data.forEach {
-            fragments.add(OreoActivityBannerFragment.newInstance(it))
+            fragments.add(OreoActivityBannerFragment.newInstance(it, object : NudgeBannerListener {
+                override fun onAiClicked() {
+                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.ACTIVITY))
+                }
+            }))
         }
         val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytAScoreData.lytAScoreBanner.vpBannerSlider.apply {
@@ -594,7 +601,7 @@ class OreoActivityFragment :
     }
 
 
-    private fun showCalendar(){
+    private fun showCalendar() {
         setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
             val selectedDate =
                 bundle.getString("selected_date") ?: return@setFragmentResultListener
@@ -608,6 +615,7 @@ class OreoActivityFragment :
             this.putString("launchedFrom", "activity")
         })
     }
+
     private fun setRecyclerView() {
         binding.rvTopGraph.setOnChartScrollChangedListener(this)
 

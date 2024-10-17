@@ -5,21 +5,22 @@ import android.view.View
 import com.noisefit.luna.databinding.FragmentOreoActivityBannerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.health.Nudges
+import com.oreo.ui.readiness.NudgeBannerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
 const val SLEEP_ACTIVITY_BANNER = "SLEEP_ACTIVITY_BANNER"
 
 @AndroidEntryPoint
-class OreoActivityBannerFragment :
+class OreoActivityBannerFragment(private val listener: NudgeBannerListener) :
     BaseFragment<FragmentOreoActivityBannerBinding>(FragmentOreoActivityBannerBinding::inflate) {
 
     private var bannerData: Nudges? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges) =
-            OreoActivityBannerFragment().apply {
+        fun newInstance(data: Nudges, listener: NudgeBannerListener) =
+            OreoActivityBannerFragment(listener).apply {
                 arguments = Bundle().apply {
                     putParcelable(SLEEP_ACTIVITY_BANNER, data)
 
@@ -45,11 +46,12 @@ class OreoActivityBannerFragment :
     }
 
     override fun initListener() {
-
+        binding.tvLunaAi.setOnClickListener {
+            listener.onAiClicked()
+        }
     }
 
     override fun subscribeObservers() {
 
     }
-
 }

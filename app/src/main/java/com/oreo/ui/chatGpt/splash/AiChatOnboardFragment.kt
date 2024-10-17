@@ -26,6 +26,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiChatOnboardBinding
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.compose.element.button.ButtonBlue
 import com.oreo.ui.compose.element.button.CircularBackButton
 import com.oreo.ui.compose.element.button.CircularHistoryButton
@@ -49,6 +50,7 @@ class AiChatOnboardFragment :
                     localDataStore.setAiChatSplashShown()
                     navigate(
                         AiChatOnboardFragmentDirections.actionAiChatOnboardFragmentToAiTopQuestionsFragment(
+                            AITopics.GENERAL
                         )
                     )
                 }, onBackClicked = {

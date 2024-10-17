@@ -8,23 +8,25 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.health.Nudges
+import com.oreo.ui.readiness.NudgeBannerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 const val WORKOUT_NUDGE = "WORKOUT_NUDGE"
 const val NUDGE_BG_KEY = "NUDGE_BG_KEY"
 
 @AndroidEntryPoint
-class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
-    FragmentOreoRedinessBannerBinding::inflate
-) {
+class WorkoutNudgeFragment(private val listener: NudgeBannerListener) :
+    BaseFragment<FragmentOreoRedinessBannerBinding>(
+        FragmentOreoRedinessBannerBinding::inflate
+    ) {
 
     private var bannerData: Nudges? = null
     private var nudgeBgColor: String? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges, nudgeBgColor: NudgeBgColor) =
-            WorkoutNudgeFragment().apply {
+        fun newInstance(data: Nudges, nudgeBgColor: NudgeBgColor, listener: NudgeBannerListener) =
+            WorkoutNudgeFragment(listener).apply {
                 arguments = Bundle().apply {
                     putParcelable(WORKOUT_NUDGE, data)
                     putString(NUDGE_BG_KEY, nudgeBgColor.name)
@@ -56,6 +58,7 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
             }
 
             else -> {
+                binding.tvLunaAi.gone()
                 binding.bgImv.setBackgroundResource(R.drawable.ic_nudge_activity)
             }
         }
@@ -70,7 +73,9 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
     }
 
     override fun initListener() {
-
+        binding.tvLunaAi.setOnClickListener {
+            listener.onAiClicked()
+        }
     }
 
     override fun subscribeObservers() {

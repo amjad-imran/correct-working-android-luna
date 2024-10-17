@@ -889,6 +889,9 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="aiTopic"
+            app:argType="com.oreo.ui.chatGpt.AITopics" />
     </fragment>
     <fragment
         android:id="@+id/chatSplashFragment"
@@ -1118,6 +1121,9 @@
             app:destination="@id/chatHistoryFragment"
             app:popUpTo="@id/aiTopQuestionsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="aiTopic"
+            app:argType="com.oreo.ui.chatGpt.AITopics" />
     </fragment>
     <fragment
         android:id="@+id/referralFragment"
