@@ -1,6 +1,7 @@
 package com.oreo.ui.referral
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
@@ -13,7 +14,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.noisefit.data.model.referral.Prize
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralBinding
@@ -23,10 +23,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notify
 
 
 @AndroidEntryPoint
@@ -35,6 +33,9 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
     private val viewModel: ReferralViewModel by viewModels()
     private val args: ReferralFragmentArgs by navArgs()
     private val indicators = ArrayList<View>()
+
+    private var mLastClickTime: Long = 0
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,9 +96,15 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
     override fun initListener() {
         binding.bClaimCode.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+
             if (viewModel.referralCode.value?.referralCode.isNullOrEmpty()) {
                 viewModel.getReferCode()
             } else {
+
                 context?.let { ctx ->
                     viewModel.referralCode.value?.shareMessage?.let {
                         ShareUtil.shareText(ctx, it)
@@ -142,9 +149,9 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
                 setViewPager(it)
                 val remainingDays = it.remainingDays ?: 1
-                binding.tvDaysLeft.text = if(remainingDays==0){
+                binding.tvDaysLeft.text = if (remainingDays == 0) {
                     getString(R.string.text_ends_today)
-                }else if (remainingDays == 1) {
+                } else if (remainingDays == 1) {
                     "$remainingDays day left"
                 } else {
                     "$remainingDays days left"
