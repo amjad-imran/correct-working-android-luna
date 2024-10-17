@@ -97,12 +97,10 @@
 
         <TextView
             android:id="@+id/tvDurationUnit"
-            style="@style/H5"
+            style="@style/S28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="2dp"
-            android:textColor="@color/white_48"
             app:layout_constraintBottom_toBottomOf="@id/tvDurationValue"
             app:layout_constraintStart_toEndOf="@id/tvDurationValue"
             tools:text=":19" />

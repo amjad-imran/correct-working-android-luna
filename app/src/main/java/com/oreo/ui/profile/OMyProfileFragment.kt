@@ -2,7 +2,6 @@ package com.oreo.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -52,9 +51,9 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
-        binding.lytReferralNo.tvMyReferrals.setOnClickListener {
+        /*binding.lytReferralNo.tvMyReferrals.setOnClickListener {
             navigate(R.id.myReferralsFragment)
-        }
+        }*/
 
         binding.lytReferralAvailable.tvRefer.setOnClickListener {
             viewModel.referralResponse?.let {
@@ -170,7 +169,7 @@ class OMyProfileFragment :
             when (it) {
                 is ReferralRunningState.Available -> {
                     binding.lytReferralAvailable.root.visible()
-                    binding.lytReferralNo.root.gone()
+                    //binding.lytReferralNo.root.gone()
                     binding.lytReferralAvailable.apply {
                         tvReferralMessage.text = it.prizeTitle
                         this.ivMain.loadImageWithCache(this.root.context, it.prizeImageUrl)
@@ -179,12 +178,12 @@ class OMyProfileFragment :
 
                 ReferralRunningState.Default -> {
                     binding.lytReferralAvailable.root.gone()
-                    binding.lytReferralNo.root.gone()
+                    //binding.lytReferralNo.root.gone()
                 }
 
                 ReferralRunningState.NotAvailable -> {
                     binding.lytReferralAvailable.root.gone()
-                    binding.lytReferralNo.root.visible()
+                    //binding.lytReferralNo.root.visible()
                 }
             }
         }

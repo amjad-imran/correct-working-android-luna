@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/tvTitle"
+        style="@style/S18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -16,7 +17,6 @@
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:textColor="#ba343c"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,13 +25,14 @@
 
     <TextView
         android:id="@+id/tvSubTitle"
+        style="@style/S28"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
         android:textColor="#ba343c"
-        android:textSize="26sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

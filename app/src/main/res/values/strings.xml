@@ -1359,7 +1359,7 @@
     <string name="text_claim_code">Claim code</string>
     <string name="text_referral_not_running">We’re not running a referral program at the moment, but it’s coming soon! Stay tuned!</string>
     <string name="text_my_referrals">My referrals</string>
-    <string name="text_refer_now">Refer Now</string>
+    <string name="text_refer_now">Refer now</string>
     <string name="text_status">Status :</string>
     <string name="text_ring_purchased">Ring purchased</string>
     <string name="text_ring_delivered">Ring delivered</string>

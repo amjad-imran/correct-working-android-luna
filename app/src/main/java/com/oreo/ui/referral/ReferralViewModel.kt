@@ -91,8 +91,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_2,
-                            textColor = Color.parseColor("#f6ed89")
+                            backgroundRes = R.drawable.bg_ref_3,
+                            textColor = Color.parseColor("#dffc79")
                         )
                     )
                 )
@@ -102,8 +102,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_3,
-                            textColor = Color.parseColor("#ffffff")
+                            backgroundRes = R.drawable.bg_ref_2,
+                            textColor = Color.parseColor("#f6ed89")
                         )
                     )
                 )
@@ -159,7 +159,7 @@ class ReferralViewModel @Inject constructor(
             0 -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
             1 -> Pair(R.drawable.bg_ref_3, Color.parseColor("#dffc79"))
             2 -> Pair(R.drawable.bg_ref_4, Color.parseColor("#bcf04c"))
-            3 -> Pair(R.drawable.bg_ref_5, Color.parseColor("#f2efe7"))
+                3 -> Pair(R.drawable.bg_ref_5, Color.parseColor("#f2efe7"))
             else -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
         }
     }
