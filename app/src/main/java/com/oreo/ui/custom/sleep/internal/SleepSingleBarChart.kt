@@ -43,7 +43,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
     lateinit var barTextPaintI: Paint
     private val bottomHeight = dip2px(30f)
     private val topHeight = dip2px(20f)
-    private val endPadding = dip2px(30f)
+    private val endPadding = dip2px(40f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
     lateinit var optimalPaint: Paint

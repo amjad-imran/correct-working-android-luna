@@ -85,7 +85,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private val xAxisRange = ArrayList<LocalDate>()
     private var lastSentValuePos: Int? = null
 
-    private val endPadding = dip2px(30f)
+    private val endPadding = dip2px(40f)
     private var mAverage: Pair<Float, String>? = null
     private var showOverlay = false
     private var nonNullDataCount: Int = 0
