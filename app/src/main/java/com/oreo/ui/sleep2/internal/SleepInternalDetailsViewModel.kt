@@ -470,14 +470,22 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 textColor = Color.parseColor("#29cc74")
             }
 
-            1 -> {
+            1-> {
                 background = R.drawable.back_hm_white
                 textColor = Color.parseColor("#ffffff")
             }
 
-            else -> {
+            2 -> {
                 background = R.drawable.back_hm_warning
                 textColor = Color.parseColor("#ff7c94")
+            }
+            3->{
+                background = R.drawable.back_hm_fair
+                textColor = Color.parseColor("#ffa800")
+            }
+            else->{
+                background = R.drawable.back_hm_white
+                textColor = Color.parseColor("#ffffff")
             }
         }
         return Pair(background, textColor)

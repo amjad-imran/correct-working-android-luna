@@ -433,6 +433,8 @@ class SleepInternalDetailsFragment :
                         2
                     } else if (status.equals("optimal")) {
                         0
+                    }else if (status.equals("fair") || status.equals("good")) {
+                        0
                     } else {
                         1
                     }
