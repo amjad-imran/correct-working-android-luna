@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -13,7 +15,9 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.Breakups
+import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.TrendAverage
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
@@ -124,6 +128,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                             trendsData.clear()
 
                             it.data?.forEach {
+
                                 trendsData[LocalDate.parse(it.date)] = it
                             }
                             val firstDate = it.data?.firstOrNull()
@@ -147,7 +152,18 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun loadGraphData(loadPrev: Boolean) {
         if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) {
-            getTrendsInternalDetailsData(LocalDate.parse("2024-07-19"/*startDate*/), LocalDate.now())
+
+            val dataStartDate = LocalDate.parse("2024-07-19"/*startDate*/)
+            val userStartDate = LocalDate.parse(startDate)
+
+            getTrendsInternalDetailsData(
+                if(userStartDate<dataStartDate){
+                    dataStartDate
+                }else{
+                    userStartDate
+                },
+                LocalDate.now()
+            )
             return
         }
 
@@ -329,9 +345,10 @@ class SleepInternalDetailsViewModel @Inject constructor(
                         Duration.between(currentEndTime, nextStartTime).abs().toMinutes()
 
                     val valuesRequired =
-                        (minutesDifference / 5).toInt()
-
-                    newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+                        (minutesDifference / 5).toInt() - 1
+                    if (valuesRequired > 0) {
+                        newBreakup.addAll(Array(valuesRequired) { 0f }.toList())
+                    }
                 }
 
             }
@@ -470,7 +487,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 textColor = Color.parseColor("#29cc74")
             }
 
-            1-> {
+            1 -> {
                 background = R.drawable.back_hm_white
                 textColor = Color.parseColor("#ffffff")
             }
@@ -479,11 +496,13 @@ class SleepInternalDetailsViewModel @Inject constructor(
                 background = R.drawable.back_hm_warning
                 textColor = Color.parseColor("#ff7c94")
             }
-            3->{
+
+            3 -> {
                 background = R.drawable.back_hm_fair
                 textColor = Color.parseColor("#ffa800")
             }
-            else->{
+
+            else -> {
                 background = R.drawable.back_hm_white
                 textColor = Color.parseColor("#ffffff")
             }
