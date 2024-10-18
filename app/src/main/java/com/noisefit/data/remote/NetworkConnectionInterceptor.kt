@@ -83,6 +83,7 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteUserToken()
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
+        localDataStore.setCrossedCampaign(-1)
 
         GlobalScope.launch(Dispatchers.IO) {
             removeOfflineUserData()

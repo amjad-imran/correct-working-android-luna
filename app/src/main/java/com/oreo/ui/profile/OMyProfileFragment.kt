@@ -60,7 +60,9 @@ class OMyProfileFragment :
         }
 
         binding.rowReferral.setOnClickListener {
-            if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState) {
+            if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState ||
+                viewModel.referralRunningState.value is ReferralRunningState.CampaignRunningState
+            ) {
                 viewModel.referralResponse?.let {
                     navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
                 }

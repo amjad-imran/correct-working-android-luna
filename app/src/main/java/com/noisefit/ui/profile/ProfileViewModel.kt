@@ -332,7 +332,10 @@ constructor(
     fun onReferralCloseClicked() {
         val campaignId = referralResponse?.campaignId ?: return
         localDataStore.setCrossedCampaign(campaignId)
-        referralRunningState.postValue(ReferralRunningState.Default)
+
+        referralResponse?.let {
+            referralRunningState.postValue(getReferralRunningState(it))
+        }
     }
 
 

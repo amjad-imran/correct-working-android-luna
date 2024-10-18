@@ -105,6 +105,7 @@ class AuthenticationRepositoryImpl(
             localDataSource.setWarrantyStatus(-1)
             localDataSource.setIsWatchFaceRewardEarned(false)
             localDataSource.setLastWinsCount(-1)
+            localDataSource.setCrossedCampaign(-1)
             emit(true)
         }
     }
