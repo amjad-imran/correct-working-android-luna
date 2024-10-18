@@ -147,7 +147,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun loadGraphData(loadPrev: Boolean) {
         if (selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected) {
-            getTrendsInternalDetailsData(LocalDate.parse(startDate), LocalDate.now())
+            getTrendsInternalDetailsData(LocalDate.parse("2024-07-19"/*startDate*/), LocalDate.now())
             return
         }
 
