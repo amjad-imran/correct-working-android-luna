@@ -55,6 +55,20 @@ class OMyProfileFragment :
             navigate(R.id.myReferralsFragment)
         }*/
 
+        binding.lytReferralAvailable.ivCross.setOnClickListener {
+            viewModel.onReferralCloseClicked()
+        }
+
+        binding.rowReferral.setOnClickListener {
+            if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState) {
+                viewModel.referralResponse?.let {
+                    navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
+                }
+            } else if (viewModel.referralRunningState.value == ReferralRunningState.ReferralOnlyState) {
+                navigate(R.id.myReferralsFragment)
+            }
+        }
+
         binding.lytReferralAvailable.tvRefer.setOnClickListener {
             viewModel.referralResponse?.let {
                 navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
@@ -167,23 +181,23 @@ class OMyProfileFragment :
     override fun subscribeObservers() {
         viewModel.referralRunningState.observe(this) {
             when (it) {
-                is ReferralRunningState.Available -> {
+                is ReferralRunningState.CampaignRunningState -> {
                     binding.lytReferralAvailable.root.visible()
-                    //binding.lytReferralNo.root.gone()
                     binding.lytReferralAvailable.apply {
                         tvReferralMessage.text = it.prizeTitle
                         this.ivMain.loadImageWithCache(this.root.context, it.prizeImageUrl)
                     }
+                    binding.rowReferral.visible()
+                }
+
+                ReferralRunningState.ReferralOnlyState, ReferralRunningState.ReferralAndCampaignState -> {
+                    binding.lytReferralAvailable.root.gone()
+                    binding.rowReferral.visible()
                 }
 
                 ReferralRunningState.Default -> {
                     binding.lytReferralAvailable.root.gone()
-                    //binding.lytReferralNo.root.gone()
-                }
-
-                ReferralRunningState.NotAvailable -> {
-                    binding.lytReferralAvailable.root.gone()
-                    //binding.lytReferralNo.root.visible()
+                    binding.rowReferral.gone()
                 }
             }
         }

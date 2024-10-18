@@ -208,6 +208,7 @@ private const val FORCE_UPDATE_REQUIRED_VERSION = "FORCE_UPDATE_REQUIRED_VERSION
 
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 private const val FMR_CARD_LOCATION = "FMR_CARD_LOCATION"
+private const val CROSSED_CAMPAIGN_ID = "CROSSED_CAMPAIGN_ID"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -216,6 +217,15 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun setCrossedCampaign(campaignId: Long) {
+        mPrefs.edit()?.putLong(CROSSED_CAMPAIGN_ID, campaignId)?.commit()
+
+    }
+
+    override fun getCrossedCampaign(): Long? {
+        return mPrefs.getLong(CROSSED_CAMPAIGN_ID, -1)
+    }
 
     override fun hideFindMyRingLocationCard() {
         mPrefs.edit()?.putBoolean(FMR_CARD_LOCATION, true)?.commit()

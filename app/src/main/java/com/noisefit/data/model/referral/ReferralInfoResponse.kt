@@ -17,6 +17,8 @@ data class ReferralInfoResponse(
     val referralTitle: String? = null,
     @SerializedName("referral_text")
     val referralText: String? = null,
+    @SerializedName("campaign_id")
+    val campaignId: Long? = null,
     @SerializedName("referral_image")
     val referralImage: String? = null,
     val banner: List<Referral>? = null,

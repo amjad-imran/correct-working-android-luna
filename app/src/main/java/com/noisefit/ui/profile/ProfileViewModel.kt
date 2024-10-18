@@ -307,34 +307,45 @@ constructor(
     private fun getReferralRunningState(referralInfoResponse: ReferralInfoResponse?): ReferralRunningState {
         if (referralInfoResponse == null) return ReferralRunningState.Default
 
+        val crossedCampaignId = localDataStore.getCrossedCampaign()
+        val hideTopBanner = crossedCampaignId == referralInfoResponse.campaignId
+
+
         return if (referralInfoResponse.banner.isNullOrEmpty()) {
-            if (referralInfoResponse.prize != null) {
-                ReferralRunningState.Available(
+            if (referralInfoResponse.hasReferral) {
+                ReferralRunningState.ReferralOnlyState
+            } else {
+                ReferralRunningState.Default
+            }
+        } else {
+            if (hideTopBanner) {
+                ReferralRunningState.ReferralAndCampaignState
+            } else {
+                ReferralRunningState.CampaignRunningState(
                     referralInfoResponse.referralImage,
                     referralInfoResponse.referralText
                 )
-            } else {
-                if (referralInfoResponse.hasReferral) {
-                    ReferralRunningState.NotAvailable
-                } else {
-                    ReferralRunningState.Default
-                }
             }
-        } else {
-            ReferralRunningState.Available(
-                referralInfoResponse.referralImage,
-                referralInfoResponse.referralText
-            )
         }
+    }
+
+    fun onReferralCloseClicked() {
+        val campaignId = referralResponse?.campaignId ?: return
+        localDataStore.setCrossedCampaign(campaignId)
+        referralRunningState.postValue(ReferralRunningState.Default)
     }
 
 
 }
 
 sealed class ReferralRunningState {
-    data class Available(val prizeImageUrl: String? = null, val prizeTitle: String? = null) :
+    data class CampaignRunningState(
+        val prizeImageUrl: String? = null,
+        val prizeTitle: String? = null
+    ) :
         ReferralRunningState()
 
-    data object NotAvailable : ReferralRunningState()
+    data object ReferralAndCampaignState : ReferralRunningState()
+    data object ReferralOnlyState : ReferralRunningState()
     data object Default : ReferralRunningState()
 }

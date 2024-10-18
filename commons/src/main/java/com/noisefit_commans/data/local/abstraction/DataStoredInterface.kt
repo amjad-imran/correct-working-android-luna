@@ -466,5 +466,8 @@ interface DataStoredInterface {
     fun clearForceUpdateRequired()
 
     fun hideFindMyRingLocationCard()
-    fun isFindMyRingLocationCardHidden():Boolean
+    fun isFindMyRingLocationCardHidden(): Boolean
+
+    fun setCrossedCampaign(campaignId: Long)
+    fun getCrossedCampaign(): Long? = null
 }
