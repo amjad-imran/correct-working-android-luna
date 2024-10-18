@@ -544,6 +544,7 @@ class SleepInternalDetailsFragment :
             singleBind.root.visible()
             if (viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTING_HEART_RATE ||
                 viewModel.selectedLaunchMode == SleepInternalLaunchState.RESTFULNESS ||
+                viewModel.selectedLaunchMode == SleepInternalLaunchState.TIMING ||
                 viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE
             ) {
                 if (percent > 0) {
