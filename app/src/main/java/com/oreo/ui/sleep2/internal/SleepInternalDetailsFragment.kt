@@ -1058,12 +1058,23 @@ class SleepInternalDetailsFragment :
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
                             "${percent2}% ${getRangeText()}"
                         }
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_up
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(0)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+
+                    if(viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up_red
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }else{
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_up
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+
                 }
             } else if (percent2 == 0) {
                 singleBind2.apply {
@@ -1098,12 +1109,23 @@ class SleepInternalDetailsFragment :
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
                             "${abs(percent2)}% ${getRangeText()}"
                         }
-                    ivTick.setImageResource(
-                        R.drawable.ic_trend_down
-                    )
-                    val (bgColor, textColor) = viewModel.getHighlightBackType(2)
-                    bgImage.setBackgroundResource(bgColor)
-                    tvRangeValue.setTextColor(textColor)
+
+                    if(viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down_green
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(0)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }else{
+                        ivTick.setImageResource(
+                            R.drawable.ic_trend_down
+                        )
+                        val (bgColor, textColor) = viewModel.getHighlightBackType(2)
+                        bgImage.setBackgroundResource(bgColor)
+                        tvRangeValue.setTextColor(textColor)
+                    }
+
                 }
             }
         }
