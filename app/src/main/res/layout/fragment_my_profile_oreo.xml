@@ -179,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    app:image="@drawable/ic_info_cycle_tracker"
+                    app:image="@drawable/ic_refer_and_earn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowCycleTracker"

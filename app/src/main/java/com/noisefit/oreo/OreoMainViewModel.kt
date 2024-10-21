@@ -992,18 +992,18 @@ constructor(
             Freshchat.getInstance(it).setUser(freshchatUser)
 
             val userMeta: MutableMap<String, String> = HashMap()
-            userMeta["userName"] = user?.firstName ?: ""
+            userMeta["cf_username"] = user?.firstName ?: ""
             if (pairedDevice != null) {
-                userMeta["ringSNo"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
-                userMeta["ringColor"] = pairedDevice.ringInfo?.color ?: ""
-                userMeta["ringSize"] = "${pairedDevice.ringInfo?.size}"
-                userMeta["currentFwVersion"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
+                userMeta["cf_ringsno"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
+                userMeta["cf_ringcolor"] = pairedDevice.ringInfo?.color ?: ""
+                userMeta["cf_ringsize"] = "${pairedDevice.ringInfo?.size}"
+                userMeta["cf_currentfwversion"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
             }
-            userMeta["currentAppVersion"] = BuildConfig.VERSION_NAME
-            userMeta["os"] = "Android"
-            userMeta["phoneOsVersion"] = Build.VERSION.RELEASE
-            userMeta["phoneModel"] = Build.MODEL
-            userMeta["profileImage"] = user?.imageUrl ?: ""
+            userMeta["cf_currentappversion"] = BuildConfig.VERSION_NAME
+            userMeta["cf_os"] = "Android"
+            userMeta["cf_phoneosversion"] = Build.VERSION.RELEASE
+            userMeta["cf_phonemodel"] = Build.MODEL
+            userMeta["cf_profileimage"] = user?.imageUrl ?: ""
 
             Freshchat.getInstance(it).setUserProperties(userMeta)
         }
