@@ -76,7 +76,6 @@ class ChatGptViewModel
         messages.add(ChatGptOverview.SentMessage(message, userImage))
         _chatGptOverview.value = (messages)
         //_chatGptOverview.postValue(messages)
-
         generateThreadTitle(message)
 
     }
@@ -303,7 +302,7 @@ class ChatGptViewModel
             addSentMessage(userMessage)
             addThinkingMessage()
             askQuestionStream(userMessage)
-            generateThreadTitle(userMessage)
+            //generateThreadTitle(userMessage)
         }
         return
     }
@@ -347,7 +346,6 @@ class ChatGptViewModel
     }
 
     private fun generateThreadTitle(ques: String) {
-
         if (threadTitle.value.isNullOrEmpty().not()) return
 
         if (ignoreQues(ques)) return

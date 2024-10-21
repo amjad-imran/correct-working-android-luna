@@ -318,7 +318,7 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvMin.text = "-"
         } else {
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                avgValue.roundToInt() ?: 0
+                avgValue
             )
 
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvHour.text = "$hour"
@@ -433,7 +433,7 @@ class SleepInternalDetailsFragment :
                         2
                     } else if (status.equals("optimal")) {
                         0
-                    }else if (status.equals("fair") || status.equals("good")) {
+                    } else if (status.equals("fair") || status.equals("good")) {
                         0
                     } else {
                         1
@@ -1061,14 +1061,14 @@ class SleepInternalDetailsFragment :
                             "${percent2}% ${getRangeText()}"
                         }
 
-                    if(viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+                    if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
                         ivTick.setImageResource(
                             R.drawable.ic_trend_up_red
                         )
                         val (bgColor, textColor) = viewModel.getHighlightBackType(2)
                         bgImage.setBackgroundResource(bgColor)
                         tvRangeValue.setTextColor(textColor)
-                    }else{
+                    } else {
                         ivTick.setImageResource(
                             R.drawable.ic_trend_up
                         )
@@ -1112,14 +1112,14 @@ class SleepInternalDetailsFragment :
                             "${abs(percent2)}% ${getRangeText()}"
                         }
 
-                    if(viewModel.selectedLaunchMode==SleepInternalLaunchState.HOUR_VS_NEED){
+                    if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED) {
                         ivTick.setImageResource(
                             R.drawable.ic_trend_down_green
                         )
                         val (bgColor, textColor) = viewModel.getHighlightBackType(0)
                         bgImage.setBackgroundResource(bgColor)
                         tvRangeValue.setTextColor(textColor)
-                    }else{
+                    } else {
                         ivTick.setImageResource(
                             R.drawable.ic_trend_down
                         )

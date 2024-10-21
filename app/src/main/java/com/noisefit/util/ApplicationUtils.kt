@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.floor
+import kotlin.math.roundToInt
 
 
 private const val UniqueSyncDataWorkName: String = "SyncDataWork"
@@ -234,6 +235,16 @@ object ApplicationUtils {
         } else {
             val hours: Int = value / 3600
             val minutes: Int = (value % 3600) / 60
+            Pair(hours, minutes)
+        }
+    }
+
+    fun getFormattedSleepDurationFromSeconds(value: Float): Pair<Int, Int> {
+        return if (value == 0f) {
+            Pair(0, 0)
+        } else {
+            val hours: Int = (value.roundToInt() / 3600)
+            val minutes: Int = ((value % 3600) / 60).roundToInt()
             Pair(hours, minutes)
         }
     }
