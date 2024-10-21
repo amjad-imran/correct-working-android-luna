@@ -1354,7 +1354,7 @@
     <string name="text_chat_history">Chat history</string>
     <string name="text_ask_me_anything_you_want_regarding_your_health">Ask me anything you want regarding your health</string>
     <string name="text_generating_data">Generating data</string>
-    <string name="freshchat_file_provider_authority">com.noisefit.luna.provider</string>
+    <string name="freshchat_file_provider_authority">com.noisefit.luna.fileprovider</string>
     <string name="text_my_referals">My referrals</string>
     <string name="text_claim_code">Claim code</string>
     <string name="text_referral_not_running">We’re not running a referral program at the moment, but it’s coming soon! Stay tuned!</string>
