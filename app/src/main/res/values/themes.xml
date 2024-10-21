@@ -472,23 +472,24 @@
          <item name="freshchatAttachIcon">@drawable/ic_fc_attach_file</item>
         <item name="freshchatMessageReplyInputViewStyle">@style/ChatEditText</item>
         <item name="freshchatContactUsTextStyle">@style/ChatContactUsStyle</item>
-        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowBackground">@drawable/bg_luna_support</item>
         <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:colorPrimary">#0b1a37</item>
         <item name="freshchatChatBubbleLeft">@drawable/back_chat_support</item>
-        <item name="freshchatChatBubbleRight">@drawable/back_chat_support</item>
+        <item name="freshchatChatBubbleRight">@drawable/back_chat_support_user</item>
         <item name="freshchatTeamMemberMessageTextStyle">@style/ChatTeamMemberMessageTextStyle
         </item>
         <item name="freshchatUserMessageTextStyle">@style/ChatTeamMemberMessageTextStyle</item>
         <item name="freshchatUserMessageTimeTextStyle">@style/ChatUserMessageTimeTextStyle</item>
         <item name="freshchatMessageReplyViewStyle">@style/MessageReplyView</item>
         <item name="freshchatMessageListStyle">@style/ConversationMessageStyle</item>
+
+
         <item name="freshchatFAQCategoryListItemStyle">@style/CategoryListStyle</item>
         <item name="freshchatFAQCategoryNameTextStyle">@style/faqCategoryNameTextStyle</item>
         <item name="freshchatFAQListItemStyle">@style/freshchatFAQListIStyle</item>
-        <item name="freshchatFAQVotingPromptTextStyle">@style/freshchatFAQVotingPromptTextStyle
-        </item>
-        <item name="freshchatFAQVotingPromptViewStyle">@style/freshchatFAQVotingPromptViewStyle
-        </item>
+        <item name="freshchatFAQVotingPromptTextStyle">@style/freshchatFAQVotingPromptTextStyle</item>
+        <item name="freshchatFAQVotingPromptViewStyle">@style/freshchatFAQVotingPromptViewStyle</item>
         <item name="freshchatFAQDownvoteButtonStyle">@style/freshchatFAQDownvoteButtonStyle</item>
         <item name="freshchatFAQUpvoteButtonStyle">@style/freshchatFAQUpvoteButtonStyle</item>
 
@@ -535,6 +536,8 @@
         <item name="android:maxLines">3</item>
         <item name="android:hint">@string/freshchat_chat_resolution_user_comments_hint</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white_60</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
@@ -700,8 +703,8 @@
 
     <style name="CategoryListStyle">
         <item name="android:background">@drawable/bg_freshchat_faq_cat</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
     </style>
 
     <style name="ConversationMessageStyle">
