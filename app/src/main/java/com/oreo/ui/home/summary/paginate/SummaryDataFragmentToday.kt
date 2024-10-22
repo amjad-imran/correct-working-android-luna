@@ -385,7 +385,7 @@ class SummaryDataFragmentToday :
                     if (viewModel.isChatSplashShown()) {
                         navigate(
                             R.id.aiTopQuestionsFragment,
-                            bundleOf("aiTopic" to AITopics.READINESS)
+                            bundleOf("aiTopic" to AITopics.GENERAL)
                         )
                         //mainViewModel.getChatHistoryToday()
                     } else {
