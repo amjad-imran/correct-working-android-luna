@@ -17,6 +17,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
@@ -997,7 +998,12 @@ constructor(
                 userMeta["cf_ringsno"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
                 userMeta["cf_ringcolor"] = pairedDevice.ringInfo?.color ?: ""
                 userMeta["cf_ringsize"] = "${pairedDevice.ringInfo?.size}"
-                userMeta["cf_currentfwversion"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
+                userMeta["cf_currentfwversion"] =
+                    if (WatchInfoGlobals.firmwareVersionRing.isNullOrEmpty()) {
+                        watchDataStore.getFirmwareVersion()
+                    } else {
+                        WatchInfoGlobals.firmwareVersionRing
+                    } ?: ""
             }
             userMeta["cf_currentappversion"] = BuildConfig.VERSION_NAME
             userMeta["cf_os"] = "Android"
