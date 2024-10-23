@@ -310,13 +310,17 @@ constructor(
         val crossedCampaignId = localDataStore.getCrossedCampaign()
         val hideTopBanner = crossedCampaignId == referralInfoResponse.campaignId
 
-
         return if (referralInfoResponse.banner.isNullOrEmpty()) {
-            if (referralInfoResponse.hasReferral) {
-                ReferralRunningState.ReferralOnlyState
-            } else {
-                ReferralRunningState.Default
+            if(referralInfoResponse.prize!=null){
+                ReferralRunningState.PrizeOnlyState
+            }else{
+                if (referralInfoResponse.hasReferral) {
+                    ReferralRunningState.ReferralOnlyState
+                } else {
+                    ReferralRunningState.Default
+                }
             }
+
         } else {
             if (hideTopBanner) {
                 ReferralRunningState.ReferralAndCampaignState
@@ -347,6 +351,7 @@ sealed class ReferralRunningState {
         val prizeTitle: String? = null
     ) :
         ReferralRunningState()
+    data object PrizeOnlyState:ReferralRunningState()
 
     data object ReferralAndCampaignState : ReferralRunningState()
     data object ReferralOnlyState : ReferralRunningState()

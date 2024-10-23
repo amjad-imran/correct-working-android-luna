@@ -61,7 +61,8 @@ class OMyProfileFragment :
 
         binding.rowReferral.setOnClickListener {
             if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState ||
-                viewModel.referralRunningState.value is ReferralRunningState.CampaignRunningState
+                viewModel.referralRunningState.value is ReferralRunningState.CampaignRunningState ||
+                viewModel.referralRunningState.value is ReferralRunningState.PrizeOnlyState
             ) {
                 viewModel.referralResponse?.let {
                     navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
@@ -192,7 +193,8 @@ class OMyProfileFragment :
                     binding.rowReferral.visible()
                 }
 
-                ReferralRunningState.ReferralOnlyState, ReferralRunningState.ReferralAndCampaignState -> {
+                ReferralRunningState.ReferralOnlyState, ReferralRunningState.ReferralAndCampaignState,
+                ReferralRunningState.PrizeOnlyState -> {
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.visible()
                 }

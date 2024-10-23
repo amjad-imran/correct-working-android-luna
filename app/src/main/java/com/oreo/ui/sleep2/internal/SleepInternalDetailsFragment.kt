@@ -434,7 +434,7 @@ class SleepInternalDetailsFragment :
                     } else if (status.equals("optimal")) {
                         0
                     } else if (status.equals("fair") || status.equals("good")) {
-                        0
+                        3
                     } else {
                         1
                     }
@@ -974,13 +974,19 @@ class SleepInternalDetailsFragment :
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight
         if (percent1 == null) {
             singleBind.root.visible()
-            singleBind.tvRangeValue.invisible()
             singleBind.ivTick.setImageResource(0)
             singleBind.bgImage.setBackgroundResource(0)
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
-                this.visible()
-                text = context.getString(R.string.txt_avg_hours)
+            if(isInteracting){
+                singleBind.tvRangeValue.gone()
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
+            }else{
+                singleBind.tvRangeValue.invisible()
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
+                    this.visible()
+                    text = context.getString(R.string.txt_avg_hours)
+                }
             }
+
         } else {
             singleBind.root.visible()
             singleBind.tvRangeValue.visible()
@@ -1053,11 +1059,18 @@ class SleepInternalDetailsFragment :
             singleBind2.root.visible()
             singleBind2.ivTick.setImageResource(0)
             singleBind2.bgImage.setBackgroundResource(0)
-            singleBind2.tvRangeValue.invisible()
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
-                this.visible()
-                text = context.getString(R.string.txt_avg_hours)
+
+            if(isInteracting){
+                singleBind2.tvRangeValue.gone()
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
+            }else{
+                singleBind2.tvRangeValue.invisible()
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
+                    this.visible()
+                    text = context.getString(R.string.text_avg_need)
+                }
             }
+
         } else {
             singleBind2.root.visible()
             singleBind2.tvRangeValue.visible()
