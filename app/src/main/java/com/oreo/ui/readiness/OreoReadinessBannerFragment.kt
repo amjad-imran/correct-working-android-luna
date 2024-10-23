@@ -10,20 +10,24 @@ import dagger.hilt.android.AndroidEntryPoint
 const val READINESS_BANNER = "READINESS_BANNER"
 
 @AndroidEntryPoint
-class OreoReadinessBannerFragment(private val listener: NudgeBannerListener) :
+class OreoReadinessBannerFragment() :
     BaseFragment<FragmentOreoRedinessBannerBinding>(FragmentOreoRedinessBannerBinding::inflate) {
 
     private var bannerData: Nudges? = null
+    private var listener: NudgeBannerListener? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges, listener: NudgeBannerListener) =
-            OreoReadinessBannerFragment(listener).apply {
+        fun newInstance(data: Nudges) =
+            OreoReadinessBannerFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(READINESS_BANNER, data)
 
                 }
             }
+    }
+    fun setClickListener(listener: NudgeBannerListener) {
+        this.listener = listener
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +49,7 @@ class OreoReadinessBannerFragment(private val listener: NudgeBannerListener) :
 
     override fun initListener() {
         binding.tvLunaAi.setOnClickListener {
-            listener.onAiClicked()
+            listener?.onAiClicked()
         }
     }
 

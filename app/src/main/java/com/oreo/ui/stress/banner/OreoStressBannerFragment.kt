@@ -2,11 +2,13 @@ package com.oreo.ui.stress.banner
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepBannerBinding
 import com.noisefit.luna.databinding.FragmentOreoStressBannerBinding
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.StressNudge
 import com.oreo.ui.readiness.NudgeBannerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,32 +16,34 @@ import dagger.hilt.android.AndroidEntryPoint
 
 const val STRESS_BANNER = "STRESS_BANNER"
 
-@AndroidEntryPoint
-class OreoStressBannerFragment(private val listener: NudgeBannerListener) :
+class OreoStressBannerFragment() :
     BaseFragment<FragmentOreoStressBannerBinding>(FragmentOreoStressBannerBinding::inflate) {
 
     private var bannerData: StressNudge? = null
+    private var listener: NudgeBannerListener? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: StressNudge, listener: NudgeBannerListener) =
-            OreoStressBannerFragment(listener).apply {
+        fun newInstance(data: StressNudge): OreoStressBannerFragment {
+            return OreoStressBannerFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(STRESS_BANNER, data)
 
                 }
             }
+        }
+
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            bannerData = it.getParcelable(STRESS_BANNER)
-        }
+    fun setClickListener(listener: NudgeBannerListener) {
+        this.listener = listener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            bannerData = it.getParcelable(STRESS_BANNER)
+        }
         setUi(bannerData)
     }
 
@@ -60,7 +64,7 @@ class OreoStressBannerFragment(private val listener: NudgeBannerListener) :
 
     override fun initListener() {
         binding.tvLunaAi.setOnClickListener {
-            listener.onAiClicked()
+            listener?.onAiClicked()
         }
     }
 

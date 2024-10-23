@@ -392,15 +392,18 @@ class OWorkoutDetailsFragmentV2 :
         }
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it, NudgeBgColor.NONE ,object :
-                NudgeBannerListener {
-                override fun onAiClicked() {
-                    navigate(
-                        R.id.aiTopQuestionsFragment,
-                        bundleOf("aiTopic" to AITopics.WORKOUT)
-                    )
+            fragments.add(WorkoutNudgeFragment.newInstance(it, NudgeBgColor.NONE).apply {
+                setClickListener(object :
+                    NudgeBannerListener {
+                    override fun onAiClicked() {
+                        navigate(
+                            R.id.aiTopQuestionsFragment,
+                            bundleOf("aiTopic" to AITopics.WORKOUT)
+                        )
+                    }
                 }
-            }))
+                )
+            })
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytTop.lytCues.vpBannerSlider.apply {

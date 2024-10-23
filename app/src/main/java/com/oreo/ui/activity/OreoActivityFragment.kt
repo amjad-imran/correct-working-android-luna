@@ -178,11 +178,18 @@ class OreoActivityFragment :
         }
         val fragments = ArrayList<OreoActivityBannerFragment>()
         data.forEach {
-            fragments.add(OreoActivityBannerFragment.newInstance(it, object : NudgeBannerListener {
-                override fun onAiClicked() {
-                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.ACTIVITY))
-                }
-            }))
+            fragments.add(OreoActivityBannerFragment.newInstance(it).apply {
+                setClickListener(
+                    object : NudgeBannerListener {
+                        override fun onAiClicked() {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.ACTIVITY)
+                            )
+                        }
+                    }
+                )
+            })
         }
         val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytAScoreData.lytAScoreBanner.vpBannerSlider.apply {

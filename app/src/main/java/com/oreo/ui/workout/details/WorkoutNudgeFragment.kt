@@ -15,18 +15,19 @@ const val WORKOUT_NUDGE = "WORKOUT_NUDGE"
 const val NUDGE_BG_KEY = "NUDGE_BG_KEY"
 
 @AndroidEntryPoint
-class WorkoutNudgeFragment(private val listener: NudgeBannerListener) :
+class WorkoutNudgeFragment() :
     BaseFragment<FragmentOreoRedinessBannerBinding>(
         FragmentOreoRedinessBannerBinding::inflate
     ) {
 
     private var bannerData: Nudges? = null
     private var nudgeBgColor: String? = null
+    private var listener: NudgeBannerListener? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges, nudgeBgColor: NudgeBgColor, listener: NudgeBannerListener) =
-            WorkoutNudgeFragment(listener).apply {
+        fun newInstance(data: Nudges, nudgeBgColor: NudgeBgColor) =
+            WorkoutNudgeFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(WORKOUT_NUDGE, data)
                     putString(NUDGE_BG_KEY, nudgeBgColor.name)
@@ -34,6 +35,10 @@ class WorkoutNudgeFragment(private val listener: NudgeBannerListener) :
             }
     }
 
+
+    fun setClickListener(listener: NudgeBannerListener) {
+        this.listener = listener
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -74,7 +79,7 @@ class WorkoutNudgeFragment(private val listener: NudgeBannerListener) :
 
     override fun initListener() {
         binding.tvLunaAi.setOnClickListener {
-            listener.onAiClicked()
+            listener?.onAiClicked()
         }
     }
 

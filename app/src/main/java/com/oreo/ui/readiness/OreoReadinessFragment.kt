@@ -179,11 +179,15 @@ class OreoReadinessFragment :
         }
         val fragments = ArrayList<OreoReadinessBannerFragment>()
         data.forEach {
-            fragments.add(OreoReadinessBannerFragment.newInstance(it, object : NudgeBannerListener {
-                override fun onAiClicked() {
-                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.READINESS))
-                }
-            }))
+            fragments.add(OreoReadinessBannerFragment.newInstance(it).apply {
+                setClickListener(
+                    object : NudgeBannerListener {
+                        override fun onAiClicked() {
+                            navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.READINESS))
+                        }
+                    }
+                )
+            })
         }
         val sleepBannerAdapter =
             OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)

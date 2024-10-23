@@ -614,11 +614,18 @@ class OStressDataMovementFragment :
         val fragments = ArrayList<OreoStressBannerFragment>()
 
         nudgeList.forEach {
-            fragments.add(OreoStressBannerFragment.newInstance(it, object : NudgeBannerListener {
-                override fun onAiClicked() {
-                    navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.STRESS))
-                }
-            }))
+            fragments.add(OreoStressBannerFragment.newInstance(it).apply {
+                setClickListener(
+                    object : NudgeBannerListener {
+                        override fun onAiClicked() {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.STRESS)
+                            )
+                        }
+                    }
+                )
+            })
         }
 
         val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)

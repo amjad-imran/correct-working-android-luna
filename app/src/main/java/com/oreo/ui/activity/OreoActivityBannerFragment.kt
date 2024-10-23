@@ -12,15 +12,16 @@ import dagger.hilt.android.AndroidEntryPoint
 const val SLEEP_ACTIVITY_BANNER = "SLEEP_ACTIVITY_BANNER"
 
 @AndroidEntryPoint
-class OreoActivityBannerFragment(private val listener: NudgeBannerListener) :
+class OreoActivityBannerFragment() :
     BaseFragment<FragmentOreoActivityBannerBinding>(FragmentOreoActivityBannerBinding::inflate) {
 
     private var bannerData: Nudges? = null
+    private var listener: NudgeBannerListener? = null
 
     companion object {
         @JvmStatic
-        fun newInstance(data: Nudges, listener: NudgeBannerListener) =
-            OreoActivityBannerFragment(listener).apply {
+        fun newInstance(data: Nudges) =
+            OreoActivityBannerFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(SLEEP_ACTIVITY_BANNER, data)
 
@@ -28,6 +29,9 @@ class OreoActivityBannerFragment(private val listener: NudgeBannerListener) :
             }
     }
 
+    fun setClickListener(listener: NudgeBannerListener) {
+        this.listener = listener
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,7 +51,7 @@ class OreoActivityBannerFragment(private val listener: NudgeBannerListener) :
 
     override fun initListener() {
         binding.tvLunaAi.setOnClickListener {
-            listener.onAiClicked()
+            listener?.onAiClicked()
         }
     }
 

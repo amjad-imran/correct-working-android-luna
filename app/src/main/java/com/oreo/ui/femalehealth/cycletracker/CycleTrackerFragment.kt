@@ -651,15 +651,19 @@ class CycleTrackerFragment :
 
         val fragments = ArrayList<WorkoutNudgeFragment>()
         data.forEach {
-            fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor, object :
-                NudgeBannerListener {
-                override fun onAiClicked() {
-                    navigate(
-                        R.id.aiTopQuestionsFragment,
-                        bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
-                    )
-                }
-            }))
+            fragments.add(WorkoutNudgeFragment.newInstance(it, nudgeBgColor).apply {
+                setClickListener(
+                    object :
+                        NudgeBannerListener {
+                        override fun onAiClicked() {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
+                            )
+                        }
+                    }
+                )
+            })
         }
         val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytCues.vpBannerSlider.apply {
