@@ -468,8 +468,9 @@
 
 
     <style name="MyCustomThemeChat" parent="Theme.Freshchat.Light.DarkActionBar">
+        <item name="colorPrimary">@android:color/transparent</item>
         <item name="freshchatSendIcon">@drawable/ic_ai_send_message</item>
-         <item name="freshchatAttachIcon">@drawable/ic_fc_attach_file</item>
+        <item name="freshchatAttachIcon">@drawable/ic_fc_attach_file</item>
         <item name="freshchatMessageReplyInputViewStyle">@style/ChatEditText</item>
         <item name="freshchatContactUsTextStyle">@style/ChatContactUsStyle</item>
         <item name="android:windowBackground">@drawable/bg_luna_support</item>
@@ -479,18 +480,27 @@
         <item name="freshchatFAQCategoryListItemStyle">@style/CategoryListStyle</item>
         <item name="freshchatFAQCategoryNameTextStyle">@style/faqCategoryNameTextStyle</item>
         <item name="freshchatFAQListItemStyle">@style/freshchatFAQListIStyle</item>
-        <item name="freshchatFAQVotingPromptTextStyle">@style/freshchatFAQVotingPromptTextStyle</item>
-        <item name="freshchatFAQVotingPromptViewStyle">@style/freshchatFAQVotingPromptViewStyle</item>
+        <item name="freshchatFAQVotingPromptTextStyle">@style/freshchatFAQVotingPromptTextStyle
+        </item>
+        <item name="freshchatFAQVotingPromptViewStyle">@style/freshchatFAQVotingPromptViewStyle
+        </item>
         <item name="freshchatFAQDownvoteButtonStyle">@style/freshchatFAQDownvoteButtonStyle</item>
         <item name="freshchatFAQUpvoteButtonStyle">@style/freshchatFAQUpvoteButtonStyle</item>
 
         <!--Conversation list-->
         <item name="freshchatChannelNameTextStyle">@style/freshchatChannelNameTextStyle</item>
-        <item name="freshchatChannelDescriptionTextStyle">@style/freshchatChannelDescriptionTextStyle</item>
-        <item name="freshchatChannelLastUpdatedAtTextStyle">@style/freshchatChannelLastUpdatedAtTextStyle</item>
-        <item name="freshchatChannelUnreadCountTextStyle">@style/freshchatChannelUnreadCountTextStyle</item>
+        <item name="freshchatChannelDescriptionTextStyle">
+            @style/freshchatChannelDescriptionTextStyle
+        </item>
+        <item name="freshchatChannelLastUpdatedAtTextStyle">
+            @style/freshchatChannelLastUpdatedAtTextStyle
+        </item>
+        <item name="freshchatChannelUnreadCountTextStyle">
+            @style/freshchatChannelUnreadCountTextStyle
+        </item>
         <item name="freshchatChannelListItemStyle">@style/freshchatChannelListItemStyle</item>
         <item name="freshchatChannelAltIconStyle">@style/freshchatChannelAltIconStyle</item>
+        <item name="freshchatFAQCategoryAltIconStyle">@style/freshchatFAQAltIconStyle</item>
         <item name="freshchatChatBubbleLeft">@drawable/back_chat_support</item>
         <item name="freshchatChatBubbleRight">@drawable/back_chat_support_user</item>
         <item name="freshchatTeamMemberMessageTextStyle">@style/ChatTeamMemberMessageTextStyle
@@ -506,18 +516,24 @@
 
         <!--Customer Survey Dialog-->
         <item name="freshchatCustomerSurveyDialog">@style/freshchatCustomerSurveyDialog</item>
-        <item name="freshchatCustomerSurveyQuestionTextStyle">@style/freshchatCustomerSurveyQuestionTextStyle</item>
+        <item name="freshchatCustomerSurveyQuestionTextStyle">
+            @style/freshchatCustomerSurveyQuestionTextStyle
+        </item>
         <!--<item name="freshchatCustomerSurveyRatingBarStyle">@style/freshchatCustomerSurveyRatingBarStyle</item>-->
-        <item name="freshchatCustomerSurveyCommentsInputViewStyle">@style/freshchatCustomerSurveyCommentsInputViewStyle</item>
+        <item name="freshchatCustomerSurveyCommentsInputViewStyle">
+            @style/freshchatCustomerSurveyCommentsInputViewStyle
+        </item>
+
 
 
     </style>
+
 
     <!--To Test-->
     <style name="freshchatFAQListStyle">
         <item name="android:divider">#19ffffff</item>
         <item name="android:dividerHeight">1dp</item>
-        <item name="android:minHeight">?android:attr/listPreferredItemHeight</item>
+        <item name="android:layout_marginStart">@dimen/dimen_16dp</item>
     </style>
 
     <style name="freshchatCustomerSurveyDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -569,6 +585,15 @@
         <item name="android:textDirection">firstStrong</item>
     </style>
 
+    <style name="freshchatFAQAltIconStyle">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="fontFamily">@font/gilroy_bold</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/freshchat_channel_alt_icon_bg</item>
+    </style>
     <style name="freshchatChannelAltIconStyle">
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">0dp</item>
@@ -695,14 +720,20 @@
 
     <style name="freshchatFAQListIStyle">
         <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_14sp</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
+        <item name="android:layout_marginStart">6dp</item>
+        <item name="android:layout_marginEnd">6dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:lineSpacingExtra">7dp</item>
+        <item name="fontFamily">@font/gilroy_medium</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="faqCategoryNameTextStyle">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:layout_centerVertical">true</item>
@@ -711,8 +742,8 @@
 
     <style name="CategoryListStyle">
         <item name="android:background">@drawable/bg_freshchat_faq_cat</item>
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
     </style>
 
     <style name="ConversationMessageStyle">
