@@ -973,17 +973,24 @@ class SleepInternalDetailsFragment :
         val singleBind =
             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.lytTrendsHighlight
         if (percent1 == null) {
-            singleBind.root.gone()
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.gone()
+            singleBind.root.visible()
+            singleBind.tvRangeValue.invisible()
+            singleBind.ivTick.setImageResource(0)
+            singleBind.bgImage.setBackgroundResource(0)
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
+                this.visible()
+                text = context.getString(R.string.txt_avg_hours)
+            }
         } else {
             singleBind.root.visible()
+            singleBind.tvRangeValue.visible()
             if (percent1 > 0) {
                 singleBind.apply {
                     tvRangeValue.text =
                         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.tvAvg.apply {
                                 visible()
-                                text = "avg hours"
+                                text = context.getString(R.string.txt_avg_hours)
                             }
                             "${percent1}%"
                         } else {
@@ -1043,17 +1050,24 @@ class SleepInternalDetailsFragment :
         val singleBind2 =
             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.lytTrendsHighlight
         if (percent2 == null) {
-            singleBind2.root.gone()
-            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.gone()
+            singleBind2.root.visible()
+            singleBind2.ivTick.setImageResource(0)
+            singleBind2.bgImage.setBackgroundResource(0)
+            singleBind2.tvRangeValue.invisible()
+            binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
+                this.visible()
+                text = context.getString(R.string.txt_avg_hours)
+            }
         } else {
             singleBind2.root.visible()
+            singleBind2.tvRangeValue.visible()
             if (percent2 > 0) {
                 singleBind2.apply {
                     tvRangeValue.text =
                         if (viewModel.selectedLaunchMode == SleepInternalLaunchState.HOUR_VS_NEED && isInteracting.not()) {
                             binding.lytTopView.lytTopMultipleView.lytContentView.lytNeed.tvAvg.apply {
                                 visible()
-                                text = "avg need"
+                                text = getString(R.string.text_avg_need)
                             }
                             "${percent2}%"
                         } else {

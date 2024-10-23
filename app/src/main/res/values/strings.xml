@@ -1371,5 +1371,6 @@
     <string name="text_ends_today">Ends today</string>
     <string name="text_know_more_with_luna_ai">Know more with Luna AI</string>
     <string name="text_refer_and_earn">Refer and earn</string>
+    <string name="txt_avg_hours">avg hours</string>
 
 </resources>
