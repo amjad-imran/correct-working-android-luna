@@ -17,8 +17,10 @@
     <color name="divider_color_update">#F9F9F9</color>
     <color name="modal_color">#1AFFFFFF</color>
     <color name="errorRed">#ff4242</color>
+    <color name="white_4">#0AFFFFFF</color>
     <color name="white_10">#20FFFFFF</color>
     <color name="white_15">#26FFFFFF</color>
+    <color name="white_11">#1cffffff</color>
     <color name="white_12">#1effffff</color>
     <color name="white_12_72">#b8ffffff</color>
     <color name="white_12_70">#b3ffffff</color>
@@ -30,6 +32,7 @@
     <color name="white_40">#40ffffff</color>
     <color name="white_30">#48ffffff</color>
     <color name="white_60">#96ffffff</color>
+    <color name="white_70">#B3ffffff</color>
     <color name="white_64">#a3ffffff</color>
     <color name="color_error">#ff3358</color>
     <color name="o_heart_bg">#80ff3358</color>

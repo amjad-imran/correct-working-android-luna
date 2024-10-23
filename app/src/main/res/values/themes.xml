@@ -519,17 +519,106 @@
         <item name="freshchatCustomerSurveyQuestionTextStyle">
             @style/freshchatCustomerSurveyQuestionTextStyle
         </item>
-        <!--<item name="freshchatCustomerSurveyRatingBarStyle">@style/freshchatCustomerSurveyRatingBarStyle</item>-->
+        <item name="freshchatCustomerSurveyRatingBarStyle">@style/CustomerSurveyRatingBar</item>
         <item name="freshchatCustomerSurveyCommentsInputViewStyle">
             @style/freshchatCustomerSurveyCommentsInputViewStyle
         </item>
-
+        <item name="freshchatQuickReplyTextStyle">@style/FAQQuickReplyTextStyle</item>
+        <!-- Chat Resolution Confirmation Prompt Styles -->
+        <item name="freshchatChatResolutionPositiveButtonStyle">
+            @style/ChatResolutionPositiveButton
+        </item>
+        <item name="freshchatChatResolutionNegativeButtonStyle">
+            @style/ChatResolutionNegativeButton
+        </item>
+        <item name="freshchatChatResolutionPromptTextStyle">
+            @style/ChatResolutionPromptText
+        </item>
+        <item name="freshchatChatResolutionPromptViewStyle">
+            @style/ChatResolutionPromptView
+        </item>
 
 
     </style>
 
 
     <!--To Test-->
+    <style name="CustomerSurveyRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="ChatResolutionPositiveButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="android:text">@string/freshchat_chat_resolution_confirmation_prompt_positive
+        </item>
+        <item name="android:background">@drawable/back_fc_chat_support_qa_cta</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="ChatResolutionNegativeButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="android:text">@string/freshchat_chat_resolution_confirmation_prompt_negative
+        </item>
+        <item name="android:background">@drawable/back_fc_chat_support_qa_cta</item>
+        <item name="android:textDirection">firstStrong</item>
+    </style>
+
+    <style name="ChatResolutionPromptText">
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:padding">8dp</item>
+        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="android:textAppearance">@style/TextAppearance.Freshchat.Small</item>
+        <item name="android:text">@string/freshchat_chat_resolution_confirmation_prompt</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ChatResolutionPromptView" parent="Widget.Freshchat.ChatResolutionPromptView">
+        <item name="android:background">#162536</item>
+    </style>
+
+    <style name="FAQQuickReplyTextStyle">
+        <item name="android:background">@drawable/back_chat_support</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
     <style name="freshchatFAQListStyle">
         <item name="android:divider">#19ffffff</item>
         <item name="android:dividerHeight">1dp</item>
@@ -557,11 +646,13 @@
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginBottom">4dp</item>
+        <item name="background">@drawable/fresh_chat_input_back_edittext</item>
         <item name="android:maxLines">3</item>
         <item name="android:hint">@string/freshchat_chat_resolution_user_comments_hint</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">@color/white_60</item>
+        <item name="minHeight">100dp</item>
+        <item name="android:textColorHint">@color/white_70</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
@@ -594,6 +685,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@drawable/freshchat_channel_alt_icon_bg</item>
     </style>
+
     <style name="freshchatChannelAltIconStyle">
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">0dp</item>
@@ -812,5 +904,6 @@
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
+
 
 </resources>
