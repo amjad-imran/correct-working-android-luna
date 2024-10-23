@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.internal
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.ui.text.toUpperCase
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentSleepSleepTimeBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -17,6 +18,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -223,10 +225,10 @@ class SleepSleepTImeChartFragment :
             var current = minStartTime!!
             val max = current.plusHours(30)
 
-            val dispFormat = DateTimeFormatter.ofPattern("h:mm")
+            val dispFormat = DateTimeFormatter.ofPattern("h:mm a")
             while (current < max) {
 
-                yAxis.add(Pair(minMinutes, current.format(dispFormat)))
+                yAxis.add(Pair(minMinutes, current.format(dispFormat).toUpperCase()))
                 minMinutes = minMinutes.plus(4 * 60)
                 current = current.plusMinutes(4 * 60)
             }

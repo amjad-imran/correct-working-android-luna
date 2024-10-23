@@ -77,7 +77,7 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
     private var lastSentValuePos: Int? = null
 
-    private val endPadding = dip2px(30f)
+    private val endPadding = dip2px(50f)
     private var selectedPeriod: InternalSelectedPeriod? = null
     lateinit var xOverlayLinePaint: Paint
     lateinit var avgLineFillPaint: Paint
