@@ -723,8 +723,6 @@
         <item name="android:textSize">@dimen/text_14sp</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:layout_marginStart">6dp</item>
-        <item name="android:layout_marginEnd">6dp</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginBottom">12dp</item>
         <item name="android:lineSpacingExtra">7dp</item>
