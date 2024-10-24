@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freshchat.consumer.sdk.Freshchat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.moengage.core.internal.logger.Logger
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.pushbase.MoEPushHelper
@@ -66,7 +67,7 @@ constructor() : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-//        LOGS.d(TAG, "onMessageReceived event received ${Gson().toJson(message)}")
+        LOGS.d(TAG, "onMessageReceived event received ${Gson().toJson(message)}")
         message.data.apply {
             try {
                 val pushPayload = message.data

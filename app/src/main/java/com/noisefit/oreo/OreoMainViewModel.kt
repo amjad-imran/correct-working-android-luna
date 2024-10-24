@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
@@ -47,8 +48,6 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -1012,8 +1011,14 @@ constructor(
             userMeta["cf_profileimage"] = user?.imageUrl ?: ""
 
             Freshchat.getInstance(it).setUserProperties(userMeta)
+
+            val token = localDataStore.getFcmToken()
+            token?.let {
+                Freshchat.getInstance(NoiseFitApplicationMain.context!!)
+                    .setPushRegistrationToken(token);
+                LOGS.d("RNFMessagingService", "freshchat token sent - $it")
+
+            }
         }
-
     }
-
 }
