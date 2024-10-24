@@ -17,7 +17,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
@@ -470,8 +472,14 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         }
 
         optimalRange?.let {
-            val min = getYAxisValue(it.first)
-            val max = getYAxisValue(it.second)
+            var min = getYAxisValue(it.first)
+            var max = getYAxisValue(it.second)
+
+
+            val maxArea = height - bottomHeight
+            if (min > maxArea) {
+                min = maxArea.toFloat()
+            }
 
             canvas.drawRect(
                 RectF(
@@ -500,13 +508,13 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
             if (index == 0) {
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-offsetWidth,
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()),
                     xAxisPaint
                 )
                 canvas.drawLine(
                     0f,
-                    getYAxisValue(value.first.toFloat())-offsetWidth,
+                    getYAxisValue(value.first.toFloat()) - offsetWidth,
                     availableWidth,
                     getYAxisValue(value.first.toFloat()),
                     xLinePaint
@@ -515,7 +523,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-offsetWidth,
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height(),
                     xAxisPaint
                 )
@@ -531,7 +539,7 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
                 xAxisPaint.getTextBounds(text, 0, text.length, textBounds)
                 canvas.drawText(
                     text,
-                    width - textBounds.width().toFloat()-offsetWidth,
+                    width - textBounds.width().toFloat() - offsetWidth,
                     getYAxisValue(value.first.toFloat()) + textBounds.height() / 2,
                     xAxisPaint
                 )

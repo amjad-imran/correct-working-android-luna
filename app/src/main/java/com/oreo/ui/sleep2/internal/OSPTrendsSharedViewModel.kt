@@ -139,13 +139,7 @@ class OSPTrendsSharedViewModel @Inject constructor(
                     val value = (newMin + i * step).roundToInt()
 
                     val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value)
-                    val text = if (hour == 0) {
-                        "${minute}m"
-                    } else {
-                        "${hour}h${minute}m"
-                    }
-
-                    value to text
+                    value to String.format(locale = Locale.US, "%dh %02dm", hour, minute)
                 }
                 return yAxis
             }
@@ -514,12 +508,12 @@ class OSPTrendsSharedViewModel @Inject constructor(
             SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
                 val min = value.div(60)
                 val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(min.roundToInt())
-                val text = if (hour == 0) {
+                /*val text = if (hour == 0) {
                     "${minute}m"
                 } else {
                     "${hour}h${minute}m"
-                }
-                Pair(min, text)
+                }*/
+                Pair(min, String.format(locale = Locale.US, "%02dh %02dm", hour, minute))
             }
 
             SleepInternalLaunchState.LATENCY -> {

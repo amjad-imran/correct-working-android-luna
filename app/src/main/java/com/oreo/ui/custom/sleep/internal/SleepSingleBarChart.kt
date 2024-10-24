@@ -16,11 +16,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
+import java.util.Locale
 import kotlin.math.roundToInt
 
 
@@ -280,6 +282,9 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
                         || contributorType == SleepInternalLaunchState.BLOOD_OXYGEN
                     ) {
                         "${it.value1.roundToInt()}%"
+                    } else if (contributorType == SleepInternalLaunchState.REM_SLEEP || contributorType == SleepInternalLaunchState.DEEP_SLEEP) {
+                        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(it.value1.roundToInt())
+                        String.format(locale = Locale.US, "%02d:%02d", hour, minute)
                     } else {
                         "${it.value1.roundToInt()}"
                     }
@@ -356,8 +361,12 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         }
 
         optimalRange?.let {
-            val min = getYAxisValue(it.first)
-            val max = getYAxisValue(it.second)
+            var min = getYAxisValue(it.first)
+            var max = getYAxisValue(it.second)
+
+            if (max < topHeight) {
+                max = topHeight.toFloat()
+            }
 
             canvas.drawRect(
                 RectF(
