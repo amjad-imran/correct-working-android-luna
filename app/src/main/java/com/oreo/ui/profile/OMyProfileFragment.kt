@@ -83,9 +83,11 @@ class OMyProfileFragment :
 //            navigate(R.id.cycleTrackerStreakFragment)
         }
         binding.rowSupport.setOnClickListener {
-            Freshchat.showFAQs(requireContext(), FaqOptions().apply {
+            /*Freshchat.showFAQs(requireContext(), FaqOptions().apply {
                 showFaqCategoriesAsGrid(false)
-            })
+            })*/
+
+            Freshchat.showConversations(requireContext())
         }
 
         binding.rowSettings.setOnClickListener {
