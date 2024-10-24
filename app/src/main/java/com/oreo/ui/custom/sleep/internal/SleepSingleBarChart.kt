@@ -18,6 +18,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -364,9 +365,15 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
             var min = getYAxisValue(it.first)
             var max = getYAxisValue(it.second)
 
-            if (max < topHeight) {
+            LOGS.d("dsfkjhsdkjfhsd $min - $max = $topHeight")
+            if (min < topHeight) {
+                min = 0f
+            }
+
+            if (max < topHeight && min != 0f) {
                 max = topHeight.toFloat()
             }
+
 
             canvas.drawRect(
                 RectF(
