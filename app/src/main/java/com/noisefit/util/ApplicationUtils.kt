@@ -18,6 +18,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
 import com.noisefit.receiver.workManager.*
 import com.noisefit.watch.WatchForm
@@ -56,6 +57,18 @@ const val RescueServiceInBgWorker: String = "RescueServiceInBgWorker"
 
 
 object ApplicationUtils {
+
+
+    fun getSupportedLanguages(): List<AppLanguage> {
+        return arrayListOf(
+            AppLanguage("English", "en"),
+            AppLanguage("Français", "en"),
+            AppLanguage("Deutsch", "en"),
+            AppLanguage("Español", "en"),
+            AppLanguage("普通话", "en"),
+            AppLanguage("Italiano", "en"),
+        )
+    }
 
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
         val pwrm =
@@ -260,9 +273,9 @@ object ApplicationUtils {
             val minutes = (value % 3600) / 60
             val seconds = value % 60
             if (hours <= 0L) {
-                String.format(locale = Locale.US,"%02d:%02d", minutes, seconds)
+                String.format(locale = Locale.US, "%02d:%02d", minutes, seconds)
             } else {
-                String.format(locale = Locale.US,"%02d:%02d:%02d", hours, minutes, seconds)
+                String.format(locale = Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
             }
         }
     }
@@ -279,9 +292,9 @@ object ApplicationUtils {
             val seconds = value % 60;
 
             if (hours != 0) {
-                return String.format(locale = Locale.US,"%02d:%02d:%02d", hours, minutes, seconds)
+                return String.format(locale = Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
             }
-            return String.format(locale = Locale.US,"%02d:%02d", minutes, seconds)
+            return String.format(locale = Locale.US, "%02d:%02d", minutes, seconds)
         }
     }
 
@@ -509,13 +522,13 @@ object ApplicationUtils {
                 if (newNumber % 1 == 0.0) {
                     (newNumber.toInt()).toString()
                 } else {
-                    String.format(locale = Locale.US,"%.2f", newNumber)
+                    String.format(locale = Locale.US, "%.2f", newNumber)
                 }
             } else {
                 if ((number % 1) == 0.0) {
                     (number.toInt()).toString()
                 } else {
-                    String.format(locale = Locale.US,"%.2f", number)
+                    String.format(locale = Locale.US, "%.2f", number)
                 }
             }
         } else {
@@ -942,7 +955,7 @@ object ApplicationUtils {
         )
 
         // Output like "00:00"
-        return String.format(locale = Locale.US,"%02d:%02d", hour, minute)
+        return String.format(locale = Locale.US, "%02d:%02d", hour, minute)
     }
 
     fun getActivityDurationFormat2Seconds(duration: Long?): String {
@@ -954,7 +967,7 @@ object ApplicationUtils {
 
         val secs = 0
         // Output like "00:00:00"
-        return String.format(locale = Locale.US,"%02d:%02d:%02d", hour, minute, secs)
+        return String.format(locale = Locale.US, "%02d:%02d:%02d", hour, minute, secs)
     }
 
     fun calculateProgressPercentage(nplData: NplLeague): Int {

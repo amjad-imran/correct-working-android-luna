@@ -171,7 +171,7 @@ class SummaryDataFragmentToday :
                 )
             )
             lytBedTime.tvTime.text = "11:00"
-            lytBedTime.tvTimeUnit.text = "pm"
+            lytBedTime.tvTimeUnit.text = getString(R.string.text_pm)
 
             lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
 
@@ -189,7 +189,7 @@ class SummaryDataFragmentToday :
                 )
             )
             lytWakeupTime.tvTime.text = "7:30"
-            lytWakeupTime.tvTimeUnit.text = "am"
+            lytWakeupTime.tvTimeUnit.text = getString(R.string.text_am)
         }
     }
 
@@ -1102,7 +1102,7 @@ class SummaryDataFragmentToday :
                 imvHrv.setImageResource(R.drawable.ic_hm_check_default)
                 imvSkin.setImageResource(R.drawable.ic_hm_check_default)
                 tvNudge.visible()
-                tvNudge.text = "No data so far"
+                tvNudge.text = getString(R.string.text_no_data_so_far)
             }
         }
 
@@ -1539,9 +1539,9 @@ class SummaryDataFragmentToday :
 
                 lytHeartRate.tvLastMeasure.apply {
                     setTextColor(Color.parseColor("#88b0ff"))
-                    text = "Try again"
+                    text = getString(R.string.text_try_again)
                 }
-                lytHeartRate.tvHeartUnit.text = "Unable to measure"
+                lytHeartRate.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
 
             }
 

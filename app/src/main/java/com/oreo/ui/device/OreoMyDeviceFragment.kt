@@ -556,7 +556,7 @@ class OreoMyDeviceFragment :
                 )
                 tvRingName.text = noiseFitDevice?.bluetoothName
                 tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
-                tvBattery.text = "Trying to connect..."
+                tvBattery.text = getString(R.string.text_trying_to_connect_dot)
                 tvOtherInfo.gone()
             }
         }
@@ -573,7 +573,7 @@ class OreoMyDeviceFragment :
             )
             tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
             tvRingName.text = noiseFitDevice?.bluetoothName
-            tvBattery.text = "Make sure your bluetooth is on..."
+            tvBattery.text = getString(R.string.text_make_sure_your_bluetooth_is_on)
             tvOtherInfo.gone()
         }
     }
@@ -608,7 +608,7 @@ class OreoMyDeviceFragment :
             tvOtherInfo.visible()
 
             if (mViewModel.sessionManager.isRingCharging.value == true) {
-                tvOtherInfo.text = " | Charging"
+                tvOtherInfo.text = getString(R.string.text_charging_bar)
             } else {
                 tvOtherInfo.text = " | $lastSyncText"
             }

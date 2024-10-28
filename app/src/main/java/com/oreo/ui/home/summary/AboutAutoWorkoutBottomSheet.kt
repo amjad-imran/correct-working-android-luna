@@ -26,7 +26,7 @@ class AboutAutoWorkoutBottomSheet :
         binding.tvTitle.text = getString(R.string.text_automatic_activity_detection)
         binding.tvDesc.text = getString(R.string.text_automatic_activity_detection_desc)
         binding.btnCancel.gone()
-        binding.btnAllow.text = "Got it"
+        binding.btnAllow.text = getString(R.string.text_got_it)
     }
 
 

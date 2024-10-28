@@ -29,7 +29,7 @@ class DeviceSettingsFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.toolbar.tvTitle.text = "Device settings"
+        binding.toolbar.tvTitle.text = getString(R.string.text_device_settings)
     }
 
     override fun initListener() {

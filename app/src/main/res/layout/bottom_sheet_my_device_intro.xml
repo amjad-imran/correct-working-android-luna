@@ -81,7 +81,7 @@
                 android:paddingEnd="62dp"
                 android:layout_marginEnd="@dimen/dimen_12dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"
-                android:text="@string/text_got_it_"
+                android:text="@string/text_got_it"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

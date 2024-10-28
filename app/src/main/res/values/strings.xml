@@ -72,8 +72,7 @@
     <string name="text_max_alarm_reached">Max Alarm Limit Reached</string>
     <string name="text_max_screenshot_message">You have already added %d Screenshots. Delete other Screenshots to add new ones.</string>
     <string name="text_close">Close</string>
-    <string name="text_got_it">Got It</string>
-    <string name="text_got_it_">Got it</string>
+    <string name="text_got_it">Got it</string>
     <string name="text_remove">Remove</string>
     <string name="text_start_measurement">Start Measurement</string>
     <string name="text_freqency">Frequency</string>
@@ -1373,5 +1372,15 @@
     <string name="text_refer_and_earn">Refer and earn</string>
     <string name="txt_avg_hours">avg hours</string>
     <string name="freshchatDisableFrame">7ce808f5cb245b8c4800536b8ad7d78c</string>
+    <string name="text_choose_your_language">Choose your language</string>
+    <string name="text_language_change_message">This will change the App to the selected language</string>
+    <string name="text_pm">pm</string>
+    <string name="text_am">am</string>
+    <string name="text_no_data_so_far">No data so far</string>
+    <string name="text_unable_to_measure">Unable to measure</string>
+    <string name="text_device_settings">Device settings</string>
+    <string name="text_trying_to_connect_dot">Trying to connect...</string>
+    <string name="text_make_sure_your_bluetooth_is_on">Make sure your bluetooth is on...</string>
+    <string name="text_charging_bar">" | Charging"</string>
 
 </resources>
