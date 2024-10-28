@@ -91,8 +91,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_3,
-                            textColor = Color.parseColor("#dffc79")
+                            backgroundRes = R.drawable.bg_ref_2,
+                            textColor = Color.parseColor("#080004")
                         )
                     )
                 )
@@ -102,8 +102,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_2,
-                            textColor = Color.parseColor("#f6ed89")
+                            backgroundRes = R.drawable.bg_ref_3,
+                            textColor = Color.parseColor("#ffffff")
                         )
                     )
                 )
@@ -114,7 +114,7 @@ class ReferralViewModel @Inject constructor(
                             title = it.title,
                             subTitle = it.subTitle,
                             backgroundRes = R.drawable.bg_ref_4,
-                            textColor = Color.parseColor("#bcf04c")
+                            textColor = Color.parseColor("#f2efe7")
                         )
                     )
                 )
@@ -124,8 +124,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_6,
-                            textColor = Color.parseColor("#000000")
+                            backgroundRes = R.drawable.bg_ref_7,
+                            textColor = Color.parseColor("#172719")
                         )
                     )
                 )
@@ -154,13 +154,14 @@ class ReferralViewModel @Inject constructor(
     }
 
     private fun getFriendsCard(referredCount: Int): Pair<Int, Int> {
-        val modVal = referredCount % 4
+        val modVal = referredCount % 5
         return when (modVal) {
-            0 -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
-            1 -> Pair(R.drawable.bg_ref_3, Color.parseColor("#dffc79"))
-            2 -> Pair(R.drawable.bg_ref_4, Color.parseColor("#bcf04c"))
-                3 -> Pair(R.drawable.bg_ref_5, Color.parseColor("#f2efe7"))
-            else -> Pair(R.drawable.bg_ref_2, Color.parseColor("#f6ed89"))
+            0 -> Pair(R.drawable.bg_ref_2, Color.parseColor("#080004"))
+            1 -> Pair(R.drawable.bg_ref_3, Color.parseColor("#ffffff"))
+            2 -> Pair(R.drawable.bg_ref_4, Color.parseColor("#f2efe7"))
+            3 -> Pair(R.drawable.bg_ref_5, Color.parseColor("#aeff00"))
+            4 -> Pair(R.drawable.bg_ref_6, Color.parseColor("#ffffff"))
+            else -> Pair(R.drawable.bg_ref_2, Color.parseColor("#080004"))
         }
     }
 
@@ -168,36 +169,40 @@ class ReferralViewModel @Inject constructor(
      * Ring filled, default, join drawable
      */
     private fun getRadioButtons(referredCount: Int): Triple<Int, Int, Int> {
-        val modVal = referredCount % 4
+        val modVal = referredCount % 5
         return when (modVal) {
             0 -> Triple(
                 R.drawable.ic_ref_status_filled_2,
                 R.drawable.ic_ref_status_ring_2,
                 R.drawable.ic_ring_join_2
             )
-
             1 -> Triple(
-                R.drawable.ic_ref_status_filled_4,
-                R.drawable.ic_ref_status_ring_4,
-                R.drawable.ic_ring_join_2
-            )
-
-            2 -> Triple(
                 R.drawable.ic_ref_status_filled_3,
                 R.drawable.ic_ref_status_ring_3,
                 R.drawable.ic_ring_join_3
             )
 
+            2 -> Triple(
+                R.drawable.ic_ref_status_filled_4,
+                R.drawable.ic_ref_status_ring_3,
+                R.drawable.ic_ring_join_4
+            )
+
             3 -> Triple(
-                R.drawable.ic_ref_status_filled,
-                R.drawable.ic_ref_status_ring,
-                R.drawable.ic_ring_join_white
+                R.drawable.ic_ref_status_filled_5,
+                R.drawable.ic_ref_status_ring_5,
+                R.drawable.ic_ring_join_5
+            )
+            4 -> Triple(
+                R.drawable.ic_ref_status_filled_3,
+                R.drawable.ic_ref_status_ring_3,
+                R.drawable.ic_ring_join_3
             )
 
             else -> Triple(
-                R.drawable.ic_ref_status_filled,
-                R.drawable.ic_ref_status_ring,
-                R.drawable.ic_ring_join_white
+                R.drawable.ic_ref_status_filled_2,
+                R.drawable.ic_ref_status_ring_2,
+                R.drawable.ic_ring_join_2
             )
         }
     }
