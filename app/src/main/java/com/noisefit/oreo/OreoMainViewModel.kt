@@ -1015,9 +1015,8 @@ constructor(
             val token = localDataStore.getFcmToken()
             token?.let {
                 Freshchat.getInstance(NoiseFitApplicationMain.context!!)
-                    .setPushRegistrationToken(token);
+                    .setPushRegistrationToken(token)
                 LOGS.d("RNFMessagingService", "freshchat token sent - $it")
-
             }
         }
     }

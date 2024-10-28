@@ -732,11 +732,16 @@ class SleepInternalDetailsFragment :
                     lytHours.textLegend.gone()
                     lytHours.ivLegend.gone()
                 }
+
                 binding.lytTopView.lytTopSingleView.root.gone()
                 binding.lytTopView.lytTopMultipleView.root.visible()
                 binding.lytTopView.lytTopMultipleView.apply {
                     this.lytContentView.lytNeed.root.gone()
                     this.lytContentView.divider1.root.gone()
+                }
+                binding.lytTopView.lytTopMultipleView.lytContentView.lytHours.apply {
+                    lytTrendsHighlight.root.visible()
+                    this.lytTrendsHighlight.tvRangeValue.visible()
                 }
                 binding.lytTopView.lytTopMultipleView.tvNudge.text =
                     topContentData.trendsData?.nudge ?: ""
