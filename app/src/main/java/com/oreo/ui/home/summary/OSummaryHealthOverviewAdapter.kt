@@ -398,127 +398,47 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val hasHealthData = hasHealthData(data.data)
 
             if (hasHealthData) {
-                var outOfRangeCount = 0
-                var isSignificant = false
-                var trendName = ""
-                if (!data.data.bloodOxy?.status.isNullOrEmpty()) {
-                    val state = getHealthTrendState(
-                        data.data.bloodOxy?.status
-                    )
-                    if (state == 2 || state == 1) {
-                        outOfRangeCount++
-                        trendName = "Blood oxygen"
-                    }
-                    if (state == 2) {
-                        isSignificant = true
-                    }
+                val healthData = data.data
+                binding.tvNudge.visible()
+                binding.tvNudge.text = data.data.nudge
+
+
+                if (!healthData.bloodOxy?.status.isNullOrEmpty()) {
                     binding.imvSpo2.setImageResource(
                         getHealthTrendIcon(
-                            data.data.bloodOxy?.status
+                            healthData.bloodOxy?.status
                         )
                     )
                 } else {
                     binding.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
                 }
 
-                if (!data.data.hrv?.status.isNullOrEmpty()) {
-                    val state = getHealthTrendState(
-                        data.data.hrv?.status
-                    )
-                    if (state == 2 || state == 1) {
-                        outOfRangeCount++
-                        trendName = "HRV"
-                    }
-                    if (state == 2) {
-                        isSignificant = true
-                    }
-                    binding.imvHrv.setImageResource(
-                        getHealthTrendIcon(
-                            data.data.hrv?.status
-                        )
-                    )
+                if (!healthData.hrv?.status.isNullOrEmpty()) {
+                    binding.imvHrv.setImageResource(getHealthTrendIcon(healthData.hrv?.status))
                 } else {
                     binding.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
                 }
 
-                if (!data.data.rhr?.status.isNullOrEmpty()) {
-                    val state = getHealthTrendState(
-                        data.data.rhr?.status
-                    )
-                    if (state == 2 || state == 1) {
-                        outOfRangeCount++
-                        trendName = "Resting HR"
-                    }
-                    if (state == 2) {
-                        isSignificant = true
-                    }
-                    binding.imvRHR.setImageResource(
-                        getHealthTrendIcon(
-                            data.data.rhr?.status
-                        )
-                    )
+                if (!healthData.rhr?.status.isNullOrEmpty()) {
+                    binding.imvRHR.setImageResource(getHealthTrendIcon(healthData.rhr?.status))
                 } else {
                     binding.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
                 }
 
-                if (!data.data.skinTemp?.status.isNullOrEmpty()) {
-                    val state = getHealthTrendState(
-                        data.data.skinTemp?.status
-                    )
-                    if (state == 2 || state == 1) {
-                        outOfRangeCount++
-                        trendName = "Skin temperature"
-                    }
-                    if (state == 2) {
-                        isSignificant = true
-                    }
+                if (!healthData.skinTemp?.status.isNullOrEmpty()) {
                     binding.imvSkin.setImageResource(
                         getHealthTrendIcon(
-                            data.data.skinTemp?.status
+                            healthData.skinTemp?.status
                         )
                     )
                 } else {
                     binding.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
                 }
 
-                if (!data.data.resp?.status.isNullOrEmpty()) {
-                    val state = getHealthTrendState(
-                        data.data.resp?.status
-                    )
-                    if (state == 2 || state == 1) {
-                        outOfRangeCount++
-                        trendName = "Respiratory rate"
-                    }
-                    if (state == 2) {
-                        isSignificant = true
-                    }
-                    binding.imvResp.setImageResource(
-                        getHealthTrendIcon(
-                            data.data.resp?.status
-                        )
-                    )
+                if (!healthData.resp?.status.isNullOrEmpty()) {
+                    binding.imvResp.setImageResource(getHealthTrendIcon(healthData.resp?.status))
                 } else {
                     binding.imvResp.setImageResource(R.drawable.ic_hm_check_default)
-                }
-
-                if (outOfRangeCount == 0) {
-                    binding.tvNudge.visible()
-                    binding.tvNudge.text = "All readings are in your typical range"
-                } else if (outOfRangeCount == 1) {
-                    val text = if (isSignificant) {
-                        "significantly"
-                    } else {
-                        "slightly"
-                    }
-                    binding.tvNudge.visible()
-                    if (trendName.equals("Blood oxygen", true) || trendName.equals("HRV", true)) {
-                        binding.tvNudge.text = "Your $trendName is $text low"
-                    } else {
-                        binding.tvNudge.text = "Your $trendName is $text elevated"
-                    }
-                } else {
-                    binding.tvNudge.visible()
-                    binding.tvNudge.text = "$outOfRangeCount/5 metrics are out of range"
                 }
             } else {
                 binding.apply {
