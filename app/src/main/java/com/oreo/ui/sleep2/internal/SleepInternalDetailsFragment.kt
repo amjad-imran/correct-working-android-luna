@@ -485,7 +485,7 @@ class SleepInternalDetailsFragment :
                                 AppConversionUtils.fahrenheitToCelsius(avgValue!!)
                             String.format(
                                 locale = Locale.US,
-                                "${if(convertedValue>0)"+" else ""}%.1f",
+                                "%.1f",
                                 convertedValue
                             )
                         }
@@ -507,7 +507,7 @@ class SleepInternalDetailsFragment :
                         } else {
                             String.format(
                                 locale = Locale.US,
-                                "${if(avgValue!!.roundToInt()>0)"+" else ""}%.1f",
+                                "%.1f",
                                 avgValue
                             )
                         }
