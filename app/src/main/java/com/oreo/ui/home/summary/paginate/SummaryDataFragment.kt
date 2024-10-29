@@ -252,7 +252,7 @@ class SummaryDataFragment :
         lytWorkouts.root.visible()
 
 
-        lytWorkouts.textView66.text = "Workouts"
+        lytWorkouts.textView66.text = binding.root.context.getString(R.string.text_workouts)
         if (workouts.isNullOrEmpty()) {
             lytWorkouts.tvEmptyMsg.text =
                 getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)

@@ -16,7 +16,7 @@ class RingBatteryChargeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.tvTitle.text = "Charging your ring"
+        binding.toolbar.tvTitle.text = getString(R.string.text_charging_your_ring)
 
         initUI()
     }

@@ -164,7 +164,8 @@ class ONapDetailsFragment :
                 } else {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakup?.low}"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text =
+                        getString(R.string.text_bpm_small)
                 }
                 if (it.hrBreakup?.avg == 0 || it.hrBreakup?.avg == 255) {
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
@@ -172,7 +173,8 @@ class ONapDetailsFragment :
                 } else {
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakup?.avg}"
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text =
+                        getString(R.string.text_bpm_small)
                 }
             } else {
                 heartRateDefaultView()

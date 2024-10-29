@@ -1005,7 +1005,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepAvg.tvTitle.text = getString(R.string.text_sleep_score_o)
         binding.lytSleepScore.lytTotalSleep.tvTitle.text = getString(R.string.text_total_sleep)
         binding.lytSleepScore.lytTimeInBed.tvTitle.text = getString(R.string.text_time_in_bed)
-        binding.lytSleepScore.lytRestHr.tvTitle.text = "Average HR"
+        binding.lytSleepScore.lytRestHr.tvTitle.text = binding.root.context.getString(R.string.text_average_hr)
         binding.lytSleepScore.lytSleepEfficiency.tvTitle.text =
             getString(R.string.text_sleep_efficiency)
         setSleepBannerViewPager(dayData.nudges)

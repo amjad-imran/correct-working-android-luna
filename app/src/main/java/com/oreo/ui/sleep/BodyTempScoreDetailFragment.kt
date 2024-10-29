@@ -39,7 +39,7 @@ class BodyTempScoreDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_body_temp_page_visit)
 
-        binding.toolbar.tvTitle.text = "Skin temperature"
+        binding.toolbar.tvTitle.text = binding.root.context.getString(R.string.text_skin_temperature)
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }

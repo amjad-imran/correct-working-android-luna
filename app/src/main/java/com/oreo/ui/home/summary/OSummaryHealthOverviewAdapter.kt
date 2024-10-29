@@ -448,7 +448,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     imvHrv.setImageResource(R.drawable.ic_hm_check_default)
                     imvSkin.setImageResource(R.drawable.ic_hm_check_default)
                     tvNudge.visible()
-                    tvNudge.text = "No data so far"
+                    tvNudge.text = tvNudge.context.getString(R.string.text_no_data_so_far)
                 }
             }
 
@@ -712,7 +712,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val scoreValue = data.data.readinessScore ?: 0
             if (scoreValue == 0) {
                 binding.tvValue.text = "--"
-                binding.tvStatus.text = "No data"
+                binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_no_data)
 //                binding.tvTodayDesc.text = ""
 //                binding.tvTodayDesc.invisible()
 
@@ -913,12 +913,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             //binding.imv.loadImage(binding.imv.context, R.drawable.ic_sleep_card_bg1)
             val scoreValue = data.data.sleepScore ?: 0
             if (scoreValue <= 0) {
-                binding.tvSleepStart.text = "Start time"
-                binding.tvSleepEnd.text = "End time"
+                binding.tvSleepStart.text = binding.root.context.getString(R.string.text_start_time)
+                binding.tvSleepEnd.text = binding.root.context.getString(R.string.text_end_time)
                 binding.tvSleepStart.setTextColor(R.color.white_80.getColor())
                 binding.tvSleepEnd.setTextColor(R.color.white_80.getColor())
                 binding.tvValue.text = "--"
-                binding.tvStatus.text = "No data"
+                binding.tvStatus.text = binding.root.context.getString(R.string.text_no_data)
                 binding.tvHrValue.text = "--"
                 binding.tvHrUnit.gone()
                 binding.tvSleepMinute.text = "--"

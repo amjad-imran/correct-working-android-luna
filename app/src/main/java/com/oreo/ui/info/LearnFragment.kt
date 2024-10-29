@@ -42,7 +42,7 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.include29.tvTitle.text = "Learn more"
+        binding.include29.tvTitle.text = binding.root.context.getString(R.string.text_learn_more)
 
         setRecycler()
     }
