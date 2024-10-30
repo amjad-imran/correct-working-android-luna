@@ -72,7 +72,7 @@ class OMyProfileFragment :
             }
         }
 
-        binding.lytReferralAvailable.tvRefer.setOnClickListener {
+        binding.lytReferralAvailable.root.setOnClickListener {
             viewModel.referralResponse?.let {
                 navigate(R.id.referralFragment, bundleOf("referralInfo" to it))
             }
