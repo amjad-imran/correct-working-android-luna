@@ -386,10 +386,10 @@ class BarChartTemp : View {
     }
 
     fun getMaxValue(datas: List<ChartModel>): Float {
-        var max = 3.0f
+        var max = 2.0f
         datas.forEach {
-            if (abs(it.valueFloat) > max) {
-                max = 5.0f
+            if (abs(it.valueFloat) > max) {max
+                max = 4.0f
             }
         }
         return max
@@ -419,15 +419,15 @@ class BarChartTemp : View {
             canvas.drawLine(x, 0f, x, (mHeight - bottomWith - blockHeight), verticalLineColor!!)
 
             if (current.valueFloat > 0) {
-                val convertedVal = if (max == 3.0f) {
-                    if (current.valueFloat > 3) {
-                        3.0f
+                val convertedVal = if (max == 2.0f) {
+                    if (current.valueFloat > 2.5) {
+                        2.5f
                     } else {
                         current.valueFloat
                     }
-                } else if (max == 5.0f) {
-                    if (current.valueFloat > 6.25) {
-                        6.25f
+                } else if (max == 4.0f) {
+                    if (current.valueFloat > 5f) {
+                        5f
                     } else {
                         current.valueFloat
                     }
@@ -460,15 +460,15 @@ class BarChartTemp : View {
                 canvas.drawPath(path, topPaint!!)
 
             } else if (current.valueFloat < 0) {
-                val convertedVal = if (max == 3.0f) {
-                    if (current.valueFloat < -3) {
-                        -3.0f
+                val convertedVal = if (max == 2.0f) {
+                    if (current.valueFloat < -2) {
+                        -2.0f
                     } else {
                         current.valueFloat
                     }
-                } else if (max == 5.0f) {
-                    if (current.valueFloat < -5) {
-                        -5.0f
+                } else if (max == 4.0f) {
+                    if (current.valueFloat < -4) {
+                        -4.0f
                     } else {
                         current.valueFloat
                     }
@@ -530,15 +530,15 @@ class BarChartTemp : View {
 
             if (list[position].valueFloat > 0) {
 
-                val convertedVal = if (max == 3.0f) {
-                    if (list[position].valueFloat > 3) {
-                        3.0f
+                val convertedVal = if (max == 2.0f) {
+                    if (list[position].valueFloat > 2.5) {
+                        2.5f
                     } else {
                         list[position].valueFloat
                     }
-                } else if (max == 5.0f) {
-                    if (list[position].valueFloat > 6.25) {
-                        6.25f
+                } else if (max == 4.0f) {
+                    if (list[position].valueFloat > 5) {//
+                        5.0f
                     } else {
                         list[position].valueFloat
                     }
@@ -573,15 +573,15 @@ class BarChartTemp : View {
                 canvas.drawPath(path, topSelectedPaint!!)
 
             } else if (list[position].valueFloat < 0) {
-                val convertedVal = if (max == 3.0f) {
-                    if (list[position].valueFloat < -3) {
-                        -3.0f
+                val convertedVal = if (max == 2.0f) {
+                    if (list[position].valueFloat < -2) {
+                        -2.0f
                     } else {
                         list[position].valueFloat
                     }
-                } else if (max == 5.0f) {
-                    if (list[position].valueFloat < -5) {
-                        -5.0f
+                } else if (max == 4.0f) {
+                    if (list[position].valueFloat < -4) {
+                        -4.0f
                     } else {
                         list[position].valueFloat
                     }
