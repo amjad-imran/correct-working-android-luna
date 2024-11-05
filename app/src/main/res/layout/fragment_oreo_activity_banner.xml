@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rootView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/ic_nudge_activity">
 
         <TextView
@@ -31,6 +37,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
+            android:paddingBottom="12dp"
             android:textColor="@color/white_48"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,24 +45,14 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
             tools:text="A poor sleep score could be caused by insufficient or extraneous sleep, or due to frequent dreams." />
 
-        <TextView
-            android:id="@+id/tvLunaAi"
-            style="@style/S14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="14dp"
-            android:background="@drawable/back_nudge_ai"
-            android:gravity="center"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:text="@string/text_know_more_with_luna_ai"
-            android:textColor="#b3ffffff"
-            app:drawableEndCompat="@drawable/ic_nudge_ai_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/lytChatCta"
+            layout="@layout/layout_ask_luna_cta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
 </layout>

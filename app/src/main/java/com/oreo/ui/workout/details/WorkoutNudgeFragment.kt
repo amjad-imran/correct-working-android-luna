@@ -63,7 +63,7 @@ class WorkoutNudgeFragment() :
             }
 
             else -> {
-                binding.tvLunaAi.gone()
+                binding.lytChatCta.root.gone()
                 binding.bgImv.setBackgroundResource(R.drawable.ic_nudge_activity)
             }
         }
@@ -78,7 +78,7 @@ class WorkoutNudgeFragment() :
     }
 
     override fun initListener() {
-        binding.tvLunaAi.setOnClickListener {
+        binding.lytChatCta.root.setOnClickListener {
             listener?.onAiClicked()
         }
     }
