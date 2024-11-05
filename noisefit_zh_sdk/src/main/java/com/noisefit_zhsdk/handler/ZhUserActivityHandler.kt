@@ -55,6 +55,7 @@ import com.zhapp.ble.bean.OfflineTemperatureDataBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PhoneSportDataBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.RingBatteryBean
 import com.zhapp.ble.bean.RingBodyBatteryBean
 import com.zhapp.ble.bean.RingHealthScoreBean
 import com.zhapp.ble.bean.RingSleepNapBean
@@ -593,6 +594,10 @@ constructor(
                         )
                     )
                 }
+
+            }
+
+            override fun onRingBatteryData(p0: RingBatteryBean?) {
 
             }
 

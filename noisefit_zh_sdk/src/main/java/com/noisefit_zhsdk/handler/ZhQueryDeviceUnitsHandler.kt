@@ -51,6 +51,7 @@ import com.zhapp.ble.bean.CommonReminderBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenSettingsBean
 import com.zhapp.ble.bean.DeviceInfoBean
 import com.zhapp.ble.bean.DoNotDisturbModeBean
+import com.zhapp.ble.bean.EvDataInfoBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.FindWearSettingsBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
@@ -866,6 +867,13 @@ constructor(
 
             override fun onBreathingLightSettings(p0: BreathingLightSettingsBean?) {
 
+            }
+
+            override fun onEvDataInfo(p0: EvDataInfoBean?) {
+
+            }
+
+            override fun onEvRemindType(p0: Int) {
             }
 
 

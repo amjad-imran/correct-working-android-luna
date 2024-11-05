@@ -1,5 +1,5 @@
 
 
 configurations.maybeCreate("default")
-artifacts.add("default", file("./zh_app/ZhAppBle-sdk-n010-1.0.63.aar"))
+artifacts.add("default", file("./zh_app/ZhAppBle-sdk-n010-1.0.65.aar"))
 
