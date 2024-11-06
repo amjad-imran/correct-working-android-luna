@@ -240,7 +240,6 @@ class SummaryDataFragmentToday :
 
 
     fun loadData() {
-        LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.registerDate = mainViewModel.registerDate
@@ -470,10 +469,8 @@ class SummaryDataFragmentToday :
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
 
-
             val pairStatus: String
 
-            LOGS.d("SyncDataWork: starting job")
             if (!viewModel.isDeviceConnected()) {
                 pairStatus = "unpaired"
                 return@setOnRefreshListener
@@ -746,7 +743,6 @@ class SummaryDataFragmentToday :
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                LOGS.d(TAG, "Today data reload")
                 loadData()
             }
         }
@@ -1161,8 +1157,8 @@ class SummaryDataFragmentToday :
             this.tvOvlInDays.text = data.data.days.toString()
             this.textView1.text = data.data.bottomText
             this.tvPredictionDays.text = data.data.predictionDate
-            this.tvOvlDaysCurrent.text = "Day ${data.data.currentCycleDay}"
-            this.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
+            this.tvOvlDaysCurrent.text = getString(R.string.text_day_value,data.data.currentCycleDay)
+            this.tvOvlDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
             this.imv.setBackgroundResource(data.data.background)
 
             this.tvDesc.text = data.data.nudge
@@ -1179,8 +1175,8 @@ class SummaryDataFragmentToday :
             root.visible()
             this.textView3.text = data.data.title
             this.tvOvlInDays.text = data.data.subTitle
-            this.tvCurrentDay.text = "Day ${data.data.days}"
-            this.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
+            this.tvCurrentDay.text = getString(R.string.text_day_value,data.data.days)
+            this.tvDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
             this.tvDesc.text = data.data.nudge
             this.tvValue.text = if (data.data.temperatureVariation == null) {
                 tvUnit.text = ""
@@ -1188,10 +1184,10 @@ class SummaryDataFragmentToday :
             } else {
 
                 val tempVariation = if (viewModel.sessionManager.isMetric()) {
-                    tvUnit.text = "°C"
+                    tvUnit.text = getString(R.string.text_degree_c)
                     AppConversionUtils.fahrenheitToCelsius(32 + data.data.temperatureVariation)
                 } else {
-                    tvUnit.text = "°F"
+                    tvUnit.text = getString(R.string.text_degree_f)
                     data.data.temperatureVariation
                 }
 
@@ -1513,7 +1509,7 @@ class SummaryDataFragmentToday :
 
                 lytHeartRate.tvEmptyConnect.apply {
                     setTextColor(resources.getColor(R.color.white))
-                    text = "Measuring..."
+                    text = getString(R.string.text_measuring_dots)
                 }
             }
 
@@ -1525,7 +1521,7 @@ class SummaryDataFragmentToday :
                 lytHeartRate.tvEmptyConnect.visible()
                 lytHeartRate.tvEmptyConnect.apply {
                     setTextColor(Color.parseColor("#88b0ff"))
-                    text = "Tap to measure"
+                    text = getString(R.string.text_tap_to_measure)
                 }
             }
 
@@ -1568,7 +1564,6 @@ class SummaryDataFragmentToday :
             viewModel.viewModelScope.launch(Dispatchers.IO) {
                 context?.let {
                     val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-                    LOGS.w("imvHrMeasure isOreoSyncDataWorkerRunning $isWorkerRunning")
                     if (isWorkerRunning) {
                         viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
                             this.measureState = TapMeasureState.ERROR

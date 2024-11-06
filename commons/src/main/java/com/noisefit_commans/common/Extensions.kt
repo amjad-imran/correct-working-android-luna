@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -17,6 +18,7 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.widget.TextView
 import com.google.gson.Gson
@@ -34,6 +36,8 @@ import java.time.YearMonth
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
+
+
 
 
 fun Context.hasLocationPermission(): Boolean {

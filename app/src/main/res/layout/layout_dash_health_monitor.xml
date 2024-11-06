@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -98,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Resp."
+        android:text="@string/text_resp"
         app:layout_constraintEnd_toEndOf="@+id/imageView32"
         app:layout_constraintStart_toStartOf="@+id/imageView32"
         app:layout_constraintTop_toBottomOf="@+id/imageView32" />
@@ -109,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="RHR"
+        android:text="@string/text_rhr"
         app:layout_constraintEnd_toEndOf="@+id/imageView31"
         app:layout_constraintStart_toStartOf="@+id/imageView31"
         app:layout_constraintTop_toBottomOf="@+id/imageView31" />
@@ -120,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="SpO2"
+        android:text="@string/text_spo2"
         app:layout_constraintEnd_toEndOf="@+id/imageView41"
         app:layout_constraintStart_toStartOf="@+id/imageView41"
         app:layout_constraintTop_toBottomOf="@+id/imageView41" />
@@ -131,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="HRV"
+        android:text="@string/text_hrv"
         app:layout_constraintEnd_toEndOf="@+id/imageView42"
         app:layout_constraintStart_toStartOf="@+id/imageView42"
         app:layout_constraintTop_toBottomOf="@+id/imageView42" />
@@ -142,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Temp."
+        android:text="@string/text_temp_dot"
         app:layout_constraintEnd_toEndOf="@+id/imageView43"
         app:layout_constraintStart_toStartOf="@+id/imageView43"
         app:layout_constraintTop_toBottomOf="@+id/imageView43" />
@@ -207,7 +208,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:gravity="center_horizontal"
-        android:text="No data so far"
+        tools:text="No data so far"
         android:textColor="@color/white_55"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

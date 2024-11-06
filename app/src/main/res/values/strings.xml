@@ -1383,5 +1383,13 @@
     <string name="text_degree_f" translatable="false">°F</string>
     <string name="text_measuring_dots">Measuring...</string>
     <string name="text_tap_to_measure">Tap to measure</string>
+    <string name="text_active_calories_lc">active calories</string>
+    <string name="text_last_measured_value">Last measured %1$s</string>
+    <string name="text_tap_to_learn_more_about_your_sleep">Tap to learn more about your sleep</string>
+    <string name="text_luna_ai">Luna AI</string>
+    <string name="text_resp">Resp.</string>
+    <string name="text_rhr">RHR</string>
+    <string name="text_temp_dot">Temp.</string>
+    <string name="text_circadian_mid_point">Circadian mid-point</string>
 
 </resources>

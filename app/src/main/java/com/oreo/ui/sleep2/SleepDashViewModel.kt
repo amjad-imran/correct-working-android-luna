@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -42,6 +43,7 @@ import kotlin.math.abs
 @HiltViewModel
 class SleepDashViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
+    private val resourcesProvider: ResourcesProvider,
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -582,36 +584,36 @@ class SleepDashViewModel @Inject constructor(
         val listData = ArrayList<OHMDataModel>()
 
         if (data?.sleepScore?.value == null) {
-            listData.add(OHMDataModel(SleepContributor.REM_SLEEP))
-            listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP))
-            listData.add(OHMDataModel(SleepContributor.EFFICIENCY))
+            listData.add(OHMDataModel(SleepContributor.REM_SLEEP,getSleepContributorDisplayName(SleepContributor.REM_SLEEP)))
+            listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP,getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP)))
+            listData.add(OHMDataModel(SleepContributor.EFFICIENCY,getSleepContributorDisplayName(SleepContributor.EFFICIENCY)))
             if (showAll) {
-                listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION))
-                listData.add(OHMDataModel(SleepContributor.LATENCY))
-                listData.add(OHMDataModel(SleepContributor.RESTFULNESS))
-                listData.add(OHMDataModel(SleepContributor.TIMING))
+                listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION,getSleepContributorDisplayName(SleepContributor.SLEEP_DURATION)))
+                listData.add(OHMDataModel(SleepContributor.LATENCY,getSleepContributorDisplayName(SleepContributor.LATENCY)))
+                listData.add(OHMDataModel(SleepContributor.RESTFULNESS,getSleepContributorDisplayName(SleepContributor.RESTFULNESS)))
+                listData.add(OHMDataModel(SleepContributor.TIMING,getSleepContributorDisplayName(SleepContributor.TIMING)))
             }
-
             return listData
         }
 
 
         listData.add(
             OHMDataModel(
-                SleepContributor.REM_SLEEP, valueTime = data.remSleep?.value,
+                SleepContributor.REM_SLEEP, getSleepContributorDisplayName(SleepContributor.REM_SLEEP),valueTime = data.remSleep?.value,
                 status = data.remSleep?.status, text = data.remSleep?.text
             )
         )
 
         listData.add(
             OHMDataModel(
-                SleepContributor.DEEP_SLEEP, valueTime = data.deepSleep?.value,
+                SleepContributor.DEEP_SLEEP,  getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP),valueTime = data.deepSleep?.value,
                 status = data.deepSleep?.status, text = data.deepSleep?.text
             )
         )
         listData.add(
             OHMDataModel(
                 SleepContributor.EFFICIENCY,
+                getSleepContributorDisplayName(SleepContributor.EFFICIENCY),
                 value = if (data.efficiency?.value == null) null else "${data.efficiency?.value}",
                 unit = "%",
                 status = data.efficiency?.status,
@@ -622,7 +624,9 @@ class SleepDashViewModel @Inject constructor(
         if (showAll) {
             listData.add(
                 OHMDataModel(
-                    SleepContributor.SLEEP_DURATION, valueTime = data.sleepDuration?.value,
+                    SleepContributor.SLEEP_DURATION,
+                    getSleepContributorDisplayName(SleepContributor.SLEEP_DURATION),
+                    valueTime = data.sleepDuration?.value,
                     status = data.sleepDuration?.status, text = data.sleepDuration?.text
                 )
             )
@@ -630,6 +634,7 @@ class SleepDashViewModel @Inject constructor(
             listData.add(
                 OHMDataModel(
                     SleepContributor.LATENCY,
+                    getSleepContributorDisplayName(SleepContributor.LATENCY),
                     value = if (data.latency?.value == null) null else "${data.latency?.value}",
                     unit = "min",
                     status = data.latency?.status,
@@ -640,6 +645,7 @@ class SleepDashViewModel @Inject constructor(
             listData.add(
                 OHMDataModel(
                     SleepContributor.RESTFULNESS,
+                    getSleepContributorDisplayName(SleepContributor.RESTFULNESS),
                     value = if (data.restfulness?.value == null) null else "${data.restfulness?.value}",
                     unit = "times",
                     status = data.restfulness?.status,
@@ -650,6 +656,7 @@ class SleepDashViewModel @Inject constructor(
             listData.add(
                 OHMDataModel(
                     SleepContributor.TIMING,
+                    getSleepContributorDisplayName(SleepContributor.TIMING),
                     value = if (data.timing?.value.isNullOrEmpty()) null else "${data.timing?.value}",
                     unit = "",
                     status = data.timing?.status,
@@ -831,22 +838,39 @@ class SleepDashViewModel @Inject constructor(
         )
     }
 
+    fun getSleepContributorDisplayName(contributor: SleepContributor): String {
+        return when (contributor) {
+            SleepContributor.SLEEP_DURATION -> resourcesProvider.getString(R.string.text_sleep_duration)
+            SleepContributor.REM_SLEEP -> resourcesProvider.getString(R.string.text_rem_sleep)
+            SleepContributor.DEEP_SLEEP -> resourcesProvider.getString(R.string.text_deep_sleep)
+            SleepContributor.EFFICIENCY -> resourcesProvider.getString(R.string.text_efficiency)
+            SleepContributor.LATENCY -> resourcesProvider.getString(R.string.text_latency)
+            SleepContributor.RESTFULNESS -> resourcesProvider.getString(R.string.text_restfulness)
+            SleepContributor.TIMING -> resourcesProvider.getString(R.string.text_circadian_mid_point)
+            SleepContributor.RESPIRATORY_RATE -> resourcesProvider.getString(R.string.text_respiratory_rate)
+            SleepContributor.RESTING_HEART_RATE -> resourcesProvider.getString(R.string.text_resting_heart_rate)
+            SleepContributor.HRV -> resourcesProvider.getString(R.string.text_hrv)
+            SleepContributor.SKIN_TEMPERATURE -> resourcesProvider.getString(R.string.text_skin_temperature)
+            SleepContributor.BLOOD_OXYGEN -> resourcesProvider.getString(R.string.text_blood_oxygen)
+        }
+    }
+
 
 }
 
-enum class SleepContributor(val displayName: String, val icon: Int) {
-    SLEEP_DURATION("Sleep duration", R.drawable.ic_sleep_duration),
-    REM_SLEEP("REM sleep", R.drawable.ic_sleep_rem),
-    DEEP_SLEEP("Deep sleep", R.drawable.ic_sleep_deep),
-    EFFICIENCY("Efficiency", R.drawable.ic_sleep_efficiency),
-    LATENCY("Latency", R.drawable.ic_sleep_latency),
-    RESTFULNESS("Restfulness", R.drawable.ic_sleep_restfulness),
-    TIMING("Circadian mid-point", R.drawable.ic_sleep_timing),
-    RESPIRATORY_RATE("Respiratory rate", R.drawable.ic_respiratory_rate),
-    RESTING_HEART_RATE("Resting heart rate", R.drawable.ic_resting_hr),
-    HRV("HRV", R.drawable.ic_hrv),
-    SKIN_TEMPERATURE("Skin temperature", R.drawable.ic_skin_tempreature),
-    BLOOD_OXYGEN("Blood oxygen", R.drawable.ic_blood_oxygen)
+enum class SleepContributor(val icon: Int) {
+    SLEEP_DURATION(R.drawable.ic_sleep_duration),
+    REM_SLEEP(R.drawable.ic_sleep_rem),
+    DEEP_SLEEP(R.drawable.ic_sleep_deep),
+    EFFICIENCY(R.drawable.ic_sleep_efficiency),
+    LATENCY(R.drawable.ic_sleep_latency),
+    RESTFULNESS(R.drawable.ic_sleep_restfulness),
+    TIMING(R.drawable.ic_sleep_timing),
+    RESPIRATORY_RATE(R.drawable.ic_respiratory_rate),
+    RESTING_HEART_RATE(R.drawable.ic_resting_hr),
+    HRV(R.drawable.ic_hrv),
+    SKIN_TEMPERATURE(R.drawable.ic_skin_tempreature),
+    BLOOD_OXYGEN(R.drawable.ic_blood_oxygen)
 }
 
 data class SleepTrendsData(

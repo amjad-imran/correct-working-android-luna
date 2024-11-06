@@ -20,7 +20,7 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: OHMDataModel) {
             binding.ivIcon.loadImage(binding.ivIcon.context, resultData.type.icon)
-            binding.tvTitle.text = resultData.type.displayName
+            binding.tvTitle.text = resultData.displayTypeName
 
             if (resultData.value == null && resultData.valueTime == null) {
                 binding.lytRightValues.root.gone()
@@ -140,7 +140,6 @@ class OHMInternalAdapter(val listener: HMItemClickListener) :
     }
 
     fun setData(resultData: List<OHMDataModel>) {
-
         mDataSet.clear()
         mDataSet.addAll(resultData)
         notifyDataSetChanged()

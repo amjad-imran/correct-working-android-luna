@@ -1,7 +1,9 @@
 package com.oreo.data.dataConverter
 
 import com.google.gson.Gson
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataUnitConverter
+import com.noisefit.luna.R
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
@@ -42,6 +44,7 @@ class OreoOfflineDataMapper
 constructor(
     val watches: WatchesSDK,
     val ringDataStore: RingDataStore,
+    val resourcesProvider: ResourcesProvider,
     private val heartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
@@ -406,7 +409,10 @@ constructor(
             ""
         } else {
             measureState = TapMeasureState.LAST_MEASURED
-            "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
+            resourcesProvider.getString(
+                R.string.text_last_measured_value,
+                DateFormats.getRelativeTime(manualMeasureTime).lowercase()
+            )
         }
 
         return OHealthOverview.HeartRateDataModel(

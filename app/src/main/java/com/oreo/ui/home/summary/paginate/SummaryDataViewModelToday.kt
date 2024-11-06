@@ -238,15 +238,15 @@ class SummaryDataViewModelToday @Inject constructor(
                         if (zeroList.isEmpty()) {
                             //if sleep is not detected and hr is continuous
                             sleepAlertToShow = SleepAlert(
-                                title = "Did you sleep yesterday?",
-                                message = "Our algorithm's couldn't detect sleep last night, if you did sleep, please add it here.",
+                                title = resourceProvider.getString(R.string.text_did_you_sleep_yesterday),
+                                message = resourceProvider.getString(R.string.text_sleep_algo_detext),
                                 addSleep = true
                             )
                         } else {
                             //if sleep is not detected and hr has break
                             sleepAlertToShow = SleepAlert(
-                                title = "Did you sleep yesterday?",
-                                message = "Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.",
+                                title = resourceProvider.getString(R.string.text_did_you_sleep_yesterday),
+                                message = resourceProvider.getString(R.string.text_wear_luna_ring),
                                 addSleep = true
                             )
                         }
@@ -277,14 +277,14 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (isTodayHrDataEmpty && shouldCheck) {
                     if (isYesterdayHrDataEmpty) {
                         sleepAlertToShow = SleepAlert(
-                            title = "Missing data",
-                            message = "We haven’t received data from a while. Remember to charge your ring and wear it regularly so you don’t miss out on your personalised insights!",
+                            title = resourceProvider.getString(R.string.text_missing_data),
+                            message = resourceProvider.getString(R.string.text_sleep_charge_ring),
                             addSleep = false
                         )
                     } else {
                         sleepAlertToShow = SleepAlert(
-                            title = "Did you sleep yesterday?",
-                            message = "Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.",
+                            title = resourceProvider.getString(R.string.text_did_you_sleep_yesterday),
+                            message = resourceProvider.getString(R.string.text_wear_luna_ring),
                             addSleep = true
                         )
                     }
@@ -378,32 +378,6 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    fun getGreetingMessageValue(): String {
-        return "${getGreetingMessage()}, ${
-            user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
-        }"
-    }
-
-    private fun getGreetingMessage(): String {
-        val currentTime = DateFormats.getTimeFormat()
-        LOGS.d("TIME_TEST", "currentTime $currentTime")
-        if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
-            return "Good morning"
-        } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
-            return "Good afternoon"
-        } else if (DateFormats.isTimeBetween(currentTime, "17:00", "20:59")) {
-            return "Good evening"
-        } else if (DateFormats.isTimeBetween(
-                currentTime, "21:00", "23:59"
-            ) || DateFormats.isTimeBetween(currentTime, "00:00", "03:59")
-        ) {
-            return "Hi"
-        }
-
-        return "Hi"
-    }
-
-
     fun updateAlerts() {
         val dashAlert = HashMap<AlertType, DashAlert>()
 
@@ -412,7 +386,10 @@ class SummaryDataViewModelToday @Inject constructor(
         if (btState == false && devicePaired != null) {
             if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 dashAlert[AlertType.BLUETOOTH] =
-                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
+                    DashAlert(
+                        resourceProvider.getString(R.string.text_authorize_bluetooth_connectivity_for_luna),
+                        false
+                    )
             }
         }
 
@@ -488,11 +465,12 @@ class SummaryDataViewModelToday @Inject constructor(
                                     val dayMessage = if (periodCurrentDay == null) {
                                         null
                                     } else {
-                                        "Today's your predicted ${
+                                        resourceProvider.getString(
+                                            R.string.text_today_s_your_predicted_day,
                                             ApplicationUtils.getOrdinalWord(
                                                 periodCurrentDay
                                             )
-                                        } day."
+                                        )
                                     }
 
                                     gotYourPeriodCard = OHealthOverview.GotYourPeriod(
@@ -917,8 +895,16 @@ class SummaryDataViewModelToday @Inject constructor(
             val isPeriodLate = data.confirmPeriodDate != null
 
             return PeriodCard2(
-                title = if (isPeriodLate) "Period late for" else if (data.otaLog) "Period" else "Predicted period",
-                subTitle = if (isPeriodLate) "${data.confirmPeriodDate?.day} day" else if (data.otaLog) "Day ${data.currentDay}" else "Day ${data.currentDay}",
+                title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
+                else if (data.otaLog) resourceProvider.getString(R.string.text_period).capitalizeWords()
+                else resourceProvider.getString(R.string.text_predicted_period),
+                subTitle = if (isPeriodLate) resourceProvider.getString(
+                    R.string.text_value_day_,
+                    data.confirmPeriodDate?.day?:0
+                ) 
+                else if (data.otaLog) resourceProvider.getString(R.string.text_day_value, data.currentDay?:0)
+                else resourceProvider.getString(R.string.text_day_value, data.currentDay?:0),
+                
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -929,14 +915,14 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7()
                 ),
                 days = data.currentDay ?: 0,
-                predictionString = "Period Date",
+                predictionString = resourceProvider.getString(R.string.text_period_date),
                 background = R.drawable.back_card_period_big
             )
 
         } else {
             return PeriodCard2(
-                title = "Ovulation",
-                subTitle = "Day ${data.currentDay}",
+                title = resourceProvider.getString(R.string.text_ovulation).capitalizeWords(),
+                subTitle = resourceProvider.getString(R.string.text_day_value, data.currentDay?:0),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -947,7 +933,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7()
                 ),
                 days = data.currentDay ?: 0,
-                predictionString = "Ovulation date",
+                predictionString = resourceProvider.getString(R.string.text_ovulation_date),
                 background = R.drawable.back_card_ovulation_big
             )
         }
@@ -982,12 +968,12 @@ class SummaryDataViewModelToday @Inject constructor(
         if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
             val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
             return PeriodCard1(
-                title = "Ovulation in",
+                title = resourceProvider.getString(R.string.text_ovulation_in),
                 days = daysUntilOvulation.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = "Ovulation date",
+                bottomText = resourceProvider.getString(R.string.text_ovulation_date),
                 predictionDate = DateFormats.formatDateTime(
                     data.ovulationDate,
                     DateFormats.dateFormat3(),
@@ -999,13 +985,14 @@ class SummaryDataViewModelToday @Inject constructor(
             val isPeriodLate = data.confirmPeriodDate != null
 
             return PeriodCard1(
-                title = if (isPeriodLate) "Period late for" else "Period in",
+                title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
+                else resourceProvider.getString(R.string.text_period_in),
                 days = if (isPeriodLate) data.confirmPeriodDate?.day
                     ?: 0 else daysUntilNextPeriod.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = "Period date",
+                bottomText = resourceProvider.getString(R.string.text_period_date),
                 predictionDate = DateFormats.formatDateTime(
                     data.nextPeriodDate,
                     DateFormats.dateFormat3(),
@@ -1020,9 +1007,9 @@ class SummaryDataViewModelToday @Inject constructor(
     fun getStressStatus(value: Int?): String {
         return when (value) {
             0 -> ""
-            in 1..34 -> "Relaxed"
-            in 35..69 -> "Focussed"
-            in 70..100 -> "Stressed"
+            in 1..34 -> resourceProvider.getString(R.string.text_relaxed)
+            in 35..69 -> resourceProvider.getString(R.string.text_focussed)
+            in 70..100 -> resourceProvider.getString(R.string.text_stressed)
             else -> ""
         }
     }
@@ -1033,27 +1020,6 @@ class SummaryDataViewModelToday @Inject constructor(
             napsList.postValue(naps ?: ArrayList())
         }
     }
-
-
-    private fun handleHrFormat(time: Int): String {
-
-        if (time == 1 || time == 24) {
-            return "12 am"
-        }
-
-
-        var hour = time
-        var suffix = ""
-        if (hour > 11) {
-            suffix = "pm"
-            if (hour > 12) hour -= 12;
-        } else {
-            suffix = "am"
-            if (hour == 0) hour = 12;
-        }
-        return "$hour $suffix"
-    }
-
 
     private fun handleInfoCards(
         data: ServerUserHealthData,
@@ -1124,8 +1090,6 @@ class SummaryDataViewModelToday @Inject constructor(
      */
     private fun getDaySlot(): Int {
         val currentTime = DateFormats.getTimeFormat()
-
-        LOGS.d("TIME_TEST", "currentTime getDaySLot $currentTime")
 
         return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
             0
@@ -1259,7 +1223,8 @@ class SummaryDataViewModelToday @Inject constructor(
                     stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
                 } else {
                     stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
-                    stateHeartRateCard.value?.lastTime = "Last measured just now"
+                    stateHeartRateCard.value?.lastTime =
+                        resourceProvider.getString(R.string.text_last_measured_just_now)
                 }
                 stateHeartRateCard.value?.value = manualMeasurement.value.toString()
             }
@@ -1745,19 +1710,6 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
 
-    }
-
-    fun getHealthTrendState(status: String?): Int {
-        val drawable: Int = if (status.equals("warning", true)) {
-            2
-        } else if (status.equals("good", true)) {
-            1
-        } else if (status.equals("optimal", true)) {
-            0
-        } else {
-            1
-        }
-        return drawable
     }
 
     fun getHealthTrendIcon(status: String?): Int {

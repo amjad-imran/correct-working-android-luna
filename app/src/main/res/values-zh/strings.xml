@@ -1364,4 +1364,11 @@
     <string name="text_of_value">共%1$d</string>
     <string name="text_measuring_dots">测量...</string>
     <string name="text_tap_to_measure">点击进行测量</string>
+    <string name="text_active_calories_lc">活动热量</string>
+    <string name="text_last_measured_value">最后测量 %1$s</string>
+    <string name="text_tap_to_learn_more_about_your_sleep">点按以了解有关您睡眠的更多信息</string>
+    <string name="text_luna_ai">露娜人工智能</string>
+    <string name="text_resp">回复。</string>
+    <string name="text_rhr">右心率</string>
+    <string name="text_temp_dot">温度。</string>
 </resources>

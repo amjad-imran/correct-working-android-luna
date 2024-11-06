@@ -146,7 +146,7 @@
         android:textStyle="normal"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView62"
         app:layout_constraintStart_toEndOf="@+id/textView62"
-        android:text="active calories" />
+        android:text="@string/text_active_calories_lc" />
 
     <TextView
         android:id="@+id/tvTotalCalories"

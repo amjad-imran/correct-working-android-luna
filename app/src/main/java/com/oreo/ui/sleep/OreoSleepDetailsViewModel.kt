@@ -314,7 +314,7 @@ constructor(
                 "$minute min"
             result.add(
                 Contributors(
-                    title = "Sleep duration",
+                    title = resourcesProvider.getString(R.string.text_sleep_duration),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -325,7 +325,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep duration",
+                    title = resourcesProvider.getString(R.string.text_sleep_duration),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -341,7 +341,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Efficiency",
+                    title = resourcesProvider.getString(R.string.text_efficiency),
                     leftText = "${dayData.sleepEfficiency?.valPrcnt}%",
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -352,7 +352,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Efficiency",
+                    title = resourcesProvider.getString(R.string.text_efficiency),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -367,7 +367,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Restfulness",
+                    title = resourcesProvider.getString(R.string.text_restfulness),
                     leftText = "${dayData.restFullness?.text}",
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -378,7 +378,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Restfulness",
+                    title = resourcesProvider.getString(R.string.text_restfulness),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -402,7 +402,7 @@ constructor(
             }
             result.add(
                 Contributors(
-                    title = "REM sleep",
+                    title = resourcesProvider.getString(R.string.text_rem_sleep),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -413,7 +413,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "REM sleep",
+                    title = resourcesProvider.getString(R.string.text_rem_sleep),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -436,7 +436,7 @@ constructor(
             }
             result.add(
                 Contributors(
-                    title = "Deep sleep",
+                    title = resourcesProvider.getString(R.string.text_deep_sleep),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -447,7 +447,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Deep sleep",
+                    title = resourcesProvider.getString(R.string.text_deep_sleep),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -470,7 +470,7 @@ constructor(
             }
             result.add(
                 Contributors(
-                    title = "Latency",
+                    title = resourcesProvider.getString(R.string.text_latency),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -481,7 +481,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Latency",
+                    title = resourcesProvider.getString(R.string.text_latency),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -497,7 +497,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.timing!!.status)
             result.add(
                 Contributors(
-                    title = "Timing",
+                    title = resourcesProvider.getString(R.string.text_timing),
                     leftText = dayData.timing!!.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -508,7 +508,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Timing",
+                    title = resourcesProvider.getString(R.string.text_timing),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,

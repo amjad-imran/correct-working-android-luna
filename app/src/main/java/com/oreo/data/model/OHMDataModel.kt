@@ -5,6 +5,7 @@ import com.oreo.ui.sleep2.SleepContributor
 
 data class OHMDataModel(
     val type: SleepContributor,
+    val displayTypeName:String,
     val value: String? = null,
     val valueTime: Int? = null,//For time based contributors
     val unit: String? = null,
