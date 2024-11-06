@@ -884,22 +884,22 @@ class SleepDashFragment :
     private fun updateSleepSummary(summary: SleepSummary?) {
         val sleepSummary = arrayListOf(
             SleepAnalysisData(
-                name = "REM sleep",
+                name = getString(R.string.text_rem_sleep),
                 icon = R.drawable.ic_sleep_rem,
                 currentValue = summary?.rem?.curr_val,
                 avgValue = summary?.rem?.avg
             ), SleepAnalysisData(
-                name = "Deep sleep",
+                name = getString(R.string.text_deep_sleep),
                 icon = R.drawable.ic_sleep_deep,
                 currentValue = summary?.deep?.curr_val,
                 avgValue = summary?.deep?.avg
             ), SleepAnalysisData(
-                name = "Awake sleep",
+                name = getString(R.string.text_awake_sleep),
                 icon = R.drawable.ic_sleep_awake,
                 currentValue = summary?.awake?.curr_val,
                 avgValue = summary?.awake?.avg
             ), SleepAnalysisData(
-                name = "Light sleep",
+                name = getString(R.string.text_light_sleep),
                 icon = R.drawable.ic_sleep_light,
                 currentValue = summary?.light?.curr_val,
                 avgValue = summary?.light?.avg

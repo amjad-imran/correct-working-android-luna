@@ -14,4 +14,13 @@
     <string name="text_my_goals">Your goals</string>
 
 
+    <string name="text_awake">Awake</string>
+    <string name="text_rem">Rem</string>
+    <string name="text_light">Light</string>
+    <string name="text_deep">Deep</string>
+    <string name="text_high">High</string>
+    <string name="text_med">Med</string>
+    <string name="text_low">Low</string>
+
+
 </resources>

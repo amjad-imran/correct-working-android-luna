@@ -205,7 +205,13 @@ class SleepPerformanceChart constructor(context: Context?, attrs: AttributeSet?)
 
         val stepWidth = width / 7
 
-        val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val days = arrayListOf(context.getString(R.string.text_mon),
+            context.getString(R.string.text_tue),
+            context.getString(R.string.text_wed),
+            context.getString(R.string.text_thu),
+            context.getString(R.string.text_fri),
+            context.getString(R.string.text_sat),
+            context.getString(R.string.text_sun))
         var start = 0
         val xTextBounds = Rect()
         days.forEach {

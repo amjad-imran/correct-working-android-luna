@@ -1391,5 +1391,13 @@
     <string name="text_rhr">RHR</string>
     <string name="text_temp_dot">Temp.</string>
     <string name="text_circadian_mid_point">Circadian mid-point</string>
+    <string name="text_awake_sleep">Awake sleep</string>
+    <string name="text_mon">Mon</string>
+    <string name="text_tue">Tue</string>
+    <string name="text_wed">Wed</string>
+    <string name="text_thu">Thu</string>
+    <string name="text_fri">Fri</string>
+    <string name="text_sat">Sat</string>
+    <string name="text_sun">Sun</string>
 
 </resources>

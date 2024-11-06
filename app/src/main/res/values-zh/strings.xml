@@ -1371,4 +1371,13 @@
     <string name="text_resp">回复。</string>
     <string name="text_rhr">右心率</string>
     <string name="text_temp_dot">温度。</string>
+    <string name="text_circadian_mid_point">昼夜节律中点</string>
+    <string name="text_awake_sleep">清醒睡眠</string>
+    <string name="text_mon">周一</string>
+    <string name="text_tue">星期二</string>
+    <string name="text_wed">周三</string>
+    <string name="text_thu">星期四</string>
+    <string name="text_fri">周五</string>
+    <string name="text_sat">星期六</string>
+    <string name="text_sun">太阳</string>
 </resources>

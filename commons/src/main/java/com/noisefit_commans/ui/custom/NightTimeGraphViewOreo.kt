@@ -73,20 +73,20 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
 
             canvas.drawText(
-                "High",
-                textXPos - mTextPaint.measureText("High"),
+                context.getString(R.string.text_high),
+                textXPos - mTextPaint.measureText(context.getString(R.string.text_high)),
                 sectionHeight * 1,
                 mTextPaint
             )
             canvas.drawText(
-                "Med",
-                textXPos - mTextPaint.measureText("Med"),
+                context.getString(R.string.text_med),
+                textXPos - mTextPaint.measureText(context.getString(R.string.text_med)),
                 sectionHeight * 2,
                 mTextPaint
             )
             canvas.drawText(
-                "Low",
-                textXPos - mTextPaint.measureText("Low"),
+                context.getString(R.string.text_low),
+                textXPos - mTextPaint.measureText(context.getString(R.string.text_low)),
                 sectionHeight * 3,
                 mTextPaint
             )

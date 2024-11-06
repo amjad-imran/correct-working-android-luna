@@ -1,5 +1,7 @@
 package com.oreo.ui.internal
 
+import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConversionUtils
@@ -13,7 +15,8 @@ import kotlin.math.roundToInt
 
 @HiltViewModel
 class OHMInternalViewModel @Inject constructor(
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     var healthTrend: HealthTrend? = null
@@ -42,13 +45,13 @@ class OHMInternalViewModel @Inject constructor(
                     32f + (healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f)
                 )
 
-                if(convertedVal>0){
+                if (convertedVal > 0) {
                     String.format(
                         locale = Locale.US,
                         "+%.1f",
                         convertedVal,
                     )
-                }else{
+                } else {
                     String.format(
                         locale = Locale.US,
                         "%.1f",
@@ -57,13 +60,13 @@ class OHMInternalViewModel @Inject constructor(
                 }
             } else {
                 val value = healthTrend?.skinTemp?.value?.toFloat() ?: 0.0f
-                if(value>0){
+                if (value > 0) {
                     String.format(
                         locale = Locale.US,
                         "+%.1f",
                         value,
                     )
-                }else{
+                } else {
                     String.format(
                         locale = Locale.US,
                         "%.1f",
@@ -82,6 +85,7 @@ class OHMInternalViewModel @Inject constructor(
         listData.add(
             OHMDataModel(
                 SleepContributor.RESPIRATORY_RATE,
+                getSleepContributorDisplayName(SleepContributor.RESPIRATORY_RATE),
                 value = resp,
                 valueTime = null,
                 unit = "rpm",
@@ -92,6 +96,7 @@ class OHMInternalViewModel @Inject constructor(
         listData.add(
             OHMDataModel(
                 SleepContributor.RESTING_HEART_RATE,
+                getSleepContributorDisplayName(SleepContributor.RESTING_HEART_RATE),
                 value = rhr,
                 valueTime = null,
                 unit = "bpm",
@@ -102,6 +107,7 @@ class OHMInternalViewModel @Inject constructor(
         listData.add(
             OHMDataModel(
                 SleepContributor.HRV,
+                getSleepContributorDisplayName(SleepContributor.HRV),
                 value = hrv,
                 valueTime = null,
                 unit = "ms",
@@ -112,6 +118,7 @@ class OHMInternalViewModel @Inject constructor(
         listData.add(
             OHMDataModel(
                 SleepContributor.SKIN_TEMPERATURE,
+                getSleepContributorDisplayName(SleepContributor.SKIN_TEMPERATURE),
                 value = skinTemp,
                 valueTime = null,
                 unit = if (sessionManager.isMetric()) "°C" else "°F",
@@ -126,6 +133,7 @@ class OHMInternalViewModel @Inject constructor(
         listData.add(
             OHMDataModel(
                 SleepContributor.BLOOD_OXYGEN,
+                getSleepContributorDisplayName(SleepContributor.BLOOD_OXYGEN),
                 value = bloodOxy,
                 valueTime = null,
                 unit = "%",
@@ -136,6 +144,23 @@ class OHMInternalViewModel @Inject constructor(
 
 
         return listData
+    }
+
+    fun getSleepContributorDisplayName(contributor: SleepContributor): String {
+        return when (contributor) {
+            SleepContributor.SLEEP_DURATION -> resourcesProvider.getString(R.string.text_sleep_duration)
+            SleepContributor.REM_SLEEP -> resourcesProvider.getString(R.string.text_rem_sleep)
+            SleepContributor.DEEP_SLEEP -> resourcesProvider.getString(R.string.text_deep_sleep)
+            SleepContributor.EFFICIENCY -> resourcesProvider.getString(R.string.text_efficiency)
+            SleepContributor.LATENCY -> resourcesProvider.getString(R.string.text_latency)
+            SleepContributor.RESTFULNESS -> resourcesProvider.getString(R.string.text_restfulness)
+            SleepContributor.TIMING -> resourcesProvider.getString(R.string.text_circadian_mid_point)
+            SleepContributor.RESPIRATORY_RATE -> resourcesProvider.getString(R.string.text_respiratory_rate)
+            SleepContributor.RESTING_HEART_RATE -> resourcesProvider.getString(R.string.text_resting_heart_rate)
+            SleepContributor.HRV -> resourcesProvider.getString(R.string.text_hrv)
+            SleepContributor.SKIN_TEMPERATURE -> resourcesProvider.getString(R.string.text_skin_temperature)
+            SleepContributor.BLOOD_OXYGEN -> resourcesProvider.getString(R.string.text_blood_oxygen)
+        }
     }
 
 

@@ -1,0 +1,24 @@
+<resources>
+
+
+    <string name="app_name">常见的</string>
+    <string name="text_please_wait">请稍等</string>
+    <string name="text_disabled">残疾人</string>
+    <string name="text_enabled">启用</string>
+    <string name="text_unpair_device">取消设备配对</string>
+    <string name="delete_account">删除帐户</string>
+    <string name="text_delete_account">删除帐户</string>
+    <string name="logout">退出</string>
+    <string name="text_customer_support">客户支持</string>
+    <string name="text_about">关于</string>
+    <string name="text_rate_us">评价我们</string>
+    <string name="text_help_and_support">常见问题</string>
+    <string name="text_my_goals">你的目标</string>
+    <string name="text_awake">醒</string>
+    <string name="text_rem">雷姆</string>
+    <string name="text_light">光</string>
+    <string name="text_deep">深的</string>
+    <string name="text_high">高的</string>
+    <string name="text_med">医学</string>
+    <string name="text_low">低的</string>
+</resources>

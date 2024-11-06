@@ -744,14 +744,17 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
 
         canvas.drawText(
-            "Awake",
-            textXPos - mTextPaint.measureText("Awake"),
+            context.getString(R.string.text_awake),
+            textXPos - mTextPaint.measureText(context.getString(R.string.text_awake)),
             (sectionHeight * 1 - textPosOffset),
             mTextPaint
         )
-        canvas.drawText("Rem", textXPos- mTextPaint.measureText("Rem"), (sectionHeight * 2 - textPosOffset), mTextPaint)
-        canvas.drawText("Light", textXPos- mTextPaint.measureText("Light"), (sectionHeight * 3 - textPosOffset), mTextPaint)
-        canvas.drawText("Deep", textXPos- mTextPaint.measureText("Deep"), (sectionHeight * 4 - textPosOffset), mTextPaint)
+        canvas.drawText(context.getString(R.string.text_rem),
+            textXPos- mTextPaint.measureText(context.getString(R.string.text_rem)), (sectionHeight * 2 - textPosOffset), mTextPaint)
+        canvas.drawText(context.getString(R.string.text_light),
+            textXPos- mTextPaint.measureText(context.getString(R.string.text_light)), (sectionHeight * 3 - textPosOffset), mTextPaint)
+        canvas.drawText(context.getString(R.string.text_deep),
+            textXPos- mTextPaint.measureText(context.getString(R.string.text_deep)), (sectionHeight * 4 - textPosOffset), mTextPaint)
 
 
     }
