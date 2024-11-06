@@ -1380,4 +1380,9 @@
     <string name="text_fri">周五</string>
     <string name="text_sat">星期六</string>
     <string name="text_sun">太阳</string>
+    <string name="text_sleep_balance">睡眠平衡</string>
+    <string name="text_activity_balance">活动平衡</string>
+    <string name="text_hrv_balance">心率变异性平衡</string>
+    <string name="text_recovery_index">恢复指数</string>
+    <string name="text_sleep_regularity">睡眠规律</string>
 </resources>

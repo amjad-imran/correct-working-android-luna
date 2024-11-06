@@ -1399,5 +1399,10 @@
     <string name="text_fri">Fri</string>
     <string name="text_sat">Sat</string>
     <string name="text_sun">Sun</string>
+    <string name="text_sleep_balance">Sleep balance</string>
+    <string name="text_activity_balance">Activity balance</string>
+    <string name="text_hrv_balance">HRV balance</string>
+    <string name="text_recovery_index">Recovery index</string>
+    <string name="text_sleep_regularity">Sleep regularity</string>
 
 </resources>

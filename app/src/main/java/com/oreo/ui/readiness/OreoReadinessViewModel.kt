@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -31,6 +32,7 @@ class OreoReadinessViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
+    val resourcesProvider: ResourcesProvider,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -325,7 +327,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Sleep score",
+                    title = resourcesProvider.getString(R.string.text_sleep_score),
                     leftText = dayData.sleepScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -336,7 +338,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep score",
+                    title =  resourcesProvider.getString(R.string.text_sleep_score),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -353,7 +355,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Activity Score",
+                    title = resourcesProvider.getString(R.string.text_activity_score),
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -364,7 +366,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Activity Score",
+                    title = resourcesProvider.getString(R.string.text_activity_score),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -381,7 +383,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Recovery index",
+                    title = resourcesProvider.getString(R.string.text_recovery_index),
                     leftText = dayData.recoveryIndex.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -392,7 +394,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Recovery index",
+                    title = resourcesProvider.getString(R.string.text_recovery_index),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -408,7 +410,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.sleepRegularity.status)
             result.add(
                 Contributors(
-                    title = "Sleep regularity",
+                    title = resourcesProvider.getString(R.string.text_sleep_regularity),
                     leftText = dayData.sleepRegularity.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -419,7 +421,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep regularity",
+                    title = resourcesProvider.getString(R.string.text_sleep_regularity),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -435,7 +437,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.sleepBalance.status)
             result.add(
                 Contributors(
-                    title = "Sleep balance",
+                    title = resourcesProvider.getString(R.string.text_sleep_balance),
                     leftText = dayData.sleepBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -446,7 +448,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep balance",
+                    title = resourcesProvider.getString(R.string.text_sleep_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -463,7 +465,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Average HR",
+                    title = resourcesProvider.getString(R.string.text_average_hr),
                     leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -474,7 +476,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Average HR",
+                    title = resourcesProvider.getString(R.string.text_average_hr),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -491,7 +493,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Activity balance",
+                    title = resourcesProvider.getString(R.string.text_activity_balance),
                     leftText = dayData.activityBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -502,7 +504,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Activity balance",
+                    title = resourcesProvider.getString(R.string.text_activity_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -518,7 +520,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.hrvBalance.status)
             result.add(
                 Contributors(
-                    title = "HRV balance",
+                    title = resourcesProvider.getString(R.string.text_hrv_balance),
                     leftText = dayData.hrvBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -529,7 +531,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "HRV balance",
+                    title = resourcesProvider.getString(R.string.text_hrv_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -546,7 +548,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.tempBalance.status)
             result.add(
                 Contributors(
-                    title = "Skin temperature",
+                    title = resourcesProvider.getString(R.string.text_skin_temperature),
                     leftText = dayData.tempBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -557,7 +559,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Skin temperature",
+                    title = resourcesProvider.getString(R.string.text_skin_temperature),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -577,7 +579,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep.status)
             result.add(
                 Contributors(
-                    title = "Sleep duration",
+                    title = resourcesProvider.getString(R.string.text_sleep_duration),
                     leftText = dayData.totalSleep.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -588,7 +590,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep duration",
+                    title = resourcesProvider.getString(R.string.text_sleep_duration),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -601,7 +603,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.sleepBalance.status)
             result.add(
                 Contributors(
-                    title = "Sleep balance",
+                    title = resourcesProvider.getString(R.string.text_sleep_balance),
                     leftText = dayData.sleepBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -612,7 +614,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Sleep balance",
+                    title = resourcesProvider.getString(R.string.text_sleep_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -627,7 +629,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Activity Score",
+                    title = resourcesProvider.getString(R.string.text_activity_score),
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -638,7 +640,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Activity Score",
+                    title = resourcesProvider.getString(R.string.text_activity_score),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -653,7 +655,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Activity balance",
+                    title = resourcesProvider.getString(R.string.text_activity_balance),
                     leftText = dayData.activityBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -664,7 +666,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Activity balance",
+                    title = resourcesProvider.getString(R.string.text_activity_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -678,7 +680,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.hrvBalance.status)
             result.add(
                 Contributors(
-                    title = "HRV balance",
+                    title = resourcesProvider.getString(R.string.text_hrv_balance),
                     leftText = dayData.hrvBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -689,7 +691,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "HRV balance",
+                    title = resourcesProvider.getString(R.string.text_hrv_balance),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -704,7 +706,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Average HR",
+                    title = resourcesProvider.getString(R.string.text_average_hr),
                     leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -715,7 +717,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Average HR",
+                    title = resourcesProvider.getString(R.string.text_average_hr),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -730,7 +732,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Recovery index",
+                    title = resourcesProvider.getString(R.string.text_recovery_index),
                     leftText = dayData.recoveryIndex.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -741,7 +743,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Recovery index",
+                    title = resourcesProvider.getString(R.string.text_recovery_index),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -750,10 +752,6 @@ constructor(
                 )
             )
         }
-
-
-
-
         return result
     }
 
