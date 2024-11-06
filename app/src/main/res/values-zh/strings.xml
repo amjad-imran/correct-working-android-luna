@@ -1330,4 +1330,38 @@
     <string name="text_end_start_new">
 <![CDATA[ 结束并开始新的 ]]>
 </string>
+    <string name="text_ends_today">今天结束</string>
+    <string name="text_know_more_with_luna_ai">通过 Luna AI 了解更多</string>
+    <string name="text_refer_and_earn">推荐并赚取</string>
+    <string name="txt_avg_hours">平均小时数</string>
+    <string name="text_ask_luna_ai">询问 Luna AI</string>
+    <string name="text_choose_your_language">选择您的语言</string>
+    <string name="text_language_change_message">这会将应用程序更改为所选语言</string>
+    <string name="text_pm">下午</string>
+    <string name="text_am">是</string>
+    <string name="text_no_data_so_far">到目前为止还没有数据</string>
+    <string name="text_unable_to_measure">无法测量</string>
+    <string name="text_device_settings">设备设置</string>
+    <string name="text_trying_to_connect_dot">正在尝试连接...</string>
+    <string name="text_make_sure_your_bluetooth_is_on">确保您的蓝牙已打开...</string>
+    <string name="text_charging_bar">|收费</string>
+    <string name="text_no_data">无数据</string>
+    <string name="text_charging_your_ring">为戒指充电</string>
+    <string name="text_did_you_sleep_yesterday">昨天你睡了吗？</string>
+    <string name="text_missing_data">缺失数据</string>
+    <string name="text_sleep_algo_detext">我们的算法无法检测昨晚的睡眠情况，如果您确实睡眠，请在此处添加。</string>
+    <string name="text_wear_luna_ring">睡觉时佩戴 Luna 戒指即可自动检测您的睡眠情况。请务必为您的戒指充电，以免错过宝贵的见解。如果您确实睡觉，请在此处添加。</string>
+    <string name="text_sleep_charge_ring">我们有一段时间没有收到数据了。请记住为您的戒指充电并定期佩戴，这样您就不会错过您的个性化见解！</string>
+    <string name="text_authorize_bluetooth_connectivity_for_luna">授权 Luna 的蓝牙连接</string>
+    <string name="text_today_s_your_predicted_day">今天是您预计的 %1$s 天。</string>
+    <string name="text_period_late_for">经期迟到为</string>
+    <string name="text_predicted_period">预计经期</string>
+    <string name="text_value_day_">%1$d 天</string>
+    <string name="text_day_value">第 %1$d 天</string>
+    <string name="text_period_date">经期日期</string>
+    <string name="text_ovulation_date">排卵日</string>
+    <string name="text_last_measured_just_now">上次测量刚刚</string>
+    <string name="text_of_value">共%1$d</string>
+    <string name="text_measuring_dots">测量...</string>
+    <string name="text_tap_to_measure">点击进行测量</string>
 </resources>

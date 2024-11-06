@@ -1193,7 +1193,6 @@
     <string name="text_log_your_period_to_get_started_next">Predictions are happening from the day you have logged your first period.</string>
     <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
     <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
-    <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>
     <string name="text_talk_to">Talk to</string>
     <string name="text_learn_more_about_yourself">Learn more about yourself.</string>
     <string name="text_ai_content_1">Connect with Luna AI, your smart health coach. Ask questions and get tailored feedback on your health metrics. Luna AI guides your wellness journey with practical, actionable insights.</string>
@@ -1351,7 +1350,7 @@
     <string name="text_know_more_with_luna_ai">Know more with Luna AI</string>
     <string name="text_refer_and_earn">Refer and earn</string>
     <string name="txt_avg_hours">avg hours</string>
-    <string name="freshchatDisableFrame">7ce808f5cb245b8c4800536b8ad7d78c</string>
+    <string name="freshchatDisableFrame" translatable="false">7ce808f5cb245b8c4800536b8ad7d78c</string>
     <string name="text_ask_luna_ai">Ask Luna AI</string>
     <string name="text_choose_your_language">Choose your language</string>
     <string name="text_language_change_message">This will change the App to the selected language</string>
@@ -1365,5 +1364,24 @@
     <string name="text_charging_bar">" | Charging"</string>
     <string name="text_no_data">No data</string>
     <string name="text_charging_your_ring">Charging your ring</string>
+    <string name="text_did_you_sleep_yesterday">Did you sleep yesterday?</string>
+    <string name="text_missing_data">Missing data</string>
+    <string name="text_sleep_algo_detext">Our algorithm\'s couldn\'t detect sleep last night, if you did sleep, please add it here.</string>
+    <string name="text_wear_luna_ring">Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.</string>
+    <string name="text_sleep_charge_ring">We haven’t received data from a while. Remember to charge your ring and wear it regularly so you don’t miss out on your personalised insights!</string>
+    <string name="text_authorize_bluetooth_connectivity_for_luna">Authorize Bluetooth connectivity for Luna</string>
+    <string name="text_today_s_your_predicted_day">Today\'s your predicted %1$s day.</string>
+    <string name="text_period_late_for">Period late for</string>
+    <string name="text_predicted_period">Predicted period</string>
+    <string name="text_value_day_">%1$d day</string>
+    <string name="text_day_value">Day %1$d</string>
+    <string name="text_period_date">Period date</string>
+    <string name="text_ovulation_date">Ovulation date</string>
+    <string name="text_last_measured_just_now">Last measured just now</string>
+    <string name="text_of_value">of %1$d</string>
+    <string name="text_degree_c" translatable="false">°C</string>
+    <string name="text_degree_f" translatable="false">°F</string>
+    <string name="text_measuring_dots">Measuring...</string>
+    <string name="text_tap_to_measure">Tap to measure</string>
 
 </resources>
