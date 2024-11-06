@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
@@ -38,6 +39,7 @@ import com.noisefit_commans.ui.displayToast
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.oreo.util.language.LocaleHelper
 
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIController {
@@ -51,6 +53,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
         super.onCreate(savedInstanceState)
         binding = getViewBinding()
         progressBar = setLoadingView()
+        LocaleHelper.setLocale(this, NoiseFitApplicationMain.appLanguage.languageCode)
         setContentView(binding.root)
         observeSubscriber()
         initListener()
@@ -99,10 +102,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                     (response.uiComponentType as UIComponentType.AreYouSureDialog).callback,
                 )
             }
+
             is UIComponentType.Dialog -> {
             }
+
             is UIComponentType.None -> {
             }
+
             is UIComponentType.RetryApiDialog -> {
                 var showWrongDialog = false
                 var message = (response.uiComponentType as UIComponentType.RetryApiDialog).message
@@ -129,10 +135,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                 }
 
             }
+
             is UIComponentType.SnackBar -> {
             }
+
             is UIComponentType.Toast -> {
             }
+
             is UIComponentType.CustomAlertDialog -> {
                 customInfoDialog(
                     (response.uiComponentType as UIComponentType.CustomAlertDialog).title,
@@ -142,6 +151,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                     (response.uiComponentType as UIComponentType.CustomAlertDialog).callback
                 )
             }
+
             is UIComponentType.InfoAlertDialog -> {
                 showInfoDialog(
                     (response.uiComponentType as UIComponentType.InfoAlertDialog).title,
@@ -332,7 +342,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
 
     }
 
-    var wrongTimeDialog : AlertDialog?=null
+    var wrongTimeDialog: AlertDialog? = null
 
     private fun showWrongTimeDialog() {
         val builder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
@@ -525,6 +535,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
             }
         }
         return true
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        base?.let {
+            super.attachBaseContext(LocaleHelper.onAttach(it))
+        }
     }
 
 }

@@ -102,13 +102,25 @@
                     app:text="Your profile" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowSelectLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_user_duotone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
+                    app:text="Select Language" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowHelp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:image="@drawable/ic_question_mark"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/rowSelectLanguage"
                     app:text="@string/text_help_and_support" />
 
 

@@ -789,30 +789,10 @@
     <string name="text_score_overview">Score Overview</string>
     <string name="text_daily_average_comparison">Daily average comparison</string>
 
-    <string name="text_prh_title">Prediction History</string>
-    <string name="text_npl_terms_conditions"><![CDATA[NPL terms & conditions]]></string>
-    <string name="text_claim_your_wins">Claim your wins</string>
-    <string name="text_your_team_won">Your team won!</string>
-    <string name="text_collect_your_reward">Collect your reward</string>
-    <string name="text_predict_the_winner">Predict the winner</string>
-    <string name="text_ongoing_match">Ongoing Match</string>
-    <string name="text_user_prediction_meter">User prediction meter</string>
-    <string name="text_predicted">predicted</string>
-    <string name="text_score_board">Score board</string>
-    <string name="text_time_left">Time left</string>
     <string name="text_any_query_raise_a_complaint">Any query? Raise a complaint</string>
     <string name="text_reward">Reward</string>
     <string name="text_result">Result</string>
-    <string name="text_prediction_team">Predicted team</string>
 
-    <string name="text_noise_pl">Noise Premier League</string>
-    <string name="text_yet_to_bat">Yet to bat</string>
-    <string name="text_vs_small">vs</string>
-
-    <string name="text_npl_is_waiting_for_you_with_loads_of_rewards_and_fun">NPL is waiting for you with loads of rewards and fun.</string>
-    <string name="text_ready_set_predict">Ready, set, predict!</string>
-    <string name="text_no_predictions_made">No predictions made</string>
-    <string name="text_predict_the_winner_of_upcoming_matches_correctly_and_get_exciting_rewards_with_every_win">Predict the winner of upcoming matches correctly and get exciting rewards with every win.</string>
     <string name="textwins">Wins</string>
     <string name="text_losses">Losses</string>
     <string name="text_matches_left">Matches Left</string>

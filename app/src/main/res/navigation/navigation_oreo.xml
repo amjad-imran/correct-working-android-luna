@@ -1137,4 +1137,13 @@
         android:id="@+id/myReferralsFragment"
         android:name="com.oreo.ui.referral.MyReferralsFragment"
         android:label="fragment_my_referrals" />
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.noisefit.ui.onboarding.language.LanguageFragment"
+        android:label="fragment_language">
+        <argument
+            android:name="hideContinue"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
 </navigation>

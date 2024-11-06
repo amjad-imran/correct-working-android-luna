@@ -209,6 +209,7 @@ private const val FORCE_UPDATE_REQUIRED_VERSION = "FORCE_UPDATE_REQUIRED_VERSION
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 private const val FMR_CARD_LOCATION = "FMR_CARD_LOCATION"
 private const val CROSSED_CAMPAIGN_ID = "CROSSED_CAMPAIGN_ID"
+private const val APP_LANGUAGE = "APP_LANGUAGE"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -217,6 +218,15 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveSelectedAppLanguage(languageCode: String) {
+        mPrefs.edit()?.putString(APP_LANGUAGE, languageCode)?.commit()
+    }
+
+    override fun getSelectedAppLanguage(): String? {
+        return mPrefs.getString(APP_LANGUAGE, null)
+
+    }
 
     override fun setCrossedCampaign(campaignId: Long) {
         mPrefs.edit()?.putLong(CROSSED_CAMPAIGN_ID, campaignId)?.commit()

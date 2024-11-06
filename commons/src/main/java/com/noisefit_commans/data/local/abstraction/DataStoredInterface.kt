@@ -470,4 +470,7 @@ interface DataStoredInterface {
 
     fun setCrossedCampaign(campaignId: Long)
     fun getCrossedCampaign(): Long? = null
+
+    fun saveSelectedAppLanguage(languageCode: String)
+    fun getSelectedAppLanguage(): String?
 }

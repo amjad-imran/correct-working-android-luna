@@ -51,23 +51,29 @@ const val UniqueWatchFaceSyncWorkName: String = "UniqueWatchFaceSyncWorkName"
 const val UniqueDiyWatchFaceSyncWorkName: String = "UniqueDiyWatchFaceSyncWorkName"
 private const val UniqueAgpsReminderWorkName: String = "AgpsReminderWork"
 private const val UniqueSportSyncWorkName: String = "SportSyncWork"
-const val UniqueMatchReminderWorkName: String = "MatchReminderWork"
-
-const val RescueServiceInBgWorker: String = "RescueServiceInBgWorker"
-
 
 object ApplicationUtils {
 
 
+    fun getDefaultLanguage() = AppLanguage("English", "en")
+
     fun getSupportedLanguages(): List<AppLanguage> {
         return arrayListOf(
             AppLanguage("English", "en"),
-            AppLanguage("Français", "en"),
-            AppLanguage("Deutsch", "en"),
-            AppLanguage("Español", "en"),
-            AppLanguage("普通话", "en"),
-            AppLanguage("Italiano", "en"),
+            AppLanguage("French", "fr"),
+            AppLanguage("German", "de"),
+            AppLanguage("Spanish", "es"),
+            AppLanguage("Italian", "it"),
+            AppLanguage("Dutch", "nl"),
+            AppLanguage("Mandarin", "zh"),
         )
+    }
+
+    fun getAppLanguageByCode(savedLanguage: String): AppLanguage {
+        val languageCode = getSupportedLanguages().find {
+            it.languageCode.equals(savedLanguage, true)
+        }
+        return languageCode ?: AppLanguage("English", "en")
     }
 
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {

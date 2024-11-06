@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
     <string name="app_name">Luna Ring</string>
     <string name="app_version">Version %s</string>
     <string name="text_watch_pair_fail">Votre %s n\'a pas pu s\'associer</string>
@@ -18,9 +17,7 @@
     <string name="text_health_fitness">Forme physique et santé</string>
     <string name="text_today">Aujourd\'hui</string>
     <string name="text_warranty_registration">Enregistrement de garantie</string>
-    <string name="text_terms_and_conditions">
-<![CDATA[ Conditions générales ]]>
-</string>
+    <string name="text_terms_and_conditions"><![CDATA[ Conditions générales ]]></string>
     <string name="text_terms_and_condition_new">Termes et conditions</string>
     <string name="text_privacy_policy">politique de confidentialité</string>
     <string name="text_idle_alert">Alerte d\'inactivité</string>
@@ -40,7 +37,7 @@
     <string name="text_upload_agps">Télécharger AGPS</string>
     <string name="text_quick_reply">Réponse rapide</string>
     <string name="text_rapid_eye_movement">Mouvement oculaire rapide</string>
-    <string name="text_google_fit">Google Fit</string>
+    <string name="text_google_fit">GoogleFit</string>
     <string name="text_world_clock">Horloge mondiale</string>
     <string name="text_stocks">Actions</string>
     <string name="text_add_stocks">Ajouter des actions</string>
@@ -121,8 +118,8 @@
     <string name="text_no_activities">Aucune activité à afficher ici</string>
     <string name="text_powered_by">Alimenté par</string>
     <string name="text_read_more">En savoir plus</string>
-    <string name="text_plus_exp">plus</string>
-    <string name="text_moins_exp">moins</string>
+    <string name="text_more_exp">plus</string>
+    <string name="text_less_exp">moins</string>
     <string name="text_choose_from">Choisissez parmi</string>
     <string name="character_name">qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM</string>
     <string name="character_warranty">qwertyuiopasdfghjklzxcvbnm 1234567890 QWERTYUIOPASDFGHJKLZXCVBNM</string>
@@ -205,7 +202,7 @@
     <string name="text_new_version_of_the_app_is_available">Une nouvelle version de l\'application est disponible</string>
     <string name="text_update_now_to_enjoy_new_features">Mettez à jour maintenant pour profiter des nouvelles fonctionnalités</string>
     <string name="text_please_check_back_again_later">Veuillez réessayer plus tard</string>
-    <string name="text_camera_permission_qr">Autorisation de la caméra requise, autoriser ?</string>
+    <string name="text_camera_permission_qr">Autorisation de la caméra requise, autoriser?</string>
     <string name="text_average_heart_rate">Fréquence cardiaque moyenne</string>
     <string name="channel_noise_push">Notifications poussées</string>
     <string name="channel_noise_description">Notifications poussées</string>
@@ -218,7 +215,7 @@
     <string name="text_stock_disclaimer">
 <![CDATA[ Ces données sont destinées à être utilisées à des fins de référence et d\'information uniquement. Effectuez vos propres recherches indépendantes avant d’investir dans des actions. Vérifiez les données provenant de plusieurs sources car la valeur marchande peut fluctuer rapidement. Toutes les figures sont destinées uniquement à des fins éducatives. Consultez votre conseiller financier avant d\'investir. ]]>
 </string>
-    <string name="text_km">km</string>
+    <string name="text_kms">kms</string>
     <string name="text_sleep_score_lower">Score de sommeil</string>
     <string name="text_date">Date</string>
     <string name="text_no_contacts_found">Aucun contact trouvé</string>
@@ -244,21 +241,21 @@
     <string name="text_select_widget">Sélectionnez les widgets</string>
     <string name="text_app_list_sorting">Tri de la liste des applications</string>
     <string name="text_add_contacts">Ajouter des contacts</string>
-    <string name="text_disconnect_calling_watch">Remarque : Dissociez le Bluetooth de votre montre (%s) des paramètres Bluetooth de votre téléphone.</string>
+    <string name="text_disconnect_calling_watch">Remarque: Dissociez le Bluetooth de votre montre (%s) des paramètres Bluetooth de votre téléphone.</string>
     <string name="text_install_update">Installer maintenant</string>
     <string name="text_new_trophy_earned">Nouveau trophée gagné</string>
     <string name="text_manage_apps">Gérer les applications</string>
     <string name="text_selected_matches">Matchs sélectionnés</string>
     <string name="text_hello_from_the_nnoisefit_fam">Bonjour de la part de la Luna Fam</string>
     <string name="text_from_fitness_and_health_to_work_and_style_noisefit_helps_you_stay_at_the_top_of_everything">De la forme physique et de la santé au travail et au style, Luna Ring vous aide à rester au top de tout.</string>
-    <string name="text_what_do_you_ncall_home">Qu\'est-ce que vous\nappellez chez vous ?</string>
-    <string name="text_don_t_live_here_npick_your_country_from_the_dropdown">Vous n\'habitez pas ici ?\nSélectionnez votre pays dans la liste déroulante.</string>
+    <string name="text_what_do_you_ncall_home">Qu\'est-ce que vous\nappellez chez vous?</string>
+    <string name="text_don_t_live_here_npick_your_country_from_the_dropdown">Vous n\'habitez pas ici?\nSélectionnez votre pays dans la liste déroulante.</string>
     <string name="text_what_s_your_number">Quel est ton numéro ?</string>
-    <string name="text_we_promise_we_won_t_spam_you">Nous promettons de ne pas vous spammer.</string>
+    <string name="text_we_promise_we_won_t_spam_you">Nous promettons que nous ne vous spammerons pas.</string>
     <string name="text_contact_number_hint">9999999999</string>
     <string name="text_otp_please">OTP, s\'il vous plaît</string>
     <string name="text_passwords_can_be_tricky_just_look_for_the_4_digit_otp_we_just_sent_and_kickstart_your_app_journey">Recherchez simplement l\'OTP à 4 chiffres que nous venons d\'envoyer et démarrez votre parcours vers l\'application.</string>
-    <string name="text_did_not_receive_otp">Vous n\'avez pas reçu l\'OTP ?</string>
+    <string name="text_did_not_receive_otp">Vous n\'avez pas reçu l\'OTP?</string>
     <string name="text_resend_otp">Renvoyer OTP</string>
     <string name="text_otp_hint">____</string>
     <string name="text_looking_for_your_device">Vous recherchez votre appareil</string>
@@ -266,15 +263,15 @@
     <string name="text_keep_your_watch_near_your_phone">Assurez-vous que votre bague est placée sur le chargeur.</string>
     <string name="text_unable_to_pair_your_device">Impossible de coupler votre appareil ?</string>
     <string name="text_stop_pairing">Arrêter le jumelage</string>
-    <string name="text_colorfit_ultra_2">ColorFit Ultra2</string>
+    <string name="text_colorfit_ultra_2">ColorFit Ultra 2</string>
     <string name="text_scan_qr_code">Scanner le code QR</string>
     <string name="text_please_align_the_qr_code_within_the_scanner_make_sure_your_phone_s_bluetooth_connection_is_active">Veuillez aligner le code QR dans le scanner. Assurez-vous que la connexion Bluetooth de votre téléphone est active</string>
-    <string name="text_unable_to_scan_the_qr_code_on_your_device">Vous ne parvenez pas à scanner le code QR sur votre appareil ?</string>
+    <string name="text_unable_to_scan_the_qr_code_on_your_device">Vous ne parvenez pas à scanner le code QR sur votre appareil?</string>
     <string name="text_skip_for_now">Passer pour l\'instant</string>
     <string name="text_let_s_do_this">Faisons ça</string>
     <string name="text_set_up_your_profile">Configurez votre profil</string>
     <string name="text_unlock_a_world_of_experiences_curated_by_noisefit_to_help_you_get_to_your_goals">Débloquez un monde d\'expériences organisées par l\'application Luna Ring, pour vous aider à atteindre vos objectifs.</string>
-    <string name="text_what_should_nwe_call_you">Comment devrions-nous\nvous appeler ?</string>
+    <string name="text_what_should_nwe_call_you">Comment devrions-nous vous appeler?</string>
     <string name="text_let_s_start_with_your_full_name_for_a_personalised_experience">Commençons par votre nom complet pour une expérience personnalisée.</string>
     <string name="text_full_name_hint">Nom et prénom</string>
     <string name="text_user_interest">Quels sont vos intérêts ?</string>
@@ -289,7 +286,7 @@
     <string name="text_how_much_do_you_weigh">Combien peses-tu ?</string>
     <string name="text_metric_kg">Métrique (kg)</string>
     <string name="text_imperial_lbs">Impérial (lbs)</string>
-    <string name="text_daily_steps_goal">Quel est votre objectif de pas cible ?</string>
+    <string name="text_daily_steps_goal">Quel est votre objectif de pas cible?</string>
     <string name="text_daily_steps_sub_heading">Définissez votre objectif de pas quotidien et commencez votre parcours de remise en forme avec l\'application Luna Ring.</string>
     <string name="text_pair_later">Associez-le plus tard</string>
     <string name="text_4">04</string>
@@ -299,7 +296,7 @@
     <string name="text_5">05</string>
     <string name="text_7">07</string>
     <string name="text_8">08</string>
-    <string name="text_unable_to_search_or_pair_your_device">Vous ne parvenez pas à trouver ou à associer votre appareil ?</string>
+    <string name="text_unable_to_search_or_pair_your_device">Vous ne parvenez pas à trouver ou à associer votre appareil?</string>
     <string name="text_agree_and_continue">Accepter et continuer</string>
     <string name="text_i_agree_with_noisefit_terms">
 <![CDATA[ J\'accepte les conditions générales de Luna Ring et je reconnais la politique de confidentialité de Luna Ring. ]]>
@@ -332,7 +329,7 @@
     <string name="text_goal">But</string>
     <string name="text_steps">Mesures</string>
     <string name="text_distance">Distance</string>
-    <string name="text_kilocalories">kilocalories</string>
+    <string name="text_kcal">kilocalories</string>
     <string name="text_mins">min</string>
     <string name="text_no_data_recorded">Aucune donnée enregistrée</string>
     <string name="text_health_overview">Aperçu de la santé</string>
@@ -364,7 +361,7 @@
     <string name="text_facebook">Facebook</string>
     <string name="text_spo2_level">Votre niveau de SpO2</string>
     <string name="text_call_alert">Alerte d\'appel</string>
-    <string name="text_what_email_id">Quel est votre identifiant de messagerie ?</string>
+    <string name="text_what_email_id">Quel est votre identifiant de messagerie?</string>
     <string name="text_enter_valid_email">S\'il vous plaît, mettez une adresse email valide</string>
     <string name="text_use_password">Utiliser le mot de passe</string>
     <string name="text_use_otp">Utiliser OTP</string>
@@ -374,14 +371,14 @@
     <string name="text_find_my_device">Trouver mon appareil</string>
     <string name="text_user_manual">Manuel d\'utilisation</string>
     <string name="text_select_contacts">Sélectionner des contacts</string>
-    <string name="text_no_app_selected">Cliquez sur « Gérer les applications » et sélectionnez l\'application\npour laquelle vous souhaitez être averti.</string>
+    <string name="text_no_app_selected">Cliquez sur «Gérer les applications» et sélectionnez l\'application\npour laquelle vous souhaitez être averti.</string>
     <string name="text_no_stocks_added">Aucun stock ajouté</string>
-    <string name="text_add_to_add_alarm">Cliquez sur « Ajouter une alarme » pour\n ajouter votre alarme.</string>
+    <string name="text_add_to_add_alarm">Cliquez sur «Ajouter une alarme» pour\n ajouter votre alarme.</string>
     <string name="text_add_to_add_reminder">Cliquez sur « Ajouter un rappel » pour ajouter votre rappel.</string>
-    <string name="text_add_to_add_contact">Cliquez sur « Ajouter des contacts » pour ajouter\nvos %d meilleurs contacts.</string>
-    <string name="text_add_to_add_widget">Cliquez sur « Ajouter » et ajoutez\nvos %d meilleurs widgets.</string>
-    <string name="text_add_to_add_stock">Cliquez sur « Ajouter des actions » pour ajouter\njusqu\'à %d options d\'achat d\'actions.</string>
-    <string name="text_add_to_add_clock">Cliquez sur « Ajouter des horloges » pour ajouter\n jusqu\'à %d horloges.</string>
+    <string name="text_add_to_add_contact">Cliquez sur «Ajouter des contacts» pour ajouter\nvos %d meilleurs contacts.</string>
+    <string name="text_add_to_add_widget">Cliquez sur «Ajouter» et ajoutez\nvos %d meilleurs widgets.</string>
+    <string name="text_add_to_add_stock">Cliquez sur «Ajouter des actions» pour ajouter\njusqu\'à %d options d\'achat d\'actions.</string>
+    <string name="text_add_to_add_clock">Cliquez sur «Ajouter des horloges» pour ajouter\n jusqu\'à %d horloges.</string>
     <string name="text_save_changes">Enregistrer les modifications</string>
     <string name="text_select_stock">Sélectionnez les actions</string>
     <string name="text_search_your_stock">Recherchez votre stock</string>
@@ -405,10 +402,10 @@
     <string name="weight">Poids</string>
     <string name="change_profile_picture">Changer la photo de profil</string>
     <string name="badges">Insignes</string>
-    <string name="logout_ques">Se déconnecter ?</string>
-    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Êtes-vous sûr de vous déconnecter de votre\ncompte Luna Ring ?</string>
-    <string name="delete_account_ques">Supprimer le compte ?</string>
-    <string name="are_you_sure_want_to_delete_your_noisefit_account_all_your_data_will_be_lost_if_you_delete_your_account">Êtes-vous sûr de vouloir supprimer votre compte Luna Ring ? Toutes vos données seront perdues si vous supprimez votre compte</string>
+    <string name="logout_ques">Se déconnecter?</string>
+    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Êtes-vous sûr de vous déconnecter de votre\ncompte Luna Ring?</string>
+    <string name="delete_account_ques">Supprimer le compte?</string>
+    <string name="are_you_sure_want_to_delete_your_noisefit_account_all_your_data_will_be_lost_if_you_delete_your_account">Êtes-vous sûr de vouloir supprimer votre compte Luna Ring? Toutes vos données seront perdues si vous supprimez votre compte</string>
     <string name="text_sos">SOS</string>
     <string name="text_emergency_contact">Personne à contacter en cas d\'urgence</string>
     <string name="text_app_notifications">Notifications d\'application</string>
@@ -432,7 +429,7 @@
     <string name="text_reminders">Rappels</string>
     <string name="text_my_badges">Mes badges</string>
     <string name="text_sports_rec_desc">Autorisez votre bague à détecter automatiquement l\'activité sans lancer l\'activité manuellement. L\'appareil identifiera automatiquement votre état de course ou de marche.</string>
-    <string name="text_leave_challenge_message">Êtes-vous sûr de vouloir quitter « %s » ? Toute la progression de votre défi et vos données seront effacées</string>
+    <string name="text_leave_challenge_message">Êtes-vous sûr de vouloir quitter «%s»? Toute la progression de votre défi et vos données seront effacées</string>
     <string name="text_feedback_hint">Ajoutez votre commentaire ici</string>
     <string name="text_explore_message">Participez à des défis en cours et visualisez vos progrès dans vos défis.</string>
     <string name="selected_sports_mode_will_be_shown_on_the_your_device_from_where_you_can_quickly_start_your_workout">Le mode sportif sélectionné sera affiché sur votre appareil, à partir duquel vous pourrez rapidement commencer votre entraînement</string>
@@ -467,7 +464,7 @@
     <string name="device_password">Mot de passe de l\'appareil</string>
     <string name="text_device_setting">Paramétrage de l\'appareil</string>
     <string name="text_no_buddies_added">Aucun copain ajouté</string>
-    <string name="text_no_buddy_add">Cliquez sur « Ajouter » pour ajouter vos amis. Luna Ring est mieux avec vos amis.</string>
+    <string name="text_no_buddy_add">Cliquez sur «Ajouter» pour ajouter vos amis. Luna Ring est mieux avec vos amis.</string>
     <string name="text_no_requests_received">Aucune demande reçue</string>
     <string name="text_no_requests_sent">Aucune demande envoyée</string>
     <string name="text_calories">Calories</string>
@@ -545,7 +542,7 @@
     <string name="text_you_are_disqualified">Vous êtes disqualifié</string>
     <string name="text_no_upcoming_challenges_title">Aucun défi disponible</string>
     <string name="text_progress_avg_day">Progression moyenne/jour</string>
-    <string name="text_great_job">Excellent travail !</string>
+    <string name="text_great_job">Excellent travail!</string>
     <string name="text_total_calories">Calories totales</string>
     <string name="text_progress">Progrès</string>
     <string name="text_watchface_transfer">Transfert du cadran de la montre</string>
@@ -567,7 +564,7 @@
     <string name="text_issue_still_not_resolved">Le problème n\'est toujours pas résolu ?</string>
     <string name="text_to_share_your_issue_along_with_screenshots_and_screen_recordings_click_here">Si votre problème n\'est toujours pas résolu, veuillez partager votre problème avec des captures d\'écran, cliquez ici</string>
     <string name="text_our_team_will_contact_you_shortly">Notre équipe vous contactera sous peu.</string>
-    <string name="text_was_this_article_helpful">Cet article a-t-il été utile ?</string>
+    <string name="text_was_this_article_helpful">Cet article a-t-il été utile?</string>
     <string name="text_write_your_suggestions_here">Écrivez vos suggestions ici…</string>
     <string name="text_connect">Connecter</string>
     <string name="text_disconnect">Déconnecter</string>
@@ -576,10 +573,10 @@
     <string name="text_sync_data">Synchroniser les données</string>
     <string name="text_once_your_noisefit_and_google_fit_accounts_are_connected_your_workout_and_health_data_including_steps_distance_heart_rate_sleep_will_be_automatically_synced_to_google_fit">Une fois vos comptes Luna Ring et Google Fit connectés, vos données d\'entraînement et de santé (y compris les pas, la fréquence cardiaque, le sommeil, la localisation, les entraînements) seront automatiquement synchronisées avec Google Fit. En fonction de vos préférences, autorisez l\'application Luna Ring à importer et exporter. données de GoogleFit et intégrez-les à vos scores d’activité et de préparation.</string>
     <string name="text_the_google_fit_app_tracks_your_movements_lets_you_set_goals_and_keeps_track_of_your_progress_to_coach_you_towards_a_healthier_life">L\'application Google Fit suit vos mouvements, vous permet de définir des objectifs et de suivre vos progrès pour vous accompagner vers une vie plus saine.</string>
-    <string name="text_how_satisfied_are_you_with_the_noisefit">Dans quelle mesure êtes-vous satisfait de la bague Luna ?</string>
+    <string name="text_how_satisfied_are_you_with_the_noisefit">Dans quelle mesure êtes-vous satisfait de la bague Luna?</string>
     <string name="text_raise_complaint">Déposer une plainte</string>
     <string name="text_complete_your_watch_setup">Terminez la configuration de votre bague</string>
-    <string name="text_how_we_handle_data_privacy">Comment gérons-nous la confidentialité des données ?</string>
+    <string name="text_how_we_handle_data_privacy">Comment gérons-nous la confidentialité des données?</string>
     <string name="text_download">Télécharger</string>
     <string name="text_supported_application">Application prise en charge</string>
     <string name="text_update_qr_payment">Mettre à jour le code QR UPI</string>
@@ -602,7 +599,7 @@
     <string name="text_decline">Déclin</string>
     <string name="text_accept">Accepter</string>
     <string name="text_vs">Contre</string>
-    <string name="text_who_is_your_n_next_challenge">Qui est votre \n prochain Challenger ?</string>
+    <string name="text_who_is_your_n_next_challenge">Qui est votre \n prochain Challenger?</string>
     <string name="text_me">Moi</string>
     <string name="text_challenger">Un challenger ?</string>
     <string name="text_badges">Insignes</string>
@@ -659,7 +656,7 @@
     <string name="text_redeem">Racheter</string>
     <string name="text_tasks">Tâches</string>
     <string name="text_put_your_earnings_to_use">Utilisez vos gains</string>
-    <string name="text_my_vouchers">Mes bons</string>
+    <string name="text_my_vouchers">Mes bons d\'achat</string>
     <string name="text_no_coin_transaction_found">Aucune transaction Luna Ring Coin trouvée</string>
     <string name="text_complete_tasks_to_earn_rewards_and_spend_on_various_brands">Effectuez des tâches pour gagner des récompenses et dépenser pour différentes marques</string>
     <string name="text_current">Actuel:</string>
@@ -773,30 +770,9 @@
     <string name="text_oreo_battery">Batterie Oréo</string>
     <string name="text_score_overview">Aperçu des scores</string>
     <string name="text_daily_average_comparison">Comparaison moyenne quotidienne</string>
-    <string name="text_prh_title">Historique des prédictions</string>
-    <string name="text_npl_terms_conditions">
-<![CDATA[Conditions générales NPL ]]>
-</string>
-    <string name="text_claim_your_wins">Réclamez vos gains</string>
-    <string name="text_your_team_won">Votre équipe a gagné !</string>
-    <string name="text_collect_your_reward">Récupérez votre récompense</string>
-    <string name="text_predict_the_winner">Prédire le gagnant</string>
-    <string name="text_ongoing_match">Match en cours</string>
-    <string name="text_user_prediction_meter">Compteur de prédiction utilisateur</string>
-    <string name="text_prédit">prédit</string>
-    <string name="text_score_board">Tableau de scores</string>
-    <string name="text_time_left">Temps restant</string>
     <string name="text_any_query_raise_a_complaint">Une question ? Déposer une plainte</string>
     <string name="text_reward">Récompense</string>
     <string name="text_result">Résultat</string>
-    <string name="text_prediction_team">Équipe prévue</string>
-    <string name="text_noise_pl">Bruit Premier League</string>
-    <string name="text_yet_to_bat">Encore à battre</string>
-    <string name="text_contre_small">contre</string>
-    <string name="text_npl_is_waiting_for_you_with_loads_of_rewards_and_fun">NPL vous attend avec de nombreuses récompenses et du plaisir.</string>
-    <string name="text_ready_set_predict">À vos marques, prêts, prédisez !</string>
-    <string name="text_no_predictions_made">Aucune prédiction faite</string>
-    <string name="text_predict_the_winner_of_upcoming_matches_correctly_and_get_exciting_rewards_with_every_win">Prédisez correctement le vainqueur des matchs à venir et obtenez des récompenses passionnantes à chaque victoire.</string>
     <string name="textwins">Victoires</string>
     <string name="text_losses">Pertes</string>
     <string name="text_matches_left">Matchs restants</string>
@@ -812,7 +788,7 @@
     <string name="text_start_quiz">Démarrer le quiz</string>
     <string name="text_participants_won_total">les participants ont gagné au total</string>
     <string name="text_quit">Quitter</string>
-    <string name="text_are_you_sure_you_want_to_quit_the_quiz_your_progress_will_be_deleted">Êtes-vous sûr de vouloir quitter le quiz ? Votre progression sera supprimée.</string>
+    <string name="text_are_you_sure_you_want_to_quit_the_quiz_your_progress_will_be_deleted">Êtes-vous sûr de vouloir quitter le quiz? Votre progression sera supprimée.</string>
     <string name="text_close_quiz">Fermer le quiz</string>
     <string name="text_next_quiz_in">Prochain quiz dans</string>
     <string name="text_refreshing">Rafraîchissant</string>
@@ -824,8 +800,8 @@
     <string name="text_avg">Moy.</string>
     <string name="text_distance_split">Répartition des distances</string>
     <string name="text_time_km">Temps/km</string>
-    <string name="text_kilomètres">kilomètres</string>
-    <string name="text_heure">heure</string>
+    <string name="text_km">kilomètres</string>
+    <string name="text_hr">heure</string>
     <string name="text_pace">Rythme</string>
     <string name="text_set_your_target_calorie_goal">Définissez votre objectif calorique cible</string>
     <string name="text_account_already_exists">Le compte existe déjà ?</string>
@@ -844,12 +820,12 @@
     <string name="text_search_here">Recherchez ici..</string>
     <string name="text_yesterday">Hier</string>
     <string name="text_all_time_average">Moyenne de tous les temps</string>
-    <string name="text_question_left">Questions restantes :</string>
-    <string name="text_bonus_reward">Récompense bonus :</string>
+    <string name="text_question_left">Questions restantes:</string>
+    <string name="text_bonus_reward">Récompense bonus:</string>
     <string name="text_npl_watch_face">Cadran de montre NPL</string>
     <string name="text_your_score_card_history">Historique de votre carte de score</string>
     <string name="text_npl_recap">Récapitulatif des NPL</string>
-    <string name="texxt_thank_your_for_all_the_love_and_passion_for_the_sport_n_npl_will_be_back_next_season_stay_tuned">Merci pour tout l\'amour et la passion pour le sport !\n\nNPL sera de retour la saison prochaine 💪 Restez à l\'écoute !</string>
+    <string name="texxt_thank_your_for_all_the_love_and_passion_for_the_sport_n_npl_will_be_back_next_season_stay_tuned">Merci pour tout l\'amour et la passion pour le sport!\n\nNPL sera de retour la saison prochaine 💪 Restez à l\'écoute!</string>
     <string name="text_you_are_a_true_noisemaker">Vous êtes un vrai Noisemaker 👏</string>
     <string name="text_target_achieved">Objectif atteint</string>
     <string name="text_bonus_reward_for_super_over_awaits_you_collect_your_reward">Une récompense bonus pour Super Over vous attend. Récupérez votre récompense</string>
@@ -858,7 +834,7 @@
     <string name="text_selected_language">Langue sélectionnée</string>
     <string name="text_view_community_guidelines">Afficher les directives de la communauté</string>
     <string name="text_remind_later">Rappeler plus tard</string>
-    <string name="text_app_update_msg">Nous avons apporté quelque chose de nouveau ✨, mettez à jour l\'application Luna Ring maintenant pour découvrir les dernières fonctionnalités !</string>
+    <string name="text_app_update_msg">Nous avons apporté quelque chose de nouveau ✨, mettez à jour l\'application Luna Ring maintenant pour découvrir les dernières fonctionnalités!</string>
     <string name="text_noisefit_update">Mise à jour de l\'application disponible</string>
     <string name="text_favourite_watchface">cadran préféré</string>
     <string name="text_create_your_own">Créez le vôtre</string>
@@ -869,8 +845,8 @@
     <string name="text_identify_workout">Identifier l\'entraînement</string>
     <string name="text_detected_workouts">Entraînements détectés</string>
     <string name="text_all_workouts">Tous les entraînements</string>
-    <string name="text_dismiss_activity_title">Ignorer l\'activité ?</string>
-    <string name="text_dismiss_activity_desc">Cette activité ne peut pas être récupérée si elle est rejetée une fois. Êtes-vous sûr de vouloir continuer ?</string>
+    <string name="text_dismiss_activity_title">Ignorer l\'activité?</string>
+    <string name="text_dismiss_activity_desc">Cette activité ne peut pas être récupérée si elle est rejetée une fois. Êtes-vous sûr de vouloir continuer?</string>
     <string name="text_keep">Garder</string>
     <string name="text_review">Revoir</string>
     <string name="text_what_is_this">Qu\'est-ce que c\'est?</string>
@@ -898,10 +874,10 @@
     <string name="text_downloading__">Téléchargement…</string>
     <string name="text_create_your_own_watchfaces">Créez vos propres cadrans</string>
     <string name="text_with_different_backgrounds_filters_fonts_placements">Avec différents arrière-plans, filtres, polices, emplacements</string>
-    <string name="text_no_watch_face_is_created">Euh oh ! Rien ici pour l\'instant.\nPourquoi n\'essayez-vous pas de créer un cadran ?</string>
+    <string name="text_no_watch_face_is_created">Euh oh ! Rien ici pour l\'instant.\nPourquoi n\'essayez-vous pas de créer un cadran?</string>
     <string name="text_sleep_reminder">Rappel de sommeil</string>
     <string name="text_comparison_msg">Vous brûlez plus de calories aujourd’hui que d’habitude</string>
-    <string name="text_heure_lower">heure</string>
+    <string name="text_hr_lower">heure</string>
     <string name="text_device">Appareil</string>
     <string name="text_customer_support_helpline">Ligne d\'assistance client</string>
     <string name="text_raise_a_complaint">Déposer une plainte</string>
@@ -915,7 +891,7 @@
     <string name="text_no_luna_ring_yet">Pas encore de bague Luna ?</string>
     <string name="text_ring_message_find_device">Assurez-vous que votre bague est placée sur le chargeur et que le Bluetooth de votre téléphone est activé.</string>
     <string name="text_pairing_ring_message">Assurez-vous que votre bague est placée sur le chargeur</string>
-    <string name="text_all_done">Tout est fait !</string>
+    <string name="text_all_done">Tout est fait!</string>
     <string name="text_for_the_most_accurate_readings_wear_the_ring_on_your_index_finger_with_its_sensors_facing_the_palm_side">Pour les lectures les plus précises, portez la bague sur votre index avec ses capteurs face à la paume.</string>
     <string name="text_let_s_go">Allons-y</string>
     <string name="text_the_sleep_tab_is_where_where_you_can_explore_your_sleep_quality_in_detail">L\'onglet Sommeil vous permet d\'explorer en détail la qualité de votre sommeil.</string>
@@ -924,7 +900,7 @@
     <string name="text_the_readiness_tab_gives_you_an_overview_of_your_key_recovery_metrics">L\'onglet Préparation vous donne un aperçu de vos principales mesures de récupération.</string>
     <string name="text_your_daily_readiness_score_is_based_on_your_sleep_activity_and_body_signals">Votre score de préparation quotidien est basé sur votre sommeil, votre activité et vos signaux corporels.</string>
     <string name="text_the_activity_tab_is_where_you_can_follow_your_daily_movement_workouts_and_easy_days">L\'onglet Activité vous permet de suivre vos mouvements quotidiens, vos entraînements et vos journées faciles.</string>
-    <string name="text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal">Toutes les activités physiques, des travaux ménagers à l\'entraînement, comptent pour votre objectif quotidien.</string>
+    <string name="text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal">Toute activité physique, des travaux ménagers à l\'entraînement, compte pour votre objectif quotidien.</string>
     <string name="text_your_activity_score_updates_continuously_as_luna_learns_how_active_you_are_throughout_the_week">Votre score d\'activité est mis à jour en permanence, à mesure que Luna apprend à quel point vous êtes actif tout au long de la semaine.</string>
     <string name="text_you_will_see_your_sleep_score_after_your_first_sleep_analysis">Vous verrez votre score de sommeil après votre première analyse du sommeil</string>
     <string name="text_you_will_see_your_readiness_score_after_first_sleep_analysis">Vous verrez votre score de préparation après la première analyse du sommeil</string>
@@ -941,7 +917,7 @@
     <string name="text_got_something_to_share_tell_us">Vous avez quelque chose à partager ? Dites-nous.</string>
     <string name="text_log_in">Se connecter</string>
     <string name="text_privacy_message">Bienvenue sur Luna Ring. Vous pouvez utiliser cette application pour gérer votre bague et afficher les données d\'exercice et de santé associées. Nous respecterons strictement les lois, réglementations et politiques de confidentialité en vigueur pour protéger vos informations personnelles. Pour fournir les services les plus élémentaires, l\'application doit être connectée à Internet.</string>
-    <string name="text_do_you_want_to_reset">Ring est déjà connecté à un autre appareil. Voulez-vous le réinitialiser ?</string>
+    <string name="text_do_you_want_to_reset">Ring est déjà connecté à un autre appareil. Voulez-vous le réinitialiser?</string>
     <string name="text_thank_u_sharing">Merci pour le partage !</string>
     <string name="text_wrong_time">Mauvais moment</string>
     <string name="text_adjust_date">Ajuster la date</string>
@@ -956,7 +932,7 @@
     <string name="text_ring_care_message">Traitez votre Luna du mieux que vous pouvez</string>
     <string name="text_welcome_to_luna">Bienvenue à Luna</string>
     <string name="text_understanding_your_body_starts_here">Comprendre votre corps commence ici</string>
-    <!-- TODO : Supprimer ou modifier ce texte d\'espace réservé -->
+    <!-- TODO: Supprimer ou modifier ce texte d\'espace réservé -->
     <string name="hello_blank_fragment">Bonjour fragment vierge</string>
     <string name="text_soft_reset">Réinitialisation logicielle</string>
     <string name="text_charge_your_ring">Chargez votre bague</string>
@@ -972,14 +948,14 @@
     <string name="text_trouble_connecting_your_ring">Des difficultés à connecter votre bague ?</string>
     <string name="text_get_help">Obtenir de l\'aide</string>
     <string name="text_identify">Identifier</string>
-    <string name="text_device_has_a_new_location">L\'appareil a un nouvel emplacement !</string>
+    <string name="text_device_has_a_new_location">L\'appareil a un nouvel emplacement!</string>
     <string name="text_device_intro_msg">
 <![CDATA[ Retrouvez maintenant tous les détails et paramètres de votre appareil dans le coin d\'accès rapide ]]>
 </string>
     <string name="text_something_went_wrong_please_try_again">Quelque chose s\'est mal passé. Veuillez réessayer</string>
     <string name="text_retry">Réessayer</string>
     <string name="text_your_baseline">Votre référence</string>
-    <string name="text_turn_on_google_fit_sync">Activer la synchronisation Google Fit</string>
+    <string name="text_turn_on_google_fit_sync">Activer la synchronisation GoogleFit</string>
     <string name="text_enable_google_fit_access">Activer l\'accès à Google Fit</string>
     <string name="text_allow_google_fit_message">En fonction de vos préférences, autorisez l\'application Luna ring à importer et exporter des données depuis Googlefit et à les intégrer dans vos scores d\'activité et de préparation.</string>
     <string name="text_average_oxygen_saturation">Saturation moyenne en oxygène</string>
@@ -994,8 +970,8 @@
     <string name="text_ring_out_of_range">Votre bague Luna est hors de portée. Ne vous inquiétez pas, vos données seront reflétées une fois la bague connectée.</string>
     <string name="text_end">Fin</string>
     <string name="text_end_workout">Fin de l\'entraînement</string>
-    <string name="text_ready_to_end_your_workout">Prêt à terminer votre entraînement et à enregistrer vos progrès ?</string>
-    <string name="text_ready_to_end_your_workout_short">Étant donné que votre entraînement dure moins d\'une minute, il ne sera pas enregistré. Etes-vous sûr de vouloir mettre fin à votre entraînement ?</string>
+    <string name="text_ready_to_end_your_workout">Prêt à terminer votre entraînement et à enregistrer vos progrès?</string>
+    <string name="text_ready_to_end_your_workout_short">Étant donné que votre entraînement dure moins d\'une minute, il ne sera pas enregistré. Etes-vous sûr de vouloir mettre fin à votre entraînement?</string>
     <string name="text_select_workout">Sélectionnez un entraînement</string>
     <string name="text_trying_to_connect_your_ring">J\'essaie de connecter votre bague</string>
     <string name="text_ring_not_in_range">Pour enregistrer votre entraînement, assurez-vous que votre bague est chargée, à votre doigt et à portée de votre appareil.</string>
@@ -1009,7 +985,7 @@
     <string name="text_charging_message">Pour enregistrer votre entraînement, retirez votre bague du chargeur et portez-la à votre doigt.</string>
     <string name="text_0">0</string>
     <string name="text_100">100</string>
-    <string name="text_select_to_compare">Sélectionnez pour comparer :</string>
+    <string name="text_select_to_compare">Sélectionnez pour comparer:</string>
     <string name="text_no_movement">Aucun mouvement</string>
     <string name="text_header">En-tête</string>
     <string name="text_relaxed">Détendu</string>
@@ -1019,9 +995,9 @@
     <string name="text_nap_detected">Sieste détectée</string>
     <string name="text_confirm">Confirmer</string>
     <string name="text_imported_from_google_fit">Importé de Google Fit</string>
-    <string name="text_dismiss_detected_nap">Ignorer la sieste détectée ?</string>
-    <string name="text_nap_remove_message">Ces données de sieste ne peuvent pas être récupérées si elles sont rejetées une fois. Êtes-vous sûr de vouloir continuer ?</string>
-    <string name="text_calculating_your_baseline">Calculer votre ligne de base</string>
+    <string name="text_dismiss_detected_nap">Ignorer la sieste détectée?</string>
+    <string name="text_nap_remove_message">Ces données de sieste ne peuvent pas être récupérées si elles sont rejetées une fois. Êtes-vous sûr de vouloir continuer?</string>
+    <string name="text_calculating_your_baseline">Calculer votre référence</string>
     <string name="text_wear_ring_for">Portez votre bague régulièrement pendant 15 jours pour constater un écart de température cutanée par rapport à votre référence personnalisée.</string>
     <string name="text_intensity_not_capture">Impossible de capturer les données d\'intensité pour cet entraînement en raison d\'un mauvais ajustement de l\'anneau ou d\'un manque de mouvement.</string>
     <string name="text_ring_lo_battert_stop_message">Votre entraînement est terminé car la batterie de votre anneau est faible. Assurez-vous que votre bague est chargée, à votre doigt et à portée de votre appareil.</string>
@@ -1037,7 +1013,6 @@
     <string name="text_bo_else">Votre taux d’oxygène dans le sang présentait plusieurs variations. Cela peut être dû à des troubles respiratoires importants pendant le sommeil.</string>
     <string name="text_active_duration">Durée active</string>
     <string name="text_maximum">Maximum</string>
-    <string name="text_MS">MS</string>
     <string name="text_remind_me_later">Rappelle-moi plus tard</string>
     <string name="text_update_my_app">Mettre à jour mon application</string>
     <string name="text_update_my_ring">Mettre à jour ma bague</string>
@@ -1054,11 +1029,11 @@
     <string name="text_fw_up_to_date">Votre bague utilise le dernier firmware et est prête à fonctionner</string>
     <string name="text_setting_up_your_device">Configuration de votre appareil</string>
     <string name="text_setting_up_device">Gardez votre bague Luna à proximité de votre téléphone jusqu\'à ce que la mise à jour soit terminée</string>
-    <string name="text_all_done_">Tout est fait !</string>
+    <string name="text_all_done_">Tout est fait!</string>
     <string name="text_all_done_message">Préparez-vous à embarquer pour un voyage de découverte de soi et de bien-être</string>
     <string name="text_update_available_message">Mise à jour vers la dernière version du micrologiciel pour des fonctionnalités nouvelles et améliorées</string>
     <string name="text_low_battery_alert">Alerte de batterie faible</string>
-    <string name="text_low_battery_message">La mise à jour du micrologiciel nécessite que votre bague dispose d\'au moins 20 % de batterie. Veuillez charger votre appareil et réessayer.</string>
+    <string name="text_low_battery_message">La mise à jour du micrologiciel nécessite que votre bague dispose d\'au moins 20% de batterie. Veuillez charger votre appareil et réessayer.</string>
     <string name="text_your_ring_is_evolving">Votre bague évolue</string>
     <string name="text_ring_successfully_updated">Ring mis à jour avec succès</string>
     <string name="text_okay">D\'accord</string>
@@ -1072,8 +1047,8 @@
     <string name="text_cadence" tools:ignore="ExtraTranslation">Cadence</string>
     <string name="text_recovery_time" tools:ignore="ExtraTranslation">Temps de récupération</string>
     <string name="text_training_effects" tools:ignore="ExtraTranslation">Effets d\'entraînement</string>
-    <string name="text_before_9_pm_battery_charge_msg">La batterie de votre bague Luna est inférieure à 20 %. N\'oubliez pas de charger votre bague avant de vous coucher pour bénéficier d\'informations ininterrompues.</string>
-    <string name="text_after_9_pm_battery_charge_msg">La batterie de votre bague Luna est inférieure à 20 %. Pour continuer à recevoir des informations précieuses tout au long de votre journée, veuillez prendre un moment pour le recharger bientôt.</string>
+    <string name="text_before_9_pm_battery_charge_msg">La batterie de votre bague Luna est inférieure à 20%. N\'oubliez pas de charger votre bague avant de vous coucher pour bénéficier d\'informations ininterrompues.</string>
+    <string name="text_after_9_pm_battery_charge_msg">La batterie de votre bague Luna est inférieure à 20%. Pour continuer à recevoir des informations précieuses tout au long de votre journée, veuillez prendre un moment pour le recharger bientôt.</string>
     <string name="text_open_luna_ring_app">Ouvrez l\'application Luna Ring</string>
     <string name="text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date">Gardez l\'application Luna Ring en cours d\'exécution pour que vos données restent à jour</string>
     <string name="text_learn_more_desc1">Le stress englobe à la fois les réponses physiques et mentales à des facteurs internes et externes. Lorsqu’il est bien géré, le stress peut favoriser la croissance personnelle en matière de productivité, de créativité et de résilience. \n\nLe suivi du stress via Luna Ring repose sur la compréhension du système nerveux autonome (SNA), indiquant les niveaux de stress et les processus de récupération. Par exemple, une VRC inférieure à la normale peut indiquer un système nerveux sympathique surmené, tandis qu\'une fréquence cardiaque au repos plus rapide peut signifier une réponse au stress. \n\nOutre les zones de stress, vous pouvez examiner la corrélation entre l\'activité et le stress physiologique. Accédez à cette fonctionnalité en appuyant sur la flèche vers le bas sur votre graphique de stress. Par exemple, il vous aide à identifier les moments où le stress est survenu malgré l’absence de mouvements d’intensité moyenne ou élevée. \n\nVotre bague Luna mesure le stress physiologique que votre corps subit tout au long de la journée. Le stress hors activité mesure le stress ressenti en dehors des entraînements de sommeil. L’examen de cette répartition peut donner un aperçu de la façon dont votre corps accumule et gère le stress déclenché par des facteurs émotionnels ou interpersonnels.</string>
@@ -1107,16 +1082,16 @@
     <string name="text_metric_message">Mesures en mètres, kilogrammes et litres.</string>
     <string name="text_message_imperial">Mesures en pieds, pouces et livres.</string>
     <string name="text_enable_notifications">Activer les notifications</string>
-    <string name="text_notification_message">Permettez à LUNA de vous informer sur : le niveau de la batterie, les alertes d\'inactivité, la progression de l\'activité, les rappels de l\'heure du coucher et les informations personnalisées.</string>
+    <string name="text_notification_message">Permettez à LUNA de vous informer sur: le niveau de la batterie, les alertes d\'inactivité, la progression de l\'activité, les rappels d\'heure du coucher et les informations personnalisées.</string>
     <string name="text_track_your_cycle">Suivez votre cycle</string>
     <string name="text_track_your_cycle_desc">Bénéficiez d\'informations personnalisées, de la prévision de vos prochaines règles au suivi de l\'ovulation</string>
     <string name="text_fmh_w_title_1">Présentation de CycleTracker</string>
     <string name="text_fmh_w_title_2">Pourquoi suivre ses règles ?</string>
     <string name="text_fmh_w_title_3">Comprendre votre cycle grâce aux variations de température</string>
     <string name="text_fmh_w_title_4">Sécuriser vos données</string>
-    <string name="text_fmh_w_title_5">Vous êtes prêt !</string>
+    <string name="text_fmh_w_title_5">Vous êtes prêt!</string>
     <string name="text_fmh_w_content_1">Restez connecté à votre corps avec CycleTracker. Il offre des informations personnalisées, des prévisions de règles au suivi de l\'ovulation. Obtenez du soutien et des conseils pour chaque phase du cycle afin de rester informé et préparé.</string>
-    <string name="text_fmh_w_content_2">Suivi des règles : essentiel pour la conscience du corps, la gestion de la santé et la confiance. Donnez-vous les moyens de prendre soin de vous et d’un suivi proactif.</string>
+    <string name="text_fmh_w_content_2">Suivi des règles: essentiel pour la conscience du corps, la gestion de la santé et la confiance. Donnez-vous les moyens de prendre soin de vous et d’un suivi proactif.</string>
     <string name="text_fmh_w_content_4">Votre vie privée est notre priorité. Nous utilisons des mesures de sécurité de premier ordre pour protéger vos données. Faites-nous confiance pour protéger vos informations pendant que vous suivez votre cycle.</string>
     <string name="text_fmh_w_content_5">Vous êtes prêt à obtenir des informations personnalisées sur votre parcours reproductif, de la prévision de vos prochaines règles au suivi de l\'ovulation, afin que vous puissiez planifier à l\'avance.</string>
     <string name="text_fmh_w_content_3">La menstruation se refroidit, la phase folliculaire se réchauffe. Des creux avant l\'ovulation, des pics après l\'ovulation. La phase lutéale reste chaude. L\'application prédit les jours fertiles et facilite la planification. Suivez la température pour des périodes personnalisées.</string>
@@ -1131,7 +1106,7 @@
     <string name="text_not_sure">Pas sûr</string>
     <string name="text_how_long_does_your_period_usually_last">Combien de temps durent habituellement vos règles ?</string>
     <string name="text_how_long_does_your_cycle_usually_last">Quelle est la durée de votre cycle typique ?</string>
-    <string name="text_are_you_diagnosed_with_any_of_these_conditions">Avez-vous reçu un diagnostic de l\'une des affections suivantes ?</string>
+    <string name="text_are_you_diagnosed_with_any_of_these_conditions">Avez-vous reçu un diagnostic de l\'une des affections suivantes?</string>
     <string name="text_select_from_the_provided_options">Veuillez sélectionner si vous souffrez de problèmes de santé persistants diagnostiqués par un professionnel de la santé.</string>
     <string name="text_do_you_use_hormonal_contraceptives_or_other_hormones">Utilisez-vous une forme de contraception hormonale ?</string>
     <string name="text_when_was_the_first_day_of_your_last_period">Quand ont commencé vos dernières règles ?</string>
@@ -1141,14 +1116,14 @@
     <string name="text_cycle_history">Histoire du cycle</string>
     <string name="text_ovulation">ovulation</string>
     <string name="text_fertile_days">jours fertiles</string>
-    <string name="text_période">période</string>
+    <string name="text_period">période</string>
     <string name="text_ovulation_temperature_variation">Variation de la température d\'ovulation</string>
     <string name="text_cycle_prediction">Prédiction des cycles</string>
     <string name="text_normal_length">Longueur normale</string>
     <string name="text_period_duration">Durée de la période</string>
     <string name="text_next_estimated_date_for_period_start_will_be_in">La prochaine date estimée pour le début des règles sera dans</string>
-    <string name="text_folliculaire">folliculaire</string>
-    <string name="text_lutéal">lutéal</string>
+    <string name="text_follicular">folliculaire</string>
+    <string name="text_luteal">lutéal</string>
     <string name="text_cycle_tracker">Suivi de vélo</string>
     <string name="text_ovulation_in">Ovulation dans</string>
     <string name="text_period_u">Période</string>
@@ -1157,26 +1132,26 @@
     <string name="text_cycle_log">Journal de cycle</string>
     <string name="text_log_period">Période de journalisation</string>
     <string name="text_calender">Calandre</string>
-    <string name="text_period_last_sub_message">La durée des règles est mesurée du premier au dernier jour du saignement. Si vous êtes irrégulier ou incertain, cliquez sur « Pas sûr »</string>
-    <string name="text_cycle_last_sub_message">Votre cycle commence le premier jour de vos règles et se termine la veille de vos prochaines règles. Si vous êtes irrégulier ou incertain, cliquez sur « Pas sûr »</string>
-    <string name="text_jours">jours</string>
+    <string name="text_period_last_sub_message">La durée des règles est mesurée du premier au dernier jour du saignement. Si vous êtes irrégulier ou incertain, cliquez sur «Pas sûr»</string>
+    <string name="text_cycle_last_sub_message">Votre cycle commence le premier jour de vos règles et se termine la veille de vos prochaines règles. Si vous êtes irrégulier ou incertain, cliquez sur «Pas sûr»</string>
+    <string name="text_days">jours</string>
     <string name="text_abnormal_length">Longueur anormale</string>
     <string name="text_introduction_to_cycle_tracking">Introduction au suivi du cycle</string>
     <string name="text_broadly_there_are_2_phases_of_the_menstrual_cycle">En gros, il y a 2 phases du cycle menstruel :</string>
     <string name="text_menstrual_cycle_desc">Comprendre votre cycle menstruel ne consiste pas seulement à savoir quand vos prochaines règles pourraient commencer. Le suivi du cycle peut vous aider à reconnaître les tendances de votre santé, à prédire les périodes fertiles et à gérer les symptômes plus efficacement. En suivant votre cycle, vous obtenez un aperçu des rythmes naturels de votre corps, ce qui peut être crucial pour la planification et le bien-être.</string>
     <string name="text_follicular_phase">Phase folliculaire</string>
-    <string name="text_stress_info_start_point">Le point de départ : la période menstruelle</string>
+    <string name="text_stress_info_start_point">Le point de départ: la période menstruelle</string>
     <string name="text_stress_info_start_point_desc">Notre voyage commence avec la période menstruelle, la première phase de votre cycle. Cela commence lorsque les niveaux d’hormones chutent, signalant à votre corps de se débarrasser de la muqueuse utérine. Cette phase, qui dure généralement entre 3 et 7 jours, peut entraîner des crampes et de la fatigue. Pendant ce temps, la température de votre corps est au plus bas et se prépare à augmenter à mesure que le voyage continue. Le suivi de ces jours vous aide à anticiper et à gérer les symptômes, rendant ainsi le voyage plus fluide.</string>
     <string name="text_stress_info_fertile_window">Approche de la fenêtre fertile</string>
     <string name="text_stress_info_fertile_window_desc">À mesure que nous avançons, la phase folliculaire passe à la fenêtre fertile. Cette fenêtre est la préparation de votre corps à une éventuelle grossesse et s\'étend sur environ 5 à 6 jours, se terminant le jour de l\'ovulation. C’est une période cruciale pour celles qui envisagent de concevoir, marquée par une augmentation des œstrogènes qui épaississent la muqueuse utérine et créent un environnement favorable aux spermatozoïdes. Vous remarquerez peut-être des changements comme une glaire cervicale plus claire et plus extensible et une légère baisse de température juste avant qu’elle ne commence à augmenter. Reconnaître cette fenêtre peut être crucial, que vous essayiez de concevoir ou d\'éviter une grossesse.</string>
-    <string name="text_stress_info_peak_ovulation">Le pic : le jour de l’ovulation</string>
+    <string name="text_stress_info_peak_ovulation">Le pic: le jour de l’ovulation</string>
     <string name="text_stress_info_peak_ovulation_desc">Le point culminant de notre voyage est l’ovulation. Cela se produit au milieu du cycle lorsqu’une augmentation de l’hormone lutéinisante amène votre ovaire à libérer un ovule mature. La libération de l’ovule annonce une augmentation de la température corporelle, confirmant que l’ovulation a bien eu lieu. C’est votre jour le plus fertile, et le corps peut signaler son arrivée par des signes subtils comme un pincement au cœur de la douleur sur un côté de votre abdomen. L’œuf survivra environ 24 heures et s’il n’est pas fécondé, l’anticipation d’un nouveau cycle commence.</string>
     <string name="text_stress_info_cycle_continue">Le cycle continue</string>
     <string name="text_stress_info_cycle_continue_desc">Après l\'ovulation, la phase lutéale prend le relais. Si la grossesse ne se produit pas, les niveaux d’hormones finiront par chuter et le cycle recommencera avec les prochaines règles. Chaque cycle est l’occasion de mieux comprendre votre corps, vous permettant ainsi d’acquérir les connaissances nécessaires pour gérer votre santé de manière proactive.</string>
     <string name="text_luteal_phase">Phase lutéale</string>
-    <string name="text_follicular_duration_desc">Durée : Commence le premier jour de vos règles et dure jusqu\'à l\'ovulation. Que se passe-t-il : Cette phase comprend la période menstruelle et la période précédant l\'ovulation. Cela commence par la desquamation de la muqueuse utérine (phase menstruelle) et se poursuit à mesure que les follicules des ovaires mûrissent, pour aboutir à l\'ovulation.</string>
-    <string name="text_follicular_what_happens_desc">Que se passe-t-il : Cette phase comprend la période menstruelle et la période précédant l\'ovulation. Cela commence par la desquamation de la muqueuse utérine (phase menstruelle) et se poursuit à mesure que les follicules des ovaires mûrissent, pour aboutir à l\'ovulation.</string>
-    <string name="text_luteal_duration_description">Durée : Commence juste après l\'ovulation et se termine au début de vos prochaines règles.</string>
+    <string name="text_follicular_duration_desc">Durée : Commence le premier jour de vos règles et dure jusqu\'à l\'ovulation. Que se passe-t-il: Cette phase comprend la période menstruelle et la période précédant l\'ovulation. Cela commence par la desquamation de la muqueuse utérine (phase menstruelle) et se poursuit à mesure que les follicules des ovaires mûrissent, pour aboutir à l\'ovulation.</string>
+    <string name="text_follicular_what_happens_desc">Que se passe-t-il: Cette phase comprend la période menstruelle et la période précédant l\'ovulation. Cela commence par la desquamation de la muqueuse utérine (phase menstruelle) et se poursuit à mesure que les follicules des ovaires mûrissent, pour aboutir à l\'ovulation.</string>
+    <string name="text_luteal_duration_description">Durée: Commence juste après l\'ovulation et se termine au début de vos prochaines règles.</string>
     <string name="text_luteal_what_happens_description">Que se passe-t-il : Après l’ovulation, le corps se prépare à une éventuelle grossesse. Si la fécondation n’a pas lieu, la phase lutéale se termine par la phase menstruelle du cycle suivant.</string>
     <string name="text_your_goal">Votre objectif</string>
     <string name="text_track_my_period">Suivre mes règles</string>
@@ -1187,7 +1162,7 @@
     <string name="text_symptoms_record">Enregistrement des symptômes</string>
     <string name="text_cycle_details">Détails du cycle</string>
     <string name="text_coming_soon">À venir</string>
-    <string name="text_coming_soon_pregnancy_desc">Des informations sur la grossesse se profilent à l\'horizon.\nCette fonctionnalité sera bientôt disponible,\naméliorant votre expérience de suivi.\nRestez à l\'écoute des mises à jour !</string>
+    <string name="text_coming_soon_pregnancy_desc">Des informations sur la grossesse se profilent à l\'horizon.\nCette fonctionnalité sera bientôt disponible,\naméliorant votre expérience de suivi.\nRestez à l\'écoute des mises à jour!</string>
     <string name="text_notify_me">Prévenez-moi</string>
     <string name="text_fillicular_phase_desc">Cela commence le premier jour de vos règles et dure jusqu’à l’ovulation. Cela commence par la desquamation de la muqueuse utérine (phase menstruelle) et se poursuit à mesure que les follicules des ovaires mûrissent, pour aboutir à l\'ovulation. La température basale du corps reste basse et stable, tandis que les niveaux d\'œstrogènes augmentent progressivement, épaississant la muqueuse endométriale. L\'hormone folliculo-stimulante (FSH) stimule la croissance des follicules ovariens, entraînant une augmentation de la production d\'œstrogènes, tandis que les niveaux d\'hormone lutéinisante (LH) augmentent vers la fin de la phase, déclenchant l\'ovulation. Les niveaux de progestérone restent bas jusqu\'après l\'ovulation. Ces changements hormonaux préparent le corps à une éventuelle conception.</string>
     <string name="text_luteal_phase_desc">Cela commence juste après l’ovulation et se termine au début de vos prochaines règles. La température basale du corps augmente généralement légèrement en raison de l\'augmentation des niveaux de progestérone, signalant la libération d\'un ovule par l\'ovaire. Les niveaux d’œstrogènes restent élevés, maintenant la muqueuse endométriale épaissie en préparation à l’implantation. La progestérone, produite par le corps jaune formé à partir du follicule rompu, atteint son apogée, soutenant la muqueuse utérine et inhibant la poursuite de l\'ovulation. Les taux d’hormone lutéinisante (LH) et d’hormone folliculo-stimulante (FSH) diminuent après l’ovulation. Si la fécondation n’a pas lieu, les niveaux d’hormones diminuent vers la fin de la phase lutéale, conduisant aux menstruations et au début d’un nouveau cycle.</string>
@@ -1203,7 +1178,7 @@
     <string name="text_ai_content_1">Connectez-vous avec Luna AI, votre coach santé intelligent. Posez des questions et obtenez des commentaires personnalisés sur vos indicateurs de santé. Luna AI guide votre parcours de bien-être avec des informations pratiques et exploitables.</string>
     <string name="text_ai_content_2">Lorsque vous êtes dépassé ou fatigué, Luna AI aide à identifier les facteurs affectant votre bien-être, en offrant des conseils personnalisés pour améliorer le repos et gérer le stress, maintenir l\'équilibre et la résilience.</string>
     <string name="text_ai_content_3">Préparez-vous à votre prochain défi sportif avec Luna AI en tant que coach personnel et nutritionniste.</string>
-    <string name="text_ai_error_message">Désolé %s, mes circuits doivent être déformés ! Reprenons cela par moi.</string>
+    <string name="text_ai_error_message">Désolé %s, mes circuits doivent être déformés! Reprenons cela par moi.</string>
     <string name="text_got_your_period">Tu as tes règles ?</string>
     <string name="text_averages_are_based_on_last_6_cycles">Les moyennes sont basées sur les 6 derniers cycles</string>
     <string name="text_contraceptives_message">Les hormones, comme tout autre contraceptif, peuvent affecter votre variation naturelle de température.</string>
@@ -1215,10 +1190,10 @@
     <string name="text_sleep_performance">Performance du sommeil</string>
     <string name="text_hour_vs_need">Heure vs besoin</string>
     <string name="text_restorative_sleep">Un sommeil réparateur</string>
-    <string name="text_profond">profond</string>
-    <string name="text_rem">rem</string>
-    <string name="text_besoin">besoin</string>
-    <string name="text_heures">heures</string>
+    <string name="text_deep">profond</string>
+    <string name="text_rem">Rem</string>
+    <string name="text_need">besoin</string>
+    <string name="text_hours">heures</string>
     <string name="text_desc_msg">Ces mesures sont évaluées pendant que vous dormez la nuit. Mesurer pendant cette période réduit le bruit dans vos données pour vous présenter des mesures plus précises</string>
     <string name="text_extra_sleep_need">Besoin de sommeil supplémentaire</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Votre moment idéal au lit ce soir est</string>
@@ -1247,28 +1222,28 @@
     <string name="text_set_up_alarm">Configurer l\'alarme</string>
     <string name="text_system_sounds">Sons du système</string>
     <string name="text_hra_1">Fréquence cardiaque au repos (RHR) : fréquence cardiaque pendant le sommeil, généralement entre 60 et 100 BPM. Un RHR inférieur indique souvent une meilleure santé cardiovasculaire. La surveillance de votre RHR au fil du temps peut aider à détecter les changements de condition physique et à identifier les problèmes de santé potentiels.</string>
-    <string name="text_hra_2">Fréquence cardiaque faible (LHR) : inférieure à 60 BPM, courante chez les athlètes dotés d\'un cœur efficace. Une bradycardie, ou une fréquence cardiaque anormalement basse, peut indiquer une excellente forme cardiovasculaire ou des problèmes de santé sous-jacents nécessitant des soins médicaux.</string>
-    <string name="text_hra_3">Fréquence cardiaque maximale (FCM) : La fréquence cardiaque la plus élevée pendant l\'exercice, estimée à 220 moins votre âge. Cette mesure est cruciale pour concevoir des routines d’entraînement personnalisées et sûres.</string>
-    <string name="text_hra_4">Comprendre les zones de fréquence cardiaque d\'entraînement :</string>
+    <string name="text_hra_2">Fréquence cardiaque faible (LHR): inférieure à 60 BPM, courante chez les athlètes dotés d\'un cœur efficace. Une bradycardie, ou une fréquence cardiaque anormalement basse, peut indiquer une excellente forme cardiovasculaire ou des problèmes de santé sous-jacents nécessitant des soins médicaux.</string>
+    <string name="text_hra_3">Fréquence cardiaque maximale (FCM): La fréquence cardiaque la plus élevée pendant l\'exercice, estimée à 220 moins votre âge. Cette mesure est cruciale pour concevoir des routines d’entraînement personnalisées et sûres.</string>
+    <string name="text_hra_4">Comprendre les zones de fréquence cardiaque d\'entraînement:</string>
     <string name="text_hra_5">Zone 1 (50-60 % MHR) : Cardio léger, comme la marche rapide. Cette zone contribue à améliorer l’endurance de base et favorise la combustion des graisses.</string>
-    <string name="text_hra_6">Zone 2 (60-70 % MHR) : Améliore la santé cardiovasculaire et augmente l\'endurance, comme le jogging ou le cyclisme régulier.</string>
-    <string name="text_hra_7">Zone 3 (70-80 % MHR) : Améliore la forme aérobique et l\'endurance, comme la course à pied ou le cyclisme rapide.</string>
+    <string name="text_hra_6">Zone 2 (60-70 % MHR) : Améliore la santé cardiovasculaire et augmente l\'endurance, comme le jogging ou le cyclisme régulier.</string>
+    <string name="text_hra_7">Zone 3 (70-80 % MHR) : Améliore la condition aérobique et l\'endurance, comme la course à pied ou le cyclisme rapide.</string>
     <string name="text_hra_8">Zone 4 (80-90 % MHR) : augmente les performances et la vitesse maximales, idéale pour l\'entraînement fractionné de haute intensité (HIIT).</string>
     <string name="text_hra_9">Zone 5 (90-100 % MHR) : Effort maximum pour des impulsions courtes, utilisé lors de sprints ou d\'entraînements de très haute intensité.</string>
-    <string name="text_hra_10">Zone réparatrice/indice de récupération : pendant le sommeil profond, la fréquence cardiaque descend à son plus bas niveau, favorisant ainsi la récupération. Cette phase est essentielle à la réparation musculaire, à la fonction immunitaire et à la récupération globale.</string>
-    <string name="text_hra_10_h">Zone de restauration/indice de récupération :</string>
-    <string name="text_hra_9_h">Zone 5 (90-100 % MHR) :</string>
-    <string name="text_hra_8_h">Zone 4 (80-90 % MHR) :</string>
-    <string name="text_hra_7_h">Zone 3 (70-80% MHR) :</string>
-    <string name="text_hra_6_h">Zone 2 (60-70% MHR) :</string>
-    <string name="text_hra_5_h">Zone 1 (50-60 % MHR) :</string>
-    <string name="text_hra_4_h">Comprendre les zones de fréquence cardiaque d\'entraînement :</string>
-    <string name="text_hra_3_h">Fréquence cardiaque maximale (FCM) :</string>
-    <string name="text_hra_2_h">Faible fréquence cardiaque (LHR) :</string>
-    <string name="text_hra_1_h">Fréquence cardiaque au repos (RHR) :</string>
+    <string name="text_hra_10">Zone réparatrice/indice de récupération: pendant le sommeil profond, la fréquence cardiaque descend à son plus bas niveau, favorisant ainsi la récupération. Cette phase est essentielle à la réparation musculaire, à la fonction immunitaire et à la récupération globale.</string>
+    <string name="text_hra_10_h">Zone de restauration/indice de récupération:</string>
+    <string name="text_hra_9_h">Zone 5 (90-100% MHR):</string>
+    <string name="text_hra_8_h">Zone 4 (80-90% MHR):</string>
+    <string name="text_hra_7_h">Zone 3 (70-80% MHR):</string>
+    <string name="text_hra_6_h">Zone 2 (60-70% MHR):</string>
+    <string name="text_hra_5_h">Zone 1 (50-60% MHR):</string>
+    <string name="text_hra_4_h">Comprendre les zones de fréquence cardiaque d\'entraînement:</string>
+    <string name="text_hra_3_h">Fréquence cardiaque maximale (FCM):</string>
+    <string name="text_hra_2_h">Faible fréquence cardiaque (LHR):</string>
+    <string name="text_hra_1_h">Fréquence cardiaque au repos (RHR):</string>
     <string name="text_hra1_title">Termes généraux relatifs à la fréquence cardiaque</string>
     <string name="text_hra1_head_1">Votre cœur bat environ 100 000 fois par jour, ajustant son rythme en fonction de votre activité et de vos émotions. La fréquence cardiaque, mesurée en battements par minute (BPM), offre des informations précieuses sur la santé.</string>
-    <string name="text_hra1_head_2">Le Luna Ring suit votre fréquence cardiaque 24h/24 et 7j/7 pour vous fournir des informations sur votre niveau de forme physique et votre état de santé général. Les mesures de fréquence cardiaque sont prises toutes les 5 minutes en mode normal et toutes les 30 secondes dans la fonction « enregistrer un entraînement » pendant que vous portez la bague. Il fournit des données détaillées, vous aidant à prendre des décisions éclairées concernant vos routines de santé et de remise en forme.</string>
+    <string name="text_hra1_head_2">Le Luna Ring suit votre fréquence cardiaque 24h/24 et 7j/7 pour vous fournir des informations sur votre niveau de forme physique et votre état de santé général. Les mesures de fréquence cardiaque sont prises toutes les 5 minutes en mode normal et toutes les 30 secondes dans la fonction «enregistrer un entraînement» pendant que vous portez la bague. Il fournit des données détaillées, vous aidant à prendre des décisions éclairées concernant vos routines de santé et de remise en forme.</string>
     <string name="text_hra2_title">Fréquence cardiaque normale pour mon âge</string>
     <string name="text_hra2_1">Votre fréquence cardiaque mesure la vitesse à laquelle votre cœur bat pour pomper le sang dans tout votre corps. Cette mesure peut varier au cours de la journée en fonction de vos activités, de votre santé et d\'autres facteurs physiologiques et constitue un bon indicateur de l\'intensité du travail de votre cœur.</string>
     <string name="normal_heart_rates">Fréquence cardiaque normale</string>
@@ -1279,17 +1254,17 @@
     <string name="text_hra2_5">Vous pouvez améliorer votre fréquence cardiaque quel que soit votre âge. L\'exercice régulier, en particulier les activités aérobiques comme la course ou le vélo, renforce votre système cardiovasculaire, mais le maintien d\'un mode de vie sain joue également un rôle important. Rester hydraté, limiter les stimulants comme la caféine, suivre une alimentation équilibrée et bénéficier d’un sommeil de qualité sont tous des amis de votre cœur.</string>
     <string name="text_hra2_6">Maintenir une fréquence cardiaque saine implique une combinaison d’exercice, d’une bonne nutrition et d’une bonne hygiène du sommeil. Une activité physique régulière, notamment des exercices aérobiques comme la course ou le vélo, renforce votre système cardiovasculaire. Il est également important de rester hydraté, de limiter les stimulants comme la caféine et de suivre une alimentation équilibrée, riche en fruits, légumes et grains entiers. Un sommeil de qualité est essentiel à la santé cardiaque, car il permet à votre corps de récupérer et de se rajeunir. Surveiller votre fréquence cardiaque avec des appareils comme le Luna Ring peut fournir des informations précieuses et vous aider à prendre des décisions éclairées concernant votre santé.</string>
     <string name="what_are_heart_rate_zones">Que sont les zones de fréquence cardiaque ?</string>
-    <string name="text_hra3_1">Votre cœur bat environ 100 000 fois par jour, ajustant son rythme en fonction de votre activité et de vos émotions. La fréquence cardiaque, mesurée en battements par minute (BPM), offre une santé précieuse. Vous êtes-vous déjà demandé si une fréquence cardiaque vigoureuse pendant l\'exercice était une bonne chose ? La réponse, comme pour la plupart des choses dans la vie, est « ça dépend ». Voici un guide pour vous aider à comprendre vos zones de fréquence cardiaque et comment elles peuvent guider vos entraînements pour atteindre vos objectifs de remise en forme.</string>
+    <string name="text_hra3_1">Votre cœur bat environ 100 000 fois par jour, ajustant son rythme en fonction de votre activité et de vos émotions. La fréquence cardiaque, mesurée en battements par minute (BPM), offre une santé précieuse. Vous êtes-vous déjà demandé si une fréquence cardiaque vigoureuse pendant l\'exercice était une bonne chose ? La réponse, comme pour la plupart des choses dans la vie, est«ça dépend». Voici un guide pour vous aider à comprendre vos zones de fréquence cardiaque et comment elles peuvent guider vos entraînements pour atteindre vos objectifs de remise en forme.</string>
     <string name="why_does_heart_rate_matter">Pourquoi la fréquence cardiaque est-elle importante ?</string>
     <string name="text_hra3_2">La fréquence cardiaque agit comme un mécanisme de biofeedback pendant l’exercice, indiquant les niveaux d’intensité. Comprendre votre fréquence cardiaque permet d\'optimiser les entraînements, améliorant ainsi l\'efficacité et la sécurité.</string>
     <string name="heart_rate_zones_decoded">Zones de fréquence cardiaque décodées</string>
-    <string name="text_hra3_3">Il existe différentes « zones » en fonction de votre fréquence cardiaque maximale (FCM). Il s’agit du nombre le plus élevé de battements par minute que votre cœur peut atteindre pendant l’exercice. Un moyen simple d\'estimer votre FCM consiste à soustraire votre âge de 220. Voici une répartition des zones de fréquence cardiaque et ce qu\'elles ressentent :</string>
-    <string name="text_hra3_4">Une autre zone que vous devez comprendre est la zone de récupération. Une fois que vous avez fini de travailler, votre rythme cardiaque revient finalement à la valeur de base. En d’autres termes, la récupération de la fréquence cardiaque est une mesure de la capacité de votre cœur à retrouver le rythme de pompage du sang auquel il est habitué lorsque vous êtes au repos.* La répartition âge par âge de la récupération de la fréquence cardiaque ressemble à ceci :</string>
+    <string name="text_hra3_3">Il existe différentes «zones» en fonction de votre fréquence cardiaque maximale (FCM). Il s’agit du nombre le plus élevé de battements par minute que votre cœur peut atteindre pendant l’exercice. Un moyen simple d\'estimer votre FCM consiste à soustraire votre âge de 220. Voici une répartition des zones de fréquence cardiaque et ce qu\'elles ressentent:</string>
+    <string name="text_hra3_4">Une autre zone que vous devez comprendre est la zone de récupération. Une fois que vous avez fini de travailler, votre rythme cardiaque revient finalement à la valeur de base. En d’autres termes, la récupération de la fréquence cardiaque est une mesure de la capacité de votre cœur à retrouver le rythme de pompage du sang auquel il est habitué lorsque vous êtes au repos.* La répartition âge par âge de la récupération de la fréquence cardiaque ressemble à ceci:</string>
     <string name="why_do_you_need_a_high_heart_rate_workout">Pourquoi avez-vous besoin d’un entraînement à fréquence cardiaque élevée ?</string>
     <string name="text_hra3_5">L’exercice de haute intensité offre de nombreux avantages comme une meilleure santé cardiovasculaire, une gestion du poids et un développement musculaire. Mais si vous avez des antécédents de maladie cardiaque, d\'hypertension artérielle, d\'angine de poitrine ou d\'arythmies, ou si vous êtes enceinte ou âgée, consultez votre médecin avant d\'effectuer tout exercice de haute intensité. Les activités de très haute intensité, si elles ne sont pas pratiquées avec modération, peuvent augmenter le risque de fibrillation auriculaire et provoquer un accident vasculaire cérébral*.</string>
     <string name="the_power_of_combining_hr_zones">Le pouvoir de combiner les zones horaires</string>
     <string name="text_hra3_6">
-<![CDATA[ Les meilleurs résultats viennent du mélange des choses. Votre Luna Ring peut suivre votre fréquence cardiaque lors de différentes activités. Visez un équilibre entre des entraînements de haute intensité (> 80 % MHR) et des activités de faible intensité (<70 % MHR). Même un exercice de faible intensité est bénéfique pour votre cœur, réduit le stress et convient à tous les niveaux de forme physique.\n\n N\'oubliez pas que l\'exercice est un voyage, pas une destination. Écoutez votre corps, trouvez ce qui fonctionne pour vous et utilisez le Luna Ring pour optimiser votre entraînement et atteindre vos objectifs de remise en forme. ]]>
+<![CDATA[ Les meilleurs résultats viennent du mélange des choses. Votre Luna Ring peut suivre votre fréquence cardiaque lors de différentes activités. Visez un équilibre entre des entraînements de haute intensité (> 80% MHR) et des activités de faible intensité (<70% MHR). Même les exercices de faible intensité sont bénéfiques pour votre cœur, réduisent le stress et conviennent à tous les niveaux de forme physique.\n\n N\'oubliez pas que l\'exercice est un voyage, pas une destination. Écoutez votre corps, trouvez ce qui fonctionne pour vous et utilisez le Luna Ring pour optimiser votre entraînement et atteindre vos objectifs de remise en forme. ]]>
 </string>
     <string name="text_hra4_1">Votre fréquence cardiaque pendant votre sommeil est un indicateur de votre niveau de repos. Lorsque vous dormez, votre fréquence cardiaque diminue et crée des schémas uniques tout au long de la nuit. Le Luna Ring suit ces modèles uniques pour vous aider à identifier les domaines à améliorer. Voici les quatre courbes de fréquence cardiaque pendant le sommeil que vous devez connaître :</string>
     <string name="the_crescent_moon">Le croissant de lune</string>
@@ -1330,9 +1305,9 @@
     <string name="text_ring_not_connecting">La bague ne se connecte pas ?</string>
     <string name="text_enable_cycle_tracker">Activer le suivi de cycle</string>
     <string name="text_enable_cycle_tracker_message">Activez le suivi du cycle pour comprendre votre cycle menstruel et savoir quand vos prochaines règles ou ovulation pourraient commencer.</string>
-    <string name="text_find_ring_message_location">Pour utiliser la fonctionnalité « Find My Ring », nous avons besoin de l\'autorisation d\'accéder à votre position en arrière-plan. Cela nous permet de fournir un suivi en temps réel de votre bague Luna chaque fois qu\'elle est déconnectée de votre application Luna. Acceptez-vous d\'autoriser l\'application Luna à accéder à votre position chaque fois que l\'anneau Luna est déconnecté ?</string>
-    <string name="text_enable_find_my_ring">Activer « Trouver ma bague »</string>
-    <string name="text_dash_find_ring_message">Autorisez Luna Ring à accéder à votre position pour activer « Find My Ring ».</string>
+    <string name="text_find_ring_message_location">Pour utiliser la fonctionnalité «Find My Ring», nous avons besoin de l\'autorisation d\'accéder à votre position en arrière-plan. Cela nous permet de fournir un suivi en temps réel de votre bague Luna chaque fois qu\'elle est déconnectée de votre application Luna. Acceptez-vous d\'autoriser l\'application Luna à accéder à votre position chaque fois que l\'anneau Luna est déconnecté?</string>
+    <string name="text_enable_find_my_ring">Activer «Trouver ma bague»</string>
+    <string name="text_dash_find_ring_message">Autorisez Luna Ring à accéder à votre position pour activer «Find My Ring».</string>
     <string name="text_turn_on_location_permissions">Activer les autorisations de localisation</string>
     <string name="title_activity_compose">ComposeActivité</string>
     <string name="text_please_wait">S\'il vous plaît, attendez</string>
@@ -1349,9 +1324,8 @@
     <string name="text_ring_purchased">Bague achetée</string>
     <string name="text_ring_delivered">Bague livrée</string>
     <string name="text_pending">En attente</string>
-    <string name="text_ongoing_workout_detected">Entraînement en cours détecté !</string>
-    <string name="text_ongoing_message">Il semble que le dernier entraînement ne s\'est pas terminé correctement.\nVous voulez le terminer et repartir à zéro ?</string>
-    <string name="text_end_start_new">
-<![CDATA[ Fin et début nouveau ]]>
+    <string name="text_ongoing_workout_detected">Entraînement en cours détecté!</string>
+    <string name="text_ongoing_message">Il semble que le dernier entraînement ne s\'est pas terminé correctement.\nVous voulez le terminer et repartir à zéro?</string>
+    <string name="text_end_start_new"><![CDATA[ Fin et début nouveau ]]>
 </string>
 </resources>

@@ -55,6 +55,10 @@ class OMyProfileFragment :
             navigate(R.id.myReferralsFragment)
         }*/
 
+        binding.rowSelectLanguage.setOnClickListener {
+            navigate(R.id.languageFragment, bundleOf("hideContinue" to true))
+        }
+
         binding.lytReferralAvailable.ivCross.setOnClickListener {
             viewModel.onReferralCloseClicked()
         }

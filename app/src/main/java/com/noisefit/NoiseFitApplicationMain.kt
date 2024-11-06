@@ -22,16 +22,19 @@ import com.moengage.core.config.NotificationConfig
 import com.moengage.core.config.PushKitConfig
 import com.moengage.core.ktx.MoEngageBuilderKtx
 import com.moengage.pushbase.MoEPushHelper
+import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.SplashActivity
+import com.noisefit.util.ApplicationUtils
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.oreo.util.MyActivityLifecycleCallbacks
+import com.oreo.util.language.LocaleHelper
 
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
@@ -54,6 +57,12 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
 
     companion object {
         var context: Application? = null
+
+        var appLanguage: AppLanguage = ApplicationUtils.getDefaultLanguage()
+        fun updateUserLanguage(language: AppLanguage) {
+            appLanguage = language
+            LocaleHelper.setLocale(context!!, language.languageCode)
+        }
     }
 
     override fun onCreate() {
@@ -61,17 +70,18 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
         context = this
+        val savedLanguage = localDataStore.getSelectedAppLanguage()
+        if (savedLanguage != null) {
+            appLanguage = ApplicationUtils.getAppLanguageByCode(savedLanguage)
+        }
         registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager))
         FileLogsUtils.initLogs(applicationContext)
         AppLogs.initAppLogs(applicationContext)
-        setDefaultLanguage(this)
+        //setDefaultLanguage(this)
         initMoEngage()
-        // TODO: Please change with your partner name.
-        // Make sure that all the letters are lowercase.
 
         //freshchat initialization
         initialiseFreshChat()
-
 
         if (BuildConfig.DEBUG) {
             ANRWatchDog().setIgnoreDebugger(true)
@@ -96,7 +106,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             MoEngageBuilderKtx(
                 application = this,
                 appId = "VWZYK0ZFPRQZM6G2WG9YBV47",
-                dataCenter= DataCenter.DATA_CENTER_3,
+                dataCenter = DataCenter.DATA_CENTER_3,
                 notificationConfig = NotificationConfig(
                     smallIcon = R.drawable.icon_transparent,
                     largeIcon =
@@ -109,7 +119,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
                 fcmConfig = FcmConfig(true),
                 pushKitConfig = PushKitConfig(true),
                 geofenceConfig = GeofenceConfig(true),
-                logConfig = LogConfig(LogLevel.DEBUG,true)
+                logConfig = LogConfig(LogLevel.DEBUG, true)
             ).build()
         )
 
@@ -128,17 +138,8 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .build()
 
-
-
-    fun setDefaultLanguage(context: Context) {
-        val locale = Locale(Locale.ENGLISH.language)
-        Locale.setDefault(locale)
-        val config = android.content.res.Configuration()
-        config.locale = locale
-        context.resources.updateConfiguration(
-            config,
-            context.resources.displayMetrics
-        )
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(LocaleHelper.onAttach(base!!))
     }
 
 }
