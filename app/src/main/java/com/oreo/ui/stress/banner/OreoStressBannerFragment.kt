@@ -63,7 +63,7 @@ class OreoStressBannerFragment() :
     }
 
     override fun initListener() {
-        binding.tvLunaAi.setOnClickListener {
+        binding.lytChatCta.root.setOnClickListener {
             listener?.onAiClicked()
         }
     }

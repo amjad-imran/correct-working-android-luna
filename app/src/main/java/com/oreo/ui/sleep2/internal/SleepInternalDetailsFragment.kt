@@ -379,19 +379,20 @@ class SleepInternalDetailsFragment :
 
             val displayValue =
                 if (viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
+                    val isDeviationSelected = viewModel.isDeviationSelected
 
                     if (sharedViewModel.sessionManager.isMetric()) {
                         val convertedValue =
                             AppConversionUtils.fahrenheitToCelsius(avgValue)
                         String.format(
                             locale = Locale.US,
-                            "${if(convertedValue>0)"+" else ""}%.1f",
+                            "${if(convertedValue>0 && isDeviationSelected)"+" else ""}%.1f",
                             convertedValue
                         )
                     } else {
                         String.format(
                             locale = Locale.US,
-                            "${if(avgValue>0)"+" else ""}%.1f",
+                            "${if(avgValue>0 && isDeviationSelected)"+" else ""}%.1f",
                             avgValue
                         )
                     }
