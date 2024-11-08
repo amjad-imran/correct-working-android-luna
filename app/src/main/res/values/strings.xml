@@ -1404,5 +1404,10 @@
     <string name="text_hrv_balance">HRV balance</string>
     <string name="text_recovery_index">Recovery index</string>
     <string name="text_sleep_regularity">Sleep regularity</string>
+    <string name="text_stay_active">Stay active</string>
+    <string name="text_move_every_hour">Move every hour</string>
+    <string name="text_calorie_goal">Calorie goal</string>
+    <string name="text_training_frequency">Training frequency</string>
+    <string name="text_training_volume">Training volume</string>
 
 </resources>

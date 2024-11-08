@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -39,6 +40,7 @@ class OreoActivityViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider,
     val dayTimeDataConvertor: OreoDayTimeDataConvertor
 ) : BaseViewModel() {
 
@@ -252,7 +254,7 @@ class OreoActivityViewModel @Inject constructor(
 
             result.add(
                 Contributors(
-                    title = "Stay active",
+                    title = resourcesProvider.getString(R.string.text_stay_active),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -263,7 +265,7 @@ class OreoActivityViewModel @Inject constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Stay active",
+                    title = resourcesProvider.getString(R.string.text_stay_active),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
@@ -280,7 +282,7 @@ class OreoActivityViewModel @Inject constructor(
             val warnings = moveEveryHour.value ?: 0
             result.add(
                 Contributors(
-                    title = "Move every hour",
+                    title = resourcesProvider.getString(R.string.text_move_every_hour),
                     leftText = "$warnings warning${if (warnings > 1) "s" else ""}",
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -291,7 +293,7 @@ class OreoActivityViewModel @Inject constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Move every hour",
+                    title = resourcesProvider.getString(R.string.text_move_every_hour),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
@@ -307,7 +309,7 @@ class OreoActivityViewModel @Inject constructor(
 
             result.add(
                 Contributors(
-                    title = "Calorie goal",
+                    title = resourcesProvider.getString(R.string.text_calorie_goal),
                     leftText = "${caloriesGoal.value ?: 0}%",
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -318,7 +320,7 @@ class OreoActivityViewModel @Inject constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Calorie goal",
+                    title = resourcesProvider.getString(R.string.text_calorie_goal),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
@@ -335,7 +337,7 @@ class OreoActivityViewModel @Inject constructor(
 
             result.add(
                 Contributors(
-                    title = "Training frequency",
+                    title = resourcesProvider.getString(R.string.text_training_frequency),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -346,7 +348,7 @@ class OreoActivityViewModel @Inject constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Training frequency",
+                    title = resourcesProvider.getString(R.string.text_training_frequency),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
@@ -362,7 +364,7 @@ class OreoActivityViewModel @Inject constructor(
             val leftText = trainingVolume.text
             result.add(
                 Contributors(
-                    title = "Training volume",
+                    title = resourcesProvider.getString(R.string.text_training_volume),
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -373,7 +375,7 @@ class OreoActivityViewModel @Inject constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Training volume",
+                    title = resourcesProvider.getString(R.string.text_training_volume),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
