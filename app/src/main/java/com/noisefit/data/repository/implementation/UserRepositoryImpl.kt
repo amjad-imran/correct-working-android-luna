@@ -184,4 +184,12 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun saveAppLanguage(): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.saveAppLanguage(
+                "${BuildConfig.BASE_URL_NEW}/user_detail/language/change"
+            )
+        }
+    }
+
 }

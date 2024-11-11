@@ -273,6 +273,11 @@ interface NetworkService {
         @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponse<List<Interest>>
 
+    @POST
+    suspend fun saveAppLanguage(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
 
     /**
      * ---------------------------------------------------------------------------------

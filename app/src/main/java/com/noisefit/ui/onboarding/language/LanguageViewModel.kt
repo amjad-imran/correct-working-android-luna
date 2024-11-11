@@ -2,18 +2,30 @@ package com.noisefit.ui.onboarding.language
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.model.language.AppLanguage
+import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.AppRepository
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.ui.onboarding.auth.AuthMode
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LanguageViewModel @Inject constructor(
-    val localDataStore: DataStoredInterface
+    val localDataStore: DataStoredInterface,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     var hideContinue: Boolean = false
@@ -38,9 +50,43 @@ class LanguageViewModel @Inject constructor(
     fun updateSelectedLanguage(language: AppLanguage) {
         localDataStore.saveSelectedAppLanguage(language.languageCode)
         NoiseFitApplicationMain.updateUserLanguage(language)
+        viewModelScope.launch {
+            userRepository.saveAppLanguage().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-        _languageUpdated.postValue(Event(true))
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        updateSelectedLanguage(language)
+                                    }
+
+                                    override fun no() {
+                                        _languageUpdated.postValue(Event(true))
+                                    }
+                                }
+                        })
+
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let {
+                            _languageUpdated.postValue(Event(true))
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

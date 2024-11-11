@@ -48,5 +48,8 @@ interface UserRepository {
     suspend fun getRingLastLocation(mac:String): Flow<Resource<BaseApiResponse<RingLocationData>>>
     suspend fun setRingLastLocation(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun saveAppLanguage(): Flow<Resource<BaseApiResponse<Any>>>
+
+
 
 }
