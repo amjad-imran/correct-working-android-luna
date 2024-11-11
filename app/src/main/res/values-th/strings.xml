@@ -17,9 +17,7 @@
     <string name="text_health_fitness">ฟิตเนสและสุขภาพ</string>
     <string name="text_today">วันนี้</string>
     <string name="text_warranty_registration">การลงทะเบียนการรับประกัน</string>
-    <string name="text_terms_and_conditions">
-<![CDATA[ ข้อกำหนดและเงื่อนไข ]]>
-</string>
+    <string name="text_terms_and_conditions"><![CDATA[ ข้อกำหนดและเงื่อนไข ]]></string>
     <string name="text_terms_and_condition_new">ข้อกำหนดและเงื่อนไข</string>
     <string name="text_privacy_policy">นโยบายความเป็นส่วนตัว</string>
     <string name="text_idle_alert">การแจ้งเตือนที่ไม่ได้ใช้งาน</string>

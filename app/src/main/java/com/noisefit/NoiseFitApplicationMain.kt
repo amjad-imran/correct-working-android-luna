@@ -4,6 +4,7 @@ package com.noisefit
 import android.app.Application
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
@@ -33,6 +34,7 @@ import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
+import com.noisefit_commans.utils.LOGS
 import com.oreo.util.MyActivityLifecycleCallbacks
 import com.oreo.util.language.LocaleHelper
 
@@ -70,9 +72,15 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
         context = this
+
         val savedLanguage = localDataStore.getSelectedAppLanguage()
         if (savedLanguage != null) {
             appLanguage = ApplicationUtils.getAppLanguageByCode(savedLanguage)
+        } else {
+            val phoneLanguage = Resources.getSystem().configuration.locale.language/*Locale.getDefault().language*/
+            val language = ApplicationUtils.getAppLanguageByCode(phoneLanguage)
+            appLanguage = language
+            localDataStore.saveSelectedAppLanguage(language.languageCode)
         }
         registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager))
         FileLogsUtils.initLogs(applicationContext)
