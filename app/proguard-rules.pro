@@ -48,6 +48,8 @@
 -keep class com.oreo.data.model.** { *; }
 -keep public enum com.oreo.** { *; }
 
+-keep class com.noisefit.data.model.** { *; }
+
 #Commons
 -keep class com.noisefit_commans.models.** { *; }
 -keep class com.noisefit_commans.response.** { *; }
@@ -106,3 +108,5 @@
 -dontwarn com.huawei.hms.api.HuaweiApiAvailability
 -dontwarn com.huawei.hms.push.HmsMessageService
 -dontwarn com.huawei.hms.push.RemoteMessage
+
+-dontwarn com.fasterxml.jackson.databind.ext.Java7SupportImpl
