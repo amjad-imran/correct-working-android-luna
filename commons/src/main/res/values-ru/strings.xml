@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">common</string>
+    <string name="text_please_wait">Пожалуйста, подождите</string>
+    <string name="text_disabled">Неполноценный</string>
+    <string name="text_enabled">Включено</string>
+    <string name="text_unpair_device">Отсоединить устройство</string>
+    <string name="delete_account">Удалить аккаунт</string>
+    <string name="text_delete_account">Удалить аккаунт</string>
+    <string name="logout">Выход из системы</string>
+    <string name="text_customer_support">Поддержка клиентов</string>
+    <string name="text_about">О</string>
+    <string name="text_rate_us">Оцените нас</string>
+    <string name="text_help_and_support">Часто задаваемые вопросы</string>
+    <string name="text_my_goals">Ваши цели</string>
+    <string name="text_awake">Бодрствующий</string>
+    <string name="text_rem">Рем</string>
+    <string name="text_light">Свет</string>
+    <string name="text_deep">Глубокий</string>
+    <string name="text_high">Высокий</string>
+    <string name="text_med">Мед</string>
+    <string name="text_low">Низкий</string>
+
+
+</resources>

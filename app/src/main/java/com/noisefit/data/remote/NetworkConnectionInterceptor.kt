@@ -20,6 +20,7 @@ import com.noisefit.data.safeApiCallFlow
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.ui.onboarding.OnBoardActivity
+import com.noisefit.util.ApplicationUtils
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -211,7 +212,8 @@ class NetworkConnectionInterceptor(
             addHeader("content-type", "application/json")
             addHeader("version", BuildConfig.VERSION_CODE.toString())
             addHeader("version-name", BuildConfig.VERSION_NAME)
-
+            val appLanguage = localDataStore.getSelectedAppLanguage()?:ApplicationUtils.getDefaultLanguage().languageCode
+            addHeader("accept-language", appLanguage)
             addHeader("user-agent", getUserAgent())
             addHeader("device-model", Build.MODEL)
             addHeader("device-manufacturer", Build.BRAND)

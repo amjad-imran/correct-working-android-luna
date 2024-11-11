@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">common</string>
+    <string name="text_please_wait">Por favor, aguarde</string>
+    <string name="text_disabled">Desabilitado</string>
+    <string name="text_enabled">Habilitado</string>
+    <string name="text_unpair_device">Desemparelhar dispositivo</string>
+    <string name="delete_account">Excluir conta</string>
+    <string name="text_delete_account">Excluir conta</string>
+    <string name="logout">Sair</string>
+    <string name="text_customer_support">Suporte ao cliente</string>
+    <string name="text_about">Sobre</string>
+    <string name="text_rate_us">Avalie-nos</string>
+    <string name="text_help_and_support">Perguntas frequentes</string>
+    <string name="text_my_goals">Seus objetivos</string>
+    <string name="text_awake">Acordado</string>
+    <string name="text_rem">Rem</string>
+    <string name="text_light">Luz</string>
+    <string name="text_deep">Profundo</string>
+    <string name="text_high">Alto</string>
+    <string name="text_med">Médio</string>
+    <string name="text_low">Baixo</string>
+
+
+</resources>

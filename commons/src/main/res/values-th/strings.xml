@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">common</string>
+    <string name="text_please_wait">โปรดรอ</string>
+    <string name="text_disabled">พิการ</string>
+    <string name="text_enabled">เปิดใช้งานแล้ว</string>
+    <string name="text_unpair_device">เลิกจับคู่อุปกรณ์</string>
+    <string name="delete_account">ลบบัญชี</string>
+    <string name="text_delete_account">ลบบัญชี</string>
+    <string name="logout">ออกจากระบบ</string>
+    <string name="text_customer_support">การสนับสนุนลูกค้า</string>
+    <string name="text_about">เกี่ยวกับ</string>
+    <string name="text_rate_us">ให้คะแนนเรา</string>
+    <string name="text_help_and_support">คำถามที่พบบ่อย</string>
+    <string name="text_my_goals">เป้าหมายของคุณ</string>
+    <string name="text_awake">ตื่น</string>
+    <string name="text_rem">เรม</string>
+    <string name="text_light">แสงสว่าง</string>
+    <string name="text_deep">ลึก</string>
+    <string name="text_high">สูง</string>
+    <string name="text_med">ยา</string>
+    <string name="text_low">ต่ำ</string>
+
+
+</resources>
