@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.yearMonth
@@ -254,7 +255,7 @@ class SleepHourVsNeedChartWeekInternal constructor(context: Context?, attrs: Att
         }
 
         if (dataSet.isEmpty()) {
-            val noDataText = "No record available"
+            val noDataText = context.getString(R.string.text_no_record_available)
             val textBounds = Rect()
             xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 

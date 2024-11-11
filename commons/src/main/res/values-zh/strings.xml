@@ -1,7 +1,5 @@
 <resources>
-
-
-    <string name="app_name">常见的</string>
+    <string name="app_name">common</string>
     <string name="text_please_wait">请稍等</string>
     <string name="text_disabled">残疾人</string>
     <string name="text_enabled">启用</string>

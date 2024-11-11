@@ -71,7 +71,7 @@ class OAboutDeviceFragment :
     private fun generateData(connectedDevice: ColorFitDevice): List<AboutDeviceData> {
         val response = ArrayList<AboutDeviceData>()
 
-        response.add(AboutDeviceData("Generation", "1"))
+        response.add(AboutDeviceData(getString(R.string.text_generation), "1"))
 
 
         val size = if (connectedDevice.ringInfo?.size != null) {
@@ -79,11 +79,11 @@ class OAboutDeviceFragment :
         } else {
             "-"
         }
-        response.add(AboutDeviceData("Colour", connectedDevice.ringInfo?.color ?: "-"))
-        response.add(AboutDeviceData("Size", size))
+        response.add(AboutDeviceData(getString(R.string.text_colour), connectedDevice.ringInfo?.color ?: "-"))
+        response.add(AboutDeviceData(getString(R.string.text_size), size))
         response.add(
             AboutDeviceData(
-                "Serial number",
+                getString(R.string.text_serial_number),
                 if (connectedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
                     val sNo = updateViewModel.watchDataStore.getSerialNo()
                     sNo ?: "-"
@@ -93,10 +93,10 @@ class OAboutDeviceFragment :
             )
         )
 
-        response.add(AboutDeviceData("MAC address", connectedDevice.address ?: ""))
+        response.add(AboutDeviceData(getString(R.string.text_mac_address), connectedDevice.address ?: ""))
         response.add(
             AboutDeviceData(
-                "Version",
+                getString(R.string.text_version),
                 "${if (WatchInfoGlobals.firmwareVersionRing != null) "${WatchInfoGlobals.firmwareVersionRing}" else ""}"
             )
         )

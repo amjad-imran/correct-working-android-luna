@@ -1,11 +1,17 @@
 package com.oreo.ui.heartrate
 
+import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HeartRateViewModel : BaseViewModel() {
+@HiltViewModel
+class HeartRateViewModel @Inject constructor(
+    private val resourcesProvider: ResourcesProvider
+) : BaseViewModel() {
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         val list = java.util.ArrayList<ChartModel>()
@@ -14,7 +20,7 @@ class HeartRateViewModel : BaseViewModel() {
             chartModel.date = it
             var currentDayText = ""
             if (it == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
-                currentDayText = "Today, "
+                currentDayText = resourcesProvider.getString(R.string.text_today_comma)
             }
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(

@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -38,6 +39,7 @@ class CycleTrackerViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
     val localDataStore: DataStoredInterface,
+    val resourcesProvider: ResourcesProvider,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -272,15 +274,15 @@ class CycleTrackerViewModel @Inject constructor(
 
     fun getPregnancyText(text: String?): String {
         return if (text.equals("high", true)) {
-            "High chance of pregnancy"
+            resourcesProvider.getString(R.string.text_high_chance_of_pregnancy)
         } else if (text.equals("low", true)) {
-            "Low chance of pregnancy"
+            resourcesProvider.getString(R.string.text_low_chance_of_pregnancy)
         } else if (text.equals("fertile", true)) {
-            "Your body is at it’s most fertile today"
+            resourcesProvider.getString(R.string.text_your_body_is_at_it_s_most_fertile_today)
         } else if (text.equals("incr", true)) {
-            "Increasing chance of pregnancy"
+            resourcesProvider.getString(R.string.text_increasing_chance_of_pregnancy)
         } else if (text.equals("decr", true)) {
-            "decreasing chance of pregnancy"
+            resourcesProvider.getString(R.string.text_decreasing_chance_of_pregnancy)
         } else {
             ""
         }
@@ -292,16 +294,16 @@ class CycleTrackerViewModel @Inject constructor(
     fun getCurrentPhaseText(
         ovulationDate: String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
-        if (ovulationDate == null) return Pair("Follicular phase", R.color.color_follicular)
+        if (ovulationDate == null) return Pair(resourcesProvider.getString(R.string.text_follicular_phase), R.color.color_follicular)
         if (periodDate.isNullOrEmpty()) return null
 
         val localCurrentDate = LocalDate.parse(currentDate)
         val ovDateLocal = LocalDate.parse(ovulationDate)
 
         return if (localCurrentDate.isBefore(ovDateLocal)) {
-            Pair("Follicular phase", R.color.color_follicular)
+            Pair(resourcesProvider.getString(R.string.text_follicular_phase), R.color.color_follicular)
         } else {
-            Pair("Luteal phase", R.color.color_luteal)
+            Pair(resourcesProvider.getString(R.string.text_luteal_phase), R.color.color_luteal)
         }
     }
 

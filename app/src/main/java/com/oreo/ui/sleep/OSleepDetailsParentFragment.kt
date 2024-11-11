@@ -35,9 +35,9 @@ class OSleepDetailsParentFragment :
     }
 
     private fun setViewPager() {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Day"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Week"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Month"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_day)))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_week)))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_month)))
         binding.lytToolbar.tvTitle.text = getPageTitle()
         loadFragment(
             OSleepScoreDetailsFragment.newInstance(
@@ -247,7 +247,7 @@ class OSleepDetailsParentFragment :
             }
 
             ViewItemClickType.READINESS_SCORE -> {
-                trendTitle = "Readiness score"
+                trendTitle = getString(R.string.text_readiness_score)
             }
 
             ViewItemClickType.HR_VARIABILITY -> {
@@ -263,23 +263,23 @@ class OSleepDetailsParentFragment :
             }
 
             ViewItemClickType.ACTIVITY_SCORE -> {
-                trendTitle = "Activity score"
+                trendTitle = getString(R.string.text_activity_score)
             }
 
             ViewItemClickType.ACTIVE_CALORIES -> {
-                trendTitle = "Goal progress"
+                trendTitle = getString(R.string.text_goal_progress)
             }
 
             ViewItemClickType.TOTAL_CALORIES_BURNED -> {
-                trendTitle = "Total calories"
+                trendTitle = getString(R.string.text_total_calories)
             }
 
             ViewItemClickType.STEPS -> {
-                trendTitle = "Steps"
+                trendTitle = getString(R.string.text_steps)
             }
 
             ViewItemClickType.DISTANCE -> {
-                trendTitle = "Distance"
+                trendTitle = getString(R.string.text_distance)
             }
             ViewItemClickType.AVG_TEMP -> {
                 trendTitle = "Body temperature"

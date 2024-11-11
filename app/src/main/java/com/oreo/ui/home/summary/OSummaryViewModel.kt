@@ -2,7 +2,9 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
@@ -45,6 +47,7 @@ constructor(
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
+    val resourcesProvider: ResourcesProvider,
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
@@ -159,7 +162,7 @@ constructor(
             chartModel.date = it
             var currentDayText = ""
             if (it == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
-                currentDayText = "Today, "
+                currentDayText = resourcesProvider.getString(R.string.text_today_comma)
             }
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(

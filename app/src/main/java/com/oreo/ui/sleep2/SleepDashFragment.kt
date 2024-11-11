@@ -766,7 +766,7 @@ class SleepDashFragment :
                 imvHrv.setImageResource(R.drawable.ic_hm_check_default)
                 imvSkin.setImageResource(R.drawable.ic_hm_check_default)
                 tvNudge.visible()
-                tvNudge.text = "No data so far"
+                tvNudge.text = getString(R.string.text_no_data_so_far)
             }
         }
 

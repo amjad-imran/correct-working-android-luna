@@ -73,9 +73,9 @@ class CycleDetailsFragment :
             ivMore.gone()
             tvHeader.text = getString(R.string.text_cycle_length)
             tvValue.text = "${viewModel.cycleData.cycleLength}"
-            tvUnit.text = "days"
+            tvUnit.text = getString(R.string.text_days)
             with(viewModel.isCycleLengthNormal(viewModel.cycleData.cycleLength ?: 0)) {
-                tvStatus.text = if (this) "Normal" else "Abnormal"
+                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 
@@ -86,9 +86,9 @@ class CycleDetailsFragment :
 
             tvHeader.text = getString(R.string.text_period_duration)
             tvValue.text = "${viewModel.cycleData.periodLength}"
-            tvUnit.text = "days"
+            tvUnit.text = getString(R.string.text_days)
             with(viewModel.isPeriodLengthNormal(viewModel.cycleData.periodLength ?: 0)) {
-                tvStatus.text = if (this) "Normal" else "Abnormal"
+                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 

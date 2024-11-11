@@ -19,6 +19,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.google.gson.Gson
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithZeroGenericFloat
 import com.noisefit_commans.common.averageWithoutZero
@@ -452,7 +453,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
-        val noDataText = "No record available"
+        val noDataText = context.getString(R.string.text_no_record_available)
         val textBounds = Rect()
         xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 

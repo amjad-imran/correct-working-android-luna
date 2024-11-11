@@ -1171,7 +1171,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (scoreValue == null) {
                 binding.tvValue.text = "--"
-                binding.tvStatus.text = "No data"
+                binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_no_data)
             } else {
                 binding.tvValue.text = scoreValue.toString()
                 binding.tvStatus.text = data.data.status

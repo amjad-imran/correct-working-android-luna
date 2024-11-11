@@ -2,6 +2,8 @@ package com.oreo.ui.stress
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.luna.R
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class StressDetailSharedViewModel @Inject
 constructor(
-    val localDataStore: DataStoredInterface
+    val localDataStore: DataStoredInterface,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     val selectedStressLevel = MutableLiveData<StressType>()
@@ -35,7 +38,7 @@ constructor(
             chartModel.date = it
             var currentDayText = ""
             if (it == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
-                currentDayText = "Today, "
+                currentDayText = resourcesProvider.getString(R.string.text_today_comma)
             }
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(

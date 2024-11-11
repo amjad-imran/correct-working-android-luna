@@ -68,13 +68,13 @@ class BodyTempScoreDetailFragment :
         val firstData = it.result?.firstOrNull()
 
         firstData?.let {
-            binding.tvAvgOn.text = "Deviation on ${
-                DateFormats.parseDate(
+            binding.tvAvgOn.text = getString(
+                R.string.text_deviation_on_value, DateFormats.parseDate(
                     it.date,
                     DateFormats.dateFormat3(),
                     DateFormats.dateFormat7()
                 )
-            }"
+            )
 
 
 
@@ -152,101 +152,6 @@ class BodyTempScoreDetailFragment :
 //        bindDataOnUi(it)
         binding.groupMain.visible()
 
-    }
-
-    private fun bindDataOnUi(it: OInternalPageResponseModal) {
-
-        //today data
-        val todayTrendValue: String
-        var todayTrendProg: Int
-        if (it.trendData?.today?.value == null || it.trendData.today.value.toInt() == 0) {
-            todayTrendValue = "No data"
-            todayTrendProg = 0
-        } else {
-            todayTrendValue = it.trendData.today.value.roundToInt().toString()
-            todayTrendProg = it.trendData.today.value.roundToInt()
-        }
-        if (todayTrendValue != "No data") {
-            binding.lytScoreOverview.lytToday.tvScore.text =
-                "${it.trendData?.today?.value.toString()} °F"
-        } else {
-            binding.lytScoreOverview.lytToday.tvScore.text = todayTrendValue
-        }
-
-
-        //yesterday data
-        val yesterdayTrendValue: String
-        var yesterdayTrendProg: Int
-        if (it.trendData?.yesterday?.value == null || it.trendData.yesterday.value.toInt() == 0) {
-            yesterdayTrendValue = "No data"
-            yesterdayTrendProg = 0
-        } else {
-            yesterdayTrendValue = it.trendData.yesterday.value.roundToInt().toString()
-            yesterdayTrendProg = it.trendData.yesterday.value.roundToInt()
-        }
-
-
-        if (yesterdayTrendValue != "No data") {
-            binding.lytScoreOverview.lytYesterday.tvScore.text =
-                "${it.trendData?.yesterday?.value.toString()} °F"
-        } else
-            binding.lytScoreOverview.lytYesterday.tvScore.text = yesterdayTrendValue
-
-
-        if (todayTrendProg > yesterdayTrendProg) {
-            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-            updateProgressColor(0)
-            val showYesPer = yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-            mViewModel.setTrendData(100 - showYesPer)
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
-
-        } else if (yesterdayTrendProg > todayTrendProg) {
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
-            updateProgressColor(1)
-            val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
-            mViewModel.setTrendData(100 - showTodayPer)
-            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
-        } else {
-            if (todayTrendProg > 0) {
-                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    100
-            }
-
-        }
-
-    }
-
-    private fun updateProgressColor(type: Int) {
-        val todayColor: Int
-        val yesterdayColor: Int
-        when (type) {
-            0 -> {
-                todayColor = returnColor().first
-                yesterdayColor = returnColor().second
-            }
-
-            1 -> {
-                todayColor = returnColor().first
-                yesterdayColor = returnColor().second
-            }
-
-            2 -> {
-                todayColor = returnColor().first
-                yesterdayColor = returnColor().second
-            }
-
-            else -> {
-                todayColor = returnColor().first
-                yesterdayColor = returnColor().second
-            }
-        }
-        binding.lytScoreOverview.lytToday.pbSteps.setIndicatorColor(
-            todayColor
-        )
-        binding.lytScoreOverview.lytYesterday.pbSteps.setIndicatorColor(
-            yesterdayColor
-        )
     }
 
     private fun returnColor(): Pair<Int, Int> {

@@ -474,7 +474,7 @@ class StressCombinedChart : View {
         if (combineModel!!.high > 0) {
             high =
                 mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
-            val highText = "Stressed"
+            val highText = context.getString(R.string.text_stressed)
 
             paintStressed.getTextBounds(highText, 0, highText.length, xTextBounds)
             canvas.drawText(
@@ -487,7 +487,7 @@ class StressCombinedChart : View {
         if (combineModel!!.medium > 0) {
             val medium =
                 mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
-            val mediumText = "Focussed"
+            val mediumText = context.getString(R.string.text_focussed)
             paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
             canvas.drawText(
                 mediumText,
@@ -496,7 +496,7 @@ class StressCombinedChart : View {
                 paintFocussed
             )
 
-            val lowText = "Relaxed"
+            val lowText = context.getString(R.string.text_relaxed)
             paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
             canvas.drawText(
                 lowText,

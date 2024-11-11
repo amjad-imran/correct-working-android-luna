@@ -21,19 +21,21 @@ class HrArticle1Adapter(val dataSet: List<HrArticlePoint>) :
             if (data.highlightString == null) {
                 binding.tvContent.text = data.message
             } else {
-                val spannableStringBuilder = SpannableStringBuilder(data.message)
-                val start = data.message.indexOf(data.highlightString)
-                val end = start + data.highlightString.length
-                spannableStringBuilder.setSpan(
-                    ForegroundColorSpan(Color.WHITE),
-                    start,
-                    end,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                binding.tvContent.text = spannableStringBuilder
+                try {
+                    val spannableStringBuilder = SpannableStringBuilder(data.message)
+                    val start = data.message.indexOf(data.highlightString)
+                    val end = start + data.highlightString.length
+                    spannableStringBuilder.setSpan(
+                        ForegroundColorSpan(Color.WHITE),
+                        start,
+                        end,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    binding.tvContent.text = spannableStringBuilder
+                }catch (exp:Exception){
+                    binding.tvContent.text = data.message
+                }
             }
-
-
         }
     }
 

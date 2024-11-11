@@ -66,6 +66,9 @@ object ApplicationUtils {
             AppLanguage("Italian", "it"),
             AppLanguage("Dutch", "nl"),
             AppLanguage("Mandarin", "zh"),
+            AppLanguage("Portuguese", "pt"),
+            AppLanguage("Thai", "th"),
+            AppLanguage("Russian", "ru"),
         )
     }
 

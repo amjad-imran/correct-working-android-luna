@@ -1312,7 +1312,7 @@ class LineChartView : View {
             }
 
         } else {
-            val noDataText = "No data available"
+            val noDataText = context.getString(R.string.text_no_data_available)
             val textWidth = noDataPaint!!.measureText(noDataText)
             val textX = (mWith - leftWith) / 2 - textWidth / 2
             val textY = (mHeight / 2 + dip2px(4f)).toFloat()

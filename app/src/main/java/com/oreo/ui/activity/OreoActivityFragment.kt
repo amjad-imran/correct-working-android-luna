@@ -713,7 +713,7 @@ class OreoActivityFragment :
         val labelColor: Int
         when (value) {
             0 -> {
-                labelValue = "Inactive"
+                labelValue = getString(R.string.text_inactive)
                 labelColor = ContextCompat.getColor(
                     requireContext(),
                     R.color.daytime_analysis_inactive_label_color
@@ -721,7 +721,7 @@ class OreoActivityFragment :
             }
 
             1 -> {
-                labelValue = "Low movement"
+                labelValue = getString(R.string.text_low_movement)
                 labelColor =
                     ContextCompat.getColor(
                         requireContext(),
@@ -730,7 +730,7 @@ class OreoActivityFragment :
             }
 
             2 -> {
-                labelValue = "Medium movement"
+                labelValue = getString(R.string.text_medium_movement)
                 labelColor = ContextCompat.getColor(
                     requireContext(),
                     R.color.daytime_medium_movement_label_color
@@ -738,12 +738,12 @@ class OreoActivityFragment :
             }
 
             3 -> {
-                labelValue = "High movement"
+                labelValue = getString(R.string.text_high_movement)
                 labelColor = ContextCompat.getColor(requireContext(), R.color.white)
             }
 
             else -> {
-                labelValue = "No data"
+                labelValue = getString(R.string.text_no_data)
                 labelColor = ContextCompat.getColor(
                     requireContext(),
                     R.color.daytime_analysis_inactive_label_color

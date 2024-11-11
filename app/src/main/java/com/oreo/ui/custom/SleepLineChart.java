@@ -401,7 +401,7 @@ public class SleepLineChart extends View {
             canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
 
         } else {
-            String noDataText = "No data available";
+            String noDataText = getContext().getString(R.string.text_no_data_available);
             float textWidth = noDataPaint.measureText(noDataText);
 
             float textX = (mWith - leftWith) / 2 - textWidth / 2;

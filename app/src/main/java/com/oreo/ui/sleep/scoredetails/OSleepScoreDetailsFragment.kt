@@ -1098,14 +1098,14 @@ class OSleepScoreDetailsFragment :
         val todayTrendValue: String
         var todayTrendProg: Int
         if (it.trendData?.today?.value == null || it.trendData.today.value.toInt() == 0) {
-            todayTrendValue = "No data"
+            todayTrendValue = getString(R.string.text_no_data)
             todayTrendProg = 0
         } else {
             todayTrendValue = it.trendData.today.value.roundToInt().toString()
             todayTrendProg = it.trendData.today.value.roundToInt()
         }
         if (isTrendValueUpdate()) {
-            if (todayTrendValue != "No data") {
+            if (todayTrendValue != getString(R.string.text_no_data)) {
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.RESTING_HR.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} bpm"
@@ -1159,7 +1159,7 @@ class OSleepScoreDetailsFragment :
         val yesterdayTrendValue: String
         var yesterdayTrendProg: Int
         if (it.trendData?.yesterday?.value == null || it.trendData.yesterday.value.toInt() == 0) {
-            yesterdayTrendValue = "No data"
+            yesterdayTrendValue = getString(R.string.text_no_data)
             yesterdayTrendProg = 0
         } else {
             yesterdayTrendValue = it.trendData.yesterday.value.roundToInt().toString()
@@ -1169,7 +1169,7 @@ class OSleepScoreDetailsFragment :
         //allTimeAvg
         val allTimeTrendValue: String =
             if (it.trendData?.allTimeAvg == null || it.trendData.allTimeAvg.toInt() == 0) {
-                "No data"
+                getString(R.string.text_no_data)
             } else {
                 it.trendData.allTimeAvg.toFloat().roundToInt().toString()
             }
@@ -1183,7 +1183,7 @@ class OSleepScoreDetailsFragment :
 
         if (isTrendValueUpdate()
         ) {
-            if (yesterdayTrendValue != "No data") {
+            if (yesterdayTrendValue != getString(R.string.text_no_data)) {
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.RESTING_HR.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
@@ -1685,23 +1685,23 @@ class OSleepScoreDetailsFragment :
             }
 
             ViewItemClickType.ACTIVITY_SCORE -> {
-                trendTitle = "Activity score trend"
+                trendTitle = getString(R.string.text_activity_score_trend)
             }
 
             ViewItemClickType.ACTIVE_CALORIES -> {
-                trendTitle = "Goal progress trend"
+                trendTitle = getString(R.string.text_goal_progress_trend)
             }
 
             ViewItemClickType.TOTAL_CALORIES_BURNED -> {
-                trendTitle = "Total calories trend"
+                trendTitle = getString(R.string.text_total_calories_trend)
             }
 
             ViewItemClickType.STEPS -> {
-                trendTitle = "Steps trend"
+                trendTitle = getString(R.string.text_steps_trend)
             }
 
             ViewItemClickType.DISTANCE -> {
-                trendTitle = "Distance trend"
+                trendTitle = getString(R.string.text_distance_trend)
             }
 
             null -> {

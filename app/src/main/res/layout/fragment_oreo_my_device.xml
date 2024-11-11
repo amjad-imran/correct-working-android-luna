@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         app:image="@drawable/ic_share"
                         app:setFeatureVisibility="@{features.shareLogs}"
-                        app:text="Share App Logs" />
+                        app:text="@string/text_share_app_logs" />
 
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowShareRingLogs"
@@ -114,14 +114,14 @@
                         android:layout_height="wrap_content"
                         app:image="@drawable/ic_share"
                         app:setFeatureVisibility="@{features.shareLogs}"
-                        app:text="Share Ring Logs" />
+                        app:text="@string/text_share_ring_logs" />
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowShareFirmwareLogs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:image="@drawable/ic_share"
                         app:setFeatureVisibility="@{features.shareLogs}"
-                        app:text="Share Firmware Logs" />
+                        app:text="@string/text_share_firmware_logs" />
 
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowFindMyRing"
@@ -129,14 +129,14 @@
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:image="@drawable/ic_round_share_location"
-                        app:text="Find my ring" />
+                        app:text="@string/text_find_my_ring" />
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowAboutDevice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:image="@drawable/ic_profile_about"
-                        app:text="About device" />
+                        app:text="@string/text_about_device" />
 
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowSettings"
@@ -144,8 +144,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:image="@drawable/ic_ring_device_settings"
-                        app:text="Device settings" />
-
+                        app:text="@string/text_device_settings" />
 
                 </LinearLayout>
 

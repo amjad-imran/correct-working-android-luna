@@ -1,4 +1,24 @@
 <resources>
+    <string name="app_name">common</string>
+    <string name="text_please_wait">Wacht alstublieft</string>
+    <string name="text_disabled">Gehandicapt</string>
+    <string name="text_enabled">Ingeschakeld</string>
+    <string name="text_unpair_device">Apparaat ontkoppelen</string>
+    <string name="delete_account">Account verwijderen</string>
+    <string name="text_delete_account">Account verwijderen</string>
+    <string name="logout">Uitloggen</string>
+    <string name="text_customer_support">Klantenondersteuning</string>
+    <string name="text_about">Over</string>
+    <string name="text_rate_us">Beoordeel ons</string>
+    <string name="text_help_and_support">Veelgestelde vragen</string>
+    <string name="text_my_goals">Jouw doelen</string>
+    <string name="text_awake">Wakker</string>
+    <string name="text_rem">Rem</string>
+    <string name="text_light">Licht</string>
+    <string name="text_deep">Diep</string>
+    <string name="text_high">Hoog</string>
+    <string name="text_med">Med</string>
+    <string name="text_low">Laag</string>
 
 
 </resources>

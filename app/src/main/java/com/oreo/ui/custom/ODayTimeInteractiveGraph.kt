@@ -312,10 +312,10 @@ class ODayTimeInteractiveGraph : View {
 
         val qHeight = (mHeight - bottomWith - topWith) / 4
 
-        val highText = "High"
-        val medText = "Med"
-        val lowText = "Low"
-        val inactiveText = "Inactive"
+        val highText = context.getString(R.string.text_high)
+        val medText = context.getString(R.string.text_med)
+        val lowText = context.getString(R.string.text_low)
+        val inactiveText = context.getString(R.string.text_inactive)
         val textPaddingLeft = dip2px(10f).toFloat()
 
 

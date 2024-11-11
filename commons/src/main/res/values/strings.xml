@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">common</string>
+    <string name="app_name" translatable="false">common</string>
     <string name="text_please_wait">Please Wait</string>
     <string name="text_disabled">Disabled</string>
     <string name="text_enabled">Enabled</string>
@@ -12,8 +12,6 @@
     <string name="text_rate_us">Rate us</string>
     <string name="text_help_and_support">Frequently asked questions</string>
     <string name="text_my_goals">Your goals</string>
-
-
     <string name="text_awake">Awake</string>
     <string name="text_rem">Rem</string>
     <string name="text_light">Light</string>
@@ -21,6 +19,5 @@
     <string name="text_high">High</string>
     <string name="text_med">Med</string>
     <string name="text_low">Low</string>
-
 
 </resources>

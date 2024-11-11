@@ -3,6 +3,7 @@ package com.oreo.ui.heartrate
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
@@ -27,73 +28,49 @@ import javax.inject.Inject
 class OHeartRateDataViewModel @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val hrDataConvertor: OreoHRDataConvertor,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     var date: String? = null
-    var isToday = false
     val heartRateData = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
     var summaryHealthData: ServerUserHealthData? = null
 
-    fun getNudges(): ArrayList<Nudges> {
-        val dataList = ArrayList<Nudges>()
-        dataList.add(
-            Nudges(
-                label = "Rest is productive",
-                message = "Your resting hr is good"
-            )
-        )
-        dataList.add(
-            Nudges(
-                label = "Rest is not productive",
-                message = "Your resting hr is good"
-            )
-        )
-        return dataList
-    }
 
     fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
         val dataList = ArrayList<LearnMoreDataModel>()
         dataList.add(
             LearnMoreDataModel(
-                title = "General heart rate terms",
-                msg = "2 min read",
+                title = resourcesProvider.getString(R.string.text_general_heart_rate_terms),
+                msg = resourcesProvider.getString(R.string.text__2_min_read),
                 img = R.drawable.img_hr_article_1,
                 type = 1
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                title = "Normal heart rate for my age",
-                msg = "2 min read",
+                title = resourcesProvider.getString(R.string.text_normal_heart_rate_for_my_age),
+                msg = resourcesProvider.getString(R.string.text__2_min_read),
                 img = R.drawable.img_hr_article_2,
                 type = 2
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                title = "What are heart rate zones ?",
-                msg = "2 min read",
+                title = resourcesProvider.getString(R.string.text_what_are_heart_rate_zones),
+                msg = resourcesProvider.getString(R.string.text__2_min_read),
                 img = R.drawable.img_hr_article_3,
                 type = 3
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                title = "Heart rate during sleep",
-                msg = "2 min read",
+                title = resourcesProvider.getString(R.string.text_heart_rate_during_sleep),
+                msg = resourcesProvider.getString(R.string.text__2_min_read),
                 img = R.drawable.img_hr_article_4,
                 type = 4
             )
         )
         return dataList
-    }
-
-    fun checkIsToday(date: String?) {
-        if (date == null) {
-            isToday = false
-        }
-        val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3())
-        isToday = todayDate.equals(date, true)
     }
 
     fun getTodayHeartRate() {
@@ -108,7 +85,6 @@ class OHeartRateDataViewModel @Inject constructor(
     }
 
     private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
-        LOGS.d("HeartRateData ${Gson().toJson(data.heart)}")
         var breakupArray = data.heart?.break_up
         if (breakupArray.isNullOrEmpty()) {
             val dummyArray = ArrayList<Int>()

@@ -2,6 +2,7 @@ package com.oreo.ui.stress
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -31,7 +32,8 @@ import kotlin.math.roundToInt
 class OStressDetailViewModel @Inject
 constructor(
     val screenUtils: ScreenUtils,
-    val oreoStressDataConvertor: OreoStressDataConvertor
+    val oreoStressDataConvertor: OreoStressDataConvertor,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     var lastStressValue: Int? = 0
@@ -57,20 +59,20 @@ constructor(
             howItWorksDataList.postValue(
                 arrayListOf(
                     StressImageModel(
-                        "What is stress?",
-                        "Stress is the body’s natural response to a physical or mental challenge.",
+                        resourcesProvider.getString(R.string.text_what_is_stress),
+                        resourcesProvider.getString(R.string.text_stress_1),
                         R.drawable.image_s_hw_1
                     ), StressImageModel(
-                        "How does the Luna Ring measure stress?",
-                        "Your stress data is updated every 15 minutes and categorised as relaxed, focused, or stressed.",
+                        resourcesProvider.getString(R.string.text_how_does_the_luna_ring),
+                        resourcesProvider.getString(R.string.text_stress_2),
                         R.drawable.image_s_hw_2
                     ), StressImageModel(
-                        "How to manage acute (short-term) stress?",
-                        "Acute stress typically arises in response to immediate threats or challenges.",
+                        resourcesProvider.getString(R.string.text_how_to_manage_acute_short_term_stress),
+                        resourcesProvider.getString(R.string.text_stress_3),
                         R.drawable.image_s_hw_3
                     ), StressImageModel(
-                        "How to manage chronic (long-term) stress?",
-                        "Chronic stress persists over time and can result from various factors or even a serious illness.",
+                        resourcesProvider.getString(R.string.text_how_to_manage_chronic),
+                        resourcesProvider.getString(R.string.text_stress_4),
                         R.drawable.image_s_hw_4
                     )
                 )

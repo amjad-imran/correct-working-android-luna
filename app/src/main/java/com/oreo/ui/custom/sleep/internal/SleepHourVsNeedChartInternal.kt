@@ -17,6 +17,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
@@ -199,7 +200,7 @@ class SleepHourVsNeedChartInternal constructor(context: Context?, attrs: Attribu
         }
 
         if (dataSet.isEmpty()) {
-            val noDataText = "No record available"
+            val noDataText = context.getString(R.string.text_no_record_available)
             val textBounds = Rect()
             xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
 

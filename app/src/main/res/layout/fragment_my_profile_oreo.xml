@@ -99,7 +99,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/include14"
-                    app:text="Your profile" />
+                    app:text="@string/text_your_profile" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowSelectLanguage"
@@ -111,7 +111,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
-                    app:text="Select Language" />
+                    app:text="@string/text_select_language" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowHelp"
@@ -143,7 +143,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowFeedBack"
-                    app:text="Learn more" />
+                    app:text="@string/text_learn_more" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowSettings"
@@ -163,7 +163,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowSettings"
-                    app:text="Live support" />
+                    app:text="@string/text_live_support" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowAbout"

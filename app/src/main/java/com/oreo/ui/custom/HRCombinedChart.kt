@@ -494,7 +494,7 @@ class HRCombinedChart : View {
                 mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
             if (isNoDataState) {
-                val text = "No data"
+                val text = context.getString(R.string.text_no_data)
                 val textStart = (mWith - leftWith) / 2 - xTextPaint.measureText(text) / 2
                 xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
                 canvas.drawText(
@@ -531,7 +531,7 @@ class HRCombinedChart : View {
             val xAxis2 = (max + min) / 2
 
             if (isNoDataState) {
-                val text = "No data"
+                val text = context.getString(R.string.text_no_data)
                 val textStart = (mWith - leftWith) / 2 - xTextPaint.measureText(text) / 2
                 xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
                 canvas.drawText(

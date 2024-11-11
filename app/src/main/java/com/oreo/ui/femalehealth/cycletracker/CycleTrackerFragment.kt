@@ -289,9 +289,9 @@ class CycleTrackerFragment :
         binding.lytInsight.lytCycleLength.apply {
             tvHeader.text = getString(R.string.text_cycle_length)
             tvValue.text = "${cycleLength}"
-            tvUnit.text = "days"
+            tvUnit.text = getString(R.string.text_days)
             with(viewModel.isCycleLengthNormal(cycleLength)) {
-                tvStatus.text = if (this) "Normal" else "Abnormal"
+                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 
@@ -300,9 +300,9 @@ class CycleTrackerFragment :
         binding.lytInsight.lytPeriodLength.apply {
             tvHeader.text = getString(R.string.text_period_duration)
             tvValue.text = "${periodLength}"
-            tvUnit.text = "days"
+            tvUnit.text = getString(R.string.text_days)
             with(viewModel.isPeriodLengthNormal(periodLength)) {
-                tvStatus.text = if (this) "Normal" else "Abnormal"
+                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 
@@ -505,8 +505,8 @@ class CycleTrackerFragment :
 
             val isPastDate = viewModel.isPastCycle(selectedDateLocal)
 
-            tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
-            tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"
+            tvCurrentDay.text = getString(R.string.text_day_value, data.currentDay ?: 0)
+            tvTotalDays.text = getString(R.string.text_of_value, data.cycleLength ?: 0)
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
@@ -530,16 +530,16 @@ class CycleTrackerFragment :
 
                         tvCurrentState.text = if (data.otaLog) {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.edit)
-                            "Period"
+                            getString(R.string.text_period_cap)
                         } else {
                             binding.lytTrackerTop.btnLog.text = getString(R.string.text_log)
-                            "Predicted period"
+                            getString(R.string.text_predicted_period)
                         }
 
                         tvStateDay.text = if (data.otaLog) {
-                            "Day ${data.currentDay}"
+                            getString(R.string.text_day_value, data.currentDay)
                         } else {
-                            "Day ${data.currentDay}"
+                            getString(R.string.text_day_value, data.currentDay)
                         }
                     }
 
@@ -549,8 +549,8 @@ class CycleTrackerFragment :
                         if (isPastDate) {
                             showPastCycleUI(data.currentDay ?: 0)
                         } else {
-                            tvCurrentState.text = "Predicted day of"
-                            tvStateDay.text = "Ovulation"
+                            tvCurrentState.text = getString(R.string.text_predicted_day_of)
+                            tvStateDay.text = getString(R.string.text_ovulation_first)
                         }
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_high)
                     }
@@ -570,8 +570,8 @@ class CycleTrackerFragment :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        tvCurrentState.text = "Ovulation in"
-                        tvStateDay.text = "${daysUntilOvulation} Days"
+                        tvCurrentState.text = getString(R.string.text_ovulation_in)
+                        tvStateDay.text = getString(R.string.text_value_days, daysUntilOvulation)
                     }
                     if (daysUntilOvulation > 3) {
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_low)
@@ -586,15 +586,15 @@ class CycleTrackerFragment :
                         val isPeriodLate = data.confirmPeriodDate != null
 
                         tvCurrentState.text = if (isPeriodLate) {
-                            "Period late for"
+                            getString(R.string.text_period_late_for)
                         } else {
-                            "Period in"
+                            getString(R.string.text_period_in)
                         }
 
                         tvStateDay.text = if (isPeriodLate) {
-                            "${data.confirmPeriodDate?.day} day"
+                            getString(R.string.text_value_day, data.confirmPeriodDate?.day)
                         } else {
-                            "${daysUntilNextPeriod} Days"
+                            getString(R.string.text_value_days, daysUntilNextPeriod)
                         }
                     }
 
@@ -613,8 +613,8 @@ class CycleTrackerFragment :
     }
 
     private fun showPastCycleUI(currentDay: Int) {
-        binding.lytTrackerTop.tvCurrentState.text = "Past cycle"
-        binding.lytTrackerTop.tvStateDay.text = "Day $currentDay"
+        binding.lytTrackerTop.tvCurrentState.text = getString(R.string.text_past_cycle)
+        binding.lytTrackerTop.tvStateDay.text = getString(R.string.text_day_value, currentDay)
     }
 
     private fun setNudgesViewPager(
@@ -639,9 +639,9 @@ class CycleTrackerFragment :
         }
 
         val currentState = binding.lytTrackerTop.tvCurrentState.text.toString()
-        if (currentState.equals("Period in", true)) {
+        if (currentState.equals(getString(R.string.text_period_in), true)) {
             nudgeBgColor = NudgeBgColor.PERIOD_LOW
-        } else if (currentState.equals("Ovulation in", true)) {
+        } else if (currentState.equals(getString(R.string.text_ovulation_in), true)) {
             nudgeBgColor = NudgeBgColor.OVULATION_LOW
         }
 
