@@ -316,6 +316,7 @@ constructor(
                             val todayData = userHealthData[getTodayDate()]
                             todayData?.let {
                                 sendSleepEvents(it)
+                                showNotification(it)
                             }
 
 
@@ -620,10 +621,10 @@ constructor(
 
     private fun showNotification(response: ServerUserHealthData?) {
 
-        if (response?.sleep == null) return
+        /*if (response?.sleep == null) return*/
 
         //Sleep
-        response.sleep?.let {
+       /* response.sleep?.let {
             if ((it.sleep_score?.value ?: 0) > 75 && (it.totalSleep?.value
                     ?: 0) >= 25200 && (it.totalSleep?.value
                     ?: 0) <= 32400
@@ -643,9 +644,9 @@ constructor(
                     localDataStore.setSleepNotificationTimeStamp()
                 }
             }
-        }
+        }*/
 
-        response.readiness?.let {
+        response?.readiness?.let {
             val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
                 val nudge = it.dashNudges?.firstOrNull()
