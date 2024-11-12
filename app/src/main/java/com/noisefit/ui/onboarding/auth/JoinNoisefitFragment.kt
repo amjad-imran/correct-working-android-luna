@@ -3,6 +3,7 @@ package com.noisefit.ui.onboarding.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -89,6 +90,11 @@ class JoinNoisefitFragment :
         authViewModel.authSuccess.observe(viewLifecycleOwner) {
             it.getContent()?.let { value ->
                 if (value) {
+                    if (authViewModel.hasUserSelectedLanguage().not()) {
+                        navigate(R.id.languageFragment, bundleOf("hideContinue" to false))
+                        return@observe
+                    }
+
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
                             startActivity(

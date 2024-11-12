@@ -189,33 +189,35 @@ class AuthViewModel @Inject constructor(
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
                             sessionManager.updateGender(it.user?.userInfo?.gender)
-                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+                            sessionManager.updateNotificationSettings(
+                                it.user?.notificationsEnabledLuna ?: 1
+                            )
 
                             localDataStore.updateUserToken(it.token)
                             authSuccess.postValue(Event(true))
                             loginSuccessEvent()
 
-                           /* if (isOutSideIndia) {
-                                localDataStore.saveUserInfo(it.user!!)
-                                localDataStore.updateUserToken(it.token)
-                                ringDataStore.setUpdateUserDeviceStatus(false)
-                                authSuccess.postValue(Event(true))
-                                loginSuccessForOutSideIndiaUserEvent()
-                                return@let
-                            }
+                            /* if (isOutSideIndia) {
+                                 localDataStore.saveUserInfo(it.user!!)
+                                 localDataStore.updateUserToken(it.token)
+                                 ringDataStore.setUpdateUserDeviceStatus(false)
+                                 authSuccess.postValue(Event(true))
+                                 loginSuccessForOutSideIndiaUserEvent()
+                                 return@let
+                             }
 
 
-                            if (it.user!!.mobile.isNullOrEmpty()) {
-                                user = it.user
-                                email = it.user!!.email
-                                verifyMobile.postValue(Event(true))
-                            } else {
-                                localDataStore.saveUserInfo(it.user!!)
-                                localDataStore.updateUserToken(it.token)
-                                ringDataStore.setUpdateUserDeviceStatus(false)
-                                authSuccess.postValue(Event(true))
-                                loginSuccessEvent()
-                            }*/
+                             if (it.user!!.mobile.isNullOrEmpty()) {
+                                 user = it.user
+                                 email = it.user!!.email
+                                 verifyMobile.postValue(Event(true))
+                             } else {
+                                 localDataStore.saveUserInfo(it.user!!)
+                                 localDataStore.updateUserToken(it.token)
+                                 ringDataStore.setUpdateUserDeviceStatus(false)
+                                 authSuccess.postValue(Event(true))
+                                 loginSuccessEvent()
+                             }*/
                             sendMessage("Otp Verified ")
                             //emailOtpGenerated.postValue(Event(true))
                         }
@@ -323,9 +325,13 @@ class AuthViewModel @Inject constructor(
                                 if (isOutSideIndia) {
                                     if (it.user != null) {
                                         localDataStore.saveUserInfo(it.user!!)
-                                        sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateUnit(
+                                            it.user?.userGoals?.getUnit() ?: Units.METRIC
+                                        )
                                         sessionManager.updateGender(it.user?.userInfo?.gender)
-                                        sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+                                        sessionManager.updateNotificationSettings(
+                                            it.user?.notificationsEnabledLuna ?: 1
+                                        )
                                         localDataStore.updateUserToken(it.token)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
@@ -337,9 +343,13 @@ class AuthViewModel @Inject constructor(
                                         verifyMobile.postValue(Event(true))
                                     } else {
                                         localDataStore.saveUserInfo(user)
-                                        sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateUnit(
+                                            it.user?.userGoals?.getUnit() ?: Units.METRIC
+                                        )
                                         sessionManager.updateGender(it.user?.userInfo?.gender)
-                                        sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+                                        sessionManager.updateNotificationSettings(
+                                            it.user?.notificationsEnabledLuna ?: 1
+                                        )
                                         localDataStore.updateUserToken(it.token)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
@@ -524,32 +534,34 @@ class AuthViewModel @Inject constructor(
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
                             sessionManager.updateGender(it.user?.userInfo?.gender)
-                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+                            sessionManager.updateNotificationSettings(
+                                it.user?.notificationsEnabledLuna ?: 1
+                            )
                             localDataStore.updateUserToken(it.token)
                             authSuccess.postValue(Event(true))
                             loginSuccessEvent()
 
 
-                           /* if (isOutSideIndia) {
-                                localDataStore.saveUserInfo(it.user!!)
-                                localDataStore.updateUserToken(it.token)
-                                ringDataStore.setUpdateUserDeviceStatus(false)
-                                authSuccess.postValue(Event(true))
-                                loginSuccessForOutSideIndiaUserEvent()
-                                return@let
-                            }
-                            if (it.user!!.mobile.isNullOrEmpty()) {
-                                email = it.user?.email
-                                user = it.user
-                                verifyMobile.postValue(Event(true))
-                                //CASE No mobile, ask mobile auth flow
-                            } else {
-                                localDataStore.saveUserInfo(it.user!!)
-                                localDataStore.updateUserToken(it.token)
-                                ringDataStore.setUpdateUserDeviceStatus(false)
-                                authSuccess.postValue(Event(true))
-                                loginSuccessEvent()
-                            }*/
+                            /* if (isOutSideIndia) {
+                                 localDataStore.saveUserInfo(it.user!!)
+                                 localDataStore.updateUserToken(it.token)
+                                 ringDataStore.setUpdateUserDeviceStatus(false)
+                                 authSuccess.postValue(Event(true))
+                                 loginSuccessForOutSideIndiaUserEvent()
+                                 return@let
+                             }
+                             if (it.user!!.mobile.isNullOrEmpty()) {
+                                 email = it.user?.email
+                                 user = it.user
+                                 verifyMobile.postValue(Event(true))
+                                 //CASE No mobile, ask mobile auth flow
+                             } else {
+                                 localDataStore.saveUserInfo(it.user!!)
+                                 localDataStore.updateUserToken(it.token)
+                                 ringDataStore.setUpdateUserDeviceStatus(false)
+                                 authSuccess.postValue(Event(true))
+                                 loginSuccessEvent()
+                             }*/
                         }
 
                     }
@@ -597,7 +609,9 @@ class AuthViewModel @Inject constructor(
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
                             sessionManager.updateGender(it.user?.userInfo?.gender)
-                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+                            sessionManager.updateNotificationSettings(
+                                it.user?.notificationsEnabledLuna ?: 1
+                            )
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
@@ -676,6 +690,8 @@ class AuthViewModel @Inject constructor(
         }
         return true
     }
+
+    fun hasUserSelectedLanguage() = localDataStore.hasUserSelectedLanguage()
 }
 
 enum class AuthMode {

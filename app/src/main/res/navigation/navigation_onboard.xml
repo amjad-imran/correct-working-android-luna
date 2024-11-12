@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_onboard"
     app:startDestination="@id/welcomeFragment">
     <fragment
@@ -71,6 +72,15 @@
             android:name="mobileNumber"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.noisefit.ui.onboarding.language.LanguageFragment"
+        android:label="fragment_language">
+        <argument
+            android:name="hideContinue"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
 
 
 </navigation>

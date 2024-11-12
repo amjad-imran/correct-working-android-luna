@@ -473,4 +473,8 @@ interface DataStoredInterface {
 
     fun saveSelectedAppLanguage(languageCode: String)
     fun getSelectedAppLanguage(): String?
+
+    fun hasUserSelectedLanguage():Boolean
+    fun setHasUserSelectedLanguage()
+
 }

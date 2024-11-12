@@ -32,7 +32,6 @@ class LanguageViewModel @Inject constructor(
 
     var hideContinue: Boolean = false
     var selectedLanguage: String = ApplicationUtils.getDefaultLanguage().languageCode
-    var selectedAppLanguage: AppLanguage? = null
 
     private val _languages = MutableLiveData<List<AppLanguage>>()
     val languages: LiveData<List<AppLanguage>> = _languages
@@ -82,14 +81,19 @@ class LanguageViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-
                         resource.data?.data?.let {
+                            localDataStore.setHasUserSelectedLanguage()
                             _languageUpdated.postValue(Event(true))
-
                         }
                     }
                 }
             }
+        }
+    }
+
+    fun selectedListPosition(list: List<AppLanguage>, selectedLanguage: String): Int {
+        return list.indexOfFirst {
+            it.languageCode.equals(selectedLanguage, true)
         }
     }
 

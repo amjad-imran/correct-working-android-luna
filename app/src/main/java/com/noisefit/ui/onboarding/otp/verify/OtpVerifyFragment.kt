@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
@@ -188,6 +189,13 @@ class OtpVerifyFragment :
         viewModel.authSuccess.observe(this) {
             it.getContent()?.let { value ->
                 if (value) {
+
+                    if (authViewModel.hasUserSelectedLanguage().not()) {
+                        navigate(R.id.languageFragment, bundleOf("hideContinue" to false))
+                        return@observe
+                    }
+
+
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
                             startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))

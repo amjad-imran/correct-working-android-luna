@@ -2,6 +2,7 @@ package com.noisefit.ui.onboarding.auth
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
@@ -173,6 +174,12 @@ class EmailOtpFragment :
         viewModel.authSuccess.observe(this) {
             it.getContent()?.let { value ->
                 if (value) {
+
+                    if (viewModel.hasUserSelectedLanguage().not()) {
+                        navigate(R.id.languageFragment, bundleOf("hideContinue" to false))
+                        return@observe
+                    }
+
                     if (viewModel.isDevicePaired()) {
                         if (viewModel.isProfileSetupComplete()) {
                             startActivity(

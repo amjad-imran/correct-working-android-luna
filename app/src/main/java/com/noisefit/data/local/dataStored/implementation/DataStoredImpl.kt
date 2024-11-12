@@ -210,6 +210,7 @@ private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 private const val FMR_CARD_LOCATION = "FMR_CARD_LOCATION"
 private const val CROSSED_CAMPAIGN_ID = "CROSSED_CAMPAIGN_ID"
 private const val APP_LANGUAGE = "APP_LANGUAGE"
+private const val HAS_SELECTED_LANGUAGE = "HAS_SELECTED_LANGUAGE"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -225,12 +226,18 @@ class DataStoredImpl
 
     override fun getSelectedAppLanguage(): String? {
         return mPrefs.getString(APP_LANGUAGE, null)
+    }
 
+    override fun hasUserSelectedLanguage(): Boolean {
+        return mPrefs.getBoolean(HAS_SELECTED_LANGUAGE, false)
+    }
+
+    override fun setHasUserSelectedLanguage() {
+        mPrefs.edit()?.putBoolean(HAS_SELECTED_LANGUAGE, true)?.commit()
     }
 
     override fun setCrossedCampaign(campaignId: Long) {
         mPrefs.edit()?.putLong(CROSSED_CAMPAIGN_ID, campaignId)?.commit()
-
     }
 
     override fun getCrossedCampaign(): Long? {
