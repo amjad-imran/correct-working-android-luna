@@ -18,6 +18,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LanguageViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
     var hideContinue: Boolean = false
@@ -51,6 +53,8 @@ class LanguageViewModel @Inject constructor(
         localDataStore.saveSelectedAppLanguage(language.languageCode)
         NoiseFitApplicationMain.updateUserLanguage(language)
         viewModelScope.launch {
+            userActivityRepository.clearAllHealthData()
+
             userRepository.saveAppLanguage().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
