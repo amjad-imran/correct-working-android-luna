@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -204,7 +205,7 @@ fun AskQuestion(
         onValueChange = { text = it },
         placeholder = {
             Text(
-                text = "Type something",
+                text = stringResource(R.string.text_type_something),
                 style = FontStyle.SIZE_16,
                 color = Color.LightGray
             )

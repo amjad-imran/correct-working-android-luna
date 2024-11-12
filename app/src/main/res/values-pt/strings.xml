@@ -1493,4 +1493,22 @@
     <string name="text_why_optimal_sleep_latency_matters">Por que a latência ideal do sono é importante?</string>
     <string name="text_understanding_restfulness">Compreendendo o descanso</string>
     <string name="text_the_benefits_of_minimizing">Os benefícios de minimizar movimentos elevados para melhor descanso</string>
+    <string name="text_value_workouts_detected">%1$d treinos detectados</string>
+    <string name="text_value_workout_detected">%1$d treino detectado</string>
+    <string name="text_type_something">Digite algo</string>
+    <string name="text_ask_luna_ai_anything">Pergunte qualquer coisa à Luna AI</string>
+    <string name="text_same_as_yesterday">igual a ontem</string>
+    <string name="text_more_than_yesterday">mais do que ontem</string>
+    <string name="text_less_than_yesterday">menos que ontem</string>
+    <string name="text_from_yesterday">de ontem</string>
+    <string name="text_same_as_last_week">igual à semana passada</string>
+    <string name="text_more_than_last_week">mais do que na semana passada</string>
+    <string name="text_less_than_last_week">menos que na semana passada</string>
+    <string name="text_from_last_week_on_average">da semana passada em média</string>
+    <string name="text_same_as_last_month">igual ao mês passado</string>
+    <string name="text_more_than_last_month">mais do que no mês passado</string>
+    <string name="text_less_than_last_month">menos que no mês passado</string>
+    <string name="text_from_last_month_on_average">do mês passado em média</string>
+    <string name="text_avg_from_value">Média de %1$s</string>
+    <string name="text_avg_in_value">Média em %1$s %2$s</string>
 </resources>

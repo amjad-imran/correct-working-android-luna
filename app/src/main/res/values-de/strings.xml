@@ -1493,4 +1493,22 @@
     <string name="text_why_optimal_sleep_latency_matters">Was ist die optimale Arbeitsplatte?</string>
     <string name="text_understanding_restfulness">Rostschutz</string>
     <string name="text_the_benefits_of_minimizing">Um einen besseren Rost zu erzielen, müssen Sie den gesamten Prozess minimieren</string>
+    <string name="text_value_workouts_detected">%1$d Training wurde erkannt</string>
+    <string name="text_value_workout_detected">%1$d Training wurde erkannt</string>
+    <string name="text_type_something">Geben Sie iets ein</string>
+    <string name="text_ask_luna_ai_anything">Vraag Luna AI alles</string>
+    <string name="text_same_as_yesterday">hetzelfde als gisteren</string>
+    <string name="text_more_than_yesterday">mehr und gisteren</string>
+    <string name="text_less_than_yesterday">Aufpasser und gisteren</string>
+    <string name="text_from_yesterday">van gisteren</string>
+    <string name="text_same_as_last_week">hetzelfde als vorige Woche</string>
+    <string name="text_more_than_last_week">Mehr als eine Woche zuvor</string>
+    <string name="text_less_than_last_week">Minder und vorige Woche</string>
+    <string name="text_from_last_week_on_average">gemiddeld van vorige Woche</string>
+    <string name="text_same_as_last_month">hetzelfde als vorige maand</string>
+    <string name="text_more_than_last_month">mehr und mehr</string>
+    <string name="text_less_than_last_month">minder und vorige maand</string>
+    <string name="text_from_last_month_on_average">gemiddeld van vorige maand</string>
+    <string name="text_avg_from_value">Gemiddeld vanaf %1$s</string>
+    <string name="text_avg_in_value">Gemiddeld in %1$s %2$s</string>
 </resources>

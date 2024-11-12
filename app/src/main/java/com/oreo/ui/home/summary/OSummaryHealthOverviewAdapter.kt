@@ -1233,9 +1233,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.AutoSport,
             position: Int,
         ) {
-            var title = "${data.count} workouts detected"
+            var title =
+                binding.root.context.getString(R.string.text_value_workouts_detected, data.count)
+
             if (data.count <= 1) {
-                title = "${data.count} workout detected"
+                title =
+                    binding.root.context.getString(R.string.text_value_workout_detected, data.count)
             }
             binding.tvTitle.text = title
 

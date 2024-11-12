@@ -1498,4 +1498,22 @@
     <string name="text_why_optimal_sleep_latency_matters">Почему оптимальная продолжительность сна имеет значение?</string>
     <string name="text_understanding_restfulness">Понимание покоя</string>
     <string name="text_the_benefits_of_minimizing">Преимущества минимизации частых движений для лучшего покоя</string>
+    <string name="text_value_workouts_detected">Обнаружено %1$d тренировок</string>
+    <string name="text_value_workout_detected">Обнаружена тренировка %1$d</string>
+    <string name="text_type_something">Введите что-нибудь</string>
+    <string name="text_ask_luna_ai_anything">Спросите Луну ИИ о чем угодно</string>
+    <string name="text_same_as_yesterday">то же, что и вчера</string>
+    <string name="text_more_than_yesterday">больше, чем вчера</string>
+    <string name="text_less_than_yesterday">меньше, чем вчера</string>
+    <string name="text_from_yesterday">со вчерашнего дня</string>
+    <string name="text_same_as_last_week">то же, что и на прошлой неделе</string>
+    <string name="text_more_than_last_week">больше, чем на прошлой неделе</string>
+    <string name="text_less_than_last_week">меньше, чем на прошлой неделе</string>
+    <string name="text_from_last_week_on_average">в среднем за прошлую неделю</string>
+    <string name="text_same_as_last_month">то же, что и в прошлом месяце</string>
+    <string name="text_more_than_last_month">больше, чем в прошлом месяце</string>
+    <string name="text_less_than_last_month">меньше, чем в прошлом месяце</string>
+    <string name="text_from_last_month_on_average">в среднем за последний месяц</string>
+    <string name="text_avg_from_value">В среднем за %1$s</string>
+    <string name="text_avg_in_value">В среднем за %1$s %2$s</string>
 </resources>

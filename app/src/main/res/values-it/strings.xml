@@ -1497,4 +1497,22 @@
     <string name="text_why_optimal_sleep_latency_matters">Qual è il livello ottimale di slaaplatentie belangrijk?</string>
     <string name="text_understanding_restfulness">Presenza di ruggine</string>
     <string name="text_the_benefits_of_minimizing">De voordelen van het minimaliseren van hoge bewegingen voor een betere ruggine</string>
+    <string name="text_value_workouts_detected">%1$d formazione rilevata</string>
+    <string name="text_value_workout_detected">%1$d formazione rilevata</string>
+    <string name="text_type_something">Digitare iets</string>
+    <string name="text_ask_luna_ai_anything">Vraag Luna AI tutto</string>
+    <string name="text_same_as_yesterday">hetzelfde als gisteren</string>
+    <string name="text_more_than_yesterday">meer dan gisteren</string>
+    <string name="text_less_than_yesterday">badare a e gisteren</string>
+    <string name="text_from_yesterday">van gisteren</string>
+    <string name="text_same_as_last_week">hetzelfde als vorige week</string>
+    <string name="text_more_than_last_week">più e più settimana vorige</string>
+    <string name="text_less_than_last_week">ricorda e vorige settimana</string>
+    <string name="text_from_last_week_on_average">settimana gemiddeld van vorige</string>
+    <string name="text_same_as_last_month">hetzelfde als vorige maand</string>
+    <string name="text_more_than_last_month">più e meglio</string>
+    <string name="text_less_than_last_month">ricorda e vorige maand</string>
+    <string name="text_from_last_month_on_average">gemiddeld van vorige maand</string>
+    <string name="text_avg_from_value">Valore assegnato %1$s</string>
+    <string name="text_avg_in_value">Gemiddeld in %1$s %2$s</string>
 </resources>

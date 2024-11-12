@@ -1495,4 +1495,22 @@
     <string name="text_mac_address">Adresse MAC</string>
     <string name="text_version">Version</string>
     <string name="text_readiness_score_trend">Gereedheidsscore-tendance</string>
+    <string name="text_value_workouts_detected">%1$d formations détectées</string>
+    <string name="text_value_workout_detected">%1$d formation détectée</string>
+    <string name="text_type_something">Types d\'applications</string>
+    <string name="text_ask_luna_ai_anything">Vraag Luna AI tous</string>
+    <string name="text_same_as_yesterday">hetzelfde als gisteren</string>
+    <string name="text_more_than_yesterday">plus et plus d\'informations</string>
+    <string name="text_less_than_yesterday">garder et enregistrer</string>
+    <string name="text_from_yesterday">Van Gisteren</string>
+    <string name="text_same_as_last_week">hetzelfde als vorige semaine</string>
+    <string name="text_more_than_last_week">plus d\'une semaine</string>
+    <string name="text_less_than_last_week">garder la semaine dernière</string>
+    <string name="text_from_last_week_on_average">semaine gemiddeld van vorige</string>
+    <string name="text_same_as_last_month">hetzelfde comme vorige maand</string>
+    <string name="text_more_than_last_month">plus et vorige maand</string>
+    <string name="text_less_than_last_month">minder et vorige maand</string>
+    <string name="text_from_last_month_on_average">gemiddeld van vorige maand</string>
+    <string name="text_avg_from_value">Moyen de %1$s</string>
+    <string name="text_avg_in_value">Moyen-âge dans %1$s %2$s</string>
 </resources>

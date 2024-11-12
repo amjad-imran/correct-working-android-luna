@@ -1497,4 +1497,22 @@
     <string name="text_why_optimal_sleep_latency_matters">为什么最佳睡眠潜伏期很重要？</string>
     <string name="text_understanding_restfulness">了解宁静</string>
     <string name="text_the_benefits_of_minimizing">尽量减少剧烈运动以获得更好的休息的好处</string>
+    <string name="text_value_workouts_detected">检测到 %1$d 次锻炼</string>
+    <string name="text_value_workout_detected">检测到 %1$d 次锻炼</string>
+    <string name="text_type_something">输入一些内容</string>
+    <string name="text_ask_luna_ai_anything">向 Luna AI 询问任何问题</string>
+    <string name="text_same_as_yesterday">和昨天一样</string>
+    <string name="text_more_than_yesterday">比昨天多</string>
+    <string name="text_less_than_yesterday">比昨天少</string>
+    <string name="text_from_yesterday">从昨天开始</string>
+    <string name="text_same_as_last_week">与上周相同</string>
+    <string name="text_more_than_last_week">比上周多</string>
+    <string name="text_less_than_last_week">比上周少</string>
+    <string name="text_from_last_week_on_average">与上周相比平均</string>
+    <string name="text_same_as_last_month">与上个月相同</string>
+    <string name="text_more_than_last_month">比上个月多</string>
+    <string name="text_less_than_last_month">少于上个月</string>
+    <string name="text_from_last_month_on_average">与上个月平均相比</string>
+    <string name="text_avg_from_value">%1$s 的平均值</string>
+    <string name="text_avg_in_value">%1$s %2$s 的平均值</string>
 </resources>

@@ -440,7 +440,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_yesterday)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as yesterday"
+                            getString(R.string.text_same_as_yesterday)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -448,11 +448,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than yesterday"
+                                    getString(R.string.text_more_than_yesterday)
                                 else
-                                    "less than yesterday"
+                                    getString(R.string.text_less_than_yesterday)
                             } else
-                                "from yesterday"
+                                getString(R.string.text_from_yesterday)
                         }
                     }
 
@@ -461,7 +461,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_week)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last week"
+                            getString(R.string.text_same_as_last_week)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -469,11 +469,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last week"
+                                    getString(R.string.text_more_than_last_week)
                                 else
-                                    "less than last week"
+                                    getString(R.string.text_less_than_last_week)
                             } else
-                                "from last week on average"
+                                getString(R.string.text_from_last_week_on_average)
                         }
                     }
 
@@ -482,7 +482,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_month)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last month"
+                            getString(R.string.text_same_as_last_month)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -490,11 +490,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last month"
+                                    getString(R.string.text_more_than_last_month)
                                 else
-                                    "less than last month"
+                                    getString(R.string.text_less_than_last_month)
                             } else
-                                "from last month on average"
+                                getString(R.string.text_from_last_month_on_average)
                         }
                     }
                 }
@@ -522,7 +522,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_yesterday)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as yesterday"
+                            getString(R.string.text_same_as_yesterday)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -530,11 +530,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than yesterday"
+                                    getString(R.string.text_more_than_yesterday)
                                 else
-                                    "less than yesterday"
+                                    getString(R.string.text_less_than_yesterday)
                             } else
-                                "from yesterday"
+                                getString(R.string.text_from_yesterday)
                         }
                     }
 
@@ -543,7 +543,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_week)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last week"
+                            getString(R.string.text_same_as_last_week)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -551,11 +551,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last week"
+                                    getString(R.string.text_more_than_last_week)
                                 else
-                                    "less than last week"
+                                    getString(R.string.text_less_than_last_week)
                             } else
-                                "from last week on average"
+                                getString(R.string.text_from_last_week_on_average)
                         }
                     }
 
@@ -564,7 +564,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_month)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last month"
+                            getString(R.string.text_same_as_last_month)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -572,11 +572,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last month"
+                                    getString(R.string.text_more_than_last_month)
                                 else
-                                    "less than last month"
+                                    getString(R.string.text_less_than_last_month)
                             } else
-                                "from last month on average"
+                                getString(R.string.text_from_last_month_on_average)
                         }
                     }
                 }
@@ -598,7 +598,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_yesterday)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as yesterday"
+                            getString(R.string.text_same_as_yesterday)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -606,11 +606,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than yesterday"
+                                    getString(R.string.text_more_than_yesterday)
                                 else
-                                    "less than yesterday"
+                                    getString(R.string.text_less_than_yesterday)
                             } else
-                                "from yesterday"
+                                getString(R.string.text_from_yesterday)
                         }
                     }
 
@@ -619,7 +619,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_week)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last week"
+                            getString(R.string.text_same_as_last_week)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -627,11 +627,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last week"
+                                    getString(R.string.text_more_than_last_week)
                                 else
-                                    "less than last week"
+                                    getString(R.string.text_less_than_last_week)
                             } else
-                                "from last week on average"
+                                getString(R.string.text_from_last_week_on_average)
                         }
                     }
 
@@ -640,7 +640,7 @@ class OSleepScoreDetailsFragment :
                         trendYesterdayTitle = getString(R.string.text_last_month)
 
                         trendScoreMsg = if (mViewModel.isProgressEqual)
-                            "same as last month"
+                            getString(R.string.text_same_as_last_month)
                         else {
                             if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
@@ -648,11 +648,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.itemClickType == ViewItemClickType.STEPS.name
                             ) {
                                 if (mViewModel.isTodayGreater)
-                                    "more than last month"
+                                    getString(R.string.text_more_than_last_month)
                                 else
-                                    "less than last month"
+                                    getString(R.string.text_less_than_last_month)
                             } else
-                                "from last month on average"
+                                getString(R.string.text_from_last_month_on_average)
                         }
                     }
                 }
@@ -1079,13 +1079,19 @@ class OSleepScoreDetailsFragment :
 
             "week" -> {
                 val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
-                LOGS.d("sdfsdfsdf ${mViewModel.selectedDate} $yearVal")
-                "Avg from ${DateFormats.getStartAndEndWeek(data.toInt(), yearVal.toInt())}"
+                getString(
+                    R.string.text_avg_from_value,
+                    DateFormats.getStartAndEndWeek(data.toInt(), yearVal.toInt())
+                )
             }
 
             else -> {
                 val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
-                "Avg in ${DateFormats.getCompleteMonthName(data.toInt() - 1)} $yearVal"
+                getString(
+                    R.string.text_avg_in_value,
+                    DateFormats.getCompleteMonthName(data.toInt() - 1),
+                    yearVal
+                )
             }
         }
 

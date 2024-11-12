@@ -1483,4 +1483,22 @@
     <string name="text_why_optimal_sleep_latency_matters">เหตุใดเวลาแฝงในการนอนหลับที่เหมาะสมจึงมีความสำคัญ</string>
     <string name="text_understanding_restfulness">เข้าใจถึงความสงบ</string>
     <string name="text_the_benefits_of_minimizing">ประโยชน์ของการลดการเคลื่อนไหวที่สูงเพื่อการพักผ่อนที่ดีขึ้น</string>
+    <string name="text_value_workouts_detected">ตรวจพบการออกกำลังกาย %1$d</string>
+    <string name="text_value_workout_detected">ตรวจพบการออกกำลังกาย %1$d</string>
+    <string name="text_type_something">พิมพ์อะไรบางอย่าง</string>
+    <string name="text_ask_luna_ai_anything">ถาม Luna AI อะไรก็ได้</string>
+    <string name="text_same_as_yesterday">เช่นเดียวกับเมื่อวาน</string>
+    <string name="text_more_than_yesterday">มากกว่าเมื่อวาน</string>
+    <string name="text_less_than_yesterday">น้อยกว่าเมื่อวาน</string>
+    <string name="text_from_yesterday">จากเมื่อวาน</string>
+    <string name="text_same_as_last_week">เช่นเดียวกับสัปดาห์ที่แล้ว</string>
+    <string name="text_more_than_last_week">มากกว่าสัปดาห์ที่แล้ว</string>
+    <string name="text_less_than_last_week">น้อยกว่าสัปดาห์ที่แล้ว</string>
+    <string name="text_from_last_week_on_average">โดยเฉลี่ยจากสัปดาห์ที่แล้ว</string>
+    <string name="text_same_as_last_month">เช่นเดียวกับเดือนที่แล้ว</string>
+    <string name="text_more_than_last_month">มากกว่าเดือนที่แล้ว</string>
+    <string name="text_less_than_last_month">น้อยกว่าเดือนที่แล้ว</string>
+    <string name="text_from_last_month_on_average">โดยเฉลี่ยจากเดือนที่แล้ว</string>
+    <string name="text_avg_from_value">เฉลี่ยตั้งแต่ %1$s</string>
+    <string name="text_avg_in_value">เฉลี่ยใน %1$s %2$s</string>
 </resources>
