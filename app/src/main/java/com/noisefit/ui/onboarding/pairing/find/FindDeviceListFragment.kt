@@ -18,10 +18,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
@@ -54,6 +56,7 @@ import com.noisefit_commans.utils.*
 import com.noisefit_commans.utils.bleUtils.CRPScanRecordParser
 import com.noisefit_commans.utils.bleUtils.DeviceEntity
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -124,6 +127,15 @@ class FindDeviceListFragment :
     }
 
     private fun checkPermissionAndScan() {
+        if(hasGpsPermission().not()){
+            showPermDetailsDialog()
+            return
+        }
+
+        askPermAndScan()
+    }
+
+    private fun askPermAndScan(){
         checkLocationPermission(permissionGranted = {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -227,6 +239,34 @@ class FindDeviceListFragment :
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             )
+        }
+    }
+
+    private fun showPermDetailsDialog() {
+        setFragmentResultListener(LOCATION_PERM_REQUEST_PAIRING) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+            if (allow) {
+                this@FindDeviceListFragment.askPermAndScan()
+            } else {
+                this@FindDeviceListFragment.navigateUpSafe()
+            }
+        }
+        navigate(R.id.bottomSheetLocationPermissionRequest2)
+    }
+
+    private fun hasGpsPermission(): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
+        }else{
+            return false
         }
     }
 
