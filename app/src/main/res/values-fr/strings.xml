@@ -212,9 +212,31 @@
     <string name="channel_data_sync_noise_description">Synchronisation des données</string>
     <string name="channel_noise_connection">Notifications de connectivité</string>
     <string name="channel_connection_description">Notifications de connectivité</string>
-    <string name="text_stock_disclaimer">
-<![CDATA[ Ces données sont destinées à être utilisées à des fins de référence et d\'information uniquement. Effectuez vos propres recherches indépendantes avant d’investir dans des actions. Vérifiez les données provenant de plusieurs sources car la valeur marchande peut fluctuer rapidement. Toutes les figures sont destinées uniquement à des fins éducatives. Consultez votre conseiller financier avant d\'investir. ]]>
-</string>
+    <string name="text_understanding_restorative_sleep">Herstellende slaap begrijpen</string>
+    <string name="text_the_benefits_of_getting">De voordelen van voldoende herstellende slaap</string>
+    <string name="text_what_is_sleep_performance">Qu\'est-ce qui est en cause?</string>
+    <string name="text_how_to_improve_sleep_performance">Comment les slaapprestaties sont-elles prononcées ?</string>
+    <string name="text_hours_vs_need">Uren contre behoefte</string>
+    <string name="text_the_science_of_hours_vs_need">De wetenschap van uren contre behoefte</string>
+    <string name="text_why_does_sleep_need">Pourquoi est-ce que c\'est vrai et comment peut-on dire ces mots ?</string>
+    <string name="text_sleep_consistency">Cohérence du slaap</string>
+    <string name="text_understanding_sleep_consistency">Slaapcohérence avec le belang Ervan begrijpen</string>
+    <string name="text_the_benefits_of_maintaining">Les exigences du handhaven en matière de cohérence</string>
+    <string name="text_understanding_circadian_mid_point">Le point moyen circadien commence</string>
+    <string name="text_the_benefits_of_aligning">Les lignes directrices de votre point médian circadien</string>
+    <string name="text_understanding_sleep_efficiency">Slaapefficiëntie begrijpen</string>
+    <string name="text_the_benefits_of_sleep_efficiency">L\'efficacité des efforts</string>
+    <string name="text_understanding_rem_sleep">Rem-slaap begrijpen</string>
+    <string name="text_the_benefits_of_rem_sleep">Les suggestions du REM-slaap</string>
+    <string name="text_understanding_deep_sleep">Diepe slaap begrijpen</string>
+    <string name="text_the_benefits_of_deep_sleep">De voordelen van diepe slaap</string>
+    <string name="text_understanding_sleep_duration">De slaapduur begrijpen</string>
+    <string name="text_the_importance_of_sleep">Il s\'agit d\'un slaapduur pour la santé et le monde</string>
+    <string name="text_sleep_latency">Slaaplatentie</string>
+    <string name="text_understanding_sleep_latency">Slaaplatentie begrijpen</string>
+    <string name="text_why_optimal_sleep_latency_matters">Pourquoi est-ce que la slaaplatentie belangrijk est optimale ?</string>
+    <string name="text_understanding_restfulness">Présence de rouille</string>
+    <string name="text_the_benefits_of_minimizing">Il s\'agit de minimiser les problèmes de haute qualité pour une meilleure rouille</string>
     <string name="text_kms">kms</string>
     <string name="text_sleep_score_lower">Score de sommeil</string>
     <string name="text_date">Date</string>
@@ -1472,4 +1494,5 @@
     <string name="text_size">Maât</string>
     <string name="text_mac_address">Adresse MAC</string>
     <string name="text_version">Version</string>
+    <string name="text_readiness_score_trend">Gereedheidsscore-tendance</string>
 </resources>

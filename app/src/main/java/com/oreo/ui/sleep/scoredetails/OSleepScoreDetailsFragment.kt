@@ -1669,7 +1669,7 @@ class OSleepScoreDetailsFragment :
             }
 
             ViewItemClickType.READINESS_SCORE -> {
-                trendTitle = "Readiness score trend "
+                trendTitle = getString(R.string.text_readiness_score_trend)
             }
 
             ViewItemClickType.HR_VARIABILITY -> {
