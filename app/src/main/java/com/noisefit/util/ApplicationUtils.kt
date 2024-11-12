@@ -60,15 +60,15 @@ object ApplicationUtils {
     fun getSupportedLanguages(): List<AppLanguage> {
         return arrayListOf(
             AppLanguage("English", "en"),
-            AppLanguage("French", "fr"),
-            AppLanguage("German", "de"),
-            AppLanguage("Spanish", "es"),
-            AppLanguage("Italian", "it"),
-            AppLanguage("Dutch", "nl"),
-            AppLanguage("Mandarin", "zh"),
-            AppLanguage("Portuguese", "pt"),
-            AppLanguage("Thai", "th"),
-            AppLanguage("Russian", "ru"),
+            AppLanguage("Français", "fr"),
+            AppLanguage("Deutsch", "de"),
+            AppLanguage("Español", "es"),
+            AppLanguage("Italiano", "it"),
+            AppLanguage("Nederlandse", "nl"),
+            AppLanguage("普通话", "zh"),
+            AppLanguage("Português", "pt"),
+            AppLanguage("ภาษาไทย", "th"),
+            AppLanguage("Русский", "ru"),
         )
     }
 
