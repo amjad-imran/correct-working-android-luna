@@ -66,7 +66,7 @@ class OreoAContributorAdapter(val mListener: ContributorItemClickListener) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: ArrayList<Contributors>) {
+    fun setData(resultData: List<Contributors>) {
         mDataSet.clear()
         mDataSet.addAll(resultData)
         notifyDataSetChanged()

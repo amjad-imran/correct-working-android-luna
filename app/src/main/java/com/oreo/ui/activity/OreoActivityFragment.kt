@@ -357,7 +357,8 @@ class OreoActivityFragment :
 
         //handle contributors data
         binding.lytAContributor.tvTitle.text = getString(R.string.text_activity_contributors)
-        mActivityAdapter.setData(mViewModel.getContributorsData(it) as ArrayList<Contributors>)
+        mViewModel.contriData = mViewModel.getContributorsData(it) as ArrayList<Contributors>
+        mActivityAdapter.setData(mViewModel.contriData ?: ArrayList())
 
         //handle daily movement views
 //        handleMovementViews(it)

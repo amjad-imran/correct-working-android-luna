@@ -24,6 +24,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.Contributor
 
 
 @HiltViewModel
@@ -42,6 +43,8 @@ constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+
+    private var contriData: List<Contributors>? = null
 
     init {
         //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
@@ -296,6 +299,7 @@ constructor(
         val desList = getParsedDescriptionData(contriVersion)
         for (i in resultData.indices) {
             val ctList = resultData[i]
+            val hasData = checkIfDataExists(ctList.contriType)
             val child = Contributors(
                 title = ctList.title,
                 leftText = ctList.leftText,
@@ -303,22 +307,34 @@ constructor(
                 barColor = ctList.barColor,
                 barPercent = ctList.barPercent,
                 backgroundRes = ctList.backgroundRes,
-                description = desList[i]
+                description = desList[i],
+                contriType = ctList.contriType,
+                hasData = hasData
             )
             contList.add(child)
         }
         return contList
     }
 
+    private fun checkIfDataExists(contriType: Contributor): Boolean {
+        if (contriData == null) return false
+
+        val data = contriData?.first {
+            it.contriType == contriType
+        }
+        return data?.hasData ?: true
+    }
+
     fun getContributorsData(dayData: OreoReadinessModel?, contriVersion: Int): List<Contributors> {
-        return if (contriVersion >= 2) {
+        contriData = if (contriVersion >= 2) {
             getContributorsDataVersion2(dayData)
         } else {
             getContributorsDataVersion1(dayData)
         }
+        return contriData ?: ArrayList()
     }
 
-    fun getContributorsDataVersion2(dayData: OreoReadinessModel?): List<Contributors> {
+    private fun getContributorsDataVersion2(dayData: OreoReadinessModel?): List<Contributors> {
         val result = ArrayList<Contributors>()
 
         //Sleep score
@@ -332,19 +348,21 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.sleepScore.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SLEEP_SCORE
                 )
             )
         } else {
             result.add(
                 Contributors(
-                    title =  resourcesProvider.getString(R.string.text_sleep_score),
+                    title = resourcesProvider.getString(R.string.text_sleep_score),
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.SLEEP_SCORE
                 )
             )
         }
@@ -360,7 +378,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.activityScore.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.ACTIVITY_SCORE
                 )
             )
         } else {
@@ -372,7 +391,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.ACTIVITY_SCORE
                 )
             )
         }
@@ -388,7 +408,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.recoveryIndex.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.RECOVERY_INDEX
                 )
             )
         } else {
@@ -400,7 +421,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.RECOVERY_INDEX
                 )
             )
         }
@@ -415,7 +437,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.sleepRegularity.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SLEEP_REGULARITY
                 )
             )
         } else {
@@ -427,7 +450,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.SLEEP_REGULARITY
                 )
             )
         }
@@ -442,7 +466,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.sleepBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SLEEP_BALANCE
                 )
             )
         } else {
@@ -454,7 +479,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.SLEEP_BALANCE
                 )
             )
         }
@@ -470,7 +496,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.AVERAGE_HR
                 )
             )
         } else {
@@ -482,7 +509,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.AVERAGE_HR
                 )
             )
         }
@@ -498,7 +526,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.activityBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.ACTIVITY_BALANCE
                 )
             )
         } else {
@@ -510,7 +539,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.ACTIVITY_BALANCE
                 )
             )
         }
@@ -525,7 +555,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.hrvBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.HRV_BALANCE
                 )
             )
         } else {
@@ -537,7 +568,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.HRV_BALANCE
                 )
             )
         }
@@ -553,7 +585,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.tempBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SKIN_TEMP
                 )
             )
         } else {
@@ -565,7 +598,8 @@ constructor(
                     barColor = R.color.readiness_progress_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.SKIN_TEMP
                 )
             )
         }
@@ -584,7 +618,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.totalSleep.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SLEEP_DURATION
                 )
             )
         } else {
@@ -595,7 +630,9 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    hasData = false,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.SLEEP_DURATION
                 )
             )
         }
@@ -608,7 +645,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.sleepBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.SLEEP_BALANCE
                 )
             )
         } else {
@@ -618,8 +656,10 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
+                    hasData = false,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.SLEEP_BALANCE
                 )
             )
         }
@@ -634,7 +674,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.activityScore.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.ACTIVITY_SCORE
                 )
             )
         } else {
@@ -644,8 +685,10 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
+                    hasData = false,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.ACTIVITY_SCORE
                 )
             )
         }
@@ -660,7 +703,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.activityBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.ACTIVITY_BALANCE
                 )
             )
         } else {
@@ -670,8 +714,10 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
+                    hasData = false,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.ACTIVITY_BALANCE
                 )
             )
         }
@@ -685,7 +731,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.hrvBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.HRV_BALANCE
                 )
             )
         } else {
@@ -695,8 +742,10 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
+                    hasData = false,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.HRV_BALANCE
                 )
             )
         }
@@ -711,7 +760,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.AVERAGE_HR
                 )
             )
         } else {
@@ -721,8 +771,10 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
+                    hasData = false,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.AVERAGE_HR
                 )
             )
         }
@@ -737,7 +789,8 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.recoveryIndex.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.RECOVERY_INDEX
                 )
             )
         } else {
@@ -748,7 +801,9 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
                     barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    hasData = false,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new,
+                    contriType = Contributor.RECOVERY_INDEX
                 )
             )
         }

@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.Contributor
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.ODayTimeActivitiesDataModel
@@ -44,6 +45,8 @@ class OreoActivityViewModel @Inject constructor(
     val dayTimeDataConvertor: OreoDayTimeDataConvertor
 ) : BaseViewModel() {
 
+
+    var contriData: List<Contributors>? = null
 
     var activeMinutes: Int = 0
 
@@ -259,7 +262,8 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = stayActive.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.STAY_ACTIVE
                 )
             )
         } else {
@@ -271,7 +275,8 @@ class OreoActivityViewModel @Inject constructor(
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.STAY_ACTIVE
                 )
             )
         }
@@ -287,7 +292,8 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = moveEveryHour.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.MOVE_EVERY_HOUR
                 )
             )
         } else {
@@ -299,7 +305,8 @@ class OreoActivityViewModel @Inject constructor(
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.MOVE_EVERY_HOUR
                 )
             )
         }
@@ -314,7 +321,8 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = caloriesGoal.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.CALORIE_GOAL
                 )
             )
         } else {
@@ -326,7 +334,8 @@ class OreoActivityViewModel @Inject constructor(
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.CALORIE_GOAL
                 )
             )
         }
@@ -342,7 +351,8 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = trainingFrequency.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.TRAINING_FREQUENCY
                 )
             )
         } else {
@@ -354,7 +364,8 @@ class OreoActivityViewModel @Inject constructor(
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.TRAINING_FREQUENCY
                 )
             )
         }
@@ -369,7 +380,8 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = trainingVolume.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
+                    contriType = Contributor.TRAINING_VOLUME
                 )
             )
         } else {
@@ -381,7 +393,8 @@ class OreoActivityViewModel @Inject constructor(
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
                     hasData = false,
-                    backgroundRes = R.drawable.back_modal_new_disabled
+                    backgroundRes = R.drawable.back_modal_new_disabled,
+                    contriType = Contributor.TRAINING_VOLUME
                 )
             )
         }
@@ -430,6 +443,8 @@ class OreoActivityViewModel @Inject constructor(
         val desList = getParsedDescriptionData()
         for (i in resultData.indices) {
             val ctList = resultData[i]
+            val hasData = checkIfDataExists(ctList.contriType)
+
             val child = Contributors(
                 title = ctList.title,
                 leftText = ctList.leftText,
@@ -437,12 +452,23 @@ class OreoActivityViewModel @Inject constructor(
                 barColor = ctList.barColor,
                 barPercent = ctList.barPercent,
                 backgroundRes = ctList.backgroundRes,
-                description = desList[i]
+                description = desList[i],
+                hasData = hasData,
+                contriType = ctList.contriType
             )
             contList.add(child)
         }
 
         return contList
+    }
+
+    private fun checkIfDataExists(contriType: Contributor): Boolean {
+        if (contriData == null) return false
+
+        val data = contriData?.first {
+            it.contriType == contriType
+        }
+        return data?.hasData ?: true
     }
 
     fun getAvgValue(it: List<OreoActivityModel>): Int {

@@ -21,6 +21,7 @@ import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.Contributor
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.health.CommonListDataModel
@@ -283,7 +284,8 @@ constructor(
                 barPercent = ctList.barPercent,
                 hasData = ctList.hasData,
                 backgroundRes = ctList.backgroundRes,
-                description = desList[i]
+                description = desList[i],
+                contriType = Contributor.SLEEP_SCORE,
             )
             contList.add(child)
         }
@@ -303,7 +305,7 @@ constructor(
     fun getContributorsData(dayData: OreoSleepModel): List<Contributors> {
         val result = ArrayList<Contributors>()
 
-        if (dayData.totalSleep != null) {
+        /*if (dayData.totalSleep != null) {
             val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep!!.status)
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.totalSleep?.value ?: 0
@@ -319,7 +321,7 @@ constructor(
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.totalSleep?.valPrcnt ?: 0,
-                    backgroundRes = background
+                    backgroundRes = background,
                 )
             )
         } else {
@@ -517,7 +519,7 @@ constructor(
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
-        }
+        }*/
 
         return result
     }
