@@ -646,6 +646,11 @@ constructor(
             }
         }*/
 
+        val currentHour = java.time.LocalDateTime.now().hour
+        if(currentHour >=12){
+            return
+        }
+
         response?.readiness?.let {
             val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
