@@ -600,7 +600,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         binding.tvLastUpdate.text = ""
                     } else {
                         binding.tvLastUpdate.text =
-                            "Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
+                            binding.tvLastUpdate.context.getString(
+                                R.string.text_updated_value,
+                                DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                            )
                     }
                 } else {
                     binding.tvLastUpdate.text = ""

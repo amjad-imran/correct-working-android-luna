@@ -1558,5 +1558,6 @@
     <string name="text_from_last_month_on_average">from last month on average</string>
     <string name="text_avg_from_value">Avg from %1$s</string>
     <string name="text_avg_in_value">Avg in %1$s %2$s</string>
+    <string name="text_updated_value">Updated %1$s</string>
 
 </resources>
