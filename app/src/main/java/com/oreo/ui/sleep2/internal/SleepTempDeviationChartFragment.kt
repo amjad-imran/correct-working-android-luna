@@ -3,20 +3,15 @@ package com.oreo.ui.sleep2.internal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.google.gson.Gson
-import com.noisefit.luna.databinding.FragmentSleepBarChartBinding
 import com.noisefit.luna.databinding.FragmentSleepTempDeviationBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.AppConversionUtils
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.ResultData
 import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.ui.custom.ScrollListener
-import com.oreo.ui.custom.sleep.internal.GraphDataModel
-import com.oreo.ui.custom.sleep.internal.SleepSingleBarAction
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
@@ -58,7 +53,8 @@ class SleepTempDeviationChartFragment :
         binding.rvTopBarGraph.updateDataWithMax(
             topGraphData.first.first,
             topGraphData.third,
-            topGraphData.second
+            topGraphData.second,
+            sharedViewModel.sessionManager.isMetric()
         )
 
         pageData?.data?.lastOrNull()?.date?.let {

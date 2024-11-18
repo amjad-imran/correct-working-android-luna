@@ -8,19 +8,15 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.DistanceUtil.convertMeterToKm
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
-import com.oreo.ui.activity.dpToPx
-import java.util.logging.Handler
+import java.text.DecimalFormat
 import kotlin.math.abs
-import kotlin.math.min
 
 class BarChartTemp : View {
     private var bgColor = 0
@@ -35,6 +31,8 @@ class BarChartTemp : View {
     private var gridColor = 0
     private var hCount = 0
     var max = 0.0f
+    private var isMetric = false
+
     private var xMin = 0
     private var leftWith = 0f
     private var rightWith = 0f
@@ -333,19 +331,19 @@ class BarChartTemp : View {
         val yTextStart = mWith - dip2px(32f).toFloat()
 
         canvas.drawText(
-            "+$yTop", yTextStart, sectionHeight * 1 - offset, yAxisPaint!!
+            "+${formatFloat(yTop)}", yTextStart, sectionHeight * 1 - offset, yAxisPaint!!
         )
         yTop -= yGap
         canvas.drawText(
-            "+$yTop", yTextStart, sectionHeight * 2 - offset, yAxisPaint!!
+            "+${formatFloat(yTop)}", yTextStart, sectionHeight * 2 - offset, yAxisPaint!!
         )
         yTop -= yGap
         canvas.drawText(
-            "+$yTop", yTextStart, sectionHeight * 3 - offset, yAxisPaint!!
+            "+${formatFloat(yTop)}", yTextStart, sectionHeight * 3 - offset, yAxisPaint!!
         )
         yTop -= yGap
         canvas.drawText(
-            "+$yTop", yTextStart, sectionHeight * 4 - offset, yAxisPaint!!
+            "+${formatFloat(yTop)}", yTextStart, sectionHeight * 4 - offset, yAxisPaint!!
         )
         yTop = 0.0f
         canvas.drawText(
@@ -353,26 +351,31 @@ class BarChartTemp : View {
         )
         yTop -= yGap
         canvas.drawText(
-            "$yTop", yTextStart, centerY + sectionHeight * 1 - offset, yAxisPaint!!
+            "${formatFloat(yTop)}", yTextStart, centerY + sectionHeight * 1 - offset, yAxisPaint!!
         )
         yTop -= yGap
         canvas.drawText(
-            "$yTop", yTextStart, centerY + sectionHeight * 2 - offset, yAxisPaint!!
+            "${formatFloat(yTop)}", yTextStart, centerY + sectionHeight * 2 - offset, yAxisPaint!!
         )
         yTop -= yGap
         canvas.drawText(
-            "$yTop", yTextStart, centerY + sectionHeight * 3 - offset, yAxisPaint!!
+            "${formatFloat(yTop)}", yTextStart, centerY + sectionHeight * 3 - offset, yAxisPaint!!
         )
 
         yTop -= yGap
         canvas.drawText(
-            "$yTop", yTextStart, centerY + sectionHeight * 4 - offset, yAxisPaint!!
+            "${formatFloat(yTop)}", yTextStart, centerY + sectionHeight * 4 - offset, yAxisPaint!!
         )
     }
 
     fun updateDataWithMax(
-        datas: List<ChartModel>, prefixList: List<ChartModel>, suffixList: List<ChartModel>
+        datas: List<ChartModel>,
+        prefixList: List<ChartModel>,
+        suffixList: List<ChartModel>,
+        isMetric: Boolean
     ) {
+        this.isMetric = isMetric
+
         list?.clear()
         list?.addAll(prefixList)
         list?.addAll(datas)
@@ -381,18 +384,29 @@ class BarChartTemp : View {
         suffixCount = suffixList.size
         max = getMaxValue(datas)
         setToUnit()
-
         postInvalidate()
     }
 
     fun getMaxValue(datas: List<ChartModel>): Float {
-        var max = 2.0f
+        var max = getConvertedValue(2.0f)
         datas.forEach {
-            if (abs(it.valueFloat) > max) {max
-                max = 4.0f
+            if (abs(it.valueFloat) > max) {
+                max = getConvertedValue(4.0f)
             }
         }
         return max
+    }
+
+    private fun getConvertedValue(value: Float): Float {
+        return if (isMetric) {
+            val convertedVal = AppConversionUtils.fahrenheitToCelsius(32 + value)
+            return formatFloat(convertedVal)
+        } else value
+    }
+
+    private fun formatFloat(value: Float): Float {
+        val df = DecimalFormat("#.#")
+        return df.format(value).toFloat()
     }
 
     private fun drawContent(canvas: Canvas) {

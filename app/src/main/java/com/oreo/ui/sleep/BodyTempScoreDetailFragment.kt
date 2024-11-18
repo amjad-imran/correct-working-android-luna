@@ -24,7 +24,6 @@ import com.oreo.ui.sleep.scoredetails.OSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class BodyTempScoreDetailFragment :
@@ -121,7 +120,8 @@ class BodyTempScoreDetailFragment :
         binding.rvTopBarGraph.updateDataWithMax(
             topGraphData.first.first,
             topGraphData.third,
-            topGraphData.second
+            topGraphData.second,
+            mViewModel.sessionManager.isMetric()
         )
 
 
