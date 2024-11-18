@@ -67,6 +67,10 @@
         android:id="@+id/badRatingBottomSheet"
         android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
         android:label="BadRatingBottomSheet" />
+    <dialog
+        android:id="@+id/bottomSheetLocationPermissionRequest2"
+        android:name="com.noisefit.ui.onboarding.pairing.find.BottomSheetLocationPermissionRequest"
+        android:label="BottomSheetLocationPermissionRequest" />
 
 
 </navigation>

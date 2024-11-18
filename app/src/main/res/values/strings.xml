@@ -1560,5 +1560,6 @@
     <string name="text_avg_in_value">Avg in %1$s %2$s</string>
     <string name="text_updated_value">Updated %1$s</string>
     <string name="text_temperature_variation">Temperature variation</string>
+    <string name="text_when_using_bluetooth_to">We need to use location permissions to enable Bluetooth related functions while using Bluetooth to search for devices, or to connect devices with Bluetooth. Do you agree to allow Luna ring app to access your location?</string>
 
 </resources>
