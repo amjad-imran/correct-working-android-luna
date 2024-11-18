@@ -173,15 +173,20 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         app:layout_constraintGuide_begin="113dp" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNameLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/name"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvNameValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -217,12 +222,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvGenderLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/gender"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvGenderValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include37" />
 
@@ -256,12 +265,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvDobLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/dob"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvDobValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include38" />
 
@@ -412,12 +425,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvHeightLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/height"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvHeightValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include41" />
 
@@ -451,12 +468,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvWeightLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/weight"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvWeightValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include42" />
 
@@ -542,13 +563,17 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNumberLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/number"
                         android:textColor="@color/white_64"
                         android:visibility="@{viewModel.numberAvailable ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toStartOf="@+id/tvNumberValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -582,12 +607,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvEmailLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
                         android:text="@string/emailid"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvEmailValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include44" />
 

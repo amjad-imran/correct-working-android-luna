@@ -1559,5 +1559,6 @@
     <string name="text_avg_from_value">Avg from %1$s</string>
     <string name="text_avg_in_value">Avg in %1$s %2$s</string>
     <string name="text_updated_value">Updated %1$s</string>
+    <string name="text_temperature_variation">Temperature variation</string>
 
 </resources>

@@ -2,8 +2,10 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
@@ -49,6 +51,7 @@ class SummaryDataViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
+    val resourcesProvider: ResourcesProvider,
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
     val hrDataConvertor: OreoHRDataConvertor
@@ -113,7 +116,7 @@ class SummaryDataViewModel @Inject constructor(
                         if (totalSleep == null) {
                             totalSleep = 0
                         }
-                        totalSleep = totalSleep!! + (it.totalDuration?:0)
+                        totalSleep = totalSleep!! + (it.totalDuration ?: 0)
                     }
                     filteredNaps.forEach {
                         val start = java.time.LocalDateTime.parse(
@@ -144,8 +147,8 @@ class SummaryDataViewModel @Inject constructor(
                                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                                 totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
-                                noOfNaps = healthData.sleep?.naps?.size?:0,
-                                noOfSleeps = healthData.sleep?.sleeps?.size?:0
+                                noOfNaps = healthData.sleep?.naps?.size ?: 0,
+                                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
                             ),
                             makeSleepArray(newSleepArray),
                             newSleepArray?.firstOrNull()?.start_time ?: "",
@@ -202,9 +205,9 @@ class SummaryDataViewModel @Inject constructor(
     private fun getStressStatus(value: Int?): String {
         return when (value) {
             0 -> ""
-            in 1..34 -> "Relaxed"
-            in 35..69 -> "Focussed"
-            in 70..100 -> "Stressed"
+            in 1..34 -> resourcesProvider.getString(R.string.text_relaxed)
+            in 35..69 -> resourcesProvider.getString(R.string.text_focussed)
+            in 70..100 -> resourcesProvider.getString(R.string.text_stressed)
             else -> ""
         }
     }

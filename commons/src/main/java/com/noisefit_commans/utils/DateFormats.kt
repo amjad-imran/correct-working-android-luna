@@ -6,6 +6,8 @@ import android.os.Build
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
+import com.noisefit_commans.NoisefitApplication
+import com.noisefit_commans.R
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import org.joda.time.DateTime
@@ -1316,7 +1318,7 @@ object DateFormats {
     fun getRelativeTime(timestamp: Long): String {
         val currentTimeStamp = Calendar.getInstance().timeInMillis
         val relativeTime = if (timestamp + 60000 > currentTimeStamp) {
-            "Just Now"
+            NoisefitApplication.context!!.getString(R.string.text_just_now)
         } else {
             DateUtils.getRelativeTimeSpanString(
                 timestamp,

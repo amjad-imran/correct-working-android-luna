@@ -355,7 +355,7 @@ class OWorkoutDetailsFragmentV2 :
 
         }
 
-        if (it.location?.locations.isNullOrEmpty()) {
+        if (it.location?.locations.isNullOrEmpty() || (it.location?.locations?.size ?: 0) <= 2) {
             binding.lytTop.vMapOverlay.gone()
             binding.lytTop.vMapGradientTop.gone()
             binding.lytTop.vMapGradientBottom.gone()

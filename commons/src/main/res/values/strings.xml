@@ -19,5 +19,6 @@
     <string name="text_high">High</string>
     <string name="text_med">Med</string>
     <string name="text_low">Low</string>
+    <string name="text_just_now">Just Now</string>
 
 </resources>

@@ -84,14 +84,15 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
                     app:srcCompat="@drawable/ic_default_profile_image" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/ivUserImage"
-                    app:layout_constraintEnd_toEndOf="@id/ivUserImage"
                     android:layout_marginBottom="12dp"
+                    android:src="@drawable/ic_edit"
                     app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
-                    android:src="@drawable/ic_edit"/>
+                    app:layout_constraintEnd_toEndOf="@id/ivUserImage"
+                    app:layout_constraintStart_toStartOf="@id/ivUserImage" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvChangeNameLabel"
@@ -100,9 +101,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_12dp"
                     android:padding="@dimen/dimen_8dp"
-                    android:visibility="gone"
                     android:text="@string/change_profile_picture"
                     android:textColor="@color/sleep_color"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
@@ -131,12 +132,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNameLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/name"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvNameValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,8 +153,8 @@
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginEnd="@dimen/side_margin"
                         android:drawableEnd="@drawable/ic_o_arrow_profile"
-                        android:singleLine="true"
                         android:gravity="center_vertical"
+                        android:singleLine="true"
                         app:layout_constraintBottom_toBottomOf="@+id/tvNameLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline1"
@@ -161,9 +166,9 @@
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginEnd="1dp"
                         android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
@@ -171,12 +176,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvGenderLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/gender"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvGenderValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include1" />
 
@@ -187,8 +196,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginEnd="@dimen/side_margin"
-                        android:gravity="center_vertical"
                         android:drawableEnd="@drawable/ic_o_arrow_profile"
+                        android:gravity="center_vertical"
                         app:layout_constraintBottom_toBottomOf="@id/tvGenderLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline1"
@@ -200,9 +209,9 @@
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="1dp"
-                        android:layout_marginStart="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvGenderLabel" />
@@ -211,12 +220,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvDobLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/dob"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvDobValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include2" />
 
@@ -228,8 +241,8 @@
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginEnd="@dimen/side_margin"
                         android:drawableEnd="@drawable/ic_o_arrow_profile"
-                        android:singleLine="true"
                         android:gravity="center_vertical"
+                        android:singleLine="true"
                         app:layout_constraintBottom_toBottomOf="@+id/tvDobLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline1"
@@ -241,10 +254,10 @@
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="1dp"
                         android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="1dp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvDobLabel" />
@@ -253,13 +266,13 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvLocationLabel"
                         style="@style/H6"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/text_location"
                         android:textColor="@color/white_64"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include3" />
 
@@ -269,64 +282,64 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/side_margin"
                         android:drawableEnd="@drawable/ic_arrow_right_dir"
-                        android:singleLine="true"
                         android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/tvLocationLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/tvLocationLabel"
                         tools:text="Rohini" />
 
-<!--                    <include-->
-<!--                        android:id="@+id/include4"-->
-<!--                        layout="@layout/layout_divider"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"-->
-<!--                        android:layout_marginTop="16dp"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/tvLocationLabel" />-->
+                    <!--                    <include-->
+                    <!--                        android:id="@+id/include4"-->
+                    <!--                        layout="@layout/layout_divider"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="1dp"-->
+                    <!--                        android:layout_marginTop="16dp"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toBottomOf="@+id/tvLocationLabel" />-->
 
 
-<!--                    <com.google.android.material.textview.MaterialTextView-->
-<!--                        android:id="@+id/tvInterestLabel"-->
-<!--                        style="@style/H6"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="@dimen/side_margin"-->
-<!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
-<!--                        android:text="@string/text_interests"-->
-<!--                        android:textColor="@color/white_64"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/include4" />-->
+                    <!--                    <com.google.android.material.textview.MaterialTextView-->
+                    <!--                        android:id="@+id/tvInterestLabel"-->
+                    <!--                        style="@style/H6"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="@dimen/side_margin"-->
+                    <!--                        android:layout_marginTop="@dimen/dimen_16dp"-->
+                    <!--                        android:text="@string/text_interests"-->
+                    <!--                        android:textColor="@color/white_64"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toBottomOf="@+id/include4" />-->
 
-<!--                    <com.google.android.material.textview.MaterialTextView-->
-<!--                        android:id="@+id/tvInterestsValue"-->
-<!--                        style="@style/H6"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="@dimen/side_margin"-->
-<!--                        android:layout_marginEnd="@dimen/side_margin"-->
-<!--                        android:drawableEnd="@drawable/ic_arrow_right_dir"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:gravity="center_vertical"-->
-<!--                        app:layout_constraintBottom_toBottomOf="@+id/tvInterestLabel"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/guideline1"-->
-<!--                        app:layout_constraintTop_toTopOf="@+id/tvInterestLabel"-->
-<!--                        tools:text="Max Productivity" />-->
+                    <!--                    <com.google.android.material.textview.MaterialTextView-->
+                    <!--                        android:id="@+id/tvInterestsValue"-->
+                    <!--                        style="@style/H6"-->
+                    <!--                        android:layout_width="0dp"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="@dimen/side_margin"-->
+                    <!--                        android:layout_marginEnd="@dimen/side_margin"-->
+                    <!--                        android:drawableEnd="@drawable/ic_arrow_right_dir"-->
+                    <!--                        android:singleLine="true"-->
+                    <!--                        android:gravity="center_vertical"-->
+                    <!--                        app:layout_constraintBottom_toBottomOf="@+id/tvInterestLabel"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toEndOf="@+id/guideline1"-->
+                    <!--                        app:layout_constraintTop_toTopOf="@+id/tvInterestLabel"-->
+                    <!--                        tools:text="Max Productivity" />-->
 
                     <include
                         android:id="@+id/include5"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginEnd="1dp"
                         android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvLocationLabel" />
@@ -335,12 +348,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvHeightLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/height"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvHeightValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include5" />
 
@@ -353,19 +370,20 @@
                         android:layout_marginEnd="@dimen/side_margin"
                         android:drawableEnd="@drawable/ic_o_arrow_profile"
                         android:gravity="center_vertical"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/tvHeightLabel"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/tvHeightLabel"
                         tools:text="165 cm" />
+
                     <include
                         android:id="@+id/include6"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="1dp"
-                        android:layout_marginStart="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvHeightLabel" />
@@ -374,12 +392,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvWeightLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/weight"
                         android:textColor="@color/white_64"
+                        app:layout_constraintEnd_toStartOf="@+id/tvWeightValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include6" />
 
@@ -388,24 +410,25 @@
                         style="@style/H6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/side_margin"
                         android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginEnd="@dimen/side_margin"
+                        android:drawableEnd="@drawable/ic_o_arrow_profile"
                         android:gravity="center_vertical"
                         app:layout_constraintBottom_toBottomOf="@+id/tvWeightLabel"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:drawableEnd="@drawable/ic_o_arrow_profile"
                         app:layout_constraintStart_toEndOf="@id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/tvWeightLabel"
                         tools:text="65 kg" />
+
                     <include
                         android:id="@+id/include7"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:visibility="gone"
-                        android:layout_marginEnd="1dp"
                         android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="1dp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvWeightLabel" />
@@ -418,8 +441,8 @@
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/text_unit"
-                        android:visibility="gone"
                         android:textColor="@color/white_64"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include7" />
 
@@ -428,12 +451,12 @@
                         style="@style/H6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/side_margin"
                         android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginEnd="@dimen/side_margin"
+                        android:drawableEnd="@drawable/ic_arrow_right_dir"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/tvUnitLabel"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:drawableEnd="@drawable/ic_arrow_right_dir"
                         app:layout_constraintStart_toEndOf="@id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/tvUnitLabel"
                         tools:text="Metric (cm/kg)" />
@@ -454,22 +477,25 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutConatiner1">
+
                     <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="113dp" />
+                        android:id="@+id/guideline2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="113dp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNumberLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
                         android:text="@string/number"
                         android:textColor="@color/white_48"
+                        app:layout_constraintEnd_toStartOf="@+id/tvNumberValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -486,14 +512,15 @@
                         app:layout_constraintStart_toStartOf="@id/guideline2"
                         app:layout_constraintTop_toTopOf="@id/tvNumberLabel"
                         tools:text="1010199190" />
+
                     <include
                         android:id="@+id/include8"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginStart="1dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="1dp"
-                        android:layout_marginStart="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvNumberLabel" />
@@ -501,12 +528,16 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvEmailLabel"
                         style="@style/H6"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:text="@string/emailid"
                         android:textColor="@color/white_48"
+                        app:layout_constraintEnd_toStartOf="@+id/tvEmailValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/include8" />
 
@@ -537,8 +568,8 @@
             android:id="@+id/btnContinue"
             style="@style/PrimaryButtonStyle"
             android:layout_width="match_parent"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginBottom="@dimen/dimen_40dp"
             android:text="@string/text_save_changes"
             android:textAllCaps="false"

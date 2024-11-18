@@ -184,9 +184,21 @@ constructor(
     fun getStressStatus(value: Int?): Pair<String, Int> {
         return when (value) {
             0 -> Pair("", R.color.white)
-            in 1..34 -> Pair("Relaxed", R.color.stress_nap_calm)
-            in 35..69 -> Pair("Focussed", R.color.stress_nap_focussed)
-            in 70..100 -> Pair("Stressed", R.color.stress_nap_stressed)
+            in 1..34 -> Pair(
+                resourcesProvider.getString(R.string.text_relaxed),
+                R.color.stress_nap_calm
+            )
+
+            in 35..69 -> Pair(
+                resourcesProvider.getString(R.string.text_focussed),
+                R.color.stress_nap_focussed
+            )
+
+            in 70..100 -> Pair(
+                resourcesProvider.getString(R.string.text_stressed),
+                R.color.stress_nap_stressed
+            )
+
             else -> Pair("", R.color.white)
         }
     }
