@@ -136,6 +136,8 @@ class SummaryDataViewModelToday @Inject constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
+    val stateStressCard = MutableLiveData<OHealthOverview.StressDashDataModel?>()
+
     val cycleTrackerCardBigData = MutableLiveData<OHealthOverview.CycleTrackerCardBig?>()
     val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
@@ -825,6 +827,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                 }
             }
+            val device = ringDataStore.getRingDevice()
 
             if (shouldShowStressCard) {
                 val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
@@ -834,7 +837,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         userActivities.add(OHealthOverview.HealthMonitorCard(it))
                     }
                 }
-                userActivities.add(
+                /*userActivities.add(
                     OHealthOverview.StressGraph(
                         combinedData,
                         healthData.stress?.stressValue?.value ?: 0,
@@ -843,7 +846,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         true,
                         stressBeta
                     )
-                )
+                )*/
+
+                stateStressCard.postValue(userRepository.getSummaryStressData().apply {
+                    this?.data = combinedData
+                    if (device == null) {
+                        this?.measureState = TapMeasureState.NO_DEVICE
+                    }
+                })
             }
 
             stateSleepAvgCard.postValue(
@@ -856,12 +866,12 @@ class SummaryDataViewModelToday @Inject constructor(
             this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
             healthOverviewData.postValue(userActivities)
 
-            val device = ringDataStore.getRingDevice()
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
+
 
             cycleTrackerCardBigData.postValue(cycleTrackerCardBig)
             cycleTrackerCardSmallData.postValue(cycleTrackerCardSmall)
@@ -896,15 +906,19 @@ class SummaryDataViewModelToday @Inject constructor(
 
             return PeriodCard2(
                 title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
-                else if (data.otaLog) resourceProvider.getString(R.string.text_period).capitalizeWords()
+                else if (data.otaLog) resourceProvider.getString(R.string.text_period)
+                    .capitalizeWords()
                 else resourceProvider.getString(R.string.text_predicted_period),
                 subTitle = if (isPeriodLate) resourceProvider.getString(
                     R.string.text_value_day_,
-                    data.confirmPeriodDate?.day?:0
-                ) 
-                else if (data.otaLog) resourceProvider.getString(R.string.text_day_value, data.currentDay?:0)
-                else resourceProvider.getString(R.string.text_day_value, data.currentDay?:0),
-                
+                    data.confirmPeriodDate?.day ?: 0
+                )
+                else if (data.otaLog) resourceProvider.getString(
+                    R.string.text_day_value,
+                    data.currentDay ?: 0
+                )
+                else resourceProvider.getString(R.string.text_day_value, data.currentDay ?: 0),
+
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -922,7 +936,10 @@ class SummaryDataViewModelToday @Inject constructor(
         } else {
             return PeriodCard2(
                 title = resourceProvider.getString(R.string.text_ovulation).capitalizeWords(),
-                subTitle = resourceProvider.getString(R.string.text_day_value, data.currentDay?:0),
+                subTitle = resourceProvider.getString(
+                    R.string.text_day_value,
+                    data.currentDay ?: 0
+                ),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
@@ -1211,24 +1228,57 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    fun updateManualValue() {
-        val manualMeasurement = ringDataStore.getManualMeasurementValue()
-        if (manualMeasurement != null && manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
+    fun measureStress(status: Boolean) {
+        stateStressCard.value?.measureState = TapMeasureState.MEASURING
+        stateStressCard.postValue(stateStressCard.value)
 
 
-            if (manualMeasurement.isError) {
-                stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
-            } else {
-                if (manualMeasurement.isMeasuring) {
-                    stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetManualMeasurement(
+                ManualMeasureType.STRESS, status
+            )
+        )
+
+    }
+
+    fun updateManualValue(type: ManualMeasureType) {
+
+        if (type == ManualMeasureType.STRESS) {
+            val manualMeasurement = ringDataStore.getManualMeasurementValueStress()
+            if (manualMeasurement != null) {
+
+                if (manualMeasurement.isError) {
+                    stateStressCard.value?.measureState = TapMeasureState.ERROR
                 } else {
-                    stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
-                    stateHeartRateCard.value?.lastTime =
-                        resourceProvider.getString(R.string.text_last_measured_just_now)
+                    if (manualMeasurement.isMeasuring) {
+                        stateStressCard.value?.measureState = TapMeasureState.MEASURING
+                    } else {
+                        stateStressCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                        stateStressCard.value?.lastTime =
+                            resourceProvider.getString(R.string.text_last_measured_just_now)
+                    }
+                    stateStressCard.value?.value = manualMeasurement.value
                 }
-                stateHeartRateCard.value?.value = manualMeasurement.value.toString()
+                stateStressCard.postValue(stateStressCard.value)
             }
-            stateHeartRateCard.postValue(stateHeartRateCard.value)
+        } else if (type == ManualMeasureType.HEART_RATE) {
+            val manualMeasurement = ringDataStore.getManualMeasurementValue()
+            if (manualMeasurement != null) {
+
+                if (manualMeasurement.isError) {
+                    stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
+                } else {
+                    if (manualMeasurement.isMeasuring) {
+                        stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
+                    } else {
+                        stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                        stateHeartRateCard.value?.lastTime =
+                            resourceProvider.getString(R.string.text_last_measured_just_now)
+                    }
+                    stateHeartRateCard.value?.value = manualMeasurement.value.toString()
+                }
+                stateHeartRateCard.postValue(stateHeartRateCard.value)
+            }
         }
     }
 

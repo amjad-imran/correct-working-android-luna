@@ -56,6 +56,8 @@ interface OreoUserActivityRepository {
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
+    suspend fun getSummaryStressData(): OHealthOverview.StressDashDataModel?
+
     suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>
 

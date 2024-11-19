@@ -22,8 +22,6 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
@@ -78,6 +76,7 @@ import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
+import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
@@ -101,7 +100,6 @@ import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -1805,8 +1803,19 @@ constructor() : LifecycleService() {
         override fun onUpdateDataReceived(dataCallback: UpdateDeviceDataCallback) {
             when (dataCallback) {
                 is UpdateDeviceDataCallback.ManualMeasurementObtained -> {
-                    ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
-                    sessionManager.setManualMeasurementValue(true)
+                    if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.STRESS) {
+                        ringDataStore.setManualMeasurementValueStress(dataCallback.manualMeasurement)
+                        sessionManager.setManualMeasurementValue(
+                            true,
+                            dataCallback.manualMeasurement.manualMeasureType
+                        )
+                    } else {
+                        ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
+                        sessionManager.setManualMeasurementValue(
+                            true,
+                            dataCallback.manualMeasurement.manualMeasureType
+                        )
+                    }
                 }
 
                 is UpdateDeviceDataCallback.OngoingWorkoutData -> {

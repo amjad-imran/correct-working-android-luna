@@ -13,6 +13,7 @@ import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.HealthOverview
 import com.noisefit_commans.data.model.HealthOverviewData
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.BloodOxygen
@@ -289,6 +290,47 @@ constructor(
             value,
             timeAgo,
             "kcal"
+        )
+    }
+
+    fun convertStressOverviewData(
+        data: OreoBodyStressData?
+    ): OHealthOverview.StressDashDataModel {
+        val list = data?.breakUp?.replace("255", "0")
+        var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
+        if (breakupArray.isNullOrEmpty()) {
+            val dummyArray = ArrayList<Int>()
+            for (i in 0..95) {
+                dummyArray.add(0)
+            }
+            breakupArray = dummyArray
+        }
+
+        var lastHr = 0
+        var manualMeasureTime = 0L
+        val lastMeasureValue = ringDataStore.getManualMeasurementValueStress()
+        if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
+            lastHr = lastMeasureValue.value
+            manualMeasureTime = lastMeasureValue.timeStamp
+        }
+
+        var measureState = TapMeasureState.DEFAULT
+        val measureText = if (manualMeasureTime == 0L) {
+            ""
+        } else {
+            measureState = TapMeasureState.LAST_MEASURED
+            resourcesProvider.getString(
+                R.string.text_last_measured_value,
+                DateFormats.getRelativeTime(manualMeasureTime).lowercase()
+            )
+        }
+
+        return OHealthOverview.StressDashDataModel(
+            null,
+            breakupArray,
+            lastTime = measureText,
+            value = lastHr,
+            measureState
         )
     }
 

@@ -470,7 +470,6 @@ constructor(
         }
 
         activeMeasureParamsBean.measureType = type
-
         return activeMeasureParamsBean
     }
 

@@ -93,6 +93,15 @@ sealed class OHealthOverview {
         var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
+    class StressDashDataModel(
+        var data: StressCombineModel?=null,
+        val listData: List<Int>? = null,
+        var lastTime: String? = "",
+        var value: Int? = null,
+        var measureState: TapMeasureState = TapMeasureState.DEFAULT
+    )
+
+
     class SleepActivityScore(
         val sleepScore: Int? = null,
         val sleepTrend: Int? = null,

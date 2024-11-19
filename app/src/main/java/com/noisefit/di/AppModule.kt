@@ -409,7 +409,7 @@ object AppModule {
 
         remoteDataSource: NetworkService,
         gson: Gson,
-        localDatSource: DataStoredInterface,
+        bodyStressDataImpl: OreoBodyStressDataImpl,
         ringDataStore: RingDataStore,
         heartRateDataImpl: OreoHeartRateDataImpl,
         hrv: OreoStressDataImpl,
@@ -430,9 +430,9 @@ object AppModule {
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
             gson,
-            localDatSource,
             ringDataStore,
             heartRateDataImpl,
+            bodyStressDataImpl,
             hrv,
             bloodOxygenDataImpl,
             respiratoryDataImpl,

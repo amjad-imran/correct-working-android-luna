@@ -35,11 +35,13 @@ import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
@@ -66,6 +68,7 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
+import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
@@ -435,6 +438,15 @@ class SummaryDataFragmentToday :
             navigate(R.id.fragmentHeartRateDetails)
         }
 
+        binding.contentMain.lytStressGraph.root.setOnClickListener {
+            if (viewModel.getStressWalkthroughShownStatus()) {
+                navigate(R.id.fragmentOStressDetails)
+            } else {
+                navigate(R.id.stressSplashFragment)
+            }
+            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
+        }
+
         binding.contentMain.lytSplanner.ivMore.setOnClickListener {
             navigate(R.id.setAlarmFragment)
         }
@@ -750,9 +762,15 @@ class SummaryDataFragmentToday :
         viewModel.sessionManager.manualMeasurementValue.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 if (it) {
-                    viewModel.updateManualValue()
+                    viewModel.updateManualValue(ManualMeasureType.HEART_RATE)
                 }
-
+            }
+        }
+        viewModel.sessionManager.manualMeasurementValueStress.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                if (it) {
+                    viewModel.updateManualValue(ManualMeasureType.STRESS)
+                }
             }
         }
 
@@ -874,6 +892,12 @@ class SummaryDataFragmentToday :
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
                 setHearRateCardUi(it)
+            }
+        }
+
+        viewModel.stateStressCard.observe(viewLifecycleOwner) {
+            if (it != null) {
+                setStressCardUi(it)
             }
         }
 
@@ -1157,7 +1181,8 @@ class SummaryDataFragmentToday :
             this.tvOvlInDays.text = data.data.days.toString()
             this.textView1.text = data.data.bottomText
             this.tvPredictionDays.text = data.data.predictionDate
-            this.tvOvlDaysCurrent.text = getString(R.string.text_day_value,data.data.currentCycleDay)
+            this.tvOvlDaysCurrent.text =
+                getString(R.string.text_day_value, data.data.currentCycleDay)
             this.tvOvlDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
             this.imv.setBackgroundResource(data.data.background)
 
@@ -1175,7 +1200,7 @@ class SummaryDataFragmentToday :
             root.visible()
             this.textView3.text = data.data.title
             this.tvOvlInDays.text = data.data.subTitle
-            this.tvCurrentDay.text = getString(R.string.text_day_value,data.data.days)
+            this.tvCurrentDay.text = getString(R.string.text_day_value, data.data.days)
             this.tvDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
             this.tvDesc.text = data.data.nudge
             this.tvValue.text = if (data.data.temperatureVariation == null) {
@@ -1461,6 +1486,156 @@ class SummaryDataFragmentToday :
 
     }
 
+    private fun setStressCardUi(data: OHealthOverview.StressDashDataModel) {
+        val lytStress = binding.contentMain.lytStressGraph
+        lytStress.root.visible()
+        lytStress.graphStress.updateData(data.data)
+
+        when (data.measureState) {
+            TapMeasureState.NO_DEVICE -> {
+                lytStress.lottieAnimView.invisible()
+                lytStress.imvHrMeasure.visible()
+
+                lytStress.groupValue.gone()
+                lytStress.tvEmptyConnect.visible()
+                lytStress.tvEmptyConnect.text =
+                    lytStress.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+
+            }
+
+            TapMeasureState.LAST_MEASURED -> {
+                lytStress.lottieAnimView.invisible()
+                lytStress.imvHrMeasure.visible()
+
+                lytStress.groupValue.visible()
+                lytStress.tvEmptyConnect.gone()
+
+                lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
+                lytStress.tvHeartUnit.text = viewModel.getStressStatus(data.value)
+
+                lytStress.tvLastMeasure.apply {
+                    setTextColor(Color.parseColor("#a3ffffff"))
+                    text = data.lastTime
+                }
+            }
+
+            TapMeasureState.MEASURING -> {
+                lytStress.lottieAnimView.visible()
+                lytStress.imvHrMeasure.invisible()
+
+                lytStress.groupValue.gone()
+                lytStress.tvEmptyConnect.visible()
+
+                lytStress.tvEmptyConnect.apply {
+                    setTextColor(resources.getColor(R.color.white))
+                    text = getString(R.string.text_measuring_dots)
+                }
+            }
+
+            TapMeasureState.DEFAULT -> {
+                lytStress.lottieAnimView.invisible()
+                lytStress.imvHrMeasure.visible()
+
+                lytStress.groupValue.gone()
+                lytStress.tvEmptyConnect.visible()
+                lytStress.tvEmptyConnect.apply {
+                    setTextColor(Color.parseColor("#88b0ff"))
+                    text = getString(R.string.text_tap_to_measure)
+                }
+            }
+
+            TapMeasureState.ERROR -> {
+                lytStress.lottieAnimView.invisible()
+                lytStress.imvHrMeasure.visible()
+
+                lytStress.groupValue.visible()
+                lytStress.tvEmptyConnect.gone()
+                lytStress.tvHeartValue.gone()
+
+                lytStress.tvLastMeasure.apply {
+                    setTextColor(Color.parseColor("#88b0ff"))
+                    text = getString(R.string.text_try_again)
+                }
+                lytStress.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
+
+            }
+
+            TapMeasureState.HIDE -> {
+                lytStress.lottieAnimView.invisible()
+                lytStress.imvHrMeasure.invisible()
+
+                lytStress.groupValue.invisible()
+                lytStress.tvEmptyConnect.gone()
+                lytStress.tvHeartValue.gone()
+            }
+        }
+        lytStress.imvHrMeasure.setOnClickListener {
+
+            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
+                return@setOnClickListener
+            }
+
+            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                return@setOnClickListener
+            }
+
+
+            if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+                return@setOnClickListener
+            }
+
+
+            viewModel.viewModelScope.launch(Dispatchers.IO) {
+                context?.let {
+                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                    if (isWorkerRunning) {
+                        viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                            this.measureState = TapMeasureState.ERROR
+                        })
+                        return@launch
+                    }
+                    viewModel.measureStress(true)
+                }
+            }
+
+            return@setOnClickListener
+        }
+
+
+        /*binding.graphStress.updateData(data.data)
+        binding.tvBeta.setVisibilityByCondition(data.isBeta)
+        binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+
+
+        if (data.value == 0) {
+            binding.tvStressValue.gone()
+            binding.tvStressStatus.gone()
+            binding.tvLastUpdate.gone()
+        } else {
+            binding.tvStressValue.visible()
+            binding.tvStressStatus.visible()
+            binding.tvLastUpdate.visible()
+
+            binding.tvStressValue.text = "${data.value}"
+            binding.tvStressStatus.text = data.valueStatus
+
+            if (data.isToday) {
+                val lastUpdatedTimestamp = data.timeStamp
+                if (lastUpdatedTimestamp == 0L) {
+                    binding.tvLastUpdate.text = ""
+                } else {
+                    binding.tvLastUpdate.text =
+                        binding.tvLastUpdate.context.getString(
+                            R.string.text_updated_value,
+                            DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                        )
+                }
+            } else {
+                binding.tvLastUpdate.text = ""
+            }
+        }*/
+    }
+
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.contentMain.lytHeartRate
         lytHeartRate.root.visible()
@@ -1550,6 +1725,7 @@ class SummaryDataFragmentToday :
                 lytHeartRate.tvHeartValue.gone()
             }
         }
+
         lytHeartRate.imvHrMeasure.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
@@ -1558,6 +1734,10 @@ class SummaryDataFragmentToday :
             }
 
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                return@setOnClickListener
+            }
+
+            if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
                 return@setOnClickListener
             }
 

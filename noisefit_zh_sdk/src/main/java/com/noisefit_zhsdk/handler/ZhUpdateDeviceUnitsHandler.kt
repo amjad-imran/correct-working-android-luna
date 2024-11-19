@@ -171,15 +171,15 @@ constructor(
 
     private val activeMeasureCallBack: ActiveMeasureCallBack = object : ActiveMeasureCallBack {
         override fun onMeasureStatus(p0: ActiveMeasureStatusBean?) {
-//            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
+            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
         }
 
         override fun onMeasuring(p0: ActiveMeasuringBean?) {
-//            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
+            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
         }
 
         override fun onMeasureResult(p0: ActiveMeasureResultBean?) {
-//            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
+            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
 
             if (p0 == null) {
                 return

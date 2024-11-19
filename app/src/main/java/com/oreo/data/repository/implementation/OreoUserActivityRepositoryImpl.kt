@@ -36,6 +36,7 @@ import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoNapDataImpl
@@ -86,9 +87,9 @@ private inline fun <reified T> Gson.fromJson(json: String) =
 class OreoUserActivityRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val gson: Gson,
-    private val localDatSource: DataStoredInterface,
     private val ringDataStore: RingDataStore,
     private val heartRateDataImpl: OreoHeartRateDataImpl,
+    private val stressDataImpl: OreoBodyStressDataImpl,
     private val hrv: OreoStressDataImpl,
     private val bloodOxygenDataImpl: OreoBloodOxygenDataImpl,
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
@@ -1331,6 +1332,24 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getHrDataByDate(date: String): OreoHeartRate? {
         return heartRateDataImpl.getTodayData(
             date
+        )
+    }
+
+    override suspend fun getSummaryStressData(): OHealthOverview.StressDashDataModel? {
+        try {
+            val todayDate = DateFormats.getTodaysDateString(10)
+            return offlineDataMapper.convertStressOverviewData(
+                stressDataImpl.getTodayData(
+                    todayDate
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return OHealthOverview.StressDashDataModel(
+            listData = ArrayList(),
+            lastTime = "0",
+            measureState = TapMeasureState.DEFAULT
         )
     }
 

@@ -26,6 +26,7 @@ private const val SLEEP_WALKAROUND_KEY = "SLEEP_WALKAROUND_KEY"
 private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
+private const val MANUAL_MEASUREMENT_KEY_STRESS = "MANUAL_MEASUREMENT_KEY_STRESS"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
 private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 
@@ -316,6 +317,17 @@ class RingDataStoreImpl
     override fun getManualMeasurementValue(): ManualMeasurement? {
         return gson.fromJson(
             mPrefs.getString(MANUAL_MEASUREMENT_KEY, null),
+            ManualMeasurement::class.java
+        )
+    }
+
+    override fun setManualMeasurementValueStress(data: ManualMeasurement) {
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_STRESS, gson.toJson(data))?.commit()
+    }
+
+    override fun getManualMeasurementValueStress(): ManualMeasurement? {
+        return gson.fromJson(
+            mPrefs.getString(MANUAL_MEASUREMENT_KEY_STRESS, null),
             ManualMeasurement::class.java
         )
     }

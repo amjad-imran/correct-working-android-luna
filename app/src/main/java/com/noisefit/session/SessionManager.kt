@@ -31,6 +31,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.location.LocationUtils
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
+import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Units
@@ -68,7 +69,7 @@ class SessionManager
     }
 
     val updateRingLocation = MutableLiveData<Event<Boolean>>()
-    val forceUpdateApp =  MutableLiveData<Event<Boolean>>()
+    val forceUpdateApp = MutableLiveData<Event<Boolean>>()
 
     /**
      * Get app Foreground status
@@ -158,6 +159,7 @@ class SessionManager
     private val _syncCompleted = MutableLiveData<Event<SyncEvents>>()
     private val _showSyncOfflineData = MutableLiveData<Event<HealthOverviewDataType>>()
     private val _manualMeasurementValue = MutableLiveData<Event<Boolean>>()
+    private val _manualMeasurementValueStress = MutableLiveData<Event<Boolean>>()
     private val _deviceQueryAction = MutableLiveData<QueryAction>()
     private val _updateDeviceQueryAction = MutableLiveData<UpdateDeviceAction>()
     private val _deviceQueryCallback = MutableLiveData<QueryCallback>()
@@ -180,6 +182,9 @@ class SessionManager
 
     val manualMeasurementValue: LiveData<Event<Boolean>>
         get() = _manualMeasurementValue
+
+    val manualMeasurementValueStress: LiveData<Event<Boolean>>
+        get() = _manualMeasurementValueStress
 
     val bluetoothState: LiveData<Boolean>
         get() = _bluetoothOnState
@@ -240,9 +245,13 @@ class SessionManager
         _connectStateRing.postValue(ConnectState.UnPaired())
     }
 
-    fun setManualMeasurementValue(status: Boolean) {
+    fun setManualMeasurementValue(status: Boolean, manualMeasureType: ManualMeasureType) {
         GlobalScope.launch(Main) {
-            _manualMeasurementValue.value = Event(status)
+            if (manualMeasureType == ManualMeasureType.STRESS) {
+                _manualMeasurementValueStress.value = Event(status)
+            } else if (manualMeasureType == ManualMeasureType.HEART_RATE) {
+                _manualMeasurementValue.value = Event(status)
+            }
         }
     }
 
