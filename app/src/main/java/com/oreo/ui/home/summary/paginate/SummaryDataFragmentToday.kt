@@ -31,6 +31,8 @@ import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.constants.WatchInfoGlobals.GEN_2_DEVICE_ID
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
@@ -1571,6 +1573,13 @@ class SummaryDataFragmentToday :
         }
         lytStress.imvHrMeasure.setOnClickListener {
 
+            if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
+                viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                    this.measureState = TapMeasureState.ERROR
+                })
+                return@setOnClickListener
+            }
+
             if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
                 return@setOnClickListener
             }
@@ -1578,7 +1587,6 @@ class SummaryDataFragmentToday :
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 return@setOnClickListener
             }
-
 
             if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
                 return@setOnClickListener

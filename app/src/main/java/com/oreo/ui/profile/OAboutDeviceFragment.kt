@@ -71,15 +71,24 @@ class OAboutDeviceFragment :
     private fun generateData(connectedDevice: ColorFitDevice): List<AboutDeviceData> {
         val response = ArrayList<AboutDeviceData>()
 
-        response.add(AboutDeviceData(getString(R.string.text_generation), "1"))
-
+        response.add(
+            AboutDeviceData(
+                getString(R.string.text_generation),
+                "${getGeneration(connectedDevice.ringInfo?.serialNoRaw)}"
+            )
+        )
 
         val size = if (connectedDevice.ringInfo?.size != null) {
             "${connectedDevice.ringInfo?.size}"
         } else {
             "-"
         }
-        response.add(AboutDeviceData(getString(R.string.text_colour), connectedDevice.ringInfo?.color ?: "-"))
+        response.add(
+            AboutDeviceData(
+                getString(R.string.text_colour),
+                connectedDevice.ringInfo?.color ?: "-"
+            )
+        )
         response.add(AboutDeviceData(getString(R.string.text_size), size))
         response.add(
             AboutDeviceData(
@@ -93,7 +102,12 @@ class OAboutDeviceFragment :
             )
         )
 
-        response.add(AboutDeviceData(getString(R.string.text_mac_address), connectedDevice.address ?: ""))
+        response.add(
+            AboutDeviceData(
+                getString(R.string.text_mac_address),
+                connectedDevice.address ?: ""
+            )
+        )
         response.add(
             AboutDeviceData(
                 getString(R.string.text_version),
@@ -104,6 +118,17 @@ class OAboutDeviceFragment :
         return response
 
 
+    }
+
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
     }
 
     override fun onDestroyView() {

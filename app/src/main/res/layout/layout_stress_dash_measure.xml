@@ -97,7 +97,7 @@
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_24dp"
         android:contentDescription="@null"
-        android:src="@drawable/ic_black_heart_with_circle"
+        android:src="@drawable/ic_back_stress_circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/graphStress" />

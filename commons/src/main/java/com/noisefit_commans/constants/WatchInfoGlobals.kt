@@ -10,6 +10,7 @@ object WatchInfoGlobals {
     var firmwareVersionNumberRing: Int = 0
     var firmwareDeviceIdRing: Int = 0
 
+    val GEN_2_DEVICE_ID = 34001
 
     var firmwareVersion: String? = null
     var serialNumber: String? = null
