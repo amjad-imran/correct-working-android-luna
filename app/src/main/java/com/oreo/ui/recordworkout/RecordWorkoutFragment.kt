@@ -43,6 +43,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
@@ -213,6 +214,8 @@ class RecordWorkoutFragment :
         binding.progressBar.root.visible()
         viewModel.sportStartTime = viewModel.getCurrentTimeStamp()
         val sportId = viewModel.workout?.ringId ?: -1
+
+        AppLogs.sendAppLogs("Record workout command sent -sportsId - $sportId  timestamp - ${viewModel.sportStartTime}")
 
         viewModel.sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.StartWorkout(

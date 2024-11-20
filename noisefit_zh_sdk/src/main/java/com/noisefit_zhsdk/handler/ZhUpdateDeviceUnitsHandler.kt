@@ -394,6 +394,7 @@ constructor(
                             setAutoWorkoutStatus(false)
 
                             LOGS.d("startWorkout started ")
+                            AppLogs.sendAppLogs("startWorkout - $sportType - $sportStartTime")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
