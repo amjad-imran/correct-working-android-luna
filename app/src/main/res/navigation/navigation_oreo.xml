@@ -1078,4 +1078,9 @@
             app:argType="boolean"
             android:defaultValue="false" />
     </dialog>
+    <fragment
+        android:id="@+id/chatGptAudioFragment"
+        android:name="com.oreo.ui.chatGpt.audio.ChatGptAudioFragment"
+        android:label="fragment_chat_gpt_audio"
+        tools:layout="@layout/fragment_chat_gpt_audio" />
 </navigation>
