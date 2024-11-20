@@ -57,7 +57,7 @@ class OActivityListAdapter(
 //                }
                 var date = activity.date
                 if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6())) {
-                    date = "Today’s Workouts"
+                    date = view.context.getString(R.string.text_today_s_workouts)
                 }
                 view.findViewById<TextView>(R.id.tvDate).text = date
             } else {
@@ -104,13 +104,15 @@ class OActivityListAdapter(
                 }
 
 
-                view.findViewById<TextView>(R.id.tvMin).text = "${activity.duration} min"
+                view.findViewById<TextView>(R.id.tvMin).text =
+                    view.context.getString(R.string.text_value_min, activity.duration.toString())
 
-                view.findViewById<TextView>(R.id.tvCalories).text = "${activity.calories} kcal"
+                view.findViewById<TextView>(R.id.tvCalories).text =
+                    view.context.getString(R.string.text_value_kcal, activity.calories)
 
                 if (activity.type.equals("apple", true)) {
                     view.findViewById<TextView>(R.id.tvImportedFrom).apply {
-                        text = "Imported from Health"
+                        text = view.context.getString(R.string.text_imported_from_health)
                         visible()
                     }
                 }else if(activity.type.equals("google", true)){

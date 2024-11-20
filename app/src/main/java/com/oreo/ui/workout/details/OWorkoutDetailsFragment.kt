@@ -159,7 +159,7 @@ class OWorkoutDetailsFragment :
             binding.lytIntensity.root.gone()
             binding.divider2.root.gone()
             binding.tvImportText.visible()
-            binding.tvImportText.text = "Imported from Health"
+            binding.tvImportText.text = getString(R.string.text_imported_from_health)
         } else if (it.type.equals("google", true)) {
             binding.lytHeartRate.root.gone()
             binding.divider1.root.visible()
@@ -238,7 +238,7 @@ class OWorkoutDetailsFragment :
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
                         hrAvg.toString()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = getString(R.string.text_bpm_small)
                 }
             } else {
                 binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
@@ -252,7 +252,7 @@ class OWorkoutDetailsFragment :
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
                         hrMax.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
                 }
             } else {
                 binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
@@ -408,7 +408,7 @@ class OWorkoutDetailsFragment :
         val duration = ApplicationUtils.getActivityDurationFormat2Seconds(it.duration)
         activityList.add(
             OWDActivityData(
-                "Duration", duration, ""
+                getString(R.string.text_duration), duration, ""
             )
         )
         if (it.calories != null && it.calories > 0) {
@@ -416,14 +416,14 @@ class OWorkoutDetailsFragment :
                 OWDActivityData(
                     getString(R.string.text_calories_burned),
                     it.calories.toString(),
-                    "kcal",
+                    getString(R.string.text_kcal),
                 )
             )
         }
         if (it.steps != null && it.steps > 0) {
             activityList.add(
                 OWDActivityData(
-                    "Steps",
+                    getString(R.string.text_steps),
                     it.steps.toString(),
                     "",
                 )

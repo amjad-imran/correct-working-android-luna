@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.NetworkErrors.FORCE_UPDATE
@@ -57,6 +58,7 @@ class NetworkConnectionInterceptor(
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
     private val watchDataStore: WatchDataStore,
+    private val resourcesProvider: ResourcesProvider,
     private val watchesSdk: WatchesSDK,
     private val keyValueDataSource: KeyValueDataSource,
     private val database: OreoDataBase,
@@ -192,13 +194,13 @@ class NetworkConnectionInterceptor(
 
             return response
         } catch (e: ConnectException) {
-            throw IOException("Error Connecting to internet")
+            throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         } catch (e: SocketTimeoutException) {
-            throw IOException("Error Connecting to internet")
+            throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         } catch (e: UnknownHostException) {
-            throw IOException("Error Connecting to internet")
+            throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         } catch (e: HttpException) {
-            throw IOException("Error Connecting to internet")
+            throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         }
     }
 

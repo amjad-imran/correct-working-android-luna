@@ -1574,9 +1574,10 @@ class SummaryDataFragmentToday :
         lytStress.imvHrMeasure.setOnClickListener {
 
             if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
-                viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
+                /*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
                     this.measureState = TapMeasureState.ERROR
-                })
+                })*/
                 return@setOnClickListener
             }
 

@@ -23,7 +23,6 @@ object AppStaticData {
 
     const val DEFAULT_STEPS_PER_HOUR = 50
 
-    const val NOTIFICATION_TITLE = "Luna Ring is running"
     const val FINDING_YOUR_PHONE = "Finding your phone..."
 
     fun getDefaultDistanceMapperValue(): List<DistanceKmMiMapper> {

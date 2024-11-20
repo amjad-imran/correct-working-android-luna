@@ -58,10 +58,10 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
         val textPosOffset = pxFromDp(mContext, 10f)
 
         if (!isDisable) {
-            canvas.drawText("High", textXPos, sectionHeight * 1, mTextPaint)
-            canvas.drawText("Med", textXPos, sectionHeight * 2, mTextPaint)
-            canvas.drawText("Low", textXPos, sectionHeight * 3, mTextPaint)
-            canvas.drawText("None", textXPos, sectionHeight * 4, mTextPaint)
+            canvas.drawText(context.getString(R.string.text_high), textXPos, sectionHeight * 1, mTextPaint)
+            canvas.drawText(context.getString(R.string.text_med), textXPos, sectionHeight * 2, mTextPaint)
+            canvas.drawText(context.getString(R.string.text_low), textXPos, sectionHeight * 3, mTextPaint)
+            canvas.drawText(context.getString (R.string.text_none), textXPos, sectionHeight * 4, mTextPaint)
         }
 
 

@@ -74,7 +74,7 @@ class RescueServiceInBgWorker
             notificationManager.createNotificationChannel(channel)
         }
 
-        var title = AppStaticData.NOTIFICATION_TITLE
+        var title = context.getString(R.string.text_luna_ring_is_running)
         if (BuildConfig.DEBUG) {
             title += " - Dev"
 

@@ -2,6 +2,7 @@ package com.noisefit.di
 
 import android.content.Context
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.NetworkConnectionInterceptor
@@ -152,6 +153,7 @@ object NetworkModule {
         watchDataStore: WatchDataStore,
         lastSyncProvider: LastSyncProvider,
         watchesSdk: WatchesSDK,
+        resourcesProvider: ResourcesProvider,
         keyValueDataSource: KeyValueDataSource,
         database: OreoDataBase,
         tokenService: TokenRefreshApi,
@@ -162,6 +164,7 @@ object NetworkModule {
             localDataStore,
             ringDataStore,
             watchDataStore,
+            resourcesProvider,
             watchesSdk,
             keyValueDataSource,
             database,

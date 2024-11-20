@@ -20,5 +20,7 @@
     <string name="text_high">Hoog</string>
     <string name="text_med">Médical</string>
     <string name="text_low">Laag</string>
+    <string name="text_just_now">Tout à l\' heure</string>
+    <string name="text_cancel">Annuler</string>
 
 </resources>

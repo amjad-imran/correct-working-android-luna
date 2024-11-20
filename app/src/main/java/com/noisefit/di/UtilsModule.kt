@@ -1,5 +1,6 @@
 package com.noisefit.di
 
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.session.SessionManager
 import com.noisefit.util.*
 import com.noisefit.util.ImageUtil
@@ -78,9 +79,10 @@ object UtilsModule {
     fun provideBatteryNotificationUtils(
         localDataStore: DataStoredInterface,
         watchDataStore: WatchDataStore,
-        sessionManager: SessionManager
+        sessionManager: SessionManager,
+        resourcesProvider: ResourcesProvider
     ): BatteryNotificationUtils {
-        return BatteryNotificationUtils(localDataStore, watchDataStore, sessionManager)
+        return BatteryNotificationUtils(localDataStore, watchDataStore, sessionManager,resourcesProvider)
     }
 
     @Singleton

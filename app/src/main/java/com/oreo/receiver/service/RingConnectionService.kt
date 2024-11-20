@@ -23,6 +23,7 @@ import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
@@ -194,6 +195,9 @@ constructor() : LifecycleService() {
     lateinit var vibrationUtils: VibrationUtils
 
     @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+
+    @Inject
     lateinit var watchesSDK: WatchesSDK
 
     private var isStopServiceCalled = false
@@ -260,7 +264,10 @@ constructor() : LifecycleService() {
                          * Context.startForegroundService() did not then call Service.startForeground()
                          * need testing
                          */
-                        mLastNotification = NotificationUtil.getNotification(this)
+                        mLastNotification = NotificationUtil.getNotification(
+                            this,
+                            resourcesProvider = resourcesProvider
+                        )
 
                         mLastNotification?.let {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -307,7 +314,10 @@ constructor() : LifecycleService() {
 
             firebaseCrashlyticsUtils.setCrashlyticsUserProperty()
             if (ringDataStore.getRingDevice() == null) {
-                mLastNotification = NotificationUtil.getNotification(this)
+                mLastNotification = NotificationUtil.getNotification(
+                    this,
+                    resourcesProvider = resourcesProvider
+                )
                 mLastNotification?.let {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         startForeground(
@@ -330,7 +340,10 @@ constructor() : LifecycleService() {
                  * Context.startForegroundService() did not then call Service.startForeground()
                  * need testing
                  */
-                mLastNotification = NotificationUtil.getNotification(this)
+                mLastNotification = NotificationUtil.getNotification(
+                    this,
+                    resourcesProvider = resourcesProvider
+                )
 
                 mLastNotification?.let {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1457,6 +1470,7 @@ constructor() : LifecycleService() {
             withContext(Dispatchers.Main) {
                 val notification = NotificationUtil.changeNotificationContent(
                     this@RingConnectionService,
+                    resourcesProvider,
                     time = lastSyncTime
                 )
                 mLastNotification = notification

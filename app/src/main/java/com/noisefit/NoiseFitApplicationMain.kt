@@ -5,7 +5,6 @@ import android.app.Application
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -23,23 +22,21 @@ import com.moengage.core.config.NotificationConfig
 import com.moengage.core.config.PushKitConfig
 import com.moengage.core.ktx.MoEngageBuilderKtx
 import com.moengage.pushbase.MoEPushHelper
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit.ui.SplashActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
-import com.noisefit_commans.utils.LOGS
 import com.oreo.util.MyActivityLifecycleCallbacks
 import com.oreo.util.language.LocaleHelper
 
 import dagger.hilt.android.HiltAndroidApp
-import java.util.*
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -56,6 +53,9 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
 
     companion object {
         var context: Application? = null
@@ -82,7 +82,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             appLanguage = language
             localDataStore.saveSelectedAppLanguage(language.languageCode)
         }
-        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager))
+        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager,resourcesProvider))
         FileLogsUtils.initLogs(applicationContext)
         AppLogs.initAppLogs(applicationContext)
         //setDefaultLanguage(this)

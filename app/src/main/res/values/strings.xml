@@ -828,10 +828,10 @@
     <string name="text_select_workout_type">Select workout type</string>
     <string name="text_select">Select</string>
     <string name="text_light_exercise">Light exercise</string>
-    <string name="text_easy">Easy:</string>
-    <string name="text_moderate">Moderate:</string>
+    <string name="text_easy">Easy</string>
+    <string name="text_moderate">Moderate</string>
     <string name="text_intermediate_exercise">Intermediate exercise</string>
-    <string name="text_hard">Hard:</string>
+    <string name="text_hard">Hard</string>
     <string name="text_advanced_level_vigorous_exercise">Advanced level, vigorous exercise</string>
     <string name="text_min">min</string>
     <string name="text_enter">Enter</string>
@@ -1409,7 +1409,7 @@
     <string name="text_training_frequency">Training frequency</string>
     <string name="text_training_volume">Training volume</string>
     <string name="text_your_profile">Your profile</string>
-    <string name="text_select_language">Select Language</string>
+    <string name="text_select_language">App Language</string>
     <string name="text_live_support">Live support</string>
     <string name="text_today_comma">"Today, "</string>
     <string name="text_stress_1">Stress is the body’s natural response to a physical or mental challenge.</string>
@@ -1561,5 +1561,34 @@
     <string name="text_updated_value">Updated %1$s</string>
     <string name="text_temperature_variation">Temperature variation</string>
     <string name="text_when_using_bluetooth_to">We need to use location permissions to enable Bluetooth related functions while using Bluetooth to search for devices, or to connect devices with Bluetooth. Do you agree to allow Luna ring app to access your location?</string>
+    <string name="text_tap_to_measure_is_only">Tap to measure is only available in the higher versions of Luna Ring.</string>
+    <string name="text_ring_battery_low_value">Your ring battery is below %1$s%. Please charge your ring to get uninterrupted insights.</string>
+    <string name="text_value_detected">%1$s detected</string>
+    <string name="text_workout_detected_from_to">%1$s was detected from %2$s to %3$s and is ready to review</string>
+    <string name="text_value_mins">%1$s mins</string>
+    <string name="text_error_connecting_to_internet">Error Connecting to internet</string>
+    <string name="text_error_connecting_to_internet_retry">Error Connecting To Internet, Retry?</string>
+    <string name="text_wrong_client_time">Wrong client time</string>
+    <string name="text_failed">Failed</string>
+    <string name="text_imported_from_health">Imported from Health</string>
+    <string name="text_value_min">%1$s min</string>
+    <string name="text_value_kcal">%1$s kcal</string>
+    <string name="text_mi">mi</string>
+    <string name="text_total_distance">Total Distance</string>
+    <string name="text_restorative_zone">Restorative zone</string>
+    <string name="text_zone_1">Zone 1</string>
+    <string name="text_zone_2">Zone 2</string>
+    <string name="text_zone_3">Zone 3</string>
+    <string name="text_zone_4">Zone 4</string>
+    <string name="text_zone_5">Zone 5</string>
+    <string name="text_spm">spm</string>
+    <string name="text_otp_verified">"Otp Verified "</string>
+    <string name="text_cm">cm</string>
+    <string name="text_inches">inches</string>
+    <string name="text_kg">kg</string>
+    <string name="text_lbs">lbs</string>
+    <string name="text_syncing_user_activity">Syncing User Activity.</string>
+    <string name="text_luna_ring_is_running">Luna Ring is running</string>
+    <string name="text_last_sync_at_value">last sync at %1$s</string>
 
 </resources>

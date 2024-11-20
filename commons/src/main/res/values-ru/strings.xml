@@ -19,6 +19,8 @@
     <string name="text_high">Высокий</string>
     <string name="text_med">Мед</string>
     <string name="text_low">Низкий</string>
+    <string name="text_just_now">Прямо сейчас</string>
+    <string name="text_cancel">Отмена</string>
 
 
 </resources>

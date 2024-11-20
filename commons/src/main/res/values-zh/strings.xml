@@ -19,4 +19,6 @@
     <string name="text_high">高的</string>
     <string name="text_med">医学</string>
     <string name="text_low">低的</string>
+    <string name="text_just_now">现在</string>
+    <string name="text_cancel">取消</string>
 </resources>

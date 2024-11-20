@@ -5,11 +5,13 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.onboardProfile.DefaultDate
 import com.noisefit.ui.onboarding.onboardProfile.DefaultHeightInCm
@@ -61,7 +63,8 @@ class ProfileEditViewModel
     val userRepository: UserRepository,
     val screenUtils: ScreenUtils,
     val authenticationRepository: AuthenticationRepository,
-    val googleFitDataObservers: GoogleFitDataObservers
+    val googleFitDataObservers: GoogleFitDataObservers,
+    val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     private val _userDetailsUpdated = MutableLiveData<Event<Boolean>>()
@@ -286,20 +289,20 @@ class ProfileEditViewModel
     }
 
     fun getHeight(): String {
-        var unit = "cm"
+        var unit = resourcesProvider.getString(R.string.text_cm)
 
         if (this.unit.value == Units.IMPERIAL) {
-            unit = "inches"
+            unit = resourcesProvider.getString(R.string.text_inches)
 
         }
         return "${displayHeightValue.value?.toDouble()?.roundToInt()} $unit"
     }
 
     fun getWeight(): String {
-        var unit = "kg"
+        var unit = resourcesProvider.getString(R.string.text_kg)
 
         if (this.unit.value == Units.IMPERIAL) {
-            unit = "lbs"
+            unit = resourcesProvider.getString(R.string.text_lbs)
 
         }
         return "${displayWeightValue.value?.toDouble()?.roundToInt()} $unit"

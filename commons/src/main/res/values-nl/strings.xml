@@ -19,6 +19,8 @@
     <string name="text_high">Hoog</string>
     <string name="text_med">Med</string>
     <string name="text_low">Laag</string>
+    <string name="text_just_now">Net nu</string>
+    <string name="text_cancel">Annuleren</string>
 
 
 </resources>

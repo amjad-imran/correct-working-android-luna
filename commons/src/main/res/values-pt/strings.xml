@@ -19,6 +19,8 @@
     <string name="text_high">Alto</string>
     <string name="text_med">Médio</string>
     <string name="text_low">Baixo</string>
+    <string name="text_just_now">Agora mesmo</string>
+    <string name="text_cancel">Cancelar</string>
 
 
 </resources>

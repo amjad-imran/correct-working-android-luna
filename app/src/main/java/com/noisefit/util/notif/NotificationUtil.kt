@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -92,8 +93,13 @@ object NotificationUtil {
 
         pushNotification(
             context,
-            "$workoutName detected",
-            "$workoutName was detected from $startTime to $endTime and is ready to review",
+            context.getString(R.string.text_value_detected, workoutName),
+            context.getString(
+                R.string.text_workout_detected_from_to,
+                workoutName,
+                startTime,
+                endTime
+            ),
             LOCAL_NOTIFICATION_WORKOUT_KEY,
             "1",
             deepLink = ""
@@ -113,18 +119,19 @@ object NotificationUtil {
     fun getNotification(
         context: Context?,
         title: String? = null,
-        content: String? = null
+        content: String? = null,
+        resourcesProvider: ResourcesProvider
     ): Notification? {
 
 
         var notification: Notification? = null
         if (context != null) {
-            var nTitle = context.getString(R.string.app_name)
+            var nTitle = resourcesProvider.getString(R.string.app_name)
             title?.let {
                 nTitle = title
             }
 
-            var nDesc = context.getString(R.string.text_running_in_bg)
+            var nDesc = resourcesProvider.getString(R.string.text_running_in_bg)
             content?.let {
                 nDesc = content
             }
@@ -147,23 +154,24 @@ object NotificationUtil {
 
     fun changeNotificationContent(
         context: Context,
+        resourcesProvider: ResourcesProvider,
         time: String? = null
     ): Notification {
 
 
         val lastSync = if (time.isNullOrEmpty()) {
-            context.getString(R.string.text_not_yet_syncyed)
+            resourcesProvider.getString(R.string.text_not_yet_syncyed)
         } else {
-            "last sync at $time"
+            resourcesProvider.getString(R.string.text_last_sync_at_value, time)
         }
 
         //Please make sure update this title bar in notification block list
-        var title = AppStaticData.NOTIFICATION_TITLE
+        var title = resourcesProvider.getString(R.string.text_luna_ring_is_running)
         if (BuildConfig.DEBUG) {
             title += " - Dev"
         }
 
-        return getNotification(context, title, lastSync)!!
+        return getNotification(context, title, lastSync,resourcesProvider)!!
     }
 
 

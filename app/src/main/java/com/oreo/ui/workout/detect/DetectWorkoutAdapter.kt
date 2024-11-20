@@ -1,5 +1,6 @@
 package com.oreo.ui.workout.detect
 
+import android.content.Context
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,12 +25,15 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: OreoAutoSportData) {
 
-            val minutes = "${TimeUnit.SECONDS.toMinutes(resultData.duration.toLong())} mins"
+            val minutes = binding.root.context.getString(
+                R.string.text_value_mins,
+                TimeUnit.SECONDS.toMinutes(resultData.duration.toLong()).toString()
+            )
             binding.tvMin.text = minutes
             //val calories = "${resultData.calories} kcal"
             //binding.tvCalories.text = calories
 
-            binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0)
+            binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0,binding.tvIntensity.context)
 
             val time =
                 DateFormats.convertTimestampToDate(
@@ -64,10 +68,10 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             var isOtherWorkout = false
             if (workoutName.equals("walking", true) || workoutName.equals("running", true)) {
                 binding.btnEdit.visible()
-                binding.btnAdd.text = "Confirm"
+                binding.btnAdd.text = binding.btnAdd.context.getString(R.string.text_confirm)
             } else {
                 binding.btnEdit.gone()
-                binding.btnAdd.text = "Identify"
+                binding.btnAdd.text = binding.btnAdd.context.getString(R.string.text_identify)
                 isOtherWorkout = true
             }
 
@@ -88,18 +92,18 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         }
     }
 
-    private fun getIntensity(intensity: Int): String {
+    private fun getIntensity(intensity: Int, context: Context): String {
         return when (intensity) {
             0, 1 -> {
-                "Easy"
+                context.getString(R.string.text_easy)
             }
 
             2 -> {
-                "Moderate"
+                context.getString(R.string.text_moderate)
             }
 
             else -> {
-                "Hard"
+                context.getString(R.string.text_hard)
             }
         }
     }

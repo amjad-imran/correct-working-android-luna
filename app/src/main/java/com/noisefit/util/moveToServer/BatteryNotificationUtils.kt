@@ -2,6 +2,8 @@ package com.noisefit.util.moveToServer
 
 import android.content.Context
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.util.notif.NotificationEventsClass
@@ -24,7 +26,8 @@ class BatteryNotificationUtils
 constructor(
     val localDataStore: DataStoredInterface,
     val watchDataStore: WatchDataStore,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
 ) {
 
 
@@ -132,7 +135,7 @@ constructor(
             } ?: return
 
             val message =
-                "Your ring battery is below $batteryLevelMessage%. Please charge your ring to get uninterrupted insights."
+                resourcesProvider.getString(R.string.text_ring_battery_low_value, batteryLevelMessage)
 
             if (notificationShown[level.name] == true) {
                 return

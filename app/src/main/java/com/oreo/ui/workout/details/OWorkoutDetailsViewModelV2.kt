@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
@@ -47,6 +48,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
@@ -158,9 +160,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
-                        context.getString(R.string.text_calories_burned),
+                        resourcesProvider.getString(R.string.text_calories_burned),
                         it.calories.toString(),
-                        "kcal",
+                        resourcesProvider.getString(R.string.text_kcal),
                     )
                 )
             }
@@ -171,9 +173,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         if (it.cadence != null && it.cadence > 0) {
             activityList.add(
                 OWDActivityData(
-                    context.getString(R.string.text_cadence),
+                    resourcesProvider.getString(R.string.text_cadence),
                     it.cadence.toString(),
-                    "spm",
+                    resourcesProvider.getString(R.string.text_spm),
                 )
             )
         }
@@ -181,9 +183,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         if (it.hrMax != null && it.hrMax > 0) {
             activityList.add(
                 OWDActivityData(
-                    context.getString(R.string.text_max_hr),
+                    resourcesProvider.getString(R.string.text_max_hr),
                     it.hrMax.toString(),
-                    "bpm",
+                    resourcesProvider.getString(R.string.text_bpm_small),
                 )
             )
         }
@@ -191,9 +193,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         if (it.hrLow != null && it.hrLow > 0) {
             activityList.add(
                 OWDActivityData(
-                    context.getString(R.string.text_min_hr),
+                    resourcesProvider.getString(R.string.text_min_hr),
                     it.hrLow.toString(),
-                    "bpm",
+                    resourcesProvider.getString(R.string.text_bpm_small),
                 )
             )
         }
@@ -202,7 +204,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         if (it.steps != null && it.steps > 0) {
             activityList.add(
                 OWDActivityData(
-                    "Steps",
+                    resourcesProvider.getString(R.string.text_steps),
                     it.steps.toString(),
                     "",
                 )
@@ -213,7 +215,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             val recoveryTimeMin = it.recoveryTime / 60
             activityList.add(
                 OWDActivityData(
-                    context.getString(R.string.text_recovery_time),
+                    resourcesProvider.getString(R.string.text_recovery_time),
                     ApplicationUtils.getActivityDurationFormat2(recoveryTimeMin),
                     "",
                 )
@@ -245,10 +247,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             val distance = dataUnitConverter.formatDistance(
                 distanceToUse?.toInt() ?: 0, sessionManager.unit
             )
-            return Triple(distance, if (sessionManager.isMetric()) "km" else "mi", "Total Distance")
+            return Triple(distance, if (sessionManager.isMetric()) resourcesProvider.getString(R.string.text_km)
+                 else resourcesProvider.getString (R.string.text_mi),
+                resourcesProvider.getString(R.string.text_total_distance))
 
         } else if (data.calories != null && data.calories > 0L) {
-            return Triple(data.calories.toString(), "Kcal", "Calories Burned")
+            return Triple(data.calories.toString(), resourcesProvider.getString(R.string.text_kcal), resourcesProvider.getString(R.string.text_calories_burned))
         }
 
         return Triple("", "", "")
@@ -432,7 +436,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             add(
                 OWDActivityHRZoneData(
 
-                    title = "Restorative zone",
+                    title = resourcesProvider.getString(R.string.text_restorative_zone),
                     range = "(<50%)",
                     zone = 0,
                     percentage = zoneRestorativeIndexes.size.toFloat()
@@ -448,7 +452,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             add(
                 OWDActivityHRZoneData(
 
-                    title = "Zone 1",
+                    title = resourcesProvider.getString(R.string.text_zone_1),
                     zone = 1,
                     range = "(50-60%)",
                     percentage = zone1Indexes.size.toFloat().calculatePercentage(duration.toFloat())
@@ -462,7 +466,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             add(
                 OWDActivityHRZoneData(
 
-                    title = "Zone 2",
+                    title = resourcesProvider.getString(R.string.text_zone_2),
                     range = "(60-70%)",
                     zone = 2,
                     percentage = zone2Indexes.size.toFloat().calculatePercentage(duration.toFloat())
@@ -476,7 +480,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             add(
                 OWDActivityHRZoneData(
 
-                    title = "Zone 3",
+                    title = resourcesProvider.getString(R.string.text_zone_3),
                     range = "(70-80%)",
                     zone = 3,
                     percentage = zone3Indexes.size.toFloat().calculatePercentage(duration.toFloat())
@@ -489,7 +493,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    title = "Zone 4",
+                    title = resourcesProvider.getString(R.string.text_zone_4),
                     range = "(80-90%)",
                     zone = 4,
                     percentage = zone4Indexes.size.toFloat().calculatePercentage(duration.toFloat())
@@ -502,7 +506,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    title = "Zone 5",
+                    title = resourcesProvider.getString(R.string.text_zone_5),
                     range = "(90-100%)",
                     zone = 5,
                     percentage = zone5Indexes.size.toFloat().calculatePercentage(duration.toFloat())

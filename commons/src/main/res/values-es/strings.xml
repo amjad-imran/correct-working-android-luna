@@ -19,6 +19,8 @@
     <string name="text_high">hoog</string>
     <string name="text_med">Médico</string>
     <string name="text_low">Laag</string>
+    <string name="text_just_now">En este momento</string>
+    <string name="text_cancel">Cancelar</string>
 
 
 </resources>

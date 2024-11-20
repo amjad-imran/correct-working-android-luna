@@ -11,6 +11,7 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
 import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
@@ -90,6 +91,7 @@ constructor(
     private val syncRepository: OreoSyncRepository,
     private val userActivityHandler: UserActivityHandler,
     private val watchesSdk: WatchesSDK,
+    private val resourcesProvider: ResourcesProvider,
     private val keyValueDataSource: KeyValueDataSource,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     private val sleepNotificationUtils: SleepNotificationUtils
@@ -791,7 +793,7 @@ constructor(
 
 //        sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Start.name, eventProperty)
         mFuture = SettableFuture.create()
-        setForegroundAsync(createForegroundInfo("Syncing User Activity."))
+        setForegroundAsync(createForegroundInfo(resourcesProvider.getString(R.string.text_syncing_user_activity)))
         LOGS.d(TAG, "startWork()")
 
 

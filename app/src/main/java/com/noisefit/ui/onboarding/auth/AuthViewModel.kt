@@ -5,10 +5,12 @@ import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
@@ -36,6 +38,7 @@ class AuthViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
+    private val resourcesProvider: ResourcesProvider,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -218,7 +221,7 @@ class AuthViewModel @Inject constructor(
                                  authSuccess.postValue(Event(true))
                                  loginSuccessEvent()
                              }*/
-                            sendMessage("Otp Verified ")
+                            sendMessage(resourcesProvider.getString(R.string.text_otp_verified))
                             //emailOtpGenerated.postValue(Event(true))
                         }
 

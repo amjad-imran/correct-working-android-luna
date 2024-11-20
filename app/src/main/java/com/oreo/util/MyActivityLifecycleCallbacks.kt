@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.Nullable
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.session.SessionManager
@@ -12,7 +13,10 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.utils.LOGS
 
 
-class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
+class MyActivityLifecycleCallbacks(
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
+) :
     Application.ActivityLifecycleCallbacks {
     private var activityCount = 0
     private var activityCount2 = 0
@@ -69,8 +73,8 @@ class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
             if (sessionManager.connectStateRing.value != null && sessionManager.showLocalNotification()) {
                 NotificationUtil.sendForcePushNotification(
                     NoiseFitApplicationMain.context!!,
-                    NoiseFitApplicationMain.context!!.getString(R.string.text_open_luna_ring_app),
-                    NoiseFitApplicationMain.context!!.getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+                    resourcesProvider.getString(R.string.text_open_luna_ring_app),
+                    resourcesProvider.getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
                 )
             }
         }

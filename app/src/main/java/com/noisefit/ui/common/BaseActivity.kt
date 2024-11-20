@@ -113,14 +113,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                 var showWrongDialog = false
                 var message = (response.uiComponentType as UIComponentType.RetryApiDialog).message
                 if (message == null) {
-                    message = "Error Connecting To Internet, Retry?"
+                    message = getString(R.string.text_error_connecting_to_internet_retry)
                 } else if (message.equals(NETWORK_ERROR, true) ||
                     message.equals(NETWORK_ERROR_TIMEOUT, true) ||
                     message.equals(NETWORK_ERROR_UNKNOWN, true)
                 ) {
-                    message = "Error Connecting To Internet, Retry?"
+                    message = getString(R.string.text_error_connecting_to_internet_retry)
                 } else if (message.equals(WRONG_CLIENT_TIME_ERROR, true)) {
-                    message = "Wrong client time"
+                    message = getString(R.string.text_wrong_client_time)
                     showWrongDialog = true
                 }
 
@@ -128,7 +128,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                     showWrongTimeDialog()
                 } else {
                     showRetryDialog(
-                        "Failed",
+                        getString(R.string.text_failed),
                         message,
                         (response.uiComponentType as UIComponentType.RetryApiDialog).callback
                     )
