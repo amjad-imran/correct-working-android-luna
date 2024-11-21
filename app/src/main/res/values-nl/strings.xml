@@ -1336,8 +1336,6 @@
     <string name="text_ask_luna_ai">Vraag het aan Luna AI</string>
     <string name="text_choose_your_language">Kies uw taal</string>
     <string name="text_language_change_message">Hierdoor wordt de app naar de geselecteerde taal gewijzigd</string>
-    <string name="text_pm">p.m</string>
-    <string name="text_am">ben</string>
     <string name="text_no_data_so_far">Tot nu toe geen gegevens</string>
     <string name="text_unable_to_measure">Kan niet meten</string>
     <string name="text_device_settings">Apparaatinstellingen</string>
@@ -1600,4 +1598,9 @@
     <string name="text_2_7_days">2-7 dagen</string>
     <string name="text_21_35_days_a"><![CDATA[<21, >35 dagen]]></string>
     <string name="text_2_7_days_a"><![CDATA[<2, >7 dagen]]></string>
+    <string name="text_from_last_6_weeks">van de afgelopen 6 weken</string>
+    <string name="text_from_last_6_months">van de afgelopen 6 maanden</string>
+    <string name="text_range_value_bpm">Bereik %1$d-%2$d bpm</string>
+    <string name="text_needs">behoeften</string>
+    <string name="text_thank_you_for_your_feedback">Bedankt voor uw feedback!</string>
 </resources>

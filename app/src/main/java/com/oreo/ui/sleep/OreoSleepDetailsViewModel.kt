@@ -3,6 +3,7 @@ package com.oreo.ui.sleep
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
@@ -79,12 +80,14 @@ constructor(
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
-                    DateFormats.dateFormat3()
+                    DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"

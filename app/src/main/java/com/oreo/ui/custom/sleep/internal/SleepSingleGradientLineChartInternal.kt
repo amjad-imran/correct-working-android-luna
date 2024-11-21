@@ -17,6 +17,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
@@ -568,7 +569,12 @@ class SleepSingleGradientLineChartInternal constructor(context: Context?, attrs:
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val displayText = it.format(DateTimeFormatter.ofPattern("E"))
+            val displayText = it.format(
+                DateTimeFormatter.ofPattern(
+                    "E",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
             val textWidth = xAxisPaint.measureText(displayText)
             xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)

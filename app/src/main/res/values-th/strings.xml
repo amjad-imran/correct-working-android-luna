@@ -1321,8 +1321,6 @@
     <string name="text_ask_luna_ai">ถามลูน่าเอไอ</string>
     <string name="text_choose_your_language">เลือกภาษาของคุณ</string>
     <string name="text_language_change_message">นี่จะเปลี่ยนแอปเป็นภาษาที่เลือก</string>
-    <string name="text_pm">น</string>
-    <string name="text_am">เช้า</string>
     <string name="text_no_data_so_far">ยังไม่มีข้อมูล</string>
     <string name="text_unable_to_measure">ไม่สามารถวัดได้</string>
     <string name="text_device_settings">การตั้งค่าอุปกรณ์</string>
@@ -1584,4 +1582,9 @@
     <string name="text_2_7_days">2-7 วัน</string>
     <string name="text_21_35_days_a"><![CDATA[<21, >35 วัน]]></string>
     <string name="text_2_7_days_a"><![CDATA[<2, >7 วัน]]></string>
+    <string name="text_from_last_6_weeks">จาก 6 สัปดาห์ที่ผ่านมา</string>
+    <string name="text_from_last_6_months">จาก 6 เดือนที่ผ่านมา</string>
+    <string name="text_range_value_bpm">ช่วง %1$d-%2$d ครั้งต่อนาที</string>
+    <string name="text_needs">ความต้องการ</string>
+    <string name="text_thank_you_for_your_feedback">ขอบคุณสำหรับคำติชมของคุณ!</string>
 </resources>

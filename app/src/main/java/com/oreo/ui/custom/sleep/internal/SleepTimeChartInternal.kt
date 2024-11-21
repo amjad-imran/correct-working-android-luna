@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.luna.R
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.custom.sleep.SleepTimeModel
@@ -330,7 +331,13 @@ class SleepTimeChartInternal constructor(context: Context?, attrs: AttributeSet?
 
         val stepWidth = availableWidth / 7
 
-        val days = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val days = arrayListOf(context.getString(R.string.text_mon),
+            context.getString(R.string.text_tue),
+            context.getString(R.string.text_wed),
+            context.getString(R.string.text_thu),
+            context.getString(R.string.text_fri),
+            context.getString(R.string.text_sat),
+            context.getString(R.string.text_sun))
         var start = 0.0f
         val xTextBounds = Rect()
         days.forEach {

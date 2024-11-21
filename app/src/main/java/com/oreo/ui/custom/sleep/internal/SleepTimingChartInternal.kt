@@ -17,6 +17,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
@@ -326,7 +327,12 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
 
     private fun getTimeText(value: Float): String {
         val time = LocalTime.MIDNIGHT.plusMinutes(value.roundToLong())
-        return time.format(DateTimeFormatter.ofPattern("h:mm"))
+        return time.format(
+            DateTimeFormatter.ofPattern(
+                "h:mm",
+                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+            )
+        )
     }
 
     private fun showNoRecordAvailable(canvas: Canvas, availableWidth: Float) {
@@ -477,7 +483,12 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val displayText = it.format(DateTimeFormatter.ofPattern("E"))
+            val displayText = it.format(
+                DateTimeFormatter.ofPattern(
+                    "E",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
             val textWidth = xAxisPaint.measureText(displayText)
             xAxisPaint.getTextBounds(displayText, 0, displayText.length, xTextBounds)
             val textStart = start + (stepWidth / 2 - textWidth / 2)

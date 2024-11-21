@@ -1335,8 +1335,6 @@
     <string name="text_ask_luna_ai">Спросите Луну AI</string>
     <string name="text_choose_your_language">Выберите свой язык</string>
     <string name="text_language_change_message">Это изменит приложение на выбранный язык.</string>
-    <string name="text_pm">вечер</string>
-    <string name="text_am">являюсь</string>
     <string name="text_no_data_so_far">Данных пока нет</string>
     <string name="text_unable_to_measure">Невозможно измерить</string>
     <string name="text_device_settings">Настройки устройства</string>
@@ -1599,4 +1597,9 @@
     <string name="text_2_7_days">2-7 дней</string>
     <string name="text_21_35_days_a"><![CDATA[<21, >35 дней]]></string>
     <string name="text_2_7_days_a"><![CDATA[<2, >7 дней]]></string>
+    <string name="text_from_last_6_weeks">за последние 6 недель</string>
+    <string name="text_from_last_6_months">за последние 6 месяцев</string>
+    <string name="text_range_value_bpm">Диапазон %1$d–%2$d уд/мин</string>
+    <string name="text_needs">потребности</string>
+    <string name="text_thank_you_for_your_feedback">Спасибо за ваш отзыв!</string>
 </resources>

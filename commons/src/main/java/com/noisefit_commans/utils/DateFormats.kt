@@ -640,14 +640,15 @@ object DateFormats {
 
     fun getOrdinalDate(
         dateInput: String?,
-        currentFormat: SimpleDateFormat
+        currentFormat: SimpleDateFormat,
+        languageCode:String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val week = SimpleDateFormat("EEE", defaultLocale).format(date)
-            val day = SimpleDateFormat("d", defaultLocale).format(date)
-            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
+            val week = SimpleDateFormat("EEE", Locale(languageCode)).format(date)
+            val day = SimpleDateFormat("d", Locale(languageCode)).format(date)
+            val month = SimpleDateFormat("MMM", Locale(languageCode)).format(date)
             return "$week, $day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""
@@ -656,13 +657,14 @@ object DateFormats {
 
     fun getOrdinalDateToday(
         dateInput: String?,
-        currentFormat: SimpleDateFormat
+        currentFormat: SimpleDateFormat,
+        languageCode:String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val day = SimpleDateFormat("d", defaultLocale).format(date)
-            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
+            val day = SimpleDateFormat("d", Locale(languageCode)).format(date)
+            val month = SimpleDateFormat("MMM", Locale(languageCode)).format(date)
             return "$day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""

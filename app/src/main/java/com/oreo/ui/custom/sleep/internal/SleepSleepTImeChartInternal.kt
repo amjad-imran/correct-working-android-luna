@@ -16,6 +16,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit_commans.common.averageWithoutZeroGeneric
 import com.noisefit_commans.common.yearMonth
@@ -389,7 +390,13 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
                 val time = minDateTime!!.toLocalTime()
 
-                val text =time.plusMinutes(startTime.toLong()).format(DateTimeFormatter.ofPattern("h:mm"))
+                val text = time.plusMinutes(startTime.toLong()).format(
+                    DateTimeFormatter.ofPattern(
+                        "h:mm", Locale(
+                            NoiseFitApplicationMain.appLanguage.languageCode
+                        )
+                    )
+                )
 
                 val overlayColor = getAvgBarColor()
                 xOverlayLinePaint.color = overlayColor
@@ -402,9 +409,9 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
                     xOverlayLinePaint
                 )
 
-               /* canvas.drawLine(
-                    start.toFloat(), pos, end, pos, xOverlayLinePaint
-                )*/
+                /* canvas.drawLine(
+                     start.toFloat(), pos, end, pos, xOverlayLinePaint
+                 )*/
 
                 canvas.drawRoundRect(
                     start.toFloat(),
@@ -425,7 +432,12 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
                 val time = minDateTime!!.toLocalTime()
 
-                val text =time.plusMinutes(endTime.toLong()).format(DateTimeFormatter.ofPattern("h:mm"))
+                val text = time.plusMinutes(endTime.toLong()).format(
+                    DateTimeFormatter.ofPattern(
+                        "h:mm",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
                 val overlayColor = getAvgBarColor()
 
@@ -608,7 +620,12 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
 
         xAxisRange.forEach {
             val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-                it.format(DateTimeFormatter.ofPattern("MMM"))
+                it.format(
+                    DateTimeFormatter.ofPattern(
+                        "MMM",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
             } else {
                 //for week
                 val weekFields = WeekFields.of(Locale.getDefault())
@@ -654,13 +671,13 @@ class SleepSleepTImeChartInternal constructor(context: Context?, attrs: Attribut
         mMax = 0
         offset = 60 * 2L
 
-        if(contributorType==SleepInternalLaunchState.TIMING){
+        if (contributorType == SleepInternalLaunchState.TIMING) {
             list.forEach {
                 if (it.startTime > mMax) {
                     mMax = it.startTime
                 }
             }
-        }else{
+        } else {
             list.forEach {
                 if (it.endTime > mMax) {
                     mMax = it.endTime

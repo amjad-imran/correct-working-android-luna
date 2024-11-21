@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsV2Binding
 import com.noisefit.oreo.OreoMainViewModel
@@ -198,9 +199,11 @@ class OWorkoutDetailsFragmentV2 :
         }
 
         if (title.isEmpty()) {
-            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3()))
+            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3(),
+                NoiseFitApplicationMain.appLanguage.languageCode))
         } else {
-            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3()))
+            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3(),
+                NoiseFitApplicationMain.appLanguage.languageCode))
         }
 
         binding.lytTop.rvActivityDetails.visible()

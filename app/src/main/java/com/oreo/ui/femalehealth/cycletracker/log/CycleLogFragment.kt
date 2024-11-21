@@ -250,6 +250,8 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
                 override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+
+
                     container.textView.text = "${
                         data.yearMonth.month.name.lowercase().capitalizeWords()
                     } ${data.yearMonth.year}"

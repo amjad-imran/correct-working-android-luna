@@ -1330,8 +1330,6 @@
     <string name="text_ask_luna_ai">Pergunte à Luna AI</string>
     <string name="text_choose_your_language">Escolha seu idioma</string>
     <string name="text_language_change_message">Isso mudará o aplicativo para o idioma selecionado</string>
-    <string name="text_pm">tarde</string>
-    <string name="text_am">sou</string>
     <string name="text_no_data_so_far">Nenhum dado até agora</string>
     <string name="text_unable_to_measure">Não é possível medir</string>
     <string name="text_device_settings">Configurações do dispositivo</string>
@@ -1594,4 +1592,9 @@
     <string name="text_2_7_days">2-7 dias</string>
     <string name="text_21_35_days_a"><![CDATA[<21, >35 dias]]></string>
     <string name="text_2_7_days_a"><![CDATA[<2, >7 dias]]></string>
+    <string name="text_from_last_6_weeks">das últimas 6 semanas</string>
+    <string name="text_from_last_6_months">dos últimos 6 meses</string>
+    <string name="text_range_value_bpm">Intervalo %1$d-%2$d bpm</string>
+    <string name="text_needs">precisa</string>
+    <string name="text_thank_you_for_your_feedback">Obrigado pelo seu feedback!</string>
 </resources>

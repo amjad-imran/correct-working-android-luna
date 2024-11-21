@@ -1334,8 +1334,6 @@
     <string name="text_ask_luna_ai">询问 Luna AI</string>
     <string name="text_choose_your_language">选择您的语言</string>
     <string name="text_language_change_message">这会将应用程序更改为所选语言</string>
-    <string name="text_pm">下午</string>
-    <string name="text_am">是</string>
     <string name="text_no_data_so_far">到目前为止还没有数据</string>
     <string name="text_unable_to_measure">无法测量</string>
     <string name="text_device_settings">设备设置</string>
@@ -1598,4 +1596,9 @@
     <string name="text_2_7_days">2-7天</string>
     <string name="text_21_35_days_a"><![CDATA[<21, >35 天]]></string>
     <string name="text_2_7_days_a"><![CDATA[<2, >7 天]]></string>
+    <string name="text_from_last_6_weeks">从过去 6 周开始</string>
+    <string name="text_from_last_6_months">从过去 6 个月开始</string>
+    <string name="text_range_value_bpm">范围 %1$d-%2$d bpm</string>
+    <string name="text_needs">需要</string>
+    <string name="text_thank_you_for_your_feedback">感谢您的反馈！</string>
 </resources>
