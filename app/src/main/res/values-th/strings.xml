@@ -1556,4 +1556,23 @@
     <string name="text_syncing_user_activity">กำลังซิงค์กิจกรรมของผู้ใช้</string>
     <string name="text_luna_ring_is_running">ลูน่าริงกำลังทำงาน</string>
     <string name="text_last_sync_at_value">ซิงค์ครั้งล่าสุดเมื่อ %1$s</string>
+    <string name="text_steps_to_follow">ขั้นตอนในการปฏิบัติตาม</string>
+    <string name="text_still_not_connecting">ยังไม่เชื่อมต่อ?</string>
+    <string name="text_try_keeping_your_ring_on_the_charger">ลองเก็บแหวนไว้บนที่ชาร์จสักครู่จนกว่าจะเชื่อมต่อ</string>
+    <string name="text_check_last_synced_location">ตรวจสอบตำแหน่งที่ซิงค์ครั้งล่าสุด</string>
+    <string name="text_ensure_your_ring_and_your">ตรวจสอบให้แน่ใจว่าแหวนและโทรศัพท์ของคุณอยู่ในระยะ 1 เมตร</string>
+    <string name="text_try_turning_on_off_the_bluetooth_until_the_ring_gets_connected">ลองเปิด/ปิดบลูทูธจนกว่าวงแหวนจะเชื่อมต่อ</string>
+    <string name="text_turn_on_bluetooth">เปิดบลูทูธ</string>
+    <string name="text_reach_out_to_us_by_tapping">ติดต่อเราโดยแตะปุ่มด้านล่าง</string>
+    <string name="text_contact_us">ติดต่อเรา</string>
+    <string name="text_value_days_string">%1$s วัน</string>
+    <string name="text_none">ไม่มี</string>
+    <string name="text_fertility_treatments">การรักษาภาวะเจริญพันธุ์</string>
+    <string name="text_hormone_replacement_therapy">การบำบัดด้วยฮอร์โมนทดแทน</string>
+    <string name="text_hormonal_contraception">การคุมกำเนิดแบบฮอร์โมน</string>
+    <string name="text_prefer_not_to_say">เลือกที่จะไม่พูด</string>
+    <string name="text_other">อื่น</string>
+    <string name="text_hypothyroidism">ภาวะไทรอยด์ทำงานต่ำ</string>
+    <string name="text_menopause">วัยหมดประจำเดือน</string>
+    <string name="text_endometriosis">เยื่อบุโพรงมดลูกเจริญผิดที่</string>
 </resources>

@@ -1,26 +1,27 @@
 <resources>
 
     <string name="app_name">common</string>
-    <string name="text_please_wait">Regarder jusqu\'à la gauche</string>
-    <string name="text_disabled">Géhandicapé</string>
-    <string name="text_enabled">Ingeschakeld</string>
-    <string name="text_unpair_device">Appareils ontkoppelen</string>
-    <string name="delete_account">Compte verwijderen</string>
-    <string name="text_delete_account">Compte verwijderen</string>
-    <string name="logout">Journal de bord</string>
-    <string name="text_customer_support">Klantenondersteuning</string>
-    <string name="text_about">Sur</string>
-    <string name="text_rate_us">Beoordeel ons</string>
-    <string name="text_help_and_support">Veelgestelde vragen</string>
-    <string name="text_my_goals">Jouer doelen</string>
-    <string name="text_awake">Wakker</string>
+    <string name="text_please_wait">S\'il vous plaît, attendez</string>
+    <string name="text_disabled">Désactivé</string>
+    <string name="text_enabled">Activé</string>
+    <string name="text_unpair_device">Dissocier l\'appareil</string>
+    <string name="delete_account">Supprimer le compte</string>
+    <string name="text_delete_account">Supprimer le compte</string>
+    <string name="logout">Déconnexion</string>
+    <string name="text_customer_support">Assistance client</string>
+    <string name="text_about">À propos</string>
+    <string name="text_rate_us">Évaluez-nous</string>
+    <string name="text_help_and_support">Questions fréquemment posées</string>
+    <string name="text_my_goals">Vos objectifs</string>
+    <string name="text_awake">Éveillé</string>
     <string name="text_rem">Rem</string>
     <string name="text_light">Lumière</string>
-    <string name="text_deep">Diep</string>
-    <string name="text_high">Hoog</string>
+    <string name="text_deep">Profond</string>
+    <string name="text_high">Haut</string>
     <string name="text_med">Médical</string>
-    <string name="text_low">Laag</string>
+    <string name="text_low">Faible</string>
     <string name="text_just_now">Tout à l\' heure</string>
     <string name="text_cancel">Annuler</string>
+    <string name="text_none">Aucun</string>
 
 </resources>

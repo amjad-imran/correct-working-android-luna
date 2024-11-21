@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -37,7 +39,8 @@ const val MaxCycleDays = 100
 
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor(
-    val localDataStore: DataStoredInterface, val femaleHealthRepository: FemaleHealthRepository
+    val localDataStore: DataStoredInterface, val femaleHealthRepository: FemaleHealthRepository,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
     val fragmentSize = 7
 
@@ -126,23 +129,36 @@ class FMHOnboardingViewModel @Inject constructor(
 
     fun getHormonalData(): ArrayList<DiagnoseDataItem> {
         val listData = ArrayList<DiagnoseDataItem>()
-        listData.add(DiagnoseDataItem("None", false))
-        listData.add(DiagnoseDataItem("Fertility treatments", false))
-        listData.add(DiagnoseDataItem("Hormone replacement therapy", false))
-        listData.add(DiagnoseDataItem("Hormonal contraception", false))
-        listData.add(DiagnoseDataItem("Prefer not to say", false))
-        listData.add(DiagnoseDataItem("Other", false))
+        listData.add(DiagnoseDataItem("None", resourcesProvider.getString(R.string.text_none), false))
+        listData.add(DiagnoseDataItem("Fertility treatments",
+            resourcesProvider.getString(R.string.text_fertility_treatments), false))
+        listData.add(
+            DiagnoseDataItem(
+                "Hormone replacement therapy",
+                resourcesProvider.getString(R.string.text_hormone_replacement_therapy),
+                false
+            )
+        )
+        listData.add(DiagnoseDataItem("Hormonal contraception",
+            resourcesProvider.getString(R.string.text_hormonal_contraception), false))
+        listData.add(DiagnoseDataItem("Prefer not to say",
+            resourcesProvider.getString(R.string.text_prefer_not_to_say), false))
+        listData.add(DiagnoseDataItem("Other",
+            resourcesProvider.getString(R.string.text_other), false))
         return listData
     }
 
     fun getDiagnoseData(): ArrayList<DiagnoseDataItem> {
         val listData = ArrayList<DiagnoseDataItem>()
-        listData.add(DiagnoseDataItem("None", false))
-        listData.add(DiagnoseDataItem("PCOS", false))
-        listData.add(DiagnoseDataItem("PCOD", false))
-        listData.add(DiagnoseDataItem("Hypothyroidism", false))
-        listData.add(DiagnoseDataItem("Menopause", false))
-        listData.add(DiagnoseDataItem("Endometriosis", false))
+        listData.add(DiagnoseDataItem("None", resourcesProvider.getString(R.string.text_none), false))
+        listData.add(DiagnoseDataItem("PCOS", "PCOS", false))
+        listData.add(DiagnoseDataItem("PCOD", "PCOD", false))
+        listData.add(DiagnoseDataItem("Hypothyroidism",
+            resourcesProvider.getString(R.string.text_hypothyroidism), false))
+        listData.add(DiagnoseDataItem("Menopause",
+            resourcesProvider.getString(R.string.text_menopause), false))
+        listData.add(DiagnoseDataItem("Endometriosis",
+            resourcesProvider.getString(R.string.text_endometriosis), false))
         return listData
     }
 
@@ -238,7 +254,8 @@ class FMHOnboardingViewModel @Inject constructor(
                                 3 -> {
                                     _femaleHealthSkip.postValue(Event(true))
                                 }
-                                4->{
+
+                                4 -> {
                                     //do nothing
                                 }
                             }

@@ -17,7 +17,7 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
     inner class ViewHolder(val binding: LayoutFmhDiagnoseItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DiagnoseDataItem) {
-            binding.tvHeader.text = data.title
+            binding.tvHeader.text = data.displayTitle
             if (data.isChecked) {
                 binding.ivChecked.visible()
                 binding.container.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)

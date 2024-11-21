@@ -42,7 +42,7 @@ class CycleTrackerSettingsFragment :
                 viewModel.cycleTrackerInfo?.cycleLength.toString()
             }
             viewModel.lastSelectedCycleLength = cLength
-            binding.lytCycleLength.tvDays.text = "$cLength days"
+            binding.lytCycleLength.tvDays.text = getString(R.string.text_value_days_string, cLength)
         } else {
             binding.lytCycleLength.tvDays.text = ""
         }
@@ -53,7 +53,8 @@ class CycleTrackerSettingsFragment :
                 viewModel.cycleTrackerInfo?.periodLength.toString()
             }
             viewModel.lastSelectedPeriodLength = cLength
-            binding.lytPeriodDuration.tvDays.text = "$cLength days"
+            binding.lytPeriodDuration.tvDays.text =
+                getString(R.string.text_value_days_string, cLength)
         } else {
             binding.lytPeriodDuration.tvDays.text = ""
         }

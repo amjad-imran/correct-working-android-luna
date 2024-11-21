@@ -1567,4 +1567,23 @@
     <string name="text_syncing_user_activity">Benutzeraktivität synchronisieren.</string>
     <string name="text_luna_ring_is_running">Luna Ring läuft</string>
     <string name="text_last_sync_at_value">letzte Synchronisierung um %1$s</string>
+    <string name="text_steps_to_follow">Zu befolgende Schritte</string>
+    <string name="text_still_not_connecting">Immer noch keine Verbindung?</string>
+    <string name="text_try_keeping_your_ring_on_the_charger">Versuchen Sie, Ihren Ring einige Minuten lang auf dem Ladegerät zu lassen, bis er angeschlossen ist.</string>
+    <string name="text_check_last_synced_location">Überprüfen Sie den zuletzt synchronisierten Standort</string>
+    <string name="text_ensure_your_ring_and_your">Stellen Sie sicher, dass Ihr Ring und Ihr Telefon nicht weiter als 1 Meter voneinander entfernt sind</string>
+    <string name="text_try_turning_on_off_the_bluetooth_until_the_ring_gets_connected">Versuchen Sie, Bluetooth ein-/auszuschalten, bis der Ring verbunden ist.</string>
+    <string name="text_turn_on_bluetooth">Schalten Sie Bluetooth ein</string>
+    <string name="text_reach_out_to_us_by_tapping">Kontaktieren Sie uns, indem Sie auf die Schaltfläche unten tippen</string>
+    <string name="text_contact_us">Kontaktieren Sie uns</string>
+    <string name="text_value_days_string">%1$s Tage</string>
+    <string name="text_none">Keiner</string>
+    <string name="text_fertility_treatments">Fruchtbarkeitsbehandlungen</string>
+    <string name="text_hormone_replacement_therapy">Hormonersatztherapie</string>
+    <string name="text_hormonal_contraception">Hormonelle Empfängnisverhütung</string>
+    <string name="text_prefer_not_to_say">Sag es lieber nicht</string>
+    <string name="text_other">Andere</string>
+    <string name="text_hypothyroidism">Hypothyreose</string>
+    <string name="text_menopause">Menopause</string>
+    <string name="text_endometriosis">Endometriose</string>
 </resources>

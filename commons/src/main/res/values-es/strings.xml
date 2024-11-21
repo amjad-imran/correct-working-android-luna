@@ -1,26 +1,27 @@
 <resources>
     <string name="app_name">common</string>
-    <string name="text_please_wait">Considere jusqu\'à la gauche</string>
-    <string name="text_disabled">Géhandicapé</string>
-    <string name="text_enabled">Ingeschakeld</string>
-    <string name="text_unpair_device">Ropa ontkoppelen</string>
-    <string name="delete_account">Cuentas completas</string>
-    <string name="text_delete_account">Cuentas completas</string>
-    <string name="logout">diario de borde</string>
-    <string name="text_customer_support">Klantenondersteuning</string>
-    <string name="text_about">sur</string>
-    <string name="text_rate_us">Complementos de Beoordeel</string>
-    <string name="text_help_and_support">Veelgestelde vragen</string>
-    <string name="text_my_goals">jouer doelen</string>
-    <string name="text_awake">despertador</string>
+    <string name="text_please_wait">Espere por favor</string>
+    <string name="text_disabled">Desactivado</string>
+    <string name="text_enabled">Activado</string>
+    <string name="text_unpair_device">Desvincular dispositivo</string>
+    <string name="delete_account">Eliminar cuenta</string>
+    <string name="text_delete_account">Eliminar cuenta</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="text_customer_support">Atención al cliente</string>
+    <string name="text_about">Acerca de</string>
+    <string name="text_rate_us">Califícanos</string>
+    <string name="text_help_and_support">Preguntas frecuentes</string>
+    <string name="text_my_goals">Tus objetivos</string>
+    <string name="text_awake">Despierto</string>
     <string name="text_rem">Movimiento rápido del ojo</string>
-    <string name="text_light">Lumière</string>
-    <string name="text_deep">Diep</string>
-    <string name="text_high">hoog</string>
-    <string name="text_med">Médico</string>
-    <string name="text_low">Laag</string>
+    <string name="text_light">Luz</string>
+    <string name="text_deep">Profundo</string>
+    <string name="text_high">Alto</string>
+    <string name="text_med">Medicina</string>
+    <string name="text_low">Bajo</string>
     <string name="text_just_now">En este momento</string>
     <string name="text_cancel">Cancelar</string>
+    <string name="text_none">Ninguno</string>
 
 
 </resources>

@@ -1,26 +1,27 @@
 <resources>
     <string name="app_name">common</string>
-    <string name="text_please_wait">Wacht alstublieft</string>
-    <string name="text_disabled">Gehandicapt</string>
-    <string name="text_enabled">Ingeschakeld</string>
-    <string name="text_unpair_device">Gerät ontkoppelen</string>
+    <string name="text_please_wait">Bitte warten</string>
+    <string name="text_disabled">Deaktiviert</string>
+    <string name="text_enabled">Ermöglicht</string>
+    <string name="text_unpair_device">Gerät entkoppeln</string>
     <string name="delete_account">Konto löschen</string>
     <string name="text_delete_account">Konto löschen</string>
-    <string name="logout">Uitloggen</string>
-    <string name="text_customer_support">Klantenondersteuning</string>
-    <string name="text_about">Über</string>
-    <string name="text_rate_us">Beoordeel ons</string>
-    <string name="text_help_and_support">Veelgestelde vragen</string>
-    <string name="text_my_goals">Du tust etwas</string>
-    <string name="text_awake">Wakker</string>
+    <string name="logout">Abmelden</string>
+    <string name="text_customer_support">Kundenbetreuung</string>
+    <string name="text_about">Um</string>
+    <string name="text_rate_us">Bewerten Sie uns</string>
+    <string name="text_help_and_support">Häufig gestellte Fragen</string>
+    <string name="text_my_goals">Ihre Ziele</string>
+    <string name="text_awake">Wach</string>
     <string name="text_rem">Rem</string>
     <string name="text_light">Licht</string>
-    <string name="text_deep">Diep</string>
-    <string name="text_high">Hoog</string>
+    <string name="text_deep">Tief</string>
+    <string name="text_high">Hoch</string>
     <string name="text_med">Med</string>
-    <string name="text_low">Laag</string>
+    <string name="text_low">Niedrig</string>
     <string name="text_just_now">Soeben</string>
     <string name="text_cancel">Stornieren</string>
+    <string name="text_none">Keiner</string>
 
 
 </resources>

@@ -1570,4 +1570,23 @@
     <string name="text_syncing_user_activity">Sincronizzazione dell\'attività dell\'utente.</string>
     <string name="text_luna_ring_is_running">Luna Ring è in esecuzione</string>
     <string name="text_last_sync_at_value">ultima sincronizzazione alle %1$s</string>
+    <string name="text_steps_to_follow">Passaggi da seguire</string>
+    <string name="text_still_not_connecting">Ancora non ti connetti?</string>
+    <string name="text_try_keeping_your_ring_on_the_charger">Prova a tenere l\'anello sul caricabatterie per alcuni minuti finché non si collega.</string>
+    <string name="text_check_last_synced_location">Controlla l\'ultima posizione sincronizzata</string>
+    <string name="text_ensure_your_ring_and_your">Assicurati che il tuo squillo e il tuo telefono siano entro 1 metro di distanza</string>
+    <string name="text_try_turning_on_off_the_bluetooth_until_the_ring_gets_connected">Prova ad accendere/spegnere il Bluetooth finché l\'anello non si connette.</string>
+    <string name="text_turn_on_bluetooth">Attiva il bluetooth</string>
+    <string name="text_reach_out_to_us_by_tapping">Contattaci toccando il pulsante qui sotto</string>
+    <string name="text_contact_us">Contattaci</string>
+    <string name="text_value_days_string">%1$s giorni</string>
+    <string name="text_none">Nessuno</string>
+    <string name="text_fertility_treatments">Trattamenti per la fertilità</string>
+    <string name="text_hormone_replacement_therapy">Terapia ormonale sostitutiva</string>
+    <string name="text_hormonal_contraception">Contraccezione ormonale</string>
+    <string name="text_prefer_not_to_say">Preferisco non dirlo</string>
+    <string name="text_other">Altro</string>
+    <string name="text_hypothyroidism">Ipotiroidismo</string>
+    <string name="text_menopause">Menopausa</string>
+    <string name="text_endometriosis">Endometriosi</string>
 </resources>

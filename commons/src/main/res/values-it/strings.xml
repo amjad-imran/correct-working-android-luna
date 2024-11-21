@@ -1,26 +1,27 @@
 <resources>
     <string name="app_name">common</string>
-    <string name="text_please_wait">Guarda l\'altublieft</string>
-    <string name="text_disabled">Gehandicapt</string>
-    <string name="text_enabled">Ingeschakeld</string>
-    <string name="text_unpair_device">Apparecchio collegato</string>
-    <string name="delete_account">Account verwijderen</string>
-    <string name="text_delete_account">Account verwijderen</string>
-    <string name="logout">Uitloggen</string>
-    <string name="text_customer_support">Klantenondersteuning</string>
-    <string name="text_about">Sopra</string>
-    <string name="text_rate_us">Beoordeel ons</string>
-    <string name="text_help_and_support">Veelgestelde vragen</string>
-    <string name="text_my_goals">Jouw doelen</string>
-    <string name="text_awake">Wakker</string>
+    <string name="text_please_wait">Attendere prego</string>
+    <string name="text_disabled">Disabilitato</string>
+    <string name="text_enabled">Abilitato</string>
+    <string name="text_unpair_device">Disaccoppiare il dispositivo</string>
+    <string name="delete_account">Elimina account</string>
+    <string name="text_delete_account">Elimina account</string>
+    <string name="logout">Esci</string>
+    <string name="text_customer_support">Assistenza clienti</string>
+    <string name="text_about">Di</string>
+    <string name="text_rate_us">Valutaci</string>
+    <string name="text_help_and_support">Domande frequenti</string>
+    <string name="text_my_goals">I tuoi obiettivi</string>
+    <string name="text_awake">Sveglio</string>
     <string name="text_rem">REM</string>
-    <string name="text_light">Luce</string>
-    <string name="text_deep">Dip</string>
-    <string name="text_high">Hoog</string>
+    <string name="text_light">Leggero</string>
+    <string name="text_deep">Profondo</string>
+    <string name="text_high">Alto</string>
     <string name="text_med">Med</string>
-    <string name="text_low">Laag</string>
+    <string name="text_low">Basso</string>
     <string name="text_just_now">Proprio adesso</string>
     <string name="text_cancel">Cancellare</string>
+    <string name="text_none">Nessuno</string>
 
 
 </resources>

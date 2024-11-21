@@ -269,31 +269,31 @@ class TroubleShootBottomSheetFragment :
     private fun generateDataSet(): java.util.ArrayList<TroubleShootData> {
         return arrayListOf(
             TroubleShootData(
-                title = "Steps to follow",
-                message = "Try keeping your ring on the charger for few minutes until it gets connected.",
+                title = getString(R.string.text_steps_to_follow),
+                message = getString(R.string.text_try_keeping_your_ring_on_the_charger),
                 image = R.drawable.image_ts_1,
-                ctaText = "Check last synced location",
+                ctaText = getString(R.string.text_check_last_synced_location),
                 action = TroubleShootActionType.LAST_LOCATION
             ),
             TroubleShootData(
-                title = "Steps to follow",
-                message = "Ensure your ring and your phone are within 1 metre distance",
+                title = getString(R.string.text_steps_to_follow),
+                message = getString(R.string.text_ensure_your_ring_and_your),
                 image = R.drawable.image_ts_2,
-                ctaText = "Check last synced location",
+                ctaText = getString(R.string.text_check_last_synced_location),
                 action = TroubleShootActionType.LAST_LOCATION
             ),
             TroubleShootData(
-                title = "Steps to follow",
-                message = "Try turning on/off the bluetooth until the ring gets connected.",
+                title = getString(R.string.text_steps_to_follow),
+                message = getString(R.string.text_try_turning_on_off_the_bluetooth_until_the_ring_gets_connected),
                 image = R.drawable.image_ts_3,
-                ctaText = "Turn on bluetooth",
+                ctaText = getString(R.string.text_turn_on_bluetooth),
                 action = TroubleShootActionType.BLUETOOTH
             ),
             TroubleShootData(
-                title = "Still not connecting?",
-                message = "Reach out to us by tapping the button below",
+                title = getString(R.string.text_still_not_connecting),
+                message = getString(R.string.text_reach_out_to_us_by_tapping),
                 image = R.drawable.image_ts_4,
-                ctaText = "Contact us",
+                ctaText = getString(R.string.text_contact_us),
                 action = TroubleShootActionType.CONTACT_US
             )
         )

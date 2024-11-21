@@ -21,6 +21,7 @@
     <string name="text_low">Baixo</string>
     <string name="text_just_now">Agora mesmo</string>
     <string name="text_cancel">Cancelar</string>
+    <string name="text_none">Nenhum</string>
 
 
 </resources>

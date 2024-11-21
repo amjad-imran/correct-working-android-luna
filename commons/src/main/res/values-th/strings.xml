@@ -21,6 +21,7 @@
     <string name="text_low">ต่ำ</string>
     <string name="text_just_now">แค่ตอนนี้</string>
     <string name="text_cancel">ยกเลิก</string>
+    <string name="text_none">ไม่มี</string>
 
 
 </resources>

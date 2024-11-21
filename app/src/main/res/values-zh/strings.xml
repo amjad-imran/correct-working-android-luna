@@ -1570,4 +1570,23 @@
     <string name="text_syncing_user_activity">同步用户活动。</string>
     <string name="text_luna_ring_is_running">月神戒指正在运行</string>
     <string name="text_last_sync_at_value">上次同步时间为 %1$s</string>
+    <string name="text_steps_to_follow">遵循的步骤</string>
+    <string name="text_still_not_connecting">仍然无法连接？</string>
+    <string name="text_try_keeping_your_ring_on_the_charger">尝试将戒指放在充电器上几分钟，直到连接成功。</string>
+    <string name="text_check_last_synced_location">检查上次同步的位置</string>
+    <string name="text_ensure_your_ring_and_your">确保您的戒指和手机的距离在 1 米以内</string>
+    <string name="text_try_turning_on_off_the_bluetooth_until_the_ring_gets_connected">尝试打开/关闭蓝牙，直到戒指连接。</string>
+    <string name="text_turn_on_bluetooth">打开蓝牙</string>
+    <string name="text_reach_out_to_us_by_tapping">点击下面的按钮联系我们</string>
+    <string name="text_contact_us">联系我们</string>
+    <string name="text_value_days_string">%1$s 天</string>
+    <string name="text_none">没有任何</string>
+    <string name="text_fertility_treatments">生育治疗</string>
+    <string name="text_hormone_replacement_therapy">激素替代疗法</string>
+    <string name="text_hormonal_contraception">激素避孕</string>
+    <string name="text_prefer_not_to_say">宁愿不说</string>
+    <string name="text_other">其他</string>
+    <string name="text_hypothyroidism">甲状腺功能减退症</string>
+    <string name="text_menopause">绝经</string>
+    <string name="text_endometriosis">子宫内膜异位症</string>
 </resources>
