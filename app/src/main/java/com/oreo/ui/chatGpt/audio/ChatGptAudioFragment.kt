@@ -74,7 +74,7 @@ class ChatGptAudioFragment :
                     isActive = false
                     repeatFun().cancel()
                 }
-                delay(4000)
+                delay(200)
             }
         }
     }

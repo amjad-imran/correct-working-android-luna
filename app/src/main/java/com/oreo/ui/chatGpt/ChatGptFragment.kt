@@ -1,6 +1,8 @@
 package com.oreo.ui.chatGpt
 
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
@@ -21,6 +23,7 @@ import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +72,38 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.loadMessagesByThreadId(viewModel.threadId!!)
             viewModel.threadTitle.postValue(args.title)
         }
+
+        viewModel.startSpeechRecognition(listener)
+
     }
+
+    private val listener = object : RecognitionListener {
+        override fun onReadyForSpeech(params: Bundle?) {
+
+        }
+
+        override fun onBeginningOfSpeech() {}
+        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onBufferReceived(buffer: ByteArray?) {}
+        override fun onEndOfSpeech() {}
+
+        override fun onError(error: Int) {}
+
+        override fun onResults(results: Bundle?) {
+            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            LOGS.d(" onResults ${matches?.getOrNull(0)}")
+
+        }
+
+        override fun onPartialResults(partialResults: Bundle?) {
+            val partial =
+                partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            LOGS.d(" onPartialResults ${partial?.getOrNull(0)}")
+        }
+
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+    }
+
 
     private fun setAdapter() {
         with(binding.rv) {

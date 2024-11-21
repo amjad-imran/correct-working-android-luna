@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt
 
+import android.speech.RecognitionListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.util.SpeechRecognizerManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,7 +37,8 @@ class ChatGptViewModel
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository,
-    val resourceProvider: ResourcesProvider
+    val resourceProvider: ResourcesProvider,
+    private val speechRecognizerManager: SpeechRecognizerManager
 ) : BaseViewModel() {
 
     private var userImage: String? = null
@@ -68,6 +71,20 @@ class ChatGptViewModel
 
         initMessage =
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
+    }
+
+
+    fun startSpeechRecognition(listener: RecognitionListener) {
+        speechRecognizerManager.initializeSpeechRecognizer(listener)
+        speechRecognizerManager.startListening()
+    }
+
+    fun stopSpeechRecognition() {
+        speechRecognizerManager.stopListening()
+    }
+
+    fun speakText(text: String) {
+        speechRecognizerManager.speakText(text)
     }
 
 
@@ -462,5 +479,10 @@ class ChatGptViewModel
                 }*/
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        speechRecognizerManager.destroy()
     }
 }

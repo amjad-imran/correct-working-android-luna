@@ -59,7 +59,7 @@ constructor(
 
     fun speakText(text: String) {
         if (isTTSInitialized) {
-            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_ID")
+            textToSpeech?.speak(text, TextToSpeech.QUEUE_ADD, null, "TTS_ID")
         } else {
             LOGS.e("SpeechRecognizerManager", "TextToSpeech not initialized")
         }

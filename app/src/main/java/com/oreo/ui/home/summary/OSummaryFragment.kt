@@ -94,13 +94,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.oreoStatus.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-//            navigate(R.id.oreo_my_device)
-            navigate(R.id.chatGptAudioFragment)
+            navigate(R.id.oreo_my_device)
         }
 
         binding.lytHeader.lottieAnimView.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            navigate(R.id.oreo_my_device)
+
+            //navigate(R.id.oreo_my_device)
+            navigate(R.id.chatGptAudioFragment)
+
         }
 
 
