@@ -1609,5 +1609,10 @@
     <string name="text_hypothyroidism">Hypothyroidism</string>
     <string name="text_menopause">Menopause</string>
     <string name="text_endometriosis">Endometriosis</string>
+    <string name="text_hypen_min">- min</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s in this time frame already exists.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Nap in this time frame already exists.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Sleep in this time frame already exists.</string>
+    <string name="text_workout">Workout</string>
 
 </resources>

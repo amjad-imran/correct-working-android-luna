@@ -1589,4 +1589,8 @@
     <string name="text_hypothyroidism">Ipotiroidismo</string>
     <string name="text_menopause">Menopausa</string>
     <string name="text_endometriosis">Endometriosi</string>
+    <string name="text_hypen_min">-min</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s in questo intervallo di tempo esiste già.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Il pisolino in questo lasso di tempo esiste già.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Il sonno in questo lasso di tempo esiste già.</string>
 </resources>

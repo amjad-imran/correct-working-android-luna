@@ -97,7 +97,7 @@ class OAddWorkoutFragment :
             binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
         }
 
-        binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
+        binding.lytWorkout.tvWorkout.text = workout.getTranslatedActivityName()
         /*setCalories()
         enableSaveBtn()*/
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout + "_${workout.activityType}_CLICK")

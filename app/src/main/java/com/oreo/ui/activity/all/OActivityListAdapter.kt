@@ -97,7 +97,7 @@ class OActivityListAdapter(
                 val imageView = view.findViewById<ImageView>(R.id.ivWorkoutImage)
                 imageView.loadImage(imageView.context, activity.iconUrl)
 
-                view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
+                view.findViewById<TextView>(R.id.tvName).text = activity.getTranslatedActivityName()
                 val time = DateFormats.convert24HourTo12(activity.startTime)
                 if (time.isNotEmpty()) {
                     view.findViewById<TextView>(R.id.tvStart).text = "${time.lowercase()}"

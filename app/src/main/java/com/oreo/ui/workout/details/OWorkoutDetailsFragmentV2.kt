@@ -206,7 +206,7 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.rvActivityDetails.visible()
         binding.lytTop.lytActivityItem.root.visible()
         binding.lytTop.lytToolbar.tvTitle.text = title.toString()
-        binding.lytTop.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
+        binding.lytTop.lytActivityItem.tvActivityName.text = it.getTranslatedActivityName()
 
         if (it.durationSeconds == null || it.durationSeconds == 0L) {
             binding.lytTop.lytActivityItem.tvDurationValue.text =

@@ -1590,4 +1590,8 @@
     <string name="text_hypothyroidism">Гипотиреоз</string>
     <string name="text_menopause">Менопауза</string>
     <string name="text_endometriosis">Эндометриоз</string>
+    <string name="text_hypen_min">- мин</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s в этот период времени уже существует.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Сон в эти сроки уже существует.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Сон в этом временном интервале уже существует.</string>
 </resources>

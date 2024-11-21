@@ -1575,4 +1575,8 @@
     <string name="text_hypothyroidism">ภาวะไทรอยด์ทำงานต่ำ</string>
     <string name="text_menopause">วัยหมดประจำเดือน</string>
     <string name="text_endometriosis">เยื่อบุโพรงมดลูกเจริญผิดที่</string>
+    <string name="text_hypen_min">- นาที</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s มีอยู่แล้วในกรอบเวลานี้</string>
+    <string name="text_nap_in_this_time_frame_already_exists">การงีบหลับในกรอบเวลานี้มีอยู่แล้ว</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">มีการนอนหลับในช่วงเวลานี้อยู่แล้ว</string>
 </resources>

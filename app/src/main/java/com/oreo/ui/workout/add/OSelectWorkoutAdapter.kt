@@ -19,7 +19,7 @@ class OSelectWorkoutAdapter(val oSelectWorkoutInteraction: OSelectWorkoutInterac
     inner class ViewHolder(private val binding: LayoutSelectWorkoutItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: OWorkoutListModal) {
-            binding.tvTitle.text = resultData.getFormattedActivityName()
+            binding.tvTitle.text = resultData.getTranslatedActivityName()
 
             binding.root.setOnClickListener {
                 oSelectWorkoutInteraction.onWorkoutSelected(resultData)

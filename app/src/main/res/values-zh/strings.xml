@@ -1589,4 +1589,8 @@
     <string name="text_hypothyroidism">甲状腺功能减退症</string>
     <string name="text_menopause">绝经</string>
     <string name="text_endometriosis">子宫内膜异位症</string>
+    <string name="text_hypen_min">- 分钟</string>
+    <string name="text_valuein_this_time_frame_already_exists">此时间范围内的 %1$s 已存在。</string>
+    <string name="text_nap_in_this_time_frame_already_exists">在这个时间范围内的午睡已经存在。</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">这个时间范围内的睡眠已经存在。</string>
 </resources>

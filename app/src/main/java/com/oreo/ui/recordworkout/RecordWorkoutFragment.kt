@@ -65,7 +65,7 @@ class RecordWorkoutFragment :
 
         navArgs.workout.let {
             viewModel.workout = it
-            binding.tvWorkoutTitle.text = it.getFormattedActivityName()
+            binding.tvWorkoutTitle.text = it.getTranslatedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
             viewModel.sportStartTime =
                 viewModel.ringDataStore.getOngoingRecordWorkout()?.first ?: 0L

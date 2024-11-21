@@ -1591,4 +1591,8 @@
     <string name="text_hypothyroidism">Hypothyreoïdie</string>
     <string name="text_menopause">Menopauze</string>
     <string name="text_endometriosis">Endometriose</string>
+    <string name="text_hypen_min">- min</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s in dit tijdsbestek bestaat al.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Dutje in dit tijdsbestek bestaat al.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Slapen in dit tijdsbestek bestaat al.</string>
 </resources>

@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.BinaryActionCallback
@@ -45,6 +47,7 @@ class OAddWorkoutViewModel
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
+    private val resourcesProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
@@ -187,18 +190,21 @@ class OAddWorkoutViewModel
 
             if (workoutStartTime in wStartTime..wEndTime || workoutEndTime in wStartTime..wEndTime) {
                 hasOverlappingWorkout = true
-                workoutName = it.getFormattedActivityName()
+                workoutName = it.getTranslatedActivityName()
                 return@forEach
             }
 
             if (wStartTime in workoutStartTime..workoutEndTime || wEndTime in workoutStartTime..workoutEndTime) {
-                workoutName = it.getFormattedActivityName()
+                workoutName = it.getTranslatedActivityName()
                 hasOverlappingWorkout = true
                 return@forEach
             }
         }
         if (hasOverlappingWorkout) {
-            return "$workoutName in this time frame already exists."
+            return resourcesProvider.getString(
+                R.string.text_valuein_this_time_frame_already_exists,
+                workoutName
+            )
         }
 
         var hasOverlappingNap = false
@@ -219,7 +225,7 @@ class OAddWorkoutViewModel
             }
         }
         if (hasOverlappingNap) {
-            return "Nap in this time frame already exists."
+            return resourcesProvider.getString(R.string.text_nap_in_this_time_frame_already_exists)
         }
 
         var hasOverlappingSleep = false
@@ -244,7 +250,7 @@ class OAddWorkoutViewModel
         }
 
         if (hasOverlappingSleep) {
-            return "Sleep in this time frame already exists."
+            return resourcesProvider.getString(R.string.text_sleep_in_this_time_frame_already_exists)
         }
         return null
     }

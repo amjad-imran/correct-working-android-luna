@@ -1586,4 +1586,8 @@
     <string name="text_hypothyroidism">Hypothyreose</string>
     <string name="text_menopause">Menopause</string>
     <string name="text_endometriosis">Endometriose</string>
+    <string name="text_hypen_min">- mind</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s in diesem Zeitraum existiert bereits.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Ein Nickerchen in diesem Zeitraum ist bereits vorhanden.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Schlaf in diesem Zeitraum ist bereits vorhanden.</string>
 </resources>

@@ -42,7 +42,7 @@ class BottomSheetStressActivities :
                         })
                     } else {
                         navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                            putString("workoutName", data.workoutData.getFormattedActivityName())
+                            putString("workoutName", data.workoutData.getTranslatedActivityName())
                             putString("workoutId", data.workoutData.id ?: "")
                             putInt("position", -1)
                         })

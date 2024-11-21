@@ -11,6 +11,7 @@ data class OWorkoutListModal(
     @SerializedName("ring_id") val ringId: Int? = null,
     @SerializedName("icon_url") val iconUrl: String? = null,
     @SerializedName("activity_type") val activityType: String? = null,
+    val workoutText: String? = null,
     @SerializedName("low") val lowIntensity: Float? = null,
     @SerializedName("medium") val mediumIntensity: Float? = null,
     @SerializedName("high") val highIntensity: Float? = null,
@@ -24,5 +25,9 @@ data class OWorkoutListModal(
         val activityName = activityType ?: return ""
         val actNameTemp = activityName.replace("_", " ")
         return actNameTemp.capitalizeWords()
+    }
+
+    fun getTranslatedActivityName(): String {
+        return workoutText ?: getFormattedActivityName()
     }
 }
