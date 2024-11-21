@@ -1614,5 +1614,9 @@
     <string name="text_nap_in_this_time_frame_already_exists">Nap in this time frame already exists.</string>
     <string name="text_sleep_in_this_time_frame_already_exists">Sleep in this time frame already exists.</string>
     <string name="text_workout">Workout</string>
+    <string name="text_21_35_days">21-35 days</string>
+    <string name="text_2_7_days">2-7 days</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 days]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 days]]></string>
 
 </resources>

@@ -1392,7 +1392,7 @@
     <string name="text_your_profile">Jouw profiel</string>
     <string name="text_select_language">App-taal</string>
     <string name="text_live_support">Live-ondersteuning</string>
-    <string name="text_today_comma">Vandaag,</string>
+    <string name="text_today_comma">"Vandaag, "</string>
     <string name="text_stress_1">Stress is de natuurlijke reactie van het lichaam op een fysieke of mentale uitdaging.</string>
     <string name="text_how_does_the_luna_ring">Hoe meet de Luna Ring stress?</string>
     <string name="text_stress_2">Uw stressgegevens worden elke 15 minuten bijgewerkt en gecategoriseerd als ontspannen, gefocust of gestrest.</string>
@@ -1595,4 +1595,9 @@
     <string name="text_valuein_this_time_frame_already_exists">%1$s in dit tijdsbestek bestaat al.</string>
     <string name="text_nap_in_this_time_frame_already_exists">Dutje in dit tijdsbestek bestaat al.</string>
     <string name="text_sleep_in_this_time_frame_already_exists">Slapen in dit tijdsbestek bestaat al.</string>
+    <string name="text_workout">Training</string>
+    <string name="text_21_35_days">21-35 dagen</string>
+    <string name="text_2_7_days">2-7 dagen</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 dagen]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 dagen]]></string>
 </resources>

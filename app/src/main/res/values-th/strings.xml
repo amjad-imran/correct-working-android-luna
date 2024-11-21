@@ -1377,7 +1377,7 @@
     <string name="text_your_profile">โปรไฟล์ของคุณ</string>
     <string name="text_select_language">ภาษาของแอป</string>
     <string name="text_live_support">การสนับสนุนสด</string>
-    <string name="text_today_comma">วันนี้,</string>
+    <string name="text_today_comma">"วันนี้, "</string>
     <string name="text_stress_1">ความเครียดคือการตอบสนองตามธรรมชาติของร่างกายต่อความท้าทายทางร่างกายหรือจิตใจ</string>
     <string name="text_how_does_the_luna_ring">Luna Ring วัดความเครียดได้อย่างไร?</string>
     <string name="text_stress_2">ข้อมูลความเครียดของคุณจะได้รับการอัปเดตทุกๆ 15 นาที และจัดหมวดหมู่เป็นผ่อนคลาย มีสมาธิ หรือเครียด</string>
@@ -1579,4 +1579,9 @@
     <string name="text_valuein_this_time_frame_already_exists">%1$s มีอยู่แล้วในกรอบเวลานี้</string>
     <string name="text_nap_in_this_time_frame_already_exists">การงีบหลับในกรอบเวลานี้มีอยู่แล้ว</string>
     <string name="text_sleep_in_this_time_frame_already_exists">มีการนอนหลับในช่วงเวลานี้อยู่แล้ว</string>
+    <string name="text_workout">ออกกำลังกาย</string>
+    <string name="text_21_35_days">21-35 วัน</string>
+    <string name="text_2_7_days">2-7 วัน</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 วัน]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 วัน]]></string>
 </resources>

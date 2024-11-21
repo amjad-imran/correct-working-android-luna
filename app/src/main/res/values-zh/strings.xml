@@ -1390,7 +1390,7 @@
     <string name="text_your_profile">您的个人资料</string>
     <string name="text_select_language">应用程序语言</string>
     <string name="text_live_support">现场支持</string>
-    <string name="text_today_comma">今天，</string>
+    <string name="text_today_comma">"今天, "</string>
     <string name="text_stress_1">压力是身体对身体或精神挑战的自然反应。</string>
     <string name="text_how_does_the_luna_ring">Luna Ring 如何测量压力？</string>
     <string name="text_stress_2">您的压力数据每 15 分钟更新一次，并分类为放松、专注或压力。</string>
@@ -1593,4 +1593,9 @@
     <string name="text_valuein_this_time_frame_already_exists">此时间范围内的 %1$s 已存在。</string>
     <string name="text_nap_in_this_time_frame_already_exists">在这个时间范围内的午睡已经存在。</string>
     <string name="text_sleep_in_this_time_frame_already_exists">这个时间范围内的睡眠已经存在。</string>
+    <string name="text_workout">锻炼</string>
+    <string name="text_21_35_days">21-35天</string>
+    <string name="text_2_7_days">2-7天</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 天]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 天]]></string>
 </resources>

@@ -1414,7 +1414,7 @@
     <string name="text_your_profile">Votre profil</string>
     <string name="text_select_language">Langue de l\'application</string>
     <string name="text_live_support">Assistance en direct</string>
-    <string name="text_today_comma">Aujourd\'hui,</string>
+    <string name="text_today_comma">"Aujourd\'hui, "</string>
     <string name="text_stress_1">Le stress est la réponse naturelle du corps à un défi physique ou mental.</string>
     <string name="text_how_does_the_luna_ring">Comment le Luna Ring mesure-t-il le stress ?</string>
     <string name="text_stress_2">Vos données de stress sont mises à jour toutes les 15 minutes et classées comme détendues, concentrées ou stressées.</string>
@@ -1591,4 +1591,9 @@
     <string name="text_valuein_this_time_frame_already_exists">%1$s dans cette période existe déjà.</string>
     <string name="text_nap_in_this_time_frame_already_exists">La sieste dans cette période existe déjà.</string>
     <string name="text_sleep_in_this_time_frame_already_exists">Dormir pendant cette période existe déjà.</string>
+    <string name="text_workout">Entraînement</string>
+    <string name="text_21_35_days">21-35 jours</string>
+    <string name="text_2_7_days">2-7 jours</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 jours]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 jours]]></string>
 </resources>

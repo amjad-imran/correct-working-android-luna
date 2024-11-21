@@ -1391,7 +1391,7 @@
     <string name="text_your_profile">Ваш профиль</string>
     <string name="text_select_language">Язык приложения</string>
     <string name="text_live_support">Живая поддержка</string>
-    <string name="text_today_comma">Сегодня,</string>
+    <string name="text_today_comma">"Сегодня, "</string>
     <string name="text_stress_1">Стресс – это естественная реакция организма на физическую или умственную проблему.</string>
     <string name="text_how_does_the_luna_ring">Как Лунное кольцо измеряет стресс?</string>
     <string name="text_stress_2">Ваши данные о стрессе обновляются каждые 15 минут и классифицируются как расслабленные, сосредоточенные или напряженные.</string>
@@ -1594,4 +1594,9 @@
     <string name="text_valuein_this_time_frame_already_exists">%1$s в этот период времени уже существует.</string>
     <string name="text_nap_in_this_time_frame_already_exists">Сон в эти сроки уже существует.</string>
     <string name="text_sleep_in_this_time_frame_already_exists">Сон в этом временном интервале уже существует.</string>
+    <string name="text_workout">Тренировка</string>
+    <string name="text_21_35_days">21-35 дней</string>
+    <string name="text_2_7_days">2-7 дней</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 дней]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 дней]]></string>
 </resources>
