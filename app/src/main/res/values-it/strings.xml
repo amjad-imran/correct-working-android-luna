@@ -1601,4 +1601,5 @@
     <string name="text_range_value_bpm">Intervallo %1$d-%2$d bpm</string>
     <string name="text_needs">esigenze</string>
     <string name="text_thank_you_for_your_feedback">Grazie per il tuo feedback!</string>
+    <string name="text_day_of_value">Giorno %1$d di %2$d</string>
 </resources>

@@ -299,7 +299,7 @@ class PeriodLineChart : View {
         normalMin: Int,
         normalMax: Int,
         averageValue: Int? = null,
-        buffer:Int
+        buffer: Int
     ) {
         list!!.clear()
         list.addAll(prefixList)
@@ -487,25 +487,25 @@ class PeriodLineChart : View {
     }
 
 
-   /* fun calculateYAxisValues(min: Int, max: Int): List<Int> {
-        val yAxisValues = mutableListOf<Int>()
+    /* fun calculateYAxisValues(min: Int, max: Int): List<Int> {
+         val yAxisValues = mutableListOf<Int>()
 
-        var newMin = min - 10
-        if (newMin < 0) {
-            newMin = 0
-        }
-        val newMax = max + 10
-        var currentVal = newMin
+         var newMin = min - 10
+         if (newMin < 0) {
+             newMin = 0
+         }
+         val newMax = max + 10
+         var currentVal = newMin
 
-        while (currentVal < newMax) {
-            if (currentVal % 5 == 0) {
-                yAxisValues.add(currentVal)
-            }
-            currentVal++
-        }
+         while (currentVal < newMax) {
+             if (currentVal % 5 == 0) {
+                 yAxisValues.add(currentVal)
+             }
+             currentVal++
+         }
 
-        return yAxisValues
-    }*/
+         return yAxisValues
+     }*/
 
     fun calculateYAxisValues(min: Int, max: Int): List<Int> {
         val yAxisValues = mutableListOf<Int>()
@@ -561,7 +561,7 @@ class PeriodLineChart : View {
 
         //FOr average value
         if (avgValue != null) {
-            val avgStr = avgValue.toString() + " days"
+            val avgStr = context.getString(R.string.text_value_days, avgValue)
             val avg =
                 mHeight - bottomWith - (avgValue!! - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 

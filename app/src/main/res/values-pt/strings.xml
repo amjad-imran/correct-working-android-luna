@@ -1597,4 +1597,5 @@
     <string name="text_range_value_bpm">Intervalo %1$d-%2$d bpm</string>
     <string name="text_needs">precisa</string>
     <string name="text_thank_you_for_your_feedback">Obrigado pelo seu feedback!</string>
+    <string name="text_day_of_value">Dia %1$d de %2$d</string>
 </resources>

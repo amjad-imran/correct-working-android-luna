@@ -1599,4 +1599,5 @@
     <string name="text_range_value_bpm">Plage %1$d-%2$d bpm</string>
     <string name="text_needs">besoins</string>
     <string name="text_thank_you_for_your_feedback">Merci pour votre retour !</string>
+    <string name="text_day_of_value">Jour %1$d de %2$d</string>
 </resources>

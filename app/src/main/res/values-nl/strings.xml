@@ -1603,4 +1603,5 @@
     <string name="text_range_value_bpm">Bereik %1$d-%2$d bpm</string>
     <string name="text_needs">behoeften</string>
     <string name="text_thank_you_for_your_feedback">Bedankt voor uw feedback!</string>
+    <string name="text_day_of_value">Dag %1$d van %2$d</string>
 </resources>

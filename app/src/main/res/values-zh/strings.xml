@@ -1601,4 +1601,5 @@
     <string name="text_range_value_bpm">范围 %1$d-%2$d bpm</string>
     <string name="text_needs">需要</string>
     <string name="text_thank_you_for_your_feedback">感谢您的反馈！</string>
+    <string name="text_day_of_value">第 %1$d 天，共 %2$d</string>
 </resources>

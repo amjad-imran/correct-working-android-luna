@@ -925,11 +925,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = tempVariance,
-                predictionDate = DateFormats.formatDateTime(
-                    data.nextPeriodDate,
-                    DateFormats.dateFormat3(),
-                    DateFormats.dateFormat7()
-                ),
+                predictionDate = data.nextPeriodDate?:"",
                 days = data.currentDay ?: 0,
                 predictionString = resourceProvider.getString(R.string.text_period_date),
                 background = R.drawable.back_card_period_big
@@ -946,11 +942,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = tempVariance,
-                predictionDate = DateFormats.formatDateTime(
-                    data.ovulationDate,
-                    DateFormats.dateFormat3(),
-                    DateFormats.dateFormat7()
-                ),
+                predictionDate = data.ovulationDate?:"",
                 days = data.currentDay ?: 0,
                 predictionString = resourceProvider.getString(R.string.text_ovulation_date),
                 background = R.drawable.back_card_ovulation_big

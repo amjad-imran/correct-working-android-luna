@@ -210,9 +210,9 @@ class CycleTrackerFragment :
 
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
-            if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
+            if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
                 launchMode = "Luteal"
-            } else if (binding.lytTrackerTop.tvPhase.text.equals("Follicular phase")) {
+            } else if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_follicular_phase))) {
                 launchMode = "Follicular"
             }
             if (launchMode.isNotEmpty()) {

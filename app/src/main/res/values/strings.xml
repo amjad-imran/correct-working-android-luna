@@ -1623,5 +1623,6 @@
     <string name="text_range_value_bpm">Range %1$d-%2$d bpm</string>
     <string name="text_needs">needs</string>
     <string name="text_thank_you_for_your_feedback">Thank you for your feedback!</string>
+    <string name="text_day_of_value">Day %1$d of %2$d</string>
 
 </resources>

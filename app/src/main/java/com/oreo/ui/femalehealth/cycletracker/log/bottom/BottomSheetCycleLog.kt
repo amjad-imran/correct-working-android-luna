@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetCycleLogBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
@@ -24,6 +25,7 @@ import com.oreo.ui.femalehealth.cycletracker.log.OnLogItemClick
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 const val CYCLE_LOG_SAVE = "CYCLE_LOG_SAVE"
 
@@ -79,11 +81,12 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     }
 
     private fun setTitleDate() {
-        binding.tvDate.text = DateFormats.formatDate(
-            viewModel.selectedDate.value.toString(),
-            DateFormats.dateFormat3(),
-            DateFormats.dateFormat7()
-        )
+        binding.tvDate.text = viewModel.selectedDate.value?.format(
+            DateTimeFormatter.ofPattern(
+                "dd MMM",
+                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+            )
+        ) ?: ""
     }
 
 
