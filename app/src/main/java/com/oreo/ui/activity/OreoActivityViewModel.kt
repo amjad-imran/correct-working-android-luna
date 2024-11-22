@@ -114,7 +114,7 @@ class OreoActivityViewModel @Inject constructor(
             val chartModel = ChartModel()
             var currentDayText = ""
             if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
-                currentDayText = "Today, "
+                currentDayText = resourcesProvider.getString(R.string.text_today_comma)
             }
 
             val formattedDate = if (currentDayText.isEmpty()) {
