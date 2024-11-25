@@ -1591,60 +1591,6 @@ object DateFormats {
 
     }
 
-    fun getEndsInData1(currentTime: String, end_date: String): Pair<String, String> {
-        val sdfSource = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getTimeZone("IST")
-        }
-
-        val sdfLocal = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getDefault()
-        }
-
-
-        val date1: Date = sdfSource.parse(end_date) as Date
-        val current: Date = sdfSource.parse(currentTime) as Date
-
-
-        val calenderEnd = Calendar.getInstance()
-        calenderEnd.time = sdfLocal.parse(sdfLocal.format(date1))
-        calenderEnd.set(Calendar.HOUR_OF_DAY, 0)
-        calenderEnd.set(Calendar.MINUTE, 0)
-        calenderEnd.set(Calendar.SECOND, 0)
-        calenderEnd.set(Calendar.MILLISECOND, 0)
-
-        val calenderCurrent = Calendar.getInstance()
-        calenderCurrent.time = sdfLocal.parse(sdfLocal.format(current))
-        calenderCurrent.set(Calendar.HOUR_OF_DAY, 23)
-        calenderCurrent.set(Calendar.MINUTE, 59)
-        calenderCurrent.set(Calendar.SECOND, 59)
-        calenderCurrent.set(Calendar.MILLISECOND, 59)
-
-
-        val difference =
-            (TimeUnit.MILLISECONDS.toDays(calenderEnd.timeInMillis - calenderCurrent.timeInMillis)).toInt()
-
-        var differenceTxt = difference.toString()
-        var daysText = ""
-        when (difference) {
-            1 -> {
-                differenceTxt = "Tomorrow"
-            }
-
-            0 -> {
-                differenceTxt = "Today"
-            }
-
-            else -> {
-                daysText = if (difference <= 1) {
-                    "Day"
-                } else {
-                    "Days"
-                }
-            }
-        }
-
-        return Pair(differenceTxt, daysText)
-    }
 
     //Sort dates
     fun sortDates(dates: List<String>): List<LocalDateTime> {

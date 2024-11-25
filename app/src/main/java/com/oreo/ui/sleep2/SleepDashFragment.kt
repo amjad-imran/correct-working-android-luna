@@ -386,9 +386,12 @@ class SleepDashFragment :
             } catch (exp: Exception) {
             }
 
-            binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM",
-                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
-            ))
+            binding.toolbar.tvMonth.text = it.format(
+                DateTimeFormatter.ofPattern(
+                    "MMM",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
 
             viewModel.getDataForDate(it)
 
@@ -552,8 +555,18 @@ class SleepDashFragment :
             fun bind(day: WeekDay) {
                 this.day = day
 
-                bind.exSevenDateText.text =day.date.format(DateTimeFormatter.ofPattern("dd",Locale(NoiseFitApplicationMain.appLanguage.languageCode)))
-                bind.exSevenDayText.text =day.date.format(DateTimeFormatter.ofPattern("EEE",Locale(NoiseFitApplicationMain.appLanguage.languageCode)))
+                bind.exSevenDateText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "dd",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
+                bind.exSevenDayText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
                 val score = viewModel.sleepData[day.date]?.sleepScore?.value
                 if (score == null) {

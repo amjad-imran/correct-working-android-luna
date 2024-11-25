@@ -120,11 +120,12 @@ class OStressDataMovementFragment :
                 val day = viewModel.getDayFromDate(dayData.date)
                 binding.lytStressHeader.tvHeader.text =
                     if (viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
-                binding.lytStressHeader.tvTypical.text = "vs typical $day"
+                binding.lytStressHeader.tvTypical.text =
+                    getString(R.string.text_vs_typical_value, day)
 
                 binding.lytInactiveStressHeader.tvHeader.text =
                     if (viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
-                binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
+                binding.lytInactiveStressHeader.tvTypical.text = getString(R.string.text_vs_typical_value, day)
 
                 viewModel.defaultMeterData = Pair(
                     dayData.stress?.stressValue?.value, dayData.stress?.stressValue?.lastUpdated
@@ -372,7 +373,7 @@ class OStressDataMovementFragment :
             layout.icTrend.rotation = 180f
         } else {
             layout.icTrend.gone()
-            layout.tvDifference.text = "No change"
+            layout.tvDifference.text = getString(R.string.text_no_change)
         }
 
     }
@@ -600,8 +601,8 @@ class OStressDataMovementFragment :
         if (data.isNullOrEmpty()) {
             nudgeList.add(
                 StressNudge(
-                    label = "No summary available",
-                    message = "There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress"
+                    label = getString(R.string.text_no_summary_available),
+                    message = getString(R.string.text_there_wasn_t_enough_data)
                 )
             )
         } else {

@@ -1600,4 +1600,13 @@
     <string name="text_needs">besoins</string>
     <string name="text_thank_you_for_your_feedback">Merci pour votre retour !</string>
     <string name="text_day_of_value">Jour %1$d de %2$d</string>
+    <string name="text_flow_value">Flux : %1$s</string>
+    <string name="text_no_change">Aucun changement</string>
+    <string name="text_vs_typical_value">par rapport à %1$s typique</string>
+    <string name="text_no_summary_available">Aucun résumé disponible</string>
+    <string name="text_there_wasn_t_enough_data">Il n’y avait pas suffisamment de données pour donner un résumé d’une journée complète. Pensez à porter votre bague pour suivre votre stress</string>
+    <string name="text_not_connected">Non connecté</string>
+    <string name="text_location_not_found">Emplacement introuvable</string>
+    <string name="text_this_is_the_latest_phone_location">Il s\'agit de la dernière localisation du téléphone. Notez qu\'il ne s\'agit peut-être pas de l\'emplacement actuel de votre bague.</string>
+    <string name="text_last_synced_value">Dernière synchronisation %1$s</string>
 </resources>

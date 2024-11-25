@@ -1598,4 +1598,13 @@
     <string name="text_needs">precisa</string>
     <string name="text_thank_you_for_your_feedback">Obrigado pelo seu feedback!</string>
     <string name="text_day_of_value">Dia %1$d de %2$d</string>
+    <string name="text_flow_value">Fluxo: %1$s</string>
+    <string name="text_no_change">Sem alteração</string>
+    <string name="text_vs_typical_value">vs típico %1$s</string>
+    <string name="text_no_summary_available">Nenhum resumo disponível</string>
+    <string name="text_there_wasn_t_enough_data">Não havia dados suficientes para fornecer um resumo do dia inteiro. Lembre-se de usar seu anel para monitorar seu estresse</string>
+    <string name="text_not_connected">Não conectado</string>
+    <string name="text_location_not_found">Local não encontrado</string>
+    <string name="text_this_is_the_latest_phone_location">Esta é a localização do telefone mais recente. Observe que esta pode não ser a localização atual do seu anel.</string>
+    <string name="text_last_synced_value">Última sincronização %1$s</string>
 </resources>

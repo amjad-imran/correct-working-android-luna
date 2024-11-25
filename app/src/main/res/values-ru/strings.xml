@@ -1603,4 +1603,13 @@
     <string name="text_needs">потребности</string>
     <string name="text_thank_you_for_your_feedback">Спасибо за ваш отзыв!</string>
     <string name="text_day_of_value">День %1$d из %2$d</string>
+    <string name="text_flow_value">Поток: %1$s</string>
+    <string name="text_no_change">Без изменений</string>
+    <string name="text_vs_typical_value">по сравнению с типичным %1$s</string>
+    <string name="text_no_summary_available">Краткое описание недоступно</string>
+    <string name="text_there_wasn_t_enough_data">Недостаточно данных, чтобы подвести итоги за весь день. Не забывайте носить кольцо, чтобы отслеживать уровень стресса.</string>
+    <string name="text_not_connected">Не подключено</string>
+    <string name="text_location_not_found">Местоположение не найдено</string>
+    <string name="text_this_is_the_latest_phone_location">Это последнее местоположение телефона. Обратите внимание, что это может быть не текущее местоположение вашего кольца.</string>
+    <string name="text_last_synced_value">Последняя синхронизация: %1$s</string>
 </resources>

@@ -1599,4 +1599,13 @@
     <string name="text_needs">Bedürfnisse</string>
     <string name="text_thank_you_for_your_feedback">Vielen Dank für Ihr Feedback!</string>
     <string name="text_day_of_value">Tag %1$d von %2$d</string>
+    <string name="text_flow_value">Fluss: %1$s</string>
+    <string name="text_no_change">Keine Änderung</string>
+    <string name="text_vs_typical_value">im Vergleich zu typischen %1$s</string>
+    <string name="text_no_summary_available">Keine Zusammenfassung verfügbar</string>
+    <string name="text_there_wasn_t_enough_data">Für eine ganztägige Zusammenfassung lagen nicht genügend Daten vor. Denken Sie daran, Ihren Ring zu tragen, um Ihren Stress zu verfolgen</string>
+    <string name="text_not_connected">Nicht verbunden</string>
+    <string name="text_location_not_found">Standort nicht gefunden</string>
+    <string name="text_this_is_the_latest_phone_location">Dies ist der neueste Telefonstandort. Beachten Sie, dass dies möglicherweise nicht der aktuelle Standort Ihres Rings ist.</string>
+    <string name="text_last_synced_value">Zuletzt synchronisiert %1$s</string>
 </resources>

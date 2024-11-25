@@ -1185,7 +1185,18 @@ class SummaryDataFragmentToday :
             this.textView3.text = data.data.title
             this.tvOvlInDays.text = data.data.days.toString()
             this.textView1.text = data.data.bottomText
-            this.tvPredictionDays.text = data.data.predictionDate
+            this.tvPredictionDays.text = if (data.data.predictionDate.isNullOrEmpty().not()) {
+                LocalDate.parse(data.data.predictionDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(
+                        DateTimeFormatter.ofPattern(
+                            "dd MMM",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
+                    )
+            } else {
+                ""
+            }
+
             this.tvOvlDaysCurrent.text =
                 getString(R.string.text_day_value, data.data.currentCycleDay)
             this.tvOvlDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
@@ -1231,7 +1242,7 @@ class SummaryDataFragmentToday :
 
             this.tvPeriodicPeriod.text = data.data.predictionString
 
-            this.tvDays.text =if(data.data.predictionDate.isNullOrEmpty().not()){
+            this.tvDays.text = if (data.data.predictionDate.isNullOrEmpty().not()) {
                 LocalDate.parse(data.data.predictionDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                     .format(
                         DateTimeFormatter.ofPattern(
@@ -1239,7 +1250,7 @@ class SummaryDataFragmentToday :
                             Locale(NoiseFitApplicationMain.appLanguage.languageCode)
                         )
                     )
-            }else{
+            } else {
                 ""
             }
 

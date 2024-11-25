@@ -1602,4 +1602,13 @@
     <string name="text_needs">esigenze</string>
     <string name="text_thank_you_for_your_feedback">Grazie per il tuo feedback!</string>
     <string name="text_day_of_value">Giorno %1$d di %2$d</string>
+    <string name="text_flow_value">Flusso: %1$s</string>
+    <string name="text_no_change">Nessun cambiamento</string>
+    <string name="text_vs_typical_value">rispetto al tipico %1$s</string>
+    <string name="text_no_summary_available">Nessun riepilogo disponibile</string>
+    <string name="text_there_wasn_t_enough_data">Non c’erano dati sufficienti per fornire un riepilogo dell’intera giornata. Ricordati di indossare l\'anello per monitorare lo stress</string>
+    <string name="text_not_connected">Non connesso</string>
+    <string name="text_location_not_found">Posizione non trovata</string>
+    <string name="text_this_is_the_latest_phone_location">Questa è l\'ultima posizione del telefono. Tieni presente che questa potrebbe non essere la posizione attuale del tuo anello.</string>
+    <string name="text_last_synced_value">Ultima sincronizzazione %1$s</string>
 </resources>

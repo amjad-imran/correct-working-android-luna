@@ -14,6 +14,7 @@ import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
@@ -91,11 +92,18 @@ class CycleTrackerFragment :
 
             fun bind(day: WeekDay) {
                 this.day = day
-
-                bind.exSevenDateText.text =
-                    DateFormats.getDayFromDate(DateFormats.convertLocalDateToDate(day.date))
-                bind.exSevenDayText.text =
-                    DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
+                bind.exSevenDateText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "dd",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
+                bind.exSevenDayText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
                 val (state, isDateSelected) = viewModel.getCurrentState(day.date)
 
@@ -291,7 +299,8 @@ class CycleTrackerFragment :
             tvValue.text = "${cycleLength}"
             tvUnit.text = getString(R.string.text_days)
             with(viewModel.isCycleLengthNormal(cycleLength)) {
-                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
+                tvStatus.text =
+                    if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 
@@ -302,7 +311,8 @@ class CycleTrackerFragment :
             tvValue.text = "${periodLength}"
             tvUnit.text = getString(R.string.text_days)
             with(viewModel.isPeriodLengthNormal(periodLength)) {
-                tvStatus.text = if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
+                tvStatus.text =
+                    if (this) getString(R.string.text_normal) else getString(R.string.text_abnormal)
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
 
@@ -334,7 +344,12 @@ class CycleTrackerFragment :
                 binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(it)
             } catch (exp: Exception) {
             }
-            binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
+            binding.toolbar.tvMonth.text = it.format(
+                DateTimeFormatter.ofPattern(
+                    "MMM",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
 
             viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         }

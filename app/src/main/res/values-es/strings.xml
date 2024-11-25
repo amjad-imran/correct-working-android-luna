@@ -1602,4 +1602,13 @@
     <string name="text_needs">necesidades</string>
     <string name="text_thank_you_for_your_feedback">¡Gracias por tus comentarios!</string>
     <string name="text_day_of_value">Día %1$d de %2$d</string>
+    <string name="text_flow_value">Flujo: %1$s</string>
+    <string name="text_no_change">Sin cambios</string>
+    <string name="text_vs_typical_value">vs %1$s típico</string>
+    <string name="text_no_summary_available">No hay resumen disponible</string>
+    <string name="text_there_wasn_t_enough_data">No había datos suficientes para dar un resumen del día completo. Recuerde usar su anillo para controlar su estrés.</string>
+    <string name="text_not_connected">No conectado</string>
+    <string name="text_location_not_found">Ubicación no encontrada</string>
+    <string name="text_this_is_the_latest_phone_location">Esta es la última ubicación del teléfono. Tenga en cuenta que es posible que esta no sea la ubicación actual de su anillo.</string>
+    <string name="text_last_synced_value">Última sincronización %1$s</string>
 </resources>

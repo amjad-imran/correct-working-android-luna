@@ -1624,5 +1624,14 @@
     <string name="text_needs">needs</string>
     <string name="text_thank_you_for_your_feedback">Thank you for your feedback!</string>
     <string name="text_day_of_value">Day %1$d of %2$d</string>
+    <string name="text_flow_value">Flow: %1$s</string>
+    <string name="text_no_change">No change</string>
+    <string name="text_vs_typical_value">vs typical %1$s</string>
+    <string name="text_no_summary_available">No summary available</string>
+    <string name="text_there_wasn_t_enough_data">There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress</string>
+    <string name="text_not_connected">Not connected</string>
+    <string name="text_location_not_found">Location not found</string>
+    <string name="text_this_is_the_latest_phone_location">This is the latest phone location. Note that this may not be the current location of your ring.</string>
+    <string name="text_last_synced_value">Last Synced %1$s</string>
 
 </resources>

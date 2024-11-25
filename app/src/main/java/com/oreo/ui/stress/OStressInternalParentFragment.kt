@@ -34,9 +34,9 @@ class OStressInternalParentFragment :
     }
 
     private fun setViewPager() {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Day"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Week"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Month"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_day)))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_week)))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_month)))
         if (args.cameFrom == "active") {
             binding.lytToolbar.tvTitle.text = getString(R.string.text_overall_stress)
             sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_overall_stress_page_visit)

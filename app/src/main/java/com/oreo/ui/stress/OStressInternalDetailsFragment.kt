@@ -159,7 +159,7 @@ class OStressInternalDetailsFragment :
                     icTrend.rotation = 180f
                 } else {
                     icTrend.gone()
-                    tvDifference.text = "No change"
+                    tvDifference.text = getString(R.string.text_no_change)
                 }
                 lytDifference.visible()
             } else {
@@ -193,7 +193,7 @@ class OStressInternalDetailsFragment :
                     icTrend.rotation = 180f
                 } else {
                     icTrend.gone()
-                    tvDifference.text = "No change"
+                    tvDifference.text = getString(R.string.text_no_change)
                 }
                 lytDifference.visible()
             } else {
@@ -228,7 +228,7 @@ class OStressInternalDetailsFragment :
                     icTrend.rotation = 180f
                 } else {
                     icTrend.gone()
-                    tvDifference.text = "No change"
+                    tvDifference.text = getString(R.string.text_no_change)
                 }
                 lytDifference.visible()
             } else {

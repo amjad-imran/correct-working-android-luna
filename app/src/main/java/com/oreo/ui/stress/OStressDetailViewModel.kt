@@ -298,6 +298,7 @@ constructor(
 
     fun getDayFromDate(date: String): String {
         return try {
+            LocalDate.parse(date).dayOfWeek
             LocalDate.parse(date).dayOfWeek.name.lowercase()
         } catch (exp: Exception) {
             ""

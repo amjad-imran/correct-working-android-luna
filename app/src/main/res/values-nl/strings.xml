@@ -1604,4 +1604,13 @@
     <string name="text_needs">behoeften</string>
     <string name="text_thank_you_for_your_feedback">Bedankt voor uw feedback!</string>
     <string name="text_day_of_value">Dag %1$d van %2$d</string>
+    <string name="text_flow_value">Stroom: %1$s</string>
+    <string name="text_no_change">Geen verandering</string>
+    <string name="text_vs_typical_value">versus typisch %1$s</string>
+    <string name="text_no_summary_available">Geen samenvatting beschikbaar</string>
+    <string name="text_there_wasn_t_enough_data">Er waren niet genoeg gegevens om een ​​volledige dagsamenvatting te geven. Vergeet niet om uw ring te dragen om uw stress bij te houden</string>
+    <string name="text_not_connected">Niet verbonden</string>
+    <string name="text_location_not_found">Locatie niet gevonden</string>
+    <string name="text_this_is_the_latest_phone_location">Dit is de nieuwste telefoonlocatie. Houd er rekening mee dat dit mogelijk niet de huidige locatie van uw ring is.</string>
+    <string name="text_last_synced_value">Laatst gesynchroniseerd %1$s</string>
 </resources>

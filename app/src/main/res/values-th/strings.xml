@@ -1588,4 +1588,13 @@
     <string name="text_needs">ความต้องการ</string>
     <string name="text_thank_you_for_your_feedback">ขอบคุณสำหรับคำติชมของคุณ!</string>
     <string name="text_day_of_value">วันที่ %1$d จาก %2$d</string>
+    <string name="text_flow_value">กระแส: %1$s</string>
+    <string name="text_no_change">ไม่มีการเปลี่ยนแปลง</string>
+    <string name="text_vs_typical_value">เทียบกับ %1$s ทั่วไป</string>
+    <string name="text_no_summary_available">ไม่มีบทสรุป</string>
+    <string name="text_there_wasn_t_enough_data">มีข้อมูลไม่เพียงพอที่จะสรุปแบบเต็มวัน อย่าลืมสวมแหวนเพื่อติดตามความเครียด</string>
+    <string name="text_not_connected">ไม่ได้เชื่อมต่อ</string>
+    <string name="text_location_not_found">ไม่พบตำแหน่ง</string>
+    <string name="text_this_is_the_latest_phone_location">นี่คือตำแหน่งโทรศัพท์ล่าสุด โปรดทราบว่านี่อาจไม่ใช่ตำแหน่งปัจจุบันของแหวนของคุณ</string>
+    <string name="text_last_synced_value">ซิงค์ครั้งล่าสุด %1$s</string>
 </resources>
