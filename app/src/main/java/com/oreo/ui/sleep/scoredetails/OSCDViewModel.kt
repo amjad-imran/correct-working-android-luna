@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
@@ -23,6 +24,9 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -246,7 +250,12 @@ class OSCDViewModel @Inject constructor(
             val chartModel = ChartModel()
             chartModel.date = it.date
             if (dayType?.lowercase() == "day")
-                chartModel.index = DateFormats.shortFormatWeek(it.date)
+                chartModel.index = LocalDate.parse(it.date).format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
             else if (dayType?.lowercase() == "month")
                 chartModel.index = DateTimeUtil.getMonth(it.date.toInt() - 1, resourcesProvider)
             else

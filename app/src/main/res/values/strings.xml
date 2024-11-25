@@ -1645,5 +1645,16 @@
     <string name="text_oct">Oct</string>
     <string name="text_nov">Nov</string>
     <string name="text_dec">Dec</string>
+    <string name="text_january">January</string>
+    <string name="text_february">February</string>
+    <string name="text_march">March</string>
+    <string name="text_april">April</string>
+    <string name="text_june">June</string>
+    <string name="text_july">July</string>
+    <string name="text_august">August</string>
+    <string name="text_september">September</string>
+    <string name="text_october">October</string>
+    <string name="text_november">November</string>
+    <string name="text_december">December</string>
 
 </resources>

@@ -92,4 +92,62 @@ object DateTimeUtil {
         }
     }
 
+    fun getCompleteMonthName(month: Int, resourcesProvider: ResourcesProvider): String {
+
+        when (month) {
+            0 -> {
+                return resourcesProvider.getString(R.string.text_january)
+            }
+
+            1 -> {
+                return resourcesProvider.getString(R.string.text_february)
+            }
+
+            2 -> {
+                return resourcesProvider.getString(R.string.text_march)
+            }
+
+            3 -> {
+                return resourcesProvider.getString(R.string.text_april)
+            }
+
+            4 -> {
+                return resourcesProvider.getString(R.string.text_may)
+            }
+
+            5 -> {
+                return resourcesProvider.getString(R.string.text_june)
+            }
+
+            6 -> {
+                return resourcesProvider.getString(R.string.text_july)
+            }
+
+            7 -> {
+                return resourcesProvider.getString(R.string.text_august)
+            }
+
+            8 -> {
+                return resourcesProvider.getString(R.string.text_september)
+            }
+
+            9 -> {
+                return resourcesProvider.getString(R.string.text_october)
+            }
+
+            10 -> {
+                return resourcesProvider.getString(R.string.text_november)
+            }
+
+            11 -> {
+                return resourcesProvider.getString(R.string.text_december)
+            }
+
+            else -> {
+                return ""
+            }
+        }
+    }
+    
+
 }

@@ -1623,4 +1623,15 @@
     <string name="text_oct">十月</string>
     <string name="text_nov">十一月</string>
     <string name="text_dec">十二月</string>
+    <string name="text_january">一月</string>
+    <string name="text_february">二月</string>
+    <string name="text_march">行进</string>
+    <string name="text_april">四月</string>
+    <string name="text_june">六月</string>
+    <string name="text_july">七月</string>
+    <string name="text_august">八月</string>
+    <string name="text_september">九月</string>
+    <string name="text_october">十月</string>
+    <string name="text_november">十一月</string>
+    <string name="text_december">十二月</string>
 </resources>

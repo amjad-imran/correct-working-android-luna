@@ -1619,4 +1619,15 @@
     <string name="text_oct">Outubro</string>
     <string name="text_nov">novembro</string>
     <string name="text_dec">dezembro</string>
+    <string name="text_january">Janeiro</string>
+    <string name="text_february">Fevereiro</string>
+    <string name="text_march">Marchar</string>
+    <string name="text_april">abril</string>
+    <string name="text_june">Junho</string>
+    <string name="text_july">Julho</string>
+    <string name="text_august">Agosto</string>
+    <string name="text_september">Setembro</string>
+    <string name="text_october">outubro</string>
+    <string name="text_november">novembro</string>
+    <string name="text_december">dezembro</string>
 </resources>

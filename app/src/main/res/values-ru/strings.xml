@@ -1624,4 +1624,15 @@
     <string name="text_oct">октябрь</string>
     <string name="text_nov">ноябрь</string>
     <string name="text_dec">декабрь</string>
+    <string name="text_january">январь</string>
+    <string name="text_february">февраль</string>
+    <string name="text_march">Маршировать</string>
+    <string name="text_april">апрель</string>
+    <string name="text_june">Июнь</string>
+    <string name="text_july">Июль</string>
+    <string name="text_august">Август</string>
+    <string name="text_september">Сентябрь</string>
+    <string name="text_october">Октябрь</string>
+    <string name="text_november">ноябрь</string>
+    <string name="text_december">декабрь</string>
 </resources>

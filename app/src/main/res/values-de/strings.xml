@@ -1620,4 +1620,15 @@
     <string name="text_oct">Okt</string>
     <string name="text_nov">Nov</string>
     <string name="text_dec">Dez</string>
+    <string name="text_january">Januar</string>
+    <string name="text_february">Februar</string>
+    <string name="text_march">Marsch</string>
+    <string name="text_april">April</string>
+    <string name="text_june">Juni</string>
+    <string name="text_july">Juli</string>
+    <string name="text_august">August</string>
+    <string name="text_september">September</string>
+    <string name="text_october">Oktober</string>
+    <string name="text_november">November</string>
+    <string name="text_december">Dezember</string>
 </resources>

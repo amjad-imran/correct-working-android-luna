@@ -1609,4 +1609,15 @@
     <string name="text_oct">ต.ค</string>
     <string name="text_nov">พ.ย</string>
     <string name="text_dec">ธ.ค</string>
+    <string name="text_january">มกราคม</string>
+    <string name="text_february">กุมภาพันธ์</string>
+    <string name="text_march">มีนาคม</string>
+    <string name="text_april">เมษายน</string>
+    <string name="text_june">มิถุนายน</string>
+    <string name="text_july">กรกฎาคม</string>
+    <string name="text_august">สิงหาคม</string>
+    <string name="text_september">กันยายน</string>
+    <string name="text_october">ตุลาคม</string>
+    <string name="text_november">พฤศจิกายน</string>
+    <string name="text_december">ธันวาคม</string>
 </resources>
