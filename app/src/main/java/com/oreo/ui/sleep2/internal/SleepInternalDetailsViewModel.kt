@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
@@ -33,6 +34,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.Collections
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -1112,7 +1114,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getDisplayDate(): String {
-        val format = DateTimeFormatter.ofPattern("dd MMM")
+        val format = DateTimeFormatter.ofPattern("dd MMM",
+            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+        )
         return if (currentSelectedStartDate == currentSelectedEndDate) {
             currentSelectedStartDate.format(format)
 

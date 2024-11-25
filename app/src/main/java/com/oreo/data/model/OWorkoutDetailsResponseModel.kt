@@ -26,6 +26,7 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("hr_avg") val hrAvg: Int? = null,
     @SerializedName("hr_low") val hrLow: Int? = null,
     @SerializedName("hr_max") val hrMax: Int? = null,
+    val workoutText: String? = null,
     @SerializedName("distance") val distance: Long? = null,
     @SerializedName("cadence") val cadence: Long? = null,
     @SerializedName("recovery_time") val recoveryTime: Long? = null,
@@ -42,6 +43,10 @@ data class OWorkoutDetailsResponseModel(
         val activityName = activityType ?: return ""
         val actNameTemp = activityName.replace("_", " ")
         return actNameTemp.capitalizeWords()
+    }
+
+    fun getTranslatedActivityName(): String {
+        return workoutText ?: getFormattedActivityName()
     }
 }
 

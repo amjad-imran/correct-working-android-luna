@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.cycletracker.history
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FmhCycleTrackHistoryItemBinding
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
@@ -17,17 +18,19 @@ class FMHCycleTrackerHistoryAdapter(val listener: OnHistoryItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: FMHCycleHistoryDataModel) {
             binding.tvHeader.text = if (bindingAdapterPosition == 0) {
-                "Current cycle: ${data.cycleLength} days"
+                binding.root.context.getString(R.string.text_current_cycle_days, data.cycleLength)
             } else {
-                "${data.cycleLength} days"
+                binding.root.context.getString(R.string.text_value_days, data.cycleLength)
             }
-            binding.tvStartedOn.text = "Started on ${
+            binding.tvStartedOn.text = binding.root.context.getString(
+                R.string.text_started_on_value,
                 DateFormats.formatDate(
                     data.periodDate,
                     DateFormats.dateFormat3(),
                     DateFormats.dateFormat7()
                 )
-            }"
+            )
+
 
             val ovDays = abs(
                 DateFormats.getDateDiff(

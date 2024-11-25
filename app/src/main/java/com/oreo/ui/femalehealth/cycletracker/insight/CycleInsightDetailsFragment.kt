@@ -38,11 +38,11 @@ class CycleInsightDetailsFragment :
             ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#2bca79"))
             when (viewModel.launchMode) {
                 CycleInsightLaunchMode.CYCLE_LENGTH -> {
-                    tvDays.text = "21-35 days"
+                    tvDays.text = getString(R.string.text_21_35_days)
                 }
 
                 CycleInsightLaunchMode.PERIOD_DURATION -> {
-                    tvDays.text = "2-7 days"
+                    tvDays.text = getString(R.string.text_2_7_days)
                 }
             }
 
@@ -53,11 +53,11 @@ class CycleInsightDetailsFragment :
             ivColorBox.setBackgroundColor(android.graphics.Color.parseColor("#ff84d5"))
             when (viewModel.launchMode) {
                 CycleInsightLaunchMode.CYCLE_LENGTH -> {
-                    tvDays.text = "<21, >35 days"
+                    tvDays.text = getString(R.string.text_21_35_days_a)
                 }
 
                 CycleInsightLaunchMode.PERIOD_DURATION -> {
-                    tvDays.text = "<2, >7 days"
+                    tvDays.text = getString(R.string.text_2_7_days_a)
                 }
             }
 

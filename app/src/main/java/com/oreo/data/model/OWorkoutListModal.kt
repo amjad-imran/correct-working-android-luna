@@ -14,6 +14,7 @@ data class OActivityListModal(
     @SerializedName("duration") val duration: Long? = null,
     @SerializedName("calories") val calories: String? = null,
     @SerializedName("activity_type") val activityType: String? = null,
+    val workoutText: String? = null,
     @SerializedName("type") var type: String? = null,
     @SerializedName("start_time") val startTime: String? = null,
     @SerializedName("end_time") val endTime: String? = null,
@@ -25,6 +26,10 @@ data class OActivityListModal(
         val activityName = activityType ?: return ""
         val actNameTemp = activityName.replace("_", " ")
         return actNameTemp.capitalizeWords()
+    }
+
+    fun getTranslatedActivityName(): String {
+        return workoutText ?: getFormattedActivityName()
     }
 
     fun getDisplayVersionType(): Int {

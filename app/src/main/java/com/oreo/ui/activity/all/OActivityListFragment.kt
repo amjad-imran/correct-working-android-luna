@@ -204,7 +204,7 @@ class OActivityListFragment :
             })
         }else{
             navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                putString("workoutName", activity.getFormattedActivityName())
+                putString("workoutName", activity.getTranslatedActivityName())
                 putString("workoutId", activity.id ?: "")
                 putInt("position", position)
             })

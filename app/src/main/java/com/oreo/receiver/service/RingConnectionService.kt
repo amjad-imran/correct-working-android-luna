@@ -1182,10 +1182,10 @@ constructor() : LifecycleService() {
                             val workoutTimeStamp = it.startTime
                             if (workoutTimeStamp > timeStamp && sessionManager.showLocalNotification()) {
                                 NotificationUtil.showWorkoutLocalNotification(
-                                    this, it
+                                    this, it,
+                                    resourcesProvider
                                 )
                             }
-
                         }
 
 

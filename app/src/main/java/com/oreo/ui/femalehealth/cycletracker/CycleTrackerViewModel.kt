@@ -120,7 +120,10 @@ class CycleTrackerViewModel @Inject constructor(
 
                             val symList = ArrayList<Pair<String, String>>()
                             it?.symptom?.flow?.let {
-                                val title = "Flow: ${it.symptomName ?: ""}"
+                                val title = resourcesProvider.getString(
+                                    R.string.text_flow_value,
+                                    it.symptomName ?: ""
+                                )
                                 symList.add(Pair(it.icon ?: "", title))
                             }
                             it?.symptom?.symptoms?.forEach {

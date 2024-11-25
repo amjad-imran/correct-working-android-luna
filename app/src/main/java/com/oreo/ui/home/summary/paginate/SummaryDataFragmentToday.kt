@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
@@ -87,6 +88,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 
@@ -1182,7 +1185,18 @@ class SummaryDataFragmentToday :
             this.textView3.text = data.data.title
             this.tvOvlInDays.text = data.data.days.toString()
             this.textView1.text = data.data.bottomText
-            this.tvPredictionDays.text = data.data.predictionDate
+            this.tvPredictionDays.text = if (data.data.predictionDate.isNullOrEmpty().not()) {
+                LocalDate.parse(data.data.predictionDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(
+                        DateTimeFormatter.ofPattern(
+                            "dd MMM",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
+                    )
+            } else {
+                ""
+            }
+
             this.tvOvlDaysCurrent.text =
                 getString(R.string.text_day_value, data.data.currentCycleDay)
             this.tvOvlDaysLeft.text = getString(R.string.text_of_value, data.data.totalCycleDay)
@@ -1227,7 +1241,18 @@ class SummaryDataFragmentToday :
             this.imv.setBackgroundResource(data.data.background)
 
             this.tvPeriodicPeriod.text = data.data.predictionString
-            this.tvDays.text = data.data.predictionDate
+
+            this.tvDays.text = if (data.data.predictionDate.isNullOrEmpty().not()) {
+                LocalDate.parse(data.data.predictionDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .format(
+                        DateTimeFormatter.ofPattern(
+                            "dd MMM",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
+                    )
+            } else {
+                ""
+            }
 
             this.root.setOnClickListener {
                 navigate(R.id.fragmentCycleTracker)
@@ -1446,7 +1471,7 @@ class SummaryDataFragmentToday :
                     })
                 } else {
                     navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                        putString("workoutName", data.getFormattedActivityName())
+                        putString("workoutName", data.getTranslatedActivityName())
                         putString("workoutId", data.id ?: "")
                         putInt("position", position)
                     })

@@ -108,17 +108,17 @@ class OHeartRateDataFragment :
                     if (item.value != 0) {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = item.value.toString()
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
                         binding.lytHeartRate.tvSubtitle1.text = time
                     } else {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
                         binding.lytHeartRate.tvSubtitle1.text = ""
                     }
                     if (item.maxValue != 0 && item.minValue != 0) {
                         binding.lytHeartRate.tvSubtitle2.visible()
                         binding.lytHeartRate.tvSubtitle2.text =
-                            "Range ${item.minValue}-${item.maxValue} bpm"
+                            getString(R.string.text_range_value_bpm, item.minValue, item.maxValue)
                     } else {
                         binding.lytHeartRate.tvSubtitle2.gone()
                     }
@@ -182,11 +182,12 @@ class OHeartRateDataFragment :
         if (it.average.toInt() != 0) {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-            binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
+            binding.lytHeartRate.tvSubtitle2.text =
+                getString(R.string.text_range_value_bpm, it.minValues, it.maxValues)
         } else {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
         }
     }
 

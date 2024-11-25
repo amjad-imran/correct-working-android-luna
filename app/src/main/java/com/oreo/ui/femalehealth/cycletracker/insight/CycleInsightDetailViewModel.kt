@@ -2,6 +2,7 @@ package com.oreo.ui.femalehealth.cycletracker.insight
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
@@ -16,6 +17,9 @@ import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -91,13 +95,20 @@ class CycleInsightDetailViewModel @Inject constructor(
             val chartModel = PeriodChartModel()
             chartModel.date = it.date
 
-            val month =
-                DateFormats.formatDateTime(
-                    it.date, DateFormats.dateFormat3(), DateFormats.monthOnly()
+            val month = LocalDate.parse(it.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(
+                    DateTimeFormatter.ofPattern(
+                        "MMM",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
                 )
-            val day = DateFormats.formatDateTime(
-                it.date, DateFormats.dateFormat3(), DateFormats.dateOnly()
-            )
+            val day = LocalDate.parse(it.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(
+                    DateTimeFormatter.ofPattern(
+                        "dd",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
             chartModel.month = month
             chartModel.day = day

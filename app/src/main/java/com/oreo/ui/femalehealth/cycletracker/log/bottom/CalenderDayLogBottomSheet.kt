@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCalenderDayLogBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
@@ -17,11 +18,13 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.ui.femalehealth.cycletracker.CycleTrackerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 const val CALENDER_DAY_LOG_KEY = "CALENDER_DAY_LOG_KEY"
 
@@ -54,7 +57,12 @@ class CalenderDayLogBottomSheet :
 
     private fun setTitleDate(localDate: LocalDate) {
         viewModel.getDataForDate(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        binding.tvTitle.text = localDate.format(DateTimeFormatter.ofPattern("dd MMM"))
+        binding.tvTitle.text = localDate.format(
+            DateTimeFormatter.ofPattern(
+                "dd MMM",
+                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+            )
+        )
     }
 
     override fun initListener() {
@@ -108,8 +116,12 @@ class CalenderDayLogBottomSheet :
                 btnLog.isEnabled = true
             }
 
+            val datePeriod = getString(
+                R.string.text_day_of_value,
+                (data.currentDay ?: 0),
+                (data.cycleLength ?: 0)
+            )
 
-            val datePeriod = "Day ${(data.currentDay ?: 0)} of ${(data.cycleLength ?: 0)}"
             tvDatePeriod.text = datePeriod
 
             tvMessage.text = viewModel.getPregnancyText(data.pregnancyChances)
@@ -137,19 +149,19 @@ class CalenderDayLogBottomSheet :
                         //tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
 
                         tvCurrentState.text = if (data.otaLog) {
-                            "Period"
+                            getString(R.string.text_period)
                         } else {
-                            "Predicted period"
+                            getString(R.string.text_predicted_period)
                         }
 
                         //tvStateDay.text = "Day ${data.currentDay}"
 
                         tvStateDay.text =
-                            if (data.otaLog) {
-                                "Day ${data.currentDay}"
-                            } else {
-                                "Day ${data.currentDay}"
-                            }
+                                /*if (data.otaLog) {*/
+                            getString(R.string.text_day_value, data.currentDay)
+                        /*} else {
+                            getString(R.string.text_day_value, data.currentDay)
+                        }*/
                     }
 
                 } else {
@@ -157,8 +169,8 @@ class CalenderDayLogBottomSheet :
                         if (isPastDate) {
                             showPastCycleUI(data.currentDay ?: 0)
                         } else {
-                            tvCurrentState.text = "Predicted day of"
-                            tvStateDay.text = "Ovulation"
+                            tvCurrentState.text = getString(R.string.text_predicted_day_of)
+                            tvStateDay.text = getString(R.string.text_ovulation).capitalizeWords()
                         }
 
                     }
@@ -178,8 +190,8 @@ class CalenderDayLogBottomSheet :
                     if (isPastDate) {
                         showPastCycleUI(data.currentDay ?: 0)
                     } else {
-                        tvCurrentState.text = "Ovulation in"
-                        tvStateDay.text = "${daysUntilOvulation} Days"
+                        tvCurrentState.text = getString(R.string.text_ovulation_in)
+                        tvStateDay.text = getString(R.string.text_value_days, daysUntilOvulation)
                     }
                 } else {
                     if (isPastDate) {
@@ -188,15 +200,15 @@ class CalenderDayLogBottomSheet :
                         val isPeriodLate = data.confirmPeriodDate != null
 
                         tvCurrentState.text = if (isPeriodLate) {
-                            "Period late for"
+                            getString(R.string.text_period_late_for)
                         } else {
-                            "Period in"
+                            getString(R.string.text_period_in)
                         }
 
                         tvStateDay.text = if (isPeriodLate) {
-                            "${data.confirmPeriodDate?.day} day"
+                            getString(R.string.text_value_day, data.confirmPeriodDate?.day)
                         } else {
-                            "${daysUntilNextPeriod} Days"
+                            getString(R.string.text_value_days, daysUntilNextPeriod)
                         }
                     }
                 }
@@ -205,8 +217,8 @@ class CalenderDayLogBottomSheet :
     }
 
     private fun showPastCycleUI(currentDay: Int) {
-        binding.tvCurrentState.text = "Past cycle"
-        binding.tvStateDay.text = "Day $currentDay"
+        binding.tvCurrentState.text = getString(R.string.text_past_cycle)
+        binding.tvStateDay.text = getString(R.string.text_day_value, currentDay)
     }
 
     override fun subscribeObservers() {

@@ -32,7 +32,7 @@ class ODayTimeActivitiesAdapter(val mListener: DayTimeActivitiesInteractionListe
                         DateFormats.convert24HourTo12(data.workoutData?.endTime).lowercase()
                     }"
                 binding.tvActivityTime.text = formattedTime
-                binding.tvName.text = data.workoutData?.getFormattedActivityName()
+                binding.tvName.text = data.workoutData?.getTranslatedActivityName()
 
             } else if (data.type?.equals("sleep", true) == true) {
                 binding.tvName.setTextColor(

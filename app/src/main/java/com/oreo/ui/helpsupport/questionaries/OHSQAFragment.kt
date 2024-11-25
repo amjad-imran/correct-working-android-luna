@@ -53,7 +53,7 @@ class OHSQAFragment :
         binding.lytHelpful.ivThumbsUp.setOnClickListener {
             binding.lytHelpful.ivThumbsUp.alpha = 1.0f
             binding.lytHelpful.ivThumbsDown.alpha = 0.5f
-            requireActivity().displayToast("Thank you for your feedback!")
+            requireActivity().displayToast(getString(R.string.text_thank_you_for_your_feedback))
         }
         binding.lytHelpful.ivThumbsDown.setOnClickListener {
             binding.lytHelpful.ivThumbsUp.alpha = 0.5f

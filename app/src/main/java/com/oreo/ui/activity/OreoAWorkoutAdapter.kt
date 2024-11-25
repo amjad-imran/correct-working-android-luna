@@ -21,7 +21,7 @@ class OreoAWorkoutAdapter(val mListener: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(activity: OActivityListModal) {
 
-            binding.tvName.text = activity.getFormattedActivityName()
+            binding.tvName.text = activity.getTranslatedActivityName()
             binding.view16.root.invisible()
             binding.ivWorkoutImage.loadImage(binding.imageView8.context, activity.iconUrl)
 

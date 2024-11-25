@@ -1,5 +1,6 @@
 package com.oreo.ui.heartrate
 
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
@@ -25,12 +26,14 @@ class HeartRateViewModel @Inject constructor(
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it,
-                    DateFormats.dateFormat3()
+                    DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     it,
                     DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"

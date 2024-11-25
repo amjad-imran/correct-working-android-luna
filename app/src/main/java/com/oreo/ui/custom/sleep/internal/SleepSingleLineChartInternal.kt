@@ -19,6 +19,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.google.gson.Gson
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithZeroGenericFloat
@@ -609,7 +610,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         xAxisRange.forEach {
             val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-                it.format(DateTimeFormatter.ofPattern("MMM"))
+                it.format(DateTimeFormatter.ofPattern("MMM",Locale(NoiseFitApplicationMain.appLanguage.languageCode)))
             } else {
                 //for week
                 val weekFields = WeekFields.of(Locale.getDefault())

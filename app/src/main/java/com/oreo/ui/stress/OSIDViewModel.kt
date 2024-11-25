@@ -4,6 +4,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -15,15 +17,20 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModelStress
 import com.oreo.data.model.StressResultData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
 class OSIDViewModel @Inject constructor(
     val userActivityRepository: OreoUserActivityRepository,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
 
@@ -100,7 +107,7 @@ class OSIDViewModel @Inject constructor(
             val index = if (dayType?.lowercase() == "day")
                 (DateFormats.shortFormatWeek(it.date).firstOrNull() ?: "").toString()
             else if (dayType?.lowercase() == "month")
-                DateFormats.getMonth(it.date.toInt() - 1)
+                DateTimeUtil.getMonth(it.date.toInt() - 1,resourcesProvider)
             else {
                 "W${it.date}"
             }

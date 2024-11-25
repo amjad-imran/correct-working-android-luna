@@ -120,15 +120,16 @@ class RingLocationFragment :
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
-                    binding.lytLocationData.tvConnectionState.text = "Not connected"
+                    binding.lytLocationData.tvConnectionState.text =
+                        getString(R.string.text_not_connected)
                 }
 
                 is ConnectState.Connecting -> {
-                    binding.lytLocationData.tvConnectionState.text = "Not connected"
+                    binding.lytLocationData.tvConnectionState.text = getString(R.string.text_not_connected)
                 }
 
                 is ConnectState.ConnectSuccess -> {
-                    binding.lytLocationData.tvConnectionState.text = "Connected"
+                    binding.lytLocationData.tvConnectionState.text = getString(R.string.text_connected)
                 }
 
                 is ConnectState.UnPaired -> {
@@ -221,11 +222,11 @@ class RingLocationFragment :
             )
 
             if (viewModel.bottomSheetState == BottomSheetState.NO_DATA) {
-                tvAddress.text = "Location not found"
+                tvAddress.text = getString(R.string.text_location_not_found)
                 tvAddress.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
 
                 textDisclaimer.text =
-                    "This is the latest phone location. Note that this may not be the current location of your ring."
+                    getString(R.string.text_this_is_the_latest_phone_location)
 
                 tvLastSyncedAt.gone()
                 tvBatteryPercentage.gone()
@@ -264,7 +265,10 @@ class RingLocationFragment :
                     )
 
                     tvLastSyncedAt.text =
-                        "Last Synced ${viewModel.formatRelativeTime(startTimeStamp)}"
+                        getString(
+                            R.string.text_last_synced_value,
+                            viewModel.formatRelativeTime(startTimeStamp)
+                        )
                 } else {
                     tvLastSyncedAt.text = ""
                 }

@@ -17,6 +17,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
+import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
@@ -656,7 +657,11 @@ constructor(
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
                 val nudge = it.dashNudges?.firstOrNull()
                 if (it.readinessScore?.value != null && nudge != null) {
-                    pushNotificationReadiness.postValue(
+                    NotificationUtil.pushNotification(
+                        NoiseFitApplicationMain.context!!, nudge.label, nudge.message, NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY, "1"
+                    )
+
+                    /*pushNotificationReadiness.postValue(
                         Event(
                             PushLocalNotification(
                                 nudge.label,
@@ -664,7 +669,7 @@ constructor(
                                 NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
                             )
                         )
-                    )
+                    )*/
                     localDataStore.setReadinessNotificationTimeStamp()
                 }
             }

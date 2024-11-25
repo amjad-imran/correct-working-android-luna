@@ -1687,7 +1687,7 @@ class OreoUserActivityRepositoryImpl(
             }
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/categories"
+                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/help_and_support/categories"
                 remoteDataSource.getHSCategories(url)
             }
 
@@ -1792,7 +1792,7 @@ class OreoUserActivityRepositoryImpl(
             }
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/answers/${quesId}"
+                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/help_and_support/answers/${quesId}"
                 remoteDataSource.getHSQAnswer(url)
             }
 

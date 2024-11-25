@@ -7,6 +7,8 @@ import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.LastSyncItems
+import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.AppRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.ui.onboarding.auth.AuthMode
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class LanguageViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     private val userRepository: UserRepository,
+    private val lastSyncProvider: LastSyncProvider,
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -53,6 +56,7 @@ class LanguageViewModel @Inject constructor(
         NoiseFitApplicationMain.updateUserLanguage(language)
         viewModelScope.launch {
             userActivityRepository.clearAllHealthData()
+            lastSyncProvider.removeSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
 
             userRepository.saveAppLanguage().collect { resource ->
                 when (resource) {

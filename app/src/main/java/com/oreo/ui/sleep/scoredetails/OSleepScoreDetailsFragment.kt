@@ -1,11 +1,11 @@
 package com.oreo.ui.sleep.scoredetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOSleepScoreDetailsBinding
 import com.noisefit.oreo.util.graph.OLineChartUtils
@@ -18,18 +18,18 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -859,7 +859,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
+                        val compPro = "${String.format(locale = Locale.US, "%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name) {
                         tryCatch {
@@ -1070,18 +1070,23 @@ class OSleepScoreDetailsFragment :
     private fun setTopDateLabel(data: String, year: String? = null) {
         val dateRangeValue: String = when (mViewModel.dayType?.lowercase()) {
             "day" -> {
-                DateFormats.getConvertToDateFormat(
-                    data,
-                    DateFormats.dateFormat3(),
-                    DateFormats.dateTimeFormatWithWeekWithoutYearShort()
-                ) ?: ""
+                LocalDate.parse(data).format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE, dd MMMM",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
             }
 
             "week" -> {
                 val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
                 getString(
                     R.string.text_avg_from_value,
-                    DateFormats.getStartAndEndWeek(data.toInt(), yearVal.toInt())
+                    DateTimeUtil.getStartAndEndWeek(
+                        data.toInt(),
+                        yearVal.toInt(),
+                        mViewModel.resourcesProvider
+                    )
                 )
             }
 
@@ -1089,7 +1094,10 @@ class OSleepScoreDetailsFragment :
                 val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
                 getString(
                     R.string.text_avg_in_value,
-                    DateFormats.getCompleteMonthName(data.toInt() - 1),
+                    DateTimeUtil.getCompleteMonthName(
+                        data.toInt() - 1,
+                        mViewModel.resourcesProvider
+                    ),
                     yearVal
                 )
             }

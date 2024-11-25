@@ -27,7 +27,7 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(activity: OActivityListModal) {
 
-            binding.tvName.text = activity.getFormattedActivityName()
+            binding.tvName.text = activity.getTranslatedActivityName()
             binding.view16.root.invisible()
             binding.ivWorkoutImage.loadImage(binding.imageView8.context, activity.iconUrl)
 
@@ -39,17 +39,17 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
             }
 
             binding.tvMin.text = if(activity.duration==null){
-                "- min"
+                binding.root.context.getString(R.string.text_hypen_min)
             }else{
-                "${activity.duration} min"
+                binding.root.context.getString(R.string.text_value_min,"${activity.duration}")
             }
 
-            binding.tvCalories.text = "${activity.calories} kcal"
+            binding.tvCalories.text = binding.root.context.getString(R.string.text_value_kcal,"${activity.calories}")
 
 
             if (activity.type.equals("apple", true)) {
                 binding.tvImportedFrom.apply {
-                    text = "Imported from Health"
+                    text = binding.root.context.getString(R.string.text_imported_from_health)
                     visible()
                 }
             } else if(activity.type.equals("google", true)) {

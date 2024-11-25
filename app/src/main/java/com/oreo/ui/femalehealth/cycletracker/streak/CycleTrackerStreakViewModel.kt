@@ -3,7 +3,9 @@ package com.oreo.ui.femalehealth.cycletracker.streak
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -23,7 +25,8 @@ import kotlin.math.abs
 
 @HiltViewModel
 class CycleTrackerStreakViewModel @Inject constructor(
-    private val femaleHealthRepository: FemaleHealthRepository
+    private val femaleHealthRepository: FemaleHealthRepository,
+    val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     lateinit var cycleData: FMHCycleHistoryDataModel
@@ -78,7 +81,10 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
                             val symList = ArrayList<Pair<String, String>>()
                             it?.symptom?.flow?.let {
-                                val title = "Flow: ${it.symptomName ?: ""}"
+                                val title = resourcesProvider.getString(
+                                    R.string.text_flow_value,
+                                    it.symptomName ?: ""
+                                )
                                 symList.add(Pair(it.icon ?: "", title))
                             }
                             it?.symptom?.symptoms?.forEach {

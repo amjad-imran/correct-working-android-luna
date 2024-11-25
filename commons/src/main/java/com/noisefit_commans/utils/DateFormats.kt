@@ -498,119 +498,7 @@ object DateFormats {
         }
     }
 
-    fun getMonth(month: Int): String {
 
-        when (month) {
-            0 -> {
-                return "Jan"
-            }
-
-            1 -> {
-                return "Feb"
-            }
-
-            2 -> {
-                return "Mar"
-            }
-
-            3 -> {
-                return "Apr"
-            }
-
-            4 -> {
-                return "May"
-            }
-
-            5 -> {
-                return "Jun"
-            }
-
-            6 -> {
-                return "Jul"
-            }
-
-            7 -> {
-                return "Aug"
-            }
-
-            8 -> {
-                return "Sep"
-            }
-
-            9 -> {
-                return "Oct"
-            }
-
-            10 -> {
-                return "Nov"
-            }
-
-            11 -> {
-                return "Dec"
-            }
-
-            else -> {
-                return ""
-            }
-        }
-    }
-
-    fun getCompleteMonthName(month: Int): String {
-
-        when (month) {
-            0 -> {
-                return "January"
-            }
-
-            1 -> {
-                return "February"
-            }
-
-            2 -> {
-                return "March"
-            }
-
-            3 -> {
-                return "April"
-            }
-
-            4 -> {
-                return "May"
-            }
-
-            5 -> {
-                return "June"
-            }
-
-            6 -> {
-                return "July"
-            }
-
-            7 -> {
-                return "August"
-            }
-
-            8 -> {
-                return "September"
-            }
-
-            9 -> {
-                return "October"
-            }
-
-            10 -> {
-                return "November"
-            }
-
-            11 -> {
-                return "December"
-            }
-
-            else -> {
-                return ""
-            }
-        }
-    }
 
     fun formatMonthly(dateInput: String?): String {
         return try {
@@ -640,14 +528,15 @@ object DateFormats {
 
     fun getOrdinalDate(
         dateInput: String?,
-        currentFormat: SimpleDateFormat
+        currentFormat: SimpleDateFormat,
+        languageCode:String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val week = SimpleDateFormat("EEE", defaultLocale).format(date)
-            val day = SimpleDateFormat("d", defaultLocale).format(date)
-            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
+            val week = SimpleDateFormat("EEE", Locale(languageCode)).format(date)
+            val day = SimpleDateFormat("d", Locale(languageCode)).format(date)
+            val month = SimpleDateFormat("MMM", Locale(languageCode)).format(date)
             return "$week, $day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""
@@ -656,13 +545,14 @@ object DateFormats {
 
     fun getOrdinalDateToday(
         dateInput: String?,
-        currentFormat: SimpleDateFormat
+        currentFormat: SimpleDateFormat,
+        languageCode:String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val day = SimpleDateFormat("d", defaultLocale).format(date)
-            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
+            val day = SimpleDateFormat("d", Locale(languageCode)).format(date)
+            val month = SimpleDateFormat("MMM", Locale(languageCode)).format(date)
             return "$day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""
@@ -1173,30 +1063,7 @@ object DateFormats {
         return false
     }
 
-    fun getStartAndEndWeek(week: Int, year: Int): String {
-        val calendar = Calendar.getInstance()
 
-        calendar.set(Calendar.YEAR, year)
-        //first day of week
-        calendar.set(Calendar.WEEK_OF_YEAR, week)
-
-        val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
-
-        val firstDay = calendar.firstDayOfWeek
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-
-        //calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-        val startDate: Date = calendar.time
-        val startDateInStr = formatter.format(startDate)
-
-        calendar.add(Calendar.DATE, 6)
-        val enddate: Date = calendar.time
-        val endDaString = formatter.format(enddate)
-
-        val df = SimpleDateFormat("MM", Locale.getDefault())
-        val month = df.format(enddate).toInt()
-        return "$startDateInStr - $endDaString ${getMonth(month - 1)}"
-    }
 
     fun getConvertToDateFormat(
         date: String,
@@ -1589,60 +1456,6 @@ object DateFormats {
 
     }
 
-    fun getEndsInData1(currentTime: String, end_date: String): Pair<String, String> {
-        val sdfSource = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getTimeZone("IST")
-        }
-
-        val sdfLocal = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getDefault()
-        }
-
-
-        val date1: Date = sdfSource.parse(end_date) as Date
-        val current: Date = sdfSource.parse(currentTime) as Date
-
-
-        val calenderEnd = Calendar.getInstance()
-        calenderEnd.time = sdfLocal.parse(sdfLocal.format(date1))
-        calenderEnd.set(Calendar.HOUR_OF_DAY, 0)
-        calenderEnd.set(Calendar.MINUTE, 0)
-        calenderEnd.set(Calendar.SECOND, 0)
-        calenderEnd.set(Calendar.MILLISECOND, 0)
-
-        val calenderCurrent = Calendar.getInstance()
-        calenderCurrent.time = sdfLocal.parse(sdfLocal.format(current))
-        calenderCurrent.set(Calendar.HOUR_OF_DAY, 23)
-        calenderCurrent.set(Calendar.MINUTE, 59)
-        calenderCurrent.set(Calendar.SECOND, 59)
-        calenderCurrent.set(Calendar.MILLISECOND, 59)
-
-
-        val difference =
-            (TimeUnit.MILLISECONDS.toDays(calenderEnd.timeInMillis - calenderCurrent.timeInMillis)).toInt()
-
-        var differenceTxt = difference.toString()
-        var daysText = ""
-        when (difference) {
-            1 -> {
-                differenceTxt = "Tomorrow"
-            }
-
-            0 -> {
-                differenceTxt = "Today"
-            }
-
-            else -> {
-                daysText = if (difference <= 1) {
-                    "Day"
-                } else {
-                    "Days"
-                }
-            }
-        }
-
-        return Pair(differenceTxt, daysText)
-    }
 
     //Sort dates
     fun sortDates(dates: List<String>): List<LocalDateTime> {

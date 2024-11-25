@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
@@ -36,6 +37,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalTime
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -167,12 +169,14 @@ constructor(
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it,
-                    DateFormats.dateFormat3()
+                    DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     it,
                     DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
                 )
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"

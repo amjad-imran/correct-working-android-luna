@@ -1353,8 +1353,8 @@
     <string name="text_ask_luna_ai">Ask Luna AI</string>
     <string name="text_choose_your_language">Choose your language</string>
     <string name="text_language_change_message">This will change the App to the selected language</string>
-    <string name="text_pm">pm</string>
-    <string name="text_am">am</string>
+    <string name="text_pm" translatable="false">pm</string>
+    <string name="text_am" translatable="false">am</string>
     <string name="text_no_data_so_far">No data so far</string>
     <string name="text_unable_to_measure">Unable to measure</string>
     <string name="text_device_settings">Device settings</string>
@@ -1609,5 +1609,52 @@
     <string name="text_hypothyroidism">Hypothyroidism</string>
     <string name="text_menopause">Menopause</string>
     <string name="text_endometriosis">Endometriosis</string>
+    <string name="text_hypen_min">- min</string>
+    <string name="text_valuein_this_time_frame_already_exists">%1$s in this time frame already exists.</string>
+    <string name="text_nap_in_this_time_frame_already_exists">Nap in this time frame already exists.</string>
+    <string name="text_sleep_in_this_time_frame_already_exists">Sleep in this time frame already exists.</string>
+    <string name="text_workout">Workout</string>
+    <string name="text_21_35_days">21-35 days</string>
+    <string name="text_2_7_days">2-7 days</string>
+    <string name="text_21_35_days_a"><![CDATA[<21, >35 days]]></string>
+    <string name="text_2_7_days_a"><![CDATA[<2, >7 days]]></string>
+    <string name="text_from_last_6_weeks">from last 6 weeks</string>
+    <string name="text_from_last_6_months">from last 6 months</string>
+    <string name="text_range_value_bpm">Range %1$d-%2$d bpm</string>
+    <string name="text_needs">needs</string>
+    <string name="text_thank_you_for_your_feedback">Thank you for your feedback!</string>
+    <string name="text_day_of_value">Day %1$d of %2$d</string>
+    <string name="text_flow_value">Flow: %1$s</string>
+    <string name="text_no_change">No change</string>
+    <string name="text_vs_typical_value">vs typical %1$s</string>
+    <string name="text_no_summary_available">No summary available</string>
+    <string name="text_there_wasn_t_enough_data">There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress</string>
+    <string name="text_not_connected">Not connected</string>
+    <string name="text_location_not_found">Location not found</string>
+    <string name="text_this_is_the_latest_phone_location">This is the latest phone location. Note that this may not be the current location of your ring.</string>
+    <string name="text_last_synced_value">Last Synced %1$s</string>
+    <string name="text_jan">Jan</string>
+    <string name="text_feb">Feb</string>
+    <string name="text_mar">Mar</string>
+    <string name="text_apr">Apr</string>
+    <string name="text_may">May</string>
+    <string name="text_jun">Jun</string>
+    <string name="text_jul">Jul</string>
+    <string name="text_aug">Aug</string>
+    <string name="text_sep">Sep</string>
+    <string name="text_oct">Oct</string>
+    <string name="text_nov">Nov</string>
+    <string name="text_dec">Dec</string>
+    <string name="text_january">January</string>
+    <string name="text_february">February</string>
+    <string name="text_march">March</string>
+    <string name="text_april">April</string>
+    <string name="text_june">June</string>
+    <string name="text_july">July</string>
+    <string name="text_august">August</string>
+    <string name="text_september">September</string>
+    <string name="text_october">October</string>
+    <string name="text_november">November</string>
+    <string name="text_december">December</string>
 
 </resources>

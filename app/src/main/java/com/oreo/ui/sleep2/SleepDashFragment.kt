@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderSleepDayBinding
 import com.noisefit.luna.databinding.FragmentSleepDashBinding
@@ -74,6 +75,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -384,7 +386,12 @@ class SleepDashFragment :
             } catch (exp: Exception) {
             }
 
-            binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
+            binding.toolbar.tvMonth.text = it.format(
+                DateTimeFormatter.ofPattern(
+                    "MMM",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
 
             viewModel.getDataForDate(it)
 
@@ -548,11 +555,18 @@ class SleepDashFragment :
             fun bind(day: WeekDay) {
                 this.day = day
 
-                bind.exSevenDateText.text =
-                    DateFormats.getDayFromDate(DateFormats.convertLocalDateToDate(day.date))
-                bind.exSevenDayText.text =
-                    DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
-
+                bind.exSevenDateText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "dd",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
+                bind.exSevenDayText.text = day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
                 val score = viewModel.sleepData[day.date]?.sleepScore?.value
                 if (score == null) {
