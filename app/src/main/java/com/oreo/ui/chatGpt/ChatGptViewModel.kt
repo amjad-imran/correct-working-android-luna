@@ -41,6 +41,8 @@ class ChatGptViewModel
     private val speechRecognizerManager: SpeechRecognizerManager
 ) : BaseViewModel() {
 
+    var isAudioMode: Boolean = false
+
     private var userImage: String? = null
     private var userName: String? = null
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
@@ -240,6 +242,10 @@ class ChatGptViewModel
                     if (msg != null) {
                         msg = cleanServerResponse(msg)
                         responseBuilder.append(msg)
+                        if(isAudioMode){
+                            //speechRecognizerManager.speakText(msg)
+                            LOGS.d("RecognitionListener", "Received message $msg")
+                        }
                     }
 
                     addReceivedMessage(
@@ -281,6 +287,11 @@ class ChatGptViewModel
                 override fun onClosed(sse: ServerSentEvent?) {
                     //LOGS.d("streammmmmm onClosed()")
                     fetchInProgress.postValue(false)
+
+                    if(isAudioMode){
+                        speechRecognizerManager.speakText(responseBuilder.toString())
+                        LOGS.d("RecognitionListener", "Received message $responseBuilder")
+                    }
                     sse?.close()
                 }
 

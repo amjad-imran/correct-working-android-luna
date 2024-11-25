@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt
 
+import android.media.audiofx.Visualizer
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
@@ -27,6 +28,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.absoluteValue
 
 
 @AndroidEntryPoint
@@ -73,35 +75,49 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.threadTitle.postValue(args.title)
         }
 
-        viewModel.startSpeechRecognition(listener)
-
     }
 
     private val listener = object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
-
+            LOGS.d("RecognitionListener", "onReadyForSpeech() $params")
         }
 
-        override fun onBeginningOfSpeech() {}
-        override fun onRmsChanged(rmsdB: Float) {}
-        override fun onBufferReceived(buffer: ByteArray?) {}
-        override fun onEndOfSpeech() {}
+        override fun onBeginningOfSpeech() {
+            LOGS.d("RecognitionListener", "onBeginningOfSpeech()")
+        }
+
+        override fun onRmsChanged(rmsdB: Float) {
+            //LOGS.d("RecognitionListener", "onRmsChanged - $rmsdB")
+            binding.lytAudio.viewAudioVisualizer.updateRms(rmsdB)
+        }
+
+        override fun onBufferReceived(buffer: ByteArray?) {
+            LOGS.d("RecognitionListener", "onBufferReceived() - $buffer")
+        }
+
+        override fun onEndOfSpeech() {
+            LOGS.d("RecognitionListener", "onEndOfSpeech()")
+        }
 
         override fun onError(error: Int) {}
 
         override fun onResults(results: Bundle?) {
             val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            LOGS.d(" onResults ${matches?.getOrNull(0)}")
-
+            val text = matches?.getOrNull(0) ?: ""
+            binding.lytAudio.testUserText.text = text
+            LOGS.d("RecognitionListener", "onResults ${matches?.getOrNull(0)}")
+            sendMessage(text)
         }
 
         override fun onPartialResults(partialResults: Bundle?) {
             val partial =
                 partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            LOGS.d(" onPartialResults ${partial?.getOrNull(0)}")
+            LOGS.d("RecognitionListener", " onPartialResults ${partial?.getOrNull(0)}")
         }
 
-        override fun onEvent(eventType: Int, params: Bundle?) {}
+        override fun onEvent(eventType: Int, params: Bundle?) {
+            LOGS.d("RecognitionListener", " onEvent $eventType")
+        }
     }
 
 
@@ -135,6 +151,24 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
+        binding.testAudio.setOnClickListener {
+            binding.lytAudio.root.visible()
+        }
+        binding.lytAudio.ivCross.setOnClickListener {
+            binding.lytAudio.root.gone()
+            viewModel.isAudioMode = false
+            viewModel.stopSpeechRecognition()
+        }
+        binding.lytAudio.bTextMode.setOnClickListener {
+            binding.lytAudio.root.gone()
+            viewModel.isAudioMode = false
+            viewModel.stopSpeechRecognition()
+        }
+        binding.lytAudio.bAudioMode.setOnClickListener {
+            viewModel.isAudioMode = true
+            viewModel.startSpeechRecognition(listener)
+        }
+
         binding.ivHistory.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
         }
@@ -148,7 +182,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 viewModel.stopResponseGeneration()
             } else {
                 if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
-                    sendMessage()
+                    sendMessage(binding.lytChatBox.chatEtx.text.toString())
                 }
             }
         }
@@ -160,7 +194,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                sendMessage()
+                sendMessage(binding.lytChatBox.chatEtx.text.toString())
                 true
             } else false
         })
@@ -168,8 +202,32 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     }
 
-    fun sendMessage() {
-        val message = binding.lytChatBox.chatEtx.text.toString()
+    private fun setupVisualizer(audioSessionId: Int) {
+        Visualizer(audioSessionId).apply {
+            captureSize = Visualizer.getCaptureSizeRange()[1] // Maximum capture size
+            setDataCaptureListener(object : Visualizer.OnDataCaptureListener {
+                override fun onWaveFormDataCapture(
+                    visualizer: Visualizer,
+                    waveform: ByteArray,
+                    samplingRate: Int
+                ) {
+                    val amplitude = waveform.map { it.toInt().absoluteValue }.average().toFloat()
+                    binding.lytAudio.viewAudioVisualizer.updateRms(amplitude)
+                }
+
+                override fun onFftDataCapture(
+                    visualizer: Visualizer,
+                    fft: ByteArray,
+                    samplingRate: Int
+                ) {
+                    // Optional: FFT data for frequency visualization
+                }
+            }, Visualizer.getMaxCaptureRate() / 2, true, false)
+            enabled = true
+        }
+    }
+
+    fun sendMessage(message:String) {
         if (message.isNotEmpty()) {
             viewModel.addSentMessage(message)
             viewModel.addThinkingMessage()

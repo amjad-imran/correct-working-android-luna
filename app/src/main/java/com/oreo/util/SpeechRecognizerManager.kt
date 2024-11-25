@@ -20,6 +20,7 @@ constructor(
     private var speechRecognizer: SpeechRecognizer? = null
     private var textToSpeech: TextToSpeech? = null
     private var isTTSInitialized = false
+    private var audioSessionId: String? = null
 
     init {
         initializeTextToSpeech()
