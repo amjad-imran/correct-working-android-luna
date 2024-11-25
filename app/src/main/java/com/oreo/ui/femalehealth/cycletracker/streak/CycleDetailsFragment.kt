@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleDetailsBinding
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class CycleDetailsFragment :
@@ -161,10 +163,13 @@ class CycleDetailsFragment :
 
         binding.lytTopCalender.tvDateRangeValue.text =
             "${
-                start.format(DateTimeFormatter.ofPattern("dd MMM"))
+                start.format(DateTimeFormatter.ofPattern("dd MMM",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                ))
             } - ${
                 end.format(
-                    DateTimeFormatter.ofPattern("dd MMM")
+                    DateTimeFormatter.ofPattern("dd MMM",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode))
                 )
             }"
 
@@ -188,9 +193,18 @@ class CycleDetailsFragment :
                 this.day = day
 
                 bind.exSevenDateText.text =
-                    DateFormats.getDayFromDate(DateFormats.convertLocalDateToDate(day.date))
-                bind.exSevenDayText.text =
-                    DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
+                    day.date.format(
+                        DateTimeFormatter.ofPattern(
+                            "dd",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
+                    )
+                bind.exSevenDayText.text =day.date.format(
+                    DateTimeFormatter.ofPattern(
+                        "EEE",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
+                )
 
                 val (state, isDateSelected) = viewModel.getCurrentState(day.date)
 
