@@ -1607,4 +1607,16 @@
     <string name="text_location_not_found">Local não encontrado</string>
     <string name="text_this_is_the_latest_phone_location">Esta é a localização do telefone mais recente. Observe que esta pode não ser a localização atual do seu anel.</string>
     <string name="text_last_synced_value">Última sincronização %1$s</string>
+    <string name="text_jan">janeiro</string>
+    <string name="text_feb">Fevereiro</string>
+    <string name="text_mar">março</string>
+    <string name="text_apr">abril</string>
+    <string name="text_may">Poderia</string>
+    <string name="text_jun">junho</string>
+    <string name="text_jul">julho</string>
+    <string name="text_aug">agosto</string>
+    <string name="text_sep">Setembro</string>
+    <string name="text_oct">Outubro</string>
+    <string name="text_nov">novembro</string>
+    <string name="text_dec">dezembro</string>
 </resources>

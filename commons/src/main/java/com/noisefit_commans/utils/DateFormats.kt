@@ -498,62 +498,6 @@ object DateFormats {
         }
     }
 
-    fun getMonth(month: Int): String {
-
-        when (month) {
-            0 -> {
-                return "Jan"
-            }
-
-            1 -> {
-                return "Feb"
-            }
-
-            2 -> {
-                return "Mar"
-            }
-
-            3 -> {
-                return "Apr"
-            }
-
-            4 -> {
-                return "May"
-            }
-
-            5 -> {
-                return "Jun"
-            }
-
-            6 -> {
-                return "Jul"
-            }
-
-            7 -> {
-                return "Aug"
-            }
-
-            8 -> {
-                return "Sep"
-            }
-
-            9 -> {
-                return "Oct"
-            }
-
-            10 -> {
-                return "Nov"
-            }
-
-            11 -> {
-                return "Dec"
-            }
-
-            else -> {
-                return ""
-            }
-        }
-    }
 
     fun getCompleteMonthName(month: Int): String {
 
@@ -1175,30 +1119,7 @@ object DateFormats {
         return false
     }
 
-    fun getStartAndEndWeek(week: Int, year: Int): String {
-        val calendar = Calendar.getInstance()
 
-        calendar.set(Calendar.YEAR, year)
-        //first day of week
-        calendar.set(Calendar.WEEK_OF_YEAR, week)
-
-        val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
-
-        val firstDay = calendar.firstDayOfWeek
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-
-        //calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-        val startDate: Date = calendar.time
-        val startDateInStr = formatter.format(startDate)
-
-        calendar.add(Calendar.DATE, 6)
-        val enddate: Date = calendar.time
-        val endDaString = formatter.format(enddate)
-
-        val df = SimpleDateFormat("MM", Locale.getDefault())
-        val month = df.format(enddate).toInt()
-        return "$startDateInStr - $endDaString ${getMonth(month - 1)}"
-    }
 
     fun getConvertToDateFormat(
         date: String,

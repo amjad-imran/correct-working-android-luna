@@ -29,6 +29,7 @@ import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -859,7 +860,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${String.format(locale = Locale.US,"%.1f", difference)} °F"
+                        val compPro = "${String.format(locale = Locale.US, "%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name) {
                         tryCatch {
@@ -1081,7 +1082,11 @@ class OSleepScoreDetailsFragment :
                 val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
                 getString(
                     R.string.text_avg_from_value,
-                    DateFormats.getStartAndEndWeek(data.toInt(), yearVal.toInt())
+                    DateTimeUtil.getStartAndEndWeek(
+                        data.toInt(),
+                        yearVal.toInt(),
+                        mViewModel.resourcesProvider
+                    )
                 )
             }
 

@@ -1597,4 +1597,16 @@
     <string name="text_location_not_found">ไม่พบตำแหน่ง</string>
     <string name="text_this_is_the_latest_phone_location">นี่คือตำแหน่งโทรศัพท์ล่าสุด โปรดทราบว่านี่อาจไม่ใช่ตำแหน่งปัจจุบันของแหวนของคุณ</string>
     <string name="text_last_synced_value">ซิงค์ครั้งล่าสุด %1$s</string>
+    <string name="text_jan">ม.ค</string>
+    <string name="text_feb">ก.พ</string>
+    <string name="text_mar">มี.ค</string>
+    <string name="text_apr">เม.ย</string>
+    <string name="text_may">อาจ</string>
+    <string name="text_jun">มิ.ย</string>
+    <string name="text_jul">ก.ค</string>
+    <string name="text_aug">ส.ค</string>
+    <string name="text_sep">ก.ย</string>
+    <string name="text_oct">ต.ค</string>
+    <string name="text_nov">พ.ย</string>
+    <string name="text_dec">ธ.ค</string>
 </resources>

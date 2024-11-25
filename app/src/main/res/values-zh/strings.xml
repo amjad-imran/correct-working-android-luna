@@ -1611,4 +1611,16 @@
     <string name="text_location_not_found">未找到位置</string>
     <string name="text_this_is_the_latest_phone_location">这是最新的电话位置。请注意，这可能不是您戒指的当前位置。</string>
     <string name="text_last_synced_value">上次同步%1$s</string>
+    <string name="text_jan">扬</string>
+    <string name="text_feb">二月</string>
+    <string name="text_mar">三月</string>
+    <string name="text_apr">四月</string>
+    <string name="text_may">可能</string>
+    <string name="text_jun">君</string>
+    <string name="text_jul">七月</string>
+    <string name="text_aug">八月</string>
+    <string name="text_sep">九月</string>
+    <string name="text_oct">十月</string>
+    <string name="text_nov">十一月</string>
+    <string name="text_dec">十二月</string>
 </resources>

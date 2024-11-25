@@ -1611,4 +1611,16 @@
     <string name="text_location_not_found">Ubicación no encontrada</string>
     <string name="text_this_is_the_latest_phone_location">Esta es la última ubicación del teléfono. Tenga en cuenta que es posible que esta no sea la ubicación actual de su anillo.</string>
     <string name="text_last_synced_value">Última sincronización %1$s</string>
+    <string name="text_jan">Ene</string>
+    <string name="text_feb">Feb</string>
+    <string name="text_mar">Mar</string>
+    <string name="text_apr">Abr</string>
+    <string name="text_may">Puede</string>
+    <string name="text_jun">Jun</string>
+    <string name="text_jul">Jul</string>
+    <string name="text_aug">Ago</string>
+    <string name="text_sep">Sep</string>
+    <string name="text_oct">Oct</string>
+    <string name="text_nov">Nov</string>
+    <string name="text_dec">Dic</string>
 </resources>

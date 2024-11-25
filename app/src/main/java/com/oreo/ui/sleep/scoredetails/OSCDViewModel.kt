@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -19,6 +20,7 @@ import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OSCDViewModel @Inject constructor(
     val userActivityRepository: OreoUserActivityRepository,
+    val resourcesProvider: ResourcesProvider,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -245,7 +248,7 @@ class OSCDViewModel @Inject constructor(
             if (dayType?.lowercase() == "day")
                 chartModel.index = DateFormats.shortFormatWeek(it.date)
             else if (dayType?.lowercase() == "month")
-                chartModel.index = DateFormats.getMonth(it.date.toInt() - 1)
+                chartModel.index = DateTimeUtil.getMonth(it.date.toInt() - 1, resourcesProvider)
             else
                 chartModel.index = it.date
 

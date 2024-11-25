@@ -1633,5 +1633,17 @@
     <string name="text_location_not_found">Location not found</string>
     <string name="text_this_is_the_latest_phone_location">This is the latest phone location. Note that this may not be the current location of your ring.</string>
     <string name="text_last_synced_value">Last Synced %1$s</string>
+    <string name="text_jan">Jan</string>
+    <string name="text_feb">Feb</string>
+    <string name="text_mar">Mar</string>
+    <string name="text_apr">Apr</string>
+    <string name="text_may">May</string>
+    <string name="text_jun">Jun</string>
+    <string name="text_jul">Jul</string>
+    <string name="text_aug">Aug</string>
+    <string name="text_sep">Sep</string>
+    <string name="text_oct">Oct</string>
+    <string name="text_nov">Nov</string>
+    <string name="text_dec">Dec</string>
 
 </resources>

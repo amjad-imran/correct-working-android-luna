@@ -1612,4 +1612,16 @@
     <string name="text_location_not_found">Местоположение не найдено</string>
     <string name="text_this_is_the_latest_phone_location">Это последнее местоположение телефона. Обратите внимание, что это может быть не текущее местоположение вашего кольца.</string>
     <string name="text_last_synced_value">Последняя синхронизация: %1$s</string>
+    <string name="text_jan">Ян</string>
+    <string name="text_feb">февраль</string>
+    <string name="text_mar">Мар</string>
+    <string name="text_apr">апрель</string>
+    <string name="text_may">Может</string>
+    <string name="text_jun">июнь</string>
+    <string name="text_jul">июль</string>
+    <string name="text_aug">август</string>
+    <string name="text_sep">Сентябрь</string>
+    <string name="text_oct">октябрь</string>
+    <string name="text_nov">ноябрь</string>
+    <string name="text_dec">декабрь</string>
 </resources>

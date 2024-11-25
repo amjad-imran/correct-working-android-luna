@@ -1613,4 +1613,16 @@
     <string name="text_location_not_found">Locatie niet gevonden</string>
     <string name="text_this_is_the_latest_phone_location">Dit is de nieuwste telefoonlocatie. Houd er rekening mee dat dit mogelijk niet de huidige locatie van uw ring is.</string>
     <string name="text_last_synced_value">Laatst gesynchroniseerd %1$s</string>
+    <string name="text_jan">jan</string>
+    <string name="text_feb">februari</string>
+    <string name="text_mar">Maart</string>
+    <string name="text_apr">april</string>
+    <string name="text_may">Kunnen</string>
+    <string name="text_jun">jun</string>
+    <string name="text_jul">juli</string>
+    <string name="text_aug">augustus</string>
+    <string name="text_sep">september</string>
+    <string name="text_oct">okt</string>
+    <string name="text_nov">nov</string>
+    <string name="text_dec">dec</string>
 </resources>
