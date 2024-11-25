@@ -494,7 +494,7 @@ class CycleTrackerFragment :
                 ivInfo.visible()
                 divider1.root.visible()
                 tvMoreNight.text =
-                    "Temperature data for upcoming 3 cycles is required"//"Data for ${data.pendingNights} more nights is required"
+                    getString(R.string.text_temperature_data_for_upcoming)//"Data for ${data.pendingNights} more nights is required"
             }
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))
