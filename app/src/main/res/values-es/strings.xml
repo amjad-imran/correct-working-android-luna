@@ -1641,4 +1641,13 @@
     <string name="text_hearing_from_you_helps_us">Escuchar de usted nos ayuda a crear la mejor experiencia en Luna Ring.</string>
     <string name="text_ring_disabled">Anillo desactivado</string>
     <string name="text_your_ring_has_been_disabled">Tu anillo ha sido desactivado. Para reactivarlo, comuníquese con nuestro equipo de atención al cliente.</string>
+    <string name="text_otp_has_been_send_to">La OTP ha sido enviada a</string>
+    <string name="text_enter_otp_to_continue">Ingrese OTP para continuar.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">¿Estás seguro de que quieres combinar un anillo nuevo?</string>
+    <string name="text_are_you_sure_you_want_to_reset">¿Estás seguro de que quieres restablecer?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Su anillo se desemparejará y se perderán todos los datos no guardados]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Aconsejamos colocar el anillo en el cargador. Su anillo se desemparejará y se perderán todos los datos no guardados]]></string>
+    <string name="text_restart_the_ring">¿Reiniciar el anillo?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Aconsejamos colocar el anillo en el cargador. El proceso de reinicio puede tardar unos segundos. Su anillo se emparejará automáticamente con la aplicación una vez que el reinicio sea exitoso.</string>
+    <string name="text_please_wait_while_the_device">Espere mientras se reinicia el dispositivo. No cierres la aplicación.</string>
 </resources>

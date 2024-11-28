@@ -1555,10 +1555,6 @@
     <string name="text_zone_5">Zona 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">Otp verificado</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">polegadas</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">libras</string>
     <string name="text_syncing_user_activity">Sincronizando a atividade do usuário.</string>
     <string name="text_luna_ring_is_running">Luna Ring está funcionando</string>
     <string name="text_last_sync_at_value">última sincronização em %1$s</string>
@@ -1637,4 +1633,13 @@
     <string name="text_hearing_from_you_helps_us">Ouvir você nos ajuda a criar a melhor experiência no Luna Ring.</string>
     <string name="text_ring_disabled">Toque desativado</string>
     <string name="text_your_ring_has_been_disabled">Seu anel foi desativado. Para reativá-lo, entre em contato com nossa equipe de suporte ao cliente.</string>
+    <string name="text_otp_has_been_send_to">OTP foi enviado para</string>
+    <string name="text_enter_otp_to_continue">Digite OTP para continuar.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Tem certeza de que deseja emparelhar um novo anel?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Tem certeza de que deseja redefinir?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Seu anel será desemparelhado e todos os dados não salvos serão perdidos]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Aconselhamos colocar o anel no carregador. Seu anel será desemparelhado e todos os dados não salvos serão perdidos]]></string>
+    <string name="text_restart_the_ring">Reiniciar o anel?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Aconselhamos colocar o anel no carregador. O processo de reinicialização pode demorar alguns segundos. Seu anel será emparelhado automaticamente com o aplicativo assim que a reinicialização for bem-sucedida.</string>
+    <string name="text_please_wait_while_the_device">Aguarde enquanto o dispositivo está sendo reiniciado. Não feche o aplicativo.</string>
 </resources>

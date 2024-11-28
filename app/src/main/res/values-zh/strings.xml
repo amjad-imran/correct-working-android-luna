@@ -1559,10 +1559,6 @@
     <string name="text_zone_5">5区</string>
     <string name="text_spm">样本量</string>
     <string name="text_otp_verified">OTP 验证</string>
-    <string name="text_cm">厘米</string>
-    <string name="text_inches">英寸</string>
-    <string name="text_kg">公斤</string>
-    <string name="text_lbs">磅</string>
     <string name="text_syncing_user_activity">同步用户活动。</string>
     <string name="text_luna_ring_is_running">月神戒指正在运行</string>
     <string name="text_last_sync_at_value">上次同步时间为 %1$s</string>
@@ -1641,4 +1637,13 @@
     <string name="text_hearing_from_you_helps_us">您的反馈有助于我们在 Luna Ring 上打造最佳体验。</string>
     <string name="text_ring_disabled">环已禁用</string>
     <string name="text_your_ring_has_been_disabled">您的戒指已被禁用。要重新激活它，请联系我们的客户支持团队。</string>
+    <string name="text_otp_has_been_send_to">OTP 已发送至</string>
+    <string name="text_enter_otp_to_continue">输入 OTP 以继续。</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">您确定要配对新戒指吗？</string>
+    <string name="text_are_you_sure_you_want_to_reset">您确定要重置吗？</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[您的戒指将被取消配对，所有未保存的数据将丢失]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[我们建议将戒指放在充电器上。您的戒指将被取消配对，所有未保存的数据都将丢失]]></string>
+    <string name="text_restart_the_ring">重启环？</string>
+    <string name="text_we_advise_placing_the_ring_on_the">我们建议将戒指放在充电器上。重新启动过程可能需要几秒钟。重启成功后，您的戒指将自动与应用程序配对。</string>
+    <string name="text_please_wait_while_the_device">设备正在重置，请稍候。不要关闭应用程序。</string>
 </resources>

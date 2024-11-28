@@ -1559,10 +1559,6 @@
     <string name="text_zone_5">Zona 5</string>
     <string name="text_spm">sp</string>
     <string name="text_otp_verified">OTP verificato</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">pollici</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">libbre</string>
     <string name="text_syncing_user_activity">Sincronizzazione dell\'attività dell\'utente.</string>
     <string name="text_luna_ring_is_running">Luna Ring è in esecuzione</string>
     <string name="text_last_sync_at_value">ultima sincronizzazione alle %1$s</string>
@@ -1641,4 +1637,13 @@
     <string name="text_hearing_from_you_helps_us">Ascoltarti ci aiuta a creare la migliore esperienza su Luna Ring.</string>
     <string name="text_ring_disabled">Suoneria disabilitata</string>
     <string name="text_your_ring_has_been_disabled">Il tuo anello è stato disabilitato. Per riattivarlo, contatta il nostro team di assistenza clienti.</string>
+    <string name="text_otp_has_been_send_to">L\'OTP è stato inviato a</string>
+    <string name="text_enter_otp_to_continue">Inserisci OTP per continuare.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Sei sicuro di voler associare un nuovo anello?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Sei sicuro di voler reimpostare?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Il tuo anello verrà annullato e tutti i dati non salvati andranno persi]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Si consiglia di posizionare l\'anello sul caricabatterie. Il tuo anello verrà annullato e tutti i dati non salvati andranno persi]]></string>
+    <string name="text_restart_the_ring">Riavviare l\'anello?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Si consiglia di posizionare l\'anello sul caricabatterie. Il processo di riavvio potrebbe richiedere alcuni secondi. Il tuo anello si accoppierà automaticamente con l\'app una volta che il riavvio ha avuto esito positivo.</string>
+    <string name="text_please_wait_while_the_device">Attendi mentre viene ripristinato il dispositivo. Non chiudere l\'app.</string>
 </resources>

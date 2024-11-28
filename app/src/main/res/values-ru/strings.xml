@@ -1560,10 +1560,6 @@
     <string name="text_zone_5">Зона 5</string>
     <string name="text_spm">сперма в минуту</string>
     <string name="text_otp_verified">Отп проверен</string>
-    <string name="text_cm">см</string>
-    <string name="text_inches">дюймы</string>
-    <string name="text_kg">кг</string>
-    <string name="text_lbs">фунты</string>
     <string name="text_syncing_user_activity">Синхронизация активности пользователей.</string>
     <string name="text_luna_ring_is_running">Луна Ринг бежит</string>
     <string name="text_last_sync_at_value">последняя синхронизация в %1$s</string>
@@ -1642,4 +1638,13 @@
     <string name="text_hearing_from_you_helps_us">Ваши отзывы помогут нам создать лучший опыт работы с Luna Ring.</string>
     <string name="text_ring_disabled">Звонок отключен</string>
     <string name="text_your_ring_has_been_disabled">Ваше кольцо отключено. Чтобы повторно активировать его, обратитесь в нашу службу поддержки клиентов.</string>
+    <string name="text_otp_has_been_send_to">OTP отправлен на</string>
+    <string name="text_enter_otp_to_continue">Введите OTP, чтобы продолжить.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Вы уверены, что хотите подключить новое кольцо?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Вы уверены, что хотите выполнить сброс?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Ваше кольцо будет отключено, и все несохраненные данные будут потеряны]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Советуем положить кольцо на зарядное устройство. Ваше кольцо будет отключено, и все несохраненные данные будут потеряны]]></string>
+    <string name="text_restart_the_ring">Перезапустить кольцо?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Советуем положить кольцо на зарядное устройство. Процесс перезапуска может занять несколько секунд. Ваше кольцо автоматически соединится с приложением после успешного перезапуска.</string>
+    <string name="text_please_wait_while_the_device">Пожалуйста, подождите, пока происходит перезагрузка устройства. Не закрывайте приложение.</string>
 </resources>

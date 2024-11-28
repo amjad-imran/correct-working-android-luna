@@ -45,34 +45,37 @@ class OtpVerifyFragment :
 
         if (!viewModel.contactNumber.value.isNullOrEmpty()) {
             val mobileNumber = viewModel.contactNumber.value
-            val text = "OTP has been send to ${mobileNumber} Enter OTP to continue."
+            val text = getString(R.string.text_otp_has_been_send_to)+ " ${mobileNumber} " + getString(R.string.text_enter_otp_to_continue)
             val spannableString = SpannableString(text)
             // It is used to set the span to the string
             val white80 = ForegroundColorSpan(Color.parseColor("#ccffffff"))
             val linkColor = ForegroundColorSpan(Color.parseColor("#82a8f3"))
 
-            spannableString.setSpan(
-                white80,
-                1, "OTP has been send to ".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            spannableString.setSpan(
-                linkColor,
-                "OTP has been send to ".length,
-                "OTP has been send to $mobileNumber".length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            spannableString.setSpan(
-                white80,
-                "OTP has been send to $mobileNumber".length,
-                "OTP has been send to $mobileNumber Enter OTP to continue.".length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            binding.tvSubHeading.text = spannableString
+            try {
+                spannableString.setSpan(
+                    white80,
+                    1, getString(R.string.text_otp_has_been_send_to).length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableString.setSpan(
+                    linkColor,
+                    getString(R.string.text_otp_has_been_send_to).length,
+                    "${getString(R.string.text_otp_has_been_send_to)} $mobileNumber".length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableString.setSpan(
+                    white80,
+                    "${getString(R.string.text_otp_has_been_send_to)} $mobileNumber".length,
+                    "${getString(R.string.text_otp_has_been_send_to)} $mobileNumber ${getString(R.string.text_enter_otp_to_continue)}".length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                binding.tvSubHeading.text = spannableString
+            }catch (exp:Exception){
+                binding.tvSubHeading.text = text
+            }
         } else {
             binding.tvSubHeading.text =
                 getString(R.string.text_passwords_can_be_tricky_just_look_for_the_4_digit_otp_we_just_sent_and_kickstart_your_app_journey)
         }
-
 
         startSMSRetrieverClient()
 

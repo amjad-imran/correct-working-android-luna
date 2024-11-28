@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalDetailsBinding
 import com.noisefit.luna.databinding.OreoLayoutTopHourMn20Binding
@@ -22,6 +23,9 @@ import com.oreo.data.model.ChartModelStress
 import com.oreo.data.model.StressResultData
 import com.oreo.ui.custom.ScrollListenerStress
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -289,14 +293,13 @@ class OStressInternalDetailsFragment :
 
     override fun subscribeObservers() {
         mViewModel.selectedData.observe(this) { data ->
-
             binding.tvMsg.text = Html.fromHtml(data?.message ?: "")
 
             if (mViewModel.dayType?.equals("day", true) == true) {
-                binding.tvDate.text = DateFormats.formatDateTime(
-                    data.date,
-                    DateFormats.dateFormat3(),
-                    DateFormats.dateFormat2()
+                binding.tvDate.text = LocalDate.parse(data.date).format(
+                    DateTimeFormatter.ofPattern("dd MMMM yyyy",
+                        Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                    )
                 )
                 binding.tvDate.visible()
             } else {

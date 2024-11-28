@@ -1557,10 +1557,6 @@
     <string name="text_zone_5">Zone 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">OTP verifiziert</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">Zoll</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">Pfund</string>
     <string name="text_syncing_user_activity">Benutzeraktivität synchronisieren.</string>
     <string name="text_luna_ring_is_running">Luna Ring läuft</string>
     <string name="text_last_sync_at_value">letzte Synchronisierung um %1$s</string>
@@ -1639,4 +1635,13 @@
     <string name="text_hearing_from_you_helps_us">Wenn wir von Ihnen hören, können wir das beste Erlebnis auf Luna Ring schaffen.</string>
     <string name="text_ring_disabled">Klingeln deaktiviert</string>
     <string name="text_your_ring_has_been_disabled">Ihr Ring wurde deaktiviert. Um es erneut zu aktivieren, wenden Sie sich bitte an unser Kundensupport-Team.</string>
+    <string name="text_otp_has_been_send_to">OTP wurde gesendet an</string>
+    <string name="text_enter_otp_to_continue">Geben Sie OTP ein, um fortzufahren.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Sind Sie sicher, dass Sie einen neuen Ring koppeln möchten?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Möchten Sie wirklich zurücksetzen?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Ihr Ring wird entkoppelt und alle nicht gespeicherten Daten gehen verloren]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Wir empfehlen, den Ring auf dem Ladegerät zu platzieren. Ihr Ring wird entkoppelt und alle nicht gespeicherten Daten gehen verloren]]></string>
+    <string name="text_restart_the_ring">Den Ring neu starten?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Wir empfehlen, den Ring auf das Ladegerät zu legen. Der Neustartvorgang kann einige Sekunden dauern. Ihr Ring wird automatisch mit der App gekoppelt, sobald der Neustart erfolgreich ist.</string>
+    <string name="text_please_wait_while_the_device">Bitte warten Sie, während das Gerät zurückgesetzt wird. Schließen Sie die App nicht.</string>
 </resources>

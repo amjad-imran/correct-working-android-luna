@@ -1584,10 +1584,10 @@
     <string name="text_zone_5">Zone 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">"Otp Verified "</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">inches</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">lbs</string>
+    <string name="text_cm" translatable="false">cm</string>
+    <string name="text_inches" translatable="false">inches</string>
+    <string name="text_kg" translatable="false">kg</string>
+    <string name="text_lbs" translatable="false">lbs</string>
     <string name="text_syncing_user_activity">Syncing User Activity.</string>
     <string name="text_luna_ring_is_running">Luna Ring is running</string>
     <string name="text_last_sync_at_value">last sync at %1$s</string>
@@ -1665,5 +1665,14 @@
     <string name="text_hearing_from_you_helps_us">Hearing from you helps us create the best experience on Luna Ring.</string>
     <string name="text_ring_disabled">Ring disabled</string>
     <string name="text_your_ring_has_been_disabled">Your ring has been disabled. To reactivate it, please contact our customer support team.</string>
+    <string name="text_otp_has_been_send_to">OTP has been send to</string>
+    <string name="text_enter_otp_to_continue">Enter OTP to continue.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Are you sure you want to pair a new ring?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Are you sure you want to reset?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Your ring will be unpaired & all the unsaved data will be lost]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[We advise placing the ring on the charger. Your ring will be unpaired & all the unsaved data will be lost]]></string>
+    <string name="text_restart_the_ring">Restart the ring?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">We advise placing the ring on the charger. The restart process may take a few seconds. Your ring will automatically pair with the app once the restart is successful.</string>
+    <string name="text_please_wait_while_the_device">Please wait while the device is being reset. Do not close the app.</string>
 
 </resources>

@@ -1545,10 +1545,6 @@
     <string name="text_zone_5">โซน 5</string>
     <string name="text_spm">เอสพีเอ็ม</string>
     <string name="text_otp_verified">OTP ยืนยันแล้ว</string>
-    <string name="text_cm">ซม</string>
-    <string name="text_inches">นิ้ว</string>
-    <string name="text_kg">กก</string>
-    <string name="text_lbs">ปอนด์</string>
     <string name="text_syncing_user_activity">กำลังซิงค์กิจกรรมของผู้ใช้</string>
     <string name="text_luna_ring_is_running">ลูน่าริงกำลังทำงาน</string>
     <string name="text_last_sync_at_value">ซิงค์ครั้งล่าสุดเมื่อ %1$s</string>
@@ -1627,4 +1623,13 @@
     <string name="text_hearing_from_you_helps_us">การได้ยินจากคุณช่วยให้เราสร้างประสบการณ์ที่ดีที่สุดบน Luna Ring</string>
     <string name="text_ring_disabled">ปิดใช้งานเสียงเรียกเข้าแล้ว</string>
     <string name="text_your_ring_has_been_disabled">แหวนของคุณถูกปิดใช้งาน หากต้องการเปิดใช้งานอีกครั้ง โปรดติดต่อทีมสนับสนุนลูกค้าของเรา</string>
+    <string name="text_otp_has_been_send_to">ได้ส่ง OTP ไปที่</string>
+    <string name="text_enter_otp_to_continue">กรอก OTP เพื่อดำเนินการต่อ</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">คุณแน่ใจหรือไม่ว่าต้องการจับคู่แหวนใหม่?</string>
+    <string name="text_are_you_sure_you_want_to_reset">คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ต</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[วงแหวนของคุณจะถูกยกเลิกการจับคู่ & ข้อมูลที่ไม่ได้บันทึกทั้งหมดจะสูญหาย]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[เราแนะนำให้วางวงแหวนไว้บนเครื่องชาร์จ แหวนของคุณจะถูกยกเลิกการจับคู่และข้อมูลที่ไม่ได้บันทึกไว้ทั้งหมดจะสูญหาย]]></string>
+    <string name="text_restart_the_ring">รีสตาร์ทแหวนเหรอ?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">เราแนะนำให้วางแหวนไว้บนแท่นชาร์จ กระบวนการรีสตาร์ทอาจใช้เวลาสักครู่ แหวนของคุณจะจับคู่กับแอปโดยอัตโนมัติเมื่อการรีสตาร์ทสำเร็จ</string>
+    <string name="text_please_wait_while_the_device">โปรดรอสักครู่ในขณะที่อุปกรณ์กำลังถูกรีเซ็ต อย่าปิดแอป</string>
 </resources>

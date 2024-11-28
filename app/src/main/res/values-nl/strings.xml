@@ -1561,10 +1561,6 @@
     <string name="text_zone_5">Zone 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">Otp-geverifieerd</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">inch</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">pond</string>
     <string name="text_syncing_user_activity">Gebruikersactiviteit synchroniseren.</string>
     <string name="text_luna_ring_is_running">Luna Ring loopt</string>
     <string name="text_last_sync_at_value">laatste synchronisatie om %1$s</string>
@@ -1643,4 +1639,13 @@
     <string name="text_hearing_from_you_helps_us">Door van u te horen, kunnen we de beste ervaring op Luna Ring creëren.</string>
     <string name="text_ring_disabled">Beltoon uitgeschakeld</string>
     <string name="text_your_ring_has_been_disabled">Je ring is uitgeschakeld. Neem contact op met ons klantenserviceteam om het opnieuw te activeren.</string>
+    <string name="text_otp_has_been_send_to">OTP is verzonden naar</string>
+    <string name="text_enter_otp_to_continue">Voer OTP in om door te gaan.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Weet je zeker dat je een nieuwe ring wilt koppelen?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Weet je zeker dat je wilt resetten?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Je ring wordt ontkoppeld en alle niet-opgeslagen gegevens gaan verloren]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Wij adviseren om de ring op de oplader te plaatsen. Je ring wordt ontkoppeld en alle niet-opgeslagen gegevens gaan verloren]]></string>
+    <string name="text_restart_the_ring">De ring opnieuw opstarten?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Wij adviseren om de ring op de oplader te plaatsen. Het herstartproces kan enkele seconden duren. Je ring wordt automatisch gekoppeld met de app zodra het opnieuw opstarten is gelukt.</string>
+    <string name="text_please_wait_while_the_device">Een ogenblik geduld terwijl het apparaat wordt gereset. Sluit de app niet.</string>
 </resources>

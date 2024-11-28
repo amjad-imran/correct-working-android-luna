@@ -1557,10 +1557,6 @@
     <string name="text_zone_5">Zone 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">OTP vérifié</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">pouces</string>
-    <string name="text_kg">kilos</string>
-    <string name="text_lbs">livres</string>
     <string name="text_syncing_user_activity">Synchronisation de l\'activité utilisateur.</string>
     <string name="text_luna_ring_is_running">Luna Ring est en cours d\'exécution</string>
     <string name="text_last_sync_at_value">dernière synchronisation à %1$s</string>
@@ -1639,4 +1635,13 @@
     <string name="text_hearing_from_you_helps_us">Vos commentaires nous aident à créer la meilleure expérience sur Luna Ring.</string>
     <string name="text_ring_disabled">Sonnerie désactivée</string>
     <string name="text_your_ring_has_been_disabled">Votre sonnerie a été désactivée. Pour le réactiver, veuillez contacter notre équipe de support client.</string>
+    <string name="text_otp_has_been_send_to">OTP a été envoyé à</string>
+    <string name="text_enter_otp_to_continue">Entrez OTP pour continuer.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Êtes-vous sûr de vouloir associer une nouvelle bague ?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Êtes-vous sûr de vouloir réinitialiser ?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Votre bague ne sera plus couplée et toutes les données non enregistrées seront perdues]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[Nous conseillons de placer la bague sur le chargeur. Votre bague ne sera plus appairée et toutes les données non enregistrées seront perdues]]></string>
+    <string name="text_restart_the_ring">Redémarrer la sonnerie ?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">Nous conseillons de placer la bague sur le chargeur. Le processus de redémarrage peut prendre quelques secondes. Votre bague s\'associera automatiquement à l\'application une fois le redémarrage réussi.</string>
+    <string name="text_please_wait_while_the_device">Veuillez patienter pendant la réinitialisation de l\'appareil. Ne fermez pas l\'application.</string>
 </resources>
