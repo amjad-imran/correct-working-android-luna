@@ -1,6 +1,15 @@
 [
   {
-    "question": "You don’t sound pleased. Tell us why?",
+    "question_en": "You don’t sound pleased. Tell us why?",
+    "question_de": "Du klingst nicht erfreut. Sagen Sie uns warum?",
+    "question_es": "No pareces contento. Cuéntanos ¿por qué?",
+    "question_fr": "Vous n’avez pas l’air content. Dites-nous pourquoi ?",
+    "question_it": "Non sembri contento. Dicci perché?",
+    "question_nl": "Je klinkt niet tevreden. Vertel ons waarom?",
+    "question_pt": "Você não parece satisfeito. Diga-nos por quê?",
+    "question_ru": "Ты не выглядишь довольным. Расскажите нам, почему?",
+    "question_th": "คุณดูไม่ค่อยพอใจเลย บอกเราว่าทำไม?",
+    "question_zh": "你听起来不太高兴。告诉我们为什么？",
     "problem_array": [
       "Accuracy of health data",
       "App experience",
@@ -9,7 +18,16 @@
     ]
   },
   {
-    "question": "What do you not like about Luna Ring?",
+    "question_en": "What do you not like about Luna Ring?",
+    "question_de": "Was gefällt Ihnen am Luna Ring nicht?",
+    "question_es": "¿Qué es lo que no te gusta de Luna Ring?",
+    "question_fr": "Qu’est-ce que vous n’aimez pas chez Luna Ring ?",
+    "question_it": "Cosa non ti piace del Luna Ring?",
+    "question_nl": "Wat vind je niet leuk aan Luna Ring?",
+    "question_pt": "O que você não gosta no Luna Ring?",
+    "question_ru": "Что вам не нравится в Луна Ринг?",
+    "question_th": "คุณไม่ชอบอะไรเกี่ยวกับ Luna Ring?",
+    "question_zh": "您不喜欢 Luna Ring 的哪些方面？",
     "problem_array": [
       "Accuracy of health data",
       "App experience",
@@ -18,7 +36,16 @@
     ]
   },
   {
-    "question": "What do you like to improve in Luna Ring?",
+    "question_en": "What do you like to improve in Luna Ring?",
+    "question_de": "Was möchten Sie in Luna Ring verbessern?",
+    "question_es": "¿Qué te gusta mejorar en Luna Ring?",
+    "question_fr": "Qu’aimez-vous améliorer dans Luna Ring ?",
+    "question_it": "Cosa ti piacerebbe migliorare in Luna Ring?",
+    "question_nl": "Wat wil je graag verbeteren in Luna Ring?",
+    "question_pt": "O que você gostaria de melhorar no Luna Ring?",
+    "question_ru": "Что вам хотелось бы улучшить в Luna Ring?",
+    "question_th": "คุณอยากจะปรับปรุงอะไรใน Luna Ring?",
+    "question_zh": "您希望改进 Luna Ring 的哪些方面？",
     "problem_array": [
       "Accuracy of health data",
       "App experience",
@@ -27,7 +54,16 @@
     ]
   },
   {
-    "question": "What did you like about Luna Ring?",
+    "question_en": "What did you like about Luna Ring?",
+    "question_de": "Was hat dir am Luna Ring gefallen?",
+    "question_es": "¿Qué te gustó de Luna Ring?",
+    "question_fr": "Qu’avez-vous aimé chez Luna Ring ?",
+    "question_it": "Cosa ti è piaciuto di Luna Ring?",
+    "question_nl": "Wat vond je leuk aan Luna Ring?",
+    "question_pt": "O que você gostou no Luna Ring?",
+    "question_ru": "Что вам понравилось в Лунном ринге?",
+    "question_th": "คุณชอบอะไรเกี่ยวกับ Luna Ring?",
+    "question_zh": "您喜欢 Luna Ring 的哪些方面？",
     "problem_array": [
       "Accuracy of health data",
       "App experience",
@@ -36,7 +72,17 @@
     ]
   },
   {
-    "question": "What did you like about Luna Ring?", "problem_array": [
+    "question_en": "What did you like about Luna Ring?",
+    "question_de": "Was hat dir am Luna Ring gefallen?",
+    "question_es": "¿Qué te gustó de Luna Ring?",
+    "question_fr": "Qu’avez-vous aimé chez Luna Ring ?",
+    "question_it": "Cosa ti è piaciuto di Luna Ring?",
+    "question_nl": "Wat vond je leuk aan Luna Ring?",
+    "question_pt": "O que você gostou no Luna Ring?",
+    "question_ru": "Что вам понравилось в Лунном ринге?",
+    "question_th": "คุณชอบอะไรเกี่ยวกับ Luna Ring?",
+    "question_zh": "您喜欢 Luna Ring 的哪些方面？",
+    "problem_array": [
       "Accuracy of health data",
       "App experience",
       "Pairing & connectivity experience",
