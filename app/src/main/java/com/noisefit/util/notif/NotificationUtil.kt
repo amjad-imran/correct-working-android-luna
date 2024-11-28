@@ -21,6 +21,7 @@ import com.noisefit.util.notif.NotificationEventsClass.APP_UPDATE_NOTIFICATION_K
 import com.noisefit.util.notif.NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY
+import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
@@ -83,9 +84,14 @@ object NotificationUtil {
         pushNotification(context, title, content, LOCAL_NOTIFICATION_KEY, "1")
     }
 
-    fun showWorkoutLocalNotification(context: Context, data: OreoAutoSportData,resourcesProvider: ResourcesProvider) {
-        val workoutName = data.type?.lowercase()?.capitalizeWords() ?: resourcesProvider.getString(R.string.text_workout)
-        val startTime = DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat12())
+    fun showWorkoutLocalNotification(
+        context: Context,
+        data: OreoAutoSportData,
+        resourcesProvider: ResourcesProvider
+    ) {
+        val workoutName = getTranslatedName(data.type?.lowercase(), resourcesProvider)
+        val startTime =
+            DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat12())
         val endTime = DateFormats.convertTimestampToDate(
             data.startTime + data.duration * 1000,
             DateFormats.timeFormat12()
@@ -104,6 +110,25 @@ object NotificationUtil {
             "1",
             deepLink = ""
         )
+    }
+
+    private fun getTranslatedName(
+        workoutName: String?,
+        resourcesProvider: ResourcesProvider
+    ): String {
+        if (workoutName.isNullOrEmpty()) {
+            return resourcesProvider.getString(R.string.text_workout)
+        }
+
+        return when (workoutName.lowercase()) {
+            SportActivityName.RUNNING -> {
+                resourcesProvider.getString(R.string.text_running).capitalizeWords()
+            }
+
+            else -> {
+                resourcesProvider.getString(R.string.text_walking).capitalizeWords()
+            }
+        }
     }
 
 
@@ -171,7 +196,7 @@ object NotificationUtil {
             title += " - Dev"
         }
 
-        return getNotification(context, title, lastSync,resourcesProvider)!!
+        return getNotification(context, title, lastSync, resourcesProvider)!!
     }
 
 

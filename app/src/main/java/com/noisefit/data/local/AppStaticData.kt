@@ -1,5 +1,6 @@
 package com.noisefit.data.local
 
+import android.content.Context
 import android.graphics.Color
 import com.google.gson.Gson
 import com.noisefit.luna.BuildConfig
@@ -97,8 +98,10 @@ object AppStaticData {
         return arrayOf("metric", "imperial")
     }
 
-    fun getGenderValues(): Array<String> {
-        return arrayOf("Man", "Woman", "Non-binary", "Prefer not to say")
+    fun getGenderValues(context:Context): Array<String> {
+        return arrayOf(context.getString(R.string.man), context.getString(R.string.text_woman),
+            context.getString(R.string.text_non_binary),
+            context.getString(R.string.text_prefer_not_to_say))
     }
     fun getIntensityValues(): Array<String> {
         return arrayOf("Easy", "Moderate", "Hard")

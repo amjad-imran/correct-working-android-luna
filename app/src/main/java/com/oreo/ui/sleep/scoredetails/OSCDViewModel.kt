@@ -70,9 +70,12 @@ class OSCDViewModel @Inject constructor(
     }
 
     fun getInternalDetailsData() {
+        val contriType = returnContributorType()
+        if(contriType.isNullOrEmpty()) return
+
         viewModelScope.launch {
             userActivityRepository.getInternalPagesData(
-                selectedDate!!, dayType.toString().lowercase(), returnContributorType()
+                selectedDate!!, dayType.toString().lowercase(), contriType
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -144,10 +147,13 @@ class OSCDViewModel @Inject constructor(
     }
 
     fun getActivityInternalDetailsData() {
+        val contriType = returnContributorType()
+        if (contriType.isNullOrEmpty()) return
+
 
         viewModelScope.launch {
             userActivityRepository.getActivityInternalPagesData(
-                selectedDate!!, dayType.toString().lowercase(), returnContributorType()
+                selectedDate!!, dayType.toString().lowercase(), contriType
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -191,10 +197,12 @@ class OSCDViewModel @Inject constructor(
     }
 
     fun getReadinessInternalDetailsData() {
+        val contriType = returnContributorType()
+        if(contriType.isNullOrEmpty()) return
 
         viewModelScope.launch {
             userActivityRepository.getReadinessInternalPagesData(
-                selectedDate!!, dayType.toString().lowercase(), returnContributorType()
+                selectedDate!!, dayType.toString().lowercase(),contriType
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {

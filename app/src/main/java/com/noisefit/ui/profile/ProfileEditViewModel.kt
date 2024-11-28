@@ -326,19 +326,19 @@ class ProfileEditViewModel
     fun getGenderValue(): String {
 
         val tempGender: String =
-            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) "Man"
-            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) "Woman"
-            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) "Non-binary"
-            else "Prefer not to say"
+            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) resourcesProvider.getString(R.string.man)
+            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) resourcesProvider.getString(R.string.text_woman)
+            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) resourcesProvider.getString(R.string.text_non_binary)
+            else resourcesProvider.getString(R.string.text_prefer_not_to_say)
         return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
     }
 
     fun setGender(lGender: String?) {
 
         val temp: String = when (lGender?.lowercase()) {
-            "male", "man" -> Gender.MALE.type
-            "female", "woman" -> Gender.FEMALE.type
-            "non-binary", "other" -> Gender.OTHER.type
+            "male", resourcesProvider.getString(R.string.man).lowercase() -> Gender.MALE.type
+            "female", resourcesProvider.getString(R.string.text_woman).lowercase() -> Gender.FEMALE.type
+            resourcesProvider.getString(R.string.text_non_binary).lowercase(), "other" -> Gender.OTHER.type
             else -> Gender.NotToSay.type
         }
         gender.value = temp

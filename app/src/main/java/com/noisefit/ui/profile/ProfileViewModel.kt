@@ -4,11 +4,13 @@ import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.data.BinaryActionCallback
@@ -16,10 +18,12 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.BuildUtils
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
@@ -38,10 +42,12 @@ constructor(
     val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
     private val referralRepository: ReferralRepository,
+    private val resourcesProvider: ResourcesProvider,
     private val femaleHealthRepository: FemaleHealthRepository,
 ) : BaseViewModel() {
 
     private var _user = MutableLiveData<User>()
+    private var _userGender = MutableLiveData<String>()
     private var _logoutSuccess = MutableLiveData<Boolean>()
     var numberAvailable = MutableLiveData<Boolean>()
 
@@ -53,6 +59,7 @@ constructor(
 
 
     fun getUser(): LiveData<User> = _user
+    fun getFormattedGender(): LiveData<String> = _userGender
     fun logoutSuccess(): LiveData<Boolean> = _logoutSuccess
 
     fun getEndGameValue(): String {
@@ -182,6 +189,22 @@ constructor(
 
     fun getUserData() {
         _user.value = (userRepository.getUser())
+        _userGender.value = getFormattedGender(_user.value?.userInfo?.gender)
+    }
+
+    fun getFormattedGender(gender:String?): String {
+        if(gender==null) return ""
+
+        val tempGender: String = if (gender.lowercase() == Gender.MALE.type.lowercase())
+            resourcesProvider.getString(R.string.man)
+        else if (gender.lowercase() == Gender.FEMALE.type.lowercase())
+            resourcesProvider.getString(R.string.text_woman)
+        else if (gender.lowercase() == Gender.OTHER.type.lowercase())
+            resourcesProvider.getString(R.string.text_non_binary)
+        else
+            resourcesProvider.getString(R.string.text_prefer_not_to_say)
+
+        return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
     }
 
     fun getDeviceName(): String {
