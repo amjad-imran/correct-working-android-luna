@@ -1638,4 +1638,7 @@
     <string name="text_connection_failed">Conexión fallida</string>
     <string name="text_ring_not_on_charging">El timbre no se carga</string>
     <string name="text_reset_successful">Restablecer exitosamente</string>
+    <string name="text_hearing_from_you_helps_us">Escuchar de usted nos ayuda a crear la mejor experiencia en Luna Ring.</string>
+    <string name="text_ring_disabled">Anillo desactivado</string>
+    <string name="text_your_ring_has_been_disabled">Tu anillo ha sido desactivado. Para reactivarlo, comuníquese con nuestro equipo de atención al cliente.</string>
 </resources>

@@ -1638,4 +1638,7 @@
     <string name="text_connection_failed">Connessione non riuscita</string>
     <string name="text_ring_not_on_charging">Non squilla durante la ricarica</string>
     <string name="text_reset_successful">Reimpostazione riuscita</string>
+    <string name="text_hearing_from_you_helps_us">Ascoltarti ci aiuta a creare la migliore esperienza su Luna Ring.</string>
+    <string name="text_ring_disabled">Suoneria disabilitata</string>
+    <string name="text_your_ring_has_been_disabled">Il tuo anello è stato disabilitato. Per riattivarlo, contatta il nostro team di assistenza clienti.</string>
 </resources>

@@ -1636,4 +1636,7 @@
     <string name="text_connection_failed">Échec de la connexion</string>
     <string name="text_ring_not_on_charging">La sonnerie n\'est pas en charge</string>
     <string name="text_reset_successful">Réinitialisation réussie</string>
+    <string name="text_hearing_from_you_helps_us">Vos commentaires nous aident à créer la meilleure expérience sur Luna Ring.</string>
+    <string name="text_ring_disabled">Sonnerie désactivée</string>
+    <string name="text_your_ring_has_been_disabled">Votre sonnerie a été désactivée. Pour le réactiver, veuillez contacter notre équipe de support client.</string>
 </resources>

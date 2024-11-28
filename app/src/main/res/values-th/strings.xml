@@ -1624,4 +1624,7 @@
     <string name="text_connection_failed">การเชื่อมต่อล้มเหลว</string>
     <string name="text_ring_not_on_charging">เสียงเรียกเข้าไม่ได้กำลังชาร์จ</string>
     <string name="text_reset_successful">รีเซ็ตสำเร็จ</string>
+    <string name="text_hearing_from_you_helps_us">การได้ยินจากคุณช่วยให้เราสร้างประสบการณ์ที่ดีที่สุดบน Luna Ring</string>
+    <string name="text_ring_disabled">ปิดใช้งานเสียงเรียกเข้าแล้ว</string>
+    <string name="text_your_ring_has_been_disabled">แหวนของคุณถูกปิดใช้งาน หากต้องการเปิดใช้งานอีกครั้ง โปรดติดต่อทีมสนับสนุนลูกค้าของเรา</string>
 </resources>

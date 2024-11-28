@@ -1636,4 +1636,7 @@
     <string name="text_connection_failed">Verbindung fehlgeschlagen</string>
     <string name="text_ring_not_on_charging">Beim Laden klingelt es nicht</string>
     <string name="text_reset_successful">Zurücksetzen erfolgreich</string>
+    <string name="text_hearing_from_you_helps_us">Wenn wir von Ihnen hören, können wir das beste Erlebnis auf Luna Ring schaffen.</string>
+    <string name="text_ring_disabled">Klingeln deaktiviert</string>
+    <string name="text_your_ring_has_been_disabled">Ihr Ring wurde deaktiviert. Um es erneut zu aktivieren, wenden Sie sich bitte an unser Kundensupport-Team.</string>
 </resources>

@@ -1634,4 +1634,7 @@
     <string name="text_connection_failed">Falha na conexão</string>
     <string name="text_ring_not_on_charging">O toque não está carregando</string>
     <string name="text_reset_successful">Redefinição bem-sucedida</string>
+    <string name="text_hearing_from_you_helps_us">Ouvir você nos ajuda a criar a melhor experiência no Luna Ring.</string>
+    <string name="text_ring_disabled">Toque desativado</string>
+    <string name="text_your_ring_has_been_disabled">Seu anel foi desativado. Para reativá-lo, entre em contato com nossa equipe de suporte ao cliente.</string>
 </resources>

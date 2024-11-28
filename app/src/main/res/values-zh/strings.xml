@@ -1638,4 +1638,7 @@
     <string name="text_connection_failed">连接失败</string>
     <string name="text_ring_not_on_charging">铃声未充电</string>
     <string name="text_reset_successful">重置成功</string>
+    <string name="text_hearing_from_you_helps_us">您的反馈有助于我们在 Luna Ring 上打造最佳体验。</string>
+    <string name="text_ring_disabled">环已禁用</string>
+    <string name="text_your_ring_has_been_disabled">您的戒指已被禁用。要重新激活它，请联系我们的客户支持团队。</string>
 </resources>

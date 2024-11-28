@@ -1640,4 +1640,7 @@
     <string name="text_connection_failed">Verbinding mislukt</string>
     <string name="text_ring_not_on_charging">Bel niet bij opladen</string>
     <string name="text_reset_successful">Opnieuw instellen succesvol</string>
+    <string name="text_hearing_from_you_helps_us">Door van u te horen, kunnen we de beste ervaring op Luna Ring creëren.</string>
+    <string name="text_ring_disabled">Beltoon uitgeschakeld</string>
+    <string name="text_your_ring_has_been_disabled">Je ring is uitgeschakeld. Neem contact op met ons klantenserviceteam om het opnieuw te activeren.</string>
 </resources>

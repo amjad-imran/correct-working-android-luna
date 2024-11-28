@@ -1663,5 +1663,7 @@
     <string name="text_ring_not_on_charging">Ring not on charging</string>
     <string name="text_reset_successful">Reset Successful</string>
     <string name="text_hearing_from_you_helps_us">Hearing from you helps us create the best experience on Luna Ring.</string>
+    <string name="text_ring_disabled">Ring disabled</string>
+    <string name="text_your_ring_has_been_disabled">Your ring has been disabled. To reactivate it, please contact our customer support team.</string>
 
 </resources>

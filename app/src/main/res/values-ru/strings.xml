@@ -1639,4 +1639,7 @@
     <string name="text_connection_failed">Соединение не удалось</string>
     <string name="text_ring_not_on_charging">Звонок не заряжается</string>
     <string name="text_reset_successful">Сброс успешен</string>
+    <string name="text_hearing_from_you_helps_us">Ваши отзывы помогут нам создать лучший опыт работы с Luna Ring.</string>
+    <string name="text_ring_disabled">Звонок отключен</string>
+    <string name="text_your_ring_has_been_disabled">Ваше кольцо отключено. Чтобы повторно активировать его, обратитесь в нашу службу поддержки клиентов.</string>
 </resources>
