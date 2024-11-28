@@ -820,7 +820,7 @@
     <string name="text_distance_split">Distance split</string>
     <string name="text_time_km">Time/km</string>
     <string name="text_km">km</string>
-    <string name="text_hr">hr</string>
+    <string name="text_hr" translatable="false">hr</string>
     <string name="text_pace">Pace</string>
     <string name="text_set_your_target_calorie_goal">Set your target calorie goal</string>
     <string name="text_account_already_exists">Account already exists?</string>
@@ -833,7 +833,7 @@
     <string name="text_intermediate_exercise">Intermediate exercise</string>
     <string name="text_hard">Hard</string>
     <string name="text_advanced_level_vigorous_exercise">Advanced level, vigorous exercise</string>
-    <string name="text_min">min</string>
+    <string name="text_min" translatable="false">min</string>
     <string name="text_enter">Enter</string>
     <string name="text_intensity">Intensity</string>
     <string name="text_search_here">Search here..</string>
@@ -1656,5 +1656,14 @@
     <string name="text_october">October</string>
     <string name="text_november">November</string>
     <string name="text_december">December</string>
+    <string name="text_the_importance_of_sleep_duration">The importance of sleep duration for health and wellness</string>
+    <string name="text_sleep_learn_more_about">**What is sleep score?**\n\nSleep score is a daily measure that evaluates the quality of your sleep. Adequate sleep is essential for maintaining your physical and mental health, as well as supporting your immune system and metabolism. With the Luna ring, you can track your sleep patterns and identify areas for improvement.\n\n**How is sleep score calculated?**\n\nThe sleep score considers multiple factors (also known as **contributors**), including total sleep duration, sleep efficiency (the percentage of time you spend asleep during the night), and sleep stages such as REM and deep sleep, among other metrics. A higher sleep score reflects better sleep quality.\n\n*   **Optimal (85-100):** Your sleep quality is excellent, and you experienced uninterrupted sleep.\n    \n*   **Good (70-84):** Your sleep quality is good, though you may have had minor disturbances.\n    \n*   **Fair (60-69):** Your sleep quality might be somewhat compromised, with a few disruptions during the night.\n    \n*   **Pay attention (0-59):** This score indicates a night of disturbed sleep.\n    \n\n**How to improve your sleep score?**\n\n*   Maintain consistent sleep and wake times.\n    \n*   Avoid exposure to blue light from electronic devices before bedtime.\n    \n*   Ensure your sleep environment is quiet, dark, and cool.\n    \n\n**What is sleep need?**\n\nSleep need represents the amount of sleep required to achieve peak performance. It is calculated based on the following:\n\n*   **Baseline:** The minimum amount of sleep you need within a 24-hour period, typically around 7 hours, before considering sleep debt and recent strain.\n    \n*   **Activity levels:** The total calories your body endures throughout the day. Burning calories more than your calorie goal increases your sleep need.\n    \n*   **Sleep debt:** The extra sleep required to compensate for previous nights of insufficient rest. Elite athletes often keep their sleep debt below 45 minutes to optimize performance.\n    \n*   **Naps:** Naps can help you manage your sleep need. The time spent napping is subtracted from your overall sleep need, making it easier to achieve 100% sleep performance. \n    \n\n**What are sleep stages?**\n\nYour body cycles through four stages of sleep each night, typically spanning 3-5 cycles:\n\n1.  **Light sleep:** This stage occurs as you transition into deeper sleep. It has minimal restorative effects, and you can be easily awakened during this time.\n    \n2.  **Deep sleep:**  Known as the \"physically restorative\" stage, deep sleep is when your muscles and tissues repair, and cells regenerate. During this time, the body produces 95% of human growth hormone. Waking up during deep sleep can leave you feeling groggy and disoriented.\n    \n3.  **REM sleep:** REM (rapid eye movement) sleep is the \"mentally restorative\" stage, where the brain consolidates short-term memories into long-term ones. The brain is highly active during REM, with increased heart rate and respiration. This is also when vivid dreaming occurs.\n    \n4.  **Awake:** Although being awake briefly throughout the night is normal, it’s considered a sleep stage but one must try to minimise the awake time during sleep.\n</string>
+    <string name="text_temperature_data_for_upcoming">Temperature data for upcoming 3 cycles is required</string>
+    <string name="text_connection_failed">Connection Failed</string>
+    <string name="text_ring_not_on_charging">Ring not on charging</string>
+    <string name="text_reset_successful">Reset Successful</string>
+    <string name="text_hearing_from_you_helps_us">Hearing from you helps us create the best experience on Luna Ring.</string>
+    <string name="text_ring_disabled">Ring disabled</string>
+    <string name="text_your_ring_has_been_disabled">Your ring has been disabled. To reactivate it, please contact our customer support team.</string>
 
 </resources>

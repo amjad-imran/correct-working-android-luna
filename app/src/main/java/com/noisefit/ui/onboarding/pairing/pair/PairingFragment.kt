@@ -602,7 +602,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
                 ResetStates.CONNECTED -> {}
                 ResetStates.CONNECTION_FAILED -> {
-                    context.showShortToast("Connection Failed")
+                    context.showShortToast(getString(R.string.text_connection_failed))
 
 
                     alert.dismiss()
@@ -610,13 +610,13 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 }
 
                 ResetStates.NOT_ON_CHARGING -> {
-                    context.showShortToast("Ring not on charging")
+                    context.showShortToast(getString(R.string.text_ring_not_on_charging))
                     alert.dismiss()
                     viewModel.navigateUp.postValue(Event(true))
                 }
 
                 ResetStates.RESET_SUCCESS -> {
-                    context.showShortToast("Reset Successful")
+                    context.showShortToast(getString(R.string.text_reset_successful))
                     alert.dismiss()
                     viewModel.navigateUp.postValue(Event(true))
                 }

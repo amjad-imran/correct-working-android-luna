@@ -48,14 +48,14 @@ class OActivityListFragment :
             if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                context.showShortToast("Please connect your ring to add a workout")
+                context.showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
             }
         }
         binding.lytTodayEmpty.view1.setOnClickListener {
             if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                context.showShortToast("Please connect your ring to add a workout")
+                context.showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
             }
         }
         /* binding.lytEmptyView.btnAddWorkout.setOnClickListener {

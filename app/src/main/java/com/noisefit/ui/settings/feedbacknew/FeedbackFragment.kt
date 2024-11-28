@@ -164,7 +164,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
     }
 
     private fun setUIData(position: Int) {
-        binding.lytChipView.tvQuestionTitle.text = viewModel.questionList[position].question
+        binding.lytChipView.tvQuestionTitle.text = viewModel.getSelectedQuestion(position)?:""
         setCategoryChips(viewModel.questionList[position].problem_array)
     }
 

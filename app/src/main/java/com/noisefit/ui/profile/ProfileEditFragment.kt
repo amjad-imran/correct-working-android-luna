@@ -217,7 +217,7 @@ class ProfileEditFragment :
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getGenderValue(),
-                    AppStaticData.getGenderValues(),
+                    AppStaticData.getGenderValues(requireContext()),
                     getString(R.string.gender)
                 )
             )

@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetRateNowBinding
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseBottomSheet
@@ -36,7 +37,7 @@ class RateNowBottomSheet :
 //            "Hi Noisemaker, Your feedback is very important for us. please take a moment to rate us."
 //        else
 //            "Hi ${localDataStore.getUser()?.firstName}, Your feedback is very important for us. please take a moment to rate us."
-        val msg="Hearing from you helps us create the best experience on Luna Ring."
+        val msg= getString(R.string.text_hearing_from_you_helps_us)
         binding.tvMessage.text = msg
         initListener()
 

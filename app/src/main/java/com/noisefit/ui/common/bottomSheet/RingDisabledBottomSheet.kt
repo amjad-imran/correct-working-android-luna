@@ -28,12 +28,12 @@ class RingDisabledBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvTitle.text = "Ring disabled"
+        binding.tvTitle.text = getString(R.string.text_ring_disabled)
         binding.tvDesc.text =
-            "Your ring has been disabled. To reactivate it, please contact our customer support team."
+            getString(R.string.text_your_ring_has_been_disabled)
 
-        binding.btnAllow.text = "Contact us"
-        binding.btnCancel.text = "Cancel"
+        binding.btnAllow.text = getString(R.string.text_contact_us)
+        binding.btnCancel.text = getString(R.string.text_cancel)
 
     }
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.NoiseFitApplicationMain.Companion.context
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DeviceRepository
@@ -58,10 +59,13 @@ class FeedbackNewViewModel @Inject constructor(
 
     var watchLogFile: File? = null
     var appLogFile: File? = null
+    var selectedLanguageCode = "en"
 
 
     init {
         //getLogsPath()
+
+        selectedLanguageCode = NoiseFitApplicationMain.appLanguage.languageCode.lowercase()
     }
 
     fun getLogsPath() {
@@ -302,6 +306,22 @@ class FeedbackNewViewModel @Inject constructor(
         }
         val listCountryType = object : TypeToken<List<FeedbackQuestionaries>>() {}.type
         _feedbackQuestion.postValue(Gson().fromJson(jsonString, listCountryType))
+    }
+
+    //TODO optimize
+    fun getSelectedQuestion(position: Int): String? {
+        return when (selectedLanguageCode) {
+            "de" -> questionList[position].question_de
+            "es" -> questionList[position].question_es
+            "fr" -> questionList[position].question_fr
+            "it" -> questionList[position].question_it
+            "nl" -> questionList[position].question_nl
+            "pt" -> questionList[position].question_pt
+            "ru" -> questionList[position].question_ru
+            "th" -> questionList[position].question_th
+            "zh" -> questionList[position].question_zh
+            else -> questionList[position].question_en
+        }
     }
 
 

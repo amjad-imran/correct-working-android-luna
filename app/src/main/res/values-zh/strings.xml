@@ -798,7 +798,6 @@
     <string name="text_distance_split">距离分割</string>
     <string name="text_time_km">时间/公里</string>
     <string name="text_km">公里</string>
-    <string name="text_hr">小时</string>
     <string name="text_pace">步伐</string>
     <string name="text_set_your_target_calorie_goal">设定您的卡路里目标</string>
     <string name="text_account_already_exists">帐户已存在？</string>
@@ -811,7 +810,6 @@
     <string name="text_intermediate_exercise">中级练习</string>
     <string name="text_hard">难的</string>
     <string name="text_advanced_level_vigorous_exercise">高级水平，剧烈运动</string>
-    <string name="text_min">分钟</string>
     <string name="text_enter">进入</string>
     <string name="text_intensity">强度</string>
     <string name="text_search_here">在这里搜索..</string>
@@ -1453,7 +1451,7 @@
     <string name="text_decreasing_chance_of_pregnancy">减少怀孕的机会</string>
     <string name="text_normal">普通的</string>
     <string name="text_no_data_available">无可用数据</string>
-    <string name="text_deviation_on_value">%1$s 存在偏差</string>
+    <string name="text_deviation_on_value">存在偏差 %1$s</string>
     <string name="text_no_record_available">无可用记录</string>
     <string name="text_goal_progress_trend">目标进度趋势</string>
     <string name="text_total_calories_trend">总热量趋势</string>
@@ -1540,7 +1538,7 @@
     <string name="text_temperature_variation">温度变化</string>
     <string name="text_when_using_bluetooth_to">我们在使用蓝牙搜索设备，或者连接蓝牙设备时，需要利用位置权限来开启蓝牙相关功能。您是否同意 Luna 戒指应用程序访问您的位置？</string>
     <string name="text_tap_to_measure_is_only">点击测量仅适用于更高版本的 Luna Ring。</string>
-    <string name="text_ring_battery_low_value">您的戒指电池电量低于%1$s%。请为您的戒指充电，以获得不间断的见解。</string>
+    <string name="text_ring_battery_low_value">您的戒指电池电量低于 %1$d%。请为您的戒指充电，以获得不间断的见解。</string>
     <string name="text_value_detected">检测到%1$s</string>
     <string name="text_workout_detected_from_to">%1$s 已在 %2$s 到 %3$s 之间检测到，已准备好进行审核</string>
     <string name="text_value_mins">%1$s 分钟</string>
@@ -1634,4 +1632,13 @@
     <string name="text_october">十月</string>
     <string name="text_november">十一月</string>
     <string name="text_december">十二月</string>
+    <string name="text_the_importance_of_sleep_duration">睡眠时间对健康的重要性</string>
+    <string name="text_sleep_learn_more_about">**什么是睡眠分数？**\n\n睡眠分数是评估您睡眠质量的日常指标。充足的睡眠对于维持身心健康以及支持免疫系统和新陈代谢至关重要。使用 Luna 环，您可以跟踪您的睡眠模式并确定需要改进的领域。\n\n**睡眠分数是如何计算的？**\n\n睡眠分数考虑了多种因素（也称为**贡献因素**），包括总睡眠持续时间、睡眠效率（夜间睡眠时间的百分比）以及睡眠阶段（例如快速眼动睡眠和深度睡眠）等指标。睡眠得分越高反映睡眠质量越好。\n\n* **最佳（85-100）：** 您的睡眠质量非常好，并且您体验到不间断的睡眠。\n    \n* **良好 (70-84)：** 您的睡眠质量良好，但可能受到轻微干扰。\n    \n* **一般（60-69）：** 您的睡眠质量可能会受到一定程度的影响，夜间会出现一些干扰。\n    \n* **注意（0-59）：** 该分数表示一晚睡眠受到干扰。\n    \n\n**如何提高睡眠分数？**\n\n* 保持一致的睡眠和起床时间。\n    \n* 睡前避免接触电子设备的蓝光。\n    \n* 确保您的睡眠环境安静、黑暗且凉爽。\n    \n\n**什么是睡眠需求？**\n\n睡眠需求代表达到最佳表现所需的睡眠量。它是根据以下公式计算的：\n\n* **基线：** 在考虑睡眠债和近期压力之前，您在 24 小时内（通常为 7 小时左右）所需的最低睡眠量。\n    \n* **活动水平：** 您的身体全天承受的总热量。燃烧的卡路里超过您的卡路里目标会增加您的睡眠需求。\n    \n* **睡眠债：** 为了弥补前一晚休息不足而需要的额外睡眠。精英运动员通常将睡眠不足​​控制在 45 分钟以下，以优化表现。\n    \n* **小睡：** 小睡可以帮助您管理睡眠需求。午睡时间会从您的整体睡眠需求中减去，从而更容易实现 100% 的睡眠表现。 \n    \n\n**什么是睡眠阶段？**\n\n您的身体每晚会经历四个睡眠阶段，通常跨越 3-5 个周期：\n\n1. **浅度睡眠：** 当您过渡到深度睡眠时，就会出现此阶段。它的恢复效果微乎其微，在这段时间你很容易被唤醒。\n    \n2. **深度睡眠：** 深度睡眠被称为“身体恢复”阶段，是指肌肉和组织修复、细胞再生的阶段。在此期间，身体会产生95%的人体生长激素。在深度睡眠中醒来会让您感到昏昏沉沉、迷失方向。\n    \n3. **快速眼动睡眠：** 快速眼动睡眠是“精神恢复”阶段，在此阶段，大脑将短期记忆巩固为长期记忆。快速眼动睡眠期间，大脑高度活跃，心率和呼吸加快。这也是生动的梦发生的时候。\n    \n4. **清醒：** 虽然整个晚上短暂清醒是正常的，但它被认为是一个睡眠阶段，但必须尽量减少睡眠期间的清醒时间。\n</string>
+    <string name="text_temperature_data_for_upcoming">需要接下来 3 个周期的温度数据</string>
+    <string name="text_connection_failed">连接失败</string>
+    <string name="text_ring_not_on_charging">铃声未充电</string>
+    <string name="text_reset_successful">重置成功</string>
+    <string name="text_hearing_from_you_helps_us">您的反馈有助于我们在 Luna Ring 上打造最佳体验。</string>
+    <string name="text_ring_disabled">环已禁用</string>
+    <string name="text_your_ring_has_been_disabled">您的戒指已被禁用。要重新激活它，请联系我们的客户支持团队。</string>
 </resources>

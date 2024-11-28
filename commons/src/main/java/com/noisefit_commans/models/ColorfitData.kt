@@ -455,19 +455,6 @@ data class UserInfo(
         this.stepLength = if (stepLength.isNullOrEmpty()) 0 else stepLength.toInt()
     }
 
-
-    fun getFormattedGender(): String {
-        val tempGender: String = if (gender.lowercase() == Gender.MALE.type.lowercase())
-            "Man"
-        else if (gender.lowercase() == Gender.FEMALE.type.lowercase())
-            "Woman"
-        else if (gender.lowercase() == Gender.OTHER.type.lowercase())
-            "Non-binary"
-        else
-            "Prefer not to say"
-        return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
-    }
-
     fun getFormattedStepLength(unitSystem: String?): String {
         return when (unitSystem) {
             "metric" -> "$stepLength cm"

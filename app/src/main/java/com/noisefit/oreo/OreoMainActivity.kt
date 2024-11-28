@@ -302,7 +302,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (viewModel.isDeviceConnected()) {
             navController?.navigate(R.id.addWorkoutFragment)
         } else {
-            showShortToast("Please connect your ring to add a workout")
+            showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
         }
     }
 
