@@ -327,7 +327,6 @@
     <string name="text_steps">Schritte</string>
     <string name="text_distance">Distanz</string>
     <string name="text_kcal">kcal</string>
-    <string name="text_mins">min</string>
     <string name="text_no_data_recorded">Keine Daten erfasst</string>
     <string name="text_health_overview">Gesundheitsübersicht</string>
     <string name="text_average">Durchschnitt</string>
@@ -810,7 +809,6 @@
     <string name="text_intermediate_exercise">Mittelschwere Übung</string>
     <string name="text_hard">Hart</string>
     <string name="text_advanced_level_vigorous_exercise">Fortgeschrittenes Niveau, intensive Übung</string>
-    <string name="text_min">min</string>
     <string name="text_enter">Eingeben</string>
     <string name="text_intensity">Intensität</string>
     <string name="text_search_here">Hier suchen..</string>

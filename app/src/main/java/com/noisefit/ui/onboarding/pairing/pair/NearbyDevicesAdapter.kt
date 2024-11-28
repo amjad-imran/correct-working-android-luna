@@ -27,7 +27,7 @@ class NearbyDevicesAdapter(private val listener: NearbyDevicesClickListener?) :
         fun bind(colorFitDevice: ColorFitDevice) {
 
             val colorInfo = if (colorFitDevice.ringInfo != null) {
-                " (${colorFitDevice.ringInfo?.color}, Size ${colorFitDevice.ringInfo?.size})"
+                " (${colorFitDevice.ringInfo?.color},"+ binding.root.context.getString(R.string.text_size) +" ${colorFitDevice.ringInfo?.size})"
             } else {
                 null
             }

@@ -334,7 +334,7 @@
     <string name="text_steps">Steps</string>
     <string name="text_distance">Distance</string>
     <string name="text_kcal">kcal</string>
-    <string name="text_mins">min</string>
+    <string name="text_mins" translatable="false">min</string>
     <string name="text_no_data_recorded">No data recorded</string>
     <string name="text_health_overview">Health overview</string>
     <string name="text_average">Average</string>

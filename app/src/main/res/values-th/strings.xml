@@ -323,7 +323,6 @@
     <string name="text_steps">ขั้นตอน</string>
     <string name="text_distance">ระยะทาง</string>
     <string name="text_kcal">กิโลแคลอรี</string>
-    <string name="text_mins">นาที</string>
     <string name="text_no_data_recorded">ไม่มีการบันทึกข้อมูล</string>
     <string name="text_health_overview">ภาพรวมด้านสุขภาพ</string>
     <string name="text_average">เฉลี่ย</string>
