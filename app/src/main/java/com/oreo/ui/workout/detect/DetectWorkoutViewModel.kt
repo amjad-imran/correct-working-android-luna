@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
@@ -35,6 +36,7 @@ class DetectWorkoutViewModel
 constructor(
     private val syncRepository: OreoSyncRepository,
     private val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider,
     private val userActivityRepository: OreoUserActivityRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
@@ -62,10 +64,10 @@ constructor(
                         resource.value?.forEach {
                             val date = DateFormats.convertTimestampToDate(
                                 it.startTime,
-                                DateFormats.monthDateWithoutYear2()
+                                DateFormats.dateFormat3()
+                                /*DateFormats.monthDateWithoutYear2()*/
                             )
-
-
+                            //MMM dd
 
                             if (hm.containsKey(date)) {
                                 val programmeList = hm[date]!!

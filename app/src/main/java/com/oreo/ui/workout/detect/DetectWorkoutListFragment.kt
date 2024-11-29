@@ -5,12 +5,17 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutListBinding
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import org.joda.time.DateTime
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -98,7 +103,12 @@ class DetectWorkoutListFragment :
         binding.vpFriends.adapter = pagerAdapter
         binding.vpFriends.setCurrentItem(pairData.first.size, false)
         TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
-            tab.text = pairData.first[position]
+            tab.text = LocalDate.parse(pairData.first[position]).format(
+                DateTimeFormatter.ofPattern(
+                    "MMM dd",
+                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                )
+            )
         }.attach()
 
     }

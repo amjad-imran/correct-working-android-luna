@@ -18,8 +18,10 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.receiver.workManager.*
 import com.noisefit.watch.WatchForm
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
@@ -636,38 +638,38 @@ object ApplicationUtils {
         }
     }
 
-    fun getOrdinalWord(number: Int): String {
+    fun getOrdinalWord(number: Int, resourcesProvider: ResourcesProvider): String {
         val suffixes = hashMapOf(
-            1 to "first",
-            2 to "second",
-            3 to "third",
-            4 to "fourth",
-            5 to "fifth",
-            6 to "sixth",
-            7 to "seventh",
-            8 to "eighth",
-            9 to "ninth",
-            10 to "tenth",
-            11 to "eleventh",
-            12 to "twelfth",
-            13 to "thirteenth",
-            14 to "fourteenth",
-            15 to "fifteenth",
-            16 to "sixteenth",
-            17 to "seventeenth",
-            18 to "eighteenth",
-            19 to "nineteenth",
-            20 to "twentieth",
-            21 to "twenty-first",
-            22 to "twenty-second",
-            23 to "twenty-third",
-            24 to "twenty-fourth",
-            25 to "twenty-fifth",
-            26 to "twenty-sixth",
-            27 to "twenty-seventh",
-            28 to "twenty-eighth",
-            29 to "twenty-ninth",
-            30 to "thirtieth"
+            1 to resourcesProvider.getString(R.string.text_first),
+            2 to resourcesProvider.getString(R.string.text_second),
+            3 to resourcesProvider.getString(R.string.third),
+            4 to resourcesProvider.getString(R.string.fourth),
+            5 to resourcesProvider.getString(R.string.fifth),
+            6 to resourcesProvider.getString(R.string.sixth),
+            7 to resourcesProvider.getString(R.string.seventh),
+            8 to resourcesProvider.getString(R.string.eighth),
+            9 to resourcesProvider.getString(R.string.ninth),
+            10 to resourcesProvider.getString(R.string.tenth),
+            11 to resourcesProvider.getString(R.string.eleventh),
+            12 to resourcesProvider.getString(R.string.twelfth),
+            13 to resourcesProvider.getString(R.string.thirteenth),
+            14 to resourcesProvider.getString(R.string.fourteenth),
+            15 to resourcesProvider.getString(R.string.fifteenth),
+            16 to resourcesProvider.getString(R.string.sixteenth),
+            17 to resourcesProvider.getString(R.string.seventeenth),
+            18 to resourcesProvider.getString(R.string.eighteenth),
+            19 to resourcesProvider.getString(R.string.nineteenth),
+            20 to resourcesProvider.getString(R.string.twentieth),
+            21 to resourcesProvider.getString(R.string.twenty_first),
+            22 to resourcesProvider.getString(R.string.twenty_second),
+            23 to resourcesProvider.getString(R.string.twenty_third),
+            24 to resourcesProvider.getString(R.string.twenty_fourth),
+            25 to resourcesProvider.getString(R.string.twenty_fifth),
+            26 to resourcesProvider.getString(R.string.twenty_sixth),
+            27 to resourcesProvider.getString(R.string.twenty_seventh),
+            28 to resourcesProvider.getString(R.string.twenty_eighth),
+            29 to resourcesProvider.getString(R.string.twenty_ninth),
+            30 to resourcesProvider.getString(R.string.thirtieth)
         )
         return suffixes[number] ?: "$number"
     }

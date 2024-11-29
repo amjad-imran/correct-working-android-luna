@@ -32,47 +32,50 @@ class DetectWorkoutFragment :
 
 
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
-        DetectWorkoutAdapter(object : DetectWorkoutListener {
-            override fun onAddWorkout(data: OreoAutoSportData, position: Int) {
-                viewModel.addWorkout(data, onAddSuccess = { workoutId ->
-                    isWorkoutAdded = true
-                    navigateToDetailsWorkout(data, workoutId)
-                    viewModel.markWorkoutSynced(data.id, position)
-                })
-            }
-
-            override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
-                detectWorkoutFragmentListener?.onIdentifyWorkout(
-                    data,
-                    viewModel.dayKey,
-                    viewModel.movementList
-                )
-
-            }
-
-            override fun onDismissWorkout(data: OreoAutoSportData, position: Int) {
-
-                requireActivity().supportFragmentManager.setFragmentResultListener(
-                    ALERT_REQUEST_KEY,
-                    viewLifecycleOwner
-                ) { _, bundle ->
-                    val updated = bundle.getBoolean("allow")
-
-                    if (updated) {
+        DetectWorkoutAdapter(
+            object : DetectWorkoutListener {
+                override fun onAddWorkout(data: OreoAutoSportData, position: Int) {
+                    viewModel.addWorkout(data, onAddSuccess = { workoutId ->
+                        isWorkoutAdded = true
+                        navigateToDetailsWorkout(data, workoutId)
                         viewModel.markWorkoutSynced(data.id, position)
-
-                    }
+                    })
                 }
 
-                navigate(
-                    DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAlertTextBottomSheet(
-                        getString(R.string.text_dismiss_activity_title),
-                        getString(R.string.text_dismiss_activity_desc), "", ""
+                override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
+                    detectWorkoutFragmentListener?.onIdentifyWorkout(
+                        data,
+                        viewModel.dayKey,
+                        viewModel.movementList
                     )
-                )
-            }
 
-        })
+                }
+
+                override fun onDismissWorkout(data: OreoAutoSportData, position: Int) {
+
+                    requireActivity().supportFragmentManager.setFragmentResultListener(
+                        ALERT_REQUEST_KEY,
+                        viewLifecycleOwner
+                    ) { _, bundle ->
+                        val updated = bundle.getBoolean("allow")
+
+                        if (updated) {
+                            viewModel.markWorkoutSynced(data.id, position)
+
+                        }
+                    }
+
+                    navigate(
+                        DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAlertTextBottomSheet(
+                            getString(R.string.text_dismiss_activity_title),
+                            getString(R.string.text_dismiss_activity_desc), "", ""
+                        )
+                    )
+                }
+
+            },
+            viewModel.resourcesProvider
+        )
     }
 
     private fun navigateToDetailsWorkout(data: OreoAutoSportData, workoutId: String) {
