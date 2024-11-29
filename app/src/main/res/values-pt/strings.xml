@@ -1671,4 +1671,7 @@
     <string name="twenty_eighth">vigésimo oitavo</string>
     <string name="twenty_ninth">vigésimo nono</string>
     <string name="thirtieth">trigésimo</string>
+    <string name="text_yesterday_space">"Ontem "</string>
+    <string name="text_performing_ring_factory_reset">Executando a redefinição de fábrica do anel</string>
+    <string name="text_resetting_ring_to_factory_settings">Redefinindo o anel para as configurações de fábrica. Isso pode levar alguns segundos. Por favor, aguarde...</string>
 </resources>

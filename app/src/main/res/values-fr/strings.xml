@@ -1673,4 +1673,7 @@
     <string name="twenty_eighth">vingt-huitième</string>
     <string name="twenty_ninth">vingt-neuvième</string>
     <string name="thirtieth">trentième</string>
+    <string name="text_yesterday_space">"Hier "</string>
+    <string name="text_performing_ring_factory_reset">Effectuer une réinitialisation d\'usine de Ring</string>
+    <string name="text_resetting_ring_to_factory_settings">Réinitialisation de la bague aux paramètres d\'usine. Cela peut prendre quelques secondes. S\'il vous plaît, attendez...</string>
 </resources>

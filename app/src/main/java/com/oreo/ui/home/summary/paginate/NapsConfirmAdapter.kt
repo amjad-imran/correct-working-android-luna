@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary.paginate
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowNapConfirmBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.OreoNapData
@@ -26,7 +27,7 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
 
             val timeBuilder = StringBuilder()
             if (mDate != null && !nap.date.equals(mDate)) {
-                timeBuilder.append("Yesterday ")
+                timeBuilder.append(binding.root.context.getString(R.string.text_yesterday_space))
             }
             timeBuilder.append(
                 DateFormats.parseDate(

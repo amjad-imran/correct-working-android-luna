@@ -1675,4 +1675,7 @@
     <string name="twenty_eighth">二十八</string>
     <string name="twenty_ninth">二十九</string>
     <string name="thirtieth">第三十</string>
+    <string name="text_yesterday_space">"昨天 "</string>
+    <string name="text_performing_ring_factory_reset">执行环恢复出厂设置</string>
+    <string name="text_resetting_ring_to_factory_settings">将环重置为出厂设置。这可能需要几秒钟。请稍等...</string>
 </resources>

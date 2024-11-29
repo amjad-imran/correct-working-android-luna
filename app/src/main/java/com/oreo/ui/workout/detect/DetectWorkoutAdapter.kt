@@ -70,11 +70,12 @@ class DetectWorkoutAdapter(
             val workoutName = resultData.type?.replace("_", " ")
                 ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
 
-            binding.tvTitle.text = getTranslatedName(workoutName, resourcesProvider)
+            val translatedName = getTranslatedName(workoutName, resourcesProvider)
+            binding.tvTitle.text = translatedName
 
             var isOtherWorkout = false
-            if (workoutName.equals(binding.root.context.getString(R.string.text_walking), true) ||
-                workoutName.equals(binding.root.context.getString(R.string.text_running), true)
+            if (translatedName.equals(binding.root.context.getString(R.string.text_walking), true) ||
+                translatedName.equals(binding.root.context.getString(R.string.text_running), true)
             ) {
                 binding.btnEdit.visible()
                 binding.btnAdd.text = binding.btnAdd.context.getString(R.string.text_confirm)

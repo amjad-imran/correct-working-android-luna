@@ -1661,4 +1661,7 @@
     <string name="twenty_eighth">ยี่สิบแปด</string>
     <string name="twenty_ninth">ยี่สิบเก้า</string>
     <string name="thirtieth">สามสิบ</string>
+    <string name="text_yesterday_space">"เมื่อวาน "</string>
+    <string name="text_performing_ring_factory_reset">ทำการรีเซ็ตเป็นค่าจากโรงงานของ Ring</string>
+    <string name="text_resetting_ring_to_factory_settings">การรีเซ็ตวงแหวนเป็นการตั้งค่าจากโรงงาน การดำเนินการนี้อาจใช้เวลาไม่กี่วินาที โปรดรอ...</string>
 </resources>

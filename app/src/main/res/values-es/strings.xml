@@ -1679,4 +1679,7 @@
     <string name="twenty_eighth">vigésimo octavo</string>
     <string name="twenty_ninth">vigésimo noveno</string>
     <string name="thirtieth">trigésimo</string>
+    <string name="text_yesterday_space">"Ayer "</string>
+    <string name="text_performing_ring_factory_reset">Realizar un restablecimiento de fábrica de Ring</string>
+    <string name="text_resetting_ring_to_factory_settings">Restablecer el anillo a la configuración de fábrica. Esto puede tardar unos segundos. Espere por favor...</string>
 </resources>

@@ -1677,4 +1677,7 @@
     <string name="twenty_eighth">achtentwintigste</string>
     <string name="twenty_ninth">negenentwintigste</string>
     <string name="thirtieth">dertigste</string>
+    <string name="text_yesterday_space">"Gisteren "</string>
+    <string name="text_performing_ring_factory_reset">Ring-fabrieksreset uitvoeren</string>
+    <string name="text_resetting_ring_to_factory_settings">Ring resetten naar fabrieksinstellingen. Dit kan enkele seconden duren. Even geduld a.u.b....</string>
 </resources>

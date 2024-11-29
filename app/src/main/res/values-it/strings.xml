@@ -1675,4 +1675,7 @@
     <string name="twenty_eighth">ventottesimo</string>
     <string name="twenty_ninth">ventinovesimo</string>
     <string name="thirtieth">trentesimo</string>
+    <string name="text_yesterday_space">"Ieri "</string>
+    <string name="text_performing_ring_factory_reset">Esecuzione del ripristino delle impostazioni di fabbrica di Ring</string>
+    <string name="text_resetting_ring_to_factory_settings">Ripristino dell\'anello alle impostazioni di fabbrica. L\'operazione potrebbe richiedere alcuni secondi. Attendere prego...</string>
 </resources>

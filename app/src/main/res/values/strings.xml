@@ -1704,5 +1704,8 @@
     <string name="twenty_eighth">twenty-eighth</string>
     <string name="twenty_ninth">twenty-ninth</string>
     <string name="thirtieth">thirtieth</string>
+    <string name="text_yesterday_space">"Yesterday "</string>
+    <string name="text_performing_ring_factory_reset">Performing Ring factory reset</string>
+    <string name="text_resetting_ring_to_factory_settings">Resetting ring to factory settings. This may take few seconds. Please wait...</string>
 
 </resources>

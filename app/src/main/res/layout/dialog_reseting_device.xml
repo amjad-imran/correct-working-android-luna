@@ -22,7 +22,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:text="Performing Ring factory reset"
+                android:text="@string/text_performing_ring_factory_reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
-                android:text="Resetting ring to factory settings. This may take few seconds. Please wait..."
+                android:text="@string/text_resetting_ring_to_factory_settings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

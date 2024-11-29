@@ -1672,4 +1672,7 @@
     <string name="twenty_eighth">achtundzwanzigsten</string>
     <string name="twenty_ninth">neunundzwanzigsten</string>
     <string name="thirtieth">dreißigsten</string>
+    <string name="text_yesterday_space">"Gestern "</string>
+    <string name="text_performing_ring_factory_reset">Ring-Werksreset durchführen</string>
+    <string name="text_resetting_ring_to_factory_settings">Ring auf Werkseinstellungen zurücksetzen. Dies kann einige Sekunden dauern. Bitte warten...</string>
 </resources>
