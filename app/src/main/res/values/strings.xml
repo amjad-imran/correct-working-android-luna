@@ -1704,5 +1704,8 @@
     <string name="twenty_eighth">twenty-eighth</string>
     <string name="twenty_ninth">twenty-ninth</string>
     <string name="thirtieth">thirtieth</string>
+    <string name="text_workout_plan">Workout Plan</string>
+    <string name="text_ai_edit_plan">"This will allow Luna ai to edit the whole plan "</string>
+    <string name="text_proceed">Proceed</string>
 
 </resources>

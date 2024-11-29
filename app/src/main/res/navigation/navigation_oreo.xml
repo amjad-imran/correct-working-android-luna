@@ -1151,4 +1151,8 @@
         android:name="com.oreo.ui.chatGpt.audio.ChatGptAudioFragment"
         android:label="fragment_chat_gpt_audio"
         tools:layout="@layout/fragment_chat_gpt_audio" />
+    <fragment
+        android:id="@+id/workoutPlansFragment"
+        android:name="com.oreo.ui.chatGpt.functions.WorkoutPlansFragment"
+        android:label="fragment_workout_plans" />
 </navigation>

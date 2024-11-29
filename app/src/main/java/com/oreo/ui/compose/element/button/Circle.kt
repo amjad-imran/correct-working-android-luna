@@ -73,6 +73,31 @@ fun CircularHistoryButton(onClick: () -> Unit) {
 
 @Preview
 @Composable
+fun CircularImageButtonPreview() {
+    CircularImageButton(onClick = {}) {
+        Image(
+            painter = painterResource(R.drawable.ic_chat_history),
+            contentDescription = "Back"
+        )
+    }
+}
+
+@Composable
+fun CircularImageButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(38.dp)
+            .clip(CircleShape)
+            .background(color = Color(0x0affffff))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
+}
+
+@Preview
+@Composable
 fun ElipsizeTextButtonPreview() {
     ElipsizeTextButton("My referals", onClick = {})
 }

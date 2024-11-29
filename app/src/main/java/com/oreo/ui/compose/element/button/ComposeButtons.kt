@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.oreo.ui.compose.styles.FontStyle
 
@@ -74,6 +75,40 @@ fun ButtonPrimary(text: String, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth()
             )
         }
+    }
+}
+
+
+@Preview
+@Composable
+fun ButtonSecondaryPreview() {
+    ButtonSecondary(text = "Android", onClick = {})
+}
+
+@Composable
+fun ButtonSecondary(buttonHeight: Dp = 52.dp, text: String, onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        shape = RoundedCornerShape(buttonHeight),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(buttonHeight)
+            .background(
+                color = Color(0x33FFFFFF),
+                shape = RoundedCornerShape(buttonHeight)
+            )
+            .border(1.dp, Color(0x1effffff), RoundedCornerShape(50))
+    ) {
+        Text(
+            text = text,
+            style = FontStyle.SIZE_16,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
