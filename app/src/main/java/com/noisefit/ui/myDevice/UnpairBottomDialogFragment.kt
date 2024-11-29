@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentUnpairBottomDialogBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
@@ -57,12 +58,14 @@ class UnpairBottomDialogFragment :
         defValue = "Ring"
 
         binding.tvTitle.text =
-            if (navArgs.forceUnpair) "Are you sure you want to pair a new ring?" else "Are you sure you want to reset?"
+            if (navArgs.forceUnpair) getString(R.string.text_are_you_sure_you_want_to_pair_a_new_ring) else getString(
+                R.string.text_are_you_sure_you_want_to_reset
+            )
 
         binding.tvPrivacy.text =
-            if (navArgs.forceUnpair) "Your ring will be unpaired & all the unsaved data will be lost" else
-                "We advise placing the ring on the charger. Your ring will be unpaired & all the unsaved data will be lost"
-        binding.btnAllow.text = "Reset"
+            if (navArgs.forceUnpair) getString(R.string.text_your_ring_will_be_unpaired) else
+                getString(R.string.text_we_advise_placing_the_ring_on)
+        binding.btnAllow.text = getString(R.string.text_reset)
 
         binding.btnAllow.setOnClickListener {
 

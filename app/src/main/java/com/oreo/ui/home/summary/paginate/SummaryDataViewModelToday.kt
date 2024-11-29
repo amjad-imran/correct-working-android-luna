@@ -472,7 +472,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         resourceProvider.getString(
                                             R.string.text_today_s_your_predicted_day,
                                             ApplicationUtils.getOrdinalWord(
-                                                periodCurrentDay
+                                                periodCurrentDay,resourceProvider
                                             )
                                         )
                                     }

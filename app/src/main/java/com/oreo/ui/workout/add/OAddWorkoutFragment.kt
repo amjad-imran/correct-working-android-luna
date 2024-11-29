@@ -11,12 +11,14 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddWorkoutBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
+import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
@@ -29,6 +31,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -558,7 +561,7 @@ class OAddWorkoutFragment :
         binding.lytCaloriesBurn.tvDurationValue.text = viewModel.addWorkout.duration.toString()
         setStartTimeBetween()
         setEndTimeBetween(false)
-        binding.lytWorkout.tvWorkout.text = viewModel.activityType
+        binding.lytWorkout.tvWorkout.text = getTranslatedName(viewModel.activityType, viewModel.resourcesProvider)
 
         binding.lytToolbar.apply {
             tvTitle.text = getString(R.string.text_identify_workout)
@@ -566,6 +569,25 @@ class OAddWorkoutFragment :
 
         viewModel.movementList?.let {
             handleMovementNewViews(it)
+        }
+    }
+
+    private fun getTranslatedName(
+        workoutName: String?,
+        resourcesProvider: ResourcesProvider
+    ): String {
+        if (workoutName.isNullOrEmpty()) {
+            return ""
+        }
+
+        return when (workoutName.lowercase()) {
+            SportActivityName.RUNNING -> {
+                resourcesProvider.getString(R.string.text_running).capitalizeWords()
+            }
+
+            else -> {
+                resourcesProvider.getString(R.string.text_walking).capitalizeWords()
+            }
         }
     }
 

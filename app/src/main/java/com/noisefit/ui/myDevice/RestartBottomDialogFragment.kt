@@ -46,14 +46,11 @@ class RestartBottomDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         connectedDevice = ringDataStore.getRingDevice()
 
-        binding.tvTitle.text = "Restart the ring?"
+        binding.tvTitle.text = getString(R.string.text_restart_the_ring)
         binding.tvPrivacy.text =
-            "We advise placing the ring on the charger. The restart process may take a few seconds. " +
-                    "Your ring will automatically pair with the app once the restart is successful."
+            getString(R.string.text_we_advise_placing_the_ring_on_the)
 
         binding.btnAllow.setOnClickListener {
 

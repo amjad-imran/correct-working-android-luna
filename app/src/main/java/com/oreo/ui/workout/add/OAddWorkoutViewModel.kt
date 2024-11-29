@@ -47,7 +47,7 @@ class OAddWorkoutViewModel
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
-    private val resourcesProvider: ResourcesProvider,
+    val resourcesProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager
 ) : BaseViewModel() {

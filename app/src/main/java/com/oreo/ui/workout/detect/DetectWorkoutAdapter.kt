@@ -8,16 +8,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.OreoItemDetectWorkoutListBinding
+import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import java.util.concurrent.TimeUnit
 
 
-class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
+class DetectWorkoutAdapter(
+    val detectWorkoutListener: DetectWorkoutListener,
+    val resourcesProvider: ResourcesProvider
+) :
     RecyclerView.Adapter<DetectWorkoutAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<OreoAutoSportData>()
 
@@ -33,7 +39,8 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             //val calories = "${resultData.calories} kcal"
             //binding.tvCalories.text = calories
 
-            binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0,binding.tvIntensity.context)
+            binding.tvIntensity.text =
+                getIntensity(resultData.intensity ?: 0, binding.tvIntensity.context)
 
             val time =
                 DateFormats.convertTimestampToDate(
@@ -63,10 +70,12 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             val workoutName = resultData.type?.replace("_", " ")
                 ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
 
-            binding.tvTitle.text = workoutName
+            binding.tvTitle.text = getTranslatedName(workoutName, resourcesProvider)
 
             var isOtherWorkout = false
-            if (workoutName.equals("walking", true) || workoutName.equals("running", true)) {
+            if (workoutName.equals(binding.root.context.getString(R.string.text_walking), true) ||
+                workoutName.equals(binding.root.context.getString(R.string.text_running), true)
+            ) {
                 binding.btnEdit.visible()
                 binding.btnAdd.text = binding.btnAdd.context.getString(R.string.text_confirm)
             } else {
@@ -88,6 +97,25 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             }
             binding.btnEdit.setOnClickListener {
                 detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
+            }
+        }
+    }
+
+    private fun getTranslatedName(
+        workoutName: String?,
+        resourcesProvider: ResourcesProvider
+    ): String {
+        if (workoutName.isNullOrEmpty()) {
+            return ""
+        }
+
+        return when (workoutName.lowercase()) {
+            SportActivityName.RUNNING -> {
+                resourcesProvider.getString(R.string.text_running).capitalizeWords()
+            }
+
+            else -> {
+                resourcesProvider.getString(R.string.text_walking).capitalizeWords()
             }
         }
     }

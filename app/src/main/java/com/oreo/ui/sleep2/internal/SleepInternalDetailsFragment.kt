@@ -8,6 +8,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSleepInternalDetailsBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -644,7 +645,10 @@ class SleepInternalDetailsFragment :
 
                         tvDateTime.text =
                             if (viewModel.isDeviationSelected && viewModel.selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE) {
-                                val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                val dayFormat = DateTimeFormatter.ofPattern(
+                                    "EEEE, dd MMMM yyyy",
+                                    Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                                )
                                 getString(
                                     R.string.text_deviation_on_value,
                                     topContentData.date?.format(dayFormat)
@@ -654,7 +658,8 @@ class SleepInternalDetailsFragment :
                                     topContentData.time ?: ""
                                 } else {
                                     val dayFormat =
-                                        DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                                        DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",
+                                            Locale(NoiseFitApplicationMain.appLanguage.languageCode))
                                     topContentData.date?.format(dayFormat)
                                 }
                             }
@@ -756,7 +761,8 @@ class SleepInternalDetailsFragment :
                         tvOptimalRangeLabel.alpha = 0.5f
                         ivCircle.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode))
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytContentView.lytHours.lytTrendsHighlight.root.invisible()
                         lytPaginate.root.gone()
@@ -859,7 +865,7 @@ class SleepInternalDetailsFragment :
                         lytContentView.lytNeed.lytTrendsHighlight.root.alpha = 0.5f
 
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",Locale(NoiseFitApplicationMain.appLanguage.languageCode))
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytPaginate.root.gone()
 

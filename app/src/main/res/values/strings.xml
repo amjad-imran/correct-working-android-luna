@@ -334,7 +334,7 @@
     <string name="text_steps">Steps</string>
     <string name="text_distance">Distance</string>
     <string name="text_kcal">kcal</string>
-    <string name="text_mins">min</string>
+    <string name="text_mins" translatable="false">min</string>
     <string name="text_no_data_recorded">No data recorded</string>
     <string name="text_health_overview">Health overview</string>
     <string name="text_average">Average</string>
@@ -1584,10 +1584,10 @@
     <string name="text_zone_5">Zone 5</string>
     <string name="text_spm">spm</string>
     <string name="text_otp_verified">"Otp Verified "</string>
-    <string name="text_cm">cm</string>
-    <string name="text_inches">inches</string>
-    <string name="text_kg">kg</string>
-    <string name="text_lbs">lbs</string>
+    <string name="text_cm" translatable="false">cm</string>
+    <string name="text_inches" translatable="false">inches</string>
+    <string name="text_kg" translatable="false">kg</string>
+    <string name="text_lbs" translatable="false">lbs</string>
     <string name="text_syncing_user_activity">Syncing User Activity.</string>
     <string name="text_luna_ring_is_running">Luna Ring is running</string>
     <string name="text_last_sync_at_value">last sync at %1$s</string>
@@ -1665,5 +1665,44 @@
     <string name="text_hearing_from_you_helps_us">Hearing from you helps us create the best experience on Luna Ring.</string>
     <string name="text_ring_disabled">Ring disabled</string>
     <string name="text_your_ring_has_been_disabled">Your ring has been disabled. To reactivate it, please contact our customer support team.</string>
+    <string name="text_otp_has_been_send_to">OTP has been send to</string>
+    <string name="text_enter_otp_to_continue">Enter OTP to continue.</string>
+    <string name="text_are_you_sure_you_want_to_pair_a_new_ring">Are you sure you want to pair a new ring?</string>
+    <string name="text_are_you_sure_you_want_to_reset">Are you sure you want to reset?</string>
+    <string name="text_your_ring_will_be_unpaired"><![CDATA[Your ring will be unpaired & all the unsaved data will be lost]]></string>
+    <string name="text_we_advise_placing_the_ring_on"><![CDATA[We advise placing the ring on the charger. Your ring will be unpaired & all the unsaved data will be lost]]></string>
+    <string name="text_restart_the_ring">Restart the ring?</string>
+    <string name="text_we_advise_placing_the_ring_on_the">We advise placing the ring on the charger. The restart process may take a few seconds. Your ring will automatically pair with the app once the restart is successful.</string>
+    <string name="text_please_wait_while_the_device">Please wait while the device is being reset. Do not close the app.</string>
+    <string name="text_first">first</string>
+    <string name="text_second">second</string>
+    <string name="third">third</string>
+    <string name="fourth">fourth</string>
+    <string name="fifth">fifth</string>
+    <string name="sixth">sixth</string>
+    <string name="seventh">seventh</string>
+    <string name="eighth">eighth</string>
+    <string name="ninth">ninth</string>
+    <string name="tenth">tenth</string>
+    <string name="eleventh">eleventh</string>
+    <string name="twelfth">twelfth</string>
+    <string name="thirteenth">thirteenth</string>
+    <string name="fourteenth">fourteenth</string>
+    <string name="fifteenth">fifteenth</string>
+    <string name="sixteenth">sixteenth</string>
+    <string name="seventeenth">seventeenth</string>
+    <string name="eighteenth">eighteenth</string>
+    <string name="nineteenth">nineteenth</string>
+    <string name="twentieth">twentieth</string>
+    <string name="twenty_first">twenty-first</string>
+    <string name="twenty_second">twenty-second</string>
+    <string name="twenty_third">twenty-third</string>
+    <string name="twenty_fourth">twenty-fourth</string>
+    <string name="twenty_fifth">twenty-fifth</string>
+    <string name="twenty_sixth">twenty-sixth</string>
+    <string name="twenty_seventh">twenty-seventh</string>
+    <string name="twenty_eighth">twenty-eighth</string>
+    <string name="twenty_ninth">twenty-ninth</string>
+    <string name="thirtieth">thirtieth</string>
 
 </resources>

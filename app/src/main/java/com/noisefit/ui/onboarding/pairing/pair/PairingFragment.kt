@@ -108,10 +108,9 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     override fun initListener() {
         binding.btnPairingIssue.setOnClickListener {
             navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Get Started")
+                putString("title", getString(R.string.text_get_started))
                 putString("id", "1")
             })
-
         }
         binding.btnStopPairing.setOnClickListener {
             sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_try_again,
