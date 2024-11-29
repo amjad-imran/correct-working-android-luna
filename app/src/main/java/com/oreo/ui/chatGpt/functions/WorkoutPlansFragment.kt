@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -23,10 +25,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -34,10 +42,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ai.TopQuestions
+import com.oreo.ui.chatGpt.topquestions.AiTopQuestionsViewModel
 import com.oreo.ui.chatGpt.topquestions.QuestionItem
 import com.oreo.ui.compose.element.button.ButtonSecondary
 import com.oreo.ui.compose.element.button.CircularBackButton
@@ -50,6 +63,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class WorkoutPlansFragment :
     BaseFragment<FragmentWorkoutPlansBinding>(FragmentWorkoutPlansBinding::inflate) {
 
+    val viewModel: WorkoutPlanViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,9 +73,7 @@ class WorkoutPlansFragment :
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
             setContent {
-                WorkoutPlanScreen(onEditClicked = {
-
-                }, onWorkoutClicked = {
+                WorkoutPlanScreen(onWorkoutClicked = {
 
                 })
             }
@@ -81,99 +94,166 @@ class WorkoutPlansFragment :
 @Preview
 @Composable
 fun EditPlanPreview() {
-    EditPlanView()
+    EditPlanView(onCancelClicked = {}, onProceedClicked = {})
 }
 
 @Composable
-private fun EditPlanView() {
-    Text(
-        text = stringResource(R.string.text_ai_edit_plan),
-        style = FontStyle.SIZE_16,
-        color = Color(0xB2FFFFFF),
-    )
+private fun EditPlanView(onCancelClicked: () -> Unit, onProceedClicked: () -> Unit) {
+    LOGS.d("sdfksjdkfjhksdjf Created")
 
-
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
         Text(
-            text = stringResource(R.string.text_cancel),
+            text = stringResource(R.string.text_ai_edit_plan),
             style = FontStyle.SIZE_16,
-            color = Color(0xFFDB4343),
-            textAlign = TextAlign.Center,
+            color = Color(0xB2FFFFFF),
         )
 
-        ButtonSecondary(42.dp, stringResource(R.string.text_proceed)) {
+        Spacer(modifier = Modifier.height(16.dp))
 
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .height(42.dp)
+                    .wrapContentHeight(Alignment.CenterVertically)
+                    .clickable {
+                        LOGS.d("sdfksjdkfjhksdjf cancelled 1")
+                        onCancelClicked()
+                    },
+                text = stringResource(R.string.text_cancel),
+                style = FontStyle.SIZE_16,
+                color = Color(0xFFDB4343),
+                textAlign = TextAlign.Center,
+            )
+
+            ButtonSecondary(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .clickable {
+                        LOGS.d("sdfksjdkfjhksdjf proceed 1")
+                        onProceedClicked()
+                    },
+                42.dp, stringResource(R.string.text_proceed)
+            ) {
+            }
         }
     }
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun WorkoutPlanScreenPreview() {
-    WorkoutPlanScreen(onEditClicked = {}, onWorkoutClicked = {})
+    WorkoutPlanScreen(onWorkoutClicked = {})
 }
 
 @Composable
-fun WorkoutPlanScreen(onEditClicked: () -> Unit, onWorkoutClicked: (workout: String) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        WorkoutPlanToolbar(onBackClicked = {
+fun WorkoutPlanScreen(onWorkoutClicked: (workout: String) -> Unit) {
 
-        }, onEditClicked = {
-            onEditClicked()
-        })
+    val viewModel: WorkoutPlanViewModel = hiltViewModel()
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .padding(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                Column {
-                    Text(
-                        text = "Lorem ipsum dolor sit amet consectetur. Sed nisi sit purus malesuada pulvinar.",
-                        style = FontStyle.SIZE_14,
-                        color = Color(0xCCFFFFFF)
+    val showEditScreen by viewModel.showEditScreen.collectAsState()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(text = "Show Edit Screen: $showEditScreen")
+
+        if (showEditScreen) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                CircularImageButton(onClick = {
+                    LOGS.d("sdfksjdkfjhksdjf cancelled")
+                    viewModel.showEditScreen(false)
+                }) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_edit_ai),
+                        contentDescription = "Edit"
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Last updated: 21 March ‘24",
-                        style = FontStyle.SIZE_14,
-                        color = Color(0x7AFFFFFF),
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                EditPlanView(onCancelClicked = {
+                    LOGS.d("sdfksjdkfjhksdjf cancelled")
+                    viewModel.showEditScreen(false)
+                }, onProceedClicked = {
+                    LOGS.d("sdfksjdkfjhksdjf proceed")
+                    viewModel.showEditScreen(false)
+                })
             }
+        }
 
-            items(
-                arrayListOf(
-                    true,
-                    false,
-                    false,
-                    false,
-                    true,
-                    false,
-                    false,
-                    false,
-                    true,
-                    false,
-                    false,
-                    false
-                )
-            ) { item ->
+        Column(
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .blur(if (showEditScreen) 60.dp else 0.dp)
+        ) {
+            WorkoutPlanToolbar(onBackClicked = {
 
-                if (item) {
-                    WorkoutHeader("Header name here")
-                } else {
-                    WorkoutItem(item) { selectedQues ->
-                        onWorkoutClicked(selectedQues)
+            }, onEditClicked = {
+                viewModel.showEditScreen(true)
+            })
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    Column {
+                        Text(
+                            text = "Lorem ipsum dolor sit amet consectetur. Sed nisi sit purus malesuada pulvinar.",
+                            style = FontStyle.SIZE_14,
+                            color = Color(0xCCFFFFFF)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Last updated: 21 March ‘24",
+                            style = FontStyle.SIZE_14,
+                            color = Color(0x7AFFFFFF),
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+
+                items(
+                    arrayListOf(
+                        true,
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false
+                    )
+                ) { item ->
+
+                    if (item) {
+                        WorkoutHeader("Header name here")
+                    } else {
+                        WorkoutItem(item) { selectedQues ->
+                            onWorkoutClicked(selectedQues)
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable

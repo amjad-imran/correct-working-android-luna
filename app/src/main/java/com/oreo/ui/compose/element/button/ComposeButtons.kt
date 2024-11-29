@@ -82,19 +82,18 @@ fun ButtonPrimary(text: String, onClick: () -> Unit) {
 @Preview
 @Composable
 fun ButtonSecondaryPreview() {
-    ButtonSecondary(text = "Android", onClick = {})
+    ButtonSecondary(Modifier,text = "Android", onClick = {})
 }
 
 @Composable
-fun ButtonSecondary(buttonHeight: Dp = 52.dp, text: String, onClick: () -> Unit) {
+fun ButtonSecondary(modifier: Modifier, buttonHeight: Dp = 52.dp, text: String, onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
         shape = RoundedCornerShape(buttonHeight),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent
         ),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .height(buttonHeight)
             .background(
                 color = Color(0x33FFFFFF),
