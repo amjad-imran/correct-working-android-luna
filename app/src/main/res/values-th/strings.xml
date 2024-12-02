@@ -1664,4 +1664,8 @@
     <string name="text_yesterday_space">"เมื่อวาน "</string>
     <string name="text_performing_ring_factory_reset">ทำการรีเซ็ตเป็นค่าจากโรงงานของ Ring</string>
     <string name="text_resetting_ring_to_factory_settings">การรีเซ็ตวงแหวนเป็นการตั้งค่าจากโรงงาน การดำเนินการนี้อาจใช้เวลาไม่กี่วินาที โปรดรอ...</string>
+    <string name="text_value_warning">คำเตือน %1$s</string>
+    <string name="text_processing_data">กำลังประมวลผลข้อมูล</string>
+    <string name="text_available_after_7_days">ใช้ได้หลังจาก 7 วัน</string>
+    <string name="text_after">หลังจาก</string>
 </resources>

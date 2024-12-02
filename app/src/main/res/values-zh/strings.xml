@@ -1678,4 +1678,8 @@
     <string name="text_yesterday_space">"昨天 "</string>
     <string name="text_performing_ring_factory_reset">执行环恢复出厂设置</string>
     <string name="text_resetting_ring_to_factory_settings">将环重置为出厂设置。这可能需要几秒钟。请稍等...</string>
+    <string name="text_value_warning">%1$s 警告</string>
+    <string name="text_processing_data">处理数据</string>
+    <string name="text_available_after_7_days">7天后可用</string>
+    <string name="text_after">后</string>
 </resources>

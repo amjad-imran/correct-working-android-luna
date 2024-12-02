@@ -57,7 +57,7 @@ class StressActivitiesAdapter(val mListener: StressActivitiesInteractionListener
                     ).lowercase()
                 }"
                 binding.tvActivityTime.text = formattedTime
-                binding.tvName.text = data.type
+                binding.tvName.text = binding.root.context.getString(R.string.text_sleep)/*data.type*/
 
 
             } else if (data.type?.equals("nap", true) == true) {
@@ -84,7 +84,7 @@ class StressActivitiesAdapter(val mListener: StressActivitiesInteractionListener
                     ).lowercase()
                 }"
                 binding.tvActivityTime.text = formattedTime
-                binding.tvName.text = data.type
+                binding.tvName.text = binding.root.context.getString(R.string.text_nap)/*data.type*/
 
             }
 
