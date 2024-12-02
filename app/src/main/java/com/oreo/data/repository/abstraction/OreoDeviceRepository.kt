@@ -35,4 +35,6 @@ interface OreoDeviceRepository {
 
     suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
 
+    suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<Any>?>>
+
 }

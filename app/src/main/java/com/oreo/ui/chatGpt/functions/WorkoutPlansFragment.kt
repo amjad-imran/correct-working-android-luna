@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -42,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.noisefit.luna.R
@@ -56,6 +58,7 @@ import com.oreo.ui.compose.element.button.ButtonSecondary
 import com.oreo.ui.compose.element.button.CircularBackButton
 import com.oreo.ui.compose.element.button.CircularHistoryButton
 import com.oreo.ui.compose.element.button.CircularImageButton
+import com.oreo.ui.compose.element.button.Loading
 import com.oreo.ui.compose.styles.FontStyle
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,6 +71,7 @@ class WorkoutPlansFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getWorkoutPlans()
 
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -134,12 +138,10 @@ private fun EditPlanView(onCancelClicked: () -> Unit, onProceedClicked: () -> Un
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .clickable {
-                        LOGS.d("sdfksjdkfjhksdjf proceed 1")
-                        onProceedClicked()
-                    },
+                    .zIndex(1f),
                 42.dp, stringResource(R.string.text_proceed)
             ) {
+                onProceedClicked()
             }
         }
     }
@@ -157,35 +159,35 @@ fun WorkoutPlanScreen(onWorkoutClicked: (workout: String) -> Unit) {
     val viewModel: WorkoutPlanViewModel = hiltViewModel()
 
     val showEditScreen by viewModel.showEditScreen.collectAsState()
+    val loading by viewModel.getLoading().collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Show Edit Screen: $showEditScreen")
-
         if (showEditScreen) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp),
-                horizontalAlignment = Alignment.End
-            ) {
-                CircularImageButton(onClick = {
-                    LOGS.d("sdfksjdkfjhksdjf cancelled")
-                    viewModel.showEditScreen(false)
-                }) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_edit_ai),
-                        contentDescription = "Edit"
-                    )
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .zIndex(1f)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    CircularImageButton(onClick = {
+                        viewModel.showEditScreen(false)
+                    }) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_edit_ai),
+                            contentDescription = "Edit"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    EditPlanView(onCancelClicked = {
+                        viewModel.showEditScreen(false)
+                    }, onProceedClicked = {
+                        viewModel.showEditScreen(false)
+                    })
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                EditPlanView(onCancelClicked = {
-                    LOGS.d("sdfksjdkfjhksdjf cancelled")
-                    viewModel.showEditScreen(false)
-                }, onProceedClicked = {
-                    LOGS.d("sdfksjdkfjhksdjf proceed")
-                    viewModel.showEditScreen(false)
-                })
             }
         }
 
@@ -251,6 +253,9 @@ fun WorkoutPlanScreen(onWorkoutClicked: (workout: String) -> Unit) {
                     }
                 }
             }
+        }
+        if (loading) {
+            Loading()
         }
     }
 

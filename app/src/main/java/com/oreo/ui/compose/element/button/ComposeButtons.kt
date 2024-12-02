@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.compose.styles.FontStyle
 
 
@@ -86,9 +87,12 @@ fun ButtonSecondaryPreview() {
 }
 
 @Composable
-fun ButtonSecondary(modifier: Modifier, buttonHeight: Dp = 52.dp, text: String, onClick: () -> Unit) {
+fun ButtonSecondary(modifier: Modifier,
+                    buttonHeight: Dp = 52.dp,
+                    text: String, onClick: () -> Unit) {
     Button(
-        onClick = { onClick() },
+        onClick = {
+            onClick() },
         shape = RoundedCornerShape(buttonHeight),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent

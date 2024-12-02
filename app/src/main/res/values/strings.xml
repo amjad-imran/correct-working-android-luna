@@ -1707,5 +1707,6 @@
     <string name="text_workout_plan">Workout Plan</string>
     <string name="text_ai_edit_plan">"This will allow Luna ai to edit the whole plan "</string>
     <string name="text_proceed">Proceed</string>
+    <string name="text_not_now">Not now</string>
 
 </resources>

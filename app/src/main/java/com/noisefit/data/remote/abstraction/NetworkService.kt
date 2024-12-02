@@ -466,6 +466,12 @@ interface NetworkService {
     ): BaseApiResponse<TopQuestionsResponse>
 
     @GET
+    suspend fun getAiWorkoutPlans(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
+
+    @GET
     suspend fun generateThreadTitle(
         @Url url: String,
         @Query("message") message: String?,
@@ -581,12 +587,10 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<ReferralInfoResponse>
 
-  @GET
+    @GET
     suspend fun getReferralHistory(
         @Url url: String
     ): BaseApiResponse<List<ReferralsMain>>
-
-
 
 
     /**
