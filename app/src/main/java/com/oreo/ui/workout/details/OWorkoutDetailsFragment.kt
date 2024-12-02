@@ -69,7 +69,6 @@ class OWorkoutDetailsFragment :
     }
 
     private fun setDefaultUiValue() {
-        binding.lytToolbar.tvTitle.text = args.workoutName
         binding.lytIntensity.tvTitle.text = getString(R.string.text_intensity)
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_max_hr)
@@ -207,6 +206,9 @@ class OWorkoutDetailsFragment :
             )
 
         }
+
+        binding.lytToolbar.tvTitle.text = it.workoutText
+
 
 
         /* setMovementGraph(

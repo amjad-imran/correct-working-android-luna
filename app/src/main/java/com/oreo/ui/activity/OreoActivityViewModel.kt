@@ -254,9 +254,9 @@ class OreoActivityViewModel @Inject constructor(
                 stayActive.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min inactivity"
+                "$hour hr $minute min " +resourcesProvider.getString(R.string.text_inactive).lowercase()
             } else
-                "$minute min inactivity"
+                "$minute min " +resourcesProvider.getString(R.string.text_inactive).lowercase()
 
             result.add(
                 Contributors(
@@ -288,10 +288,17 @@ class OreoActivityViewModel @Inject constructor(
             val (textColor, barColor, background) = getContributorsColors(moveEveryHour.status)
 
             val warnings = moveEveryHour.value ?: 0
+
+            val warningText = if(NoiseFitApplicationMain.appLanguage.languageCode.equals("en")){
+                "$warnings warning${if (warnings > 1) "s" else ""}"
+            }else{
+                resourcesProvider.getString(R.string.text_value_warning, warnings)
+            }
+            
             result.add(
                 Contributors(
                     title = resourcesProvider.getString(R.string.text_move_every_hour),
-                    leftText = "$warnings warning${if (warnings > 1) "s" else ""}",
+                    leftText = warningText,
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = moveEveryHour.valPrcnt ?: 0,

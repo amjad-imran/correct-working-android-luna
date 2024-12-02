@@ -16,14 +16,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Processing data" />
+        android:text="@string/text_processing_data" />
 
     <TextView
         style="@style/S12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="available after 7 days"
+        android:text="@string/text_available_after_7_days"
         android:textColor="@color/white_40" />
 
 </LinearLayout>

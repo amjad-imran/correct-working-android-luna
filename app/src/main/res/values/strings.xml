@@ -1410,7 +1410,7 @@
     <string name="text_training_volume">Training volume</string>
     <string name="text_your_profile">Your profile</string>
     <string name="text_select_language">App Language</string>
-    <string name="text_live_support">Live support</string>
+    <string name="text_live_support">Live Unterstützung</string>
     <string name="text_today_comma">"Today, "</string>
     <string name="text_stress_1">Stress is the body’s natural response to a physical or mental challenge.</string>
     <string name="text_how_does_the_luna_ring">How does the Luna Ring measure stress?</string>
@@ -1708,5 +1708,12 @@
     <string name="text_ai_edit_plan">"This will allow Luna ai to edit the whole plan "</string>
     <string name="text_proceed">Proceed</string>
     <string name="text_not_now">Not now</string>
+    <string name="text_yesterday_space">"Yesterday "</string>
+    <string name="text_performing_ring_factory_reset">Performing Ring factory reset</string>
+    <string name="text_resetting_ring_to_factory_settings">Resetting ring to factory settings. This may take few seconds. Please wait...</string>
+    <string name="text_value_warning">%1$s warning</string>
+    <string name="text_processing_data">Processing data</string>
+    <string name="text_available_after_7_days">available after 7 days</string>
+    <string name="text_after">"after "</string>
 
 </resources>

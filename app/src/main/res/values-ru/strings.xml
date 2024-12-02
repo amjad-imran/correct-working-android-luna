@@ -1676,4 +1676,11 @@
     <string name="twenty_eighth">двадцать восьмой</string>
     <string name="twenty_ninth">двадцать девятый</string>
     <string name="thirtieth">тридцатый</string>
+    <string name="text_yesterday_space">"Вчера "</string>
+    <string name="text_performing_ring_factory_reset">Выполнение заводского сброса Ring</string>
+    <string name="text_resetting_ring_to_factory_settings">Сброс кольца к заводским настройкам. Это может занять несколько секунд. Пожалуйста, подождите...</string>
+    <string name="text_value_warning">%1$s предупреждение</string>
+    <string name="text_processing_data">Обработка данных</string>
+    <string name="text_available_after_7_days">доступен через 7 дней</string>
+    <string name="text_after">после</string>
 </resources>

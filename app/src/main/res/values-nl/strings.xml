@@ -1677,4 +1677,11 @@
     <string name="twenty_eighth">achtentwintigste</string>
     <string name="twenty_ninth">negenentwintigste</string>
     <string name="thirtieth">dertigste</string>
+    <string name="text_yesterday_space">"Gisteren "</string>
+    <string name="text_performing_ring_factory_reset">Ring-fabrieksreset uitvoeren</string>
+    <string name="text_resetting_ring_to_factory_settings">Ring resetten naar fabrieksinstellingen. Dit kan enkele seconden duren. Even geduld a.u.b....</string>
+    <string name="text_value_warning">%1$s waarschuwing</string>
+    <string name="text_processing_data">Gegevens verwerken</string>
+    <string name="text_available_after_7_days">beschikbaar na 7 dagen</string>
+    <string name="text_after">na</string>
 </resources>
