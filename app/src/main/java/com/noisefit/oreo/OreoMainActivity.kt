@@ -164,23 +164,19 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         binding.navView.apply {
             lytHome.setOnClickListener {
                 selectMenuItem(BottomNavOption.HOME)
-
             }
             lytActivity.setOnClickListener {
                 selectMenuItem(BottomNavOption.ACTIVITY)
-
             }
             lytReadiness.setOnClickListener {
                 selectMenuItem(BottomNavOption.READINESS)
-
             }
             lytSleep.setOnClickListener {
                 selectMenuItem(BottomNavOption.SLEEP)
-
             }
-            lytMyDevice.setOnClickListener {
-                selectMenuItem(BottomNavOption.MY_DEVICE)
 
+            lytLunaAi.setOnClickListener {
+                selectMenuItem(BottomNavOption.LUNA_AI)
             }
         }
     }
@@ -769,10 +765,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         selectMenuItem(BottomNavOption.HOME)
                     }
 
-                    BottomNavOption.MY_DEVICE -> {
-                        selectMenuItem(BottomNavOption.MY_DEVICE)
-                    }
-
                     BottomNavOption.SLEEP -> {
                         selectMenuItem(BottomNavOption.SLEEP)
                     }
@@ -783,6 +775,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     BottomNavOption.ACTIVITY -> {
                         selectMenuItem(BottomNavOption.ACTIVITY)
+                    }
+
+                    BottomNavOption.LUNA_AI -> {
+                        selectMenuItem(BottomNavOption.LUNA_AI)
                     }
                 }
             }
@@ -904,7 +900,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val navListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
-                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.sleepDashFragment -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
+                R.id.navigation_oreo_workouts, R.id.sleepDashFragment,
+                R.id.navigation_lunaZoneFragment -> {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
@@ -1007,7 +1005,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onBackPressed() {
         navController?.let {
             when (it.currentDestination?.id) {
-                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.sleepDashFragment -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
+                R.id.navigation_oreo_workouts, R.id.sleepDashFragment, R.id.navigation_lunaZoneFragment -> {
 
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
@@ -1033,7 +1032,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_device_default)
 
 
                 binding.navView.apply {
@@ -1041,7 +1041,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     ivGlowSleep.gone()
                     ivGlowReadiness.gone()
                     ivGlowActivity.gone()
-                    ivGlowMyDevice.gone()
+                    ivGlowLunaAi.gone()
                 }
 
 
@@ -1059,14 +1059,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_device_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.visible()
                     ivGlowReadiness.gone()
                     ivGlowActivity.gone()
-                    ivGlowMyDevice.gone()
+                    ivGlowLunaAi.gone()
                 }
 
                 val lastDestination = navController?.currentDestination
@@ -1083,14 +1084,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_device_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.gone()
                     ivGlowReadiness.visible()
                     ivGlowActivity.gone()
-                    ivGlowMyDevice.gone()
+                    ivGlowLunaAi.gone()
                 }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_readiness) {
@@ -1106,13 +1108,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
-                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_device_default)
+
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.gone()
                     ivGlowReadiness.gone()
                     ivGlowActivity.visible()
-                    ivGlowMyDevice.gone()
+                    ivGlowLunaAi.gone()
                 }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_workouts) {
@@ -1122,10 +1126,28 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_activity_click)
             }
 
-            else -> {}
+            BottomNavOption.LUNA_AI -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
+
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_device_selected)
+
+                binding.navView.apply {
+                    ivGlowHome.gone()
+                    ivGlowSleep.gone()
+                    ivGlowReadiness.gone()
+                    ivGlowActivity.gone()
+                    ivGlowLunaAi.visible()
+                }
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_lunaZoneFragment) {
+                    navController?.popBackStack(R.id.navigation_lunaZoneFragment, true)
+                    navController?.navigate(R.id.navigation_lunaZoneFragment)
+                }
+            }
         }
-
-
     }
 
     override fun getViewBinding() = ActivityOreoMainBinding.inflate(layoutInflater)
@@ -1139,5 +1161,5 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 }
 
 enum class BottomNavOption {
-    HOME, SLEEP, READINESS, ACTIVITY, MY_DEVICE
+    HOME, SLEEP, READINESS, ACTIVITY, LUNA_AI
 }

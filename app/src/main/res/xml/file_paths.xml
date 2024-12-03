@@ -4,7 +4,7 @@
     <external-cache-path
         name="external_files"
         path="."/>
-    <external-path name="captures" path="."/>
+    <external-files-path name="shared_images" path="." />
     <files-path
         name="deviceLog"
         path="deviceLog/" />

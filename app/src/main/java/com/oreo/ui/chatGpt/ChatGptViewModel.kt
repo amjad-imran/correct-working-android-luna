@@ -95,7 +95,7 @@ class ChatGptViewModel
         messages.add(ChatGptOverview.SentMessage(message, userImage))
         _chatGptOverview.value = (messages)
         //_chatGptOverview.postValue(messages)
-        generateThreadTitle(message)
+        //generateThreadTitle(message)
 
     }
 

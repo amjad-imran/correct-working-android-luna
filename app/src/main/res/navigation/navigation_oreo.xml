@@ -1155,4 +1155,12 @@
         android:id="@+id/workoutPlansFragment"
         android:name="com.oreo.ui.chatGpt.functions.WorkoutPlansFragment"
         android:label="fragment_workout_plans" />
+    <fragment
+        android:id="@+id/navigation_lunaZoneFragment"
+        android:name="com.oreo.ui.chatGpt.LunaZoneFragment"
+        android:label="fragment_luna_zone" />
+    <fragment
+        android:id="@+id/aiSummaryFragment"
+        android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"
+        android:label="fragment_ai_summary"/>
 </navigation>
