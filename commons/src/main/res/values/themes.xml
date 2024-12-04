@@ -303,6 +303,10 @@
         <item name="android:thumb">@drawable/custom_thumb</item>
         <item name="track">@drawable/custom_track_3</item>
     </style>
+    \<style name="CustomSwitch4">
+        <item name="android:thumb">@drawable/custom_thumb_2</item>
+        <item name="track">@drawable/custom_track_3</item>
+    </style>
 
 
 </resources>

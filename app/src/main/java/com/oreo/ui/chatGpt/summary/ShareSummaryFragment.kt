@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +23,11 @@ import com.noisefit_commans.utils.ImageUtil
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.DataMetrics
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.math.roundToInt
-
 
 @AndroidEntryPoint
 class ShareSummaryFragment :
@@ -37,7 +38,26 @@ class ShareSummaryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setBlur()
         initUI(args.data, false)
+
+    }
+
+
+    private fun setBlur() {
+        val radius = 25f
+        val decorView = binding.blurView
+        val rootView = binding.root
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(requireContext())
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
 
     }
 

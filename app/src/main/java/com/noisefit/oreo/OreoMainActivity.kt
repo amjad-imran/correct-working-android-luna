@@ -1135,7 +1135,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     ivGlowSleep.gone()
                     ivGlowReadiness.gone()
                     ivGlowActivity.gone()
-                    ivGlowLunaAi.visible()
+                    ivGlowLunaAi.gone()
                 }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_lunaZoneFragment) {
