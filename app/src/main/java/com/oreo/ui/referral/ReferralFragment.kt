@@ -127,7 +127,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
         viewModel.referralInfo.observe(this) {
 
             binding.tvReferralTitle.text = it.referralTitle
-            binding.tvName.text = "Hello ${viewModel.getUserName()}"
+            binding.tvName.text = getString(R.string.text_hello_value, viewModel.getUserName())
 
             if (it.hasReferral) {
                 binding.tvReferrals.visible()
@@ -152,7 +152,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
                 binding.tvDaysLeft.text = if (remainingDays <=1) {
                     getString(R.string.text_ends_today)
                 } else {
-                    "$remainingDays days left"
+                    getString(R.string.text_value_days_left, remainingDays)
                 }
             } else {
                 binding.vpMain.gone()
@@ -175,7 +175,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             if (it?.referralCode.isNullOrEmpty()) {
                 binding.bClaimCode.text = getString(R.string.text_claim_code)
             } else {
-                binding.bClaimCode.text = "Share code \"${it.referralCode}\""
+                binding.bClaimCode.text = getString(R.string.text_share_code_value, it.referralCode)
             }
         }
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ModalStyleTransparentOreo"
     android:layout_width="match_parent"
-    android:layout_marginTop="24dp"
     android:layout_height="80dp"
+    android:layout_marginTop="24dp"
     tools:ignore="MissingDefaultResource">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -26,8 +26,8 @@
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:padding="6dp"
         android:alpha="0.6"
+        android:padding="6dp"
         android:src="@drawable/ic_arrow_right_white"
         app:layout_constraintEnd_toEndOf="@+id/imv"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,15 +50,15 @@
 
     <TextView
         android:id="@+id/tvMessage"
+        style="@style/H6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:singleLine="true"
-        android:ellipsize="end"
         android:layout_marginEnd="16dp"
-        style="@style/H6"
-        android:textColor="@color/white_80"
         android:layout_marginBottom="16dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/white_80"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

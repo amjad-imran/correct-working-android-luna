@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
@@ -22,6 +24,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +33,7 @@ class LanguageViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     private val userRepository: UserRepository,
     private val lastSyncProvider: LastSyncProvider,
+    private val keyValueDataSource: KeyValueDataSource,
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -54,9 +58,10 @@ class LanguageViewModel @Inject constructor(
     fun updateSelectedLanguage(language: AppLanguage) {
         localDataStore.saveSelectedAppLanguage(language.languageCode)
         NoiseFitApplicationMain.updateUserLanguage(language)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.clearAllHealthData()
             lastSyncProvider.removeSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.LEARN)
 
             userRepository.saveAppLanguage().collect { resource ->
                 when (resource) {

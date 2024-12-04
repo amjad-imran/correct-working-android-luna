@@ -54,6 +54,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         style="@style/H6"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@color/white_80"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
