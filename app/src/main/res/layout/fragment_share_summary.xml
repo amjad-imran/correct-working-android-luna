@@ -100,7 +100,6 @@
                 android:layout_marginBottom="38dp"
                 android:text="@string/text_enable_private_mode"
                 android:textColor="#80FFFFFF"
-                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/tvShare"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
