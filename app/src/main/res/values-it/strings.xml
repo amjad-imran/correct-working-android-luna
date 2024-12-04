@@ -1682,4 +1682,7 @@
     <string name="text_processing_data">Elaborazione dati</string>
     <string name="text_available_after_7_days">disponibile dopo 7 giorni</string>
     <string name="text_after">Dopo</string>
+    <string name="text_hello_value">Ciao %1$s</string>
+    <string name="text_value_days_left">%1$d giorni rimasti</string>
+    <string name="text_share_code_value">Codice di condivisione \"%1$s\"</string>
 </resources>

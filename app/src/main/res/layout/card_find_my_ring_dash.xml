@@ -34,11 +34,12 @@
     <TextView
         android:id="@+id/textView128"
         style="@style/S14"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="42dp"
+        android:gravity="center"
         android:layout_marginTop="22dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginEnd="42dp"
         android:text="@string/text_enable_find_my_ring"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,15 +65,18 @@
     <TextView
         android:id="@+id/tvTurnOn"
         style="@style/S14"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:textColor="#88b0ff"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
         android:paddingVertical="6dp"
+        android:text="@string/text_turn_on_location_permissions"
+        android:textColor="#88b0ff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView129"
-        android:text="@string/text_turn_on_location_permissions" />
+        app:layout_constraintTop_toBottomOf="@+id/textView129" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

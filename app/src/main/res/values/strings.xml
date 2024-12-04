@@ -1717,5 +1717,8 @@
     <string name="text_after">"after "</string>
     <string name="text_enable_private_mode">Enable private mode to hide private details while sharing on social media.</string>
     <string name="text_private_mode">Private mode</string>
+    <string name="text_hello_value">Hello %1$s</string>
+    <string name="text_value_days_left">%1$d days left</string>
+    <string name="text_share_code_value">Share code \"%1$s\"</string>
 
 </resources>
