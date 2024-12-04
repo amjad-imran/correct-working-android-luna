@@ -1715,5 +1715,7 @@
     <string name="text_processing_data">Processing data</string>
     <string name="text_available_after_7_days">available after 7 days</string>
     <string name="text_after">"after "</string>
+    <string name="text_enable_private_mode">Enable private mode to hide private details while sharing on social media.</string>
+    <string name="text_private_mode">Private mode</string>
 
 </resources>

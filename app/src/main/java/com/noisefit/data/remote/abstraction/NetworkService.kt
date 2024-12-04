@@ -27,6 +27,7 @@ import com.noisefit_commans.data.response.UserResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.data.response.WatchTokenResponse
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.FemaleHealthIconsModel
@@ -469,6 +470,11 @@ interface NetworkService {
     suspend fun getAiWorkoutPlans(
         @Url url: String
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getDailySummaryData(
+        @Url url: String
+    ): BaseApiResponse<List<AiDailySummaryModel>>
 
 
     @GET

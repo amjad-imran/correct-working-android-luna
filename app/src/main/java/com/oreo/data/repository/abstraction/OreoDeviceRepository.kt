@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
@@ -29,7 +30,10 @@ interface OreoDeviceRepository {
 
     suspend fun loadMessagesByThreadId(threadId: String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>>
 
-    suspend fun generateThreadTitle(ques: String,threadId:String): Flow<Resource<BaseApiResponse<String>?>>
+    suspend fun generateThreadTitle(
+        ques: String,
+        threadId: String
+    ): Flow<Resource<BaseApiResponse<String>?>>
 
     suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
 
@@ -37,4 +41,5 @@ interface OreoDeviceRepository {
 
     suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<Any>?>>
 
+    suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>>
 }

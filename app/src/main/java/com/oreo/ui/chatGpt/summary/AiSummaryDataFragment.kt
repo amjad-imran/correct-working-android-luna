@@ -2,19 +2,23 @@ package com.oreo.ui.chatGpt.summary
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.luna.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.databinding.FragmentAiSummaryDataBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.loadImage
+import com.oreo.data.model.AiDailySummaryModel
+import com.oreo.data.model.DataMetrics
 
 
 class AiSummaryDataFragment :
     BaseFragment<FragmentAiSummaryDataBinding>(FragmentAiSummaryDataBinding::inflate) {
 
+
     companion object {
-        fun getInstance(text: String): AiSummaryDataFragment {
+        fun getInstance(data: AiDailySummaryModel): AiSummaryDataFragment {
             return AiSummaryDataFragment().apply {
                 this.arguments = Bundle().apply {
-                    this.putString("text", text)
+                    this.putParcelable("data", data)
                 }
             }
         }
@@ -23,10 +27,26 @@ class AiSummaryDataFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val text = arguments?.getString("text")
-        binding.tvText.text = text
+        val data = arguments?.getParcelable<AiDailySummaryModel>("data")
 
-        binding.rootView.setBackgroundResource(R.color.colorRed2)
+        data?.let {
+            initUI(it)
+        }
+    }
+
+    private fun initUI(data: AiDailySummaryModel) {
+        binding.tvTitle.text = data.title
+        binding.tvSubtext.text = data.subTitle
+        binding.ivBackground.loadImage(binding.ivBackground.context, data.bgImage)
+
+        setRecycler(data.metrics)
+    }
+
+    private fun setRecycler(metrics: List<DataMetrics>?) {
+        binding.rvDataMetrics.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvDataMetrics.adapter = DataMetricsAdapter().apply {
+            this.setDataSet(metrics ?: ArrayList())
+        }
     }
 
     override fun initListener() {

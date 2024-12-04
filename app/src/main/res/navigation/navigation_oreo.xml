@@ -575,7 +575,7 @@
         android:label="BottomSheetRingBatteryLow" />
     <dialog
         android:id="@+id/bottomSheetWorkoutInProgress"
-        android:name="com.oreo.ui.recordworkout.BottomSheetWorkoutInProgress"/>
+        android:name="com.oreo.ui.recordworkout.BottomSheetWorkoutInProgress" />
 
     <dialog
         android:id="@+id/bottomSheetRingCharging"
@@ -1143,8 +1143,8 @@
         android:label="fragment_language">
         <argument
             android:name="hideContinue"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/chatGptAudioFragment"
@@ -1162,5 +1162,13 @@
     <fragment
         android:id="@+id/aiSummaryFragment"
         android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"
-        android:label="fragment_ai_summary"/>
+        android:label="fragment_ai_summary" />
+    <fragment
+        android:id="@+id/shareSummaryFragment"
+        android:name="com.oreo.ui.chatGpt.summary.ShareSummaryFragment"
+        android:label="fragment_share_summary">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.AiDailySummaryModel" />
+    </fragment>
 </navigation>

@@ -205,7 +205,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:padding="6dp"
-            android:src="@drawable/ic_dash_oreo_activity_default"
+            android:src="@drawable/ic_dash_luna_zone_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -216,7 +216,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_medium"
             android:gravity="center"
-            android:text="Luna AI"
+            android:text="@string/text_luna_ai"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

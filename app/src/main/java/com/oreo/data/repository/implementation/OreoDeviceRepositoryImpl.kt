@@ -7,6 +7,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
@@ -118,6 +119,14 @@ class OreoDeviceRepositoryImpl(
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/"//TODO change URL
             remoteDataSource.getAiWorkoutPlans(url)
+        }
+    }
+
+    override suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/"//TODO change URL
+            remoteDataSource.getDailySummaryData(url)
         }
     }
 }
