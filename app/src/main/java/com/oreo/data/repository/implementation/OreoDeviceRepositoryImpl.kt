@@ -117,7 +117,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<Any>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/"//TODO change URL
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/workout-plan"
             remoteDataSource.getAiWorkoutPlans(url)
         }
     }

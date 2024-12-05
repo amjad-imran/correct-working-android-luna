@@ -12,6 +12,9 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         binding.tvDashboard.setOnClickListener {
             navigate(R.id.aiSummaryFragment)
         }
+        binding.tvWorkout.setOnClickListener {
+            navigate(R.id.workoutPlansFragment)
+        }
     }
 
     override fun subscribeObservers() {

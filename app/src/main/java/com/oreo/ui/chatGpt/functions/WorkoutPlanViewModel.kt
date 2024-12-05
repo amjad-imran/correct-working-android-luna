@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt.functions
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
@@ -18,12 +19,12 @@ import javax.inject.Inject
 class WorkoutPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository
 ) : BaseViewModelCompose() {
-    private val _showEditScreen = MutableStateFlow(false)
-    val showEditScreen: StateFlow<Boolean> = _showEditScreen
 
-    fun showEditScreen(boolean: Boolean) {
-        _showEditScreen.value = boolean
-    }
+    val workoutData: String? = null
+
+    val dayTitle = MutableLiveData<String>()
+    val selectedPosition = MutableLiveData<Int>()
+    val workoutList = MutableLiveData<List<String>>()
 
     fun getWorkoutPlans() {
         viewModelScope.launch {
@@ -56,10 +57,20 @@ class WorkoutPlanViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
+                            setSelectedPosition(1)//todo based on current day
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     *@param position-> 1..7 (Mon - Sun)
+     */
+    fun setSelectedPosition(position: Int) {
+        selectedPosition.postValue(position)
+        dayTitle.postValue("Workout name here")
+        workoutList.postValue(arrayListOf("Workout 1","Workout 2","Workout 3","Workout 4"))
     }
 }

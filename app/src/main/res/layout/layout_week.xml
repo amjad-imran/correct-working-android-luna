@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvMon"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="1"
+        android:text="@string/text_mon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvTue"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTue"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="2"
+        android:text="@string/text_tue"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toStartOf="@+id/tvWed"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvMon"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+    <TextView
+        android:id="@+id/tvWed"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="3"
+        android:text="@string/text_wed"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toStartOf="@+id/tvThu"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvTue"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+    <TextView
+        android:id="@+id/tvThu"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="4"
+        android:text="@string/text_thu"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toStartOf="@+id/tvFri"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvWed"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+    <TextView
+        android:id="@+id/tvFri"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="5"
+        android:text="@string/text_fri"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toStartOf="@+id/tvSat"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvThu"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+    <TextView
+        android:id="@+id/tvSat"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="6"
+        android:text="@string/text_sat"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toStartOf="@+id/tvSun"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvFri"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+    <TextView
+        android:id="@+id/tvSun"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tag="7"
+        android:text="@string/text_sun"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvSat"
+        app:layout_constraintTop_toTopOf="@+id/tvMon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

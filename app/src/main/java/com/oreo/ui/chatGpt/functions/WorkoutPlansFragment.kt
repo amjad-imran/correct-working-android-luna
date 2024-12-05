@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt.functions
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnClickListener
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,12 +45,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.ui.chatGpt.topquestions.AiTopQuestionsViewModel
@@ -68,32 +74,82 @@ class WorkoutPlansFragment :
 
     val viewModel: WorkoutPlanViewModel by viewModels()
 
+    val mAdapter: AiWorkoutAdapter by lazy { AiWorkoutAdapter() }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.tvTitle.text = getString(R.string.text_workout_plan)
+
         viewModel.getWorkoutPlans()
-
-        binding.composeView.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-            setContent {
-                WorkoutPlanScreen(onWorkoutClicked = {
-
-                })
-            }
-
-        }
-
+        setRecycler()
     }
 
-    override fun initListener() {
 
+    override fun initListener() {
+        binding.lytWeek.tvMon.setOnClickListener(weekListener)
+        binding.lytWeek.tvTue.setOnClickListener(weekListener)
+        binding.lytWeek.tvWed.setOnClickListener(weekListener)
+        binding.lytWeek.tvThu.setOnClickListener(weekListener)
+        binding.lytWeek.tvFri.setOnClickListener(weekListener)
+        binding.lytWeek.tvSat.setOnClickListener(weekListener)
+        binding.lytWeek.tvSun.setOnClickListener(weekListener)
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
     }
 
     override fun subscribeObservers() {
+        viewModel.selectedPosition.observe(this){
+            showSelected(it)
+        }
+        viewModel.workoutList.observe(this) {
+            mAdapter.setDataSet(it)
+            binding.lytRestDay.root.setVisibilityByCondition(it.isEmpty())
+        }
+        viewModel.dayTitle.observe(this){
+            binding.tvDayName.text = it
+            binding.tvDayName.setVisibilityByCondition(it.isNotEmpty())
+        }
+    }
 
+
+    private fun setRecycler() {
+        binding.rvWorkouts.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvWorkouts.adapter = mAdapter
+    }
+
+
+    private val weekListener = OnClickListener { v ->
+        val tag = v?.tag?.toString()?.toIntOrNull()
+        tag?.let {
+            viewModel.setSelectedPosition(it)
+        }
+    }
+
+
+    private fun showSelected(selectedTag: Int) {
+        val main = binding.lytWeek
+        val layouts = arrayListOf(
+            main.tvMon,
+            main.tvTue,
+            main.tvWed,
+            main.tvThu,
+            main.tvFri,
+            main.tvSat,
+            main.tvSun
+        )
+        layouts.forEach {
+            if (it.tag.toString().toInt() == selectedTag) {
+                it.setBackgroundResource(R.drawable.bg_week_selected)
+            } else {
+                it.setBackgroundResource(0)
+            }
+        }
     }
 }
+/*
 
 @Preview
 @Composable
@@ -272,6 +328,7 @@ fun WorkoutHeader(headerText: String) {
 
 }
 
+*/
 /*@Preview
 @Composable
 fun WorkoutListPreview() {
@@ -281,7 +338,8 @@ fun WorkoutListPreview() {
     ) {
 
     }
-}*/
+}*//*
+
 
 @Composable
 fun WorkoutItem(workout: Boolean, onWorkoutClicked: (workout: String) -> Unit) {
@@ -364,4 +422,4 @@ fun WorkoutPlanToolbar(
 
     }
 
-}
+}*/
