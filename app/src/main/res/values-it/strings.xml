@@ -1685,4 +1685,5 @@
     <string name="text_hello_value">Ciao %1$s</string>
     <string name="text_value_days_left">%1$d giorni rimasti</string>
     <string name="text_share_code_value">Codice di condivisione \"%1$s\"</string>
+    <string name="text_cancelled">Annullato</string>
 </resources>

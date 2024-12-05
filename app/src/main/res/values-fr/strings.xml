@@ -1683,4 +1683,5 @@
     <string name="text_hello_value">Bonjour %1$s</string>
     <string name="text_value_days_left">%1$d jours restants</string>
     <string name="text_share_code_value">Partager le code \"%1$s\"</string>
+    <string name="text_cancelled">Annulé</string>
 </resources>

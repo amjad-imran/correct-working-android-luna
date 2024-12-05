@@ -194,7 +194,7 @@ class OWorkoutDetailsFragment :
 
 
             setMovementGraph(
-                it.intensity,
+                it.intensityText,
                 movement, DateFormats.convert24HourTo12(
                     it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
                 ), DateFormats.convert24HourTo12(

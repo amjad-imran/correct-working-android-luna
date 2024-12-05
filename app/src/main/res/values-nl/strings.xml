@@ -1687,4 +1687,5 @@
     <string name="text_hello_value">Hallo %1$s</string>
     <string name="text_value_days_left">%1$d dagen resterend</string>
     <string name="text_share_code_value">Deelcode \"%1$s\"</string>
+    <string name="text_cancelled">Geannuleerd</string>
 </resources>

@@ -1671,4 +1671,5 @@
     <string name="text_hello_value">สวัสดี %1$s</string>
     <string name="text_value_days_left">เหลืออีก %1$d วัน</string>
     <string name="text_share_code_value">รหัสแบ่งปัน \"%1$s\"</string>
+    <string name="text_cancelled">ยกเลิก</string>
 </resources>

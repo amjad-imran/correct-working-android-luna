@@ -4,11 +4,13 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemReferralBinding
 import com.oreo.data.model.referral.Referral
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class ReferralsInternalAdapter : RecyclerView.Adapter<ReferralsInternalAdapter.ViewHolder>() {
     private val mDataSet = ArrayList<Referral>()
@@ -19,7 +21,7 @@ class ReferralsInternalAdapter : RecyclerView.Adapter<ReferralsInternalAdapter.V
         fun bind(referralsMain: Referral) {
             binding.tvName.text = referralsMain.usedBy
             binding.tvDate.text = LocalDate.parse(referralsMain.createdDate)
-                .format(DateTimeFormatter.ofPattern("dd MMM,yyyy"))
+                .format(DateTimeFormatter.ofPattern("dd MMM,yyyy",Locale(NoiseFitApplicationMain.appLanguage.languageCode)))
 
             if (referralsMain.status.equals("purchased")) {
                 binding.ivPurchased.setImageResource(R.drawable.ic_ref_status_filled)
@@ -34,7 +36,7 @@ class ReferralsInternalAdapter : RecyclerView.Adapter<ReferralsInternalAdapter.V
             } else if(referralsMain.status.equals("cancelled")) {
                 binding.ivPurchased.setImageResource(R.drawable.ic_ref_status_ring)
                 binding.ivDelivered.setImageResource(R.drawable.ic_ref_status_ring)
-                binding.tvStatus.text = "Cancelled"
+                binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_cancelled)
                 binding.tvStatus.setTextColor(Color.parseColor("#ff4062"))
             }else {
                 binding.ivPurchased.setImageResource(R.drawable.ic_ref_status_ring)

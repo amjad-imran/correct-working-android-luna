@@ -1686,4 +1686,5 @@
     <string name="text_hello_value">Привет, %1$s</string>
     <string name="text_value_days_left">Осталось %1$d дней</string>
     <string name="text_share_code_value">Поделиться кодом \"%1$s\"</string>
+    <string name="text_cancelled">Отменено</string>
 </resources>
