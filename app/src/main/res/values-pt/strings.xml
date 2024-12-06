@@ -1682,4 +1682,7 @@
     <string name="text_value_days_left">%1$d dias restantes</string>
     <string name="text_share_code_value">Compartilhe o código \"%1$s\"</string>
     <string name="text_cancelled">Cancelado</string>
+    <string name="text_workout_added_successfully">Treino adicionado com sucesso</string>
+    <string name="text_please_select_a_time_before_current_time">Selecione um horário anterior ao horário atual</string>
+    <string name="text_please_select_a_time_after_10_pm">Selecione um horário depois das 22h</string>
 </resources>

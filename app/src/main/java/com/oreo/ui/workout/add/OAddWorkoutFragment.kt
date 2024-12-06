@@ -714,7 +714,7 @@ class OAddWorkoutFragment :
                     )
 
                 )
-                context.showShortToast("Workout Added Successfully")
+                context.showShortToast(getString(R.string.text_workout_added_successfully))
                 navigateUpSafe()
             }
         }
