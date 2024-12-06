@@ -1721,5 +1721,6 @@
     <string name="text_value_days_left">%1$d days left</string>
     <string name="text_share_code_value">Share code \"%1$s\"</string>
     <string name="text_rest_day">Rest day</string>
+    <string name="text_cancelled">Cancelled</string>
 
 </resources>

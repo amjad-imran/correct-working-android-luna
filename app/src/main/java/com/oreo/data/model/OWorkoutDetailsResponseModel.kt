@@ -20,6 +20,7 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("start_time") val startTime: String? = null,
     @SerializedName("end_time") val endTime: String? = null,
     val intensity: String? = null,
+    val intensityText: String? = null,
     @SerializedName("created_date") val createdDate: String? = null,
     val type: String? = null,
     val date: String? = null,

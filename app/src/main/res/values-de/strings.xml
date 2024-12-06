@@ -1682,4 +1682,5 @@
     <string name="text_hello_value">Hallo %1$s</string>
     <string name="text_value_days_left">Noch %1$d Tage übrig</string>
     <string name="text_share_code_value">Teilen Sie den Code „%1$s“</string>
+    <string name="text_cancelled">Abgesagt</string>
 </resources>

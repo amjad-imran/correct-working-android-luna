@@ -1685,4 +1685,5 @@
     <string name="text_hello_value">你好%1$s</string>
     <string name="text_value_days_left">还剩 %1$d 天</string>
     <string name="text_share_code_value">分享代码“%1$s”</string>
+    <string name="text_cancelled">取消</string>
 </resources>
