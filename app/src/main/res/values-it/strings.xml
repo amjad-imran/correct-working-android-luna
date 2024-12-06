@@ -1686,4 +1686,7 @@
     <string name="text_value_days_left">%1$d giorni rimasti</string>
     <string name="text_share_code_value">Codice di condivisione \"%1$s\"</string>
     <string name="text_cancelled">Annullato</string>
+    <string name="text_workout_added_successfully">Allenamento aggiunto con successo</string>
+    <string name="text_please_select_a_time_before_current_time">Seleziona un\'ora precedente all\'ora corrente</string>
+    <string name="text_please_select_a_time_after_10_pm">Seleziona un orario dopo le 22:00</string>
 </resources>

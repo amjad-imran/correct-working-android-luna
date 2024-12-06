@@ -1688,4 +1688,7 @@
     <string name="text_value_days_left">%1$d dagen resterend</string>
     <string name="text_share_code_value">Deelcode \"%1$s\"</string>
     <string name="text_cancelled">Geannuleerd</string>
+    <string name="text_workout_added_successfully">Training succesvol toegevoegd</string>
+    <string name="text_please_select_a_time_before_current_time">Selecteer een tijd vóór de huidige tijd</string>
+    <string name="text_please_select_a_time_after_10_pm">Selecteer een tijdstip na 22.00 uur</string>
 </resources>

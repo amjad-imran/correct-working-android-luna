@@ -1672,4 +1672,7 @@
     <string name="text_value_days_left">เหลืออีก %1$d วัน</string>
     <string name="text_share_code_value">รหัสแบ่งปัน \"%1$s\"</string>
     <string name="text_cancelled">ยกเลิก</string>
+    <string name="text_workout_added_successfully">เพิ่มการออกกำลังกายเรียบร้อยแล้ว</string>
+    <string name="text_please_select_a_time_before_current_time">โปรดเลือกเวลาก่อนเวลาปัจจุบัน</string>
+    <string name="text_please_select_a_time_after_10_pm">กรุณาเลือกเวลาหลัง 22.00 น</string>
 </resources>

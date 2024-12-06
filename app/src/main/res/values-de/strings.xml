@@ -1382,7 +1382,7 @@
     <string name="text_training_volume">Trainingsvolumen</string>
     <string name="text_your_profile">Ihr Profil</string>
     <string name="text_select_language">App-Sprache</string>
-    <string name="text_live_support">Live-Support</string>
+    <string name="text_live_support">Live Unterstützung</string>
     <string name="text_today_comma">"Heute, "</string>
     <string name="text_stress_1">Stress ist die natürliche Reaktion des Körpers auf eine körperliche oder geistige Herausforderung.</string>
     <string name="text_how_does_the_luna_ring">Wie misst der Luna Ring Stress?</string>
@@ -1683,4 +1683,7 @@
     <string name="text_value_days_left">Noch %1$d Tage übrig</string>
     <string name="text_share_code_value">Teilen Sie den Code „%1$s“</string>
     <string name="text_cancelled">Abgesagt</string>
+    <string name="text_workout_added_successfully">Training erfolgreich hinzugefügt</string>
+    <string name="text_please_select_a_time_before_current_time">Bitte wählen Sie eine Uhrzeit vor der aktuellen Uhrzeit aus</string>
+    <string name="text_please_select_a_time_after_10_pm">Bitte wählen Sie eine Zeit nach 22:00 Uhr aus</string>
 </resources>

@@ -674,13 +674,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
                     val string = StringBuilder()
-                    string.append("after ")
+                    string.append(binding.root.context.getString(R.string.text_after))
+                    string.append(" ")
 
                     if (napCount > 0) {
                         if (sleepCount == 0) {
-                            string.append("${(napCount - 1)} nap")
+                            string.append("${(napCount - 1)} ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         } else {
-                            string.append("$napCount nap")
+                            string.append("$napCount ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         }
                     }
 
@@ -688,7 +695,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         if (napCount > 0) {
                             string.append(" & ")
                         }
-                        string.append("${(sleepCount - 1)} sleep")
+                        string.append("${(sleepCount - 1)} ")
+                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
                     }
 
                     binding.lytNapLabel.tvNapCountMsg.text = string.toString()
@@ -779,13 +787,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
                     val string = StringBuilder()
-                    string.append("after ")
+                    string.append(binding.root.context.getString(R.string.text_after))
+                    string.append(" ")
 
                     if (napCount > 0) {
                         if (sleepCount == 0) {
-                            string.append("${(napCount - 1)} nap")
+                            string.append("${(napCount - 1)} ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         } else {
-                            string.append("$napCount nap")
+                            string.append("$napCount ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         }
                     }
 
@@ -793,7 +808,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         if (napCount > 0) {
                             string.append(" & ")
                         }
-                        string.append("${(sleepCount - 1)} sleep")
+                        string.append("${(sleepCount - 1)} ")
+                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
                     }
 
                     binding.lytNapLabel.tvNapCountMsg.text = string.toString()
@@ -864,13 +880,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
                     val string = StringBuilder()
-                    string.append("after ")
+                    string.append(binding.root.context.getString(R.string.text_after))
+                    string.append(" ")
 
                     if (napCount > 0) {
                         if (sleepCount == 0) {
-                            string.append("${(napCount - 1)} nap")
+                            string.append("${(napCount - 1)} ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         } else {
-                            string.append("$napCount nap")
+                            string.append("$napCount ")
+                            string.append(
+                                binding.root.context.getString(R.string.text_nap).lowercase()
+                            )
                         }
                     }
 
@@ -878,7 +901,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         if (napCount > 0) {
                             string.append(" & ")
                         }
-                        string.append("${(sleepCount - 1)} sleep")
+                        string.append("${(sleepCount - 1)} ")
+                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
                     }
 
 

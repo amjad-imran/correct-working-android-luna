@@ -1410,7 +1410,7 @@
     <string name="text_training_volume">Training volume</string>
     <string name="text_your_profile">Your profile</string>
     <string name="text_select_language">App Language</string>
-    <string name="text_live_support">Live Unterstützung</string>
+    <string name="text_live_support">Live Support</string>
     <string name="text_today_comma">"Today, "</string>
     <string name="text_stress_1">Stress is the body’s natural response to a physical or mental challenge.</string>
     <string name="text_how_does_the_luna_ring">How does the Luna Ring measure stress?</string>
@@ -1724,5 +1724,8 @@
     <string name="text_cancelled">Cancelled</string>
     <string name="text_next_workout">Next workout</string>
     <string name="text_diet_plan">Diet Plan</string>
+    <string name="text_workout_added_successfully">Workout Added Successfully</string>
+    <string name="text_please_select_a_time_before_current_time">Please select a time before current time</string>
+    <string name="text_please_select_a_time_after_10_pm">Please select a time after 10 PM</string>
 
 </resources>

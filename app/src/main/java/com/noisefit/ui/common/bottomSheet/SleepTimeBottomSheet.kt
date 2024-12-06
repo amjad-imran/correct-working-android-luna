@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.SleepTimeBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
@@ -63,7 +64,7 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
                     binding.lytTimePicker.timePicker.currentMinute = currentMinute
                     if (!showTodayToast) {
                         showTodayToast = true
-                        context.showShortToast("Please select a time before current time")
+                        context.showShortToast(getString(R.string.text_please_select_a_time_before_current_time))
                     }
 
                 } else {
@@ -88,7 +89,7 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
                     binding.lytTimePicker.timePicker.currentMinute = 0
                     if (!showYesterdayToast) {
                         showYesterdayToast = true
-                        context.showShortToast("Please select a time after 10 PM")
+                        context.showShortToast(getString(R.string.text_please_select_a_time_after_10_pm))
                     }
 
                 }

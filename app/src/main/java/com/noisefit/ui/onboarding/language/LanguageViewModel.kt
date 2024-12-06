@@ -63,6 +63,10 @@ class LanguageViewModel @Inject constructor(
             lastSyncProvider.removeSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
             keyValueDataSource.removeDataByKey("", KeyValueDataType.LEARN)
 
+            //Female health Data
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+
             userRepository.saveAppLanguage().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
