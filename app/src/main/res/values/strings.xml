@@ -1722,5 +1722,7 @@
     <string name="text_share_code_value">Share code \"%1$s\"</string>
     <string name="text_rest_day">Rest day</string>
     <string name="text_cancelled">Cancelled</string>
+    <string name="text_next_workout">Next workout</string>
+    <string name="text_diet_plan">Diet Plan</string>
 
 </resources>

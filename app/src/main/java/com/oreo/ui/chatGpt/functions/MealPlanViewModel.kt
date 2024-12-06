@@ -17,24 +17,24 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkoutPlanViewModel @Inject constructor(
+class MealPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository
 ) : BaseViewModelCompose() {
 
     val workoutData: String? = null
 
-    val dayTitle = MutableLiveData<String>()
+    val dayNutrients = MutableLiveData<List<String>>()
     val selectedPosition = MutableLiveData<Int>()
     val currentSelectedWeekDayPosition = MutableLiveData<Int>()
-    val workoutList = MutableLiveData<List<String>>()
+    val dayMealList = MutableLiveData<List<String>>()
 
     init {
         currentSelectedWeekDayPosition.postValue(LocalDate.now().dayOfWeek.value)
     }
 
-    fun getWorkoutPlans() {
+    fun getMealPlans() {
         viewModelScope.launch {
-            oreoDeviceRepository.getAiWorkoutPlans().collect { resource ->
+            oreoDeviceRepository.getAiMealPlans().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -50,7 +50,7 @@ class WorkoutPlanViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getWorkoutPlans()
+                                        getMealPlans()
                                     }
 
                                     override fun no() {
@@ -76,7 +76,7 @@ class WorkoutPlanViewModel @Inject constructor(
      */
     fun setSelectedPosition(position: Int) {
         selectedPosition.postValue(position)
-        dayTitle.postValue("Workout name here")
-        workoutList.postValue(arrayListOf("Workout 1", "Workout 2", "Workout 3", "Workout 4"))
+        dayNutrients.postValue(arrayListOf("","","",""))
+        dayMealList.postValue(arrayListOf("Workout 1", "Workout 2", "Workout 3", "Workout 4"))
     }
 }

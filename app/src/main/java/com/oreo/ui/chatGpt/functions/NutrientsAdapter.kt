@@ -4,29 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
+import com.noisefit.luna.databinding.RowNutrientBinding
 
-class AiWorkoutAdapter(val onWorkoutSelected: (String) -> Unit) :
-    RecyclerView.Adapter<AiWorkoutAdapter.ViewHolder>() {
+class NutrientsAdapter() :
+    RecyclerView.Adapter<NutrientsAdapter.ViewHolder>() {
     private val mDataSet = ArrayList<String>()
 
-    inner class ViewHolder(val binding: RowAiWorkoutBinding) :
+    inner class ViewHolder(val binding: RowNutrientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: String) {
-
-            binding.tvWorkoutName.text = "Flat Bench Press"
-            binding.tvDetails.text = "3 sets 10 reps"
-
-            binding.root.setOnClickListener {
-                onWorkoutSelected(data)
-            }
-
+            binding.tvNutrient.text = "Calories : 1200kcal"
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            RowAiWorkoutBinding.inflate(
+            RowNutrientBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

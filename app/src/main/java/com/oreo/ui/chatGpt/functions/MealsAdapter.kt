@@ -2,31 +2,33 @@ package com.oreo.ui.chatGpt.functions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
+import com.noisefit.luna.databinding.RowMealDataBinding
 
-class AiWorkoutAdapter(val onWorkoutSelected: (String) -> Unit) :
-    RecyclerView.Adapter<AiWorkoutAdapter.ViewHolder>() {
+class MealsAdapter(val onMealSelected: (String) -> Unit) :
+    RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
     private val mDataSet = ArrayList<String>()
 
-    inner class ViewHolder(val binding: RowAiWorkoutBinding) :
+    inner class ViewHolder(val binding: RowMealDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: String) {
 
-            binding.tvWorkoutName.text = "Flat Bench Press"
-            binding.tvDetails.text = "3 sets 10 reps"
+            binding.tvTitle.text = "Breakfast"
+            binding.rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
+            binding.rvMeals.adapter = SubMealAdapter(arrayListOf("","",""))
 
             binding.root.setOnClickListener {
-                onWorkoutSelected(data)
+                onMealSelected.invoke(data)
             }
-
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            RowAiWorkoutBinding.inflate(
+            RowMealDataBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

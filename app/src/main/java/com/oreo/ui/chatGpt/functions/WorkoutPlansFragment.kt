@@ -3,78 +3,30 @@ package com.oreo.ui.chatGpt.functions
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import androidx.core.view.allViews
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.setVisibilityByCondition
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.ai.TopQuestions
-import com.oreo.ui.chatGpt.topquestions.AiTopQuestionsViewModel
-import com.oreo.ui.chatGpt.topquestions.QuestionItem
-import com.oreo.ui.compose.element.button.ButtonSecondary
-import com.oreo.ui.compose.element.button.CircularBackButton
-import com.oreo.ui.compose.element.button.CircularHistoryButton
-import com.oreo.ui.compose.element.button.CircularImageButton
-import com.oreo.ui.compose.element.button.Loading
-import com.oreo.ui.compose.styles.FontStyle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WorkoutPlansFragment :
     BaseFragment<FragmentWorkoutPlansBinding>(FragmentWorkoutPlansBinding::inflate) {
 
-    val viewModel: WorkoutPlanViewModel by viewModels()
+    private val viewModel: WorkoutPlanViewModel by viewModels()
+    private val mAdapter: AiWorkoutAdapter by lazy {
+        AiWorkoutAdapter(onWorkoutSelected = {
+            navigate(R.id.aiWorkoutDetailFragment)
+        })
+    }
 
-    val mAdapter: AiWorkoutAdapter by lazy { AiWorkoutAdapter() }
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,6 +35,8 @@ class WorkoutPlansFragment :
 
         viewModel.getWorkoutPlans()
         setRecycler()
+
+        mainViewModel.addWorkoutCtaVisibility.postValue(true)
     }
 
 
@@ -101,16 +55,37 @@ class WorkoutPlansFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.selectedPosition.observe(this){
+        viewModel.selectedPosition.observe(this) {
             showSelected(it)
         }
         viewModel.workoutList.observe(this) {
             mAdapter.setDataSet(it)
             binding.lytRestDay.root.setVisibilityByCondition(it.isEmpty())
         }
-        viewModel.dayTitle.observe(this){
+        viewModel.dayTitle.observe(this) {
             binding.tvDayName.text = it
             binding.tvDayName.setVisibilityByCondition(it.isNotEmpty())
+        }
+        viewModel.currentSelectedWeekDayPosition.observe(this) { selectedPos ->
+            val main = binding.lytWeek
+
+            val views = arrayListOf(
+                main.selection1,
+                main.selection2,
+                main.selection3,
+                main.selection4,
+                main.selection5,
+                main.selection6,
+                main.selection7
+            )
+            views.forEach {
+                if (it.tag.toString().toInt() == selectedPos) {
+                    it.visible()
+                } else {
+                    it.invisible()
+                }
+            }
+
         }
     }
 

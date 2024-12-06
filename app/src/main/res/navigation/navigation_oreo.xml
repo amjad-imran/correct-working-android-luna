@@ -1171,4 +1171,12 @@
             android:name="data"
             app:argType="com.oreo.data.model.AiDailySummaryModel" />
     </fragment>
+    <fragment
+        android:id="@+id/aiWorkoutDetailFragment"
+        android:name="com.oreo.ui.chatGpt.functions.AiWorkoutDetailFragment"
+        android:label="fragment_ai_workout_detail" />
+    <fragment
+        android:id="@+id/aiWorkoutPlanFragment"
+        android:name="com.oreo.ui.chatGpt.functions.AiWorkoutPlanFragment"
+        android:label="fragment_ai_workout_plan"/>
 </navigation>
