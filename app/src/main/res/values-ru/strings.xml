@@ -1690,4 +1690,5 @@
     <string name="text_workout_added_successfully">Тренировка успешно добавлена</string>
     <string name="text_please_select_a_time_before_current_time">Пожалуйста, выберите время до текущего времени</string>
     <string name="text_please_select_a_time_after_10_pm">Пожалуйста, выберите время после 22:00.</string>
+    <string name="text_synced_space">Синхронизировано: %1$s</string>
 </resources>

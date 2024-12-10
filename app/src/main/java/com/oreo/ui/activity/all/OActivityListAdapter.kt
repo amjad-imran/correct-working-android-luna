@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.luna.R
 import com.noisefit_commans.models.Units
@@ -15,6 +16,9 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.OActivityListModal
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class OActivityListAdapter(
@@ -58,6 +62,13 @@ class OActivityListAdapter(
                 var date = activity.date
                 if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6())) {
                     date = view.context.getString(R.string.text_today_s_workouts)
+                }else{
+                    date = LocalDate.parse(activity.date,DateTimeFormatter.ofPattern("dd MMMM, yyyy")).format(
+                        DateTimeFormatter.ofPattern(
+                            "dd MMMM, yyyy",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
+                    )
                 }
                 view.findViewById<TextView>(R.id.tvDate).text = date
             } else {

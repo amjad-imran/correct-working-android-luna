@@ -1742,5 +1742,6 @@
     <string name="text_setting_up">Setting up</string>
     <string name="text_your_diet_plan_is_saved">Your diet plan is saved</string>
     <string name="text_your_workout_plan_is_saved">Your workout plan is saved</string>
+    <string name="text_synced_space">Synced : %1$s</string>
 
 </resources>

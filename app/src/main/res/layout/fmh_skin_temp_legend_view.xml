@@ -4,36 +4,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <include
-            android:id="@+id/lytPeriod"
-            layout="@layout/fmh_legend_single_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/lytOvulation"
-            layout="@layout/fmh_legend_single_item"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <include
-            android:id="@+id/lytFollicular"
-            layout="@layout/fmh_legend_single_item"
-            android:layout_width="wrap_content"
+            <include
+                android:id="@+id/lytPeriod"
+                layout="@layout/fmh_legend_single_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/lytOvulation"
+                layout="@layout/fmh_legend_single_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp" />
-
-        <include
-            android:id="@+id/lytLuteal"
-            layout="@layout/fmh_legend_single_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
+            <include
+                android:id="@+id/lytFollicular"
+                layout="@layout/fmh_legend_single_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/lytLuteal"
+                layout="@layout/fmh_legend_single_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </layout>

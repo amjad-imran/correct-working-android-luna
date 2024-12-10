@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -27,6 +28,9 @@ import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -143,7 +147,14 @@ class OWorkoutDetailsFragment :
 
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
-        binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
+
+        binding.lytActivityItem.tvActivityDate.text = LocalDate.parse(it.date).format(
+            DateTimeFormatter.ofPattern(
+                "dd MMM, yyyy",
+                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+            )
+        )
+
         binding.lytActivityItem.tvTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
@@ -210,7 +221,6 @@ class OWorkoutDetailsFragment :
         binding.lytToolbar.tvTitle.text = it.workoutText
 
 
-
         /* setMovementGraph(
              arrayListOf(0, 1, 2, 3, 2, 2, 1, 2), "12:03 pm","12:06 pm"
          )*/
@@ -240,7 +250,8 @@ class OWorkoutDetailsFragment :
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
                         hrAvg.toString()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = getString(R.string.text_bpm_small)
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text =
+                        getString(R.string.text_bpm_small)
                 }
             } else {
                 binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
@@ -254,7 +265,8 @@ class OWorkoutDetailsFragment :
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
                         hrMax.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text =
+                        getString(R.string.text_bpm_small)
                 }
             } else {
                 binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"

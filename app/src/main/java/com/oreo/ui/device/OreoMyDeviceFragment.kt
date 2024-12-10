@@ -583,7 +583,10 @@ class OreoMyDeviceFragment :
 
         val lastSync =
             mViewModel.sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
-        val lastSyncText = "Synced : ${lastSync ?: getString(R.string.text_not_yet_syncyed)}"
+        val lastSyncText = getString(
+            R.string.text_synced_space,
+            lastSync ?: getString(R.string.text_not_yet_syncyed)
+        )
         binding.lytDeviceConnected.apply {
 
             ivRingImage.loadImage(
