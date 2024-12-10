@@ -38,10 +38,7 @@ class ChatGptViewModel
     val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository,
     val resourceProvider: ResourcesProvider,
-    private val speechRecognizerManager: SpeechRecognizerManager
 ) : BaseViewModel() {
-
-    var isAudioMode: Boolean = false
 
     private var userImage: String? = null
     private var userName: String? = null
@@ -77,21 +74,6 @@ class ChatGptViewModel
         initMessage =
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
-
-
-    fun startSpeechRecognition(listener: RecognitionListener) {
-        speechRecognizerManager.initializeSpeechRecognizer(listener)
-        speechRecognizerManager.startListening()
-    }
-
-    fun stopSpeechRecognition() {
-        speechRecognizerManager.stopListening()
-    }
-
-    fun speakText(text: String) {
-        speechRecognizerManager.speakText(text)
-    }
-
 
     fun addSentMessage(message: String) {
         val messages = _chatGptOverview.value ?: ArrayList()
@@ -151,7 +133,6 @@ class ChatGptViewModel
         addThinkingMessage()
         lastApi?.let {
             askQuestionStream(it.second)
-            //askQuestion(it.second)
         }
     }
 
@@ -245,10 +226,6 @@ class ChatGptViewModel
                     if (msg != null) {
                         msg = cleanServerResponse(msg)
                         responseBuilder.append(msg)
-                        if (isAudioMode) {
-                            //speechRecognizerManager.speakText(msg)
-                            LOGS.d("RecognitionListener", "Received message $msg")
-                        }
                     }
 
                     addReceivedMessage(
@@ -291,13 +268,8 @@ class ChatGptViewModel
                     //LOGS.d("streammmmmm onClosed()")
                     fetchInProgress.postValue(false)
 
-                    if (isAudioMode) {
-                        speechRecognizerManager.speakText(responseBuilder.toString())
-                        LOGS.d("RecognitionListener", "Received message $responseBuilder")
-                    }
-
                     //TODO write plan & its type recognition logic  - with anil
-                    showSavePlan.postValue(Event(AiPlanType.WORKOUT))
+                    checkForPlans(responseBuilder.toString())
                     sse?.close()
                 }
 
@@ -312,6 +284,20 @@ class ChatGptViewModel
         }
 
 
+    }
+
+    private fun checkForPlans(message: String) {
+        val mealIdentifier = "🍎🥗🍲"
+        val workoutIdentifier = "🚴‍♀️🏋️‍♂️🧘"
+
+        if (message.contains(mealIdentifier)) {
+            showSavePlan.postValue(Event(AiPlanType.MEAL))
+            return
+        }
+
+        if (message.contains(workoutIdentifier)) {
+            showSavePlan.postValue(Event(AiPlanType.WORKOUT))
+        }
     }
 
     private fun cleanServerResponse(msg: String): String {
@@ -514,20 +500,19 @@ class ChatGptViewModel
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        speechRecognizerManager.destroy()
-    }
-
     fun savePlanData() {
-        val planType = AiPlanType.WORKOUT
+        if (showSavePlan.value?.peekContent() == null) {
+            return
+        }
 
         viewModelScope.launch {
-            if (planType == AiPlanType.WORKOUT) {
+            if (showSavePlan.value?.peekContent() == AiPlanType.WORKOUT) {
                 oreoDeviceRepository.saveWorkoutPlan()
-            } else {
+            } else if (showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
                 oreoDeviceRepository.saveMealPlan()
-            }.collect { resource ->
+            } else {
+                null
+            }?.collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

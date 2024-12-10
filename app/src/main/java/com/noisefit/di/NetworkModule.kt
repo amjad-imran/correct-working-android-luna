@@ -4,6 +4,7 @@ import android.content.Context
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.remote.HeaderInterceptorAudio
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.NetworkConnectionInterceptor
 import com.noisefit.data.remote.NetworkConnectionInterceptorShop
@@ -42,7 +43,6 @@ object NetworkModule {
         .client(client)
         .build()
 
-
     @Singleton
     @Provides
     fun buildTokenApi(@Named("TokenClient") client: OkHttpClient): TokenRefreshApi {
@@ -53,6 +53,34 @@ object NetworkModule {
             .build()
             .create(TokenRefreshApi::class.java)
     }
+
+
+    @Singleton
+    @Provides
+    fun buildAudioApi(@Named("AudioClient") client: OkHttpClient): AudioApiService {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL_NEW)
+            .client(client)
+            .build()
+            .create(AudioApiService::class.java)
+    }
+
+    @Named("AudioClient")
+    @Singleton
+    @Provides
+    fun provideHttpClientAudio(
+        @Named("NwInterceptorAudio") networkConnectionInterceptor: HeaderInterceptorAudio,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(networkConnectionInterceptor)
+        .apply {
+            if (BuildConfig.DEBUG) {
+                tryCatch {
+                    this.addInterceptor(CurlLoggerInterceptor("CURL"))
+                }
+            }
+        }
+        .build()
+
 
     @Singleton
     @Provides
@@ -99,6 +127,17 @@ object NetworkModule {
         @ApplicationContext appContext: Context
     ): NetworkConnectionInterceptorShop =
         NetworkConnectionInterceptorShop(appContext)
+
+    @Named("NwInterceptorAudio")
+    @Singleton
+    @Provides
+    fun provideNetworkInterceptorAudio(
+        @ApplicationContext appContext: Context,
+        localDataStore: DataStoredInterface,
+        ringDataStore: RingDataStore,
+    ): HeaderInterceptorAudio =
+        HeaderInterceptorAudio(appContext, localDataStore, ringDataStore)
+
 
     @Named("HttpClientShop")
     @Singleton

@@ -2,6 +2,8 @@ package com.oreo.ui.chatGpt
 
 import android.media.audiofx.Visualizer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import android.view.View
@@ -51,7 +53,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
     }
 
-
     private val viewModel: ChatGptViewModel by viewModels()
     private val args: ChatGptFragmentArgs by navArgs()
 
@@ -76,50 +77,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
     }
-
-    private val listener = object : RecognitionListener {
-        override fun onReadyForSpeech(params: Bundle?) {
-            LOGS.d("RecognitionListener", "onReadyForSpeech() $params")
-        }
-
-        override fun onBeginningOfSpeech() {
-            LOGS.d("RecognitionListener", "onBeginningOfSpeech()")
-        }
-
-        override fun onRmsChanged(rmsdB: Float) {
-            //LOGS.d("RecognitionListener", "onRmsChanged - $rmsdB")
-            //binding.lytAudio.viewAudioVisualizer.updateRms(rmsdB)
-        }
-
-        override fun onBufferReceived(buffer: ByteArray?) {
-            LOGS.d("RecognitionListener", "onBufferReceived() - $buffer")
-        }
-
-        override fun onEndOfSpeech() {
-            LOGS.d("RecognitionListener", "onEndOfSpeech()")
-        }
-
-        override fun onError(error: Int) {}
-
-        override fun onResults(results: Bundle?) {
-            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            val text = matches?.getOrNull(0) ?: ""
-            //binding.lytAudio.testUserText.text = text
-            LOGS.d("RecognitionListener", "onResults ${matches?.getOrNull(0)}")
-            sendMessage(text)
-        }
-
-        override fun onPartialResults(partialResults: Bundle?) {
-            val partial =
-                partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            LOGS.d("RecognitionListener", " onPartialResults ${partial?.getOrNull(0)}")
-        }
-
-        override fun onEvent(eventType: Int, params: Bundle?) {
-            LOGS.d("RecognitionListener", " onEvent $eventType")
-        }
-    }
-
 
     private fun setAdapter() {
         with(binding.rv) {
@@ -257,7 +214,38 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         requireView().viewTreeObserver.removeOnGlobalLayoutListener(keyboardListener)
     }
 
+    private fun showSnackBar(text: String) {
+        binding.lytSnackbar.apply {
+            this.tvMessage.text = text
+            startSnackBarRemoveTimer()
+
+            this.tvView.setOnClickListener {
+                if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
+                    navigate(R.id.aiMealPlanFragment)
+                } else if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.WORKOUT) {
+                    navigate(R.id.workoutPlansFragment)
+                }
+            }
+        }
+    }
+
+    private fun startSnackBarRemoveTimer() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            nullableBinding?.lytSnackbar?.root?.gone()
+        }, 3000)
+    }
+
     override fun subscribeObservers() {
+
+        viewModel.aiGeneratedPlanSaved.observe(this) {
+            binding.lytSaveData.root.gone()
+
+            if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
+                showSnackBar(getString(R.string.text_your_diet_plan_is_saved))
+            } else if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.WORKOUT) {
+                showSnackBar(getString(R.string.text_your_workout_plan_is_saved))
+            }
+        }
 
         /* keyboardListener = ViewTreeObserver.OnGlobalLayoutListener {
              view?.let {
@@ -290,18 +278,18 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             }
         }
 
-        binding.lytChatBox.chatEtx.doOnTextChanged { text, start, before, count ->
+        /*binding.lytChatBox.chatEtx.doOnTextChanged { text, start, before, count ->
             if (viewModel.fetchInProgress.value == true) return@doOnTextChanged
 
-            /* if (text.isNullOrEmpty()) {
+             if (text.isNullOrEmpty()) {
                  binding.lytChatBox.btnSendMessage.setImageResource(0)
                  binding.vOverlay.gone()
              } else {
                  binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
                  binding.vOverlay.visible()
-             }*/
+             }
 
-        }
+        }*/
 
         viewModel.fetchInProgress.observe(this) {
             if (it) {

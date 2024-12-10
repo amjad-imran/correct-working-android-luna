@@ -1178,5 +1178,9 @@
     <fragment
         android:id="@+id/aiMealPlanFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiMealPlanFragment"
-        android:label="fragment_ai_workout_plan"/>
+        android:label="fragment_ai_workout_plan" />
+    <fragment
+        android:id="@+id/audioAiFragment"
+        android:name="com.oreo.ui.chatGpt.audio.AudioAiFragment"
+        android:label="fragment_audio_ai" />
 </navigation>

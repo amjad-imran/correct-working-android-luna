@@ -35,12 +35,9 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         setRecycler()
         viewModel.getLunaZoneData()
         setVideo()
-
-
     }
 
     private fun setRecycler() {
@@ -90,6 +87,9 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         binding.lytChatWidget.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }
+        binding.lytChatWidget.ivMic.setOnClickListener {
+            navigate(R.id.audioAiFragment)
+        }
 
         binding.lytDailySummaryAvailable.root.setOnClickListener {
             navigate(R.id.aiSummaryFragment)
@@ -127,7 +127,6 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     override fun subscribeObservers() {
         viewModel.suggestedQuestions.observe(this) {
             suggestionsAdapter.setDataSet(it)
-            context.showShortToast("data size ${it.size}")
         }
         viewModel.workoutPlanState.observe(this) {
             if (it) {

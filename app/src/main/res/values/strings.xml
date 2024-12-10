@@ -1739,5 +1739,8 @@
     <string name="text_would_you_like_to_save_this_workout_plan">Would you like to save this\nworkout plan?</string>
     <string name="text_would_you_like_to_save_this_diet_plan">Would you like to save\nthis diet plan?</string>
     <string name="text_view">View</string>
+    <string name="text_setting_up">Setting up</string>
+    <string name="text_your_diet_plan_is_saved">Your diet plan is saved</string>
+    <string name="text_your_workout_plan_is_saved">Your workout plan is saved</string>
 
 </resources>

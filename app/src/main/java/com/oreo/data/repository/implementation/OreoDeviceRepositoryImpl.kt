@@ -158,7 +158,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun saveMealPlan(): Flow<Resource<BaseApiResponse<Any>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/diet-plan'"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/diet-plan"
             remoteDataSource.saveWorkoutPlan(url)
         }
     }
