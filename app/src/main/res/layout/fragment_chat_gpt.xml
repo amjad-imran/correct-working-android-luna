@@ -6,58 +6,35 @@
     android:background="@drawable/image_back_luna_ai_new"
     tools:context="com.oreo.ui.chatGpt.ChatGptFragment">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivClose"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#33FFFFFF"
+        android:elevation="10dp"
+        android:src="@drawable/ic_close_dash_alert"
+        app:contentPadding="6dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
 
     <ImageView
         android:id="@+id/imageView32"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
-        android:layout_marginEnd="6dp"
         android:adjustViewBounds="true"
+        android:elevation="10dp"
         android:src="@drawable/image_luna_ai_logo"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toStartOf="@+id/imageView47"
+        app:layout_constraintBottom_toBottomOf="@+id/ivClose"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView47"
-        android:layout_width="wrap_content"
-        android:layout_height="12dp"
-        android:src="@drawable/image_luna_ai_version"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView32" />
-
-    <View
-        android:id="@+id/view39"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/back_modal_new_round"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivHistory"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/ic_chat_history"
-        app:layout_constraintBottom_toBottomOf="@+id/view39"
-        app:layout_constraintEnd_toEndOf="@+id/view39"
-        app:layout_constraintStart_toStartOf="@+id/view39"
-        app:layout_constraintTop_toTopOf="@+id/view39" />
+        app:layout_constraintTop_toTopOf="@+id/ivClose" />
 
     <TextView
         android:id="@+id/tvChatTitle"
@@ -77,15 +54,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView32"
         tools:text="How to improve my sleep performance ?"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <View
         android:id="@+id/view38"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
-        android:visibility="gone"
         android:background="@drawable/back_modal_dialog_top_round"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,15 +73,26 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:clipToPadding="false"
+        android:paddingTop="56dp"
         android:paddingBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/lytChatBox"
+        app:layout_constraintBottom_toTopOf="@id/lytGeneratingData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvChatTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/imageGradientTop"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/gradient_ai_top"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <View
@@ -114,6 +102,31 @@
         android:background="@drawable/back_ai_chat_bottom"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/lytSnackbar"
+        layout="@layout/layout_ai_snack_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintBottom_toTopOf="@id/lytGeneratingData"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <include
+        android:id="@+id/lytGeneratingData"
+        layout="@layout/layout_chat_ai_generating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/side_margin"
+        android:layout_marginBottom="28dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/lytChatBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
@@ -135,30 +148,10 @@
         layout="@layout/layout_ai_save_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/testAudio"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="24dp"
-        android:src="@drawable/ic_distance_milestones"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/lytAudio"
-        layout="@layout/layout_luna_audio_overlay"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:id="@+id/progressBar"

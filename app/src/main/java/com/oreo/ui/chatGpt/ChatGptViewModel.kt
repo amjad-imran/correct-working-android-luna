@@ -55,6 +55,9 @@ class ChatGptViewModel
 
     val threadTitle = MutableLiveData<String>()
 
+    val aiGeneratedPlanSaved = MutableLiveData<Event<Boolean>>()
+    val showSavePlan = MutableLiveData<Event<AiPlanType>>()
+
     var threadId: String? = null
     var defaultMessage: String? = null
     var userMessage: String? = null
@@ -242,7 +245,7 @@ class ChatGptViewModel
                     if (msg != null) {
                         msg = cleanServerResponse(msg)
                         responseBuilder.append(msg)
-                        if(isAudioMode){
+                        if (isAudioMode) {
                             //speechRecognizerManager.speakText(msg)
                             LOGS.d("RecognitionListener", "Received message $msg")
                         }
@@ -288,10 +291,13 @@ class ChatGptViewModel
                     //LOGS.d("streammmmmm onClosed()")
                     fetchInProgress.postValue(false)
 
-                    if(isAudioMode){
+                    if (isAudioMode) {
                         speechRecognizerManager.speakText(responseBuilder.toString())
                         LOGS.d("RecognitionListener", "Received message $responseBuilder")
                     }
+
+                    //TODO write plan & its type recognition logic  - with anil
+                    showSavePlan.postValue(Event(AiPlanType.WORKOUT))
                     sse?.close()
                 }
 
@@ -418,9 +424,25 @@ class ChatGptViewModel
 
     private fun ignoreQues(ques: String): Boolean {
         val quesList = arrayListOf(
-            "Hi", "Hey", "Hey there", "Hi there",
-            "Namaste", "Hola", "Hi Luna", "Hey Luna", "hiluna", "how are you", "howdie", "who are you",
-            "dear", "hi dear", "hi sir", "hi mam", "sir", "mam", "hello"
+            "Hi",
+            "Hey",
+            "Hey there",
+            "Hi there",
+            "Namaste",
+            "Hola",
+            "Hi Luna",
+            "Hey Luna",
+            "hiluna",
+            "how are you",
+            "howdie",
+            "who are you",
+            "dear",
+            "hi dear",
+            "hi sir",
+            "hi mam",
+            "sir",
+            "mam",
+            "hello"
         )
         return quesList.any { it.equals(ques, true) }
     }
@@ -496,4 +518,52 @@ class ChatGptViewModel
         super.onCleared()
         speechRecognizerManager.destroy()
     }
+
+    fun savePlanData() {
+        val planType = AiPlanType.WORKOUT
+
+        viewModelScope.launch {
+            if (planType == AiPlanType.WORKOUT) {
+                oreoDeviceRepository.saveWorkoutPlan()
+            } else {
+                oreoDeviceRepository.saveMealPlan()
+            }.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        savePlanData()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            aiGeneratedPlanSaved.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+enum class AiPlanType {
+    WORKOUT, MEAL
 }

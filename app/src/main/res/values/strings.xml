@@ -1727,5 +1727,17 @@
     <string name="text_workout_added_successfully">Workout Added Successfully</string>
     <string name="text_please_select_a_time_before_current_time">Please select a time before current time</string>
     <string name="text_please_select_a_time_after_10_pm">Please select a time after 10 PM</string>
+    <string name="text_edit_diet_plan">Edit diet plan</string>
+    <string name="text_daily_health_ndigest">Daily Health\nDigest</string>
+    <string name="text_my_workout_plan">My workout\nplan</string>
+    <string name="text_setup_nworkout_plan">Setup\nworkout plan</string>
+    <string name="text_setup_diet_plan">Setup\ndiet plan</string>
+    <string name="text_ask_luna">Ask Luna</string>
+    <string name="text_my_nutrition_plan">My nutrition\nplan</string>
+    <string name="text_message">Message</string>
+    <string name="text_generating_data_dot">Generating data...</string>
+    <string name="text_would_you_like_to_save_this_workout_plan">Would you like to save this\nworkout plan?</string>
+    <string name="text_would_you_like_to_save_this_diet_plan">Would you like to save\nthis diet plan?</string>
+    <string name="text_view">View</string>
 
 </resources>

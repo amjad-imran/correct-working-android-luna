@@ -33,6 +33,7 @@ import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.HealthCalendar
 import com.oreo.data.model.LearnModel
+import com.oreo.data.model.LunaZoneResponse
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHSModel
@@ -480,6 +481,18 @@ interface NetworkService {
     suspend fun getDailySummaryData(
         @Url url: String
     ): BaseApiResponse<List<AiDailySummaryModel>>
+
+    @GET
+    suspend fun getLunaZoneData(
+        @Url url: String
+    ): BaseApiResponse<LunaZoneResponse>
+
+    @POST
+    suspend fun saveWorkoutPlan(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
+
 
 
     @GET

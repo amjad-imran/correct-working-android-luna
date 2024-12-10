@@ -9,6 +9,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.LunaZoneResponse
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
@@ -135,6 +136,30 @@ class OreoDeviceRepositoryImpl(
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/"//TODO change URL
             remoteDataSource.getDailySummaryData(url)
+        }
+    }
+
+    override suspend fun getLunaZoneData(): Flow<Resource<BaseApiResponse<LunaZoneResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/dashboard"
+            remoteDataSource.getLunaZoneData(url)
+        }
+    }
+
+    override suspend fun saveWorkoutPlan(): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/workout-plan"
+            remoteDataSource.saveWorkoutPlan(url)
+        }
+    }
+
+    override suspend fun saveMealPlan(): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/diet-plan'"
+            remoteDataSource.saveWorkoutPlan(url)
         }
     }
 }

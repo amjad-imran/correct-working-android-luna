@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/back_chat_message_send">
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView47"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/back_chat_message_send"
+        app:layout_constraintBottom_toBottomOf="@+id/chatEtx"
+        app:layout_constraintEnd_toEndOf="@+id/chatEtx"
+        app:layout_constraintStart_toStartOf="@+id/chatEtx"
+        app:layout_constraintTop_toTopOf="@+id/chatEtx" />
 
 
     <EditText
         android:id="@+id/chatEtx"
         style="@style/S14"
         android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="10dp"
         android:background="@color/transparent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="How can I help today"
+        android:hint="@string/text_message"
         android:imeOptions="actionSend"
-        android:paddingEnd="8dp"
+        android:paddingHorizontal="16dp"
         android:singleLine="true"
         android:textColor="@color/white"
         android:textColorHint="#66ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSendMessage"
+        app:layout_constraintEnd_toStartOf="@+id/btnAudioChat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/btnSendMessage"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="10dp"
-        android:padding="6dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/btnAudioChat"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_ai_mic_black"
+        app:contentPadding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

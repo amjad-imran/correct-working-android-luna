@@ -88,7 +88,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         override fun onRmsChanged(rmsdB: Float) {
             //LOGS.d("RecognitionListener", "onRmsChanged - $rmsdB")
-            binding.lytAudio.viewAudioVisualizer.updateRms(rmsdB)
+            //binding.lytAudio.viewAudioVisualizer.updateRms(rmsdB)
         }
 
         override fun onBufferReceived(buffer: ByteArray?) {
@@ -104,7 +104,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         override fun onResults(results: Bundle?) {
             val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             val text = matches?.getOrNull(0) ?: ""
-            binding.lytAudio.testUserText.text = text
+            //binding.lytAudio.testUserText.text = text
             LOGS.d("RecognitionListener", "onResults ${matches?.getOrNull(0)}")
             sendMessage(text)
         }
@@ -151,46 +151,52 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
-        binding.testAudio.setOnClickListener {
-            binding.lytAudio.root.visible()
-        }
-        binding.lytAudio.ivCross.setOnClickListener {
-            binding.lytAudio.root.gone()
-            viewModel.isAudioMode = false
-            viewModel.stopSpeechRecognition()
-        }
-        binding.lytAudio.bTextMode.setOnClickListener {
-            binding.lytAudio.root.gone()
-            viewModel.isAudioMode = false
-            viewModel.stopSpeechRecognition()
-        }
-        binding.lytAudio.bAudioMode.setOnClickListener {
-            viewModel.isAudioMode = true
-            viewModel.startSpeechRecognition(listener)
+        binding.rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerView.canScrollVertically(-1)) {
+                    binding.imageGradientTop.gone()
+                } else {
+                    if (binding.imageGradientTop.visibility == View.GONE) {
+                        binding.imageGradientTop.visible()
+                    }
+                }
+
+            }
+        })
+
+        /*binding.ivHistory.setOnClickListener {
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
+        }*/
+
+        binding.lytGeneratingData.ivStopGenerating.setOnClickListener {
+            viewModel.stopResponseGeneration()
         }
 
-        binding.ivHistory.setOnClickListener {
-            navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
+        binding.lytSaveData.btnSave.setOnClickListener {
+            viewModel.savePlanData()
+        }
+        binding.lytSaveData.btnCancel.setOnClickListener {
+            binding.lytSaveData.root.gone()
         }
 
         /* binding.lytChatBox.btnNewChat.setOnClickListener {
              navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf("",""))
          }*/
 
-        binding.lytChatBox.btnSendMessage.setOnClickListener {
-            if (viewModel.fetchInProgress.value == true) {
-                viewModel.stopResponseGeneration()
-            } else {
-                if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
-                    sendMessage(binding.lytChatBox.chatEtx.text.toString())
-                }
-            }
-        }
+        /* binding.lytChatBox.btnSendMessage.setOnClickListener {
+             if (viewModel.fetchInProgress.value == true) {
+                 viewModel.stopResponseGeneration()
+             } else {
+                 if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
+                     sendMessage(binding.lytChatBox.chatEtx.text.toString())
+                 }
+             }
+         }*/
 
-        binding.toolbar.backBtn.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             navigateUpSafe()
         }
-
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -212,7 +218,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                     samplingRate: Int
                 ) {
                     val amplitude = waveform.map { it.toInt().absoluteValue }.average().toFloat()
-                    binding.lytAudio.viewAudioVisualizer.updateRms(amplitude)
+                    // binding.lytAudio.viewAudioVisualizer.updateRms(amplitude)
                 }
 
                 override fun onFftDataCapture(
@@ -227,7 +233,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
     }
 
-    fun sendMessage(message:String) {
+    fun sendMessage(message: String) {
         if (message.isNotEmpty()) {
             viewModel.addSentMessage(message)
             viewModel.addThinkingMessage()
@@ -253,20 +259,29 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun subscribeObservers() {
 
-        keyboardListener = ViewTreeObserver.OnGlobalLayoutListener {
-            view?.let {
-                val insets = ViewCompat.getRootWindowInsets(it)
-                val isKeyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime())
-                if (viewModel.threadTitle.value.isNullOrEmpty().not()) {
-                    if (isKeyboardVisible == true) {
-                        binding.tvChatTitle.gone()
-                    } else {
-                        binding.tvChatTitle.visible()
-                    }
+        /* keyboardListener = ViewTreeObserver.OnGlobalLayoutListener {
+             view?.let {
+                 val insets = ViewCompat.getRootWindowInsets(it)
+                 val isKeyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime())
+                 if (viewModel.threadTitle.value.isNullOrEmpty().not()) {
+                     if (isKeyboardVisible == true) {
+                         binding.tvChatTitle.gone()
+                     } else {
+                         binding.tvChatTitle.visible()
+                     }
+                 }
+             }
+         }
+         requireView().viewTreeObserver.addOnGlobalLayoutListener(keyboardListener)*/
+
+        viewModel.showSavePlan.observe(this) {
+            it.getContent()?.let {
+                when (it) {
+                    AiPlanType.WORKOUT -> showSaveWorkoutPlan()
+                    AiPlanType.MEAL -> showSaveMealPlan()
                 }
             }
         }
-        requireView().viewTreeObserver.addOnGlobalLayoutListener(keyboardListener)
 
         viewModel.threadTitle.observe(this) {
             binding.tvChatTitle.apply {
@@ -278,27 +293,23 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.lytChatBox.chatEtx.doOnTextChanged { text, start, before, count ->
             if (viewModel.fetchInProgress.value == true) return@doOnTextChanged
 
-            if (text.isNullOrEmpty()) {
-                binding.lytChatBox.btnSendMessage.setImageResource(0)
-                binding.vOverlay.gone()
-            } else {
-                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
-                binding.vOverlay.visible()
-            }
+            /* if (text.isNullOrEmpty()) {
+                 binding.lytChatBox.btnSendMessage.setImageResource(0)
+                 binding.vOverlay.gone()
+             } else {
+                 binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_ai_send_message)
+                 binding.vOverlay.visible()
+             }*/
 
         }
 
         viewModel.fetchInProgress.observe(this) {
             if (it) {
-                binding.lytChatBox.chatEtx.isEnabled = false
-                binding.lytChatBox.chatEtx.setText(getString(R.string.text_generating_data))
-                binding.lytChatBox.chatEtx.setTextColor(android.graphics.Color.parseColor("#9ecfff"))
-                binding.lytChatBox.btnSendMessage.setImageResource(R.drawable.ic_round_stop_circle)
+                binding.lytGeneratingData.root.visible()
+                binding.lytChatBox.root.gone()
             } else {
-                binding.lytChatBox.chatEtx.isEnabled = true
-                binding.lytChatBox.chatEtx.setText("")
-                binding.lytChatBox.chatEtx.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
-                binding.lytChatBox.btnSendMessage.setImageResource(0)
+                binding.lytGeneratingData.root.gone()
+                binding.lytChatBox.root.visible()
             }
         }
 
@@ -330,6 +341,20 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             it?.let {
                 mAdapter.items = it
             }
+        }
+    }
+
+    private fun showSaveWorkoutPlan() {
+        binding.lytSaveData.apply {
+            testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_workout_plan)
+            root.visible()
+        }
+    }
+
+    private fun showSaveMealPlan() {
+        binding.lytSaveData.apply {
+            testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_diet_plan)
+            root.visible()
         }
     }
 

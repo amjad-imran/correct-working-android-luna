@@ -9,12 +9,11 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiWorkoutPlanBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AiWorkoutPlanFragment :
+class AiMealPlanFragment :
     BaseFragment<FragmentAiWorkoutPlanBinding>(FragmentAiWorkoutPlanBinding::inflate) {
 
     private val viewModel: MealPlanViewModel by viewModels()

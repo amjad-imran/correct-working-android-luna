@@ -5,6 +5,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
+import com.oreo.data.model.LunaZoneResponse
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
@@ -44,4 +45,10 @@ interface OreoDeviceRepository {
     suspend fun getAiMealPlans(): Flow<Resource<BaseApiResponse<Any>?>>
 
     suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>>
+
+    suspend fun getLunaZoneData(): Flow<Resource<BaseApiResponse<LunaZoneResponse>?>>
+
+    suspend fun saveWorkoutPlan(): Flow<Resource<BaseApiResponse<Any>?>>
+
+    suspend fun saveMealPlan(): Flow<Resource<BaseApiResponse<Any>?>>
 }
