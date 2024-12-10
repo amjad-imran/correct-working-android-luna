@@ -1718,5 +1718,6 @@
     <string name="text_workout_added_successfully">Workout Added Successfully</string>
     <string name="text_please_select_a_time_before_current_time">Please select a time before current time</string>
     <string name="text_please_select_a_time_after_10_pm">Please select a time after 10 PM</string>
+    <string name="text_synced_space">Synced : %1$s</string>
 
 </resources>

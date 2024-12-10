@@ -1686,4 +1686,5 @@
     <string name="text_workout_added_successfully">Training erfolgreich hinzugefügt</string>
     <string name="text_please_select_a_time_before_current_time">Bitte wählen Sie eine Uhrzeit vor der aktuellen Uhrzeit aus</string>
     <string name="text_please_select_a_time_after_10_pm">Bitte wählen Sie eine Zeit nach 22:00 Uhr aus</string>
+    <string name="text_synced_space">Synchronisiert: %1$s</string>
 </resources>

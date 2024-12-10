@@ -1689,4 +1689,5 @@
     <string name="text_workout_added_successfully">锻炼添加成功</string>
     <string name="text_please_select_a_time_before_current_time">请选择当前时间之前的时间</string>
     <string name="text_please_select_a_time_after_10_pm">请选择晚上10点之后的时间</string>
+    <string name="text_synced_space">已同步：%1$s</string>
 </resources>

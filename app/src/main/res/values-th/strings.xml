@@ -1675,4 +1675,5 @@
     <string name="text_workout_added_successfully">เพิ่มการออกกำลังกายเรียบร้อยแล้ว</string>
     <string name="text_please_select_a_time_before_current_time">โปรดเลือกเวลาก่อนเวลาปัจจุบัน</string>
     <string name="text_please_select_a_time_after_10_pm">กรุณาเลือกเวลาหลัง 22.00 น</string>
+    <string name="text_synced_space">ซิงค์แล้ว : %1$s</string>
 </resources>

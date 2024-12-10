@@ -71,7 +71,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
 
     private fun updateIndicators(count: Int, position: Int) {
         indicators.clear()
-        binding.indicatorLayout.removeAllViews()
+        nullableBinding?.indicatorLayout?.removeAllViews()
         for (i in 0 until count) {
             val indicator = View(this@ReferralFragment.context)
             val params = LinearLayout.LayoutParams(
@@ -90,7 +90,7 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
                 indicator.setBackgroundResource(R.drawable.indicator_inactive)
             }
             indicators.add(indicator)
-            binding.indicatorLayout.addView(indicator)
+            nullableBinding?.indicatorLayout?.addView(indicator)
         }
     }
 

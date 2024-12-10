@@ -51,7 +51,6 @@
             lineChart:yTextSize="10sp"
             tools:visibility="visible" />
 
-
         <include
             android:id="@+id/lytLegendView"
             layout="@layout/fmh_skin_temp_legend_view"
