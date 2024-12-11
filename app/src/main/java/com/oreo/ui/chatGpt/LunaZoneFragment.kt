@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt
 
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -13,6 +14,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
 class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneBinding::inflate) {
@@ -35,9 +38,27 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setBlur()
         setRecycler()
         viewModel.getLunaZoneData()
         setVideo()
+    }
+
+    private fun setBlur() {
+        val radius = 5f
+        val decorView = binding.lytChatWidget.root
+        val rootView = binding.rootView
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(requireContext())
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
     }
 
     private fun setRecycler() {

@@ -1,4 +1,6 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/rootView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -80,16 +82,28 @@
         tools:visibility="visible" />
 
 
-    <include
-        android:id="@+id/lytChatWidget"
-        layout="@layout/layout_ai_chat_widget"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:blurOverlayColor="#00000000">
+
+            <include
+                android:id="@+id/lytChatWidget"
+                layout="@layout/layout_ai_chat_widget"
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
+        </eightbitlab.com.blurview.BlurView>
+    </androidx.cardview.widget.CardView>
 
     <include
         android:id="@+id/progressBar"
