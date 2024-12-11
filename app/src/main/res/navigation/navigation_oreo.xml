@@ -892,6 +892,9 @@
         <argument
             android:name="aiTopic"
             app:argType="com.oreo.ui.chatGpt.AITopics" />
+        <argument
+            android:name="meal"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/chatSplashFragment"

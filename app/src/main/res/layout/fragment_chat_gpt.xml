@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvChatTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
+        android:id="@+id/rvChats"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

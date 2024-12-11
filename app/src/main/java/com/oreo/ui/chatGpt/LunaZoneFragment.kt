@@ -13,9 +13,11 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneBinding::inflate) {
@@ -41,11 +43,29 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         setBlur()
         setRecycler()
         viewModel.getLunaZoneData()
-        setVideo()
+
+    }
+
+    private fun getVideoHeight() {
+        binding.rootView.post {
+            val height: Int = binding.rootView.height
+
+            val layoutParams = binding.lytDailySummaryAvailable.root.layoutParams
+            layoutParams.height = (height.toFloat() * 0.65).roundToInt()
+            binding.lytDailySummaryAvailable.root.layoutParams = layoutParams
+
+            setVideo()
+
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getVideoHeight()
     }
 
     private fun setBlur() {
-        val radius = 5f
+        val radius = 20f
         val decorView = binding.lytChatWidget.root
         val rootView = binding.rootView
         val windowBackground = decorView.background
@@ -189,7 +209,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             }
             binding.lytPlans.lytWorkoutPlanSetup.root.gone()
         } else {
-            if(mealState){
+            if (mealState) {
                 binding.lytPlans.lytWorkoutPlan.apply {
                     ivWorkoutPlan.setImageResource(R.drawable.image_ai_w_plan)
                     ivBottomIcon.setImageResource(R.drawable.image_w_plus)
@@ -198,7 +218,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     root.visible()
                 }
                 binding.lytPlans.lytWorkoutPlanSetup.root.gone()
-            }else{
+            } else {
                 binding.lytPlans.lytWorkoutPlan.root.gone()
                 binding.lytPlans.lytWorkoutPlanSetup.root.visible()
             }
@@ -216,7 +236,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             }
             binding.lytPlans.lytMealPlanSetup.root.gone()
         } else {
-            if(workoutState){
+            if (workoutState) {
                 binding.lytPlans.lytMealPlan.apply {
                     ivWorkoutPlan.setImageResource(R.drawable.image_ai_m_plan)
                     ivBottomIcon.setImageResource(R.drawable.image_meal_plus)
@@ -225,7 +245,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     root.visible()
                 }
                 binding.lytPlans.lytMealPlanSetup.root.gone()
-            }else{
+            } else {
                 binding.lytPlans.lytMealPlan.root.gone()
                 binding.lytPlans.lytMealPlanSetup.root.visible()
             }

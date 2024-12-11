@@ -73,6 +73,21 @@ val TEXT_GRADIENT_STYLE_2 = intArrayOf(
     Color.parseColor("#88ebeb")
 )
 
+
+fun View.revealFromBottom() {
+    measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    val height = measuredHeight
+
+    translationY = height.toFloat()
+
+    visibility = View.VISIBLE
+
+    animate()
+        .translationY(0f)
+        .setDuration(300) // Animation duration in milliseconds
+        .start()
+}
+
 fun Float.dpToPixel(): Float {
     val density = NoisefitApplication.context?.resources?.displayMetrics?.density ?: 0f
     return this * density

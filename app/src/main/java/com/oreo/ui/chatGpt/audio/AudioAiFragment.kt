@@ -90,7 +90,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
     private val listener = object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
-            binding.tvMessage.text = ""
+            nullableBinding?.tvMessage?.text = ""
 
             LOGS.d("RecognitionListener", "onReadyForSpeech() $params")
             viewModel.startListening()
@@ -111,12 +111,17 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
         override fun onEndOfSpeech() {
             LOGS.d("RecognitionListener", "onEndOfSpeech()")
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.startListening()
-            }, 500)
+            startListeningWithDelay()
+
         }
 
-        override fun onError(error: Int) {}
+        override fun onError(error: Int) {
+            LOGS.d("RecognitionListener", "onError() - $error")
+            if(error== SpeechRecognizer.ERROR_NO_MATCH){
+                startListeningWithDelay()
+            }
+
+        }
 
         override fun onResults(results: Bundle?) {
             val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -137,5 +142,10 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
     }
 
+    fun startListeningWithDelay(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.startListening()
+        }, 500)
+    }
 
 }

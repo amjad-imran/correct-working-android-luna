@@ -1,8 +1,7 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/rootView"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/image_back_luna_ai_new"
@@ -88,6 +87,7 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="72dp"
         app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -96,7 +96,7 @@
             android:id="@+id/blurView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:blurOverlayColor="#00000000">
+            app:blurOverlayColor="#80000000">
 
             <include
                 android:id="@+id/lytChatWidget"

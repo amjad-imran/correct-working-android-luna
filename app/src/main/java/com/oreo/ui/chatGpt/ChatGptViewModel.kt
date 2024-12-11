@@ -61,6 +61,7 @@ class ChatGptViewModel
     var threadId: String? = null
     var defaultMessage: String? = null
     var userMessage: String? = null
+    var meal: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"

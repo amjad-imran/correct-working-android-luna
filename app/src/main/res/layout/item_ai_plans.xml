@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -14,12 +15,16 @@
         <include
             android:id="@+id/lytWorkoutPlan"
             layout="@layout/layout_ai_plan_card"
+            android:visibility="gone"
+            tools:visibilty="visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/lytWorkoutPlanSetup"
             layout="@layout/layout_ai_plan_setup"
+            android:visibility="gone"
+            tools:visibilty="visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -38,12 +43,16 @@
         <include
             android:id="@+id/lytMealPlan"
             layout="@layout/layout_ai_plan_card"
+            android:visibility="gone"
+            tools:visibilty="visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/lytMealPlanSetup"
             layout="@layout/layout_ai_plan_setup_meal"
+            android:visibility="gone"
+            tools:visibilty="visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

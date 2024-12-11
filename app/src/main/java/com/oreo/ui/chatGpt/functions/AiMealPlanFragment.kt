@@ -10,6 +10,8 @@ import com.noisefit.luna.databinding.FragmentAiWorkoutPlanBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,8 +25,15 @@ class AiMealPlanFragment :
     }
 
     private val mealsAdapter: MealsAdapter by lazy {
-        MealsAdapter(onMealSelected = {
-
+        MealsAdapter(onMealSelected = { meal->
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                null,
+                null,
+                AITopics.GENERAL,
+                meal
+            )
         })
     }
 
@@ -49,6 +58,17 @@ class AiMealPlanFragment :
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
+        }
+
+        binding.tvEditDietPlan.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                null,
+                null,
+                AITopics.GENERAL
+            )
+            navigate(frag, bundle)
         }
 
     }

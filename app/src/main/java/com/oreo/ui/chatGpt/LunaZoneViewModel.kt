@@ -25,10 +25,6 @@ class LunaZoneViewModel @Inject constructor(
     val planState = MutableLiveData<Pair<Boolean, Boolean>>()
 
     fun getLunaZoneData() {
-
-        planState.postValue(Pair(true,true))
-        return
-
         viewModelScope.launch {
             deviceRepository.getLunaZoneData().collect { resource ->
                 when (resource) {
@@ -58,9 +54,12 @@ class LunaZoneViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
-                            /*workoutPlanState.postValue(it.workoutPlan ?: false)
-                            mealPLanState.postValue(it.nutritionalPlan ?: false)*/
+                            planState.postValue(
+                                Pair(
+                                    it.workoutPlan ?: false,
+                                    it.nutritionalPlan ?: false
+                                )
+                            )
                             suggestedQuestions.postValue(it.suggestedQues ?: ArrayList())
 
                         }

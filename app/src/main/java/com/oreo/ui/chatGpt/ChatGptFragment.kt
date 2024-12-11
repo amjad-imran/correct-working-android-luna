@@ -24,12 +24,14 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.revealFromBottom
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Scanner
 import kotlin.math.absoluteValue
 
 
@@ -41,7 +43,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             defaultMessage: String?,
             userMessage: String?,
             title: String?,
-            aiTopic: AITopics
+            aiTopic: AITopics,
+            meal: String? = null,
         ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
@@ -49,6 +52,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putString("userMessage", userMessage ?: "")
                 putString("title", title ?: "")
                 putSerializable("aiTopic", aiTopic)
+                putString("meal", meal)
             })
         }
     }
@@ -65,6 +69,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.threadId = args.threadId
         viewModel.defaultMessage = args.defaultMessage
         viewModel.userMessage = args.userMessage
+        viewModel.meal = args.meal
 
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
@@ -73,13 +78,18 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.generateThreadId()
         } else {
             viewModel.loadMessagesByThreadId(viewModel.threadId!!)
-            viewModel.threadTitle.postValue(args.title)
+            //viewModel.threadTitle.postValue(args.title)
         }
+
+        setTopData()
+    }
+
+    private fun setTopData() {
 
     }
 
     private fun setAdapter() {
-        with(binding.rv) {
+        with(binding.rvChats) {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
@@ -108,7 +118,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
-        binding.rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.lytChatBox.btnAudioChat.setOnClickListener {
+            navigate(R.id.audioAiFragment)
+        }
+
+        binding.rvChats.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(-1)) {
@@ -133,6 +147,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.lytSaveData.btnSave.setOnClickListener {
             viewModel.savePlanData()
         }
+
         binding.lytSaveData.btnCancel.setOnClickListener {
             binding.lytSaveData.root.gone()
         }
@@ -236,8 +251,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }, 3000)
     }
 
+    override fun onResume() {
+        super.onResume()
+        nullableBinding?.lytSnackbar?.root?.gone()
+    }
+
     override fun subscribeObservers() {
-        viewModel.removeSnackBar.observe(this){
+        viewModel.removeSnackBar.observe(this) {
             it.getContent()?.let {
                 nullableBinding?.lytSnackbar?.root?.gone()
             }
@@ -327,7 +347,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.scrollToBottom.observe(this) {
             it.getContent()?.let {
-                binding.rv.smoothScrollToPosition(mAdapter.getItemCount() - 1)
+                binding.rvChats.smoothScrollToPosition(mAdapter.getItemCount() - 1)
             }
         }
 
@@ -341,14 +361,15 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     private fun showSaveWorkoutPlan() {
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_workout_plan)
-            root.visible()
+            root.revealFromBottom()
         }
     }
+
 
     private fun showSaveMealPlan() {
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_diet_plan)
-            root.visible()
+            root.revealFromBottom()
         }
     }
 
