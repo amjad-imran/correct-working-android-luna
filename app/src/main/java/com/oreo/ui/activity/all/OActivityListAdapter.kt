@@ -60,10 +60,10 @@ class OActivityListAdapter(
 //                    view.findViewById<View>(R.id.include45).gone()
 //                }
                 var date = activity.date
-                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6())) {
+                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
                     date = view.context.getString(R.string.text_today_s_workouts)
-                }else{
-                    date = LocalDate.parse(activity.date,DateTimeFormatter.ofPattern("dd MMMM, yyyy")).format(
+                } else {
+                    date = LocalDate.parse(activity.date).format(
                         DateTimeFormatter.ofPattern(
                             "dd MMMM, yyyy",
                             Locale(NoiseFitApplicationMain.appLanguage.languageCode)
@@ -126,7 +126,7 @@ class OActivityListAdapter(
                         text = view.context.getString(R.string.text_imported_from_health)
                         visible()
                     }
-                }else if(activity.type.equals("google", true)){
+                } else if (activity.type.equals("google", true)) {
                     view.findViewById<TextView>(R.id.tvImportedFrom).apply {
                         text = this.context.getString(R.string.text_imported_from_google_fit)
                         visible()
