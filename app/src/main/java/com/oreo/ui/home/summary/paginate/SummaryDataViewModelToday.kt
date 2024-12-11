@@ -472,7 +472,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                         resourceProvider.getString(
                                             R.string.text_today_s_your_predicted_day,
                                             ApplicationUtils.getOrdinalWord(
-                                                periodCurrentDay,resourceProvider
+                                                periodCurrentDay, resourceProvider
                                             )
                                         )
                                     }
@@ -925,7 +925,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = tempVariance,
-                predictionDate = data.nextPeriodDate?:"",
+                predictionDate = data.nextPeriodDate ?: "",
                 days = data.currentDay ?: 0,
                 predictionString = resourceProvider.getString(R.string.text_period_date),
                 background = R.drawable.back_card_period_big
@@ -942,7 +942,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = tempVariance,
-                predictionDate = data.ovulationDate?:"",
+                predictionDate = data.ovulationDate ?: "",
                 days = data.currentDay ?: 0,
                 predictionString = resourceProvider.getString(R.string.text_ovulation_date),
                 background = R.drawable.back_card_ovulation_big
@@ -985,7 +985,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 bottomText = resourceProvider.getString(R.string.text_ovulation_date),
-                predictionDate = data.ovulationDate?:"",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
+                predictionDate = data.ovulationDate
+                    ?: "",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
                 background = R.drawable.back_card_ovulation_small
             )
         } else {
@@ -1000,7 +1001,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 bottomText = resourceProvider.getString(R.string.text_period_date),
-                predictionDate = data.nextPeriodDate?:"",
+                predictionDate = data.nextPeriodDate ?: "",
                 background = R.drawable.back_card_period_small
             )
         }
@@ -1755,6 +1756,8 @@ class SummaryDataViewModelToday @Inject constructor(
             R.drawable.ic_health_good
         } else if (status.equals("optimal", true)) {
             R.drawable.ic_health_optimal
+        } else if (status.equals("calibrating", true)) {
+            R.drawable.ic_hm_check_default
         } else {
             R.drawable.ic_health_good
         }
