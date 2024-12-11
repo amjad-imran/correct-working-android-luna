@@ -128,38 +128,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         viewModel.suggestedQuestions.observe(this) {
             suggestionsAdapter.setDataSet(it)
         }
-        viewModel.workoutPlanState.observe(this) {
-            if (it) {
-                binding.lytPlans.lytWorkoutPlan.apply {
-                    ivWorkoutPlan.setImageResource(R.drawable.image_ai_w_plan)
-                    ivBottomIcon.setImageResource(R.drawable.ic_workout_plan)
-                    tvPlanName.text = getString(R.string.text_my_workout_plan)
-                    tvPlanName.setTextColor(Color.parseColor("#A8FFFF"))
-                    root.visible()
-                }
-                binding.lytPlans.lytWorkoutPlanSetup.root.gone()
-            } else {
-                binding.lytPlans.lytWorkoutPlan.root.gone()
-                binding.lytPlans.lytWorkoutPlanSetup.root.visible()
-            }
-        }
-        viewModel.mealPLanState.observe(this) {
-            if (it) {
-                binding.lytPlans.lytMealPlan.apply {
-                    ivWorkoutPlan.setImageResource(R.drawable.image_ai_m_plan)
-                    ivBottomIcon.setImageResource(R.drawable.ic_meal_plan)
-                    tvPlanName.text = getString(R.string.text_my_nutrition_plan)
-                    tvPlanName.setTextColor(Color.parseColor("#61613D"))
-                    root.visible()
-                }
-                binding.lytPlans.lytMealPlanSetup.root.gone()
-            } else {
-                binding.lytPlans.lytMealPlan.root.gone()
-                binding.lytPlans.lytMealPlanSetup.root.visible()
-            }
-        }
 
-
+        viewModel.planState.observe(this) {
+            setPlanUi(it)
+        }
 
         viewModel.getLoading().observe(this) {
             if (it) {
@@ -180,6 +152,65 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 uiController.onApiErrorReceived(response)
             }
         }
+    }
+
+    private fun setPlanUi(data: Pair<Boolean, Boolean>) {
+
+        val (workoutState, mealState) = data
+
+        if (workoutState) {
+            binding.lytPlans.lytWorkoutPlan.apply {
+                ivWorkoutPlan.setImageResource(R.drawable.image_ai_w_plan)
+                ivBottomIcon.setImageResource(R.drawable.ic_workout_plan)
+                tvPlanName.text = getString(R.string.text_my_workout_plan)
+                tvPlanName.setTextColor(Color.parseColor("#A8FFFF"))
+                root.visible()
+            }
+            binding.lytPlans.lytWorkoutPlanSetup.root.gone()
+        } else {
+            if(mealState){
+                binding.lytPlans.lytWorkoutPlan.apply {
+                    ivWorkoutPlan.setImageResource(R.drawable.image_ai_w_plan)
+                    ivBottomIcon.setImageResource(R.drawable.image_w_plus)
+                    tvPlanName.text = getString(R.string.text_setup_nworkout_plan)
+                    tvPlanName.setTextColor(Color.parseColor("#A8FFFF"))
+                    root.visible()
+                }
+                binding.lytPlans.lytWorkoutPlanSetup.root.gone()
+            }else{
+                binding.lytPlans.lytWorkoutPlan.root.gone()
+                binding.lytPlans.lytWorkoutPlanSetup.root.visible()
+            }
+
+        }
+
+
+        if (mealState) {
+            binding.lytPlans.lytMealPlan.apply {
+                ivWorkoutPlan.setImageResource(R.drawable.image_ai_m_plan)
+                ivBottomIcon.setImageResource(R.drawable.ic_meal_plan)
+                tvPlanName.text = getString(R.string.text_my_nutrition_plan)
+                tvPlanName.setTextColor(Color.parseColor("#61613D"))
+                root.visible()
+            }
+            binding.lytPlans.lytMealPlanSetup.root.gone()
+        } else {
+            if(workoutState){
+                binding.lytPlans.lytMealPlan.apply {
+                    ivWorkoutPlan.setImageResource(R.drawable.image_ai_m_plan)
+                    ivBottomIcon.setImageResource(R.drawable.image_meal_plus)
+                    tvPlanName.text = getString(R.string.text_setup_diet_plan)
+                    tvPlanName.setTextColor(Color.parseColor("#61613D"))
+                    root.visible()
+                }
+                binding.lytPlans.lytMealPlanSetup.root.gone()
+            }else{
+                binding.lytPlans.lytMealPlan.root.gone()
+                binding.lytPlans.lytMealPlanSetup.root.visible()
+            }
+
+        }
+
     }
 
 }

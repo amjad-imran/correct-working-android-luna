@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt.functions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -63,12 +64,18 @@ class WorkoutPlanViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
+                            generateData(it)
+
                             setSelectedPosition(LocalDate.now().dayOfWeek.value)//todo based on current day
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun generateData(data: List<AiWorkoutResponse>) {
+        //As per anil response is not yet final
     }
 
     /**

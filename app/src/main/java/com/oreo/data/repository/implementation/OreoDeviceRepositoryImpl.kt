@@ -2,6 +2,7 @@ package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
@@ -115,7 +116,7 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<Any>?>> {
+    override suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<List<AiWorkoutResponse>>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/activity/v2/workout-plan"
@@ -134,7 +135,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/"//TODO change URL
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/digest"
             remoteDataSource.getDailySummaryData(url)
         }
     }

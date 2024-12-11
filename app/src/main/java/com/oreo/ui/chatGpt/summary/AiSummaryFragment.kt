@@ -26,6 +26,9 @@ import com.noisefit.luna.databinding.AiShareTemplate1Binding
 import com.noisefit.luna.databinding.FragmentAiSummaryBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.CommonConstants.FILE_PROVIDER
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AiDailySummaryModel
@@ -52,11 +55,34 @@ class AiSummaryFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
         viewModel.dailySummaryData.observe(this) {
             it.getContent()?.let {
-
                 viewModel.currentStoryIndex = 0
                 viewModel.isPaused = false
+
+                binding.btnCancel.visible()
+                binding.ivShare.visible()
+
                 setUpViewPager(it)
             }
         }

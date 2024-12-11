@@ -1174,7 +1174,11 @@
     <fragment
         android:id="@+id/aiWorkoutDetailFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiWorkoutDetailFragment"
-        android:label="fragment_ai_workout_detail" />
+        android:label="fragment_ai_workout_detail" >
+        <argument
+            android:name="data"
+            app:argType="com.noisefit.data.model.AiExerciseList[]" />
+    </fragment>
     <fragment
         android:id="@+id/aiMealPlanFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiMealPlanFragment"

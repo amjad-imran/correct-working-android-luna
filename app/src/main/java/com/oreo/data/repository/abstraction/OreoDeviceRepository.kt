@@ -1,6 +1,7 @@
 package com.oreo.data.repository.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.AiDailySummaryModel
@@ -40,7 +41,7 @@ interface OreoDeviceRepository {
 
     suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
 
-    suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<Any>?>>
+    suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<List<AiWorkoutResponse>>?>>
 
     suspend fun getAiMealPlans(): Flow<Resource<BaseApiResponse<Any>?>>
 

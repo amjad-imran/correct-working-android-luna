@@ -42,6 +42,9 @@ class ChatGptViewModel
 
     private var userImage: String? = null
     private var userName: String? = null
+
+    val removeSnackBar = MutableLiveData<Event<Boolean>>()
+
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
@@ -546,6 +549,10 @@ class ChatGptViewModel
                 }
             }
         }
+    }
+
+    fun removeSnackBar() {
+        removeSnackBar.postValue(Event(true))
     }
 }
 

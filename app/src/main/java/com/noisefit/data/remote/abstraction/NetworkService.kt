@@ -1,6 +1,7 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.oreo.data.model.RingLocationData
@@ -470,7 +471,7 @@ interface NetworkService {
     @GET
     suspend fun getAiWorkoutPlans(
         @Url url: String
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<List<AiWorkoutResponse>>
 
     @GET
     suspend fun getAiMealPlans(

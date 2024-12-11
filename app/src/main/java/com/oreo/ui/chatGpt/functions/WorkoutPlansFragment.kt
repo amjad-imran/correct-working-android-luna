@@ -3,9 +3,11 @@ package com.oreo.ui.chatGpt.functions
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.data.model.AiExerciseList
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -22,7 +24,7 @@ class WorkoutPlansFragment :
     private val viewModel: WorkoutPlanViewModel by viewModels()
     private val mAdapter: AiWorkoutAdapter by lazy {
         AiWorkoutAdapter(onWorkoutSelected = {
-            navigate(R.id.aiWorkoutDetailFragment)
+            navigate(R.id.aiWorkoutDetailFragment, bundleOf("data" to it.toTypedArray()))
         })
     }
 
@@ -58,14 +60,17 @@ class WorkoutPlansFragment :
         viewModel.selectedPosition.observe(this) {
             showSelected(it)
         }
+
         viewModel.workoutList.observe(this) {
-            mAdapter.setDataSet(it)
+            mAdapter.setDataSet(arrayListOf(AiExerciseList(), AiExerciseList(), AiExerciseList()))
             binding.lytRestDay.root.setVisibilityByCondition(it.isEmpty())
         }
+
         viewModel.dayTitle.observe(this) {
             binding.tvDayName.text = it
             binding.tvDayName.setVisibilityByCondition(it.isNotEmpty())
         }
+
         viewModel.currentSelectedWeekDayPosition.observe(this) { selectedPos ->
             val main = binding.lytWeek
 

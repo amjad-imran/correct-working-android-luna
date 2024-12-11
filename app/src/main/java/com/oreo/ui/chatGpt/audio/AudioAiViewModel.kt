@@ -106,7 +106,9 @@ class AudioAiViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                audioTrack?.stop()
+                if (audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
+                    audioTrack?.stop()
+                }
                 audioTrack?.release()
                 inputStream?.close()
             }
@@ -116,7 +118,7 @@ class AudioAiViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (audioTrack!!.playState == AudioTrack.PLAYSTATE_PLAYING) {
+        if (audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack?.stop()
             audioTrack?.release()
         }

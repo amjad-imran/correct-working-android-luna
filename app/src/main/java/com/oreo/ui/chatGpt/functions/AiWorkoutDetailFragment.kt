@@ -2,22 +2,74 @@ package com.oreo.ui.chatGpt.functions
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AiExerciseList
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiWorkoutDetailBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AiWorkoutDetailFragment :
     BaseFragment<FragmentAiWorkoutDetailBinding>(FragmentAiWorkoutDetailBinding::inflate) {
 
+    val navArgs: AiWorkoutDetailFragmentArgs by navArgs()
+
+    var dataList = ArrayList<AiExerciseList>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val dataList = navArgs.data.toMutableList()
+
+        this.dataList.clear()
+        this.dataList.addAll(dataList)
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUI()
+    }
+
+    private fun setUI() {
+        val workout = dataList.first()
+
         binding.tvWorkoutName.text = "Flat Bench Press"
         binding.tvSetsData.text = "3 sets 12 reps"
+
+        if (dataList.size > 1) {
+            binding.ivNext.visible()
+            binding.tvNextWorkout.visible()
+        } else {
+            binding.ivNext.gone()
+            binding.tvNextWorkout.gone()
+        }
     }
 
     override fun initListener() {
+
+        binding.ivMic.setOnClickListener {
+            navigate(R.id.audioAiFragment)
+        }
+        binding.ivTextChat.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                null,
+                null,
+                AITopics.GENERAL
+            )
+            navigate(frag, bundle)
+        }
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
 
         binding.tvNextWorkout.setOnClickListener {
             onNextClicked()
@@ -28,8 +80,9 @@ class AiWorkoutDetailFragment :
 
     }
 
-    fun onNextClicked() {
-
+    private fun onNextClicked() {
+        this.dataList.removeAt(0)
+        setUI()
     }
 
     override fun subscribeObservers() {

@@ -217,6 +217,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     private fun showSnackBar(text: String) {
         binding.lytSnackbar.apply {
             this.tvMessage.text = text
+            this.root.visible()
             startSnackBarRemoveTimer()
 
             this.tvView.setOnClickListener {
@@ -231,11 +232,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     private fun startSnackBarRemoveTimer() {
         Handler(Looper.getMainLooper()).postDelayed({
-            nullableBinding?.lytSnackbar?.root?.gone()
+            viewModel.removeSnackBar()
         }, 3000)
     }
 
     override fun subscribeObservers() {
+        viewModel.removeSnackBar.observe(this){
+            it.getContent()?.let {
+                nullableBinding?.lytSnackbar?.root?.gone()
+            }
+        }
 
         viewModel.aiGeneratedPlanSaved.observe(this) {
             binding.lytSaveData.root.gone()
