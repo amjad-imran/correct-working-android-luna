@@ -180,10 +180,10 @@ constructor(
         activitiesTemp.forEach {
             it.date ?: return@forEach
 
-            val date = DateFormats.formatDateTime(
+            val date = it.date!!/*DateFormats.formatDateTime(
                 it.date, DateFormats.dateFormat3(),
-                DateFormats.dateFormat6()
-            )
+                DateFormats.dateFormat3()
+            )*/
 
             if (date.isEmpty()) return@forEach
 
