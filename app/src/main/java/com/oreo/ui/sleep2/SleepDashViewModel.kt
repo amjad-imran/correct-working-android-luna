@@ -194,6 +194,8 @@ class SleepDashViewModel @Inject constructor(
             R.drawable.ic_health_good
         } else if (status.equals("optimal", true)) {
             R.drawable.ic_health_optimal
+        } else if (status.equals("calibrating", true)) {
+            R.drawable.ic_hm_check_default
         } else {
             R.drawable.ic_health_good
         }
