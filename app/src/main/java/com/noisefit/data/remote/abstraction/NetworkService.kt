@@ -28,6 +28,7 @@ import com.noisefit_commans.data.response.UserResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.data.response.WatchTokenResponse
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.AiCreds
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
@@ -497,7 +498,7 @@ interface NetworkService {
     @GET
     suspend fun getCredentials(
         @Url url: String
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<AiCreds>
 
 
     @GET

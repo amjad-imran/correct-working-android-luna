@@ -39,7 +39,7 @@ class AiSummaryDataFragment :
         binding.tvSubtext.text = data.subTitle
         binding.ivBackground.loadImage(binding.ivBackground.context, data.bgImage)
 
-        setRecycler(data.metrics?.filter { it.value != null })
+        setRecycler(data.metrics)
     }
 
     private fun setRecycler(metrics: List<DataMetrics>?) {

@@ -18,6 +18,7 @@ data class AiDailySummaryModel(
 data class DataMetrics(
     val key: String? = null,
     val value: Float? = null,
+    val value1: String? = null,
 ) : Parcelable
 
 /**

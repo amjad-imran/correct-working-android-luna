@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.oreo.data.model.AiCreds
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.LunaZoneResponse
@@ -39,7 +40,7 @@ interface OreoDeviceRepository {
 
     suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
 
-    suspend fun getCredentials(): Flow<Resource<BaseApiResponse<Any>?>>
+    suspend fun getCredentials(): Flow<Resource<BaseApiResponse<AiCreds>?>>
 
     suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
 

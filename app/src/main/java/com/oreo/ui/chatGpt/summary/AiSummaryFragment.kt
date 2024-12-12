@@ -32,6 +32,8 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.CommonConstants.FILE_PROVIDER
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AiDailySummaryModel
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -80,7 +82,7 @@ class AiSummaryFragment :
                 viewModel.currentStoryIndex = 0
                 viewModel.isPaused = false
 
-                binding.btnCancel.visible()
+                binding.btnAsk.visible()
                 binding.ivShare.visible()
 
                 setUpViewPager(it)
@@ -183,7 +185,7 @@ class AiSummaryFragment :
 
     override fun onResume() {
         super.onResume()
-        if(viewModel.isPaused){
+        if (viewModel.isPaused) {
             resumeStoryProgress()
         }
     }
@@ -236,7 +238,7 @@ class AiSummaryFragment :
         }
     }
 
-    fun clearRunnable(){
+    fun clearRunnable() {
         storyRunnable?.let {
             storyHandler.removeCallbacks(it)
         }
@@ -256,6 +258,16 @@ class AiSummaryFragment :
     override fun initListener() {
         binding.ivClose.setOnClickListener {
             navigateUpSafe()
+        }
+        binding.btnAsk.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                null,
+                null,
+                AITopics.GENERAL
+            )
+            navigate(frag, bundle)
         }
 
         binding.ivShare.setOnClickListener {

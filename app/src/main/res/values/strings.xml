@@ -1743,5 +1743,9 @@
     <string name="text_your_diet_plan_is_saved">Your diet plan is saved</string>
     <string name="text_your_workout_plan_is_saved">Your workout plan is saved</string>
     <string name="text_synced_space">Synced : %1$s</string>
+    <string name="text_connect_your_ring">Connect your ring</string>
+    <string name="text_unlock_your_daily_health_digest">Unlock your daily health digest.</string>
+    <string name="text_gather_daily_health_data_to_get_deeper_insights">Gather daily health data to get deeper insights.</string>
+    <string name="text_no_data_found">No data found</string>
 
 </resources>

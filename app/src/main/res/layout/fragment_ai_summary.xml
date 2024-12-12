@@ -68,7 +68,7 @@
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/btnCancel"
+        android:id="@+id/btnAsk"
         style="@style/SecondaryButtonStyle"
         android:layout_width="0dp"
         android:layout_height="54dp"

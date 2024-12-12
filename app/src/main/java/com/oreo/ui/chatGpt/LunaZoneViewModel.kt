@@ -23,6 +23,7 @@ class LunaZoneViewModel @Inject constructor(
      * Pair(workout,meal) state
      */
     val planState = MutableLiveData<Pair<Boolean, Boolean>>()
+    val summaryStates = MutableLiveData<SummaryStates>()
 
     fun getLunaZoneData() {
         viewModelScope.launch {
@@ -60,6 +61,9 @@ class LunaZoneViewModel @Inject constructor(
                                     it.nutritionalPlan ?: false
                                 )
                             )
+
+                            summaryStates.postValue(SummaryStates.DATA_AVAILABLE)
+
                             suggestedQuestions.postValue(it.suggestedQues ?: ArrayList())
 
                         }
@@ -69,4 +73,8 @@ class LunaZoneViewModel @Inject constructor(
         }
     }
 
+}
+
+enum class SummaryStates {
+    NO_DEVICE, NO_DATA, GENERATING, DATA_AVAILABLE, NONE
 }

@@ -12,7 +12,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:background="#627038"
             android:src="@drawable/image_m_plan_setup"
             android:scaleType="centerCrop"

@@ -166,6 +166,40 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     }
 
     override fun subscribeObservers() {
+        viewModel.summaryStates.observe(this) {
+            when (it) {
+                SummaryStates.NO_DEVICE -> {
+                    binding.lytNoDevice.root.visible()
+                    binding.lytDailySummaryAvailable.root.gone()
+                    binding.lytNoData.root.gone()
+                }
+
+                SummaryStates.NO_DATA -> {
+                    binding.lytNoDevice.root.gone()
+                    binding.lytDailySummaryAvailable.root.gone()
+                    binding.lytNoData.root.visible()
+                }
+
+                SummaryStates.GENERATING -> {
+                    binding.lytNoDevice.root.gone()
+                    binding.lytDailySummaryAvailable.root.gone()
+                    binding.lytNoData.root.gone()
+                }
+
+                SummaryStates.DATA_AVAILABLE -> {
+                    binding.lytNoDevice.root.gone()
+                    binding.lytDailySummaryAvailable.root.visible()
+                    binding.lytNoData.root.gone()
+                }
+
+                SummaryStates.NONE -> {
+                    binding.lytNoDevice.root.gone()
+                    binding.lytDailySummaryAvailable.root.gone()
+                    binding.lytNoData.root.gone()
+                }
+            }
+        }
+
         viewModel.suggestedQuestions.observe(this) {
             suggestionsAdapter.setDataSet(it)
         }

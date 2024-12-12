@@ -11,9 +11,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.abstraction.AudioApiService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -46,7 +48,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioAiViewModel @Inject constructor(
     private val audioApiService: AudioApiService,
-    private val oreoDeviceRepository: OreoDeviceRepository
+    private val oreoDeviceRepository: OreoDeviceRepository,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     private val AMPLITUDE_MAX = 5000
@@ -213,7 +216,7 @@ class AudioAiViewModel @Inject constructor(
                 .addHeader("Content-Type", "application/json")
                 .addHeader(
                     "Authorization",
-                    "Bearer sk-proj-qJ5E3AtpPFoKzcP6ZUNMT3BlbkFJVYg641Jzh12s4lqgNA5h"
+                    "Bearer $apiKey"
                 )
                 .build()
 
@@ -231,16 +234,13 @@ class AudioAiViewModel @Inject constructor(
                         ChatCompletionResponse::class.java
                     )
                 } else {
-
+                    sendMessage(resourcesProvider.getString(R.string.text_something_went_wrong))
                 }
 
             } catch (exp: Exception) {
                 exp.printStackTrace()
             }
-
         }
-
-
     }
 
     private fun processStreamingResponse(inputStream: InputStream?, responseType: Class<*>?) {
@@ -347,8 +347,10 @@ class AudioAiViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            apiKey = ""
-                            onCredentialsReceived.postValue(Event(true))
+                            apiKey = it.OPENAI_API_KEY
+                            if (apiKey.isNullOrEmpty().not()) {
+                                onCredentialsReceived.postValue(Event(true))
+                            }
                         }
                     }
                 }

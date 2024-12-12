@@ -1,6 +1,7 @@
 package com.oreo.ui.chatGpt
 
 import android.media.audiofx.Visualizer
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -37,6 +38,16 @@ import kotlin.math.absoluteValue
 
 @AndroidEntryPoint
 class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBinding::inflate) {
+    /**
+     *   val (frag, bundle) = ChatGptFragment.getStartData(
+     *                 null,
+     *                 null,
+     *                 null,
+     *                 null,
+     *                 AITopics.GENERAL
+     *             )
+     *             navigate(frag, bundle)
+     */
     companion object {
         fun getStartData(
             threadId: String?,
@@ -52,7 +63,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putString("userMessage", userMessage ?: "")
                 putString("title", title ?: "")
                 putSerializable("aiTopic", aiTopic)
-                putString("meal", meal)
+                putString("meal", meal ?: "")
             })
         }
     }
@@ -80,8 +91,17 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.loadMessagesByThreadId(viewModel.threadId!!)
             //viewModel.threadTitle.postValue(args.title)
         }
-
+        setVideo()
         setTopData()
+    }
+
+    private fun setVideo() {
+        val fileName =
+            ("android.resource://" + requireContext().packageName) + "/raw/video_ai_generating"
+        val uri = Uri.parse(fileName)
+        val videoView = binding.videoView
+        videoView.setVideoURI(uri)
+        videoView.pause()
     }
 
     private fun setTopData() {
@@ -319,9 +339,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.fetchInProgress.observe(this) {
             if (it) {
+                binding.videoView.start()
+                binding.videoView.visible()
                 binding.lytGeneratingData.root.visible()
                 binding.lytChatBox.root.gone()
             } else {
+                binding.videoView.stopPlayback()
+                binding.videoView.gone()
                 binding.lytGeneratingData.root.gone()
                 binding.lytChatBox.root.visible()
             }

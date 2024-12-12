@@ -38,7 +38,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         val uri = Uri.parse(fileName)
         val videoView = binding.videoView
         videoView.setVideoURI(uri)
-        videoView.pause()
+        videoView.stopPlayback()
     }
 
 

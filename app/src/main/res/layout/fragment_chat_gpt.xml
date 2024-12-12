@@ -95,16 +95,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <View
-        android:id="@+id/vOverlay"
+    <VideoView
+        android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="222dp"
-        android:background="@drawable/back_ai_chat_bottom"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:id="@+id/lytSnackbar"

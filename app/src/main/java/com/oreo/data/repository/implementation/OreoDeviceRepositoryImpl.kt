@@ -8,6 +8,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.oreo.data.model.AiCreds
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.model.LunaZoneResponse
@@ -164,7 +165,7 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getCredentials(): Flow<Resource<BaseApiResponse<Any>?>> {
+    override suspend fun getCredentials(): Flow<Resource<BaseApiResponse<AiCreds>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/ai-credentials"
