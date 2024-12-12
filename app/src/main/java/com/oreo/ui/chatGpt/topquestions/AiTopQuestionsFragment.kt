@@ -78,7 +78,8 @@ class AiTopQuestionsFragment :
                                 "",
                                 ques,
                                 "",
-                                navArgs.aiTopic
+                                navArgs.aiTopic,
+                                ""
                             )
                         )
                     })

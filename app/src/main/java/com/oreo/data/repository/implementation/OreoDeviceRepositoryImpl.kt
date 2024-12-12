@@ -163,4 +163,12 @@ class OreoDeviceRepositoryImpl(
             remoteDataSource.saveWorkoutPlan(url)
         }
     }
+
+    override suspend fun getCredentials(): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/ai-credentials"
+            remoteDataSource.getCredentials(url)
+        }
+    }
 }

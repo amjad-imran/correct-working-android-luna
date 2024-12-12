@@ -2,11 +2,8 @@ package com.oreo.ui.chatGpt.audio
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.speech.RecognitionListener
-import android.speech.SpeechRecognizer
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -15,10 +12,11 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAudioAiBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBinding::inflate) {
@@ -29,12 +27,24 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvMessage.text = getString(R.string.text_setting_up)
+        viewModel.getCredentials()
 
-        checkMicrophonePermission {
-            viewModel.initSpeechRecognizer(listener)
-        }
+        setVideo()
+    }
 
-        //viewModel.getAudioResponse("Who is )
+
+    private fun setVideo() {
+        val fileName = ("android.resource://" + requireContext().packageName) + "/raw/video_chat_ai"
+        val uri = Uri.parse(fileName)
+        val videoView = binding.videoView
+        videoView.setVideoURI(uri)
+        videoView.pause()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.waveRecorder?.stopRecording(true)
     }
 
     private fun checkMicrophonePermission(callback: () -> Unit) {
@@ -53,7 +63,8 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            viewModel.initSpeechRecognizer(listener)
+            binding.ivMic.visible()
+            viewModel.startNewRecording()
         } else {
             context.showShortToast("Permission Required")
             navigateUpSafe()
@@ -67,8 +78,18 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
 
         binding.ivMic.setOnClickListener {
-            if (viewModel.isInitSuccess) {
-                viewModel.startListening()
+            if (viewModel.isRecording) {
+                binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
+                binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
+                viewModel.waveRecorder?.stopRecording(false)
+                viewModel.sendRecordingToServer()
+
+                viewModel.isRecording = false
+            } else {
+                binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#26FFFFFF"))
+                binding.ivMic.setImageResource(R.drawable.ic_ai_mic)
+                viewModel.waveRecorder?.startRecording()
+                viewModel.isRecording = true
             }
         }
 
@@ -85,67 +106,54 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     override fun subscribeObservers() {
-
-    }
-
-    private val listener = object : RecognitionListener {
-        override fun onReadyForSpeech(params: Bundle?) {
-            nullableBinding?.tvMessage?.text = ""
-
-            LOGS.d("RecognitionListener", "onReadyForSpeech() $params")
-            viewModel.startListening()
-        }
-
-        override fun onBeginningOfSpeech() {
-            LOGS.d("RecognitionListener", "onBeginningOfSpeech()")
-        }
-
-        override fun onRmsChanged(rmsdB: Float) {
-            //LOGS.d("RecognitionListener", "onRmsChanged - $rmsdB")
-            //binding.lytAudio.viewAudioVisualizer.updateRms(rmsdB)
-        }
-
-        override fun onBufferReceived(buffer: ByteArray?) {
-            LOGS.d("RecognitionListener", "onBufferReceived() - $buffer")
-        }
-
-        override fun onEndOfSpeech() {
-            LOGS.d("RecognitionListener", "onEndOfSpeech()")
-            startListeningWithDelay()
-
-        }
-
-        override fun onError(error: Int) {
-            LOGS.d("RecognitionListener", "onError() - $error")
-            if(error== SpeechRecognizer.ERROR_NO_MATCH){
-                startListeningWithDelay()
+        viewModel.onCredentialsReceived.observe(this) {
+            it.getContent()?.let {
+                binding.tvMessage.text = ""
+                checkMicrophonePermission {
+                    binding.ivMic.visible()
+                    viewModel.startNewRecording()
+                }
             }
-
         }
 
-        override fun onResults(results: Bundle?) {
-            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            val text = matches?.getOrNull(0) ?: ""
-            //binding.lytAudio.testUserText.text = text
-            LOGS.d("RecognitionListener", "onResults ${matches?.getOrNull(0)}")
-            viewModel.getAudioResponse(text)
+        viewModel.videoPlayState.observe(this) {
+            if (it) {
+                if (binding.videoView.isPlaying.not()) {
+                    binding.videoView.start()
+                }
+            } else {
+                binding.videoView.pause()
+            }
         }
 
-        override fun onPartialResults(partialResults: Bundle?) {
-            val partial =
-                partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            LOGS.d("RecognitionListener", " onPartialResults ${partial?.getOrNull(0)}")
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
         }
 
-        override fun onEvent(eventType: Int, params: Bundle?) {
-            LOGS.d("RecognitionListener", " onEvent $eventType")
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
         }
+
+        viewModel.getLoading().observe(this) {
+            /* if (it) {
+                 binding.progressBar.root.visible()
+             } else {
+                 binding.progressBar.root.gone()
+             }*/
+        }
+
+        /*  viewModel.audioAiState.observe(this) {
+              when (it) {
+                  AudioAiState.DEFAULT -> binding.tvMessage.text = "Default"
+                  AudioAiState.LISTENING -> binding.tvMessage.text = "Listening"
+                  AudioAiState.GENERATING -> binding.tvMessage.text = "Generating"
+                  AudioAiState.TALKING -> binding.tvMessage.text = "Talking"
+                  else -> binding.tvMessage.text = ""
+              }
+          }*/
     }
-
-    fun startListeningWithDelay(){
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.startListening()
-        }, 500)
-    }
-
 }

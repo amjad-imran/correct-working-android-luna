@@ -494,6 +494,10 @@ interface NetworkService {
     ): BaseApiResponse<Any>
 
 
+    @GET
+    suspend fun getCredentials(
+        @Url url: String
+    ): BaseApiResponse<Any>
 
 
     @GET

@@ -39,6 +39,8 @@ interface OreoDeviceRepository {
 
     suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
 
+    suspend fun getCredentials(): Flow<Resource<BaseApiResponse<Any>?>>
+
     suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>>
 
     suspend fun getAiWorkoutPlans(): Flow<Resource<BaseApiResponse<List<AiWorkoutResponse>>?>>
