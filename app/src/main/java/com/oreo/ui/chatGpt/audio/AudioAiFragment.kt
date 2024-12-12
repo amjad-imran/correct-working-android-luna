@@ -106,6 +106,13 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     override fun subscribeObservers() {
+        viewModel.textReceived.observe(this){
+
+            it.getContent()?.let {
+                binding.tvMessageTest.text = viewModel.stringBuilder.toString()
+            }
+        }
+
         viewModel.onCredentialsReceived.observe(this) {
             it.getContent()?.let {
                 binding.tvMessage.text = ""

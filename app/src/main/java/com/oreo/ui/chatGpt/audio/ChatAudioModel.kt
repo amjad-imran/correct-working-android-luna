@@ -16,5 +16,6 @@ data class Delta(
 
 data class Audio(
     val id: String? = null,
-    val data: String? = null
+    val data: String? = null,
+    val transcript: String? = null
 )

@@ -105,6 +105,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     private fun setTopData() {
+        //video_chat_ai
+        //video_ai_generating
 
     }
 

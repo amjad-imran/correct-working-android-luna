@@ -72,107 +72,13 @@ class AudioAiViewModel @Inject constructor(
     var apiKey: String? = null
     val onCredentialsReceived = MutableLiveData<Event<Boolean>>()
 
-    fun sendRecordingToServer() {
-        if (lastFile != null) {
-            LOGS.d("VOICE_RECORDER peakCount - >$peakCount")
-            if (peakCount < 5) {
-                lastFile?.delete()
-                LOGS.d("VOICE_RECORDER File deleted $lastFile")
-            } else {
-                lastFile?.let {
-                    val base64Wav = convertRawWavToBase64(it)
-
-                    base64Wav?.let { base64 ->
-                        getAudioResponseChatGpt(base64.replace("\n", ""))
-                    }
-                }
-            }
-        }
-    }
-
-
-    fun startNewRecording() {
-        isRecording = true
-        sendRecordingToServer()
-
-        peakCount = 0
-
-        val fileName = "recording_${System.currentTimeMillis()}.wav"
-        lastFile = File(NoiseFitApplicationMain.context!!.filesDir, fileName)
-
-        waveRecorder = WaveRecorder(filePath = lastFile!!.absolutePath)
-        waveRecorder?.silenceDetection = true
-        waveRecorder?.noiseSuppressorActive = true
-        waveRecorder?.startRecording()
-
-
-        waveRecorder?.onStateChangeListener = {
-            LOGS.d("VOICE_RECORDER  ${it.name}")
-            when (it) {
-                RecorderState.RECORDING -> {}
-                RecorderState.STOP -> {}
-                RecorderState.PAUSE -> {}
-                RecorderState.SKIPPING_SILENCE -> {}
-            }
-        }
-
-        waveRecorder?.onAmplitudeListener = {
-            LOGS.d("VOICE_RECORDER", "Amplitude : $it")
-            val isSilent = isSilent(it)
-            val currentTime = System.currentTimeMillis()
-
-            if (isSilent) {
-                if (currentTime - lastSoundTime > silenceDuration) {
-                    lastSoundTime = currentTime
-
-                    waveRecorder?.stopRecording(peakCount < 5)
-                    LOGS.d("VOICE_RECORDER Silence detected - starting new recording")
-                    startNewRecording()
-                }
-            } else {
-                lastSoundTime = currentTime
-            }
-
-            if (it > AMPLITUDE_MAX) {
-                peakCount += 1
-            }
-        }
-    }
-
-    private fun convertRawWavToBase64(file: File): String? {
-        var base64String: String? = null
-
-        try {
-
-            val fileInputStream = FileInputStream(file)
-            val buffer = ByteArray(1024)
-            val outputStream = ByteArrayOutputStream()
-
-            var bytesRead: Int
-            while (fileInputStream.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
-            }
-            outputStream.close()
-
-            val byteArray = outputStream.toByteArray()
-
-            base64String = Base64.encodeToString(byteArray, Base64.DEFAULT)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return base64String
-    }
-
-
-    private fun isSilent(it: Int): Boolean {
-        return it < 1000
-    }
-
+    val stringBuilder = StringBuilder()
+    val textReceived = MutableLiveData<Event<Boolean>>()
 
     /**
      * { "model": "gpt-4o-audio-preview", "modalities": ["text", "audio"], "audio": { "voice": "alloy", "format": "pcm16" }, "messages": [ { "role": "user", "content": [ { "type": "text", "text": "Answer this recording" }, {"type": "input_audio", "input_audio": { "data": "$base64String", "format": "wav"}}]}], "stream": true}
      */
-    fun getAudioResponseChatGpt(base64String: String) {
+    private fun getAudioResponseChatGpt(base64String: String) {
 
         if (job?.isActive == true) {
             job?.cancel()
@@ -223,8 +129,6 @@ class AudioAiViewModel @Inject constructor(
             try {
                 val response = client.newCall(request).execute()
 
-
-                LOGS.d("input_stream $response")
                 if (response.isSuccessful) {
 
                     inputStream = response.body?.byteStream()
@@ -246,6 +150,8 @@ class AudioAiViewModel @Inject constructor(
     private fun processStreamingResponse(inputStream: InputStream?, responseType: Class<*>?) {
         val gson = Gson()
         try {
+            stringBuilder.clear()
+
             videoPlayState.postValue(true)
 
             val bufferSize = AudioTrack.getMinBufferSize(
@@ -274,9 +180,6 @@ class AudioAiViewModel @Inject constructor(
 
             audioTrack?.play()
 
-            audioTrack?.play()
-
-
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
                 var line: String
                 while ((reader.readLine().also { line = it }) != null) {
@@ -287,6 +190,13 @@ class AudioAiViewModel @Inject constructor(
                                 gson.fromJson<ChatCompletionResponse>(subString, responseType)
 
                             val audioData = response.choices?.get(0)?.delta?.audio?.data
+                            val transcript = response.choices?.get(0)?.delta?.audio?.transcript
+
+                            if (transcript.isNullOrEmpty().not()) {
+                                stringBuilder.append(transcript)
+                                textReceived.postValue(Event(true))
+                            }
+                            //LOGS.d("sdflkhsdjkfhsdkjf $audioData")
 
                             if (audioData != null) {
                                 val decodedAudio = Base64.decode(audioData, Base64.DEFAULT)
@@ -308,6 +218,103 @@ class AudioAiViewModel @Inject constructor(
             videoPlayState.postValue(false)
         }
     }
+
+    fun sendRecordingToServer() {
+        if (lastFile != null) {
+            LOGS.d("VOICE_RECORDER peakCount - >$peakCount")
+            if (peakCount < 5) {
+                //TODO check not working
+                if (lastFile?.exists() == true) {
+                    lastFile?.delete()
+                }
+                LOGS.d("VOICE_RECORDER File deleted $lastFile")
+            } else {
+                lastFile?.let {
+                    val base64Wav = convertRawWavToBase64(it)
+
+                    base64Wav?.let { base64 ->
+                        getAudioResponseChatGpt(base64.replace("\n", ""))
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun startNewRecording() {
+        isRecording = true
+        sendRecordingToServer()
+
+        peakCount = 0
+
+        val fileName = "recording_${System.currentTimeMillis()}.wav"
+        lastFile = File(NoiseFitApplicationMain.context!!.filesDir, fileName)
+
+        waveRecorder = WaveRecorder(filePath = lastFile!!.absolutePath).apply {
+            //silenceDetection = true
+            //noiseSuppressorActive = true
+            startRecording()
+            onStateChangeListener = {
+                LOGS.d("VOICE_RECORDER  ${it.name}")
+                when (it) {
+                    RecorderState.RECORDING -> {}
+                    RecorderState.STOP -> {}
+                    RecorderState.PAUSE -> {}
+                    RecorderState.SKIPPING_SILENCE -> {}
+                }
+            }
+        }
+
+        waveRecorder?.onAmplitudeListener = {
+            LOGS.d("VOICE_RECORDER", "Amplitude : $it")
+            val isSilent = isSilent(it)
+            val currentTime = System.currentTimeMillis()
+
+            if (isSilent) {
+                if (currentTime - lastSoundTime > silenceDuration) {
+                    lastSoundTime = currentTime
+
+                    waveRecorder?.stopRecording(peakCount < 5)
+                    startNewRecording()
+                }
+            } else {
+                lastSoundTime = currentTime
+            }
+
+            if (it > AMPLITUDE_MAX) {
+                peakCount += 1
+            }
+        }
+    }
+
+    private fun convertRawWavToBase64(file: File): String? {
+        var base64String: String? = null
+        try {
+
+            val fileInputStream = FileInputStream(file)
+            val buffer = ByteArray(1024)
+            val outputStream = ByteArrayOutputStream()
+
+            var bytesRead: Int
+            while (fileInputStream.read(buffer).also { bytesRead = it } != -1) {
+                outputStream.write(buffer, 0, bytesRead)
+            }
+            outputStream.close()
+
+            val byteArray = outputStream.toByteArray()
+
+            base64String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return base64String
+    }
+
+
+    private fun isSilent(it: Int): Boolean {
+        return it < AMPLITUDE_MAX
+    }
+
 
     override fun onCleared() {
         super.onCleared()
