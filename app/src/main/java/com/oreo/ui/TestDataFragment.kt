@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTestDataBinding
 import com.noisefit.luna.databinding.RowTabsBinding
@@ -18,6 +19,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.TestUserData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +36,9 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
 
     private val userDataLive = MutableLiveData<List<TestUserData>>()
 
@@ -63,7 +68,7 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
         binding.toolbar.tvTitle.text = "Ring Data"
 
         binding.tvLastSync.text = "last sync ${
-            sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
+            sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,resourcesProvider) }
         }"
 
 

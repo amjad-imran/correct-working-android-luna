@@ -35,6 +35,7 @@ import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.HRModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
+import com.oreo.util.DateTimeUtil
 import java.util.Calendar
 import java.util.TimeZone
 import javax.inject.Inject
@@ -228,71 +229,6 @@ constructor(
         return healthOverviewData
     }
 
-    fun convertStepsOverviewData(stepsData: StepsData?, userGoals: UserGoals?): HealthOverview {
-        var value = "--"
-        // var totalSteps = 0
-        var timeAgo = ""
-        val goals = userGoals?.stepGoal ?: 0
-        if (stepsData != null && stepsData.totalSteps != 0) {
-            value = stepsData.totalSteps.toString()
-            //  totalSteps = stepsData.totalSteps
-        }
-
-//        var percentage = totalSteps.toFloat().calculatePercentage(goals.toFloat())
-//
-//        if (percentage == 0f) {
-//            percentage = 70f
-//        }
-        timeAgo = stepsData?.timeStamp?.let { DateFormats.getRelativeTime(it) }.toString()
-        return HealthOverview.Steps(
-            value,
-            0f,
-            goals,
-            timeAgo
-        )
-    }
-
-    fun convertDistanceOverviewData(
-        stepsData: StepsData?,
-        userGoals: UserGoals?,
-        dataUnitConverter: DataUnitConverter
-    ): HealthOverview {
-        var value = "--"
-        var timeAgo = ""
-        var distanceUnit = ""
-        if (stepsData != null && stepsData.totalDistance != 0) {
-            distanceUnit = dataUnitConverter.distanceUnit(userGoals?.getUnit())
-            value = dataUnitConverter.formatDistance(
-                stepsData.totalDistance,
-                userGoals?.getUnit()
-            )
-            timeAgo = stepsData.timeStamp?.let { DateFormats.getRelativeTime(it) }.toString()
-        }
-
-        return HealthOverview.Distance(
-            value,
-            timeAgo,
-            distanceUnit
-        )
-    }
-
-    fun convertCaloriesOverviewData(
-        stepsData: StepsData?
-    ): HealthOverview {
-        var value = "--"
-        var timeAgo = ""
-        if (stepsData != null && stepsData.totalCalories != 0) {
-            value = stepsData.totalCalories.toString()
-            timeAgo = stepsData.timeStamp?.let { DateFormats.getRelativeTime(it) }.toString()
-        }
-
-        return HealthOverview.Calories(
-            value,
-            timeAgo,
-            "kcal"
-        )
-    }
-
     fun convertStressOverviewData(
         data: OreoBodyStressData?
     ): OHealthOverview.StressDashDataModel {
@@ -321,7 +257,7 @@ constructor(
             measureState = TapMeasureState.LAST_MEASURED
             resourcesProvider.getString(
                 R.string.text_last_measured_value,
-                DateFormats.getRelativeTime(manualMeasureTime).lowercase()
+                DateTimeUtil.getRelativeTime(manualMeasureTime, resourcesProvider).lowercase()
             )
         }
 
@@ -453,7 +389,7 @@ constructor(
             measureState = TapMeasureState.LAST_MEASURED
             resourcesProvider.getString(
                 R.string.text_last_measured_value,
-                DateFormats.getRelativeTime(manualMeasureTime).lowercase()
+                DateTimeUtil.getRelativeTime(manualMeasureTime,resourcesProvider).lowercase()
             )
         }
 
@@ -544,46 +480,6 @@ constructor(
 
     }
 
-    fun convertBodyTempOverviewData(
-        dataList: List<BodyTemperatureBreakup>?,
-        dataUnitConverter: DataUnitConverter,
-        units: Units
-    ): HealthOverview {
-
-        var value = "--"
-        var timeAgo = ""
-        var average = ""
-        if (!dataList.isNullOrEmpty()) {
-            val unit = dataUnitConverter.bodyTempUnit(units)
-            val currentValue = dataList.last()
-            value = "${
-                dataUnitConverter.formatBodyTemp(
-                    currentValue.value ?: 0f,
-                    units
-                )
-            } $unit"
-            timeAgo = currentValue.timeStamp?.let { DateFormats.getRelativeTime(it) }.toString()
-
-            var total = 0f
-            var count = 0
-            dataList.forEach {
-                if (it.value != 0f) {
-                    count += 1
-                    total += it.value!!
-                }
-            }
-            if (count != 0) {
-                val avgValue = (total / count).toInt()
-                average = "All day average $avgValue $unit"
-            }
-        }
-
-        return HealthOverview.BodyTemp(
-            value,
-            timeAgo,
-            average
-        )
-    }
 
     fun convertBodyTempData(data: List<BodyTemperatureBreakup>?): BodyTemperature {
         val bodyTemperature = BodyTemperature()

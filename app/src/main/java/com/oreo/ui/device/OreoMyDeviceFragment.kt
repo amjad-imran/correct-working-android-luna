@@ -53,6 +53,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
 import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -582,7 +583,7 @@ class OreoMyDeviceFragment :
         val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
 
         val lastSync =
-            mViewModel.sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
+            mViewModel.sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,mViewModel.resProvider) }
         val lastSyncText = getString(
             R.string.text_synced_space,
             lastSync ?: getString(R.string.text_not_yet_syncyed)

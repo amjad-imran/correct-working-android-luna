@@ -827,23 +827,6 @@ object DateFormats {
 
     }
 
-    fun convertDateTimeToTimeStampUTC(date: String, simpleDateFormat: SimpleDateFormat): String? {
-
-        try {
-            val sdfSource = simpleDateFormat.apply {
-                timeZone = TimeZone.getTimeZone("UTC")
-            }
-
-            val mDate = sdfSource.parse(date)
-            return getRelativeTime(mDate.time)
-
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return null
-
-    }
-
     private fun getSimpleDateFormat(format: String?): SimpleDateFormat {
         return SimpleDateFormat(format, defaultLocale)
     }
@@ -1180,21 +1163,6 @@ object DateFormats {
             return true
         }
         return false
-    }
-
-    fun getRelativeTime(timestamp: Long): String {
-        val currentTimeStamp = Calendar.getInstance().timeInMillis
-        val relativeTime = if (timestamp + 60000 > currentTimeStamp) {
-            NoisefitApplication.context!!.getString(R.string.text_just_now)
-        } else {
-            DateUtils.getRelativeTimeSpanString(
-                timestamp,
-                currentTimeStamp,
-                DateUtils.MINUTE_IN_MILLIS
-            ).toString()
-        }
-        return relativeTime
-
     }
 
 
@@ -1805,62 +1773,6 @@ object DateFormats {
     fun getDayString(date: Date): String {
         val formatter = SimpleDateFormat("EEE", Locale.getDefault())
         return formatter.format(date)
-    }
-}
-
-
-/**
- * Input dd/MM/YYYY
- */
-fun String.convertToMMDDYYYY(): String {
-    return try {
-        if (this.isEmpty()) return ""
-        val dateFormatOutput = SimpleDateFormat("MM/dd/yyyy", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getDefault()
-        }
-        val input =
-            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
-                timeZone = TimeZone.getDefault()
-            }
-        val date = input.parse(this) ?: return ""
-        dateFormatOutput.format(date)
-    } catch (exp: Exception) {
-        ""
-    }
-}
-
-/**
- * Input dd/MM/YYYY
- */
-fun String.convertToYYYY_MM_DD(): String {
-    return try {
-        if (this.isEmpty()) return ""
-        val dateFormatOutput = SimpleDateFormat("MM/dd/yyyy", DateFormats.defaultLocale).apply {
-            timeZone = TimeZone.getDefault()
-        }
-        val input =
-            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
-                timeZone = TimeZone.getDefault()
-            }
-        val date = input.parse(this) ?: return ""
-        dateFormatOutput.format(date)
-    } catch (exp: Exception) {
-        ""
-    }
-
-}
-
-fun getHoursBasedOnDateTime(startTime: String): String {
-    val date = DateFormats.dateTimeFormat5().parse(startTime)
-    return SimpleDateFormat("HH").format(date)
-}
-
-fun String.to12HourFormat(): String {
-    return try {
-        LocalTime.parse(this, DateTimeFormatter.ofPattern("HH:mm"))
-            .format(DateTimeFormatter.ofPattern("hh:mm a"))
-    } catch (exp: Exception) {
-        ""
     }
 }
 

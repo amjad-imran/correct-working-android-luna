@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DeviceRepository
@@ -37,6 +38,7 @@ class OMyDeviceViewModel @Inject constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val watchDataStore: WatchDataStore,
+    val resProvider: ResourcesProvider,
     val deviceRepository: DeviceRepository,
     val watchesSDK: WatchesSDK
 ) : BaseViewModel() {

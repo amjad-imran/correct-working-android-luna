@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLunaZoneBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -19,6 +20,8 @@ import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -191,6 +194,11 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 SummaryStates.DATA_AVAILABLE -> {
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.visible()
+                    binding.lytDailySummaryAvailable.tvDate.text = LocalDate.now().format(
+                        DateTimeFormatter.ofPattern("E, MMM dd",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        ))
+
                     binding.lytNoData.root.gone()
                 }
 

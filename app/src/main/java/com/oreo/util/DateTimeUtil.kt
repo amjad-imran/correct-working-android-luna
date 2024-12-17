@@ -1,5 +1,7 @@
 package com.oreo.util
 
+import android.content.Context
+import android.text.format.DateUtils
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import java.text.SimpleDateFormat
@@ -8,6 +10,32 @@ import java.util.Date
 import java.util.Locale
 
 object DateTimeUtil {
+
+
+    fun getRelativeTime(
+        timestamp: Long,
+        resourcesProvider: ResourcesProvider?,
+        context: Context? = null
+    ): String {
+        val currentTimeStamp = Calendar.getInstance().timeInMillis
+        val relativeTime = if (timestamp + 60000 > currentTimeStamp) {
+            if (context != null) {
+                context.getString(com.noisefit_commans.R.string.text_just_now)
+            } else if (resourcesProvider != null) {
+                resourcesProvider.getString(com.noisefit_commans.R.string.text_just_now)
+            } else {
+                ""
+            }
+        } else {
+            DateUtils.getRelativeTimeSpanString(
+                timestamp,
+                currentTimeStamp,
+                DateUtils.MINUTE_IN_MILLIS
+            ).toString()
+        }
+        return relativeTime
+
+    }
 
     fun getStartAndEndWeek(week: Int, year: Int, resourcesProvider: ResourcesProvider): String {
         val calendar = Calendar.getInstance()
@@ -148,6 +176,6 @@ object DateTimeUtil {
             }
         }
     }
-    
+
 
 }

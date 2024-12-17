@@ -50,6 +50,7 @@ import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.util.DateTimeUtil
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -604,7 +605,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         binding.tvLastUpdate.text =
                             binding.tvLastUpdate.context.getString(
                                 R.string.text_updated_value,
-                                DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                                DateTimeUtil.getRelativeTime(
+                                    lastUpdatedTimestamp,
+                                    resourcesProvider = null,
+                                    context = binding.tvLastUpdate.context
+                                )
                             )
                     }
                 } else {
@@ -698,7 +703,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             string.append(" & ")
                         }
                         string.append("${(sleepCount - 1)} ")
-                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
+                        string.append(
+                            binding.root.context.getString(R.string.text_sleep).lowercase()
+                        )
                     }
 
                     binding.lytNapLabel.tvNapCountMsg.text = string.toString()
@@ -811,7 +818,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             string.append(" & ")
                         }
                         string.append("${(sleepCount - 1)} ")
-                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
+                        string.append(
+                            binding.root.context.getString(R.string.text_sleep).lowercase()
+                        )
                     }
 
                     binding.lytNapLabel.tvNapCountMsg.text = string.toString()
@@ -904,7 +913,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             string.append(" & ")
                         }
                         string.append("${(sleepCount - 1)} ")
-                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
+                        string.append(
+                            binding.root.context.getString(R.string.text_sleep).lowercase()
+                        )
                     }
 
 
@@ -1054,7 +1065,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             string.append(" & ")
                         }
                         string.append("${(sleepCount - 1)} ")
-                        string.append(binding.root.context.getString(R.string.text_sleep).lowercase())
+                        string.append(
+                            binding.root.context.getString(R.string.text_sleep).lowercase()
+                        )
                     }
 
                     binding.lytNapLabel.tvNapCountMsg.text = string.toString()

@@ -44,6 +44,7 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -170,7 +171,7 @@ class OStressDataMovementFragment :
                 binding.lytTopStressGraph.tvLastSyncStatus.text = ""
             } else {
                 binding.lytTopStressGraph.tvLastSyncStatus.text =
-                    DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                    DateTimeUtil.getRelativeTime(lastUpdatedTimestamp,viewModel.resourcesProvider)
             }
         } else {
             binding.lytTopStressGraph.tvLastSyncStatus.text = ""
