@@ -13,6 +13,7 @@ import com.noisefit.luna.databinding.FragmentAudioAiBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,12 +40,13 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         val videoView = binding.videoView
         videoView.setVideoURI(uri)
         videoView.stopPlayback()
+        videoView.setOnPreparedListener { it.isLooping = true }
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.waveRecorder?.stopRecording(true)
+        viewModel.cleanup()
     }
 
     private fun checkMicrophonePermission(callback: () -> Unit) {

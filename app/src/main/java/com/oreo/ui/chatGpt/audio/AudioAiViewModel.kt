@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.AppLogger
 import com.noisefit.data.remote.abstraction.AudioApiService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
@@ -20,6 +21,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -53,6 +55,7 @@ class AudioAiViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val AMPLITUDE_MAX = 5000
+    private val SILENCE_DURATION: Long = 2000
 
     var isRecording = false
 
@@ -61,7 +64,6 @@ class AudioAiViewModel @Inject constructor(
     private var job: Job? = null
     private var peakCount = 0
     private var lastSoundTime: Long = System.currentTimeMillis()
-    private val silenceDuration: Long = 2000
     private var lastFile: File? = null
 
     var videoPlayState = MutableLiveData<Boolean>()
@@ -89,7 +91,7 @@ class AudioAiViewModel @Inject constructor(
             if (audioTrack != null) {
                 if (audioTrack!!.playState == AudioTrack.PLAYSTATE_PLAYING) {
                     audioTrack?.stop()
-                    audioTrack?.release()
+                    //audioTrack?.release()
                 }
             }
             inputStream?.close()
@@ -143,8 +145,37 @@ class AudioAiViewModel @Inject constructor(
 
             } catch (exp: Exception) {
                 exp.printStackTrace()
+                AppLogs.sendAppLogs("Audio API exception ${exp.message}")
+                sendMessage(resourcesProvider.getString(R.string.text_something_went_wrong))
             }
         }
+    }
+
+    private fun initializeAudioTrack() {
+        val bufferSize = AudioTrack.getMinBufferSize(
+            24000,
+            AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT
+        )
+
+        audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build()
+            )
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                    .setSampleRate(24000)
+                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                    .build()
+            )
+            .setBufferSizeInBytes(bufferSize)
+            .setTransferMode(AudioTrack.MODE_STREAM)
+            .build()
+
     }
 
     private fun processStreamingResponse(inputStream: InputStream?, responseType: Class<*>?) {
@@ -154,29 +185,9 @@ class AudioAiViewModel @Inject constructor(
 
             videoPlayState.postValue(true)
 
-            val bufferSize = AudioTrack.getMinBufferSize(
-                24000,
-                AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT
-            )
-
-            audioTrack = AudioTrack.Builder()
-                .setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .build()
-                )
-                .setAudioFormat(
-                    AudioFormat.Builder()
-                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                        .setSampleRate(24000)
-                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                        .build()
-                )
-                .setBufferSizeInBytes(bufferSize)
-                .setTransferMode(AudioTrack.MODE_STREAM)
-                .build()
+            if (audioTrack == null) {
+                initializeAudioTrack()
+            }
 
             audioTrack?.play()
 
@@ -209,12 +220,12 @@ class AudioAiViewModel @Inject constructor(
                     }
                 }
             }
-            audioTrack?.release()
+            //audioTrack?.release()
             videoPlayState.postValue(false)
 
         } catch (exp: Exception) {
             exp.printStackTrace()
-            audioTrack?.release()
+            //audioTrack?.release()
             videoPlayState.postValue(false)
         }
     }
@@ -271,7 +282,7 @@ class AudioAiViewModel @Inject constructor(
             val currentTime = System.currentTimeMillis()
 
             if (isSilent) {
-                if (currentTime - lastSoundTime > silenceDuration) {
+                if (currentTime - lastSoundTime > SILENCE_DURATION) {
                     lastSoundTime = currentTime
 
                     waveRecorder?.stopRecording(peakCount < 5)
@@ -362,6 +373,17 @@ class AudioAiViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun cleanup() {
+        waveRecorder?.stopRecording(true)
+        if (audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
+            audioTrack?.stop()
+        }
+        audioTrack?.release()
+        viewModelScope.launch(Dispatchers.IO) {
+            inputStream?.close()
         }
     }
 }

@@ -14,8 +14,8 @@ class AiWorkoutAdapter(val onWorkoutSelected: (List<AiExerciseList>) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AiExerciseList) {
 
-            binding.tvWorkoutName.text = "Flat Bench Press"
-            binding.tvDetails.text = "3 sets 10 reps"
+            binding.tvWorkoutName.text = data.exercise_name
+            binding.tvDetails.text = data.reps
 
             binding.root.setOnClickListener {
                 onWorkoutSelected(getWorkouts(bindingAdapterPosition))

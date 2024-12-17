@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class SuggestedQuestionAdapter(val onQuestionClicked: (SuggestedAiQuestions) -> 
             binding.tvQues.text = suggestedAiQuestions.ques
             binding.imageBg.loadImage(binding.imageBg.context, suggestedAiQuestions.bg_image)
             binding.ivQuesIcon.loadImage(binding.ivQuesIcon.context, suggestedAiQuestions.icon)
+            binding.tvQues.setTextColor(Color.parseColor(suggestedAiQuestions.color))
             binding.root.setOnClickListener {
                 onQuestionClicked(suggestedAiQuestions)
             }

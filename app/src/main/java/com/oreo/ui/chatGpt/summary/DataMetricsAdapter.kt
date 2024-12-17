@@ -28,77 +28,77 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
      * Pair(name,unit)
      */
     fun getDisplayDate(data: DataMetrics, context: Context): AiSummaryDataModel? {
-        if (data.value == null && data.value1 == null) return null
+        if (data.value.isNullOrEmpty()) return null
 
         when (data.key) {
             "activity_score" -> return AiSummaryDataModel(
                 name = "Activity Score",
                 isDate = false,
                 "",
-                ""
+                data.value
             )
 
             "master_avg_hr" -> return AiSummaryDataModel(
                 name = "Master Avg HR",
                 isDate = false,
                 "BPM",
-                ""
+                data.value
             )
 
             "master_avg_hrv" -> return AiSummaryDataModel(
                 name = "Master Avg HRV",
                 isDate = false,
                 "MS",
-                ""
+                data.value
             )
 
-            "master_deep" -> return AiSummaryDataModel(name = "Master Deep", isDate = false, "","")
+            "master_deep" -> return AiSummaryDataModel(name = "Master Deep", isDate = false, "",data.value)
             "master_duration" -> return AiSummaryDataModel(
                 name = "Master Duration",
                 isDate = false,
                 "",
-                ""
+                data.value
             )
 
             "master_mid_time" -> return AiSummaryDataModel(
                 name = "Master Mid Time",
                 isDate = false,
                 "",
-                ""
+                data.value
             )
 
             "master_rem" -> return AiSummaryDataModel(
                 name = "Master Rem", isDate = false, "",
-                ""
+                data.value
             )
 
             "next_period_date" -> return AiSummaryDataModel(
                 name = "Next Period Date",
                 isDate = true,
                 "",
-                "${data.value1}"
+                "${data.value}"
             )
 
             "readiness_score" -> return AiSummaryDataModel(
                 name = "Readiness Score",
                 isDate = false,
                 "",
-                ""
+                data.value
             )
 
             "skin_temp_dev" -> return AiSummaryDataModel(
                 name = "Skin Temp Dev", isDate = false, "",
-                ""
+                data.value
             )
 
             "sleep_need" -> return AiSummaryDataModel(
                 name = "Sleep Need", isDate = false, "",
-                ""
+                data.value
             )
 
             "sleep_score" -> return AiSummaryDataModel(
                 name = "Sleep Score", isDate = false, "",
-                ""
+                data.value
             )
 
             else -> return null

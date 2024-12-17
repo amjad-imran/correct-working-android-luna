@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class LunaZoneResponse(
     @SerializedName("summary_available")
     val summaryAvailable: Boolean? = false,
-    @SerializedName("SerializedName")
+    @SerializedName("workout_plan")
     val workoutPlan: Boolean? = false,
     @SerializedName("nutritional_plan")
     val nutritionalPlan: Boolean? = false,
@@ -17,5 +17,6 @@ data class LunaZoneResponse(
 data class SuggestedAiQuestions(
     val ques: String? = null,
     val icon: String? = null,
+    val color: String? = null,
     val bg_image: String? = null,
 )

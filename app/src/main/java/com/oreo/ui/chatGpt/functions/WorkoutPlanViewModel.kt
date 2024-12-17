@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt.functions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
@@ -24,10 +25,11 @@ class WorkoutPlanViewModel @Inject constructor(
 
     val workoutData: String? = null
 
-    val dayTitle = MutableLiveData<String>()
+    val dayTitle = MutableLiveData<String?>()
     val selectedPosition = MutableLiveData<Int>()
     val currentSelectedWeekDayPosition = MutableLiveData<Int>()
-    val workoutList = MutableLiveData<List<String>>()
+    val workoutList = MutableLiveData<List<AiExerciseList>?>()
+    private val workoutResponse = ArrayList<AiWorkoutResponse>()
 
     init {
         currentSelectedWeekDayPosition.postValue(LocalDate.now().dayOfWeek.value)
@@ -64,8 +66,9 @@ class WorkoutPlanViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-                            generateData(it)
 
+                            workoutResponse.clear()
+                            workoutResponse.addAll(it)
                             setSelectedPosition(LocalDate.now().dayOfWeek.value)//todo based on current day
                         }
                     }
@@ -74,16 +77,35 @@ class WorkoutPlanViewModel @Inject constructor(
         }
     }
 
-    private fun generateData(data: List<AiWorkoutResponse>) {
-        //As per anil response is not yet final
-    }
-
     /**
      *@param position-> 1..7 (Mon - Sun)
      */
     fun setSelectedPosition(position: Int) {
         selectedPosition.postValue(position)
-        dayTitle.postValue("Workout name here")
-        workoutList.postValue(arrayListOf("Workout 1", "Workout 2", "Workout 3", "Workout 4"))
+
+        val workout = workoutResponse.find {
+            it.day.equals(getDayName(position),true)
+        }
+
+        if(workout==null){
+            dayTitle.postValue(null)
+            workoutList.postValue(null)
+        }else{
+            dayTitle.postValue(null)
+            workoutList.postValue(workout.exercises)
+        }
+    }
+
+    private fun getDayName(position: Int): String {
+        return when (position) {
+            1 -> "monday"
+            2 -> "tuesday"
+            3 -> "wednesday"
+            4 -> "thursday"
+            5 -> "friday"
+            6 -> "saturday"
+            7 -> "sunday"
+            else -> ""
+        }
     }
 }

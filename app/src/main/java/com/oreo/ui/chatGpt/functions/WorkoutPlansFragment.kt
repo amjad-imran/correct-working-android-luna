@@ -62,13 +62,13 @@ class WorkoutPlansFragment :
         }
 
         viewModel.workoutList.observe(this) {
-            mAdapter.setDataSet(arrayListOf(AiExerciseList(), AiExerciseList(), AiExerciseList()))
-            binding.lytRestDay.root.setVisibilityByCondition(it.isEmpty())
+            mAdapter.setDataSet(it ?: ArrayList())
+            binding.lytRestDay.root.setVisibilityByCondition(it.isNullOrEmpty())
         }
 
         viewModel.dayTitle.observe(this) {
             binding.tvDayName.text = it
-            binding.tvDayName.setVisibilityByCondition(it.isNotEmpty())
+            binding.tvDayName.setVisibilityByCondition(it.isNullOrEmpty().not())
         }
 
         viewModel.currentSelectedWeekDayPosition.observe(this) { selectedPos ->

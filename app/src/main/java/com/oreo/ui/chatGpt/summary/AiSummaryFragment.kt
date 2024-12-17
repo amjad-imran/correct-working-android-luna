@@ -79,6 +79,12 @@ class AiSummaryFragment :
 
         viewModel.dailySummaryData.observe(this) {
             it.getContent()?.let {
+
+                if (it.isEmpty()) {
+                    navigateUpSafe()
+                    return@observe
+                }
+
                 viewModel.currentStoryIndex = 0
                 viewModel.isPaused = false
 

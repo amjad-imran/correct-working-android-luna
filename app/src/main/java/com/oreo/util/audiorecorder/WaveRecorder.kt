@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
