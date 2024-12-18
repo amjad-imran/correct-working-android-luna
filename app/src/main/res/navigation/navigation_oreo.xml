@@ -1199,5 +1199,14 @@
     <fragment
         android:id="@+id/audioAiFragment"
         android:name="com.oreo.ui.chatGpt.audio.AudioAiFragment"
-        android:label="fragment_audio_ai" />
+        android:label="fragment_audio_ai" >
+        <argument
+            android:name="planType"
+            app:argType="com.oreo.ui.chatGpt.PlanType"
+            android:defaultValue="NONE" />
+        <argument
+            android:name="text"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

@@ -69,7 +69,7 @@ class AudioAiViewModel @Inject constructor(
     var videoPlayState = MutableLiveData<Boolean>()
 
     var waveRecorder: WaveRecorder? = null
-    //val audioAiState = MutableLiveData<AudioAiState>()
+    val audioAiState = MutableLiveData<AudioAiState>()
 
     var apiKey: String? = null
     val onCredentialsReceived = MutableLiveData<Event<Boolean>>()
@@ -184,6 +184,8 @@ class AudioAiViewModel @Inject constructor(
             stringBuilder.clear()
 
             videoPlayState.postValue(true)
+
+            audioAiState.postValue(AudioAiState.AI_TALKING)
 
             if (audioTrack == null) {
                 initializeAudioTrack()
@@ -389,5 +391,5 @@ class AudioAiViewModel @Inject constructor(
 }
 
 enum class AudioAiState {
-    DEFAULT, LISTENING, GENERATING, TALKING
+    DEFAULT, LISTENING, GENERATING, AI_TALKING
 }

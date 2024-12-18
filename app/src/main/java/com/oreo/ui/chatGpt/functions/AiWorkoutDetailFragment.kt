@@ -11,6 +11,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,7 +56,12 @@ class AiWorkoutDetailFragment :
     override fun initListener() {
 
         binding.ivMic.setOnClickListener {
-            navigate(R.id.audioAiFragment)
+            val workout = dataList.first()
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.WORKOUT,
+                workout.exercise_name
+            )
+            navigate(frag, bundle)
         }
         binding.ivTextChat.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(

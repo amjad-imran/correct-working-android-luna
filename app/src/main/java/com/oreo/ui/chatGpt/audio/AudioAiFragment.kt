@@ -8,14 +8,19 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiMeals
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAudioAiBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,11 +28,33 @@ import dagger.hilt.android.AndroidEntryPoint
 class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBinding::inflate) {
 
     val viewModel: AudioAiViewModel by viewModels()
+    val args: AudioAiFragmentArgs by navArgs()
+
+    companion object {
+        fun getStartData(
+            planType: PlanType,
+            text: String? = null,
+        ): Pair<Int, Bundle?> {
+            return Pair(R.id.audioAiFragment, Bundle().apply {
+                putSerializable("planType", planType)
+                putString("text", text)
+            })
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvMessage.text = getString(R.string.text_setting_up)
+        //binding.tvMessage.text = getString(R.string.text_setting_up)
+
+        if (args.planType == PlanType.WORKOUT) {
+            binding.tvAskLuna.visible()
+            args.text?.let {
+                binding.tvMessage.text = "How to perform a ${it}?"
+            }
+        }
+
         viewModel.getCredentials()
 
         setVideo()
@@ -108,7 +135,20 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     override fun subscribeObservers() {
-        viewModel.textReceived.observe(this){
+        viewModel.audioAiState.observe(this) {
+            when (it) {
+                AudioAiState.DEFAULT -> {}
+                AudioAiState.LISTENING -> {}
+                AudioAiState.GENERATING -> {}
+                AudioAiState.AI_TALKING -> {
+                    binding.tvAskLuna.gone()
+                    binding.tvMessage.gone()
+                }
+            }
+        }
+
+
+        viewModel.textReceived.observe(this) {
 
             it.getContent()?.let {
                 binding.tvMessageTest.text = viewModel.stringBuilder.toString()
@@ -117,7 +157,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
         viewModel.onCredentialsReceived.observe(this) {
             it.getContent()?.let {
-                binding.tvMessage.text = ""
+                //binding.tvMessage.text = ""
                 checkMicrophonePermission {
                     binding.ivMic.visible()
                     viewModel.startNewRecording()
