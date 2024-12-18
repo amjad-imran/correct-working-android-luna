@@ -632,6 +632,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+        viewModel.lunaZoneReload.observe(this){
+            it.getContent()?.let {
+                if (navController?.currentDestination?.id == R.id.navigation_lunaZoneFragment) {
+                    viewModel.lunaZoneReloadConfirm.postValue(Event(true))
+                }
+            }
+        }
         viewModel.sleepDashTodayReload.observe(this) {
             it.getContent()?.let {
                 if (navController?.currentDestination?.id == R.id.sleepDashFragment) {

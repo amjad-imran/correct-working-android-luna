@@ -195,7 +195,7 @@ class OWorkoutDetailsFragmentV2 :
 
         val title = StringBuilder()
         if (DateFormats.getTodaysDateString(10).equals(it.date)) {
-            title.append("Today, ")
+            title.append(getString(R.string.text_today_comma))
         }
 
         if (title.isEmpty()) {

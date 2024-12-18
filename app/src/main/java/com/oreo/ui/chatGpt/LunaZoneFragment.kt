@@ -1,15 +1,20 @@
 package com.oreo.ui.chatGpt
 
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLunaZoneBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -28,6 +33,8 @@ import kotlin.math.roundToInt
 class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneBinding::inflate) {
 
     private val viewModel: LunaZoneViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
     private val suggestionsAdapter: SuggestedQuestionAdapter by lazy {
         SuggestedQuestionAdapter(onQuestionClicked = {
             val (frag, bundle) = ChatGptFragment.getStartData(
@@ -171,6 +178,26 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     }
 
     override fun subscribeObservers() {
+        mainViewModel.lunaZoneReloadConfirm.observe(this){
+            it.getContent()?.let {
+                viewModel.getLunaZoneData()
+            }
+        }
+
+        mainViewModel.syncTextState.observe(this) {
+            if (it.isNullOrEmpty()) {
+                binding.imageLogo.visible()
+                binding.tvHeaderStatus.gone()
+            } else {
+                binding.imageLogo.gone()
+                binding.tvHeaderStatus.apply {
+                    text = getString(R.string.text_syncing_dot)
+                    visible()
+                }
+            }
+        }
+
+
         viewModel.summaryStates.observe(this) {
             when (it) {
                 SummaryStates.NO_DEVICE -> {
@@ -183,6 +210,23 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.visible()
+
+                    binding.lytNoData.tvNoData.post {
+                        val width = binding.lytNoData.tvNoData.width.toFloat()
+
+                        val shader = LinearGradient(
+                            0f, 0f, width, 0f,
+                            intArrayOf(
+                                Color.parseColor("#C9EEFF"),
+                                Color.parseColor("#BFEBFF"),
+                                Color.parseColor("#4AC6FF")
+                            ),
+                            null,
+                            Shader.TileMode.CLAMP
+                        )
+                        binding.lytNoData.tvNoData.paint.shader = shader
+                        binding.lytNoData.tvNoData.invalidate()
+                    }
                 }
 
                 SummaryStates.GENERATING -> {

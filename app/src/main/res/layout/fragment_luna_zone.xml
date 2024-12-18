@@ -8,6 +8,7 @@
     tools:context="com.oreo.ui.chatGpt.LunaZoneFragment">
 
     <ImageView
+        android:id="@+id/imageLogo"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
         android:layout_marginTop="16dp"
@@ -17,6 +18,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHeaderStatus"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/carolina_blue"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Connecting.."
+        tools:visibility="visible" />
 
 
     <androidx.core.widget.NestedScrollView
@@ -74,9 +89,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvQuestions"
-                android:layout_marginHorizontal="@dimen/side_margin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/side_margin" />
 
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"

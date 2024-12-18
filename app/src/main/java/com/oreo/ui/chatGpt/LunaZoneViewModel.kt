@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.SuggestedAiQuestions
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LunaZoneViewModel @Inject constructor(
-    private val deviceRepository: OreoDeviceRepository
+    private val deviceRepository: OreoDeviceRepository,
+    private val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
     val suggestedQuestions = MutableLiveData<List<SuggestedAiQuestions>>()
@@ -62,7 +64,8 @@ class LunaZoneViewModel @Inject constructor(
                                 )
                             )
 
-                            summaryStates.postValue(SummaryStates.DATA_AVAILABLE)
+                            summaryStates.postValue(getSummaryStates(it.summaryAvailable))
+                            //summaryStates.postValue(SummaryStates.DATA_AVAILABLE)
 
                             suggestedQuestions.postValue(it.suggestedQues ?: ArrayList())
 
@@ -70,6 +73,18 @@ class LunaZoneViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun getSummaryStates(summaryAvailable: Boolean?): SummaryStates {
+        if (summaryAvailable == true) {
+            return SummaryStates.DATA_AVAILABLE
+        }
+        val isDeviceConnected = ringDataStore.getRingDevice() != null
+        if (isDeviceConnected.not()) {
+            return SummaryStates.NO_DEVICE
+        } else {
+            return SummaryStates.NO_DATA
         }
     }
 

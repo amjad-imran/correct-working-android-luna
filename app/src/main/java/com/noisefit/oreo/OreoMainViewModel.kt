@@ -102,6 +102,9 @@ constructor(
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
     val sleepDashTodayReload = MutableLiveData<Event<Boolean>>()
+    val lunaZoneReload = MutableLiveData<Event<Boolean>>()
+    val lunaZoneReloadConfirm = MutableLiveData<Event<Boolean>>()
+
 
     var showChatUi = MutableLiveData<Event<String>>()
 
@@ -311,6 +314,7 @@ constructor(
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
                                 dashTodayReload.value = Event(true)
+                                lunaZoneReload.value = Event(true)
                                 //sleepDashTodayReload.value = Event(true)
                             }
 

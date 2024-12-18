@@ -1747,5 +1747,11 @@
     <string name="text_unlock_your_daily_health_digest">Unlock your daily health digest.</string>
     <string name="text_gather_daily_health_data_to_get_deeper_insights">Gather daily health data to get deeper insights.</string>
     <string name="text_no_data_found">No data found</string>
+    <string name="text_avg_hr">Avg HR</string>
+    <string name="text_avg_hrv">Avg HRV</string>
+    <string name="text_mid_time">Mid Time</string>
+    <string name="text_next_period_date">Next Period Date</string>
+    <string name="tex_skin_temp_dev">Skin Temp Dev</string>
+    <string name="text_sleep_need">Sleep Need</string>
 
 </resources>
