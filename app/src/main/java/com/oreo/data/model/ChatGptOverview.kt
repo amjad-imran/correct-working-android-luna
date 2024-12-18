@@ -1,5 +1,7 @@
 package com.oreo.data.model
 
+import com.noisefit.data.model.AiExerciseList
+
 
 sealed class ChatGptOverview {
 
@@ -13,6 +15,14 @@ sealed class ChatGptOverview {
     ) : ChatGptOverview()
 
     class ThinkingMessage(
+    ) : ChatGptOverview()
+
+    class HeaderWorkout(
+        val workout: AiExerciseList
+    ) : ChatGptOverview()
+
+    class HeaderMeal(
+        val meal: String
     ) : ChatGptOverview()
 
     class RetryMessage(

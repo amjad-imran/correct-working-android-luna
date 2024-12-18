@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.custom.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class ChatHistoryFragment :
 
                 navigate(
                     ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId, "", "", title, AITopics.GENERAL,""
+                        threadId, "", "", title, AITopics.GENERAL,"", PlanType.NONE
                     )
                 )
             }

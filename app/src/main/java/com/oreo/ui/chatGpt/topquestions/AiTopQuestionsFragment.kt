@@ -43,6 +43,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.ai.TopQuestions
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.compose.element.button.CircularBackButton
 import com.oreo.ui.compose.element.button.CircularHistoryButton
 import com.oreo.ui.compose.element.button.Loading
@@ -79,7 +80,8 @@ class AiTopQuestionsFragment :
                                 ques,
                                 "",
                                 navArgs.aiTopic,
-                                ""
+                                "",
+                                PlanType.NONE
                             )
                         )
                     })

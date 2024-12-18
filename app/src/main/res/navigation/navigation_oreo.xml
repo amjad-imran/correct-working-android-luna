@@ -895,6 +895,14 @@
         <argument
             android:name="meal"
             app:argType="string" />
+        <argument
+            android:name="workout"
+            app:argType="com.noisefit.data.model.AiExerciseList"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="planType"
+            app:argType="com.oreo.ui.chatGpt.PlanType" />
     </fragment>
     <fragment
         android:id="@+id/chatSplashFragment"

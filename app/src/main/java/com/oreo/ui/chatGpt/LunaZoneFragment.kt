@@ -148,37 +148,66 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             navigate(R.id.aiSummaryFragment)
         }
         binding.lytPlans.lytWorkoutPlan.root.setOnClickListener {
-            navigate(R.id.workoutPlansFragment)
+            val workoutSetup = viewModel.planState.value?.first ?: false
+            if (workoutSetup) {
+                navigate(R.id.workoutPlansFragment)
+
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_workout_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.WORKOUT
+                )
+                navigate(frag, bundle)
+            }
         }
         binding.lytPlans.lytMealPlan.root.setOnClickListener {
-            navigate(R.id.aiMealPlanFragment)
-
+            val mealSetup = viewModel.planState.value?.second ?: false
+            if (mealSetup) {
+                navigate(R.id.aiMealPlanFragment)
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_weekly_diet_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.DIET
+                )
+                navigate(frag, bundle)
+            }
         }
 
         binding.lytPlans.lytWorkoutPlanSetup.root.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
-                "Build me a workout plan",
+                getString(R.string.text_build_me_a_workout_plan),
                 null,
-                AITopics.GENERAL
+                AITopics.GENERAL,
+                planType = PlanType.WORKOUT
             )
             navigate(frag, bundle)
         }
+
         binding.lytPlans.lytMealPlanSetup.root.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
-                "Build me a diet plan",
+                getString(R.string.text_build_me_a_weekly_diet_plan),
                 null,
-                AITopics.GENERAL
+                AITopics.GENERAL,
+                planType = PlanType.DIET
             )
             navigate(frag, bundle)
         }
     }
 
     override fun subscribeObservers() {
-        mainViewModel.lunaZoneReloadConfirm.observe(this){
+        mainViewModel.lunaZoneReloadConfirm.observe(this) {
             it.getContent()?.let {
                 viewModel.getLunaZoneData()
             }
@@ -239,9 +268,11 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.visible()
                     binding.lytDailySummaryAvailable.tvDate.text = LocalDate.now().format(
-                        DateTimeFormatter.ofPattern("E, MMM dd",
+                        DateTimeFormatter.ofPattern(
+                            "E, MMM dd",
                             Locale(NoiseFitApplicationMain.appLanguage.languageCode)
-                        ))
+                        )
+                    )
 
                     binding.lytNoData.root.gone()
                 }
@@ -310,9 +341,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 binding.lytPlans.lytWorkoutPlan.root.gone()
                 binding.lytPlans.lytWorkoutPlanSetup.root.visible()
             }
-
         }
-
 
         if (mealState) {
             binding.lytPlans.lytMealPlan.apply {
@@ -337,9 +366,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 binding.lytPlans.lytMealPlan.root.gone()
                 binding.lytPlans.lytMealPlanSetup.root.visible()
             }
-
         }
-
     }
 
 }

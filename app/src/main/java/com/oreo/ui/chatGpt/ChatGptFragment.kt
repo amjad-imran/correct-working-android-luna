@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.model.AiExerciseList
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -56,6 +57,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             title: String?,
             aiTopic: AITopics,
             meal: String? = null,
+            workout: AiExerciseList? = null,
+            planType: PlanType? = null
         ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
@@ -63,7 +66,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putString("userMessage", userMessage ?: "")
                 putString("title", title ?: "")
                 putSerializable("aiTopic", aiTopic)
+                putSerializable("planType", planType ?: PlanType.NONE)
                 putString("meal", meal ?: "")
+                putParcelable("workout", workout)
             })
         }
     }
@@ -80,7 +85,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.threadId = args.threadId
         viewModel.defaultMessage = args.defaultMessage
         viewModel.userMessage = args.userMessage
-        viewModel.meal = args.meal
+        viewModel.meal = null//args.meal
+        viewModel.workout = args.workout
+        viewModel.planType = args.planType
 
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
@@ -89,10 +96,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.generateThreadId()
         } else {
             viewModel.loadMessagesByThreadId(viewModel.threadId!!)
-            //viewModel.threadTitle.postValue(args.title)
         }
         setVideo()
-        setTopData()
     }
 
     private fun setVideo() {
@@ -102,12 +107,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         val videoView = binding.videoView
         videoView.setVideoURI(uri)
         videoView.pause()
-    }
-
-    private fun setTopData() {
-        //video_chat_ai
-        //video_ai_generating
-
     }
 
     private fun setAdapter() {
@@ -134,6 +133,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 is ChatGptOverview.ThinkingMessage -> {
 
                 }
+
+                is ChatGptOverview.HeaderMeal -> {}
+                is ChatGptOverview.HeaderWorkout -> {}
             }
         }
     }
@@ -403,4 +405,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
 enum class AITopics {
     SLEEP, READINESS, ACTIVITY, STRESS, MENSTRUAL_HEALTH, WORKOUT, GENERAL
+}
+
+enum class PlanType {
+    WORKOUT, DIET, NONE
 }

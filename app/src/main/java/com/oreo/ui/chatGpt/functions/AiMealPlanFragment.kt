@@ -25,7 +25,7 @@ class AiMealPlanFragment :
     }
 
     private val mealsAdapter: MealsAdapter by lazy {
-        MealsAdapter(onMealSelected = { meal->
+        MealsAdapter(onMealSelected = { meal ->
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
@@ -34,6 +34,7 @@ class AiMealPlanFragment :
                 AITopics.GENERAL,
                 meal
             )
+            navigate(frag, bundle)
         })
     }
 
@@ -83,7 +84,7 @@ class AiMealPlanFragment :
             nutrientsAdapter.setDataSet(it)
         }
 
-        viewModel.dayMealList.observe(this){
+        viewModel.dayMealList.observe(this) {
             mealsAdapter.setDataSet(it)
         }
 

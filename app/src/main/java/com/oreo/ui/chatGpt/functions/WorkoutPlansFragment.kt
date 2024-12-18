@@ -15,6 +15,9 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,6 +53,18 @@ class WorkoutPlansFragment :
         binding.lytWeek.tvFri.setOnClickListener(weekListener)
         binding.lytWeek.tvSat.setOnClickListener(weekListener)
         binding.lytWeek.tvSun.setOnClickListener(weekListener)
+
+        binding.ivEdit.setOnClickListener {
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                getString(R.string.text_build_me_a_workout_plan),
+                null,
+                AITopics.GENERAL,
+                planType = PlanType.WORKOUT
+            )
+            navigate(frag, bundle)
+        }
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()

@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -62,6 +63,8 @@ class ChatGptViewModel
     var defaultMessage: String? = null
     var userMessage: String? = null
     var meal: String? = null
+    var workout: AiExerciseList? = null
+    var planType: PlanType? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
@@ -77,6 +80,20 @@ class ChatGptViewModel
 
         initMessage =
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
+    }
+
+    fun addTopData() {
+        if (workout != null || meal != null) {
+            val messages = _chatGptOverview.value ?: ArrayList()
+            if (workout != null) {
+                messages.add(ChatGptOverview.HeaderWorkout(workout!!))
+            }
+            if (meal != null) {
+                messages.add(ChatGptOverview.HeaderMeal(""))
+            }
+            _chatGptOverview.value = (messages)
+
+        }
     }
 
     fun addSentMessage(message: String) {
@@ -172,6 +189,7 @@ class ChatGptViewModel
                         resource.data?.data?.let {
                             it.threadId?.let { id ->
                                 threadId = id
+                                addTopData()
                                 if (userMessage.isNullOrEmpty().not()) {
                                     sendUserInitMessage(userMessage ?: "")
                                 } else {
@@ -203,8 +221,12 @@ class ChatGptViewModel
 
             val request: Request =
                 Request.Builder()
-                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt&thread_id=$threadId")
                     .apply {
+                        when (planType) {
+                            PlanType.WORKOUT -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/workout/stream?message=$prompt")
+                            PlanType.DIET -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/diet/stream?message=$prompt")
+                            PlanType.NONE, null -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt&thread_id=$threadId")
+                        }
                         userToken?.let {
                             this.addHeader("access-token", "Bearer ${userToken.access_token}")
                             this.addHeader("wearable-type", "ring")

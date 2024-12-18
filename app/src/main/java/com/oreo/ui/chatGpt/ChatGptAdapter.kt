@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemAiHeaderMealBinding
+import com.noisefit.luna.databinding.ItemAiHeaderWorkoutBinding
 import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
 import com.noisefit.luna.databinding.ItemChatMessageRetryBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
@@ -81,6 +83,22 @@ class ChatGptAdapter :
                 )
             )
 
+            R.layout.item_ai_header_workout -> ChatGptViewItemsHolder.ChatHeaderWorkoutViewHolder(
+                ItemAiHeaderWorkoutBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.item_ai_header_meal -> ChatGptViewItemsHolder.ChatHeaderMealViewHolder(
+                ItemAiHeaderMealBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
 
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }
@@ -111,6 +129,16 @@ class ChatGptAdapter :
                 items[position] as ChatGptOverview.ThinkingMessage,
                 position
             )
+
+            is ChatGptViewItemsHolder.ChatHeaderWorkoutViewHolder -> holder.bind(
+                items[position] as ChatGptOverview.HeaderWorkout,
+                position
+            )
+
+            is ChatGptViewItemsHolder.ChatHeaderMealViewHolder -> holder.bind(
+                items[position] as ChatGptOverview.HeaderMeal,
+                position
+            )
         }
     }
 
@@ -122,6 +150,8 @@ class ChatGptAdapter :
             is ChatGptOverview.ReceivedMessage -> R.layout.item_chat_message_recived_list
             is ChatGptOverview.RetryMessage -> R.layout.item_chat_message_retry
             is ChatGptOverview.ThinkingMessage -> R.layout.item_chat_message_thinking
+            is ChatGptOverview.HeaderWorkout -> R.layout.item_ai_header_workout
+            is ChatGptOverview.HeaderMeal -> R.layout.item_ai_header_meal
         }
     }
 }
@@ -147,6 +177,29 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             binding.tvMessage.text = data.message
         }
     }
+
+    class ChatHeaderMealViewHolder(private val binding: ItemAiHeaderMealBinding) :
+        ChatGptViewItemsHolder(binding) {
+        fun bind(
+            data: ChatGptOverview.HeaderMeal,
+            position: Int
+        ) {
+
+        }
+    }
+
+    class ChatHeaderWorkoutViewHolder(private val binding: ItemAiHeaderWorkoutBinding) :
+        ChatGptViewItemsHolder(binding) {
+        fun bind(
+            data: ChatGptOverview.HeaderWorkout,
+            position: Int
+        ) {
+            binding.tvWorkoutName.text = data.workout.exercise_name
+            binding.tvSetsData.text = data.workout.reps
+
+        }
+    }
+
 
     class ChatMessageRetryViewHolder(private val binding: ItemChatMessageRetryBinding) :
         ChatGptViewItemsHolder(binding) {

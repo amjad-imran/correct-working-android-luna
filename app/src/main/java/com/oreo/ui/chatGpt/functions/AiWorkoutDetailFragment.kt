@@ -39,8 +39,8 @@ class AiWorkoutDetailFragment :
     private fun setUI() {
         val workout = dataList.first()
 
-        binding.tvWorkoutName.text = "Flat Bench Press"
-        binding.tvSetsData.text = "3 sets 12 reps"
+        binding.tvWorkoutName.text = workout.exercise_name
+        binding.tvSetsData.text = workout.reps
 
         if (dataList.size > 1) {
             binding.ivNext.visible()
@@ -62,7 +62,8 @@ class AiWorkoutDetailFragment :
                 null,
                 null,
                 null,
-                AITopics.GENERAL
+                AITopics.GENERAL,
+                workout = dataList.first()
             )
             navigate(frag, bundle)
         }
