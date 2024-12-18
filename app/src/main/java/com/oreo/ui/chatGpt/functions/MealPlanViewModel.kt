@@ -2,6 +2,10 @@ package com.oreo.ui.chatGpt.functions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiMealResponse
+import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -26,7 +30,10 @@ class MealPlanViewModel @Inject constructor(
     val dayNutrients = MutableLiveData<List<String>>()
     val selectedPosition = MutableLiveData<Int>()
     val currentSelectedWeekDayPosition = MutableLiveData<Int>()
-    val dayMealList = MutableLiveData<List<String>>()
+
+    private val mealResponse = ArrayList<AiMealResponse>()
+    val dayMealList = MutableLiveData<List<AiMeals>?>()
+
 
     init {
         currentSelectedWeekDayPosition.postValue(LocalDate.now().dayOfWeek.value)
@@ -63,6 +70,9 @@ class MealPlanViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
+                            mealResponse.clear()
+                            mealResponse.addAll(it)
+
                             setSelectedPosition(LocalDate.now().dayOfWeek.value)//todo based on current day
                         }
                     }
@@ -76,7 +86,21 @@ class MealPlanViewModel @Inject constructor(
      */
     fun setSelectedPosition(position: Int) {
         selectedPosition.postValue(position)
-        dayNutrients.postValue(arrayListOf("","","",""))
-        dayMealList.postValue(arrayListOf("Workout 1", "Workout 2", "Workout 3", "Workout 4"))
+
+        val meals = mealResponse.find {
+            it.day_name.equals(getDayName(position), true)
+        }
+
+        if (meals == null) {
+            dayMealList.postValue(null)
+        } else {
+            dayMealList.postValue(meals.meals)
+        }
+
+        //dayNutrients.postValue(arrayListOf("", "", "", ""))
+    }
+
+    private fun getDayName(position: Int): String {
+        return "day_$position"
     }
 }

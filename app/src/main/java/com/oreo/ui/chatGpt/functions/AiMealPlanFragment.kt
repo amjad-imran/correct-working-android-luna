@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +34,16 @@ class AiMealPlanFragment :
                 null,
                 AITopics.GENERAL,
                 meal
+            )
+            navigate(frag, bundle)
+        }, onEditClicked = {
+            val (frag, bundle) = ChatGptFragment.getStartData(
+                null,
+                null,
+                null,
+                null,
+                AITopics.GENERAL,
+                planType = PlanType.DIET
             )
             navigate(frag, bundle)
         })
@@ -60,18 +71,6 @@ class AiMealPlanFragment :
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-
-        binding.tvEditDietPlan.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
-                AITopics.GENERAL
-            )
-            navigate(frag, bundle)
-        }
-
     }
 
     override fun subscribeObservers() {
@@ -85,7 +84,7 @@ class AiMealPlanFragment :
         }
 
         viewModel.dayMealList.observe(this) {
-            mealsAdapter.setDataSet(it)
+            mealsAdapter.setDataSet(it ?: ArrayList())
         }
 
 

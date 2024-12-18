@@ -20,6 +20,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiMeals
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -56,7 +57,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             userMessage: String?,
             title: String?,
             aiTopic: AITopics,
-            meal: String? = null,
+            meal: AiMeals? = null,
             workout: AiExerciseList? = null,
             planType: PlanType? = null
         ): Pair<Int, Bundle?> {
@@ -67,7 +68,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putString("title", title ?: "")
                 putSerializable("aiTopic", aiTopic)
                 putSerializable("planType", planType ?: PlanType.NONE)
-                putString("meal", meal ?: "")
+                putParcelable("meal", meal)
                 putParcelable("workout", workout)
             })
         }
@@ -85,7 +86,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.threadId = args.threadId
         viewModel.defaultMessage = args.defaultMessage
         viewModel.userMessage = args.userMessage
-        viewModel.meal = null//args.meal
+        viewModel.meal = args.meal
         viewModel.workout = args.workout
         viewModel.planType = args.planType
 

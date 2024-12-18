@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieDrawable
@@ -12,9 +13,11 @@ import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
 import com.noisefit.luna.databinding.ItemChatMessageRetryBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
 import com.noisefit.luna.databinding.ItemChatMessageThinkingBinding
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.ChatGptOverview
+import com.oreo.ui.chatGpt.functions.SubMealAdapter
 import io.noties.markwon.Markwon
 
 
@@ -184,6 +187,14 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.HeaderMeal,
             position: Int
         ) {
+            binding.lytMeal.apply {
+                tvTitle.gone()
+                imageView58.gone()
+                tvEditDietPlan.gone()
+                root.visible()
+                rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
+                rvMeals.adapter = SubMealAdapter(data.meal.meal ?: ArrayList())
+            }
 
         }
     }

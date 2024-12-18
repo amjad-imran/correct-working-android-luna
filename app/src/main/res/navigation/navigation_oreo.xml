@@ -894,7 +894,9 @@
             app:argType="com.oreo.ui.chatGpt.AITopics" />
         <argument
             android:name="meal"
-            app:argType="string" />
+            app:argType="com.noisefit.data.model.AiMeals"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="workout"
             app:argType="com.noisefit.data.model.AiExerciseList"

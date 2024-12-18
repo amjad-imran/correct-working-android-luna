@@ -1,6 +1,7 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
@@ -477,7 +478,7 @@ interface NetworkService {
     @GET
     suspend fun getAiMealPlans(
         @Url url: String
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<List<AiMealResponse>>
 
     @GET
     suspend fun getDailySummaryData(

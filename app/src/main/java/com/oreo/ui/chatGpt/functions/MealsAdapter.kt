@@ -4,23 +4,35 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.model.AiMeals
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
 import com.noisefit.luna.databinding.RowMealDataBinding
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 
-class MealsAdapter(val onMealSelected: (String) -> Unit) :
+class MealsAdapter(val onMealSelected: (AiMeals) -> Unit, val onEditClicked: () -> Unit) :
     RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
-    private val mDataSet = ArrayList<String>()
+    private val mDataSet = ArrayList<AiMeals>()
 
     inner class ViewHolder(val binding: RowMealDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
+        fun bind(data: AiMeals) {
 
-            binding.tvTitle.text = "Breakfast"
+            binding.tvTitle.text = data.meal_type
             binding.rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvMeals.adapter = SubMealAdapter(arrayListOf("","",""))
+            binding.rvMeals.adapter = SubMealAdapter(data.meal ?: ArrayList())
 
-            binding.root.setOnClickListener {
+            binding.vRoot.setOnClickListener {
                 onMealSelected.invoke(data)
+            }
+
+            if (bindingAdapterPosition == mDataSet.size - 1) {
+                binding.tvEditDietPlan.visible()
+            } else {
+                binding.tvEditDietPlan.gone()
+            }
+            binding.tvEditDietPlan.setOnClickListener {
+                onEditClicked()
             }
         }
 
@@ -44,7 +56,7 @@ class MealsAdapter(val onMealSelected: (String) -> Unit) :
         holder.bind(mDataSet[position])
     }
 
-    fun setDataSet(dataSet: List<String>) {
+    fun setDataSet(dataSet: List<AiMeals>) {
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()

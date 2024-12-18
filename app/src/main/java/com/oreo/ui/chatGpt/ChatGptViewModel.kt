@@ -9,6 +9,7 @@ import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiMeals
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -62,7 +63,7 @@ class ChatGptViewModel
     var threadId: String? = null
     var defaultMessage: String? = null
     var userMessage: String? = null
-    var meal: String? = null
+    var meal: AiMeals? = null
     var workout: AiExerciseList? = null
     var planType: PlanType? = null
 
@@ -89,7 +90,7 @@ class ChatGptViewModel
                 messages.add(ChatGptOverview.HeaderWorkout(workout!!))
             }
             if (meal != null) {
-                messages.add(ChatGptOverview.HeaderMeal(""))
+                messages.add(ChatGptOverview.HeaderMeal(meal!!))
             }
             _chatGptOverview.value = (messages)
 
@@ -189,11 +190,14 @@ class ChatGptViewModel
                         resource.data?.data?.let {
                             it.threadId?.let { id ->
                                 threadId = id
+
                                 addTopData()
-                                if (userMessage.isNullOrEmpty().not()) {
-                                    sendUserInitMessage(userMessage ?: "")
-                                } else {
-                                    sendInitMessage()
+                                if (workout == null && meal == null) {
+                                    if (userMessage.isNullOrEmpty().not()) {
+                                        sendUserInitMessage(userMessage ?: "")
+                                    } else {
+                                        sendInitMessage()
+                                    }
                                 }
                             }
                         }

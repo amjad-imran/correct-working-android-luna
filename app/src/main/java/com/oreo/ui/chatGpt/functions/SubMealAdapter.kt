@@ -3,16 +3,17 @@ package com.oreo.ui.chatGpt.functions
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.model.AiMeal
 import com.noisefit.luna.databinding.RowSubMealBinding
 
-class SubMealAdapter(val mDataSet: List<String>) :
+class SubMealAdapter(val mDataSet: List<AiMeal>) :
     RecyclerView.Adapter<SubMealAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: RowSubMealBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
-            binding.tvTitle.text = "Green Apple"
-            binding.tvSubTitle.text = "1 medium size"
+        fun bind(data: AiMeal) {
+            binding.tvTitle.text = data.meal_name
+            binding.tvSubTitle.text = data.portion
         }
     }
 
