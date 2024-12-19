@@ -7,6 +7,20 @@
     tools:context="com.oreo.ui.chatGpt.ChatGptFragment">
 
 
+    <ImageView
+        android:id="@+id/ivGeneratingGradient"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:src="@drawable/gradient_ai_chat_video"
+        app:layout_constraintBottom_toTopOf="@+id/videoView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivClose"
         android:layout_width="38dp"
@@ -100,10 +114,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_height="200dp"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytSnackbar"

@@ -3,8 +3,7 @@ package com.oreo.ui.chatGpt.functions
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.navArgs
-import com.noisefit.data.model.AiExerciseList
-import com.noisefit.luna.R
+import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.databinding.FragmentAiWorkoutDetailBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -21,7 +20,7 @@ class AiWorkoutDetailFragment :
 
     val navArgs: AiWorkoutDetailFragmentArgs by navArgs()
 
-    var dataList = ArrayList<AiExerciseList>()
+    var dataList = ArrayList<AiWorkout>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,7 @@ class AiWorkoutDetailFragment :
     private fun setUI() {
         val workout = dataList.first()
 
-        binding.tvWorkoutName.text = workout.exercise_name
+        binding.tvWorkoutName.text = workout.workout_name
         binding.tvSetsData.text = workout.reps
 
         if (dataList.size > 1) {
@@ -59,7 +58,7 @@ class AiWorkoutDetailFragment :
             val workout = dataList.first()
             val (frag, bundle) = AudioAiFragment.getStartData(
                 PlanType.WORKOUT,
-                workout.exercise_name
+                workout.workout_name
             )
             navigate(frag, bundle)
         }

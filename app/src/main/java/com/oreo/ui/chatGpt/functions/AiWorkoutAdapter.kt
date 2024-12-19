@@ -3,18 +3,18 @@ package com.oreo.ui.chatGpt.functions
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
 
-class AiWorkoutAdapter(val onWorkoutSelected: (List<AiExerciseList>) -> Unit) :
+class AiWorkoutAdapter(val onWorkoutSelected: (List<AiWorkout>) -> Unit) :
     RecyclerView.Adapter<AiWorkoutAdapter.ViewHolder>() {
-    private val mDataSet = ArrayList<AiExerciseList>()
+    private val mDataSet = ArrayList<AiWorkout>()
 
     inner class ViewHolder(val binding: RowAiWorkoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: AiExerciseList) {
+        fun bind(data: AiWorkout) {
 
-            binding.tvWorkoutName.text = data.exercise_name
+            binding.tvWorkoutName.text = data.workout_name
             binding.tvDetails.text = data.reps
 
             binding.root.setOnClickListener {
@@ -25,7 +25,7 @@ class AiWorkoutAdapter(val onWorkoutSelected: (List<AiExerciseList>) -> Unit) :
 
     }
 
-    fun getWorkouts(position: Int): List<AiExerciseList> {
+    fun getWorkouts(position: Int): List<AiWorkout> {
         return mDataSet.subList(position, mDataSet.size)
     }
 
@@ -47,7 +47,7 @@ class AiWorkoutAdapter(val onWorkoutSelected: (List<AiExerciseList>) -> Unit) :
         holder.bind(mDataSet[position])
     }
 
-    fun setDataSet(dataSet: List<AiExerciseList>) {
+    fun setDataSet(dataSet: List<AiWorkout>) {
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()

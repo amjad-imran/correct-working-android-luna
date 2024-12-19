@@ -67,5 +67,12 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

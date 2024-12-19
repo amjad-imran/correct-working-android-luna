@@ -64,7 +64,7 @@ class LocationService : Service() {
 
     private fun start() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Tracking location...")
+            .setContentTitle(getString(R.string.text_tracking_location))
             //.setContentText("Location: null")
             .setSmallIcon(R.drawable.icon_transparent)
             .setOngoing(true)

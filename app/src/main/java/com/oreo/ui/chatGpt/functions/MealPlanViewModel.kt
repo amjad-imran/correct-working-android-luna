@@ -2,20 +2,14 @@ package com.oreo.ui.chatGpt.functions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiMeals
-import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.BaseViewModelCompose
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -23,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MealPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository
-) : BaseViewModelCompose() {
+) : BaseViewModel() {
 
     val workoutData: String? = null
 

@@ -24,8 +24,8 @@
         style="@style/H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/carolina_blue"
         android:layout_marginTop="16dp"
+        android:textColor="@color/carolina_blue"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +51,15 @@
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="68dp" />
+
+            <include
+                android:id="@+id/lytGeneratingData"
+                layout="@layout/layout_ai_data_generating"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginHorizontal="@dimen/side_margin"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/lytNoDevice"
@@ -132,7 +141,7 @@
             android:id="@+id/blurView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:blurOverlayColor="#80000000">
+            app:blurOverlayColor="#60000000">
 
             <include
                 android:id="@+id/lytChatWidget"

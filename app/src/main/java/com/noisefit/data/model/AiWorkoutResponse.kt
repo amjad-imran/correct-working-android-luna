@@ -4,12 +4,21 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 data class AiWorkoutResponse(
-    val day:String?=null,
-    val exercises:List<AiExerciseList>?=null,
+    val day_name: String? = null,//day_1, day_2
+    val workouts: List<AiWorkouts>? = null,
 )
 
 @Parcelize
-data class AiExerciseList(
-    val reps:String?=null,
-    val exercise_name:String?=null,
-):Parcelable
+data class AiWorkouts(
+    val session: String? = null,
+    val workout: List<AiWorkout>? = null,
+) : Parcelable
+
+@Parcelize
+data class AiWorkout(
+    val reps: String? = null,
+    val workout_name: String? = null,
+    val description: String? = null,
+) : Parcelable
+
+

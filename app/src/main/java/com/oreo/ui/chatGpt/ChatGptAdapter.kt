@@ -205,7 +205,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.HeaderWorkout,
             position: Int
         ) {
-            binding.tvWorkoutName.text = data.workout.exercise_name
+            binding.tvWorkoutName.text = data.workout.workout_name
             binding.tvSetsData.text = data.workout.reps
 
         }

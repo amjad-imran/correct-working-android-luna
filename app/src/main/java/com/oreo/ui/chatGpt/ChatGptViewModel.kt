@@ -1,15 +1,13 @@
 package com.oreo.ui.chatGpt
 
-import android.speech.RecognitionListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
-import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -19,15 +17,12 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
-import com.oreo.util.SpeechRecognizerManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
@@ -64,7 +59,7 @@ class ChatGptViewModel
     var defaultMessage: String? = null
     var userMessage: String? = null
     var meal: AiMeals? = null
-    var workout: AiExerciseList? = null
+    var workout: AiWorkout? = null
     var planType: PlanType? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
@@ -192,13 +187,7 @@ class ChatGptViewModel
                                 threadId = id
 
                                 addTopData()
-                                if (workout == null && meal == null) {
-                                    if (userMessage.isNullOrEmpty().not()) {
-                                        sendUserInitMessage(userMessage ?: "")
-                                    } else {
-                                        sendInitMessage()
-                                    }
-                                }
+                                generateInitMessage()
                             }
                         }
                     }
@@ -207,6 +196,16 @@ class ChatGptViewModel
         }
 
 
+    }
+
+    fun generateInitMessage() {
+        if (workout == null && meal == null) {
+            if (userMessage.isNullOrEmpty().not()) {
+                sendUserInitMessage(userMessage ?: "")
+            } else {
+                sendInitMessage()
+            }
+        }
     }
 
 
@@ -485,48 +484,48 @@ class ChatGptViewModel
     }
 
     fun stopResponseGeneration() {
-        if (threadId == null) return
 
         viewModelScope.launch {
             removeThinkingState()
             fetchInProgress.postValue(false)
             serverSentEvent?.close()
 
-            oreoDeviceRepository.stopResponseGeneration(threadId!!).collect { resource ->
-                /*when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        stopResponseGeneration()
-                                    }
-
-                                    override fun no() {
-
-                                    }
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.let {
-                            removeThinkingState()
-                            fetchInProgress.postValue(false)
-                            serverSentEvent?.close()
+            oreoDeviceRepository.stopResponseGeneration(threadId, planType ?: PlanType.NONE)
+                .collect { resource ->
+                    /*when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
                         }
-                    }
-                }*/
-            }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            stopResponseGeneration()
+                                        }
+
+                                        override fun no() {
+
+                                        }
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.let {
+                                removeThinkingState()
+                                fetchInProgress.postValue(false)
+                                serverSentEvent?.close()
+                            }
+                        }
+                    }*/
+                }
         }
     }
 
@@ -537,43 +536,74 @@ class ChatGptViewModel
 
         viewModelScope.launch {
             if (showSavePlan.value?.peekContent() == AiPlanType.WORKOUT) {
-                oreoDeviceRepository.saveWorkoutPlan()
-            } else if (showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
-                oreoDeviceRepository.saveMealPlan()
-            } else {
-                null
-            }?.collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
+                oreoDeviceRepository.saveWorkoutPlan().collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
 
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        savePlanData()
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            savePlanData()
+                                        }
+
+                                        override fun no() {
+
+                                        }
                                     }
+                            })
+                        }
 
-                                    override fun no() {
-
-                                    }
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            aiGeneratedPlanSaved.postValue(Event(true))
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                aiGeneratedPlanSaved.postValue(Event(true))
+                            }
                         }
                     }
                 }
+            } else if (showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
+                oreoDeviceRepository.saveMealPlan()
+                    .collect { resource ->
+                        when (resource) {
+                            is Resource.GenericError -> {
+                                sendMessage(resource.message)
+                            }
+
+                            is Resource.Loading -> {
+                                setLoading(resource.loading)
+                            }
+
+                            is Resource.NetworkError -> {
+                                setApiErrors(resource.response.apply {
+                                    this.uiComponentType as UIComponentType.RetryApiDialog
+                                    (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                        object : BinaryActionCallback {
+                                            override fun yes() {
+                                                savePlanData()
+                                            }
+
+                                            override fun no() {
+
+                                            }
+                                        }
+                                })
+                            }
+
+                            is Resource.Success -> {
+                                resource.data?.data?.let {
+                                    aiGeneratedPlanSaved.postValue(Event(true))
+                                }
+                            }
+                        }
+                    }
             }
         }
     }

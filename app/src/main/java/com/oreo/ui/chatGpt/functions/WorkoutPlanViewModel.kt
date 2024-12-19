@@ -2,18 +2,14 @@ package com.oreo.ui.chatGpt.functions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.model.AiExerciseList
+import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.BaseViewModelCompose
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -21,14 +17,14 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkoutPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository
-) : BaseViewModelCompose() {
+) : BaseViewModel() {
 
     val workoutData: String? = null
 
     val dayTitle = MutableLiveData<String?>()
     val selectedPosition = MutableLiveData<Int>()
     val currentSelectedWeekDayPosition = MutableLiveData<Int>()
-    val workoutList = MutableLiveData<List<AiExerciseList>?>()
+    val workoutList = MutableLiveData<List<AiWorkout>?>()
     private val workoutResponse = ArrayList<AiWorkoutResponse>()
 
     init {
@@ -66,10 +62,9 @@ class WorkoutPlanViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-
                             workoutResponse.clear()
                             workoutResponse.addAll(it)
-                            setSelectedPosition(LocalDate.now().dayOfWeek.value)//todo based on current day
+                            setSelectedPosition(LocalDate.now().dayOfWeek.value)
                         }
                     }
                 }
@@ -84,28 +79,30 @@ class WorkoutPlanViewModel @Inject constructor(
         selectedPosition.postValue(position)
 
         val workout = workoutResponse.find {
-            it.day.equals(getDayName(position),true)
+            it.day_name.equals(getDayName(position), true)
         }
 
-        if(workout==null){
+        if (workout?.workouts?.firstOrNull()?.workout.isNullOrEmpty()) {
             dayTitle.postValue(null)
             workoutList.postValue(null)
-        }else{
-            dayTitle.postValue(null)
-            workoutList.postValue(workout.exercises)
+        } else {
+            val workouts = workout?.workouts?.firstOrNull()!!.workout
+
+            if (isRestDay(workouts)) {
+                dayTitle.postValue(null)
+                workoutList.postValue(ArrayList())
+            } else {
+                dayTitle.postValue(workout.workouts.firstOrNull()?.session)
+                workoutList.postValue(workouts)
+            }
         }
     }
 
+    private fun isRestDay(workouts: List<AiWorkout>?): Boolean {
+        return workouts?.firstOrNull()?.reps.isNullOrEmpty()
+    }
+
     private fun getDayName(position: Int): String {
-        return when (position) {
-            1 -> "monday"
-            2 -> "tuesday"
-            3 -> "wednesday"
-            4 -> "thursday"
-            5 -> "friday"
-            6 -> "saturday"
-            7 -> "sunday"
-            else -> ""
-        }
+        return "day_$position"
     }
 }

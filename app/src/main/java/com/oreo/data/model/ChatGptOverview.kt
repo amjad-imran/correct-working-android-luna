@@ -1,7 +1,8 @@
 package com.oreo.data.model
 
-import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkout
+import com.noisefit.data.model.AiWorkouts
 
 
 sealed class ChatGptOverview {
@@ -19,7 +20,7 @@ sealed class ChatGptOverview {
     ) : ChatGptOverview()
 
     class HeaderWorkout(
-        val workout: AiExerciseList
+        val workout: AiWorkout
     ) : ChatGptOverview()
 
     class HeaderMeal(

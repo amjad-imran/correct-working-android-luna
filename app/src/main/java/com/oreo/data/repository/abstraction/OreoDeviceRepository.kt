@@ -14,6 +14,7 @@ import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.ai.TopQuestionsResponse
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.PlanType
 import kotlinx.coroutines.flow.Flow
 
 interface OreoDeviceRepository {
@@ -39,7 +40,7 @@ interface OreoDeviceRepository {
         threadId: String
     ): Flow<Resource<BaseApiResponse<String>?>>
 
-    suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>>
+    suspend fun stopResponseGeneration(threadId: String?,planType: PlanType): Flow<Resource<BaseApiResponse<Any>?>>
 
     suspend fun getCredentials(): Flow<Resource<BaseApiResponse<AiCreds>?>>
 

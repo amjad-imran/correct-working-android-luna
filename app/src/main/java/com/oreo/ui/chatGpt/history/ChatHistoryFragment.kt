@@ -37,7 +37,8 @@ class ChatHistoryFragment :
 
                 navigate(
                     ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId, "", "", title, AITopics.GENERAL,"", PlanType.NONE
+                        threadId, "", "", title, AITopics.GENERAL,
+                        PlanType.NONE
                     )
                 )
             }

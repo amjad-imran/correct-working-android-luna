@@ -5,36 +5,27 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.speech.RecognitionListener
-import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.data.model.AiExerciseList
 import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.disable
-import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.revealFromBottom
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Scanner
 import kotlin.math.absoluteValue
 
 
@@ -58,7 +49,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             title: String?,
             aiTopic: AITopics,
             meal: AiMeals? = null,
-            workout: AiExerciseList? = null,
+            workout: AiWorkout? = null,
             planType: PlanType? = null
         ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
@@ -93,11 +84,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()
 
-        if (viewModel.threadId.isNullOrEmpty()) {
-            viewModel.generateThreadId()
+        if (viewModel.planType == PlanType.NONE) {
+            if (viewModel.threadId.isNullOrEmpty()) {
+                viewModel.generateThreadId()
+            } else {
+                viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+            }
         } else {
-            viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+            viewModel.generateInitMessage()
         }
+
         setVideo()
     }
 
@@ -144,7 +140,10 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     override fun initListener() {
 
         binding.lytChatBox.btnAudioChat.setOnClickListener {
-            navigate(R.id.audioAiFragment)
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.NONE
+            )
+            navigate(frag, bundle)
         }
 
         binding.rvChats.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -346,11 +345,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             if (it) {
                 binding.videoView.start()
                 binding.videoView.visible()
+                binding.ivGeneratingGradient.visible()
                 binding.lytGeneratingData.root.visible()
                 binding.lytChatBox.root.gone()
             } else {
                 binding.videoView.stopPlayback()
                 binding.videoView.gone()
+                binding.ivGeneratingGradient.gone()
                 binding.lytGeneratingData.root.gone()
                 binding.lytChatBox.root.visible()
             }

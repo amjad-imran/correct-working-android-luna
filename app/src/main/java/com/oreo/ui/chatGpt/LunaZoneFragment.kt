@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -77,7 +79,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     }
 
     private fun setBlur() {
-        val radius = 20f
+        val radius = 18f
         val decorView = binding.lytChatWidget.root
         val rootView = binding.rootView
         val windowBackground = decorView.background
@@ -128,20 +130,16 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         }
 
         binding.lytChatWidget.textView140.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
-                AITopics.GENERAL
-            )
-            navigate(frag, bundle)
+            navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.GENERAL))
         }
         binding.lytChatWidget.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }
         binding.lytChatWidget.ivMic.setOnClickListener {
-            navigate(R.id.audioAiFragment)
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.NONE
+            )
+            navigate(frag, bundle)
         }
 
         binding.lytDailySummaryAvailable.root.setOnClickListener {
@@ -223,6 +221,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     text = getString(R.string.text_syncing_dot)
                     visible()
                 }
+                viewModel.summaryStates.postValue(SummaryStates.GENERATING)
             }
         }
 
@@ -233,12 +232,14 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoDevice.root.visible()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.gone()
+                    binding.lytGeneratingData.root.gone()
                 }
 
                 SummaryStates.NO_DATA -> {
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.visible()
+                    binding.lytGeneratingData.root.gone()
 
                     binding.lytNoData.tvNoData.post {
                         val width = binding.lytNoData.tvNoData.width.toFloat()
@@ -262,11 +263,13 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.gone()
+                    binding.lytGeneratingData.root.visible()
                 }
 
                 SummaryStates.DATA_AVAILABLE -> {
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.visible()
+                    binding.lytGeneratingData.root.gone()
                     binding.lytDailySummaryAvailable.tvDate.text = LocalDate.now().format(
                         DateTimeFormatter.ofPattern(
                             "E, MMM dd",
@@ -281,6 +284,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.gone()
+                    binding.lytGeneratingData.root.gone()
                 }
             }
         }

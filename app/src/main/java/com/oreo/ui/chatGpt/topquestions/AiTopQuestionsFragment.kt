@@ -2,13 +2,17 @@ package com.oreo.ui.chatGpt.topquestions
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +21,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,9 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +52,7 @@ import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.compose.element.button.CircularBackButton
 import com.oreo.ui.compose.element.button.CircularHistoryButton
 import com.oreo.ui.compose.element.button.Loading
@@ -69,7 +78,15 @@ class AiTopQuestionsFragment :
                 ScreenAiTopQuestion(
                     onBackClicked = {
                         navigateUpSafe()
-                    }, onHistoryClicked = {
+                    },
+                    onAiAudioClicked = {
+                        navigate(
+                            AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToAudioAiFragment(
+                                null
+                            )
+                        )
+                    },
+                    onHistoryClicked = {
                         navigate(R.id.chatHistoryFragment)
                         //navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
                     }, onQuestionSelected = { ques ->
@@ -80,7 +97,6 @@ class AiTopQuestionsFragment :
                                 ques,
                                 "",
                                 navArgs.aiTopic,
-                                "",
                                 PlanType.NONE
                             )
                         )
@@ -103,6 +119,7 @@ class AiTopQuestionsFragment :
 fun ScreenAiTopQuestion(
     onBackClicked: () -> Unit,
     onHistoryClicked: () -> Unit,
+    onAiAudioClicked: () -> Unit,
     onQuestionSelected: (question: String) -> Unit
 ) {
     val viewModel: AiTopQuestionsViewModel = hiltViewModel()
@@ -119,6 +136,7 @@ fun ScreenAiTopQuestion(
         userName,
         onBackClicked,
         onHistoryClicked,
+        onAiAudioClicked,
         onQuestionSelected
     )
 
@@ -133,48 +151,31 @@ fun AiTopQuestionMain(
     userName: String,
     onBackClicked: () -> Unit,
     onHistoryClicked: () -> Unit,
+    onAiAudioClicked: () -> Unit,
     onQuestionSelected: (question: String) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .padding(bottom = 88.dp),
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             AiHistoryToolbar(
                 showHistoryIcon,
                 onBackClicked = onBackClicked,
                 onHistoryClicked = onHistoryClicked
             )
-            Spacer(
-                modifier = Modifier.height(32.dp)
-            )
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = 26.dp
-                ),
-                text = if (userName.isEmpty()) {
-                    "Hi,\n" + "Ask me anything !"
-                } else {
-                    "Hi $userName,\n" + "Ask me anything !"
-                },
-                style = FontStyle.SIZE_24,
-                lineHeight = 32.sp
-            )
-
-            Spacer(
-                modifier = Modifier.height(24.dp)
-            )
 
             QuestionList(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 16.dp),
                 questions
             ) { selectedQues ->
                 onQuestionSelected(selectedQues)
             }
-
-
         }
 
         AskQuestion(
@@ -186,6 +187,9 @@ fun AiTopQuestionMain(
                 .padding(horizontal = 16.dp),
             onSendClicked = {
                 onQuestionSelected(it)
+            },
+            onAiAudioClicked = {
+                onAiAudioClicked()
             }
         )
 
@@ -199,24 +203,40 @@ fun AiTopQuestionMain(
 @Composable
 fun AskQuestion(
     modifier: Modifier,
-    onSendClicked: (String) -> Unit
+    onSendClicked: (String) -> Unit,
+    onAiAudioClicked: () -> Unit
 ) {
 
     var text by remember { mutableStateOf("") }
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = {
-            Text(
-                text = stringResource(R.string.text_type_something),
-                style = FontStyle.SIZE_16,
-                color = Color.LightGray
-            )
-        },
-        textStyle = FontStyle.SIZE_16,
-        singleLine = true,
-        shape = RoundedCornerShape(52.dp),
+    Row(
         modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            modifier = Modifier
+                .weight(1f)
+                .border(
+                    width = 1.dp, color = Color(0x33FFFFFF),
+                    shape = RoundedCornerShape(size = 52.dp)
+                ),
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.text_type_something),
+                    style = FontStyle.SIZE_16,
+                    color = Color.LightGray
+                )
+            },
+            textStyle = FontStyle.SIZE_16,
+            singleLine = true,
+            shape = RoundedCornerShape(52.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    onSendClicked(text)
+                },
+            )/*,
         trailingIcon = {
             if (text.isNotEmpty()) {
                 Image(
@@ -227,21 +247,55 @@ fun AskQuestion(
                     contentDescription = "Send"
                 )
             }
-        },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color(0xc009284c),
-            unfocusedContainerColor = Color(0xc009284c),
-            cursorColor = Color(0xFFb0e3ff),
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
-            focusedPlaceholderColor = Color(0X2effffff),
-            unfocusedPlaceholderColor = Color(0x2effffff),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+        }*/,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xc009284c),
+                unfocusedContainerColor = Color(0xc009284c),
+                cursorColor = Color(0xFFb0e3ff),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedPlaceholderColor = Color(0X2effffff),
+                unfocusedPlaceholderColor = Color(0x2effffff),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            )
         )
-    )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Box(modifier = Modifier
+            .width(48.dp)
+            .height(48.dp)
+            .background(
+                color = Color(0xFFFFFFFF),
+                shape = RoundedCornerShape(size = 48.dp)
+            )
+            .clickable {
+                onAiAudioClicked()
+            }) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_ai_mic_black),
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .padding(10.dp),
+                contentDescription = "Audio AI",
+            )
+        }
+    }
+
+
 }
 
+/*@Preview
+@Composable
+fun QuestionListPreview() {
+    QuestionList(modifier = Modifier, questions = arrayListOf(
+        TopQuestions("Ques 1"),
+        TopQuestions("Ques 2"),
+        TopQuestions("Ques 3")
+    ), onQuesClicked = {})
+}*/
 
 @Composable
 fun QuestionList(
@@ -259,14 +313,21 @@ fun QuestionList(
     }
 }
 
+/*@Preview
+@Composable
+fun QuestionItemPreview(){
+    QuestionItem(TopQuestions("Question here"), onQuesClicked = {})
+}*/
+
 @Composable
 fun QuestionItem(quest: TopQuestions, onQuesClicked: (ques: String) -> Unit) {
-    val backgroundColor = Color(0xFF162536)
+    val backgroundColor = Color(0x00000000)
 
     Surface(
-        shape = RoundedCornerShape(16.dp),  // Adjust corner radius as needed
-        color = backgroundColor, modifier = Modifier
-            .fillMaxWidth()
+        shape = RoundedCornerShape(14.dp),
+        color = backgroundColor,
+        border = BorderStroke(width = 2.dp, color = Color(0x66FFFFFF)),
+        modifier = Modifier
             .clickable {
                 onQuesClicked(quest.question ?: "")
             }
@@ -296,7 +357,7 @@ fun AiHistoryToolbar(
     ) {
         CircularBackButton(onClick = onBackClicked)
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Bottom
         ) {
             Image(
                 painter = painterResource(R.drawable.image_luna_ai_logo),
@@ -321,29 +382,19 @@ fun AiHistoryToolbar(
 
 }
 
-
-/*@Preview
-@Composable
-fun QuestionListPreview() {
-    QuestionList(arrayListOf("Ques 1", "Ques 2", "Ques 3"))
-}*/
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AiTopQuestionMainPreview() {
     AiTopQuestionMain(
         arrayListOf(
             TopQuestions("Ques 1"), TopQuestions("Ques 2"),
-            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
-            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
-            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
-            TopQuestions("Ques 3"), TopQuestions("Ques 1"), TopQuestions("Ques 2"),
-            TopQuestions("Ques 3"),
+            TopQuestions("Ques 3")
         ),
         true,
         false,
         "Deepak",
         onBackClicked = {},
         onHistoryClicked = {},
+        onAiAudioClicked = {},
         onQuestionSelected = {})
 }

@@ -19,6 +19,7 @@ import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.ai.TopQuestionsResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.PlanType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -102,10 +103,16 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun stopResponseGeneration(threadId: String): Flow<Resource<BaseApiResponse<Any>?>> {
+    override suspend fun stopResponseGeneration(
+        threadId: String?,
+        planType: PlanType
+    ): Flow<Resource<BaseApiResponse<Any>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
+            val url = if (planType == PlanType.NONE) {
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/stopStream?thread_id=$threadId"
+            } else {
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/stopStream?type=${planType.name.lowercase()}"
+            }
             remoteDataSource.stopResponseGeneration(url)
         }
     }
