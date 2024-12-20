@@ -141,11 +141,14 @@ class RingLocationViewModel @Inject constructor(
                 }
             }
         } else {
-            val addresses = geoCoder.getFromLocation(lat, long, 1)
-            val address = addresses?.getOrNull(0)
-            viewModelScope.launch(Dispatchers.Main) {
-                onAddressFetched(address?.getAddressLine(0))
-            }
+            try {
+                val addresses = geoCoder.getFromLocation(lat, long, 1)
+                val address = addresses?.getOrNull(0)
+                viewModelScope.launch(Dispatchers.Main) {
+                    onAddressFetched(address?.getAddressLine(0))
+                }
+            } catch (ignored: Exception) { }
+
 //            onAddressFetched(address?.locality)
         }
     }

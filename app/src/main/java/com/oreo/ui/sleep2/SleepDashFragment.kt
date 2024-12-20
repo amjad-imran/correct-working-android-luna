@@ -133,7 +133,11 @@ class SleepDashFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.tvTitle.text = getString(R.string.text_sleep)
 
-        viewModel.updateSelectedDate(LocalDate.parse(mainViewModel.selectedDate))
+        viewModel.updateSelectedDate(
+            LocalDate.parse(
+                mainViewModel.selectedDate ?: LocalDate.now().toString()
+            )
+        )
         setBlurAddCta()
         initCalender()
         setRecycler()
@@ -956,11 +960,11 @@ class SleepDashFragment :
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
                 if (onGoing) {
-                    binding.lytSSAnalysis.lytSleepInteraction.root.visible()
-                    binding.lytSSAnalysis.lytTotalSleep.root.gone()
+                    nullableBinding?.lytSSAnalysis?.lytSleepInteraction?.root?.visible()
+                    nullableBinding?.lytSSAnalysis?.lytTotalSleep?.root?.gone()
                 } else {
-                    binding.lytSSAnalysis.lytSleepInteraction.root.gone()
-                    binding.lytSSAnalysis.lytTotalSleep.root.visible()
+                    nullableBinding?.lytSSAnalysis?.lytSleepInteraction?.root?.gone()
+                    nullableBinding?.lytSSAnalysis?.lytTotalSleep?.root?.visible()
                 }
             }
         })

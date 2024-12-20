@@ -331,18 +331,22 @@ class RingLocationFragment :
                 override fun onResourceReady(
                     resource: Bitmap, transition: Transition<in Bitmap?>?
                 ) {
-                    googleMap.clear()
-                    imageView.setImageBitmap(resource)
 
-                    val bitmap = viewModel.getBitmapFromLayout(requireActivity(), markerView)
+                    activity?.let {
+                        googleMap.clear()
+                        imageView.setImageBitmap(resource)
 
-                    bitmap?.let {
-                        googleMap.addMarker(
-                            MarkerOptions().position(currentLoc).icon(
-                                BitmapDescriptorFactory.fromBitmap(bitmap)
+                        val bitmap = viewModel.getBitmapFromLayout(it, markerView)
+
+                        bitmap?.let {
+                            googleMap.addMarker(
+                                MarkerOptions().position(currentLoc).icon(
+                                    BitmapDescriptorFactory.fromBitmap(bitmap)
+                                )
                             )
-                        )
+                        }
                     }
+
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
