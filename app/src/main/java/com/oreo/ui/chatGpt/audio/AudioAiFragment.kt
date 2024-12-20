@@ -69,8 +69,8 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         viewModel.cleanup()
+        super.onDestroyView()
     }
 
     private fun checkMicrophonePermission(callback: () -> Unit) {
@@ -100,6 +100,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
     override fun initListener() {
         binding.ivCross.setOnClickListener {
+            viewModel.cleanup()
             navigateUpSafe()
         }
 

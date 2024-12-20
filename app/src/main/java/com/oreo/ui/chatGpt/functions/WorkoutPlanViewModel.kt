@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.model.AiWorkoutResponse
+import com.noisefit.data.model.AiWorkouts
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -82,20 +83,37 @@ class WorkoutPlanViewModel @Inject constructor(
             it.day_name.equals(getDayName(position), true)
         }
 
-        if (workout?.workouts?.firstOrNull()?.workout.isNullOrEmpty()) {
+        val mergedWorkouts = getAllWorkouts(workout?.workouts)
+
+
+        if (mergedWorkouts.isEmpty()/*workout?.workouts?.firstOrNull()?.workout.isNullOrEmpty()*/) {
             dayTitle.postValue(null)
             workoutList.postValue(null)
         } else {
-            val workouts = workout?.workouts?.firstOrNull()!!.workout
+            //val workouts = workout?.workouts?.firstOrNull()!!.workout
 
-            if (isRestDay(workouts)) {
+            if (isRestDay(mergedWorkouts)) {
                 dayTitle.postValue(null)
                 workoutList.postValue(ArrayList())
             } else {
-                dayTitle.postValue(workout.workouts.firstOrNull()?.session)
-                workoutList.postValue(workouts)
+                val sessionName = workout?.workouts?.firstOrNull()?.session
+                dayTitle.postValue(sessionName)
+                workoutList.postValue(mergedWorkouts)
             }
         }
+    }
+
+    private fun getAllWorkouts(workouts: List<AiWorkouts>?): List<AiWorkout> {
+        if (workouts.isNullOrEmpty()) return ArrayList()
+
+        val merged = ArrayList<AiWorkout>()
+        workouts.forEach {
+            if (it.workout.isNullOrEmpty().not()) {
+                merged.addAll(it.workout!!)
+            }
+        }
+
+        return merged
     }
 
     private fun isRestDay(workouts: List<AiWorkout>?): Boolean {

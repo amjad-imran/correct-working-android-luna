@@ -7,6 +7,7 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.media.audiofx.AcousticEchoCanceler
 import android.media.audiofx.NoiseSuppressor
+import android.media.audiofx.Visualizer
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -37,6 +38,12 @@ class WaveRecorder {
     private var fileUri: Uri? = null
     private var filePath: String? = null
     private lateinit var context: Context
+
+    private val bufferSize = AudioRecord.getMinBufferSize(
+        16000,
+        AudioFormat.CHANNEL_IN_MONO,
+        AudioFormat.ENCODING_PCM_16BIT
+    )
 
     constructor(fileUri: Uri, context: Context) {
         this.fileUri = fileUri
@@ -126,6 +133,8 @@ class WaveRecorder {
     fun startRecording() {
         if (!isAudioRecorderInitialized()) {
             initializeAudioRecorder()
+
+            LOGS.d("asjhdkfjhsafkj ${audioRecorder.audioSessionId}")
             GlobalScope.launch(Dispatchers.IO) {
                 if (waveConfig.audioEncoding == AudioFormat.ENCODING_PCM_FLOAT) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -142,16 +151,30 @@ class WaveRecorder {
     @SuppressLint("MissingPermission")
     private fun initializeAudioRecorder() {
         audioRecorder = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
-            waveConfig.sampleRate,
-            waveConfig.channels,
-            waveConfig.audioEncoding,
-            AudioRecord.getMinBufferSize(
-                waveConfig.sampleRate,
-                waveConfig.channels,
-                waveConfig.audioEncoding
-            )
+            MediaRecorder.AudioSource.MIC,
+            16000, // Sample rate
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            bufferSize
         )
+
+        /*visualizer = attachVisualizer()
+        with(visualizer!!) {
+            speakerBuffer = ByteArray(captureSize)
+        }*/
+
+
+        /* audioRecorder = AudioRecord(
+             MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+             waveConfig.sampleRate,
+             waveConfig.channels,
+             waveConfig.audioEncoding,
+             AudioRecord.getMinBufferSize(
+                 waveConfig.sampleRate,
+                 waveConfig.channels,
+                 waveConfig.audioEncoding
+             )
+         )*/
 
         if (NoiseSuppressor.isAvailable()) {
             val noiseSuppressor = NoiseSuppressor.create(audioRecorder.audioSessionId)
@@ -410,7 +433,7 @@ class WaveRecorder {
                 WaveHeaderWriter(fileUri!!, context, waveConfig).writeHeader()
             } else {
                 WaveHeaderWriter(filePath!!, waveConfig).writeHeader()
-                if(deleteFile){
+                if (deleteFile) {
                     File(filePath!!).delete()
                 }
             }

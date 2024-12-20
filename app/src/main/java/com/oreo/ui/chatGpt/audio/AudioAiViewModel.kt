@@ -230,7 +230,7 @@ class AudioAiViewModel @Inject constructor(
         }
     }
 
-    private fun logInputStream(){
+    private fun logInputStream() {
         try {
             val reader = BufferedReader(InputStreamReader(inputStream))
             val resp: StringBuilder = StringBuilder()
@@ -239,18 +239,19 @@ class AudioAiViewModel @Inject constructor(
                 resp.append(line).append('\n')
             }
             LOGS.d("VOICE_RECORDER error -> $resp")
-        }catch (exp:Exception){}
+        } catch (exp: Exception) {
+        }
     }
 
     fun sendRecordingToServer() {
         if (lastFile != null) {
             LOGS.d("VOICE_RECORDER peakCount - >$peakCount")
             if (peakCount < 5) {
-/*                LOGS.d("VOICE_RECORDER file exits - ${lastFile?.exists()}")
-                if (lastFile?.exists() == true) {
-                    lastFile?.delete()
-                }
-                LOGS.d("VOICE_RECORDER File deleted $lastFile")*/
+                /*                LOGS.d("VOICE_RECORDER file exits - ${lastFile?.exists()}")
+                                if (lastFile?.exists() == true) {
+                                    lastFile?.delete()
+                                }
+                                LOGS.d("VOICE_RECORDER File deleted $lastFile")*/
             } else {
                 lastFile?.let {
                     val base64Wav = convertRawWavToBase64(it)
@@ -264,7 +265,7 @@ class AudioAiViewModel @Inject constructor(
         }
     }
 
-    private fun deleteFilesInFolder(){
+    private fun deleteFilesInFolder() {
         val filesDir = NoiseFitApplicationMain.context!!.filesDir
         val audioFolder = File(filesDir, "audio")
 
@@ -312,6 +313,7 @@ class AudioAiViewModel @Inject constructor(
             }
         }
 
+        waveRecorder?.onAmplitudeListener = null
         waveRecorder?.onAmplitudeListener = {
             LOGS.d("VOICE_RECORDER", "Amplitude : $it")
             val isSilent = isSilent(it)

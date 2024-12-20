@@ -56,15 +56,14 @@ class WorkoutPlansFragment :
         binding.lytWeek.tvSun.setOnClickListener(weekListener)
 
         binding.ivEdit.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
+            navigate(WorkoutPlansFragmentDirections.actionWorkoutPlansFragmentToChatGptFragment(
+                "",
+                "",
                 getString(R.string.text_build_me_a_workout_plan),
-                null,
+                "",
                 AITopics.GENERAL,
-                planType = PlanType.WORKOUT
-            )
-            navigate(frag, bundle)
+                PlanType.WORKOUT
+            ))
         }
 
         binding.toolbar.backBtn.setOnClickListener {

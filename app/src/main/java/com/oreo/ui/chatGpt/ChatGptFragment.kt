@@ -174,6 +174,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         binding.lytSaveData.btnCancel.setOnClickListener {
             binding.lytSaveData.root.gone()
+            binding.ivGeneratingGradient.gone()
+            binding.videoView.stopPlayback()
+            binding.videoView.gone()
         }
 
         /* binding.lytChatBox.btnNewChat.setOnClickListener {
@@ -261,9 +264,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
             this.tvView.setOnClickListener {
                 if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
-                    navigate(R.id.aiMealPlanFragment)
+                    navigate(ChatGptFragmentDirections.actionChatGptFragmentToAiMealPlanFragment())
                 } else if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.WORKOUT) {
-                    navigate(R.id.workoutPlansFragment)
+                    navigate(
+                        ChatGptFragmentDirections.actionChatGptFragmentToWorkoutPlansFragment()
+                    )
                 }
             }
         }
@@ -289,6 +294,10 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.aiGeneratedPlanSaved.observe(this) {
             binding.lytSaveData.root.gone()
+
+            binding.ivGeneratingGradient.gone()
+            binding.videoView.stopPlayback()
+            binding.videoView.gone()
 
             if (viewModel.showSavePlan.value?.peekContent() == AiPlanType.MEAL) {
                 showSnackBar(getString(R.string.text_your_diet_plan_is_saved))
@@ -389,6 +398,10 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     private fun showSaveWorkoutPlan() {
+        binding.ivGeneratingGradient.visible()
+        binding.videoView.start()
+        binding.videoView.visible()
+
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_workout_plan)
             root.revealFromBottom()
@@ -397,6 +410,10 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
 
     private fun showSaveMealPlan() {
+        binding.ivGeneratingGradient.visible()
+        binding.videoView.start()
+        binding.videoView.visible()
+
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_diet_plan)
             root.revealFromBottom()

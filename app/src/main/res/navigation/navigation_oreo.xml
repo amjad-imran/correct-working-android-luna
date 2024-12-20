@@ -905,6 +905,16 @@
         <argument
             android:name="planType"
             app:argType="com.oreo.ui.chatGpt.PlanType" />
+        <action
+            android:id="@+id/action_chatGptFragment_to_workoutPlansFragment"
+            app:destination="@id/workoutPlansFragment"
+            app:popUpTo="@id/chatGptFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_chatGptFragment_to_aiMealPlanFragment"
+            app:destination="@id/aiMealPlanFragment"
+            app:popUpTo="@id/chatGptFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/chatSplashFragment"
@@ -1172,7 +1182,13 @@
     <fragment
         android:id="@+id/workoutPlansFragment"
         android:name="com.oreo.ui.chatGpt.functions.WorkoutPlansFragment"
-        android:label="fragment_workout_plans" />
+        android:label="fragment_workout_plans" >
+        <action
+            android:id="@+id/action_workoutPlansFragment_to_chatGptFragment"
+            app:destination="@id/chatGptFragment"
+            app:popUpTo="@id/workoutPlansFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_lunaZoneFragment"
         android:name="com.oreo.ui.chatGpt.LunaZoneFragment"
