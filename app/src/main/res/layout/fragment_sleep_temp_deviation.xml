@@ -33,7 +33,7 @@
         lineChart:lineSelectColor="#B18DF2"
         lineChart:outCircleColor="#ffeeb2"
         lineChart:outCircleRadius="1dp"
-        lineChart:rightWith="46dp"
+        lineChart:rightWith="56dp"
         lineChart:scaleColor="#ff000000"
         lineChart:scaleLenth="4dp"
         lineChart:scaleNodeColor="#FFFFFF"

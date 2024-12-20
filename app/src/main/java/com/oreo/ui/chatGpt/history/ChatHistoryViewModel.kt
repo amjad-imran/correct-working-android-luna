@@ -3,7 +3,9 @@ package com.oreo.ui.chatGpt.history
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatHistoryViewModel @Inject constructor(
-    val oreoDeviceRepository: OreoDeviceRepository
+    val oreoDeviceRepository: OreoDeviceRepository,
+    val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     private val _chatHistory = MutableLiveData<List<ChatHistoryItem>>()
@@ -75,9 +78,9 @@ class ChatHistoryViewModel @Inject constructor(
                 datesSet.add(it.date!!)
 
                 val headerOther = if (it.date.equals(todayDate)) {
-                    "Today"
+                    resourcesProvider.getString(R.string.text_today)
                 } else if (it.date.equals(yesterdayDate)) {
-                    "Yesterday"
+                    resourcesProvider.getString(R.string.text_yesterday)
                 } else {
                     null
                 }

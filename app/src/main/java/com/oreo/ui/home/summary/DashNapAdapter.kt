@@ -140,7 +140,8 @@ class DashNapAdapter(
 
             val timeBuilder = StringBuilder()
             if (!nap.date.equals(date)) {
-                timeBuilder.append("Yesterday ")
+                timeBuilder.append(binding.root.context.getString(R.string.text_yesterday))
+                timeBuilder.append(" ")
             }
             timeBuilder.append(
                 DateFormats.parseDate(

@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
@@ -41,6 +42,7 @@ class RingLocationViewModel @Inject constructor(
     val sessionManager: SessionManager,
     val watchDataStore: WatchDataStore,
     val geoCoder: Geocoder,
+    val resourcesProvider: ResourcesProvider,
     private val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
@@ -225,7 +227,7 @@ class RingLocationViewModel @Inject constructor(
         val currentTimeStamp = System.currentTimeMillis()
 
         val relativeTime = if (timestamp + 60000 > currentTimeStamp) {
-            "Just Now"
+            resourcesProvider.getString(com.noisefit_commans.R.string.text_just_now)
         } else {
             if (timestamp + 24 * 60 * 60 * 1000 >= currentTimeStamp) {
                 val totalSecs = (currentTimeStamp - timestamp) / 1000

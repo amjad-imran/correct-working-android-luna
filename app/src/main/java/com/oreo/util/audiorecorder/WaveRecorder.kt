@@ -151,7 +151,7 @@ class WaveRecorder {
     @SuppressLint("MissingPermission")
     private fun initializeAudioRecorder() {
         audioRecorder = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
+            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
             16000, // Sample rate
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
