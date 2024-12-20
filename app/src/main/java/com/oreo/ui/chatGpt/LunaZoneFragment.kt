@@ -16,6 +16,7 @@ import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLunaZoneBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -201,6 +202,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 planType = PlanType.DIET
             )
             navigate(frag, bundle)
+        }
+
+        binding.lytNoDevice.btnPair.setOnClickListener {
+            startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
         }
     }
 
