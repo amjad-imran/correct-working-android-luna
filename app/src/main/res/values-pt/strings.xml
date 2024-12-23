@@ -331,7 +331,6 @@
     <string name="text_health_overview">Visão geral da saúde</string>
     <string name="text_average">Média</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">RH médio</string>
     <string name="text_resting_hrv">VFC média</string>
     <string name="route">Rota</string>

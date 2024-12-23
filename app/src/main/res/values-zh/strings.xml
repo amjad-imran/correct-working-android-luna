@@ -331,7 +331,6 @@
     <string name="text_health_overview">健康概览</string>
     <string name="text_average">平均的</string>
     <string name="text_bpm">业务流程管理</string>
-    <string name="text_bpm_small">节拍数</string>
     <string name="text_resting_hr">平均心率</string>
     <string name="text_resting_hrv">平均心率变异性</string>
     <string name="route">路线</string>

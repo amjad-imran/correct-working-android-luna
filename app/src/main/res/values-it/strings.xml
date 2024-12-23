@@ -331,7 +331,6 @@
     <string name="text_health_overview">Panoramica sulla salute</string>
     <string name="text_average">Media</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">FC media</string>
     <string name="text_resting_hrv">HRV medio</string>
     <string name="route">Itinerario</string>

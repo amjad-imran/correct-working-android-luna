@@ -339,7 +339,7 @@
     <string name="text_health_overview">Health overview</string>
     <string name="text_average">Average</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
+    <string name="text_bpm_small" translatable="false">bpm</string>
     <string name="text_resting_hr">Average HR</string>
     <string name="text_resting_hrv">Average HRV</string>
     <string name="route">Route</string>

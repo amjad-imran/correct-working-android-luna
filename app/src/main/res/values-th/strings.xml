@@ -327,7 +327,6 @@
     <string name="text_health_overview">ภาพรวมด้านสุขภาพ</string>
     <string name="text_average">เฉลี่ย</string>
     <string name="text_bpm">บีพีเอ็ม</string>
-    <string name="text_bpm_small">ครั้งต่อนาที</string>
     <string name="text_resting_hr">ทรัพยากรบุคคลโดยเฉลี่ย</string>
     <string name="text_resting_hrv">ค่าเฉลี่ยทรัพยากรบุคคล (HRV)</string>
     <string name="route">เส้นทาง</string>

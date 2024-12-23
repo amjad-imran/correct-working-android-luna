@@ -332,7 +332,6 @@
     <string name="text_health_overview">Обзор здоровья</string>
     <string name="text_average">Средний</string>
     <string name="text_bpm">БПМ</string>
-    <string name="text_bpm_small">ударов в минуту</string>
     <string name="text_resting_hr">Средний ЧСС</string>
     <string name="text_resting_hrv">Средняя ВСР</string>
     <string name="route">Маршрут</string>

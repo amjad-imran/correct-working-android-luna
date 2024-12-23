@@ -356,7 +356,6 @@
     <string name="text_health_overview">Aperçu de la santé</string>
     <string name="text_average">Moyenne</string>
     <string name="text_bpm">temporisation</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">FC moyenne</string>
     <string name="text_resting_hrv">VRC moyenne</string>
     <string name="route">Itinéraire</string>

@@ -331,7 +331,6 @@
     <string name="text_health_overview">Resumen de salud</string>
     <string name="text_average">Promedio</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">FC promedio</string>
     <string name="text_resting_hrv">VFC promedio</string>
     <string name="route">Ruta</string>

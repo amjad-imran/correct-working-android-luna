@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -51,12 +52,20 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 binding.tvMessage.text = "How to perform a ${it}?"
             }
         }
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
         viewModel.getCredentials()
-
         setVideo()
     }
 
+
+    val callback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.cleanup()
+                navigateUpSafe()
+            }
+        }
 
     private fun setVideo() {
         val fileName = ("android.resource://" + requireContext().packageName) + "/raw/video_chat_ai"
@@ -104,7 +113,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             navigateUpSafe()
         }
 
-        binding.ivMic.setOnClickListener {
+       /* binding.ivMic.setOnClickListener {
             if (viewModel.isRecording) {
                 binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
                 binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
@@ -118,7 +127,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 viewModel.waveRecorder?.startRecording()
                 viewModel.isRecording = true
             }
-        }
+        }*/
 
         binding.ivTextChat.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(
@@ -132,15 +141,41 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
     }
 
+    private fun micStateOff(){
+        binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
+        binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
+    }
+
+    private fun micStateOn(){
+        binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#26FFFFFF"))
+        binding.ivMic.setImageResource(R.drawable.ic_ai_mic)
+    }
+
     override fun subscribeObservers() {
         viewModel.audioAiState.observe(this) {
             when (it) {
-                AudioAiState.DEFAULT -> {}
-                AudioAiState.LISTENING -> {}
-                AudioAiState.GENERATING -> {}
+                AudioAiState.DEFAULT -> {
+                    binding.tvMessage.text = ""
+                    micStateOff()
+                }
+                AudioAiState.LISTENING -> {
+                    binding.tvMessage.text = "LISTENING"
+                    micStateOn()
+                }
+                AudioAiState.GENERATING -> {
+                    binding.tvMessage.text = "GENERATING"
+                    micStateOff()
+                    viewModel.stopRecording(true)
+                }
                 AudioAiState.AI_TALKING -> {
+                    binding.tvMessage.text = "AI TALKING"
+                    micStateOff()
                     binding.tvAskLuna.gone()
-                    binding.tvMessage.gone()
+                    //binding.tvMessage.gone()
+                }
+
+                AudioAiState.AI_TALKING_STOP -> {
+                    viewModel.startNewRecording()
                 }
             }
         }
@@ -192,15 +227,5 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                  binding.progressBar.root.gone()
              }*/
         }
-
-        /*  viewModel.audioAiState.observe(this) {
-              when (it) {
-                  AudioAiState.DEFAULT -> binding.tvMessage.text = "Default"
-                  AudioAiState.LISTENING -> binding.tvMessage.text = "Listening"
-                  AudioAiState.GENERATING -> binding.tvMessage.text = "Generating"
-                  AudioAiState.TALKING -> binding.tvMessage.text = "Talking"
-                  else -> binding.tvMessage.text = ""
-              }
-          }*/
     }
 }

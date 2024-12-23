@@ -23,5 +23,6 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_none">None</string>
     <string name="text_tracking_location">Tracking location...</string>
+    <string name="text_updating_location">Updating location...</string>
 
 </resources>

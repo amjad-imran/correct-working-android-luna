@@ -333,7 +333,6 @@
     <string name="text_health_overview">Gezondheid overzicht</string>
     <string name="text_average">Gemiddeld</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">Gemiddelde HR</string>
     <string name="text_resting_hrv">Gemiddelde HRV</string>
     <string name="route">Route</string>

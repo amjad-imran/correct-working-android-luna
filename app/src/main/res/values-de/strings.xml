@@ -331,7 +331,6 @@
     <string name="text_health_overview">Gesundheitsübersicht</string>
     <string name="text_average">Durchschnitt</string>
     <string name="text_bpm">BPM</string>
-    <string name="text_bpm_small">bpm</string>
     <string name="text_resting_hr">Durchschnittliche Personalstärke</string>
     <string name="text_resting_hrv">Durchschnittliche HRV</string>
     <string name="route">Route</string>
