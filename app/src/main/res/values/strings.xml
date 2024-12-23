@@ -1753,8 +1753,8 @@
     <string name="text_next_period_date">Next Period Date</string>
     <string name="tex_skin_temp_dev">Skin Temp Dev</string>
     <string name="text_sleep_need">Sleep Need</string>
-    <string name="text_build_me_a_weekly_diet_plan" translatable="false">Build me a weekly diet plan</string>
-    <string name="text_build_me_a_workout_plan" translatable="false">Build me a weekly workout plan</string>
+    <string name="text_build_me_a_weekly_diet_plan">Build me a weekly diet plan</string>
+    <string name="text_build_me_a_workout_plan">Build me a weekly workout plan</string>
     <string name="text_generating_your_daily_health_digest">Generating your Daily Health Digest...</string>
 
 </resources>

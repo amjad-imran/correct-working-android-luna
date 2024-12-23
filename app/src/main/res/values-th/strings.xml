@@ -1700,5 +1700,7 @@
     <string name="text_next_period_date">วันที่งวดถัดไป</string>
     <string name="tex_skin_temp_dev">การพัฒนาอุณหภูมิผิวหนัง</string>
     <string name="text_sleep_need">ความต้องการการนอนหลับ</string>
+    <string name="text_build_me_a_weekly_diet_plan">สร้างแผนอาหารประจำสัปดาห์ให้ฉัน</string>
+    <string name="text_build_me_a_workout_plan">สร้างแผนการออกกำลังกายรายสัปดาห์ให้ฉัน</string>
     <string name="text_generating_your_daily_health_digest">กำลังสร้างข้อมูลย่อยด้านสุขภาพประจำวันของคุณ...</string>
 </resources>

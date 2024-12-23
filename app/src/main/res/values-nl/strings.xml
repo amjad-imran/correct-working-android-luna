@@ -1716,5 +1716,7 @@
     <string name="text_next_period_date">Datum volgende periode</string>
     <string name="tex_skin_temp_dev">Huidtemperatuur ontwikkelaar</string>
     <string name="text_sleep_need">Slaapbehoefte</string>
+    <string name="text_build_me_a_weekly_diet_plan">Stel een wekelijks dieetplan voor me op</string>
+    <string name="text_build_me_a_workout_plan">Stel een wekelijks trainingsplan voor mij op</string>
     <string name="text_generating_your_daily_health_digest">Uw dagelijkse gezondheidsoverzicht genereren...</string>
 </resources>

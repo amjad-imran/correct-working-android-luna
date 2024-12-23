@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.databinding.AiShareTemplate1Binding
 import com.noisefit.luna.databinding.FragmentShareSummaryBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -28,6 +29,9 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class ShareSummaryFragment :
@@ -65,6 +69,13 @@ class ShareSummaryFragment :
         binding.lytTemplate.tvTitle.text = data.title
         binding.lytTemplate.tvSubtext.text = data.subTitle
 
+        binding.lytTemplate.tvDate.text = LocalDate.now().format(
+            DateTimeFormatter.ofPattern(
+                "dd.MMM.yyyy",
+                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+            )
+        )
+
         binding.ivBgImage.loadImage(binding.ivBgImage.context, data.bgImage)
 
         binding.lytTemplate.ivBack.loadImage(binding.lytTemplate.ivBack.context, data.bgImage)
@@ -85,6 +96,9 @@ class ShareSummaryFragment :
     override fun initListener() {
         binding.switchPrivate.setOnCheckedChangeListener { buttonView, isChecked ->
             initUI(args.data, isChecked)
+        }
+        binding.ivCross.setOnClickListener {
+            navigateUpSafe()
         }
 
         binding.tvShare.setOnClickListener {

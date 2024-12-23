@@ -48,6 +48,7 @@ class ChatHistoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.tvTitle.text = getString(R.string.text_chat_history)
         setRecycler()
         viewModel.getChatHistory()
     }

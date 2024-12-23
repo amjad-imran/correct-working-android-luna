@@ -8,6 +8,7 @@ import com.noisefit.data.model.AiMeals
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
 import com.noisefit.luna.databinding.RowMealDataBinding
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 
 class MealsAdapter(val onMealSelected: (AiMeals) -> Unit, val onEditClicked: () -> Unit) :
@@ -31,6 +32,9 @@ class MealsAdapter(val onMealSelected: (AiMeals) -> Unit, val onEditClicked: () 
             } else {
                 binding.tvEditDietPlan.gone()
             }
+
+            binding.ivMealImage.loadImage(binding.ivMealImage.context, data.img)
+
             binding.tvEditDietPlan.setOnClickListener {
                 onEditClicked()
             }

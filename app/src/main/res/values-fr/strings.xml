@@ -1712,5 +1712,7 @@
     <string name="text_next_period_date">Date de la prochaine période</string>
     <string name="tex_skin_temp_dev">Développement de la température de la peau</string>
     <string name="text_sleep_need">Besoin de sommeil</string>
+    <string name="text_build_me_a_weekly_diet_plan">Construisez-moi un plan de régime hebdomadaire</string>
+    <string name="text_build_me_a_workout_plan">Construisez-moi un plan d\'entraînement hebdomadaire</string>
     <string name="text_generating_your_daily_health_digest">Générer votre résumé quotidien de santé...</string>
 </resources>

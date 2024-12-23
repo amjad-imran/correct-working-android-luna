@@ -161,7 +161,6 @@ class AiSummaryFragment :
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     val width: Int = binding.vGestureOverlay.width
                     if (e.x < width / 2) {
-                        clearRunnable()
                         goToPreviousStory()
                     } else {
                         clearRunnable()
@@ -252,6 +251,7 @@ class AiSummaryFragment :
 
     private fun goToPreviousStory() {
         if (viewModel.currentStoryIndex > 0) {
+            clearRunnable()
             viewModel.progressIndicators[viewModel.currentStoryIndex].progress = 0
             viewModel.currentStoryIndex -= 1
             viewModel.progressIndicators[viewModel.currentStoryIndex].progress = 0

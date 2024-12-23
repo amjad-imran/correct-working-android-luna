@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter
 class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>() {
     private val mDataSet = ArrayList<DataMetrics>()
 
+
     inner class ViewHolder(val binding: RowAiSummaryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataMetrics) {
@@ -36,28 +37,28 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
         if (data.value.isNullOrEmpty()) return null
 
         when (data.key) {
-            "activity_score" -> return AiSummaryDataModel(
+            DataMetricKeys.ACTIVITY_SCORE.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_activity_score).uppercase(),
                 isDate = false,
                 "",
                 data.value
             )
 
-            "master_avg_hr" -> return AiSummaryDataModel(
+            DataMetricKeys.AVG_HR.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_avg_hr).uppercase(),
                 isDate = false,
                 "BPM",
                 data.value
             )
 
-            "master_avg_hrv" -> return AiSummaryDataModel(
+            DataMetricKeys.AVG_HRV.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_avg_hrv).uppercase(),
                 isDate = false,
                 "MS",
                 data.value
             )
 
-            "master_deep" -> {
+            DataMetricKeys.DEEP.key -> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )
@@ -72,7 +73,7 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 )
             }
 
-            "master_duration" -> {
+            DataMetricKeys.DURATION.key -> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )
@@ -90,14 +91,14 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 )
             }
 
-            "master_mid_time" -> return AiSummaryDataModel(
+            DataMetricKeys.MID_TIME.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_mid_time).uppercase(),
                 isDate = false,
                 "",
                 data.value
             )
 
-            "master_rem" -> {
+            DataMetricKeys.REM.key-> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )
@@ -112,7 +113,7 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 )
             }
 
-            "next_period_date" -> {
+            DataMetricKeys.NEXT_PERIOD_DATE.key-> {
                 val formattedDate = try {
                     LocalDate.parse(data.value).format(DateTimeFormatter.ofPattern("dd/MM/yy"))
                 } catch (exp: Exception) {
@@ -126,21 +127,21 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 )
             }
 
-            "readiness_score" -> return AiSummaryDataModel(
+            DataMetricKeys.READINESS_SCORE.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_readiness_score).uppercase(),
                 isDate = false,
                 "",
                 data.value
             )
 
-            "skin_temp_dev" -> return AiSummaryDataModel(
+            DataMetricKeys.SKIN_TEMP_DEV.key-> return AiSummaryDataModel(
                 name = context.getString(R.string.tex_skin_temp_dev).uppercase(),
                 isDate = false,
                 "C",
                 data.value
             )
 
-            "sleep_need" -> {
+            DataMetricKeys.SLEEP_NEED.key-> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )
@@ -150,12 +151,14 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                     "$hours hr $minute min"
                 }
                 return AiSummaryDataModel(
-                    name = context.getString(R.string.text_sleep_need).uppercase(), isDate = false, "",
+                    name = context.getString(R.string.text_sleep_need).uppercase(),
+                    isDate = false,
+                    "",
                     text
                 )
             }
 
-            "sleep_score" -> return AiSummaryDataModel(
+            DataMetricKeys.SLEEP_SCORE.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.text_sleep_score).uppercase(), isDate = false, "",
                 data.value
             )
@@ -182,8 +185,16 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
     }
 
     fun setDataSet(dataSet: List<DataMetrics>) {
+        val keys = DataMetricKeys.entries.map {
+            it.key
+        }
+
+        val filteredData = dataSet.filter {
+            it.key in keys
+        }
+
         mDataSet.clear()
-        mDataSet.addAll(dataSet)
+        mDataSet.addAll(filteredData)
         notifyDataSetChanged()
     }
 
@@ -192,4 +203,19 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
     }
 
 
+}
+
+enum class DataMetricKeys(val key: String) {
+    ACTIVITY_SCORE("activity_score"),
+    AVG_HR("master_avg_hr"),
+    AVG_HRV("master_avg_hrv"),
+    DEEP("master_deep"),
+    DURATION("master_duration"),
+    MID_TIME("master_mid_time"),
+    REM("master_rem"),
+    NEXT_PERIOD_DATE("next_period_date"),
+    READINESS_SCORE("readiness_score"),
+    SKIN_TEMP_DEV("skin_temp_dev"),
+    SLEEP_NEED("sleep_need"),
+    SLEEP_SCORE("sleep_score")
 }

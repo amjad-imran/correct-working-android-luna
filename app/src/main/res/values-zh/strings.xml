@@ -1714,5 +1714,7 @@
     <string name="text_next_period_date">下一个周期日期</string>
     <string name="tex_skin_temp_dev">皮肤温度开发</string>
     <string name="text_sleep_need">睡眠需要</string>
+    <string name="text_build_me_a_weekly_diet_plan">为我制定每周饮食计划</string>
+    <string name="text_build_me_a_workout_plan">为我制定每周锻炼计划</string>
     <string name="text_generating_your_daily_health_digest">生成您的每日健康摘要...</string>
 </resources>

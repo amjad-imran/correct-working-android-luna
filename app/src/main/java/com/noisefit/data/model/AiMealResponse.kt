@@ -11,6 +11,7 @@ data class AiMealResponse(
 @Parcelize
 data class AiMeals(
     val meal_type: String? = null,
+    val img: String? = null,
     val meal: List<AiMeal>? = null,
 ) : Parcelable
 

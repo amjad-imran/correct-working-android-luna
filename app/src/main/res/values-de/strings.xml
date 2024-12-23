@@ -1711,5 +1711,7 @@
     <string name="text_next_period_date">Datum der nächsten Periode</string>
     <string name="tex_skin_temp_dev">Hauttemp.-Abw</string>
     <string name="text_sleep_need">Schlafbedarf</string>
+    <string name="text_build_me_a_weekly_diet_plan">Erstellen Sie mir einen wöchentlichen Diätplan</string>
+    <string name="text_build_me_a_workout_plan">Erstellen Sie mir einen wöchentlichen Trainingsplan</string>
     <string name="text_generating_your_daily_health_digest">Erstellen Sie Ihren täglichen Gesundheitsüberblick...</string>
 </resources>

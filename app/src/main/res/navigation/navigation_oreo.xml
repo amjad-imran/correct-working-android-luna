@@ -1216,7 +1216,13 @@
     <fragment
         android:id="@+id/aiMealPlanFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiMealPlanFragment"
-        android:label="fragment_ai_workout_plan" />
+        android:label="fragment_ai_workout_plan" >
+        <action
+            android:id="@+id/action_aiMealPlanFragment_to_chatGptFragment"
+            app:destination="@id/chatGptFragment"
+            app:popUpTo="@id/aiMealPlanFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/audioAiFragment"
         android:name="com.oreo.ui.chatGpt.audio.AudioAiFragment"

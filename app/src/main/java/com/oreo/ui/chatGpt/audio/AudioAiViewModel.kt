@@ -223,15 +223,18 @@ class AudioAiViewModel @Inject constructor(
             }
             //audioTrack?.release()
             videoPlayState.postValue(false)
-            audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
+            if(audioAiState.value!=AudioAiState.AI_TALKING_STOP){
+                audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
+            }
 
         } catch (exp: Exception) {
             //logInputStream()
             exp.printStackTrace()
             //audioTrack?.release()
             videoPlayState.postValue(false)
-            audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
-
+            if(audioAiState.value!=AudioAiState.AI_TALKING_STOP){
+                audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
+            }
         }
     }
 
@@ -311,14 +314,15 @@ class AudioAiViewModel @Inject constructor(
         waveRecorder = WaveRecorder(filePath = lastFile!!.absolutePath).apply {
             //silenceDetection = true
             //noiseSuppressorActive = true
-            audioAiState.postValue(AudioAiState.LISTENING)
             videoPlayState.postValue(true)
 
             startRecording()
             onStateChangeListener = {
                 LOGS.d("VOICE_RECORDER  ${it.name}")
                 when (it) {
-                    RecorderState.RECORDING -> {}
+                    RecorderState.RECORDING -> {
+                        audioAiState.postValue(AudioAiState.LISTENING)
+                    }
                     RecorderState.STOP -> {}
                     RecorderState.PAUSE -> {}
                     RecorderState.SKIPPING_SILENCE -> {}
@@ -379,8 +383,8 @@ class AudioAiViewModel @Inject constructor(
         super.onCleared()
         if (audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
             audioTrack?.stop()
-            audioTrack?.release()
         }
+        audioTrack?.release()
     }
 
     fun getCredentials() {
@@ -440,6 +444,22 @@ class AudioAiViewModel @Inject constructor(
             lastFile = null
         }
         waveRecorder?.stopRecording(removeFile)
+    }
+
+    fun isAiReplying(): Boolean {
+        return audioAiState.value == AudioAiState.AI_TALKING
+    }
+
+    fun interruptAi() {
+        lastFile = null
+        if (audioTrack != null) {
+            if (audioTrack!!.playState == AudioTrack.PLAYSTATE_PLAYING) {
+                audioTrack?.stop()
+            }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            inputStream?.close()
+        }
     }
 }
 

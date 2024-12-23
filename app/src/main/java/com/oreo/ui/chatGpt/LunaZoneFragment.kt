@@ -232,7 +232,13 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
 
         viewModel.summaryStates.observe(this) {
-            when (it) {
+
+            var state = it
+
+            if(mainViewModel.syncTextState.value.isNullOrEmpty().not()){
+                state = SummaryStates.GENERATING
+            }
+            when (state) {
                 SummaryStates.NO_DEVICE -> {
                     binding.lytNoDevice.root.visible()
                     binding.lytDailySummaryAvailable.root.gone()
@@ -285,7 +291,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoData.root.gone()
                 }
 
-                SummaryStates.NONE -> {
+                SummaryStates.NONE,null -> {
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.gone()

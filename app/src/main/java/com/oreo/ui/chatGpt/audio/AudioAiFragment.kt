@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -113,21 +114,12 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             navigateUpSafe()
         }
 
-       /* binding.ivMic.setOnClickListener {
-            if (viewModel.isRecording) {
-                binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
-                binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
-                viewModel.waveRecorder?.stopRecording(false)
-                viewModel.sendRecordingToServer()
-
-                viewModel.isRecording = false
-            } else {
-                binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#26FFFFFF"))
-                binding.ivMic.setImageResource(R.drawable.ic_ai_mic)
-                viewModel.waveRecorder?.startRecording()
-                viewModel.isRecording = true
+        binding.ivMic.setOnClickListener {
+            if(viewModel.isAiReplying()){
+                viewModel.interruptAi()
+                viewModel.audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
             }
-        }*/
+        }
 
         binding.ivTextChat.setOnClickListener {
             val (frag, bundle) = ChatGptFragment.getStartData(
@@ -153,22 +145,23 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
     override fun subscribeObservers() {
         viewModel.audioAiState.observe(this) {
+            LOGS.d("sjkdfhskdjfhdskj $it")
             when (it) {
                 AudioAiState.DEFAULT -> {
                     binding.tvMessage.text = ""
                     micStateOff()
                 }
                 AudioAiState.LISTENING -> {
-                    binding.tvMessage.text = "LISTENING"
+                    binding.tvMessage.text = "Speak Now"
                     micStateOn()
                 }
                 AudioAiState.GENERATING -> {
-                    binding.tvMessage.text = "GENERATING"
+                    binding.tvMessage.text = ""
                     micStateOff()
                     viewModel.stopRecording(true)
                 }
                 AudioAiState.AI_TALKING -> {
-                    binding.tvMessage.text = "AI TALKING"
+                    binding.tvMessage.text = ""
                     micStateOff()
                     binding.tvAskLuna.gone()
                     //binding.tvMessage.gone()

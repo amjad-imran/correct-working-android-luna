@@ -39,15 +39,14 @@ class AiMealPlanFragment :
             )
             navigate(frag, bundle)
         }, onEditClicked = {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
+            navigate(AiMealPlanFragmentDirections.actionAiMealPlanFragmentToChatGptFragment(
+                "",
+                "",
+                getString(R.string.text_build_me_a_weekly_diet_plan),
+                "",
                 AITopics.GENERAL,
-                planType = PlanType.DIET
-            )
-            navigate(frag, bundle)
+                PlanType.DIET
+            ))
         })
     }
 

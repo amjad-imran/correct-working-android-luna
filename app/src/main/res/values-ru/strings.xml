@@ -1715,5 +1715,7 @@
     <string name="text_next_period_date">Дата следующего периода</string>
     <string name="tex_skin_temp_dev">Изменение температуры кожи</string>
     <string name="text_sleep_need">Потребность во сне</string>
+    <string name="text_build_me_a_weekly_diet_plan">Составьте мне еженедельный план диеты</string>
+    <string name="text_build_me_a_workout_plan">Составьте мне план тренировок на неделю</string>
     <string name="text_generating_your_daily_health_digest">Создание ежедневного дайджеста здоровья...</string>
 </resources>
