@@ -1537,7 +1537,7 @@
     <string name="text_temperature_variation">Изменение температуры</string>
     <string name="text_when_using_bluetooth_to">Нам необходимо использовать разрешения на определение местоположения, чтобы включить функции, связанные с Bluetooth, при использовании Bluetooth для поиска устройств или для подключения устройств с помощью Bluetooth. Согласны ли вы разрешить приложению Luna Ring получать доступ к вашему местоположению?</string>
     <string name="text_tap_to_measure_is_only">Функция Tap to Measure доступна только в более поздних версиях Luna Ring.</string>
-    <string name="text_ring_battery_low_value">Уровень заряда кольцевой батареи ниже %1$d%. Пожалуйста, зарядите свое кольцо, чтобы получать непрерывную информацию.</string>
+    <string name="text_ring_battery_low_value">Уровень заряда кольцевой батареи ниже %s%%. Пожалуйста, зарядите свое кольцо, чтобы получать непрерывную информацию.</string>
     <string name="text_value_detected">%1$s обнаружен</string>
     <string name="text_workout_detected_from_to">%1$s был обнаружен от %2$s до %3$s и готов к проверке.</string>
     <string name="text_value_mins">%1$s мин.</string>

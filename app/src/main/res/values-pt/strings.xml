@@ -1532,7 +1532,7 @@
     <string name="text_temperature_variation">Variação de temperatura</string>
     <string name="text_when_using_bluetooth_to">Precisamos usar permissões de localização para ativar funções relacionadas ao Bluetooth enquanto usamos o Bluetooth para procurar dispositivos ou para conectar dispositivos com Bluetooth. Você concorda em permitir que o aplicativo Luna Ring acesse sua localização?</string>
     <string name="text_tap_to_measure_is_only">Toque para medir está disponível apenas nas versões superiores do Luna Ring.</string>
-    <string name="text_ring_battery_low_value">A bateria do seu anel está abaixo de %1$d%. Carregue seu anel para obter insights ininterruptos.</string>
+    <string name="text_ring_battery_low_value">A bateria do seu anel está abaixo de %s%%. Carregue seu anel para obter insights ininterruptos.</string>
     <string name="text_value_detected">%1$s detectado</string>
     <string name="text_workout_detected_from_to">%1$s foi detectado de %2$s a %3$s e está pronto para revisão</string>
     <string name="text_value_mins">%1$s minutos</string>

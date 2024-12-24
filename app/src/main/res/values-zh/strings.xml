@@ -1536,7 +1536,7 @@
     <string name="text_temperature_variation">温度变化</string>
     <string name="text_when_using_bluetooth_to">我们在使用蓝牙搜索设备，或者连接蓝牙设备时，需要利用位置权限来开启蓝牙相关功能。您是否同意 Luna 戒指应用程序访问您的位置？</string>
     <string name="text_tap_to_measure_is_only">点击测量仅适用于更高版本的 Luna Ring。</string>
-    <string name="text_ring_battery_low_value">您的戒指电池电量低于 %1$d%。请为您的戒指充电，以获得不间断的见解。</string>
+    <string name="text_ring_battery_low_value">您的戒指电池电量低于 %s%%。请为您的戒指充电，以获得不间断的见解。</string>
     <string name="text_value_detected">检测到%1$s</string>
     <string name="text_workout_detected_from_to">%1$s 已在 %2$s 到 %3$s 之间检测到，已准备好进行审核</string>
     <string name="text_value_mins">%1$s 分钟</string>

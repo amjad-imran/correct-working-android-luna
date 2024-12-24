@@ -1522,7 +1522,7 @@
     <string name="text_temperature_variation">การเปลี่ยนแปลงของอุณหภูมิ</string>
     <string name="text_when_using_bluetooth_to">เราจำเป็นต้องใช้การอนุญาตตำแหน่งเพื่อเปิดใช้งานฟังก์ชันที่เกี่ยวข้องกับบลูทูธในขณะที่ใช้บลูทูธเพื่อค้นหาอุปกรณ์ หรือเพื่อเชื่อมต่ออุปกรณ์ด้วยบลูทูธ คุณยินยอมที่จะอนุญาตให้แอป Luna Ring เข้าถึงตำแหน่งของคุณหรือไม่?</string>
     <string name="text_tap_to_measure_is_only">แตะเพื่อวัดใช้ได้เฉพาะกับ Luna Ring เวอร์ชันที่สูงกว่าเท่านั้น</string>
-    <string name="text_ring_battery_low_value">แบตเตอรี่วงแหวนของคุณต่ำกว่า %1$d% โปรดชาร์จแหวนของคุณเพื่อรับข้อมูลเชิงลึกอย่างต่อเนื่อง</string>
+    <string name="text_ring_battery_low_value">แบตเตอรี่วงแหวนของคุณต่ำกว่า %s%% โปรดชาร์จแหวนของคุณเพื่อรับข้อมูลเชิงลึกอย่างต่อเนื่อง</string>
     <string name="text_value_detected">ตรวจพบ %1$s</string>
     <string name="text_workout_detected_from_to">ตรวจพบ %1$s ตั้งแต่ %2$s ถึง %3$s และพร้อมที่จะตรวจสอบ</string>
     <string name="text_value_mins">%1$s นาที</string>

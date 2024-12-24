@@ -1538,7 +1538,7 @@
     <string name="text_temperature_variation">Temperatuurvariatie</string>
     <string name="text_when_using_bluetooth_to">We moeten locatierechten gebruiken om Bluetooth-gerelateerde functies in te schakelen terwijl we Bluetooth gebruiken om naar apparaten te zoeken of om apparaten met Bluetooth te verbinden. Gaat u ermee akkoord dat de Luna Ring-app toegang krijgt tot uw locatie?</string>
     <string name="text_tap_to_measure_is_only">Tap to Measure is alleen beschikbaar in de hogere versies van Luna Ring.</string>
-    <string name="text_ring_battery_low_value">De batterij van je ring is minder dan %1$d%. Laad uw ring op voor ononderbroken inzichten.</string>
+    <string name="text_ring_battery_low_value">De batterij van je ring is minder dan %s%%. Laad uw ring op voor ononderbroken inzichten.</string>
     <string name="text_value_detected">%1$s gedetecteerd</string>
     <string name="text_workout_detected_from_to">%1$s is gedetecteerd van %2$s tot %3$s en is klaar om te beoordelen</string>
     <string name="text_value_mins">%1$s minuten</string>
