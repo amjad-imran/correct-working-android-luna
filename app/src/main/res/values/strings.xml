@@ -1756,5 +1756,7 @@
     <string name="text_build_me_a_weekly_diet_plan">Build me a weekly diet plan</string>
     <string name="text_build_me_a_workout_plan">Build me a weekly workout plan</string>
     <string name="text_generating_your_daily_health_digest">Generating your Daily Health Digest...</string>
+    <string name="text_speak_now">Speak Now</string>
+    <string name="text_how_to_perform_a_value">How to perform a %1$s?</string>
 
 </resources>

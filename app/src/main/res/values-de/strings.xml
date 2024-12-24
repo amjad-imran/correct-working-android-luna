@@ -1714,4 +1714,15 @@
     <string name="text_build_me_a_weekly_diet_plan">Erstellen Sie mir einen wöchentlichen Diätplan</string>
     <string name="text_build_me_a_workout_plan">Erstellen Sie mir einen wöchentlichen Trainingsplan</string>
     <string name="text_generating_your_daily_health_digest">Erstellen Sie Ihren täglichen Gesundheitsüberblick...</string>
+    <string name="text_workout_plan">Trainingsplan</string>
+    <string name="text_ai_edit_plan">Dadurch kann Luna AI den gesamten Plan bearbeiten</string>
+    <string name="text_proceed">Fortfahren</string>
+    <string name="text_not_now">Nicht jetzt</string>
+    <string name="text_enable_private_mode">Aktivieren Sie den privaten Modus, um private Details beim Teilen in sozialen Medien zu verbergen.</string>
+    <string name="text_private_mode">Privatmodus</string>
+    <string name="text_rest_day">Ruhetag</string>
+    <string name="text_next_workout">Nächstes Training</string>
+    <string name="text_diet_plan">Diätplan</string>
+    <string name="text_speak_now">Sprich jetzt</string>
+    <string name="text_how_to_perform_a_value">Wie führe ich einen %1$s durch?</string>
 </resources>

@@ -1703,4 +1703,15 @@
     <string name="text_build_me_a_weekly_diet_plan">สร้างแผนอาหารประจำสัปดาห์ให้ฉัน</string>
     <string name="text_build_me_a_workout_plan">สร้างแผนการออกกำลังกายรายสัปดาห์ให้ฉัน</string>
     <string name="text_generating_your_daily_health_digest">กำลังสร้างข้อมูลย่อยด้านสุขภาพประจำวันของคุณ...</string>
+    <string name="text_workout_plan">แผนการออกกำลังกาย</string>
+    <string name="text_ai_edit_plan">นี่จะทำให้ Luna ai สามารถแก้ไขแผนทั้งหมดได้</string>
+    <string name="text_proceed">ดำเนินการ</string>
+    <string name="text_not_now">ไม่ใช่ตอนนี้</string>
+    <string name="text_enable_private_mode">เปิดใช้งานโหมดส่วนตัวเพื่อซ่อนรายละเอียดส่วนตัวขณะแชร์บนโซเชียลมีเดีย</string>
+    <string name="text_private_mode">โหมดส่วนตัว</string>
+    <string name="text_rest_day">วันพักผ่อน</string>
+    <string name="text_next_workout">ออกกำลังกายครั้งต่อไป</string>
+    <string name="text_diet_plan">แผนอาหาร</string>
+    <string name="text_speak_now">พูดเลย</string>
+    <string name="text_how_to_perform_a_value">จะดำเนินการ %1$s ได้อย่างไร?</string>
 </resources>

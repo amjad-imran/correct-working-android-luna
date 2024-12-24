@@ -1719,4 +1719,15 @@
     <string name="text_build_me_a_weekly_diet_plan">Stel een wekelijks dieetplan voor me op</string>
     <string name="text_build_me_a_workout_plan">Stel een wekelijks trainingsplan voor mij op</string>
     <string name="text_generating_your_daily_health_digest">Uw dagelijkse gezondheidsoverzicht genereren...</string>
+    <string name="text_workout_plan">Trainingsplan</string>
+    <string name="text_ai_edit_plan">Hierdoor kan Luna ai het hele plan bewerken</string>
+    <string name="text_proceed">Doorgaan</string>
+    <string name="text_not_now">Niet nu</string>
+    <string name="text_enable_private_mode">Schakel de privémodus in om privégegevens te verbergen tijdens het delen op sociale media.</string>
+    <string name="text_private_mode">Privémodus</string>
+    <string name="text_rest_day">Rustdag</string>
+    <string name="text_next_workout">Volgende training</string>
+    <string name="text_diet_plan">Dieetplan</string>
+    <string name="text_speak_now">Spreek nu</string>
+    <string name="text_how_to_perform_a_value">Hoe voer ik een %1$s uit?</string>
 </resources>

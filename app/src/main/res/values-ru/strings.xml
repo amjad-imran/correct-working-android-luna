@@ -1718,4 +1718,15 @@
     <string name="text_build_me_a_weekly_diet_plan">Составьте мне еженедельный план диеты</string>
     <string name="text_build_me_a_workout_plan">Составьте мне план тренировок на неделю</string>
     <string name="text_generating_your_daily_health_digest">Создание ежедневного дайджеста здоровья...</string>
+    <string name="text_workout_plan">План тренировок</string>
+    <string name="text_ai_edit_plan">Это позволит Luna ai редактировать весь план.</string>
+    <string name="text_proceed">Продолжить</string>
+    <string name="text_not_now">Не сейчас</string>
+    <string name="text_enable_private_mode">Включите приватный режим, чтобы скрыть личные данные при публикации в социальных сетях.</string>
+    <string name="text_private_mode">Приватный режим</string>
+    <string name="text_rest_day">ДЕНЬ ОТДЫХА</string>
+    <string name="text_next_workout">Следующая тренировка</string>
+    <string name="text_diet_plan">План диеты</string>
+    <string name="text_speak_now">Говорите сейчас</string>
+    <string name="text_how_to_perform_a_value">Как выполнить %1$s?</string>
 </resources>

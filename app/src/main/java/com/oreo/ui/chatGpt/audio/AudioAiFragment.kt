@@ -50,7 +50,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         if (args.planType == PlanType.WORKOUT) {
             binding.tvAskLuna.visible()
             args.text?.let {
-                binding.tvMessage.text = "How to perform a ${it}?"
+                binding.tvMessage.text = getString(R.string.text_how_to_perform_a_value, it)
             }
         }
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
@@ -152,7 +152,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     micStateOff()
                 }
                 AudioAiState.LISTENING -> {
-                    binding.tvMessage.text = "Speak Now"
+                    binding.tvMessage.text = getString(R.string.text_speak_now)
                     micStateOn()
                 }
                 AudioAiState.GENERATING -> {
