@@ -429,16 +429,19 @@ class WaveRecorder {
             isSkipping.set(false)
             silenceDuration = BigDecimal.ZERO
             audioSessionId = -1
-            if (fileUri != null) {
-                WaveHeaderWriter(fileUri!!, context, waveConfig).writeHeader()
-            } else {
-                WaveHeaderWriter(filePath!!, waveConfig).writeHeader()
-                if (deleteFile) {
-                    File(filePath!!).delete()
+
+            try {
+                if (fileUri != null) {
+                    WaveHeaderWriter(fileUri!!, context, waveConfig).writeHeader()
+                } else {
+                    WaveHeaderWriter(filePath!!, waveConfig).writeHeader()
+                    if (deleteFile) {
+                        File(filePath!!).delete()
+                    }
                 }
+            }catch (ignored:Exception){
             }
         }
-
     }
 
     private fun isAudioRecorderInitialized(): Boolean =

@@ -140,10 +140,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     override fun initListener() {
 
         binding.lytChatBox.btnAudioChat.setOnClickListener {
-            val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.NONE
-            )
-            navigate(frag, bundle)
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentToAudioAiFragment(null).apply {
+                planType = PlanType.NONE
+            })
         }
 
         binding.rvChats.addOnScrollListener(object : RecyclerView.OnScrollListener() {
