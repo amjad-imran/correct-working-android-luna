@@ -74,7 +74,11 @@ class ChatHistoryFragment :
         viewModel.chatHistory.observe(this) {
             mAdapter.setDataSet(it)
             if (it.isEmpty()) {
-                navigateUpSafe()
+                binding.ivNoData.visible()
+                binding.textNoData.visible()
+            } else {
+                binding.ivNoData.gone()
+                binding.textNoData.gone()
             }
         }
 

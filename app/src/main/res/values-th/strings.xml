@@ -1714,4 +1714,5 @@
     <string name="text_diet_plan">แผนอาหาร</string>
     <string name="text_speak_now">พูดเลย</string>
     <string name="text_how_to_perform_a_value">จะดำเนินการ %1$s ได้อย่างไร?</string>
+    <string name="text_nothing_here">ไม่มีอะไรที่นี่</string>
 </resources>

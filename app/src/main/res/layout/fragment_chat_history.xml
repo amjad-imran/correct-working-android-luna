@@ -27,6 +27,32 @@
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
 
+    <ImageView
+        android:id="@+id/ivNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_no_chat"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/textNoData"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:text="@string/text_nothing_here"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ivNoData"
+        app:layout_constraintStart_toStartOf="@+id/ivNoData"
+        app:layout_constraintTop_toBottomOf="@+id/ivNoData"
+        tools:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"

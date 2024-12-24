@@ -1237,6 +1237,8 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_audioAiFragment_to_aiTopQuestionsFragment"
-            app:destination="@id/aiTopQuestionsFragment" />
+            app:destination="@id/aiTopQuestionsFragment"
+            app:popUpTo="@id/audioAiFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
