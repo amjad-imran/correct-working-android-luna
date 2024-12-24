@@ -405,6 +405,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_workout_plan)
             root.revealFromBottom()
         }
+        uiController.hideSoftKeyboard()
     }
 
 
@@ -417,6 +418,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_diet_plan)
             root.revealFromBottom()
         }
+        uiController.hideSoftKeyboard()
     }
 
 }

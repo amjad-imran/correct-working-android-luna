@@ -6,6 +6,7 @@ import android.view.View.OnClickListener
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
@@ -16,10 +17,13 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WorkoutPlansFragment :
@@ -42,9 +46,16 @@ class WorkoutPlansFragment :
         viewModel.getWorkoutPlans()
         setRecycler()
 
-        mainViewModel.addWorkoutCtaVisibility.postValue(true)
+        handleAddWorkoutVisibility()
+
     }
 
+
+    private fun handleAddWorkoutVisibility() {
+        if (mainViewModel.sessionManager.connectedDeviceRing.value != null) {
+            mainViewModel.addWorkoutCtaVisibility.postValue(true)
+        }
+    }
 
     override fun initListener() {
         binding.lytWeek.tvMon.setOnClickListener(weekListener)
@@ -56,14 +67,16 @@ class WorkoutPlansFragment :
         binding.lytWeek.tvSun.setOnClickListener(weekListener)
 
         binding.ivEdit.setOnClickListener {
-            navigate(WorkoutPlansFragmentDirections.actionWorkoutPlansFragmentToChatGptFragment(
-                "",
-                "",
-                getString(R.string.text_build_me_a_workout_plan),
-                "",
-                AITopics.GENERAL,
-                PlanType.WORKOUT
-            ))
+            navigate(
+                WorkoutPlansFragmentDirections.actionWorkoutPlansFragmentToChatGptFragment(
+                    "",
+                    "",
+                    getString(R.string.text_build_me_a_workout_plan),
+                    "",
+                    AITopics.GENERAL,
+                    PlanType.WORKOUT
+                )
+            )
         }
 
         binding.toolbar.backBtn.setOnClickListener {
