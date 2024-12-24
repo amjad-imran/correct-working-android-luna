@@ -1563,7 +1563,7 @@
     <string name="text_temperature_variation">Temperature variation</string>
     <string name="text_when_using_bluetooth_to">We need to use location permissions to enable Bluetooth related functions while using Bluetooth to search for devices, or to connect devices with Bluetooth. Do you agree to allow Luna ring app to access your location?</string>
     <string name="text_tap_to_measure_is_only">Tap to measure is only available in the higher versions of Luna Ring.</string>
-    <string name="text_ring_battery_low_value">Your ring battery is below %1$s%. Please charge your ring to get uninterrupted insights.</string>
+    <string name="text_ring_battery_low_value">Your ring battery is below %s%%. Please charge your ring to get uninterrupted insights.</string>
     <string name="text_value_detected">%1$s detected</string>
     <string name="text_workout_detected_from_to">%1$s was detected from %2$s to %3$s and is ready to review</string>
     <string name="text_value_mins">%1$s mins</string>

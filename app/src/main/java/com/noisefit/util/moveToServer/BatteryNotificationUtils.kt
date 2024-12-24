@@ -135,7 +135,7 @@ constructor(
             } ?: return
 
             val message =
-                resourcesProvider.getString(R.string.text_ring_battery_low_value, batteryLevelMessage)
+                resourcesProvider.getString(R.string.text_ring_battery_low_value, batteryLevelMessage.toString())
 
             if (notificationShown[level.name] == true) {
                 return
