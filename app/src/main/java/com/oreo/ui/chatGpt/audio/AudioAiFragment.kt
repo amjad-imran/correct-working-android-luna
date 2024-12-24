@@ -115,30 +115,23 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
 
         binding.ivMic.setOnClickListener {
-            if(viewModel.isAiReplying()){
+            if (viewModel.isAiReplying()) {
                 viewModel.interruptAi()
                 viewModel.audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
             }
         }
 
         binding.ivTextChat.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
-                AITopics.GENERAL
-            )
-            navigate(frag, bundle)
+            navigate(AudioAiFragmentDirections.actionAudioAiFragmentToAiTopQuestionsFragment(AITopics.GENERAL))
         }
     }
 
-    private fun micStateOff(){
+    private fun micStateOff() {
         binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
         binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
     }
 
-    private fun micStateOn(){
+    private fun micStateOn() {
         binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#26FFFFFF"))
         binding.ivMic.setImageResource(R.drawable.ic_ai_mic)
     }
@@ -151,15 +144,18 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     binding.tvMessage.text = ""
                     micStateOff()
                 }
+
                 AudioAiState.LISTENING -> {
                     binding.tvMessage.text = getString(R.string.text_speak_now)
                     micStateOn()
                 }
+
                 AudioAiState.GENERATING -> {
                     binding.tvMessage.text = ""
                     micStateOff()
                     viewModel.stopRecording(true)
                 }
+
                 AudioAiState.AI_TALKING -> {
                     binding.tvMessage.text = ""
                     micStateOff()
