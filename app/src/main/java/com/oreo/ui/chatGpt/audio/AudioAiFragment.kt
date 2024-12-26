@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
@@ -142,22 +143,27 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             when (it) {
                 AudioAiState.DEFAULT -> {
                     binding.tvMessage.text = ""
+                    binding.tvAskLuna.gone()
                     micStateOff()
                 }
 
                 AudioAiState.LISTENING -> {
-                    binding.tvMessage.text = getString(R.string.text_speak_now)
+                    if(binding.tvAskLuna.isVisible.not()){
+                        binding.tvMessage.text = getString(R.string.text_speak_now)
+                    }
                     micStateOn()
                 }
 
                 AudioAiState.GENERATING -> {
                     binding.tvMessage.text = ""
+                    binding.tvAskLuna.gone()
                     micStateOff()
                     viewModel.stopRecording(true)
                 }
 
                 AudioAiState.AI_TALKING -> {
                     binding.tvMessage.text = ""
+                    binding.tvAskLuna.gone()
                     micStateOff()
                     binding.tvAskLuna.gone()
                     //binding.tvMessage.gone()
