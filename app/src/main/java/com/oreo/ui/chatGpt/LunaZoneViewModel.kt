@@ -65,7 +65,7 @@ class LunaZoneViewModel @Inject constructor(
                             )
 
                             summaryStates.postValue(getSummaryStates(it.summaryAvailable))
-                            //summaryStates.postValue(SummaryStates.DATA_AVAILABLE)
+                            //summaryStates.postValue(SummaryStates.NO_DEVICE)
 
                             suggestedQuestions.postValue(it.suggestedQues ?: ArrayList())
 

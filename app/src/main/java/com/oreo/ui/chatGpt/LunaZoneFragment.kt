@@ -71,6 +71,19 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
             setVideo()
 
+
+           /* val layoutParamNoData = binding.lytNoData.root.layoutParams
+            layoutParamNoData.height = (height.toFloat() * 0.65).roundToInt()
+            binding.lytNoData.root.layoutParams = layoutParams*/
+
+            /*val layoutParamNoDevice = binding.lytNoDevice.root.layoutParams
+            layoutParamNoDevice.height = (height.toFloat() * 0.65).roundToInt()
+            binding.lytNoDevice.root.layoutParams = layoutParams*/
+
+            val layoutParamGenerating = binding.lytGeneratingData.root.layoutParams
+            layoutParamGenerating.height = (height.toFloat() * 0.65).roundToInt()
+            binding.lytGeneratingData.root.layoutParams = layoutParams
+
         }
     }
 
