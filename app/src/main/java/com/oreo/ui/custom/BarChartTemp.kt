@@ -16,6 +16,8 @@ import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import kotlin.math.abs
 
 class BarChartTemp : View {
@@ -405,7 +407,7 @@ class BarChartTemp : View {
     }
 
     private fun formatFloat(value: Float): Float {
-        val df = DecimalFormat("#.#")
+        val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.US))
         return df.format(value).toFloat()
     }
 

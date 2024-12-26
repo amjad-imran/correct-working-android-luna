@@ -859,10 +859,10 @@ constructor(
      * Device paired check
      */
     fun handleAddWorkoutVisibility() {
-        viewModelScope.launch(Dispatchers.IO) {
+        /*viewModelScope.launch(Dispatchers.IO) {*/
             if (sessionManager.connectedDeviceRing.value == null) {
                 addWorkoutCtaVisibility.postValue(false)
-                return@launch
+                return
             }
             if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
                 addWorkoutCtaVisibility.postValue(true)
@@ -871,7 +871,7 @@ constructor(
                 addWorkoutCtaVisibility.postValue(false)
                 isActivityWorkAdd = false
             }
-        }
+        /*}*/
     }
 
     fun checkOnGoingWorkout() {

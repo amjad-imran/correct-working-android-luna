@@ -67,7 +67,7 @@ class MealPlanViewModel @Inject constructor(
                             mealResponse.clear()
                             mealResponse.addAll(it)
 
-                            setSelectedPosition(LocalDate.now().dayOfWeek.value)//todo based on current day
+                            setSelectedPosition(LocalDate.now().dayOfWeek.value)
                         }
                     }
                 }

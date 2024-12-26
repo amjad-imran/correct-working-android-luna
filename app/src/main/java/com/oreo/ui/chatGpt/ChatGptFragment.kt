@@ -276,7 +276,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     private fun startSnackBarRemoveTimer() {
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.removeSnackBar()
-        }, 3000)
+        }, 10 * 1000L)
     }
 
     override fun onResume() {

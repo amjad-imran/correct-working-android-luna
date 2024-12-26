@@ -1,6 +1,8 @@
 package com.noisefit_commans.utils
 
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
@@ -25,7 +27,7 @@ fun Number.prettyCountDecimal(): String {
     val value = floor(log10(numValue.toDouble())).toInt()
     val base = value / 3
     return if (value >= 3 && base < suffix.size) {
-        DecimalFormat("#0.0").format(
+        DecimalFormat("#0.0", DecimalFormatSymbols(Locale.US)).format(
             numValue / 10.0.pow((base * 3).toDouble())
         ).replace(".0","") + suffix[base]
     } else {

@@ -465,6 +465,7 @@ constructor() : LifecycleService() {
     private fun startService(initDefault: Boolean) {
         initDefaultValues = initDefault
         LOGS.i(TAG, "Before setConnetionMode")
+        updateNotification()
         if (isServiceStarted) return
         LOGS.i(TAG, "Starting the foreground service task")
         isServiceStarted = true
@@ -473,7 +474,6 @@ constructor() : LifecycleService() {
         registerTimeChangeReceiver()
         setConnection()
         setQueryObserver()
-        updateNotification()
         setLocationObserver()
     }
 
