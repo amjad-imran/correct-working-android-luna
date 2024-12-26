@@ -54,6 +54,7 @@ class ChatGptViewModel
 
     val aiGeneratedPlanSaved = MutableLiveData<Event<Boolean>>()
     val showSavePlan = MutableLiveData<Event<AiPlanType>>()
+    val videoState = MutableLiveData<Boolean>()
 
     var threadId: String? = null
     var defaultMessage: String? = null
@@ -214,6 +215,7 @@ class ChatGptViewModel
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
+        videoState.value = true
         lastApi = Pair(1, prompt)
 
         val responseBuilder = StringBuilder()
@@ -282,6 +284,8 @@ class ChatGptViewModel
                     if (fetchInProgress.value == false) return false
 
                     fetchInProgress.postValue(false)
+                    videoState.postValue(false)
+
                     if (responseBuilder.toString().isEmpty()) {
                         addErrorState(
                             String.format(
@@ -296,6 +300,7 @@ class ChatGptViewModel
                 override fun onClosed(sse: ServerSentEvent?) {
                     //LOGS.d("streammmmmm onClosed()")
                     fetchInProgress.postValue(false)
+                    videoState.postValue(false)
 
                     //TODO write plan & its type recognition logic  - with anil
                     checkForPlans(responseBuilder.toString())
@@ -488,6 +493,7 @@ class ChatGptViewModel
         viewModelScope.launch {
             removeThinkingState()
             fetchInProgress.postValue(false)
+            videoState.postValue(false)
             serverSentEvent?.close()
 
             oreoDeviceRepository.stopResponseGeneration(threadId, planType ?: PlanType.NONE)

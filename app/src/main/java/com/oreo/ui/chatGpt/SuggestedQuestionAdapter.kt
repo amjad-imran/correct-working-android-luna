@@ -19,7 +19,7 @@ class SuggestedQuestionAdapter(val onQuestionClicked: (SuggestedAiQuestions) -> 
             binding.tvQues.text = suggestedAiQuestions.ques
             binding.imageBg.loadImage(binding.imageBg.context, suggestedAiQuestions.bg_image)
             binding.ivQuesIcon.loadImage(binding.ivQuesIcon.context, suggestedAiQuestions.icon)
-            binding.tvQues.setTextColor(Color.parseColor(suggestedAiQuestions.color))
+            binding.tvQues.setTextColor(Color.parseColor(suggestedAiQuestions.color ?: "#ffffff"))
             binding.root.setOnClickListener {
                 onQuestionClicked(suggestedAiQuestions)
             }

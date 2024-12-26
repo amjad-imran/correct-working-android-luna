@@ -285,6 +285,18 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     override fun subscribeObservers() {
+        viewModel.videoState.observe(this){
+            if(it){
+                binding.ivGeneratingGradient.visible()
+                binding.videoView.start()
+                binding.videoView.visible()
+            }else{
+                binding.ivGeneratingGradient.gone()
+                binding.videoView.stopPlayback()
+                binding.videoView.gone()
+            }
+        }
+
         viewModel.removeSnackBar.observe(this) {
             it.getContent()?.let {
                 nullableBinding?.lytSnackbar?.root?.gone()
@@ -351,15 +363,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.fetchInProgress.observe(this) {
             if (it) {
-                binding.videoView.start()
-                binding.videoView.visible()
-                binding.ivGeneratingGradient.visible()
                 binding.lytGeneratingData.root.visible()
                 binding.lytChatBox.root.gone()
             } else {
-                binding.videoView.stopPlayback()
-                binding.videoView.gone()
-                binding.ivGeneratingGradient.gone()
                 binding.lytGeneratingData.root.gone()
                 binding.lytChatBox.root.visible()
             }
@@ -397,9 +403,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     private fun showSaveWorkoutPlan() {
-        binding.ivGeneratingGradient.visible()
-        binding.videoView.start()
-        binding.videoView.visible()
+        viewModel.videoState.postValue(true)
 
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_workout_plan)
@@ -410,9 +414,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
 
     private fun showSaveMealPlan() {
-        binding.ivGeneratingGradient.visible()
-        binding.videoView.start()
-        binding.videoView.visible()
+        viewModel.videoState.postValue(true)
 
         binding.lytSaveData.apply {
             testSaveQues.text = getString(R.string.text_would_you_like_to_save_this_diet_plan)
