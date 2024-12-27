@@ -42,7 +42,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -200,6 +203,17 @@ fun AiTopQuestionMain(
 
 }
 
+@Preview
+@Composable
+fun AskQuestionPreview() {
+    AskQuestion(modifier = Modifier,
+        onSendClicked = {
+
+        }, onAiAudioClicked = {
+
+        })
+}
+
 @Composable
 fun AskQuestion(
     modifier: Modifier,
@@ -228,26 +242,25 @@ fun AskQuestion(
                     color = Color.LightGray
                 )
             },
-            textStyle = FontStyle.SIZE_16,
-            singleLine = true,
+            textStyle = FontStyle.SIZE_16.copy(lineHeight = 16.em),
+            maxLines = 2,
             shape = RoundedCornerShape(52.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
             keyboardActions = KeyboardActions(
                 onSend = {
                     onSendClicked(text)
                 },
-            )/*,
+            ),
         trailingIcon = {
             if (text.isNotEmpty()) {
                 Image(
-                    painter = painterResource(R.drawable.ic_ai_send_message),
+                    painter = painterResource(R.drawable.ic_ai_send_message_2),
                     modifier = Modifier.clickable {
                         onSendClicked(text)
                     },
                     contentDescription = "Send"
                 )
             }
-        }*/,
+        },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xc009284c),
                 unfocusedContainerColor = Color(0xc009284c),
@@ -261,30 +274,30 @@ fun AskQuestion(
             )
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        if(text.isEmpty()){
+            Spacer(modifier = Modifier.width(8.dp))
 
-        Box(modifier = Modifier
-            .width(48.dp)
-            .height(48.dp)
-            .background(
-                color = Color(0xFFFFFFFF),
-                shape = RoundedCornerShape(size = 48.dp)
-            )
-            .clickable {
-                onAiAudioClicked()
-            }) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_ai_mic_black),
-                modifier = Modifier
-                    .width(48.dp)
-                    .height(48.dp)
-                    .padding(10.dp),
-                contentDescription = "Audio AI",
-            )
+            Box(modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .background(
+                    color = Color(0xFFFFFFFF),
+                    shape = RoundedCornerShape(size = 48.dp)
+                )
+                .clickable {
+                    onAiAudioClicked()
+                }) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_ai_mic_black),
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                        .padding(10.dp),
+                    contentDescription = "Audio AI",
+                )
+            }
         }
     }
-
-
 }
 
 /*@Preview
@@ -382,7 +395,7 @@ fun AiHistoryToolbar(
 
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+/*@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AiTopQuestionMainPreview() {
     AiTopQuestionMain(
@@ -397,4 +410,4 @@ fun AiTopQuestionMainPreview() {
         onHistoryClicked = {},
         onAiAudioClicked = {},
         onQuestionSelected = {})
-}
+}*/

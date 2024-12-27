@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -139,6 +140,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
+        binding.lytChatBox.ivSend.setOnClickListener {
+            if(binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()){
+                sendMessage(binding.lytChatBox.chatEtx.text.toString())
+            }
+        }
+
         binding.lytChatBox.btnAudioChat.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToAudioAiFragment(null).apply {
                 planType = PlanType.NONE
@@ -203,7 +210,19 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             } else false
         })
 
+        binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
+            if (it.isNullOrEmpty()) {
+                binding.lytChatBox.space.visible()
+                binding.lytChatBox.btnAudioChat.visible()
 
+                binding.lytChatBox.ivSend.gone()
+            } else {
+                binding.lytChatBox.space.gone()
+                binding.lytChatBox.btnAudioChat.gone()
+
+                binding.lytChatBox.ivSend.visible()
+            }
+        })
     }
 
     private fun setupVisualizer(audioSessionId: Int) {
@@ -240,7 +259,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             //viewModel.addReceivedMessage("", true)
             binding.lytChatBox.chatEtx.setText("")
 
-            viewModel.askQuestionStream(message)
+            viewModel.askQuestionStream(message.replace("\n",""))
 
             //viewModel.askQuestion(message)
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_message_submit)
@@ -285,12 +304,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     override fun subscribeObservers() {
-        viewModel.videoState.observe(this){
-            if(it){
+        viewModel.videoState.observe(this) {
+            if (it) {
                 binding.ivGeneratingGradient.visible()
                 binding.videoView.start()
                 binding.videoView.visible()
-            }else{
+            } else {
                 binding.ivGeneratingGradient.gone()
                 binding.videoView.stopPlayback()
                 binding.videoView.gone()

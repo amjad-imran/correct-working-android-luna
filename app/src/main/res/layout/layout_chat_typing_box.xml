@@ -18,22 +18,41 @@
 
     <EditText
         android:id="@+id/chatEtx"
-        style="@style/S14"
+        style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:layout_marginEnd="10dp"
         android:background="@color/transparent"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:hint="@string/text_message"
-        android:imeOptions="actionSend"
-        android:paddingHorizontal="16dp"
-        android:singleLine="true"
+        android:paddingStart="16dp"
+        android:paddingEnd="54dp"
+        android:maxLines="2"
         android:textColor="@color/white"
         android:textColorHint="#66ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAudioChat"
+        app:layout_constraintEnd_toStartOf="@+id/space"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivSend"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_ai_send_message_2"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/chatEtx"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnAudioChat"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
