@@ -22,13 +22,12 @@ import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.revealFromBottom
+import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.ArrayList
 import kotlin.math.absoluteValue
 
 
@@ -201,9 +200,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
 
         binding.ivScrollDown.setOnClickListener {
-            binding.rvChats.post {
-                binding.rvChats.smoothScrollToPosition(mAdapter.getItemCount() - 1)
-            }
+            binding.rvChats.scrollToBottom()
         }
 
         /*binding.ivHistory.setOnClickListener {
