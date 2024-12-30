@@ -29,6 +29,7 @@ import androidx.annotation.UiThread
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
@@ -72,6 +73,20 @@ val TEXT_GRADIENT_STYLE_2 = intArrayOf(
     Color.parseColor("#ffffff"),
     Color.parseColor("#88ebeb")
 )
+
+
+fun RecyclerView.scrollToBottom() {
+    val lastChild = children.lastOrNull() ?: return
+    val bottom = lastChild.bottom + paddingBottom
+    val currentY = height + scrollY
+    val alreadyAtBottom = bottom <= currentY
+    if (!alreadyAtBottom) {
+        val delta = bottom - currentY
+        smoothScrollBy(0, delta)
+    } else {
+        // already at bottom, do nothing
+    }
+}
 
 
 fun View.revealFromBottom() {
