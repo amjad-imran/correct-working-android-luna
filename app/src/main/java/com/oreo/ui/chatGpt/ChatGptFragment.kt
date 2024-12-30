@@ -169,7 +169,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
     }
 
-
     override fun initListener() {
 
         binding.lytChatBox.ivSend.setOnClickListener {

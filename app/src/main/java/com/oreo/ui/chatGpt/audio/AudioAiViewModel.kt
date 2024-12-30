@@ -49,6 +49,8 @@ class AudioAiViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
+    var isMicOn: Boolean = false
+
     private val AMPLITUDE_MAX = 2000
     private val SILENCE_DURATION: Long = 2000
     private var DEFAULT_AUDIO_PROMPT: String =

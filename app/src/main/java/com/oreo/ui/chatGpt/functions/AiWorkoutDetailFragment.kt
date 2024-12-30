@@ -42,6 +42,7 @@ class AiWorkoutDetailFragment :
 
         binding.tvWorkoutName.text = workout.workout_name
         binding.tvSetsData.text = workout.reps
+        binding.tvDescription.text = workout.description
 
         if (dataList.size > 1) {
             binding.ivNext.visible()
