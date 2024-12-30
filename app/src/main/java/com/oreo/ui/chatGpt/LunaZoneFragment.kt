@@ -359,7 +359,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             if (mealState) {
                 binding.lytPlans.lytWorkoutPlan.apply {
                     ivWorkoutPlan.setImageResource(R.drawable.image_ai_w_plan)
-                    ivBottomIcon.setImageResource(R.drawable.image_w_plus)
+                    ivBottomIcon.setImageResource(R.drawable.image_meal_plus)
                     tvPlanName.text = getString(R.string.text_setup_nworkout_plan)
                     tvPlanName.setTextColor(Color.parseColor("#A8FFFF"))
                     root.visible()

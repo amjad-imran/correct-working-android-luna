@@ -159,12 +159,14 @@ class AiSummaryFragment :
             this@AiSummaryFragment.context,
             object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    val width: Int = binding.vGestureOverlay.width
-                    if (e.x < width / 2) {
-                        goToPreviousStory()
-                    } else {
-                        clearRunnable()
-                        goToNextStory()
+                    val width: Int? = nullableBinding?.vGestureOverlay?.width
+                    if(width!=null){
+                        if (e.x < width / 2) {
+                            goToPreviousStory()
+                        } else {
+                            clearRunnable()
+                            goToNextStory()
+                        }
                     }
                     return true
                 }
@@ -266,14 +268,10 @@ class AiSummaryFragment :
             navigateUpSafe()
         }
         binding.btnAsk.setOnClickListener {
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
-                AITopics.GENERAL
+            navigate(
+                R.id.aiTopQuestionsFragment,
+                bundleOf("aiTopic" to AITopics.GENERAL)
             )
-            navigate(frag, bundle)
         }
 
         binding.ivShare.setOnClickListener {

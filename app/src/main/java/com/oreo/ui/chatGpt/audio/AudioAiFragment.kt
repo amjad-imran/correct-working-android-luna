@@ -124,6 +124,14 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             if (viewModel.isAiReplying()) {
                 viewModel.interruptAi()
                 viewModel.audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
+            }else{
+                if (viewModel.isMicOn) {
+                    viewModel.audioAiState.postValue(AudioAiState.DEFAULT)
+                    viewModel.stopRecording(false)
+                    viewModel.sendRecordingToServer()
+                } else {
+                    viewModel.startNewRecording()
+                }
             }
         }
 
@@ -133,18 +141,19 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     private fun micStateOff() {
+        viewModel.isMicOn = false
         binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#F76968"))
         binding.ivMic.setImageResource(R.drawable.ic_ai_mic_off)
     }
 
     private fun micStateOn() {
+        viewModel.isMicOn = true
         binding.ivMic.setBackgroundColor(android.graphics.Color.parseColor("#26FFFFFF"))
         binding.ivMic.setImageResource(R.drawable.ic_ai_mic)
     }
 
     override fun subscribeObservers() {
         viewModel.audioAiState.observe(this) {
-            LOGS.d("sjkdfhskdjfhdskj $it")
             when (it) {
                 AudioAiState.DEFAULT -> {
                     binding.tvMessage.text = ""
@@ -170,7 +179,6 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     binding.tvMessage.text = ""
                     binding.tvAskLuna.gone()
                     micStateOff()
-                    binding.tvAskLuna.gone()
                     //binding.tvMessage.gone()
                 }
 

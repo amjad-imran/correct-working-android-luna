@@ -202,7 +202,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.ivScrollDown.setOnClickListener {
             binding.rvChats.post {
                 binding.rvChats.smoothScrollToPosition(mAdapter.getItemCount() - 1)
-                binding.ivScrollDown.gone()
             }
         }
 
