@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -23,10 +24,11 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.revealFromBottom
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
-import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.ArrayList
 import kotlin.math.absoluteValue
 
 
@@ -95,7 +97,37 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.generateInitMessage()
         }
 
+        if (viewModel.meal != null) {
+            viewModel.meal?.meal_type?.let {
+                setMealTitle(it)
+            }
+            setMealSuggestions(arrayListOf("Ques1", "Ques2", "Ques3", "Ques4", "Ques5"))
+        }
+
+
         setVideo()
+    }
+
+    private fun setMealSuggestions(suggestions: ArrayList<String>) {
+        binding.lytSuggestions.apply {
+            root.visible()
+            this.rvSuggestions.layoutManager = LinearLayoutManager(
+                this.rvSuggestions.context,
+                LinearLayoutManager.HORIZONTAL, false
+            )
+            this.rvSuggestions.adapter = SuggestionAdapter(suggestions) {
+                sendMessage(it)
+            }
+        }
+    }
+
+    private fun setMealTitle(title: String) {
+        binding.imageView32.gone()
+        binding.toolbarTitle.apply {
+            visible()
+            text = title
+        }
+        binding.ivClose.setImageResource(R.drawable.ic_back_ai)
     }
 
     private fun setVideo() {
@@ -141,7 +173,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     override fun initListener() {
 
         binding.lytChatBox.ivSend.setOnClickListener {
-            if(binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()){
+            if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
                 sendMessage(binding.lytChatBox.chatEtx.text.toString())
             }
         }
@@ -151,6 +183,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 planType = PlanType.NONE
             })
         }
+
 
         binding.rvChats.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -162,9 +195,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                         binding.imageGradientTop.visible()
                     }
                 }
-
+                checkScrollState(recyclerView)
             }
         })
+
+        binding.ivScrollDown.setOnClickListener {
+            binding.rvChats.post {
+                binding.rvChats.smoothScrollToPosition(mAdapter.getItemCount() - 1)
+                binding.ivScrollDown.gone()
+            }
+        }
 
         /*binding.ivHistory.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
@@ -225,6 +265,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
     }
 
+    fun checkScrollState(recyclerView: RecyclerView) {
+        if (recyclerView.canScrollVertically(1)) {
+            // Show the button when scrolling up and more content is available to scroll down
+            binding.ivScrollDown.visibility = View.VISIBLE
+        } else if (!recyclerView.canScrollVertically(1)) {
+            // Hide the button when already at the bottom
+            binding.ivScrollDown.visibility = View.GONE
+        }
+    }
+
     private fun setupVisualizer(audioSessionId: Int) {
         Visualizer(audioSessionId).apply {
             captureSize = Visualizer.getCaptureSizeRange()[1] // Maximum capture size
@@ -251,6 +301,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     fun sendMessage(message: String) {
+        if(binding.lytSuggestions.root.isVisible){
+            binding.lytSuggestions.root.gone()
+        }
         if (message.isNotEmpty()) {
             viewModel.addSentMessage(message)
             viewModel.addThinkingMessage()
@@ -259,7 +312,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             //viewModel.addReceivedMessage("", true)
             binding.lytChatBox.chatEtx.setText("")
 
-            viewModel.askQuestionStream(message.replace("\n",""))
+            viewModel.askQuestionStream(message.replace("\n", ""))
 
             //viewModel.askQuestion(message)
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_message_submit)
@@ -417,6 +470,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.chatGptOverview.observe(this) {
             it?.let {
                 mAdapter.items = it
+                binding.rvChats.post {
+                    checkScrollState(binding.rvChats)
+                }
             }
         }
     }

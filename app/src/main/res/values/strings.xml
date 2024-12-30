@@ -1759,5 +1759,6 @@
     <string name="text_speak_now">Speak Now</string>
     <string name="text_how_to_perform_a_value">How to perform a %1$s?</string>
     <string name="text_nothing_here">Nothing here</string>
+    <string name="text_things_to_ask_luna">Things to ask luna</string>
 
 </resources>

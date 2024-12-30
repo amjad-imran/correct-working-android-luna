@@ -54,6 +54,11 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 binding.tvMessage.text = getString(R.string.text_how_to_perform_a_value, it)
             }
         }
+
+        if(args.planType!=PlanType.NONE){
+            binding.ivCross.setImageResource(R.drawable.ic_toolbar_back_ai)
+        }
+
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
         viewModel.getCredentials()

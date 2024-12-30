@@ -12,13 +12,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:src="@drawable/gradient_ai_chat_video"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/videoView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -29,8 +29,8 @@
         android:layout_marginTop="16dp"
         android:background="#33FFFFFF"
         android:elevation="10dp"
-        android:src="@drawable/ic_close_dash_alert"
-        app:contentPadding="6dp"
+        android:src="@drawable/ic_close_ai"
+        app:contentPadding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
@@ -49,6 +49,20 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivClose" />
+
+    <TextView
+        android:id="@+id/toolbarTitle"
+        style="@style/S20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#CCFFFFFF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/ivClose"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivClose"
+        tools:text="Breakfast"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tvChatTitle"
@@ -121,6 +135,17 @@
         tools:visibility="visible" />
 
 
+    <ImageView
+        android:id="@+id/ivScrollDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_scroll_down"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/lytSnackbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytSnackbar"
@@ -135,6 +160,20 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
+
+    <include
+        android:id="@+id/lytSuggestions"
+        layout="@layout/layout_chat_ques_suggestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/lytGeneratingData"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytGeneratingData"

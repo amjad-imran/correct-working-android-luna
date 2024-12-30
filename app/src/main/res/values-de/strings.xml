@@ -1726,4 +1726,5 @@
     <string name="text_speak_now">Sprich jetzt</string>
     <string name="text_how_to_perform_a_value">Wie führe ich einen %1$s durch?</string>
     <string name="text_nothing_here">Hier gibt es nichts</string>
+    <string name="text_things_to_ask_luna">Dinge, die man Luna fragen sollte</string>
 </resources>

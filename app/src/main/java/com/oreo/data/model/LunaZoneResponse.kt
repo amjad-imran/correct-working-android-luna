@@ -19,4 +19,5 @@ data class SuggestedAiQuestions(
     val icon: String? = null,
     val color: String? = null,
     val bg_image: String? = null,
+    val bgColor: String? = null,
 )

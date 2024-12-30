@@ -1725,4 +1725,5 @@
     <string name="text_speak_now">Fale agora</string>
     <string name="text_how_to_perform_a_value">Como realizar um %1$s?</string>
     <string name="text_nothing_here">Nada aqui</string>
+    <string name="text_things_to_ask_luna">Coisas para perguntar a Luna</string>
 </resources>
