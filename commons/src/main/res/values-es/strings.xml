@@ -22,6 +22,8 @@
     <string name="text_just_now">En este momento</string>
     <string name="text_cancel">Cancelar</string>
     <string name="text_none">Ninguno</string>
+    <string name="text_tracking_location">Ubicación de seguimiento...</string>
+    <string name="text_updating_location">Actualizando ubicación...</string>
 
 
 </resources>

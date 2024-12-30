@@ -141,6 +141,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     private fun setAdapter() {
         with(binding.rvChats) {
+            itemAnimator = null
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
@@ -468,7 +469,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.chatGptOverview.observe(this) {
             it?.let {
-                mAdapter.items = it
+                //mAdapter.items = it
+                mAdapter.setDataSet(it)
                 binding.rvChats.post {
                     checkScrollState(binding.rvChats)
                 }

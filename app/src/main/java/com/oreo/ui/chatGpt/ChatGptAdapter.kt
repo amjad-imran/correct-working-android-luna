@@ -2,6 +2,8 @@ package com.oreo.ui.chatGpt
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -16,6 +18,7 @@ import com.noisefit.luna.databinding.ItemChatMessageThinkingBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.ui.chatGpt.functions.SubMealAdapter
 import io.noties.markwon.Markwon
@@ -24,17 +27,43 @@ import io.noties.markwon.Markwon
 class ChatGptAdapter :
     RecyclerView.Adapter<ChatGptViewItemsHolder>() {
 
+    private val asyncListDiffer =
+        AsyncListDiffer(this, object : DiffUtil.ItemCallback<ChatGptOverview>() {
+            override fun areItemsTheSame(
+                oldItem: ChatGptOverview,
+                newItem: ChatGptOverview
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ChatGptOverview,
+                newItem: ChatGptOverview
+            ): Boolean {
+                return oldItem == newItem
+            }
+        })
+
+
+    fun setDataSet(data: List<ChatGptOverview>) {
+        val newList = data.toMutableList()
+        asyncListDiffer.submitList(newList)
+    }
 
     var items = listOf<ChatGptOverview>()
         set(value) {
-            field = value
+
+            asyncListDiffer.submitList(value)
+
+
+            //field = value
 //            if(refreshPosition != null && refreshPosition != -1){
 //                notifyItemChanged(refreshPosition!!)
 //            }else{
 //                notifyDataSetChanged()
 //            }notifyItemInserted(mData.size());
 //            notifyItemChanged(items.size)
-            notifyDataSetChanged()
+            //notifyDataSetChanged()
 
         }
 
@@ -114,41 +143,41 @@ class ChatGptAdapter :
         }
         when (holder) {
             is ChatGptViewItemsHolder.ChatMessageSentViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.SentMessage,
+                asyncListDiffer.currentList[position] as ChatGptOverview.SentMessage,
                 position
             )
 
             is ChatGptViewItemsHolder.ChatMessageReceivedViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.ReceivedMessage,
+                asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage,
                 position
             )
 
             is ChatGptViewItemsHolder.ChatMessageRetryViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.RetryMessage,
+                asyncListDiffer.currentList[position] as ChatGptOverview.RetryMessage,
                 position
             )
 
             is ChatGptViewItemsHolder.ChatThinkingViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.ThinkingMessage,
+                asyncListDiffer.currentList[position] as ChatGptOverview.ThinkingMessage,
                 position
             )
 
             is ChatGptViewItemsHolder.ChatHeaderWorkoutViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.HeaderWorkout,
+                asyncListDiffer.currentList[position] as ChatGptOverview.HeaderWorkout,
                 position
             )
 
             is ChatGptViewItemsHolder.ChatHeaderMealViewHolder -> holder.bind(
-                items[position] as ChatGptOverview.HeaderMeal,
+                asyncListDiffer.currentList[position] as ChatGptOverview.HeaderMeal,
                 position
             )
         }
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = asyncListDiffer.currentList.size
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
+        return when (asyncListDiffer.currentList[position]) {
             is ChatGptOverview.SentMessage -> R.layout.item_chat_message_sent_list
             is ChatGptOverview.ReceivedMessage -> R.layout.item_chat_message_recived_list
             is ChatGptOverview.RetryMessage -> R.layout.item_chat_message_retry

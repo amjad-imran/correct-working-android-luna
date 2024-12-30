@@ -22,6 +22,8 @@
     <string name="text_just_now">Proprio adesso</string>
     <string name="text_cancel">Cancellare</string>
     <string name="text_none">Nessuno</string>
+    <string name="text_tracking_location">Monitoraggio della posizione...</string>
+    <string name="text_updating_location">Aggiornamento della posizione...</string>
 
 
 </resources>

@@ -22,6 +22,8 @@
     <string name="text_just_now">Прямо сейчас</string>
     <string name="text_cancel">Отмена</string>
     <string name="text_none">Никто</string>
+    <string name="text_tracking_location">Отслеживание местоположения...</string>
+    <string name="text_updating_location">Обновление местоположения...</string>
 
 
 </resources>

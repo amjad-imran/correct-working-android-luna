@@ -2,10 +2,10 @@ package com.oreo.data.model
 
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
-import com.noisefit.data.model.AiWorkouts
+import java.util.UUID
 
 
-sealed class ChatGptOverview {
+sealed class ChatGptOverview(var id: UUID = UUID.randomUUID()) {
 
     class SentMessage(
         val message: String,

@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Request
 import okhttp3.Response
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -113,7 +114,7 @@ class ChatGptViewModel
         _scrollToBottom.postValue(Event(true))
     }
 
-    fun addReceivedMessage(message: String, streaming: Boolean) {
+    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
         viewModelScope.launch(Dispatchers.Main) {
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
@@ -122,7 +123,9 @@ class ChatGptViewModel
             if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
                 messages.removeLast()
             }
-            messages.add(ChatGptOverview.ReceivedMessage(message))
+            messages.add(ChatGptOverview.ReceivedMessage(message).apply {
+                id = uuid
+            })
             _chatGptOverview.value = (messages)
         }
     }
@@ -220,6 +223,7 @@ class ChatGptViewModel
         lastApi = Pair(1, prompt)
 
         val responseBuilder = StringBuilder()
+        val uuid = UUID.randomUUID()
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -261,7 +265,7 @@ class ChatGptViewModel
                     }
 
                     addReceivedMessage(
-                        responseBuilder.toString(), true
+                        responseBuilder.toString(),uuid
                     )
                 }
 
@@ -347,7 +351,7 @@ class ChatGptViewModel
             } else {
                 initMessage
             }
-            addReceivedMessage(message ?: "", false)
+            addReceivedMessage(message ?: "")
         }
         return
     }

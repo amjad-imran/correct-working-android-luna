@@ -23,5 +23,7 @@
     <string name="text_just_now">Tout à l\' heure</string>
     <string name="text_cancel">Annuler</string>
     <string name="text_none">Aucun</string>
+    <string name="text_tracking_location">Emplacement de suivi...</string>
+    <string name="text_updating_location">Mise à jour de l\'emplacement...</string>
 
 </resources>
