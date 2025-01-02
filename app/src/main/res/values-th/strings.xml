@@ -1716,4 +1716,6 @@
     <string name="text_how_to_perform_a_value">จะดำเนินการ %1$s ได้อย่างไร?</string>
     <string name="text_nothing_here">ไม่มีอะไรที่นี่</string>
     <string name="text_things_to_ask_luna">เรื่องที่จะถามลูน่า</string>
+    <string name="text_diet_1">ถามสูตรหน่อยค่ะ.</string>
+    <string name="text_diet_2">ถามฉันเกี่ยวกับข้อมูลทางโภชนาการของอาหารจานใด ๆ</string>
 </resources>

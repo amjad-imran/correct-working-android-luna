@@ -1734,4 +1734,6 @@
     <string name="text_how_to_perform_a_value">¿Cómo realizar un %1$s?</string>
     <string name="text_nothing_here">Nada aquí</string>
     <string name="text_things_to_ask_luna">Cosas que preguntarle a luna</string>
+    <string name="text_diet_1">Pregúntame sobre alguna receta.</string>
+    <string name="text_diet_2">Pregúntame sobre información nutricional de cualquier plato.</string>
 </resources>

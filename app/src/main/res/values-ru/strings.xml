@@ -1731,4 +1731,6 @@
     <string name="text_how_to_perform_a_value">Как выполнить %1$s?</string>
     <string name="text_nothing_here">Здесь ничего</string>
     <string name="text_things_to_ask_luna">О чем спросить Луну</string>
+    <string name="text_diet_1">Спрашивайте меня о любых рецептах.</string>
+    <string name="text_diet_2">Спросите меня о пищевой ценности любого блюда.</string>
 </resources>

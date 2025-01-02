@@ -1732,4 +1732,6 @@
     <string name="text_how_to_perform_a_value">Hoe voer ik een %1$s uit?</string>
     <string name="text_nothing_here">Niets hier</string>
     <string name="text_things_to_ask_luna">Dingen om Luna te vragen</string>
+    <string name="text_diet_1">Vraag mij naar eventuele recepten.</string>
+    <string name="text_diet_2">Vraag mij naar voedingsinformatie van welk gerecht dan ook.</string>
 </resources>

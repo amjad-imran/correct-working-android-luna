@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,7 +30,7 @@ class AiMealPlanFragment :
 
     private val mealsAdapter: MealsAdapter by lazy {
         MealsAdapter(onMealSelected = { meal ->
-            val (frag, bundle) = ChatGptFragment.getStartData(
+           /* val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
                 null,
@@ -37,7 +38,7 @@ class AiMealPlanFragment :
                 AITopics.GENERAL,
                 meal
             )
-            navigate(frag, bundle)
+            navigate(frag, bundle)*/
         }, onEditClicked = {
             navigate(AiMealPlanFragmentDirections.actionAiMealPlanFragmentToChatGptFragment(
                 "",
@@ -71,6 +72,13 @@ class AiMealPlanFragment :
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
+        }
+
+        binding.ivMic.setOnClickListener {
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.DIET
+            )
+            navigate(frag, bundle)
         }
     }
 

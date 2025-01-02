@@ -135,6 +135,12 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
     }
 
     override fun initListener() {
+        binding.ivMic.setOnClickListener {
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.NONE
+            )
+            navigate(frag, bundle)
+        }
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY > 0) {
                 binding.imageGradientTop.visible()

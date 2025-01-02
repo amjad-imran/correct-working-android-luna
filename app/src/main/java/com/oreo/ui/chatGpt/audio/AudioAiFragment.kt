@@ -53,9 +53,16 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             args.text?.let {
                 binding.tvMessage.text = getString(R.string.text_how_to_perform_a_value, it)
             }
+        } else if (args.planType == PlanType.DIET) {
+            binding.tvAskLuna.visible()
+            val questions = arrayListOf(
+                getString(R.string.text_diet_1),
+                getString(R.string.text_diet_2)
+            )
+            binding.tvMessage.text = questions.random()
         }
 
-        if(args.planType!=PlanType.NONE){
+        if (args.planType != PlanType.NONE) {
             binding.ivCross.setImageResource(R.drawable.ic_toolbar_back_ai)
         }
 
@@ -124,7 +131,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
             if (viewModel.isAiReplying()) {
                 viewModel.interruptAi()
                 viewModel.audioAiState.postValue(AudioAiState.AI_TALKING_STOP)
-            }else{
+            } else {
                 if (viewModel.isMicOn) {
                     viewModel.audioAiState.postValue(AudioAiState.DEFAULT)
                     viewModel.stopRecording(false)
@@ -136,7 +143,11 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
 
         binding.ivTextChat.setOnClickListener {
-            navigate(AudioAiFragmentDirections.actionAudioAiFragmentToAiTopQuestionsFragment(AITopics.GENERAL))
+            navigate(
+                AudioAiFragmentDirections.actionAudioAiFragmentToAiTopQuestionsFragment(
+                    AITopics.GENERAL
+                )
+            )
         }
     }
 
@@ -153,6 +164,13 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     override fun subscribeObservers() {
+        viewModel.maxAmplitudeDebug.observe(this) {
+            binding.tvMessageTest.apply {
+                visible()
+                text = "Max Amplitude: $it"
+            }
+        }
+
         viewModel.audioAiState.observe(this) {
             when (it) {
                 AudioAiState.DEFAULT -> {
@@ -162,7 +180,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 }
 
                 AudioAiState.LISTENING -> {
-                    if(binding.tvAskLuna.isVisible.not()){
+                    if (binding.tvAskLuna.isVisible.not()) {
                         binding.tvMessage.text = getString(R.string.text_speak_now)
                     }
                     micStateOn()

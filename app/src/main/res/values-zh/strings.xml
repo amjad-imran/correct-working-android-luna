@@ -1730,4 +1730,6 @@
     <string name="text_how_to_perform_a_value">如何执行%1$s？</string>
     <string name="text_nothing_here">这里什么都没有</string>
     <string name="text_things_to_ask_luna">需要问露娜的事情</string>
+    <string name="text_diet_1">有什么食谱可以问我。</string>
+    <string name="text_diet_2">向我询问任何菜肴的营养信息。</string>
 </resources>
