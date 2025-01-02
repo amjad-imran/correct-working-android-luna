@@ -1728,4 +1728,14 @@
     <string name="text_things_to_ask_luna">Coisas para perguntar a Luna</string>
     <string name="text_diet_1">Pergunte-me sobre quaisquer receitas.</string>
     <string name="text_diet_2">Pergunte-me sobre informações nutricionais de qualquer prato.</string>
+    <string name="text_listening_dot">Audição...</string>
+    <string name="text_ai_header_2">Ótimo, mais uma vez</string>
+    <string name="text_ai_header_3">Incrível, uma última vez</string>
+    <string name="text_speak">Falar</string>
+    <string name="text_hello_luna">Olá, Lua</string>
+    <string name="text_tap_to_speak">Toque para falar</string>
+    <string name="text_personalize_luna">Personalizar Lua</string>
+    <string name="text_help_luna_understand_your_voice">Ajude Luna a entender sua voz</string>
+    <string name="text_press_the_button_below">Pressione o botão abaixo para começar</string>
+    <string name="text_you_re_all_set">Está tudo pronto!</string>
 </resources>

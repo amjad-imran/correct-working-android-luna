@@ -87,6 +87,7 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
         localDataStore.setCrossedCampaign(-1)
+        localDataStore.saveAudioMaxAmp(0)
 
         GlobalScope.launch(Dispatchers.IO) {
             removeOfflineUserData()

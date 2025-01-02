@@ -48,6 +48,15 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
         //binding.tvMessage.text = getString(R.string.text_setting_up)
 
+        if (viewModel.isCalibrated().not()) {
+            navigate(AudioAiFragmentDirections.actionAudioAiFragmentToAudioAiCalibrationFragment(
+                args.text
+            ).apply {
+                planType = args.planType
+            })
+            return
+        }
+
         if (args.planType == PlanType.WORKOUT) {
             binding.tvAskLuna.visible()
             args.text?.let {
@@ -122,6 +131,12 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
 
     override fun initListener() {
+        binding.tvMessageTest.setOnClickListener {
+            viewModel.localDataStore.saveAudioMaxAmp(0)
+            viewModel.cleanup()
+            navigateUpSafe()
+        }
+
         binding.ivCross.setOnClickListener {
             viewModel.cleanup()
             navigateUpSafe()
@@ -167,7 +182,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         viewModel.maxAmplitudeDebug.observe(this) {
             binding.tvMessageTest.apply {
                 visible()
-                text = "Max Amplitude: $it"
+                text = "Amplitude: $it\nAMPLITUDE_MAX - ${viewModel.AMPLITUDE_MAX}"
             }
         }
 

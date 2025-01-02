@@ -106,6 +106,7 @@ class AuthenticationRepositoryImpl(
             localDataSource.setIsWatchFaceRewardEarned(false)
             localDataSource.setLastWinsCount(-1)
             localDataSource.setCrossedCampaign(-1)
+            localDataSource.saveAudioMaxAmp(0)
             emit(true)
         }
     }

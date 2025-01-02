@@ -211,6 +211,7 @@ private const val FMR_CARD_LOCATION = "FMR_CARD_LOCATION"
 private const val CROSSED_CAMPAIGN_ID = "CROSSED_CAMPAIGN_ID"
 private const val APP_LANGUAGE = "APP_LANGUAGE"
 private const val HAS_SELECTED_LANGUAGE = "HAS_SELECTED_LANGUAGE"
+private const val MAX_AMP = "MAX_AMP"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -219,6 +220,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveAudioMaxAmp(calibrated: Int) {
+        mPrefs.edit()?.putInt(MAX_AMP, calibrated)?.commit()
+    }
+
+    override fun getAudioMaxAmp(): Int {
+        return mPrefs.getInt(MAX_AMP, 0)
+    }
 
     override fun saveSelectedAppLanguage(languageCode: String) {
         mPrefs.edit()?.putString(APP_LANGUAGE, languageCode)?.commit()

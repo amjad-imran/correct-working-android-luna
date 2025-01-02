@@ -1732,4 +1732,14 @@
     <string name="text_things_to_ask_luna">需要问露娜的事情</string>
     <string name="text_diet_1">有什么食谱可以问我。</string>
     <string name="text_diet_2">向我询问任何菜肴的营养信息。</string>
+    <string name="text_listening_dot">听...</string>
+    <string name="text_ai_header_2">太好了，再来一次</string>
+    <string name="text_ai_header_3">太棒了，最后一次</string>
+    <string name="text_speak">说话</string>
+    <string name="text_hello_luna">“你好，露娜”</string>
+    <string name="text_tap_to_speak">点击即可说话</string>
+    <string name="text_personalize_luna">个性化露娜</string>
+    <string name="text_help_luna_understand_your_voice">帮助露娜理解你的声音</string>
+    <string name="text_press_the_button_below">按下面的按钮开始</string>
+    <string name="text_you_re_all_set">一切就绪！</string>
 </resources>

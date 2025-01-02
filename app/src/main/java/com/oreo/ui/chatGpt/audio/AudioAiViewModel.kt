@@ -16,6 +16,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
@@ -45,13 +46,14 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioAiViewModel @Inject constructor(
     private val audioApiService: AudioApiService,
+    val localDataStore: DataStoredInterface,
     private val oreoDeviceRepository: OreoDeviceRepository,
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     var isMicOn: Boolean = false
 
-    private val AMPLITUDE_MAX = 600
+    var AMPLITUDE_MAX = 100
     private val SILENCE_DURATION: Long = 2000
     private val MAX_PEAK: Int = 3
 
@@ -80,6 +82,11 @@ class AudioAiViewModel @Inject constructor(
     val stringBuilder = StringBuilder()
     val textReceived = MutableLiveData<Event<Boolean>>()
     val maxAmplitudeDebug = MutableLiveData<Int>(0)
+
+    init {
+        AMPLITUDE_MAX = localDataStore.getAudioMaxAmp()
+    }
+
 
     /**
      * { "model": "gpt-4o-audio-preview", "modalities": ["text", "audio"], "audio": { "voice": "alloy", "format": "pcm16" }, "messages": [ { "role": "user", "content": [ { "type": "text", "text": "Answer this recording" }, {"type": "input_audio", "input_audio": { "data": "$base64String", "format": "wav"}}]}], "stream": true}
@@ -155,6 +162,10 @@ class AudioAiViewModel @Inject constructor(
                 sendMessage(resourcesProvider.getString(R.string.text_something_went_wrong))
             }
         }
+    }
+
+    fun isCalibrated(): Boolean {
+        return localDataStore.getAudioMaxAmp() != 0
     }
 
     private fun initializeAudioTrack() {
@@ -397,6 +408,10 @@ class AudioAiViewModel @Inject constructor(
             audioTrack?.stop()
         }
         audioTrack?.release()
+        job?.cancel()
+        viewModelScope.launch(Dispatchers.IO) {
+            inputStream?.close()
+        }
     }
 
     fun getCredentials() {

@@ -1733,4 +1733,14 @@
     <string name="text_things_to_ask_luna">О чем спросить Луну</string>
     <string name="text_diet_1">Спрашивайте меня о любых рецептах.</string>
     <string name="text_diet_2">Спросите меня о пищевой ценности любого блюда.</string>
+    <string name="text_listening_dot">Слушаю...</string>
+    <string name="text_ai_header_2">Отлично, еще раз</string>
+    <string name="text_ai_header_3">Удивительно, в последний раз</string>
+    <string name="text_speak">Говорить</string>
+    <string name="text_hello_luna">«Привет, Луна»</string>
+    <string name="text_tap_to_speak">Нажмите, чтобы говорить</string>
+    <string name="text_personalize_luna">Персонализируйте Луну</string>
+    <string name="text_help_luna_understand_your_voice">Помогите Луне понять ваш голос</string>
+    <string name="text_press_the_button_below">Нажмите кнопку ниже, чтобы начать</string>
+    <string name="text_you_re_all_set">Все готово!</string>
 </resources>

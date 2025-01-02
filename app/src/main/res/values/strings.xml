@@ -1762,5 +1762,15 @@
     <string name="text_things_to_ask_luna">Things to ask luna</string>
     <string name="text_diet_1">Ask me about any recipes.</string>
     <string name="text_diet_2">Ask me about nutritional information of any dish.</string>
+    <string name="text_listening_dot">Listening...</string>
+    <string name="text_ai_header_2">Great, one more time</string>
+    <string name="text_ai_header_3">Amazing, one last time</string>
+    <string name="text_speak">Speak</string>
+    <string name="text_hello_luna">\"Hello, Luna\"</string>
+    <string name="text_tap_to_speak">Tap to speak</string>
+    <string name="text_personalize_luna">Personalize Luna</string>
+    <string name="text_help_luna_understand_your_voice">Help Luna understand your voice</string>
+    <string name="text_press_the_button_below">Press the button below to get started</string>
+    <string name="text_you_re_all_set">You’re all set!</string>
 
 </resources>

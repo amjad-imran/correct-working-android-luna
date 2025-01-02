@@ -1734,4 +1734,14 @@
     <string name="text_things_to_ask_luna">Dingen om Luna te vragen</string>
     <string name="text_diet_1">Vraag mij naar eventuele recepten.</string>
     <string name="text_diet_2">Vraag mij naar voedingsinformatie van welk gerecht dan ook.</string>
+    <string name="text_listening_dot">Luisteren...</string>
+    <string name="text_ai_header_2">Geweldig, nog een keer</string>
+    <string name="text_ai_header_3">Geweldig, nog een laatste keer</string>
+    <string name="text_speak">Spreken</string>
+    <string name="text_hello_luna">Hallo, Luna</string>
+    <string name="text_tap_to_speak">Tik om te spreken</string>
+    <string name="text_personalize_luna">Personaliseer Luna</string>
+    <string name="text_help_luna_understand_your_voice">Help Luna je stem te begrijpen</string>
+    <string name="text_press_the_button_below">Druk op de onderstaande knop om te beginnen</string>
+    <string name="text_you_re_all_set">Je bent helemaal klaar!</string>
 </resources>

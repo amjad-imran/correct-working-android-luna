@@ -1730,4 +1730,14 @@
     <string name="text_things_to_ask_luna">Choses à demander à Luna</string>
     <string name="text_diet_1">Demandez-moi des recettes.</string>
     <string name="text_diet_2">Demandez-moi des informations nutritionnelles sur n’importe quel plat.</string>
+    <string name="text_listening_dot">Écoute...</string>
+    <string name="text_ai_header_2">Super, encore une fois</string>
+    <string name="text_ai_header_3">Incroyable, une dernière fois</string>
+    <string name="text_speak">Parler</string>
+    <string name="text_hello_luna">Bonjour, Luna</string>
+    <string name="text_tap_to_speak">Appuyez pour parler</string>
+    <string name="text_personalize_luna">Personnalisez Luna</string>
+    <string name="text_help_luna_understand_your_voice">Aide Luna à comprendre ta voix</string>
+    <string name="text_press_the_button_below">Appuyez sur le bouton ci-dessous pour commencer</string>
+    <string name="text_you_re_all_set">Vous êtes prêt !</string>
 </resources>

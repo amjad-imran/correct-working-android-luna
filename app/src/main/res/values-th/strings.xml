@@ -1718,4 +1718,14 @@
     <string name="text_things_to_ask_luna">เรื่องที่จะถามลูน่า</string>
     <string name="text_diet_1">ถามสูตรหน่อยค่ะ.</string>
     <string name="text_diet_2">ถามฉันเกี่ยวกับข้อมูลทางโภชนาการของอาหารจานใด ๆ</string>
+    <string name="text_listening_dot">การฟัง...</string>
+    <string name="text_ai_header_2">เยี่ยมเลย อีกครั้งหนึ่ง</string>
+    <string name="text_ai_header_3">น่าทึ่งอีกครั้งหนึ่ง</string>
+    <string name="text_speak">พูด</string>
+    <string name="text_hello_luna">“สวัสดีลูน่า”</string>
+    <string name="text_tap_to_speak">แตะเพื่อพูด</string>
+    <string name="text_personalize_luna">ปรับแต่งลูน่า</string>
+    <string name="text_help_luna_understand_your_voice">ช่วยให้ลูน่าเข้าใจเสียงของคุณ</string>
+    <string name="text_press_the_button_below">กดปุ่มด้านล่างเพื่อเริ่มต้น</string>
+    <string name="text_you_re_all_set">คุณพร้อมแล้ว!</string>
 </resources>

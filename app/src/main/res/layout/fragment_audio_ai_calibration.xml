@@ -1,0 +1,160 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context="com.oreo.ui.chatGpt.audio.AudioAiCalibrationFragment">
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivCross"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_toolbar_cross_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView62"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_luna_ai_logo"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCross" />
+
+    <TextView
+        android:id="@+id/tvHeader"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:gravity="center"
+        android:textColor="#B3FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/tvMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/videoView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView62"
+        app:layout_constraintVertical_bias="0.19999999"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Personalize Luna" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        style="@style/S24"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeader"
+        tools:text="Personalizing Luna\nfor you..." />
+
+    <TextView
+        android:id="@+id/tvListening"
+        style="@style/S16"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="26dp"
+        android:gravity="center"
+        android:text="@string/text_listening_dot"
+        android:textColor="#99FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/ivStart"
+        app:layout_constraintEnd_toEndOf="@+id/ivStart"
+        app:layout_constraintStart_toStartOf="@+id/ivStart"
+        tools:visibility="visible" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivAllSet"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="76dp"
+        android:background="#26FFFFFF"
+        android:src="@drawable/ic_ai_all_set"
+        android:visibility="invisible"
+        app:contentPadding="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+        tools:visibility="visible" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivStart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="76dp"
+        android:background="#26FFFFFF"
+        android:src="@drawable/ic_ai_mic"
+        android:visibility="invisible"
+        app:contentPadding="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+        tools:visibility="visible" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBarRecording"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:indeterminate="false"
+        android:padding="0dp"
+        android:progress="30"
+        android:visibility="gone"
+        app:indicatorColor="@color/white"
+        app:indicatorSize="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivStart"
+        app:layout_constraintEnd_toEndOf="@+id/ivStart"
+        app:layout_constraintStart_toStartOf="@+id/ivStart"
+        app:layout_constraintTop_toTopOf="@+id/ivStart"
+        app:trackColor="#1effffff"
+        app:trackThickness="4dp"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/lytBottomChecks"
+        layout="@layout/layout_calibration_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
