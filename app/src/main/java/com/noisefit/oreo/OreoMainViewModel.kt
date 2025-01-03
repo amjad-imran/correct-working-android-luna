@@ -548,14 +548,22 @@ constructor(
         val dayData = _readinessHistoryResponse.value?.firstOrNull() {
             it.date.equals(selectedDate, false)
         }
+
+        val healthTrend = _sleepHistoryResponse.value?.firstOrNull() {
+            it.date.equals(selectedDate, false)
+        }?.healthTrend
         if (dayData != null) {
-            _dayReadinessData.postValue(dayData)
+            _dayReadinessData.postValue(dayData.apply {
+                this.healthTrend = healthTrend
+            })
         } else {
             _readinessHistoryResponse.value?.lastOrNull()?.let { data ->
                 LOGS.w("moveToPosition selected Date new $selectedDate")
                 returnSelectedDate = data.date
                 LOGS.w("moveToPosition selected Date new set $selectedDate")
-                _dayReadinessData.postValue(data)
+                _dayReadinessData.postValue(data.apply {
+                    this.healthTrend = healthTrend
+                })
             }
         }
         return returnSelectedDate

@@ -17,8 +17,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
-import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -37,10 +35,9 @@ import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.UnitDataModelArrayFloat
+import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.chatGpt.AITopics
-import com.oreo.ui.chatGpt.ChatGptFragment
-import com.oreo.ui.custom.LineChartAction
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
 import com.oreo.ui.custom.ScrollListener
@@ -183,7 +180,10 @@ class OreoReadinessFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
-                            navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.READINESS))
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.READINESS)
+                            )
                         }
                     }
                 )
@@ -797,6 +797,73 @@ class OreoReadinessFragment :
 
     }
 
+    private fun setHealthMonitor(healthTrend: HealthTrend?) {
+        val hasHealthData = mViewModel.hasHealthData(healthTrend)
+
+        healthTrend?.apply {
+
+            binding.lytHealthMonitor.tvNudge.visible()
+            binding.lytHealthMonitor.tvNudge.text = nudge
+
+            if (!bloodOxy?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvSpo2.setImageResource(
+                    mViewModel.getHealthTrendIcon(
+                        bloodOxy?.status
+                    )
+                )
+            } else {
+                binding.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!hrv?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvHrv.setImageResource(mViewModel.getHealthTrendIcon(hrv?.status))
+            } else {
+                binding.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!rhr?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvRHR.setImageResource(mViewModel.getHealthTrendIcon(rhr?.status))
+            } else {
+                binding.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!skinTemp?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvSkin.setImageResource(
+                    mViewModel.getHealthTrendIcon(
+                        skinTemp?.status
+                    )
+                )
+            } else {
+                binding.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+            }
+
+            if (!resp?.status.isNullOrEmpty()) {
+                binding.lytHealthMonitor.imvResp.setImageResource(mViewModel.getHealthTrendIcon(resp?.status))
+            } else {
+                binding.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
+            }
+        }
+
+        if (hasHealthData.not()) {
+            binding.lytHealthMonitor.apply {
+                imvResp.setImageResource(R.drawable.ic_hm_check_default)
+                imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+                imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+                imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+                imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+                tvNudge.visible()
+                tvNudge.text = getString(R.string.text_no_data_so_far)
+            }
+        }
+
+        binding.lytHealthMonitor.root.setOnClickListener {
+            navigate(R.id.healthMonitorInternal, Bundle().apply {
+                this.putParcelable("healthTrend", healthTrend)
+                this.putString("selectedDate", mainViewModel.selectedDate)
+            })
+        }
+    }
+
     private fun setReadinessScore(readinessData: CommonDataModel) {
         binding.lytRScoreData.lytScore.tvValue.text =
             readinessData.value.toString()
@@ -826,6 +893,8 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec4.tvTitle.text = getString(R.string.text_respiratory_rate)
 
         setReadinessBannerViewPager(it.nudges)
+
+        setHealthMonitor(it.healthTrend)
 
         //readiness score
         if (it.readinessScore != null) {

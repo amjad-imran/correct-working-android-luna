@@ -133,13 +133,35 @@
                         app:layout_constraintTop_toBottomOf="@+id/divider11" />
 
                     <include
+                        android:id="@+id/divider12"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytRContributor" />
+
+
+                    <include
+                        android:id="@+id/lytHealthMonitor"
+                        layout="@layout/layout_sleep_health_monitor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider12"
+                        android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="@dimen/side_margin" />
+
+
+                    <include
                         android:id="@+id/divider3"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:visibility="gone"
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
-                        app:layout_constraintTop_toBottomOf="@id/lytRContributor" />
+                        app:layout_constraintTop_toBottomOf="@id/lytHealthMonitor" />
 
                     <include
                         android:id="@+id/lytHeartRate"

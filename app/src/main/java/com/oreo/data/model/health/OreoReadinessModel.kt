@@ -1,6 +1,7 @@
 package com.oreo.data.model.health
 
 import com.google.gson.annotations.SerializedName
+import com.oreo.data.model.sleep.HealthTrend
 
 data class OreoReadinessModel(
     val date: String,//YYYY-MM-DD,
@@ -8,6 +9,8 @@ data class OreoReadinessModel(
     val end_time: String,//YYYY-MM-DD,
 
     @SerializedName("total_score_impact") val totalScoreImpact: Int? = null,
+
+    var healthTrend: HealthTrend?=null,
 
 
     @SerializedName("readiness_score")

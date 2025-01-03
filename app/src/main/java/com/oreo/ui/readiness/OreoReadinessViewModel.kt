@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.Contributor
+import com.oreo.data.model.sleep.HealthTrend
 
 
 @HiltViewModel
@@ -881,5 +882,28 @@ constructor(
 
     }
 
+    fun hasHealthData(healthTrend: HealthTrend?): Boolean {
+        if (healthTrend == null) return false
+        return !(healthTrend.resp?.status.isNullOrEmpty() &&
+                healthTrend.rhr?.status.isNullOrEmpty() &&
+                healthTrend.bloodOxy?.status.isNullOrEmpty() &&
+                healthTrend.hrv?.status.isNullOrEmpty() &&
+                healthTrend.skinTemp?.status.isNullOrEmpty())
 
+    }
+
+    fun getHealthTrendIcon(status: String?): Int {
+        val drawable: Int = if (status.equals("warning", true)) {
+            R.drawable.ic_health_warning
+        } else if (status.equals("good", true)) {
+            R.drawable.ic_health_good
+        } else if (status.equals("optimal", true)) {
+            R.drawable.ic_health_optimal
+        } else if (status.equals("calibrating", true)) {
+            R.drawable.ic_hm_check_default
+        } else {
+            R.drawable.ic_health_good
+        }
+        return drawable
+    }
 }
