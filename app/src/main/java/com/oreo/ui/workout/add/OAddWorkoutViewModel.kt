@@ -583,4 +583,16 @@ class OAddWorkoutViewModel
         return dates.reversed().toTypedArray()
 
     }
+
+    fun getTranslatedIntensity(intensity: String): String {
+        return if(intensity.equals("easy",true)){
+            resourcesProvider.getString(R.string.text_easy)
+        }else if(intensity.equals("moderate",true)){
+            resourcesProvider.getString(R.string.text_easy)
+        }else if(intensity.equals("hard",true)){
+            resourcesProvider.getString(R.string.text_easy)
+        }else{
+            ""
+        }
+    }
 }

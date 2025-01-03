@@ -475,7 +475,7 @@ class OAddWorkoutFragment :
             intensity = viewModel.addWorkout.intensity
             enableSaveBtn()
         }
-        binding.lytIntensity.lytItem.tvTimeValue.text = intensity
+        binding.lytIntensity.lytItem.tvTimeValue.text = viewModel.getTranslatedIntensity(intensity)
     }
 
     private fun setDate() {

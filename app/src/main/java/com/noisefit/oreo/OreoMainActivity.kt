@@ -906,6 +906,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private val navListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
+
             when (destination.id) {
                 R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts, R.id.sleepDashFragment,
