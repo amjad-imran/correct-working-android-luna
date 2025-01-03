@@ -97,6 +97,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         videoView.setVideoURI(uri)
         videoView.stopPlayback()
         videoView.setOnPreparedListener { it.isLooping = true }
+        videoView.start()
     }
 
 
@@ -115,6 +116,11 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         } else {
             micPermissionResult.launch(Manifest.permission.RECORD_AUDIO)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setVideo()
     }
 
     private val micPermissionResult = registerForActivityResult(
