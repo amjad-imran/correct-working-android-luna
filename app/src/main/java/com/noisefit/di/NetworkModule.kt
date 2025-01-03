@@ -12,7 +12,6 @@ import com.noisefit.data.remote.NetworkConstants
 import com.noisefit.data.remote.abstraction.*
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -52,17 +51,6 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TokenRefreshApi::class.java)
-    }
-
-
-    @Singleton
-    @Provides
-    fun buildAudioApi(@Named("AudioClient") client: OkHttpClient): AudioApiService {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL_NEW)
-            .client(client)
-            .build()
-            .create(AudioApiService::class.java)
     }
 
     @Named("AudioClient")
