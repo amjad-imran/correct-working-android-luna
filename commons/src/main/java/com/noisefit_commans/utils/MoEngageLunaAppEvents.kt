@@ -2,6 +2,21 @@ package com.noisefit_commans.utils
 
 object MoEngageLunaAppEvents {
 
+
+    /**
+     * AI Events start =========================
+     */
+    const val home_footer_lunaai = "home_footer_lunaai"
+    const val home_lunaai_daily_digest_plan = "home_lunaai_daily_digest_plan"
+    const val home_lunaai_workout_plan = "home_lunaai_workout_plan"
+    const val home_lunaai_nutrition_plan = "home_lunaai_nutrition_plan"
+    const val Home_lunaai_suggested_question = "home_lunaai_suggested_question"
+    const val Home_lunaai_mic_button = "home_lunaai_mic_button"
+
+    /**
+     * AI Events End =========================
+     */
+
     const val luna_homepage_visit = "luna_homepage_visit"
     const val luna_activity_sync_manual = "luna_activity_sync_manual"
     const val luna_hamburger_click = "luna_hamburger_click"

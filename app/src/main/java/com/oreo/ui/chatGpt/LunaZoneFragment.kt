@@ -22,6 +22,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -40,6 +42,13 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
     private val suggestionsAdapter: SuggestedQuestionAdapter by lazy {
         SuggestedQuestionAdapter(onQuestionClicked = {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.Home_lunaai_suggested_question,
+                HashMap<String, Any>().apply {
+                    this["question"] = it.ques ?: ""
+                }
+            )
+
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
@@ -72,9 +81,9 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             setVideo()
 
 
-           /* val layoutParamNoData = binding.lytNoData.root.layoutParams
-            layoutParamNoData.height = (height.toFloat() * 0.65).roundToInt()
-            binding.lytNoData.root.layoutParams = layoutParams*/
+            /* val layoutParamNoData = binding.lytNoData.root.layoutParams
+             layoutParamNoData.height = (height.toFloat() * 0.65).roundToInt()
+             binding.lytNoData.root.layoutParams = layoutParams*/
 
             /*val layoutParamNoDevice = binding.lytNoDevice.root.layoutParams
             layoutParamNoDevice.height = (height.toFloat() * 0.65).roundToInt()
@@ -136,6 +145,8 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
     override fun initListener() {
         binding.ivMic.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.Home_lunaai_mic_button)
+
             val (frag, bundle) = AudioAiFragment.getStartData(
                 PlanType.NONE
             )
@@ -163,11 +174,14 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         }
 
         binding.lytDailySummaryAvailable.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_daily_digest_plan)
             navigate(R.id.aiSummaryFragment)
         }
         binding.lytPlans.lytWorkoutPlan.root.setOnClickListener {
             val workoutSetup = viewModel.planState.value?.first ?: false
             if (workoutSetup) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_workout_plan)
+
                 navigate(R.id.workoutPlansFragment)
 
             } else {
@@ -185,6 +199,8 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         binding.lytPlans.lytMealPlan.root.setOnClickListener {
             val mealSetup = viewModel.planState.value?.second ?: false
             if (mealSetup) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_nutrition_plan)
+
                 navigate(R.id.aiMealPlanFragment)
             } else {
                 val (frag, bundle) = ChatGptFragment.getStartData(
@@ -254,7 +270,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
             var state = it
 
-            if(mainViewModel.syncTextState.value.isNullOrEmpty().not()){
+            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()) {
                 state = SummaryStates.GENERATING
             }
             when (state) {
@@ -310,7 +326,7 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                     binding.lytNoData.root.gone()
                 }
 
-                SummaryStates.NONE,null -> {
+                SummaryStates.NONE, null -> {
                     binding.lytNoDevice.root.gone()
                     binding.lytDailySummaryAvailable.root.gone()
                     binding.lytNoData.root.gone()

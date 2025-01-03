@@ -1146,6 +1146,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_lunaZoneFragment) {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_footer_lunaai)
                     navController?.popBackStack(R.id.navigation_lunaZoneFragment, true)
                     navController?.navigate(R.id.navigation_lunaZoneFragment)
                 }

@@ -3,6 +3,7 @@ package com.oreo.ui.chatGpt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LunaZoneViewModel @Inject constructor(
+    val sessionManager: SessionManager,
     private val deviceRepository: OreoDeviceRepository,
     private val ringDataStore: RingDataStore
 ) : BaseViewModel() {
