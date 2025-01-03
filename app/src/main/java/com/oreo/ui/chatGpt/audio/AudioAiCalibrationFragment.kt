@@ -25,7 +25,7 @@ class AudioAiCalibrationFragment :
     BaseFragment<FragmentAudioAiCalibrationBinding>(FragmentAudioAiCalibrationBinding::inflate) {
 
     private val viewModel: AudioCalibrationViewModel by viewModels()
-    val args: AudioAiFragmentArgs by navArgs()
+    val args: AudioAiCalibrationFragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

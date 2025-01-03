@@ -10,7 +10,6 @@ import com.google.gson.Gson
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
-import com.noisefit.data.remote.abstraction.AudioApiService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -46,7 +45,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AudioAiViewModel @Inject constructor(
-    private val audioApiService: AudioApiService,
     val localDataStore: DataStoredInterface,
     private val oreoDeviceRepository: OreoDeviceRepository,
     private val resourcesProvider: ResourcesProvider
