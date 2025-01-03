@@ -179,12 +179,12 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     }
 
     override fun subscribeObservers() {
-        viewModel.maxAmplitudeDebug.observe(this) {
+       /* viewModel.maxAmplitudeDebug.observe(this) {
             binding.tvMessageTest.apply {
                 visible()
                 text = "Amplitude: $it\nAMPLITUDE_MAX - ${viewModel.AMPLITUDE_MAX}"
             }
-        }
+        }*/
 
         viewModel.audioAiState.observe(this) {
             when (it) {
@@ -222,12 +222,12 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
 
 
-        viewModel.textReceived.observe(this) {
+       /* viewModel.textReceived.observe(this) {
 
             it.getContent()?.let {
                 binding.tvMessageTest.text = viewModel.stringBuilder.toString()
             }
-        }
+        }*/
 
         viewModel.onCredentialsReceived.observe(this) {
             it.getContent()?.let {
