@@ -7,12 +7,14 @@ import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -21,6 +23,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.ChatCompletionResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.util.audiorecorder.RecorderState
 import com.oreo.util.audiorecorder.WaveRecorder
@@ -42,6 +45,8 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
+private inline fun <reified T> Gson.fromJson(json: String) =
+    fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 @HiltViewModel
 class AudioAiViewModel @Inject constructor(
@@ -149,8 +154,7 @@ class AudioAiViewModel @Inject constructor(
                     inputStream = response.body?.byteStream()
 
                     processStreamingResponse(
-                        inputStream,
-                        ChatCompletionResponse::class.java
+                        inputStream
                     )
                 } else {
                     sendMessage(resourcesProvider.getString(R.string.text_something_went_wrong))
@@ -195,7 +199,7 @@ class AudioAiViewModel @Inject constructor(
 
     }
 
-    private fun processStreamingResponse(inputStream: InputStream?, responseType: Class<*>?) {
+    private fun processStreamingResponse(inputStream: InputStream?) {
         val gson = Gson()
         try {
             stringBuilder.clear()
@@ -217,9 +221,14 @@ class AudioAiViewModel @Inject constructor(
                         if (line.isNotEmpty()) {
                             val subString = line.substring(line.indexOf("data:") + 5).trim()
                             val response =
-                                gson.fromJson<ChatCompletionResponse>(subString, responseType)
+                                gson.fromJson<ChatCompletionResponse>(subString)
 
-                            val audioData = response.choices?.get(0)?.delta?.audio?.data
+                            val audioData = try {
+                                response.choices?.get(0)?.delta?.audio?.data
+                            }catch (exp:Exception){
+                                null
+                            }
+
                             //val transcript = response.choices?.get(0)?.delta?.audio?.transcript
 
                             /*if (transcript.isNullOrEmpty().not()) {
