@@ -29,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -67,6 +68,7 @@ class AudioAiViewModel @Inject constructor(
     private var audioTrack: AudioTrack? = null
     private var inputStream: InputStream? = null
     private var job: Job? = null
+    private var requestCall: Call? = null
     private var peakCount = 0
     private var lastSoundTime: Long = System.currentTimeMillis()
     private var lastFile: File? = null
@@ -109,7 +111,6 @@ class AudioAiViewModel @Inject constructor(
             }
             inputStream?.close()
 
-
             val client = OkHttpClient.Builder()
                 .apply {
                     if (BuildConfig.DEBUG) {
@@ -142,7 +143,8 @@ class AudioAiViewModel @Inject constructor(
                 .build()
 
             try {
-                val response = client.newCall(request).execute()
+                requestCall = client.newCall(request)
+                val response = requestCall!!.execute()
 
                 if (response.isSuccessful) {
 
@@ -220,7 +222,7 @@ class AudioAiViewModel @Inject constructor(
                                 gson.fromJson<ChatCompletionResponse>(subString, responseType)
 
                             val audioData = response.choices?.get(0)?.delta?.audio?.data
-                            val transcript = response.choices?.get(0)?.delta?.audio?.transcript
+                            //val transcript = response.choices?.get(0)?.delta?.audio?.transcript
 
                             /*if (transcript.isNullOrEmpty().not()) {
                                 stringBuilder.append(transcript)
@@ -310,7 +312,7 @@ class AudioAiViewModel @Inject constructor(
     }
 
 
-    fun startNewRecording() {
+    fun startNewRecording(showLoading: Boolean) {
         LOGS.d("VOICE_RECORDER - Start New Recording")
 
         isRecording = true
@@ -328,6 +330,9 @@ class AudioAiViewModel @Inject constructor(
         }
 
         lastFile = File(audioFolder, fileName)
+        if (showLoading) {
+            setLoading(true)
+        }
 
         waveRecorder = WaveRecorder(filePath = lastFile!!.absolutePath).apply {
             //silenceDetection = true
@@ -339,6 +344,7 @@ class AudioAiViewModel @Inject constructor(
                 LOGS.d("VOICE_RECORDER  ${it.name}")
                 when (it) {
                     RecorderState.RECORDING -> {
+                        setLoading(false)
                         audioAiState.postValue(AudioAiState.LISTENING)
                     }
 
@@ -364,7 +370,7 @@ class AudioAiViewModel @Inject constructor(
                     lastSoundTime = currentTime
 
                     waveRecorder?.stopRecording(peakCount < MAX_PEAK)
-                    startNewRecording()
+                    startNewRecording(false)
                 }
             } else {
                 lastSoundTime = currentTime
@@ -409,6 +415,7 @@ class AudioAiViewModel @Inject constructor(
         }
         audioTrack?.release()
         job?.cancel()
+        requestCall?.cancel()
         viewModelScope.launch(Dispatchers.IO) {
             inputStream?.close()
         }
@@ -462,6 +469,7 @@ class AudioAiViewModel @Inject constructor(
             audioTrack?.stop()
         }
         audioTrack?.release()
+        requestCall?.cancel()
         viewModelScope.launch(Dispatchers.IO) {
             inputStream?.close()
         }

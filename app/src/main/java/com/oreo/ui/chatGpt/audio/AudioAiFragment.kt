@@ -128,7 +128,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     ) {
         if (it) {
             binding.ivMic.visible()
-            viewModel.startNewRecording()
+            viewModel.startNewRecording(true)
         } else {
             context.showShortToast("Permission Required")
             navigateUpSafe()
@@ -158,7 +158,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     viewModel.stopRecording(false)
                     viewModel.sendRecordingToServer()
                 } else {
-                    viewModel.startNewRecording()
+                    viewModel.startNewRecording(true)
                 }
             }
         }
@@ -222,7 +222,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 }
 
                 AudioAiState.AI_TALKING_STOP -> {
-                    viewModel.startNewRecording()
+                    viewModel.startNewRecording(false)
                 }
             }
         }
@@ -240,7 +240,7 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 //binding.tvMessage.text = ""
                 checkMicrophonePermission {
                     binding.ivMic.visible()
-                    viewModel.startNewRecording()
+                    viewModel.startNewRecording(true)
                 }
             }
         }
@@ -268,11 +268,11 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
 
         viewModel.getLoading().observe(this) {
-            /* if (it) {
+             if (it) {
                  binding.progressBar.root.visible()
              } else {
                  binding.progressBar.root.gone()
-             }*/
+             }
         }
     }
 }
