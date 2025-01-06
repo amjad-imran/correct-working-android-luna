@@ -3,6 +3,7 @@ package com.noisefit.data.remote.abstraction
 import com.google.gson.JsonObject
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
+import com.noisefit.data.model.GoalModel
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.oreo.data.model.RingLocationData
@@ -163,6 +164,11 @@ interface NetworkService {
     suspend fun updateUserProfile(
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<User>
+
+    @GET
+    suspend fun getUserGoalsList(
+        @Url url: String
+    ): BaseApiResponseData<List<GoalModel>>
 
     @GET
     suspend fun getUserProfile(@Url url: String): UserResponse

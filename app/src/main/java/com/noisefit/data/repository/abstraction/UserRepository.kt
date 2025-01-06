@@ -2,6 +2,7 @@ package com.noisefit.data.repository.abstraction
 
 import android.net.Uri
 import com.google.gson.JsonObject
+import com.noisefit.data.model.GoalModel
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -25,6 +26,8 @@ interface UserRepository {
     suspend fun updatePushToken(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
 
     suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>>
+
+    suspend fun getUserGoalsList(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<GoalModel>>>>
 
     suspend fun uploadUserImage(imageUri: Uri): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseImage>>
 

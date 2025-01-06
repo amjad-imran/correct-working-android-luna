@@ -36,7 +36,7 @@ class OnBoardHeightFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_height_page_visit)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 80
+            pgBr.progress = viewModel.getProgress(4)
             tvCount.text = getString(R.string.text_4)
         }
 

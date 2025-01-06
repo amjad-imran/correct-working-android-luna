@@ -24,7 +24,7 @@ class OnBoardGenderFragment :
 
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_gender_page_visit)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 60
+            pgBr.progress = viewModel.getProgress(3)
             tvCount.text = getString(R.string.text_3)
         }
 

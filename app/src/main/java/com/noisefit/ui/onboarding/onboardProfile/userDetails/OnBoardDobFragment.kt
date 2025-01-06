@@ -23,7 +23,7 @@ class OnBoardDobFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_age_page_visit)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 40
+            pgBr.progress = viewModel.getProgress(2)
             tvCount.text = getString(R.string.text_2)
         }
 

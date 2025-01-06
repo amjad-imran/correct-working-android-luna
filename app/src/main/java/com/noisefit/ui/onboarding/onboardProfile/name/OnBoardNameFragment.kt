@@ -33,7 +33,7 @@ class OnBoardNameFragment :
 //        }
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_name_page)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 20
+            pgBr.progress = viewModel.getProgress(1)
             tvCount.text = getString(R.string.text_1)
         }
 

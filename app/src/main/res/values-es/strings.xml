@@ -1746,4 +1746,7 @@
     <string name="text_help_luna_understand_your_voice">Ayuda a Luna a entender tu voz</string>
     <string name="text_press_the_button_below">Presione el botón a continuación para comenzar</string>
     <string name="text_you_re_all_set">¡Ya estás listo!</string>
+    <string name="text_how_do_you_intend_to_use_luna">¿Cómo piensas utilizar Luna?</string>
+    <string name="text_please_select_all_that_apply">Por favor seleccione todo lo que corresponda</string>
+    <string name="text_type_here_dot">Escribe aquí..</string>
 </resources>

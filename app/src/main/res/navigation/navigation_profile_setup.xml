@@ -33,6 +33,10 @@
         android:id="@+id/onBoardWeightFragment"
         android:name="com.noisefit.ui.onboarding.onboardProfile.userDetails.OnBoardWeightFragment"
         android:label="OnBoardWeightFragment" />
+    <fragment
+        android:id="@+id/onBoardGoalFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.goal.OnBoardGoalFragment"
+        android:label="OnBoardGoalFragment" />
 
 
 </navigation>

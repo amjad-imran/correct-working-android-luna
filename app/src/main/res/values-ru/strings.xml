@@ -1743,4 +1743,7 @@
     <string name="text_help_luna_understand_your_voice">Помогите Луне понять ваш голос</string>
     <string name="text_press_the_button_below">Нажмите кнопку ниже, чтобы начать</string>
     <string name="text_you_re_all_set">Все готово!</string>
+    <string name="text_how_do_you_intend_to_use_luna">Как вы собираетесь использовать Луну?</string>
+    <string name="text_please_select_all_that_apply">Пожалуйста, выберите все подходящие</string>
+    <string name="text_type_here_dot">Введите сюда..</string>
 </resources>

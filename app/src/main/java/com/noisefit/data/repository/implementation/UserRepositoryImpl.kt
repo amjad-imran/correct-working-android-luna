@@ -6,6 +6,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
+import com.noisefit.data.model.GoalModel
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -123,6 +124,13 @@ class UserRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/user_detail/profile/update"
             remoteDataSource.updateUserProfile(url, request)
+        }
+    }
+
+    override suspend fun getUserGoalsList(): Flow<Resource<BaseApiResponseData<List<GoalModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/ring/intent/list"
+            remoteDataSource.getUserGoalsList(url)
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.model.GoalModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
@@ -97,6 +98,11 @@ class SetupProfileViewModel
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
+
+    var goalOtherSelected = false
+    var selectedGoalsKeys = ArrayList<String>()
+    var goalOtherText: String = ""
+
     private val _successMessage = MutableLiveData<Event<Boolean>>()
     var successMessage = _successMessage
 
@@ -120,6 +126,9 @@ class SetupProfileViewModel
 
     private val _endGame = MutableLiveData<EndGame?>()
     var endGame = _endGame
+
+    var goalsList = MutableLiveData<List<GoalModel>>()
+        private set
 
     var selectedInterests = ArrayList<Int>()
 
@@ -314,6 +323,14 @@ class SetupProfileViewModel
             heightInCm = it.height
             weightInKg = it.weight
         }
+        resetGoalsData()
+    }
+
+    fun resetGoalsData(){
+        goalOtherSelected = false
+        goalOtherText = ""
+        selectedGoalsKeys.clear()
+        goalsList.value = ArrayList()
     }
 
     fun getDob(): String {
@@ -692,13 +709,27 @@ class SetupProfileViewModel
             }
         })
 
+        userObject.add("intent", JsonArray().apply {
+            selectedGoalsKeys.forEach {
+                this.add(JsonObject().apply {
+                    addProperty("key", it)
+                    addProperty("val", "")
+                })
+            }
+            if(goalOtherSelected && goalOtherText.isNotEmpty()){
+                this.add(JsonObject().apply {
+                    addProperty("key", "other")
+                    addProperty("val", goalOtherText)
+                })
+            }
+        })
+
         return userObject
 
 
     }
 
     fun updateUserProfile() {
-
         viewModelScope.launch {
             userRepository.updateUserProfile(createUserUpdateRequest()).collect { resource ->
                 when (resource) {
@@ -964,5 +995,51 @@ class SetupProfileViewModel
 
     }
 
+
+    fun getProgress(pos: Int): Int {
+        val pageSize = 6
+        val progress = 100.0f / pageSize
+        return (pos * progress).roundToInt()
+    }
+
+    fun getUserGoalsList() {
+        viewModelScope.launch {
+            userRepository.getUserGoalsList().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getUserGoalsList()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            goalsList.postValue(
+                                it ?: ArrayList()
+                            )
+                        }/* ?: getConfig()*/
+                    }
+                }
+            }
+        }
+
+    }
 
 }

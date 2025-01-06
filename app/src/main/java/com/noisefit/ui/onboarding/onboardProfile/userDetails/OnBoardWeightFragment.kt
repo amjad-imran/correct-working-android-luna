@@ -41,7 +41,7 @@ class OnBoardWeightFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_weight_page_visit)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 100
+            pgBr.progress = viewModel.getProgress(5)
             tvCount.text = getString(R.string.text_5)
         }
 
@@ -70,12 +70,13 @@ class OnBoardWeightFragment :
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
         binding.btnContinue.setOnClickListener {
             viewModel.saveUserInfoLocally()
 //            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_WEIGHT_CLICK)
             //navigate(R.id.onBoardStepsGoalFragment)
 
-            viewModel.updateUserProfile()
+            navigate(R.id.onBoardGoalFragment)
 
         }
 
@@ -111,40 +112,5 @@ class OnBoardWeightFragment :
 
     override fun subscribeObservers() {
 
-        viewModel.getLoading().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.progressBar.root.visible()
-            } else {
-                binding.progressBar.root.gone()
-            }
-        }
-        viewModel.getApiErrors().observe(viewLifecycleOwner) {
-            it?.getContent()?.let { response ->
-                uiController.onApiErrorReceived(response)
-            }
-        }
-
-
-        viewModel.successMessage.observe(this) {
-            it.getContent()?.let {
-                val openProfile = activity is GuestProfileSetupActivity
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_successful_setup)
-                if (viewModel.isDevicePaired()) {
-                    goToDeviceSetupActivity(openProfile)
-                } else {
-                    startActivity(OreoMainActivity.getStartIntent(requireContext()))
-                    activity?.finish()
-                }
-            }
-        }
-    }
-
-    private fun goToDeviceSetupActivity(openProfile: Boolean) {
-        startActivity(
-            DeviceSetupActivityV2.getStartIntent(
-                requireContext(), fullSetup = true
-            )
-        )
-        activity?.finish()
     }
 }

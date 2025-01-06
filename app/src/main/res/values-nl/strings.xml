@@ -1744,4 +1744,7 @@
     <string name="text_help_luna_understand_your_voice">Help Luna je stem te begrijpen</string>
     <string name="text_press_the_button_below">Druk op de onderstaande knop om te beginnen</string>
     <string name="text_you_re_all_set">Je bent helemaal klaar!</string>
+    <string name="text_how_do_you_intend_to_use_luna">Hoe wil je Luna gebruiken?</string>
+    <string name="text_please_select_all_that_apply">Selecteer alles wat van toepassing is</string>
+    <string name="text_type_here_dot">Typ hier..</string>
 </resources>
