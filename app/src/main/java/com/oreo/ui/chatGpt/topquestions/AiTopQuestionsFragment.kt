@@ -166,7 +166,7 @@ fun AiTopQuestionMain(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             AiHistoryToolbar(
-                showHistoryIcon,
+                false/*showHistoryIcon*/,
                 onBackClicked = onBackClicked,
                 onHistoryClicked = onHistoryClicked
             )
