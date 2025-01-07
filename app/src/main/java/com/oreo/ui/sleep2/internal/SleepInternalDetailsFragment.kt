@@ -234,9 +234,8 @@ class SleepInternalDetailsFragment :
                 uiController.logAppEvent(
                     MoEngageLunaAppEvents.drop_down_selected,
                     hashMapOf(
-                        "source_2" to (viewModel.source ?: ""),
                         "source" to EventUtil.getEventName(viewModel.selectedLaunchMode),
-                        "destination_page_name" to EventUtil.getEventName(data)
+                        "selection" to EventUtil.getEventName(data)
                     )
                 )
 
