@@ -21,12 +21,14 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.sleep.SleepLearnMoreDataModel
 import com.oreo.ui.sleep2.ODropDownFragment
 import com.oreo.ui.sleep2.SLEEP_DROP_DOWN_ITEM
 import com.oreo.ui.sleep2.help.LearnMoreFragment
 import com.oreo.ui.sleep2.internal.learnmore.OnItemClickListener
 import com.oreo.ui.sleep2.internal.learnmore.SleepLearnMoreAdapter
+import com.oreo.util.EventUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
@@ -48,6 +50,15 @@ class SleepInternalDetailsFragment :
     private val learnMoreAdapter: SleepLearnMoreAdapter by lazy {
         SleepLearnMoreAdapter(object : OnItemClickListener {
             override fun onItemClick(data: SleepLearnMoreDataModel) {
+
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.article_clicked,
+                    hashMapOf(
+                        "source" to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                        "article_name" to (data.title ?: "")
+                    )
+                )
+
                 val (frag, bundle) = LearnMoreFragment.getStartData(data)
                 navigate(frag, bundle)
 
@@ -57,11 +68,12 @@ class SleepInternalDetailsFragment :
 
     companion object {
         fun getStartData(
-            launchMode: SleepInternalLaunchState, selectedDate: String?
+            launchMode: SleepInternalLaunchState, selectedDate: String?, source: String
         ): Pair<Int, Bundle?> {
             return Pair(R.id.sleepInternalDetailsFragment, Bundle().apply {
                 putSerializable("launchMode", launchMode)
                 putSerializable("selectedDate", selectedDate)
+                putString("source", source)
             })
         }
     }
@@ -69,6 +81,8 @@ class SleepInternalDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.selectedLaunchMode = args.launchMode
+        viewModel.source = args.source
+
         args.selectedDate?.let {
             viewModel.selectedDate = LocalDate.parse(it)
         }
@@ -133,23 +147,62 @@ class SleepInternalDetailsFragment :
     override fun initListener() {
 
         binding.lytTopView.lytTopSingleView.lytPaginate.ivBack.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriType(),
+                hashMapOf(
+                    "date" to "backward",
+                    viewModel.getEventKeyName() to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                    "source" to (viewModel.source ?: ""),
+                )
+            )
             viewModel.loadPreviousPeriodData()
         }
 
         binding.lytTopView.lytTopSingleView.lytPaginate.ivNext.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriType(),
+                hashMapOf(
+                    "date" to "forward",
+                    viewModel.getEventKeyName() to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                    "source" to (viewModel.source ?: ""),
+                )
+            )
             viewModel.loadNextPeriodData()
         }
 
         binding.lytTopView.lytTopMultipleView.lytPaginate.ivBack.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriType(),
+                hashMapOf(
+                    "date" to "backward",
+                    viewModel.getEventKeyName() to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                    "source" to (viewModel.source ?: ""),
+                )
+            )
             viewModel.loadPreviousPeriodData()
         }
 
         binding.lytTopView.lytTopMultipleView.lytPaginate.ivNext.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriType(),
+                hashMapOf(
+                    "date" to "forward",
+                    "contributor_name" to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                    "source" to (viewModel.source ?: ""),
+                )
+            )
             viewModel.loadNextPeriodData()
         }
 
 
         binding.lytDeviation.tvDeviation.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.health_monitor_temp_dev_selected,
+                hashMapOf(
+                    "health_monitor_name" to "skin_temperature",
+                    "source" to (viewModel.source ?: "")
+                )
+            )
             binding.lytDeviation.tvDeviation.setBackgroundResource(R.drawable.back_deviation_selected)
             binding.lytDeviation.tvAbsolute.setBackgroundResource(0)
             binding.lytSelector.root.gone()
@@ -159,6 +212,13 @@ class SleepInternalDetailsFragment :
         }
 
         binding.lytDeviation.tvAbsolute.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.health_monitor_temp_abs_selected,
+                hashMapOf(
+                    "health_monitor_name" to "skin_temperature",
+                    "source" to (viewModel.source ?: "")
+                )
+            )
             binding.lytDeviation.tvAbsolute.setBackgroundResource(R.drawable.back_deviation_selected)
             binding.lytDeviation.tvDeviation.setBackgroundResource(0)
             binding.lytSelector.root.visible()
@@ -171,6 +231,15 @@ class SleepInternalDetailsFragment :
             setFragmentResultListener(SLEEP_DROP_DOWN_ITEM) { _, bundle ->
                 val data = bundle.getSerializable("itemName") as SleepInternalLaunchState
 
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.drop_down_selected,
+                    hashMapOf(
+                        "source_2" to (viewModel.source ?: ""),
+                        "source" to EventUtil.getEventName(viewModel.selectedLaunchMode),
+                        "destination_page_name" to EventUtil.getEventName(data)
+                    )
+                )
+
                 viewModel.reloadFragment.postValue(Event(data))
             }
 
@@ -181,20 +250,48 @@ class SleepInternalDetailsFragment :
             navigate(frag, bundle)
         }
         binding.lytSelector.tvDaily.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriIntervalChangeType(),
+                hashMapOf(
+                    "interval" to "daily",
+                    "source" to EventUtil.getEventName(viewModel.selectedLaunchMode)
+                )
+            )
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAILY)
             viewModel.reloadData()
         }
         binding.lytSelector.tvDay.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriIntervalChangeType(),
+                hashMapOf(
+                    "interval" to "day",
+                    "source" to EventUtil.getEventName(viewModel.selectedLaunchMode)
+                )
+            )
             viewModel.setSelectedPeriod(InternalSelectedPeriod.DAY)
             viewModel.reloadData()
         }
 
         binding.lytSelector.tvWeek.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriIntervalChangeType(),
+                hashMapOf(
+                    "interval" to "week",
+                    "source" to EventUtil.getEventName(viewModel.selectedLaunchMode)
+                )
+            )
             viewModel.setSelectedPeriod(InternalSelectedPeriod.WEEK)
             viewModel.reloadData()
         }
 
         binding.lytSelector.tvMonth.setOnClickListener {
+            uiController.logAppEvent(
+                viewModel.getContriIntervalChangeType(),
+                hashMapOf(
+                    "interval" to "month",
+                    "source" to EventUtil.getEventName(viewModel.selectedLaunchMode)
+                )
+            )
             viewModel.setSelectedPeriod(InternalSelectedPeriod.MONTH)
             viewModel.reloadData()
         }
@@ -232,7 +329,10 @@ class SleepInternalDetailsFragment :
             it.getContent()?.let {
                 navigate(
                     SleepInternalDetailsFragmentDirections.actionSleepInternalDetailsFragmentSelf(
-                        it, viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        it,
+                        viewModel.selectedDate.format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        ), (viewModel.source ?: "")
                     )
                 )
             }
@@ -658,8 +758,10 @@ class SleepInternalDetailsFragment :
                                     topContentData.time ?: ""
                                 } else {
                                     val dayFormat =
-                                        DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",
-                                            Locale(NoiseFitApplicationMain.appLanguage.languageCode))
+                                        DateTimeFormatter.ofPattern(
+                                            "EEEE, dd MMMM yyyy",
+                                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                                        )
                                     topContentData.date?.format(dayFormat)
                                 }
                             }
@@ -761,8 +863,10 @@ class SleepInternalDetailsFragment :
                         tvOptimalRangeLabel.alpha = 0.5f
                         ivCircle.alpha = 0.5f
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",
-                            Locale(NoiseFitApplicationMain.appLanguage.languageCode))
+                        val dayFormat = DateTimeFormatter.ofPattern(
+                            "EEEE, dd MMMM yyyy",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytContentView.lytHours.lytTrendsHighlight.root.invisible()
                         lytPaginate.root.gone()
@@ -865,7 +969,10 @@ class SleepInternalDetailsFragment :
                         lytContentView.lytNeed.lytTrendsHighlight.root.alpha = 0.5f
 
 
-                        val dayFormat = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy",Locale(NoiseFitApplicationMain.appLanguage.languageCode))
+                        val dayFormat = DateTimeFormatter.ofPattern(
+                            "EEEE, dd MMMM yyyy",
+                            Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        )
                         tvDateTime.text = topContentData.date?.format(dayFormat)
                         lytPaginate.root.gone()
 

@@ -494,7 +494,7 @@ class SessionManager
     fun logMoEngageAppEvent(eventName: String) {
         val newEventName = eventName.lowercase().replace(" ", "_")
         MoEAnalyticsHelper.trackEvent(context, newEventName, Properties())
-        LOGS.d("LOGS_MO_ENGAGE_EVENT $newEventName")
+        LOGS.d("APP_EVENT $newEventName")
         Firebase.analytics.logEvent(newEventName, null)
         // LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
@@ -530,7 +530,7 @@ class SessionManager
         }
         MoEAnalyticsHelper.trackEvent(context, newEventName, properties)
         Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
-        LOGS.d("LOGS_MO_ENGAGE_EVENT $newEventName ${Gson().toJson(properties)}")
+        LOGS.d("APP_EVENT $newEventName ${Gson().toJson(properties)}")
     }
 
 
@@ -719,6 +719,14 @@ class SessionManager
 
     fun showLocalNotification(): Boolean {
         return notificationSettings == 1
+    }
+
+    fun logAppEvents(eventName: String, data: HashMap<String, Any>?) {
+        if (data != null) {
+            logMoEngageAppEvent(eventName, data)
+        } else {
+            logMoEngageAppEvent(eventName)
+        }
     }
 }
 

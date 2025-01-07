@@ -112,13 +112,13 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                                     binding.tvDay.context, R.color.color_bubble_gum_pink
                                 )
                             )
-                          /*  if (this.day.date > viewModel.todayDate) {
-                                binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
-                                //binding.dayBack.alpha = 0.5f
-                            } else {*/
-                                //binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
-                                binding.dayBack.setImageResource(R.drawable.ic_check_mark_period)
-                                //binding.dayBack.alpha = 1f
+                            /*  if (this.day.date > viewModel.todayDate) {
+                                  binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
+                                  //binding.dayBack.alpha = 0.5f
+                              } else {*/
+                            //binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
+                            binding.dayBack.setImageResource(R.drawable.ic_check_mark_period)
+                            //binding.dayBack.alpha = 1f
                             /*}*/
 
                         }
@@ -236,8 +236,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
     override fun getViewBinding() = ActivityLogPeriodBinding.inflate(layoutInflater)
 
     override fun setLoadingView(): DefaultLoaderBinding? = null
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
-
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
+        viewModel.sessionManager.logAppEvents(eventName, data)
     }
-
 }

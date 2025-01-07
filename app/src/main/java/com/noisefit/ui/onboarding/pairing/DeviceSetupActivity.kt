@@ -30,6 +30,7 @@ import com.noisefit_commans.utils.VibrationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
@@ -136,7 +137,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     }
 
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
 
     }
 

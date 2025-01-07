@@ -151,7 +151,7 @@ class OreoReadinessFragment :
 
     fun showInternalTrend(state: SleepInternalLaunchState, selectedDate: String) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state, selectedDate
+            state, selectedDate, "readiness"
         )
         navigate(frag, bundle)
     }
@@ -860,6 +860,7 @@ class OreoReadinessFragment :
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", healthTrend)
                 this.putString("selectedDate", mainViewModel.selectedDate)
+                this.putString("source", "readiness")
             })
         }
     }

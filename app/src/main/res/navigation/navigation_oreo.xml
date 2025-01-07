@@ -946,6 +946,9 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
+        <argument
+            android:name="source"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/sleepPlannerFragment"
@@ -979,6 +982,9 @@
             android:name="selectedDate"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="source"
+            app:argType="string"/>
     </fragment>
     <dialog
         android:id="@+id/dialogAlarmSound"

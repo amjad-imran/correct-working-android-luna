@@ -17,6 +17,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.Breakups
 import com.oreo.data.model.OSleepInternalTrendsDataModel
 import com.oreo.data.model.TrendAverage
@@ -45,6 +46,7 @@ class SleepInternalDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var registerDate: Int = -1
+    var source: String? = null
 
     var isDeviationSelected = true
 
@@ -159,9 +161,9 @@ class SleepInternalDetailsViewModel @Inject constructor(
             val userStartDate = LocalDate.parse(startDate)
 
             getTrendsInternalDetailsData(
-                if(userStartDate<dataStartDate){
+                if (userStartDate < dataStartDate) {
                     dataStartDate
-                }else{
+                } else {
                     userStartDate
                 },
                 LocalDate.now()
@@ -1114,7 +1116,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
     }
 
     fun getDisplayDate(): String {
-        val format = DateTimeFormatter.ofPattern("dd MMM",
+        val format = DateTimeFormatter.ofPattern(
+            "dd MMM",
             Locale(NoiseFitApplicationMain.appLanguage.languageCode)
         )
         return if (currentSelectedStartDate == currentSelectedEndDate) {
@@ -1139,6 +1142,50 @@ class SleepInternalDetailsViewModel @Inject constructor(
 
     fun showCalibrating(): Boolean {
         return selectedLaunchMode == SleepInternalLaunchState.SKIN_TEMPERATURE && isDeviationSelected && registerDate <= 7
+    }
+
+    fun getContriType(): String {
+        return if(isHealthMonitorTrend()){
+            MoEngageLunaAppEvents.health_monitor_calen_change_click
+        }else{
+            if (isTrend()) {
+                MoEngageLunaAppEvents.trend_calen_change_click
+            }else{
+                MoEngageLunaAppEvents.contributors_calen_change_click
+            }
+        }
+    }
+    fun getContriIntervalChangeType(): String {
+        return if(isHealthMonitorTrend()){
+            MoEngageLunaAppEvents.health_monitor_interval_change
+        }else{
+            if (isTrend()) {
+                MoEngageLunaAppEvents.trend_interval_change
+            }else{
+                MoEngageLunaAppEvents.contributors_interval_change
+            }
+        }
+    }
+    fun getEventKeyName():String{
+        return if(isHealthMonitorTrend()){
+            "health_monitor"
+        }else{
+            if (isTrend()) {
+                "trend_name"
+            }else{
+                "contributor_name"
+            }
+        }
+    }
+
+    private fun isTrend() :Boolean{
+        val trends = arrayListOf(
+            SleepInternalLaunchState.SLEEP_PERFORMANCE,
+            SleepInternalLaunchState.HOUR_VS_NEED,
+            SleepInternalLaunchState.RESTORATIVE_SLEEP,
+            SleepInternalLaunchState.SLEEP_TIME,
+        )
+        return selectedLaunchMode in trends
     }
 
 

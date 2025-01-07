@@ -7,10 +7,12 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHMInternalBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OHMDataModel
 import com.oreo.ui.sleep2.SleepDashViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import com.oreo.util.EventUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,9 +34,19 @@ class OHMInternalFragment :
                   )
                   navigate(frag, bundle)*/
 
-                showInternalTrend(launchType,
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.health_monitor_clicked,
+                    hashMapOf(
+                        "health_monitor_name" to EventUtil.getEventName(launchType),
+                        "source" to (viewModel.source ?: "")
+                    )
+                )
+
+                showInternalTrend(
+                    launchType,
                     viewModel.selectedDate ?: LocalDate.now()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                )
 
             }
         })
@@ -42,7 +54,7 @@ class OHMInternalFragment :
 
     fun showInternalTrend(state: SleepInternalLaunchState, selectedDate: String) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state, selectedDate
+            state, selectedDate, viewModel.source ?: ""
         )
         navigate(frag, bundle)
     }
@@ -53,6 +65,7 @@ class OHMInternalFragment :
         arguments?.let {
             viewModel.healthTrend = args.healthTrend
             viewModel.selectedDate = args.selectedDate
+            viewModel.source = args.source
         }
         setupUI()
     }

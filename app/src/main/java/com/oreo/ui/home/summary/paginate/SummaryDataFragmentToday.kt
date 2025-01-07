@@ -422,6 +422,7 @@ class SummaryDataFragmentToday :
                     navigate(R.id.healthMonitorInternal, Bundle().apply {
                         this.putParcelable("healthTrend", type.data)
                         this.putString("selectedDate", LocalDate.now().toString())
+                        this.putString("source", "homepage")
                     })
                 }
             }
@@ -1135,6 +1136,7 @@ class SummaryDataFragmentToday :
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data)
                 this.putString("selectedDate", LocalDate.now().toString())
+                this.putString("source", "homepage")
             })
         }
 

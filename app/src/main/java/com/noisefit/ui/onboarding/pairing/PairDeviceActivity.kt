@@ -27,7 +27,7 @@ class PairDeviceActivity : BaseActivity<ActivityPairDeviceBinding>() {
     }
 
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
     }
 
     override fun initListener() {

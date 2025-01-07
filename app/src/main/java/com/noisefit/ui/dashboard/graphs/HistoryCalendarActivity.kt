@@ -31,6 +31,7 @@ import java.time.temporal.ChronoField
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 @AndroidEntryPoint
 class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
@@ -229,6 +230,6 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
 
     override fun setLoadingView(): DefaultLoaderBinding? = null
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
     }
 }

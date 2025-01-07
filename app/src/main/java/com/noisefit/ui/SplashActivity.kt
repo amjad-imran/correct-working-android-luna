@@ -277,7 +277,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         }
     }
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
 
     }
 

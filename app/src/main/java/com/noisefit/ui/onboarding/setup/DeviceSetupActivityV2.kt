@@ -78,7 +78,7 @@ class DeviceSetupActivityV2 : BaseActivity<ActivityDeviceSetupV2Binding>() {
 
     override fun setLoadingView(): DefaultLoaderBinding = binding.progressBar
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
 
     }
 

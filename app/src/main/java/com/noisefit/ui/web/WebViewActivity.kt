@@ -167,6 +167,6 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
         return null
     }
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
     }
 }

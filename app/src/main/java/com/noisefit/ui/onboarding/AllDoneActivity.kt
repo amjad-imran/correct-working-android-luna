@@ -49,7 +49,7 @@ class AllDoneActivity : BaseActivity<ActivityAllDoneBinding>() {
 
     override fun setLoadingView(): DefaultLoaderBinding? = null
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
 
     }
 

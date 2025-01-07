@@ -44,6 +44,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.health.Nap
@@ -66,6 +67,7 @@ import com.oreo.ui.sleep2.help.LearnMoreFragment
 import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import com.oreo.util.EventUtil
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -107,7 +109,15 @@ class SleepDashFragment :
     private val adapterSleepContributor: OHMInternalAdapter by lazy {
         OHMInternalAdapter(object : OHMInternalAdapter.HMItemClickListener {
             override fun onItemClick(resultData: OHMDataModel, position: Int) {
-                showInternalTrend(viewModel.getLaunchState(resultData.type))
+                val state = viewModel.getLaunchState(resultData.type)
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.contributors_clicked,
+                    hashMapOf(
+                        "source" to "sleep",
+                        "contributor_name" to EventUtil.getEventName(state)
+                    )
+                )
+                showInternalTrend(state)
             }
         })
     }
@@ -157,6 +167,11 @@ class SleepDashFragment :
     override fun initListener() {
 
         binding.lytAINudge.root.setOnClickListener {
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.aichat_initiated_clicked,
+                hashMapOf("source" to "sleep")
+            )
             navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.SLEEP))
 
             /*val (frag, bundle) = ChatGptFragment.getStartData(
@@ -231,6 +246,11 @@ class SleepDashFragment :
                 val selectedDate =
                     bundle.getString("selected_date") ?: return@setFragmentResultListener
 
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.calender_day_selected,
+                    hashMapOf("source" to "sleep")
+                )
+
                 viewModel.updateSelectedDate(LocalDate.parse(selectedDate))
 
                 binding.vCalendar.scrollToDate(
@@ -238,6 +258,10 @@ class SleepDashFragment :
                 )
             }
 
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.calender_clicked,
+                hashMapOf("source" to "sleep")
+            )
             navigate(R.id.bottomSheetCalendar, Bundle().apply {
                 this.putString("selectedDate", viewModel.selectedDate.value.toString())
                 this.putString("launchedFrom", "sleep")
@@ -245,21 +269,41 @@ class SleepDashFragment :
 
         }
         binding.lytScore.ivInfo.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                hashMapOf("source" to "sleep")
+            )
             val (frag, bundle) = LearnMoreFragment.getStartData(viewModel.getInfoLearnMore())
             navigate(frag, bundle)
         }
 
 
         binding.lytSleepTrends.lytSleepPerformance.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.trend_clicked,
+                hashMapOf("trend_name" to EventUtil.getEventName(SleepInternalLaunchState.SLEEP_PERFORMANCE))
+            )
             showInternalTrend(SleepInternalLaunchState.SLEEP_PERFORMANCE)
         }
         binding.lytSleepTrends.lytHourVsNeed.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.trend_clicked,
+                hashMapOf("trend_name" to EventUtil.getEventName(SleepInternalLaunchState.HOUR_VS_NEED))
+            )
             showInternalTrend(SleepInternalLaunchState.HOUR_VS_NEED)
         }
         binding.lytSleepTrends.lytRestorativeSleep.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.trend_clicked,
+                hashMapOf("trend_name" to EventUtil.getEventName(SleepInternalLaunchState.RESTORATIVE_SLEEP))
+            )
             showInternalTrend(SleepInternalLaunchState.RESTORATIVE_SLEEP)
         }
         binding.lytSleepTrends.lytSleepTime.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.trend_clicked,
+                hashMapOf("trend_name" to EventUtil.getEventName(SleepInternalLaunchState.SLEEP_TIME))
+            )
             showInternalTrend(SleepInternalLaunchState.SLEEP_TIME)
         }
 
@@ -551,6 +595,10 @@ class SleepDashFragment :
                     }
 
                     if (viewModel.selectedDate.value != day.date) {
+                        uiController.logAppEvent(
+                            MoEngageLunaAppEvents.day_selected,
+                            hashMapOf("source" to "sleep")
+                        )
                         viewModel.updateSelectedDate(day.date)
                     }
                 }
@@ -792,6 +840,7 @@ class SleepDashFragment :
             navigate(R.id.healthMonitorInternal, Bundle().apply {
                 this.putParcelable("healthTrend", data?.healthTrend)
                 this.putString("selectedDate", viewModel.selectedDate.value.toString())
+                this.putString("source", "sleep")
             })
         }
 
@@ -1085,7 +1134,9 @@ class SleepDashFragment :
 
     fun showInternalTrend(state: SleepInternalLaunchState) {
         val (frag, bundle) = SleepInternalDetailsFragment.getStartData(
-            state, viewModel.selectedDate.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            state,
+            viewModel.selectedDate.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            "sleep"
         )
         navigate(frag, bundle)
     }

@@ -42,7 +42,7 @@ class ProfilePicActivity :
         }
     }
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {}
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {}
 
     override fun observeSubscriber() {}
 

@@ -33,7 +33,7 @@ class ProfileSetupActivity : BaseActivity<ActivityProfileSetupBinding>() {
 
     }
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
 
     }
 

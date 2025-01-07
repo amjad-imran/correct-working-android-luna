@@ -632,7 +632,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
-        viewModel.lunaZoneReload.observe(this){
+        viewModel.lunaZoneReload.observe(this) {
             it.getContent()?.let {
                 if (navController?.currentDestination?.id == R.id.navigation_lunaZoneFragment) {
                     viewModel.lunaZoneReloadConfirm.postValue(Event(true))
@@ -1159,8 +1159,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun setLoadingView(): DefaultLoaderBinding = binding.progressBar
 
-    override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
-
+    override fun logAppEvent(eventName: String, data: HashMap<String, Any>?) {
+        viewModel.sessionManager.logAppEvents(eventName, data)
     }
 
 }

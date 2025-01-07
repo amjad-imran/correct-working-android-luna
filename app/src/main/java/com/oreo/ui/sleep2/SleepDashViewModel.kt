@@ -586,14 +586,49 @@ class SleepDashViewModel @Inject constructor(
         val listData = ArrayList<OHMDataModel>()
 
         if (data?.sleepScore?.value == null) {
-            listData.add(OHMDataModel(SleepContributor.REM_SLEEP,getSleepContributorDisplayName(SleepContributor.REM_SLEEP)))
-            listData.add(OHMDataModel(SleepContributor.DEEP_SLEEP,getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP)))
-            listData.add(OHMDataModel(SleepContributor.EFFICIENCY,getSleepContributorDisplayName(SleepContributor.EFFICIENCY)))
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.REM_SLEEP,
+                    getSleepContributorDisplayName(SleepContributor.REM_SLEEP)
+                )
+            )
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.DEEP_SLEEP,
+                    getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP)
+                )
+            )
+            listData.add(
+                OHMDataModel(
+                    SleepContributor.EFFICIENCY,
+                    getSleepContributorDisplayName(SleepContributor.EFFICIENCY)
+                )
+            )
             if (showAll) {
-                listData.add(OHMDataModel(SleepContributor.SLEEP_DURATION,getSleepContributorDisplayName(SleepContributor.SLEEP_DURATION)))
-                listData.add(OHMDataModel(SleepContributor.LATENCY,getSleepContributorDisplayName(SleepContributor.LATENCY)))
-                listData.add(OHMDataModel(SleepContributor.RESTFULNESS,getSleepContributorDisplayName(SleepContributor.RESTFULNESS)))
-                listData.add(OHMDataModel(SleepContributor.TIMING,getSleepContributorDisplayName(SleepContributor.TIMING)))
+                listData.add(
+                    OHMDataModel(
+                        SleepContributor.SLEEP_DURATION,
+                        getSleepContributorDisplayName(SleepContributor.SLEEP_DURATION)
+                    )
+                )
+                listData.add(
+                    OHMDataModel(
+                        SleepContributor.LATENCY,
+                        getSleepContributorDisplayName(SleepContributor.LATENCY)
+                    )
+                )
+                listData.add(
+                    OHMDataModel(
+                        SleepContributor.RESTFULNESS,
+                        getSleepContributorDisplayName(SleepContributor.RESTFULNESS)
+                    )
+                )
+                listData.add(
+                    OHMDataModel(
+                        SleepContributor.TIMING,
+                        getSleepContributorDisplayName(SleepContributor.TIMING)
+                    )
+                )
             }
             return listData
         }
@@ -601,15 +636,21 @@ class SleepDashViewModel @Inject constructor(
 
         listData.add(
             OHMDataModel(
-                SleepContributor.REM_SLEEP, getSleepContributorDisplayName(SleepContributor.REM_SLEEP),valueTime = data.remSleep?.value,
-                status = data.remSleep?.status, text = data.remSleep?.text
+                SleepContributor.REM_SLEEP,
+                getSleepContributorDisplayName(SleepContributor.REM_SLEEP),
+                valueTime = data.remSleep?.value,
+                status = data.remSleep?.status,
+                text = data.remSleep?.text
             )
         )
 
         listData.add(
             OHMDataModel(
-                SleepContributor.DEEP_SLEEP,  getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP),valueTime = data.deepSleep?.value,
-                status = data.deepSleep?.status, text = data.deepSleep?.text
+                SleepContributor.DEEP_SLEEP,
+                getSleepContributorDisplayName(SleepContributor.DEEP_SLEEP),
+                valueTime = data.deepSleep?.value,
+                status = data.deepSleep?.status,
+                text = data.deepSleep?.text
             )
         )
         listData.add(

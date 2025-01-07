@@ -8,6 +8,7 @@ import com.noisefit_commans.utils.AppConversionUtils
 import com.oreo.data.model.OHMDataModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.sleep2.SleepContributor
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class OHMInternalViewModel @Inject constructor(
 
     var healthTrend: HealthTrend? = null
     var selectedDate: String? = null
+    var source: String? = null
 
     fun getHealthMonitorData(): ArrayList<OHMDataModel> {
         val listData = ArrayList<OHMDataModel>()
@@ -162,6 +164,5 @@ class OHMInternalViewModel @Inject constructor(
             SleepContributor.BLOOD_OXYGEN -> resourcesProvider.getString(R.string.text_blood_oxygen)
         }
     }
-
 
 }
