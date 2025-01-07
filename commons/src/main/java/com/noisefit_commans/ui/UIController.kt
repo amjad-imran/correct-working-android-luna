@@ -9,11 +9,11 @@ interface UIController {
 
     fun displayProgressBar(isDisplayed: Boolean, title: String)
 
-    fun logAppEvent(eventName : String,data : HashMap<String,Any??>)
+    fun logAppEvent(eventName: String, data: HashMap<String, Any>? = null)
 
     fun hideSoftKeyboard()
 
-    fun showSoftKeyboard(view : View?)
+    fun showSoftKeyboard(view: View?)
 
     fun displayInputCaptureDialog(title: String, callback: DialogInputCaptureCallback)
 
@@ -22,6 +22,7 @@ interface UIController {
     fun onDisplayError(message: String, messageMode: MessageDisplayMode = MessageDisplayMode.TOAST)
 
 }
+
 enum class MessageDisplayMode {
     SNACK_BAR, TOAST
 }

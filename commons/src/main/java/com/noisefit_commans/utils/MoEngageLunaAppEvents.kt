@@ -2,6 +2,30 @@ package com.noisefit_commans.utils
 
 object MoEngageLunaAppEvents {
 
+    /**
+     * Sleep Events ===============
+     */
+    const val aichat_initiated_clicked = "aichat_initiated_clicked"
+    const val info_clicked = "info_clicked"
+    const val day_selected = "day_selected"
+    const val calender_day_selected = "calender_day_selected"
+    const val calender_clicked = "calender_clicked"
+    const val contributors_clicked = "contributors_clicked"
+    const val trend_clicked = "trend_clicked"
+    const val health_monitor_clicked = "health_monitor_clicked"
+    const val health_monitor_temp_dev_selected = "health_monitor_temp_dev_selected"
+    const val health_monitor_temp_abs_selected = "health_monitor_temp_abs_selected"
+    const val article_clicked = "article_clicked"
+    const val health_monitor_interval_change = "health_monitor_interval_change"
+    const val contributors_interval_change = "contributors_interval_change"
+    const val trend_interval_change = "trend_interval_change"
+    const val contributors_calen_change_click = "contributors_calen_change_click"
+    const val trend_calen_change_click = "trend_calen_change_click"
+    const val health_monitor_calen_change_click = "health_monitor_calen_change_click"
+    const val drop_down_selected = "drop_down_selected"
+    /**
+     * Sleep Events add ===============
+     */
 
     /**
      * AI Events start =========================
