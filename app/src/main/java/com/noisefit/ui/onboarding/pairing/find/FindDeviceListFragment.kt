@@ -106,11 +106,11 @@ class FindDeviceListFragment :
 
 
 
-        if (PairDeviceActivity.showBack) {
+        /*if (PairDeviceActivity.showBack) {
             binding.backBtn.visible()
         } else {
             binding.backBtn.gone()
-        }
+        }*/
     }
 
     private fun setVideo() {
@@ -372,7 +372,8 @@ class FindDeviceListFragment :
 
         binding.backBtn.setOnClickListener {
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_back)
-            activity?.finish()
+            //activity?.finish()
+            navigateUpSafe()
         }
         binding.lScanning.setOnClickListener {
 

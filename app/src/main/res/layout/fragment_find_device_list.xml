@@ -29,10 +29,8 @@
                     android:id="@+id/backBtn"
                     style="@style/ToolbarBackButton"
                     android:layout_margin="@dimen/side_margin"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/textView"

@@ -10,8 +10,7 @@
         <action
             android:id="@+id/action_connectRingFragment_to_findDeviceListFragment"
             app:destination="@id/findDeviceListFragment"
-            app:popUpTo="@id/connectRingFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/findDeviceListFragment"
