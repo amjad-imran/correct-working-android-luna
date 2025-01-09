@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.noisefit.data.local.db.Converters
 import com.noisefit.data.local.db.database.KeyValueDao
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.GoogleFitDataDb
 import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OreoAutoSportData
@@ -27,6 +28,7 @@ import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyStressDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
+import com.oreo.data.db.database.OreoGFitDataDao
 import com.oreo.data.db.database.OreoGFitWorkoutDao
 import com.oreo.data.db.database.OreoHeartRateDao
 import com.oreo.data.db.database.OreoNapDao
@@ -42,8 +44,8 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
         OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class,
-        GoogleFitWorkoutData::class,OreoBodyStressData::class],
-    version = 10, exportSchema = false
+        GoogleFitWorkoutData::class, OreoBodyStressData::class, GoogleFitDataDb::class],
+    version = 11, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {
@@ -62,7 +64,10 @@ abstract class OreoDataBase : RoomDatabase() {
     abstract fun dayTimeMovementDao(): OreoDayTimeMovementDao
     abstract fun userHealthDataDao(): OreoUserHealthDataDao
 
+    @Deprecated("use gFitDataDao")
     abstract fun gFitWorkoutDao(): OreoGFitWorkoutDao
+
+    abstract fun gFitDataDao(): OreoGFitDataDao
 
     abstract fun keyValueDao(): KeyValueDao
 

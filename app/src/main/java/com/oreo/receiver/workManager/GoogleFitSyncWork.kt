@@ -10,16 +10,11 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
-import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.fromJson
-import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.assisted.Assisted
@@ -40,7 +35,8 @@ constructor(
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val offlineDataMapper: OfflineDataMapper,
     private val sessionManager: SessionManager,
-    private val userActivityRepository: OreoUserActivityRepository
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val googleFitDataSource: GoogleFitDataSource
 ) : ListenableWorker(context, workerParams) {
 
     private var mFuture: SettableFuture<Result>? = null
@@ -70,7 +66,7 @@ constructor(
         /**
          * Save sleep to google fit
          */
-        job = syncDataScope.launch {
+        job = syncDataScope.launch(Dispatchers.IO) {
             supervisorScope {
 
                 /*val callSaveSleep = async {
@@ -121,160 +117,156 @@ constructor(
 
 */
 
-               /* val callGetWorkout = async {
-                    LOGS.d("$TAG GET Workout")
+                /* val callGetWorkout = async {
+                     LOGS.d("$TAG GET Workout")
 
-                    googleFitDataObservers.getWorkoutFromSession(
-                        success = {
+                     googleFitDataObservers.getWorkoutFromSession(
+                         success = {
 
-                            LOGS.d("$TAG workout session ${it.size}")
-                            syncDataScope.launch {
-                                syncRepository.saveAndGetGFitWorkout(
-                                    offlineDataMapper.convertWorkoutGoogleFit(
-                                        it
-                                    )
-                                ).collect { resource ->
-                                    when (resource) {
-                                        is CacheResult.Success -> {
-                                            LOGS.d("$TAG workout session offline ${resource.value?.size}")
-                                            if (!resource.value.isNullOrEmpty()) {
+                             LOGS.d("$TAG workout session ${it.size}")
+                             syncDataScope.launch {
+                                 syncRepository.saveAndGetGFitWorkout(
+                                     offlineDataMapper.convertWorkoutGoogleFit(
+                                         it
+                                     )
+                                 ).collect { resource ->
+                                     when (resource) {
+                                         is CacheResult.Success -> {
+                                             LOGS.d("$TAG workout session offline ${resource.value?.size}")
+                                             if (!resource.value.isNullOrEmpty()) {
 
-                                                syncDataScope.launch {
-                                                    userActivityRepository.addGFitWorkout(
-                                                        offlineDataMapper.convertGFWorkoutIntoJsonArray(
-                                                            resource.value
-                                                        )
-                                                    ).collect { resource1 ->
-                                                        when (resource1) {
-                                                            is Resource.GenericError -> {
-                                                                LOGS.d("$TAG workout session api error")
-                                                            }
+                                                 syncDataScope.launch {
+                                                     userActivityRepository.addGFitWorkout(
+                                                         offlineDataMapper.convertGFWorkoutIntoJsonArray(
+                                                             resource.value
+                                                         )
+                                                     ).collect { resource1 ->
+                                                         when (resource1) {
+                                                             is Resource.GenericError -> {
+                                                                 LOGS.d("$TAG workout session api error")
+                                                             }
 
-                                                            is Resource.Loading -> {
+                                                             is Resource.Loading -> {
 
-                                                            }
+                                                             }
 
-                                                            is Resource.NetworkError -> {
+                                                             is Resource.NetworkError -> {
 
-                                                            }
+                                                             }
 
-                                                            is Resource.Success -> {
-                                                                LOGS.d("$TAG workout session api success")
-                                                                syncRepository.updateGFitSyncWorkout(
-                                                                    resource.value
-                                                                ).collect { resource2 ->
-                                                                    when (resource2) {
-                                                                        is CacheResult.Success -> {
-                                                                            sessionManager.reloadTodayData.postValue(
-                                                                                Event(true)
-                                                                            )
-                                                                            LOGS.d("$TAG workout session gFit success")
-                                                                        }
+                                                             is Resource.Success -> {
+                                                                 LOGS.d("$TAG workout session api success")
+                                                                 syncRepository.updateGFitSyncWorkout(
+                                                                     resource.value
+                                                                 ).collect { resource2 ->
+                                                                     when (resource2) {
+                                                                         is CacheResult.Success -> {
+                                                                             sessionManager.reloadTodayData.postValue(
+                                                                                 Event(true)
+                                                                             )
+                                                                             LOGS.d("$TAG workout session gFit success")
+                                                                         }
 
-                                                                        is CacheResult.GenericError -> {
-                                                                            LOGS.d("$TAG workout session gFit error")
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                                                         is CacheResult.GenericError -> {
+                                                                             LOGS.d("$TAG workout session gFit error")
+                                                                         }
+                                                                     }
+                                                                 }
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+                                             }
 
 
-                                            LOGS.d(
-                                                TAG,
-                                                "OreoSyncDataWork: steps ${resource.value}"
-                                            )
+                                             LOGS.d(
+                                                 TAG,
+                                                 "OreoSyncDataWork: steps ${resource.value}"
+                                             )
 
-                                        }
+                                         }
 
-                                        is CacheResult.GenericError -> {
+                                         is CacheResult.GenericError -> {
 
-                                            LOGS.e(TAG, "OreoSyncDataWork: Error $it")
+                                             LOGS.e(TAG, "OreoSyncDataWork: Error $it")
 
-                                        }
-                                    }
-                                }
-                            }
+                                         }
+                                     }
+                                 }
+                             }
 
-                            LOGS.d("$TAG ${it.size}")
-                        },
-                        failed = {
-                            LOGS.d("$TAG workout failed")
-                        }
-                    )
-                }*/
+                             LOGS.d("$TAG ${it.size}")
+                         },
+                         failed = {
+                             LOGS.d("$TAG workout failed")
+                         }
+                     )
+                 }*/
 
-               /* val callGetBodyMeasurements = async {
+                val callGetBodyMeasurements = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Body measurements")
 
                     googleFitDataObservers.getHeightWeight(
                         success = {
                             LOGS.d("$TAG HEIGHT - ${it.height} Weight - ${it.weight} Body Fat - ${it.bodyFat}")
 
-                            *//*syncDataScope.launch {
-                                userActivityRepository.syncGoogleFitUserData(
-                                    offlineDataMapper.convertGFUserDataIntoJsonObject(
-                                        it
-                                    )
-                                ).collect { resource1 ->
-                                    when (resource1) {
-                                        is Resource.GenericError -> {
-                                            LOGS.d("$TAG height weight api error")
-                                        }
+                            syncDataScope.launch(Dispatchers.IO) {
+                                googleFitDataSource.saveBodyMeasurements(it)
+                            }
 
-                                        is Resource.Loading -> {
 
-                                        }
+                            /*syncDataScope.launch {
+                               userActivityRepository.syncGoogleFitUserData(
+                                   offlineDataMapper.convertGFUserDataIntoJsonObject(
+                                       it
+                                   )
+                               ).collect { resource1 ->
+                                   when (resource1) {
+                                       is Resource.GenericError -> {
+                                           LOGS.d("$TAG height weight api error")
+                                       }
 
-                                        is Resource.NetworkError -> {
+                                       is Resource.Loading -> {
 
-                                        }
+                                       }
 
-                                        is Resource.Success -> {
-                                            LOGS.d("$TAG height weight api success")
-                                            localDataStore.setGFitUserDataLastSyncTime()
-                                        }
-                                    }
-                                }
-                            }*//*
+                                       is Resource.NetworkError -> {
+
+                                       }
+
+                                       is Resource.Success -> {
+                                           LOGS.d("$TAG height weight api success")
+                                           localDataStore.setGFitUserDataLastSyncTime()
+                                       }
+                                   }
+                               }
+                           }*/
 
                         },
                         failed = {
                             LOGS.d("$TAG height weight failed")
                         }
                     )
-                }*/
+                }
 
 
-                /*val callGetActivity = async {
+                val callGetWorkoutSessions = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Activity")
 
-                    googleFitDataObservers.importWorkout(
+                    googleFitDataObservers.importHealthSessions(
                         success = { workoutList ->
 
-                            LOGS.d("$TAG Workout import session ${workoutList.size}")
+                            //LOGS.d("$TAG Workout import session ${workoutList.size}")
 
-                            LOGS.d(TAG,"workout data - ${Gson().toJson(workoutList)}")
+                            LOGS.d(TAG, "workout import data - ${Gson().toJson(workoutList)}")
 
-                        },
-                        failed = {
-                            LOGS.d("$TAG GET Sleep failed")
-                        }
-                    )
-                }*/
+                            syncDataScope.launch(Dispatchers.IO) {
+                                googleFitDataSource.saveWorkouts(workoutList)
+                                LOGS.d(TAG, "workout saved")
+                            }
 
-                val callGetSleep = async {
-                    LOGS.d("$TAG GET Sleep")
 
-                    googleFitDataObservers.importSleepData(
-                        success = { sleepList ->
 
-                            LOGS.d("$TAG Sleep import session ${sleepList.size}")
-
-                            LOGS.d(TAG,"Sleep data - ${Gson().toJson(sleepList)}")
                         },
                         failed = {
                             LOGS.d("$TAG GET Sleep failed")
@@ -282,13 +274,54 @@ constructor(
                     )
                 }
 
+                val callGetSleepSessions = async(Dispatchers.IO) {
+                    LOGS.d("$TAG GET Activity")
+
+                    googleFitDataObservers.importSleepSessions(
+                        success = { sleepList ->
+
+                            //LOGS.d("$TAG Workout import session ${workoutList.size}")
+
+                            LOGS.d(TAG, "Sleep import data - ${Gson().toJson(sleepList)}")
+
+                            syncDataScope.launch(Dispatchers.IO) {
+                                googleFitDataSource.saveSleeps(sleepList)
+                                LOGS.d(TAG, "Sleep saved")
+                            }
+
+
+
+                        },
+                        failed = {
+                            LOGS.d("$TAG GET Sleep failed")
+                        }
+                    )
+                }
+
+                /* val callGetSleep = async {
+                     LOGS.d("$TAG GET Sleep")
+
+                     googleFitDataObservers.importSleepData(
+                         success = { sleepList ->
+
+                             LOGS.d("$TAG Sleep import session ${sleepList.size}")
+
+                             LOGS.d(TAG,"Sleep data - ${Gson().toJson(sleepList)}")
+                         },
+                         failed = {
+                             LOGS.d("$TAG GET Sleep failed")
+                         }
+                     )
+                 }*/
+
                 try {
                     //callSaveSleep.await()
 
+                    callGetBodyMeasurements.await()
 
-                    //callGetSleepAndActivity.await()
+                    callGetWorkoutSessions.await()
+                    callGetSleepSessions.await()
 
-                    //callGetBodyMeasurements.await()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -299,11 +332,7 @@ constructor(
             }
         }
 
-
-
         returnSuccess(success)
-
-
     }
 
 

@@ -112,6 +112,20 @@ data class GoogleFitWorkoutData(
 
 
 @Entity(
+    tableName = "google_fit_data"
+)
+@Parcelize
+data class GoogleFitDataDb(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "type") var type: String? = null,//workout, sleep, height, weight, body_fat
+    @ColumnInfo(name = "data") var data: String? = null,
+    @ColumnInfo(name = "startTime") var startTime: Long,
+    @ColumnInfo(name = "endTime") var endTime: Long,
+) : ColorfitData(), Parcelable
+
+
+@Entity(
     tableName = "day_time_movement", indices = [Index(value = ["date"], unique = true)]
 )
 data class DayTimeMovementBreakup(

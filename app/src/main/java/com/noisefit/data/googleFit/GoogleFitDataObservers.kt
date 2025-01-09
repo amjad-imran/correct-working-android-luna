@@ -608,11 +608,13 @@ constructor(
                 if (dataReadResponse == null) return@addOnSuccessListener
                 printHeightWeightData(dataReadResponse)
 
-                success.invoke(BodyMeasurementModel(
-                    height,
-                    weight,
-                    bodyFat
-                ))
+                success.invoke(
+                    BodyMeasurementModel(
+                        height,
+                        weight,
+                        bodyFat
+                    )
+                )
             }
             .addOnFailureListener { e: Exception? ->
                 failed.invoke()
@@ -814,6 +816,8 @@ constructor(
     private fun parseWorkoutName(workoutType: String?): String? {
         if (workoutType.isNullOrEmpty()) return null
 
+        LOGS.d("GoogleFitSyncWork  parseWorkoutName $workoutType")
+
         return when (workoutType) {
             FitnessActivities.RUNNING -> "running"
             FitnessActivities.WALKING -> "walking"
@@ -839,7 +843,7 @@ constructor(
     fun importSleepData(
         success: (sleepData: List<SleepDataGoogleFit>) -> Unit,
         failed: () -> Unit
-    ){
+    ) {
 
         val endTime = ZonedDateTime.now()
         val startTime = endTime.minusDays(1)
@@ -860,7 +864,7 @@ constructor(
         Fitness.getHistoryClient(context, googleSignInAccount)
             .readData(readRequestSleep)
             .addOnSuccessListener { response ->
-                LOGS.d("GoogleFitSyncWork ${Gson().toJson(response)}")
+                LOGS.d("GoogleFitSyncWork response  ${Gson().toJson(response)}")
                 val dataSet = response.getDataSet(DataType.TYPE_SLEEP_SEGMENT)
                 LOGS.d("GoogleFitSyncWork dataset -> ${Gson().toJson(dataSet)}")
                 for (dataPoint in dataSet.dataPoints) {
@@ -875,8 +879,16 @@ constructor(
                         SleepStages.AWAKE -> "Awake"
                         else -> "Unknown stage"
                     }
-                    LOGS.d("GoogleFitSyncWork", "Sleep stage: $stageDescription from $start to $end")
-                    sleepData.add(SleepDataGoogleFit(start, end))//todo move outside block after testing
+                    LOGS.d(
+                        "GoogleFitSyncWork",
+                        "Sleep stage: $stageDescription from $start to $end"
+                    )
+                    sleepData.add(
+                        SleepDataGoogleFit(
+                            start,
+                            end
+                        )
+                    )//todo move outside block after testing
 
                 }
                 success(sleepData)
@@ -887,26 +899,94 @@ constructor(
             }
     }
 
-
-    fun importWorkout(
-        success: (workoutData: List<WorkoutGoogleFit>) -> Unit,
+    fun importSleepSessions(
+        success: (sleepData: List<SleepDataGoogleFit>) -> Unit,
         failed: () -> Unit
     ) {
 
         val endTime = ZonedDateTime.now()
-        val startTime = endTime.minusDays(1)
+        val startTime = endTime.minusDays(1).withHour(0).withMinute(0).withSecond(0)
 
         LOGS.d(
             "GoogleFitSyncWork",
             "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
         )
 
+        val readRequestSleep = SessionReadRequest.Builder()
+            .read(DataType.TYPE_SLEEP_SEGMENT)
+            .includeSleepSessions()
+            .readSessionsFromAllApps()
+            .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .build()
+
+        val sleepData = ArrayList<SleepDataGoogleFit>()
+
+        Fitness.getSessionsClient(
+            context,
+            googleSignInAccount
+        )
+            .readSession(readRequestSleep)
+            .addOnSuccessListener { response ->
+                LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
+
+                for (session in response.sessions) {
+                    LOGS.d("GoogleFitSyncWork", "Session: $session")
+
+                    if (context.packageName == session.appPackageName) {
+                        continue
+                    }
+
+                    if (session.activity == FitnessActivities.SLEEP) {
+                        val sessionStart = session.getStartTime(TimeUnit.SECONDS)
+                        val sessionEnd = session.getEndTime(TimeUnit.SECONDS)
+
+                        LOGS.d(
+                            "GoogleFitSyncWork",
+                            "Sleep session from $sessionStart to $sessionEnd"
+                        )
+
+                        // Read data points for detailed sleep segments
+                        val dataSets = response.getDataSet(session)
+                        for (dataSet in dataSets) {
+                            for (dataPoint in dataSet.dataPoints) {
+                                val sleepType =
+                                    dataPoint.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
+                                val segmentStart = dataPoint.getStartTime(TimeUnit.SECONDS)
+                                val segmentEnd = dataPoint.getEndTime(TimeUnit.SECONDS)
+
+                                LOGS.d(
+                                    "GoogleFitSyncWork",
+                                    "Sleep type: $sleepType, Start: $segmentStart, End: $segmentEnd"
+                                )
+                            }
+                        }
+                        sleepData.add(SleepDataGoogleFit(sessionStart, sessionEnd))
+                    }
+                }
+                success.invoke(sleepData)
+            }
+            .addOnFailureListener { e ->
+                LOGS.d("GoogleFitSyncWork", "Failed to read sleep data $e")
+                failed()
+            }
+    }
+
+
+    fun importHealthSessions(
+        success: (workoutData: List<WorkoutGoogleFit>) -> Unit,
+        failed: () -> Unit
+    ) {
+
+        val endTime = ZonedDateTime.now()
+        val startTime = endTime.minusDays(1).withHour(0).withMinute(0).withSecond(0)
+
+        LOGS.d(
+            "GoogleFitSyncWork",
+            "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
+        )
 
         val readRequestWorkout = SessionReadRequest.Builder()
-            .read(DataType.TYPE_SLEEP_SEGMENT)
             .read(DataType.TYPE_WORKOUT_EXERCISE)
-            .enableServerQueries()
-            .includeSleepSessions()
             .readSessionsFromAllApps()
             .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
             .build()
@@ -928,36 +1008,12 @@ constructor(
                         continue
                     }
 
-                    /*if (session.activity == FitnessActivities.SLEEP) {
-                        val sessionStart = session.getStartTime(TimeUnit.MILLISECONDS)
-                        val sessionEnd = session.getEndTime(TimeUnit.MILLISECONDS)
-
-                        LOGS.d(
-                            "GoogleFitSyncWork",
-                            "Sleep session from $sessionStart to $sessionEnd"
-                        )
-
-                        // Read data points for detailed sleep segments
-                        val dataSets = response.getDataSet(session)
-                        for (dataSet in dataSets) {
-                            for (dataPoint in dataSet.dataPoints) {
-                                val sleepType =
-                                    dataPoint.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
-                                val segmentStart = dataPoint.getStartTime(TimeUnit.MILLISECONDS)
-                                val segmentEnd = dataPoint.getEndTime(TimeUnit.MILLISECONDS)
-
-                                LOGS.d(
-                                    "GoogleFitSyncWork",
-                                    "Sleep type: $sleepType, Start: $segmentStart, End: $segmentEnd"
-                                )
-                            }
-                        }
-                        sleepData.add(SleepDataGoogleFit(sessionStart, sessionEnd))
-                    }*/
-
                     val workoutType = parseWorkoutName(session.activity)
                     if (workoutType.isNullOrEmpty().not()) {
-                        val workoutGoogleFit = WorkoutGoogleFit()
+                        val workoutGoogleFit = WorkoutGoogleFit(
+                            startTime = session.getStartTime(TimeUnit.SECONDS),
+                            endTime = session.getEndTime(TimeUnit.SECONDS)
+                        )
                         val duration = try {
                             session.getActiveTime(TimeUnit.SECONDS)
                         } catch (exp: IllegalStateException) {
@@ -967,10 +1023,8 @@ constructor(
                         workoutGoogleFit.name = session.name
                         workoutGoogleFit.identifier = session.identifier
                         workoutGoogleFit.duration = duration
-                        workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
-                        workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
                         workoutGoogleFit.appPackageName = session.appPackageName
-                        workoutGoogleFit.activity = workoutType//session.activity
+                        workoutGoogleFit.activity = workoutType
 
                         val dataSets = response.getDataSet(session)
                         for (dataSet in dataSets) {
@@ -1037,7 +1091,6 @@ constructor(
                         }
                         workoutData.add(workoutGoogleFit)
                     }
-
                 }
                 success.invoke(workoutData)
             }
@@ -1093,7 +1146,10 @@ constructor(
                         continue
                     }
 
-                    val workoutGoogleFit = WorkoutGoogleFit()
+                    val workoutGoogleFit = WorkoutGoogleFit(
+                        startTime = session.getStartTime(TimeUnit.SECONDS),
+                        endTime = session.getEndTime(TimeUnit.SECONDS)
+                    )
 
                     val duration = try {
                         session.getActiveTime(TimeUnit.SECONDS)
@@ -1104,8 +1160,8 @@ constructor(
                     workoutGoogleFit.name = session.name
                     workoutGoogleFit.identifier = session.identifier
                     workoutGoogleFit.duration = duration
-                    workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
-                    workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
+                    //workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
+                    //workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
                     workoutGoogleFit.appPackageName = session.appPackageName
                     workoutGoogleFit.activity = workoutType//session.activity
 

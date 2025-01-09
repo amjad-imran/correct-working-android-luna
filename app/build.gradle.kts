@@ -269,6 +269,12 @@ dependencies {
     implementation(libs.androidx.material3)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.truth.v144)
+
+
+
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.curlloggerinterceptor)
 

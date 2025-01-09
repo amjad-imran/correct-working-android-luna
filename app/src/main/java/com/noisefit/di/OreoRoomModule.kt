@@ -9,6 +9,7 @@ import com.noisefit.data.local.db.database.KeyValueDao
 import com.noisefit.data.local.db.implementation.KeyValueDataSourceImpl
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoNapDataSource
@@ -20,6 +21,7 @@ import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyStressDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
+import com.oreo.data.db.database.OreoGFitDataDao
 import com.oreo.data.db.database.OreoGFitWorkoutDao
 import com.oreo.data.db.database.OreoHeartRateDao
 import com.oreo.data.db.database.OreoNapDao
@@ -29,6 +31,7 @@ import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
 import com.oreo.data.db.database.OreoStressDao
 import com.oreo.data.db.database.OreoUserHealthDataDao
+import com.oreo.data.db.implementation.GoogleFitDataSourceImpl
 import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
@@ -60,6 +63,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_7_8)
             .addMigrations(MIGRATION_8_9)
             .addMigrations(MIGRATION_9_10)
+            .addMigrations(MIGRATION_10_11)
             .build()
     }
 
@@ -182,7 +186,21 @@ class OreoRoomModule {
 
         }
     }
-
+    private val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `google_fit_data` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`type` TEXT," +
+                        "`data` TEXT," +
+                        "`startTime` INTEGER NOT NULL," +
+                        "`endTime` INTEGER NOT NULL," +
+                        "PRIMARY KEY(`id`))"
+            )
+            //database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_data_startTime ON  google_fit_data(startTime)")
+        }
+    }
 
     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
@@ -338,6 +356,18 @@ class OreoRoomModule {
 
     @Singleton
     @Provides
+    fun providesGoogleFitDataDao(database: OreoDataBase): OreoGFitDataDao {
+        return database.gFitDataDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesGoogleFitDataImpl(googleFitDataDao: OreoGFitDataDao): GoogleFitDataSourceImpl {
+        return GoogleFitDataSourceImpl(googleFitDataDao)
+    }
+
+    @Singleton
+    @Provides
     fun provideTempDataImpl(tempDao: OreoBodyTemperatureDao): OreoBodyTemperatureDataImpl {
         return OreoBodyTemperatureDataImpl(tempDao)
     }
@@ -365,6 +395,12 @@ class OreoRoomModule {
     @Provides
     fun provideTemperatureData(tempData: OreoBodyTemperatureDataImpl): OreoBodyTemperatureDataSource {
         return tempData
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoogleFitData(data: GoogleFitDataSourceImpl): GoogleFitDataSource {
+        return data
     }
 
     @Singleton

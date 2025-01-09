@@ -20,10 +20,10 @@ gradle = "8.4.2"
 freshchatAndroid = "6.2.9"
 hiltAndroidCompiler = "2.51"
 jjwtVersion = "0.7.0"
+junit = "4.13.2"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
-junit = "4.13.2"
-junitVersion = "1.1.5"
+junitVersion = "1.2.1"
 espressoCore = "3.5.1"
 kotlinBom = "1.8.22"
 lifecycleRuntimeKtx = "2.8.0"
@@ -46,6 +46,7 @@ timber = "5.0.1"
 ramseth001-text-drawable = "1.1.3"
 swipe-refresh-library-core = "1.7.2.4"
 truth = "1.4.2"
+truthVersion = "1.4.4"
 ucrop = "2.2.6"
 utilcodex = "1.31.0"
 utilcodexVersion = "1.31.1"
@@ -135,14 +136,12 @@ desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 freshchat-android = { module = "com.github.freshworks:freshchat-android", version.ref = "freshchatAndroid" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidCompiler" }
 jjwt = { module = "io.jsonwebtoken:jjwt", version.ref = "jjwtVersion" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 elvishew-xlog = { group = "com.elvishew", name = "xlog", version.ref = "elvishewXlog" }
+junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 material-v161 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 mindinventory-shimmertextview = { module = "com.github.Mindinventory:ShimmerTextView", version.ref = "shimmertextviewVersion" }
@@ -158,6 +157,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 ramseth001-text-drawable = { group = "com.github.ramseth001", name = "TextDrawable", version.ref = "ramseth001-text-drawable" }
 swipe-refresh-library-core = { group = "com.github.dkzwm", name = "srl-core", version.ref = "swipe-refresh-library-core" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+truth-v144 = { module = "com.google.truth:truth", version.ref = "truthVersion" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
 utilcodex-v1311 = { module = "com.blankj:utilcodex", version.ref = "utilcodexVersion" }
