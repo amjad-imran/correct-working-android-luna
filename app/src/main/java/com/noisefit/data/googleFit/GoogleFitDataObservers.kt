@@ -14,6 +14,9 @@ import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.SessionInsertRequest
 import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.gson.Gson
+import com.noisefit.data.model.BodyMeasurementModel
+import com.noisefit.data.model.BodyMeasurementValue
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
@@ -22,6 +25,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -39,8 +43,12 @@ constructor(
     private val localDataStore: DataStoredInterface
 ) {
 
-    private var height = 0f
-    private var weight = 0f
+    /**
+     * Pair(Timestamp,value)
+     */
+    private var height: BodyMeasurementValue? = null
+    private var weight: BodyMeasurementValue? = null
+    private var bodyFat: BodyMeasurementValue? = null
 
     fun hasPermission(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -572,13 +580,21 @@ constructor(
     }
 
 
+    /**
+     * success (Pair(Height<Pair<timestamp,value>?,Weight<Pair<timestamp,value>?>))
+     */
     fun getHeightWeight(
-        success: (data: Pair<Float, Float>) -> Unit,
+        success: (data: BodyMeasurementModel) -> Unit,
         failed: () -> Unit
     ) {
+        height = null
+        weight = null
+        bodyFat = null
+
         val dataReadRequest = DataReadRequest.Builder()
             .read(DataType.TYPE_WEIGHT)
             .read(DataType.TYPE_HEIGHT)
+            .read(DataType.TYPE_BODY_FAT_PERCENTAGE)
             .setTimeRange(1, Calendar.getInstance().timeInMillis, TimeUnit.MILLISECONDS)
             .setLimit(1)
             .build()
@@ -591,7 +607,12 @@ constructor(
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
                 if (dataReadResponse == null) return@addOnSuccessListener
                 printHeightWeightData(dataReadResponse)
-                success.invoke(Pair(DistanceUtil.meterToCentimeter(height), weight))
+
+                success.invoke(BodyMeasurementModel(
+                    height,
+                    weight,
+                    bodyFat
+                ))
             }
             .addOnFailureListener { e: Exception? ->
                 failed.invoke()
@@ -604,31 +625,56 @@ constructor(
 
         if (dataReadResult.buckets.isNotEmpty()) {
             for (bucket in dataReadResult.buckets) {
-                bucket.dataSets.forEach { dumpWeightHeightDataSet(it) }
+                bucket.dataSets.forEach {
+                    if (it.dataSource.appPackageName != context.packageName) {
+                        dumpWeightHeightDataSet(it)
+                    }
+                }
             }
         } else if (dataReadResult.dataSets.isNotEmpty()) {
-            dataReadResult.dataSets.forEach { dumpWeightHeightDataSet(it) }
+            dataReadResult.dataSets.forEach {
+                if (it.dataSource.appPackageName != context.packageName) {
+                    dumpWeightHeightDataSet(it)
+                }
+            }
         }
-
     }
 
 
     private fun dumpWeightHeightDataSet(dataSet: DataSet) {
 
         for (point in dataSet.dataPoints) {
+
+            if (point.originalDataSource.appPackageName == context.packageName) {
+                continue
+            }
             when (point.dataType) {
+                DataType.TYPE_BODY_FAT_PERCENTAGE -> {
+                    LOGS.d("GoogleFitSyncWork body fat percentage")
+                    val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
+                    val value = point.getValue(Field.FIELD_PERCENTAGE).asFloat()
+                    if (timeStamp != 0L && value != 0f) {
+                        bodyFat = BodyMeasurementValue(timeStamp, value)
+                    }
+
+                }
 
                 DataType.TYPE_HEIGHT -> {
-                    height = point.getValue(Field.FIELD_HEIGHT).asFloat()
-                    LOGS.d(
-                        TAG, "height " + point.getValue(
-                            Field.FIELD_HEIGHT
-                        ).asFloat()
-                    )
+                    val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
+                    val value = point.getValue(Field.FIELD_HEIGHT).asFloat()
+                    if (timeStamp != 0L && value != 0f) {
+                        height = BodyMeasurementValue(timeStamp, value)
+                    }
                 }
 
                 DataType.TYPE_WEIGHT -> {
-                    weight = point.getValue(Field.FIELD_WEIGHT).asFloat()
+                    val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
+                    val value = point.getValue(Field.FIELD_WEIGHT).asFloat()
+                    if (timeStamp != 0L && value != 0f) {
+                        weight = BodyMeasurementValue(timeStamp, value)
+
+                    }
+
                     LOGS.d(
                         TAG, "weight " + point.getValue(
                             Field.FIELD_WEIGHT
@@ -788,6 +834,217 @@ constructor(
             FitnessActivities.SWIMMING -> "swimming"
             else -> null
         }
+    }
+
+    fun importSleepData(
+        success: (sleepData: List<SleepDataGoogleFit>) -> Unit,
+        failed: () -> Unit
+    ){
+
+        val endTime = ZonedDateTime.now()
+        val startTime = endTime.minusDays(1)
+
+        LOGS.d(
+            "GoogleFitSyncWork",
+            " sleep import start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
+        )
+
+
+        val readRequestSleep = DataReadRequest.Builder()
+            .read(DataType.TYPE_SLEEP_SEGMENT)
+            .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .build()
+
+        val sleepData = ArrayList<SleepDataGoogleFit>()
+
+        Fitness.getHistoryClient(context, googleSignInAccount)
+            .readData(readRequestSleep)
+            .addOnSuccessListener { response ->
+                LOGS.d("GoogleFitSyncWork ${Gson().toJson(response)}")
+                val dataSet = response.getDataSet(DataType.TYPE_SLEEP_SEGMENT)
+                LOGS.d("GoogleFitSyncWork dataset -> ${Gson().toJson(dataSet)}")
+                for (dataPoint in dataSet.dataPoints) {
+                    val sleepStage = dataPoint.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
+                    val start = dataPoint.getStartTime(TimeUnit.SECONDS)
+                    val end = dataPoint.getEndTime(TimeUnit.SECONDS)
+
+                    val stageDescription = when (sleepStage) {
+                        SleepStages.SLEEP_LIGHT -> "Light sleep"
+                        SleepStages.SLEEP_DEEP -> "Deep sleep"
+                        SleepStages.SLEEP_REM -> "REM sleep"
+                        SleepStages.AWAKE -> "Awake"
+                        else -> "Unknown stage"
+                    }
+                    LOGS.d("GoogleFitSyncWork", "Sleep stage: $stageDescription from $start to $end")
+                    sleepData.add(SleepDataGoogleFit(start, end))//todo move outside block after testing
+
+                }
+                success(sleepData)
+            }
+            .addOnFailureListener { e ->
+                LOGS.d("GoogleFitSyncWork", "Failed to read sleep data $e")
+                failed()
+            }
+    }
+
+
+    fun importWorkout(
+        success: (workoutData: List<WorkoutGoogleFit>) -> Unit,
+        failed: () -> Unit
+    ) {
+
+        val endTime = ZonedDateTime.now()
+        val startTime = endTime.minusDays(1)
+
+        LOGS.d(
+            "GoogleFitSyncWork",
+            "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
+        )
+
+
+        val readRequestWorkout = SessionReadRequest.Builder()
+            .read(DataType.TYPE_SLEEP_SEGMENT)
+            .read(DataType.TYPE_WORKOUT_EXERCISE)
+            .enableServerQueries()
+            .includeSleepSessions()
+            .readSessionsFromAllApps()
+            .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .build()
+
+        val workoutData = ArrayList<WorkoutGoogleFit>()
+
+        Fitness.getSessionsClient(
+            context,
+            googleSignInAccount
+        )
+            .readSession(readRequestWorkout)
+            .addOnSuccessListener { response ->
+                LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
+
+                for (session in response.sessions) {
+                    LOGS.d("GoogleFitSyncWork", "Session: $session")
+
+                    if (context.packageName == session.appPackageName) {
+                        continue
+                    }
+
+                    /*if (session.activity == FitnessActivities.SLEEP) {
+                        val sessionStart = session.getStartTime(TimeUnit.MILLISECONDS)
+                        val sessionEnd = session.getEndTime(TimeUnit.MILLISECONDS)
+
+                        LOGS.d(
+                            "GoogleFitSyncWork",
+                            "Sleep session from $sessionStart to $sessionEnd"
+                        )
+
+                        // Read data points for detailed sleep segments
+                        val dataSets = response.getDataSet(session)
+                        for (dataSet in dataSets) {
+                            for (dataPoint in dataSet.dataPoints) {
+                                val sleepType =
+                                    dataPoint.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
+                                val segmentStart = dataPoint.getStartTime(TimeUnit.MILLISECONDS)
+                                val segmentEnd = dataPoint.getEndTime(TimeUnit.MILLISECONDS)
+
+                                LOGS.d(
+                                    "GoogleFitSyncWork",
+                                    "Sleep type: $sleepType, Start: $segmentStart, End: $segmentEnd"
+                                )
+                            }
+                        }
+                        sleepData.add(SleepDataGoogleFit(sessionStart, sessionEnd))
+                    }*/
+
+                    val workoutType = parseWorkoutName(session.activity)
+                    if (workoutType.isNullOrEmpty().not()) {
+                        val workoutGoogleFit = WorkoutGoogleFit()
+                        val duration = try {
+                            session.getActiveTime(TimeUnit.SECONDS)
+                        } catch (exp: IllegalStateException) {
+                            exp.printStackTrace()
+                            session.getEndTime(TimeUnit.SECONDS) - session.getStartTime(TimeUnit.SECONDS)
+                        }
+                        workoutGoogleFit.name = session.name
+                        workoutGoogleFit.identifier = session.identifier
+                        workoutGoogleFit.duration = duration
+                        workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
+                        workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
+                        workoutGoogleFit.appPackageName = session.appPackageName
+                        workoutGoogleFit.activity = workoutType//session.activity
+
+                        val dataSets = response.getDataSet(session)
+                        for (dataSet in dataSets) {
+                            for (point in dataSet.dataPoints) {
+                                when (point.dataType) {
+                                    DataType.AGGREGATE_DISTANCE_DELTA -> {
+                                        workoutGoogleFit.distance =
+                                            point.getValue(Field.FIELD_DISTANCE).asFloat()
+                                        LOGS.d(
+                                            TAG,
+                                            "distance " + point.getValue(Field.FIELD_DISTANCE)
+                                                .asFloat()
+                                        )
+                                    }
+
+                                    DataType.TYPE_HEART_RATE_BPM -> LOGS.d(
+                                        TAG, "heart " + point.getValue(
+                                            Field.FIELD_BPM
+                                        ).asFloat()
+                                    )
+
+
+                                    DataType.TYPE_SPEED -> {
+//                                    LOGS.d(
+//                                        TAG, "speed " + point
+//                                    )
+                                    }
+
+                                    DataType.TYPE_HEART_POINTS -> {
+//                                    LOGS.d(
+//                                        TAG, "hr_point " + point
+//                                    )
+                                    }
+
+                                    DataType.TYPE_STEP_COUNT_DELTA -> {
+                                        workoutGoogleFit.steps =
+                                            point.getValue(Field.FIELD_STEPS).asInt()
+                                        LOGS.d(
+                                            TAG, "steps " + point.getValue(
+                                                Field.FIELD_STEPS
+                                            ).asInt()
+                                        )
+                                    }
+
+                                    DataType.TYPE_CALORIES_EXPENDED -> {
+                                        workoutGoogleFit.calories =
+                                            point.getValue(Field.FIELD_CALORIES).asFloat()
+                                        LOGS.d(
+                                            TAG,
+                                            "calories " + point.getValue(Field.FIELD_CALORIES)
+                                                .asFloat()
+                                        )
+                                    }
+
+
+                                    DataType.AGGREGATE_HEART_POINTS -> LOGS.d(
+                                        TAG,
+                                        "heartPoint " + "[${point}]   "
+                                    )
+
+                                }
+
+                            }
+                        }
+                        workoutData.add(workoutGoogleFit)
+                    }
+
+                }
+                success.invoke(workoutData)
+            }
+            .addOnFailureListener { e ->
+                LOGS.d("GoogleFitSyncWork", "Failed to read sleep data $e")
+                failed()
+            }
     }
 
 

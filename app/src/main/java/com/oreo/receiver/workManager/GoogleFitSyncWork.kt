@@ -66,13 +66,20 @@ constructor(
         }*/
 
         LOGS.d("$TAG inside")
+
+        /**
+         * Save sleep to google fit
+         */
         job = syncDataScope.launch {
             supervisorScope {
 
-                val googleFitSleepData =
-                    syncRepository.getGoogleFitSleepUnSyncData(todayDate)
-                LOGS.d("$TAG ${googleFitSleepData?.size}")
-                val call1 = async {
+                /*val callSaveSleep = async {
+                    val googleFitSleepData =
+                        syncRepository.getGoogleFitSleepUnSyncData(todayDate)
+                    LOGS.d("$TAG ${googleFitSleepData?.size}")
+
+                    LOGS.d("$TAG GET Sleep")
+
                     googleFitSleepData?.let { sleepDataList ->
                         sleepDataList.forEach { sleepData ->
                             LOGS.d("$TAG google  inside sleep data")
@@ -80,7 +87,13 @@ constructor(
                                 offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
                             LOGS.d("$TAG google  inside sleep data 2")
                             LOGS.d("GOOGLE_SLEEP_DATA ${Gson().toJson(googleSleepData)}")
-                            AppLogs.sendAppLogs("Sleep Google Fit Parsed -> ${Gson().toJson(googleSleepData)}")
+                            AppLogs.sendAppLogs(
+                                "Sleep Google Fit Parsed -> ${
+                                    Gson().toJson(
+                                        googleSleepData
+                                    )
+                                }"
+                            )
                             googleSleepData?.let { sleepDataGoogleFit ->
                                 LOGS.d("$TAG google  inside sleep data 3")
                                 googleFitDataObservers.insertSleepData(
@@ -106,51 +119,11 @@ constructor(
 
                 }
 
+*/
 
-               /* if (shouldUserObjectSync) {
-                    LOGS.d("$TAG height weight start get")
-                    val call2 = async {
-                        googleFitDataObservers.getHeightWeight(
-                            success = {
-                                LOGS.d("$TAG ${it.first}")
-                                LOGS.d("$TAG ${it.second}")
-                                syncDataScope.launch {
-                                    userActivityRepository.syncGoogleFitUserData(
-                                        offlineDataMapper.convertGFUserDataIntoJsonObject(
-                                            it
-                                        )
-                                    ).collect { resource1 ->
-                                        when (resource1) {
-                                            is Resource.GenericError -> {
-                                                LOGS.d("$TAG height weight api error")
-                                            }
+               /* val callGetWorkout = async {
+                    LOGS.d("$TAG GET Workout")
 
-                                            is Resource.Loading -> {
-
-                                            }
-
-                                            is Resource.NetworkError -> {
-
-                                            }
-
-                                            is Resource.Success -> {
-                                                LOGS.d("$TAG height weight api success")
-                                                localDataStore.setGFitUserDataLastSyncTime()
-                                            }
-                                        }
-                                    }
-                                }
-
-                            },
-                            failed = {
-                                LOGS.d("$TAG height weight failed")
-                            }
-                        )
-                    }
-                    call2.await()
-                }*/
-
-                val call3 = async {
                     googleFitDataObservers.getWorkoutFromSession(
                         success = {
 
@@ -232,12 +205,90 @@ constructor(
                             LOGS.d("$TAG workout failed")
                         }
                     )
+                }*/
+
+               /* val callGetBodyMeasurements = async {
+                    LOGS.d("$TAG GET Body measurements")
+
+                    googleFitDataObservers.getHeightWeight(
+                        success = {
+                            LOGS.d("$TAG HEIGHT - ${it.height} Weight - ${it.weight} Body Fat - ${it.bodyFat}")
+
+                            *//*syncDataScope.launch {
+                                userActivityRepository.syncGoogleFitUserData(
+                                    offlineDataMapper.convertGFUserDataIntoJsonObject(
+                                        it
+                                    )
+                                ).collect { resource1 ->
+                                    when (resource1) {
+                                        is Resource.GenericError -> {
+                                            LOGS.d("$TAG height weight api error")
+                                        }
+
+                                        is Resource.Loading -> {
+
+                                        }
+
+                                        is Resource.NetworkError -> {
+
+                                        }
+
+                                        is Resource.Success -> {
+                                            LOGS.d("$TAG height weight api success")
+                                            localDataStore.setGFitUserDataLastSyncTime()
+                                        }
+                                    }
+                                }
+                            }*//*
+
+                        },
+                        failed = {
+                            LOGS.d("$TAG height weight failed")
+                        }
+                    )
+                }*/
+
+
+                /*val callGetActivity = async {
+                    LOGS.d("$TAG GET Activity")
+
+                    googleFitDataObservers.importWorkout(
+                        success = { workoutList ->
+
+                            LOGS.d("$TAG Workout import session ${workoutList.size}")
+
+                            LOGS.d(TAG,"workout data - ${Gson().toJson(workoutList)}")
+
+                        },
+                        failed = {
+                            LOGS.d("$TAG GET Sleep failed")
+                        }
+                    )
+                }*/
+
+                val callGetSleep = async {
+                    LOGS.d("$TAG GET Sleep")
+
+                    googleFitDataObservers.importSleepData(
+                        success = { sleepList ->
+
+                            LOGS.d("$TAG Sleep import session ${sleepList.size}")
+
+                            LOGS.d(TAG,"Sleep data - ${Gson().toJson(sleepList)}")
+                        },
+                        failed = {
+                            LOGS.d("$TAG GET Sleep failed")
+                        }
+                    )
                 }
 
                 try {
-                    call1.await()
+                    //callSaveSleep.await()
 
-                    call3.await()
+
+                    //callGetSleepAndActivity.await()
+
+                    //callGetBodyMeasurements.await()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
