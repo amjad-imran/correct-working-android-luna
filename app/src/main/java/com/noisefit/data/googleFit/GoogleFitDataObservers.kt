@@ -29,6 +29,7 @@ import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.toDuration
 
 private const val LUNA_ACTIVITY = "luna_activity"
 private const val SLEEP_SESSION_NAME = "Luna - Sleep Data"
@@ -907,10 +908,10 @@ constructor(
         val endTime = ZonedDateTime.now()
         val startTime = endTime.minusDays(1).withHour(0).withMinute(0).withSecond(0)
 
-        LOGS.d(
+        /*LOGS.d(
             "GoogleFitSyncWork",
             "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
-        )
+        )*/
 
         val readRequestSleep = SessionReadRequest.Builder()
             .read(DataType.TYPE_SLEEP_SEGMENT)
@@ -927,10 +928,10 @@ constructor(
         )
             .readSession(readRequestSleep)
             .addOnSuccessListener { response ->
-                LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
+                //LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
 
                 for (session in response.sessions) {
-                    LOGS.d("GoogleFitSyncWork", "Session: $session")
+                    //LOGS.d("GoogleFitSyncWork", "Session: $session")
 
                     if (context.packageName == session.appPackageName) {
                         continue
@@ -940,13 +941,13 @@ constructor(
                         val sessionStart = session.getStartTime(TimeUnit.SECONDS)
                         val sessionEnd = session.getEndTime(TimeUnit.SECONDS)
 
-                        LOGS.d(
+                        /*LOGS.d(
                             "GoogleFitSyncWork",
                             "Sleep session from $sessionStart to $sessionEnd"
-                        )
+                        )*/
 
                         // Read data points for detailed sleep segments
-                        val dataSets = response.getDataSet(session)
+                        /*val dataSets = response.getDataSet(session)
                         for (dataSet in dataSets) {
                             for (dataPoint in dataSet.dataPoints) {
                                 val sleepType =
@@ -959,8 +960,11 @@ constructor(
                                     "Sleep type: $sleepType, Start: $segmentStart, End: $segmentEnd"
                                 )
                             }
+                        }*/
+
+                        if ((sessionEnd - sessionStart) >= 15 * 60) {//should be greater than 15 minutes
+                            sleepData.add(SleepDataGoogleFit(sessionStart, sessionEnd))
                         }
-                        sleepData.add(SleepDataGoogleFit(sessionStart, sessionEnd))
                     }
                 }
                 success.invoke(sleepData)
@@ -980,10 +984,10 @@ constructor(
         val endTime = ZonedDateTime.now()
         val startTime = endTime.minusDays(1).withHour(0).withMinute(0).withSecond(0)
 
-        LOGS.d(
+        /*LOGS.d(
             "GoogleFitSyncWork",
             "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
-        )
+        )*/
 
         val readRequestWorkout = SessionReadRequest.Builder()
             .read(DataType.TYPE_WORKOUT_EXERCISE)
@@ -999,10 +1003,10 @@ constructor(
         )
             .readSession(readRequestWorkout)
             .addOnSuccessListener { response ->
-                LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
+                //LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
 
                 for (session in response.sessions) {
-                    LOGS.d("GoogleFitSyncWork", "Session: $session")
+                    //LOGS.d("GoogleFitSyncWork", "Session: $session")
 
                     if (context.packageName == session.appPackageName) {
                         continue
