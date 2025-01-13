@@ -2,21 +2,35 @@ package com.oreo.ui.googlefit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.noisefit.data.dataConverter.OfflineDataMapper
+import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "GoogleFitDataViewModel"
 @HiltViewModel
-class GoogleFitDataViewModel @Inject constructor(
-    private val googleFitDataSource: GoogleFitDataSource
+class GoogleFitDataViewModel
+@Inject
+constructor(
+    private val googleFitDataSource: GoogleFitDataSource,
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val offlineDataMapper: OfflineDataMapper,
 ) : BaseViewModel() {
-
+    val success = ArrayList<GoogleFitDataDisplayModel>()
+    val fail = ArrayList<GoogleFitDataDisplayModel>()
     var unSyncedDataList = MutableLiveData<List<GoogleFitDataDisplayModel>>()
         private set
 
@@ -71,11 +85,122 @@ class GoogleFitDataViewModel @Inject constructor(
         return result
     }
 
-    val success = ArrayList<GoogleFitDataDisplayModel>()
-    val fail = ArrayList<GoogleFitDataDisplayModel>()
 
     fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
+        viewModelScope.launch {
+            LOGS.d("sendDataToServer API start")
+            selectedItems.map { googleFitDataDisplayModel ->
+                LOGS.d("sendDataToServer API hit ")
 
+                when (googleFitDataDisplayModel.type) {
+                    GoogleFitDataType.NAP -> {
+
+                        val data = offlineDataMapper.convertGFManualNap(googleFitDataDisplayModel)
+                        userActivityRepository.addManualNap(
+                            data.first, data.second
+                        ).collect { resource ->
+                            when (resource) {
+                                is Resource.GenericError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                    LOGS.d("sendDataToServer API GenericError")
+                                }
+
+                                is Resource.Loading -> {
+                                    setLoading(resource.loading)
+
+                                }
+
+                                is Resource.NetworkError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                    LOGS.d("sendDataToServer API NetworkError ")
+                                }
+
+                                is Resource.Success -> {
+                                    resource.data?.data?.let {
+                                        LOGS.d("sendDataToServer API success $it")
+                                        success.add(googleFitDataDisplayModel)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    GoogleFitDataType.SLEEP -> {
+                        val data = offlineDataMapper.convertGFManualSleep(
+                            Gson().fromJson<SleepDataGoogleFit>(
+                                googleFitDataDisplayModel.rawData ?: ""
+                            )
+                        )
+                        userActivityRepository.addManualSleep(data.first, data.second)
+                            .collect { resource1 ->
+                                when (resource1) {
+                                    is Resource.GenericError -> {
+                                        fail.add(googleFitDataDisplayModel)
+                                        LOGS.d("$TAG workout session api error")
+                                    }
+
+                                    is Resource.Loading -> {
+
+                                    }
+
+                                    is Resource.NetworkError -> {
+                                        fail.add(googleFitDataDisplayModel)
+                                    }
+
+                                    is Resource.Success -> {
+                                        success.add(googleFitDataDisplayModel)
+                                        LOGS.d("$TAG workout session api success")
+
+                                    }
+                                }
+
+                            }
+                    }
+
+                    GoogleFitDataType.WORKOUT -> {
+                        userActivityRepository.addGFitWorkout(
+                            offlineDataMapper.convert1GFWorkoutIntoJsonArray(
+                                Gson().fromJson<WorkoutGoogleFit>(
+                                    googleFitDataDisplayModel.rawData ?: ""
+                                )
+                            )
+                        ).collect { resource1 ->
+                            when (resource1) {
+                                is Resource.GenericError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                    LOGS.d("$TAG workout session api error")
+                                }
+
+                                is Resource.Loading -> {
+
+                                }
+
+                                is Resource.NetworkError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                }
+
+                                is Resource.Success -> {
+                                    success.add(googleFitDataDisplayModel)
+                                    LOGS.d("$TAG workout session api success")
+
+                                }
+                            }
+
+                        }
+                    }
+
+                    GoogleFitDataType.BODY_MEASUREMENTS -> {
+
+
+                    }
+                }
+
+
+                LOGS.d("sendDataToServer API response ")
+            }
+
+            LOGS.d("sendDataToServer API response end")
+        }
     }
 
 

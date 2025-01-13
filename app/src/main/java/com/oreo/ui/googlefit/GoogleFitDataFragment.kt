@@ -28,6 +28,8 @@ class GoogleFitDataFragment :
         binding.rvMain.adapter = mAdapter
 
         viewModel.loadData()
+
+        viewModel.sendDataToServer(ArrayList())
     }
 
     override fun initListener() {

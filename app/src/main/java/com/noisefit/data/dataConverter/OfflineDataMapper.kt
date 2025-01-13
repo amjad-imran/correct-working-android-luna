@@ -12,8 +12,12 @@ import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.GoogleFitDataDisplayModel
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import kotlin.math.sign
 
 
 class OfflineDataMapper
@@ -273,6 +277,104 @@ class OfflineDataMapper
             }
             jsonArray.add(requestObject)
         }
+        return jsonArray
+    }
+
+    fun convertGFManualNap(googleFitDataDisplayModel: GoogleFitDataDisplayModel): Pair<JsonArray, String> {
+        val jsonArray = JsonArray()
+        val jsonObject = JsonObject()
+
+        val instant = Instant.ofEpochSecond(googleFitDataDisplayModel.startTime)
+        val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+        val endInstant = Instant.ofEpochSecond(googleFitDataDisplayModel.endTime)
+        val end = ZonedDateTime.ofInstant(endInstant, ZoneId.systemDefault())
+
+        jsonObject.addProperty("type", "manual")
+        jsonObject.addProperty(
+            "date",
+            start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        )
+        jsonObject.addProperty("duration", googleFitDataDisplayModel.duration / 60)
+        jsonObject.addProperty(
+            "start_time",
+            start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        )
+        jsonObject.addProperty(
+            "end_time",
+            end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        )
+        jsonArray.add(jsonObject)
+
+        return Pair(jsonArray, start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+    }
+
+    fun convertGFManualSleep(data: SleepDataGoogleFit): Pair<JsonArray, String> {
+
+        val jsonObject = JsonObject()
+
+        val instant = Instant.ofEpochSecond(data.startTime)
+        val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+        val endInstant = Instant.ofEpochSecond(data.endTime)
+        val end = ZonedDateTime.ofInstant(endInstant, ZoneId.systemDefault())
+        val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+        jsonObject.addProperty(
+            "date",
+            date
+        )
+        jsonObject.addProperty(
+            "end_time",
+            end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        )
+        jsonObject.addProperty(
+            "start_time",
+            start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        )
+
+        val duration = (data.endTime - data.startTime) / 60
+        jsonObject.addProperty("total_duration", duration)
+        jsonObject.addProperty("active_calories", 0)
+
+        val jsonFinalObject = JsonObject()
+        jsonFinalObject.add("day_break_up", jsonObject)
+        val jsonArray = JsonArray()
+        jsonArray.add(jsonFinalObject)
+        return Pair(jsonArray, date)
+    }
+
+    fun convert1GFWorkoutIntoJsonArray(data: WorkoutGoogleFit): JsonArray {
+        val jsonArray = JsonArray()
+        val requestObject = JsonObject().apply {
+            this.addProperty("duration", data.duration)
+            this.addProperty("calories", data.calories?.toInt() ?: 0)
+            this.addProperty("activity_type", data.activity)
+            this.addProperty("type", "google")
+            this.addProperty(
+                "date",
+                DateFormats.convertTimestampToDate(
+                    (data.startTime!! * 1000L),
+                    DateFormats.dateFormat3()
+                )
+            )
+            this.addProperty(
+                "start_time",
+                DateFormats.convertTimestampToDate(
+                    data.startTime!! * 1000L,
+                    DateFormats.time24WithoutSecond()
+                )
+            )
+            this.addProperty("steps", data.steps)
+            this.addProperty(
+                "end_time",
+                DateFormats.convertTimestampToDate(
+                    data.endTime!! * 1000L,
+                    DateFormats.time24WithoutSecond()
+                )
+            )
+            this.addProperty("intensity", "Moderate")
+        }
+        jsonArray.add(requestObject)
         return jsonArray
     }
 
