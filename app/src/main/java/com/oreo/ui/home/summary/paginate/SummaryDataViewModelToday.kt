@@ -37,6 +37,7 @@ import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoStressDataConvertor
+import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
@@ -104,7 +105,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val updateRepository: UpdateRepository,
     val resourceProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
-    val hrDataConvertor: OreoHRDataConvertor
+    val hrDataConvertor: OreoHRDataConvertor,
+    val googleFitDataSource: GoogleFitDataSource,
 ) : BaseViewModel() {
 
 
@@ -375,9 +377,11 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 if (isDataAvailableForSync) {
                     //TODO handle cross here
-                    stateGoogleFitCardDataSyncAvailable.postValue(true)
-                }
 
+                    val isDataSyncPending = (googleFitDataSource.getUnSyncedData().size > 1)
+
+                    stateGoogleFitCardDataSyncAvailable.postValue(isDataSyncPending)
+                }
             } else {
                 stateGoogleFitCardDataSyncAvailable.postValue(false)
                 if (isGoogleFitCrossed) {

@@ -2,12 +2,15 @@ package com.oreo.ui.googlefit
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitDataBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,15 +40,28 @@ class GoogleFitDataFragment :
             navigateUpSafe()
         }
         binding.btnApprove.setOnClickListener {
-            val selectedItems = mAdapter.getSelectedData()
-
-            context.showShortToast("Selected Items ${selectedItems.size}")
-            if(selectedItems.isNotEmpty()){
-                viewModel.sendDataToServer(selectedItems)
-            }
+            checkAndSendData()
 
         }
 
+        binding.lytDataSyncStatus.btnRetry.setOnClickListener {
+            binding.lytDataSyncStatus.root.gone()
+            checkAndSendData()
+        }
+
+        binding.lytDataSyncStatus.lytToolbarSync.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
+    }
+
+    private fun checkAndSendData() {
+        val selectedItems = mAdapter.getSelectedData()
+
+        context.showShortToast("Selected Items ${selectedItems.size}")
+        if (selectedItems.isNotEmpty()) {
+            viewModel.sendDataToServer(selectedItems)
+        }
     }
 
     override fun subscribeObservers() {
@@ -54,6 +70,64 @@ class GoogleFitDataFragment :
             mAdapter.setDataSet(it)
         }
 
+        viewModel.dataSyncingComplete.observe(this) {
+            it.getContent()?.let {
+                //todo remove data from adapter
+                mAdapter.removeSyncedData(viewModel.success)
+
+                //check remaining data size
+                val itemCount = mAdapter.itemCount
+
+                //if greater than 1 show error
+                if (itemCount > 0) {
+                    showSyncCompleteState(false, "Data sync failed", "")
+                } else {
+                    val syncMessage = viewModel.getSyncedMessage()
+                    showSyncCompleteState(
+                        true,
+                        "${viewModel.success.size} Items synced",
+                        syncMessage
+                    )
+                }
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+    }
+
+    private fun showSyncCompleteState(state: Boolean, title: String, message: String) {
+        binding.btnApprove.gone()
+        binding.lytDataSyncStatus.apply {
+            tvSyncMessage.text = title
+            if (state) {
+                tvMessage.text = message
+                tvMessage.visible()
+                image.setImageResource(R.drawable.ic_g_fit_success)
+            } else {
+                tvMessage.gone()
+                image.setImageResource(R.drawable.ic_g_fit_failed)
+            }
+            root.visible()
+            btnRetry.setOnClickListener {
+                binding.btnApprove.visible()
+                binding.lytDataSyncStatus.root.gone()
+
+                checkAndSendData()
+            }
+        }
     }
 
 }

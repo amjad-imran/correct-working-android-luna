@@ -894,14 +894,14 @@
             app:argType="com.oreo.ui.chatGpt.AITopics" />
         <argument
             android:name="meal"
+            android:defaultValue="@null"
             app:argType="com.noisefit.data.model.AiMeals"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="workout"
+            android:defaultValue="@null"
             app:argType="com.noisefit.data.model.AiWorkout"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="planType"
             app:argType="com.oreo.ui.chatGpt.PlanType" />
@@ -984,7 +984,7 @@
             app:nullable="true" />
         <argument
             android:name="source"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <dialog
         android:id="@+id/dialogAlarmSound"
@@ -1193,7 +1193,7 @@
     <fragment
         android:id="@+id/workoutPlansFragment"
         android:name="com.oreo.ui.chatGpt.functions.WorkoutPlansFragment"
-        android:label="fragment_workout_plans" >
+        android:label="fragment_workout_plans">
         <action
             android:id="@+id/action_workoutPlansFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
@@ -1219,7 +1219,7 @@
     <fragment
         android:id="@+id/aiWorkoutDetailFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiWorkoutDetailFragment"
-        android:label="fragment_ai_workout_detail" >
+        android:label="fragment_ai_workout_detail">
         <argument
             android:name="data"
             app:argType="com.noisefit.data.model.AiWorkout[]" />
@@ -1227,7 +1227,7 @@
     <fragment
         android:id="@+id/aiMealPlanFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiMealPlanFragment"
-        android:label="fragment_ai_workout_plan" >
+        android:label="fragment_ai_workout_plan">
         <action
             android:id="@+id/action_aiMealPlanFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
@@ -1237,11 +1237,11 @@
     <fragment
         android:id="@+id/audioAiFragment"
         android:name="com.oreo.ui.chatGpt.audio.AudioAiFragment"
-        android:label="fragment_audio_ai" >
+        android:label="fragment_audio_ai">
         <argument
             android:name="planType"
-            app:argType="com.oreo.ui.chatGpt.PlanType"
-            android:defaultValue="NONE" />
+            android:defaultValue="NONE"
+            app:argType="com.oreo.ui.chatGpt.PlanType" />
         <argument
             android:name="text"
             app:argType="string"
@@ -1260,11 +1260,11 @@
     <fragment
         android:id="@+id/audioAiCalibrationFragment"
         android:name="com.oreo.ui.chatGpt.audio.AudioAiCalibrationFragment"
-        android:label="fragment_audio_ai_calibration" >
+        android:label="fragment_audio_ai_calibration">
         <argument
             android:name="planType"
-            app:argType="com.oreo.ui.chatGpt.PlanType"
-            android:defaultValue="NONE" />
+            android:defaultValue="NONE"
+            app:argType="com.oreo.ui.chatGpt.PlanType" />
         <argument
             android:name="text"
             app:argType="string"
@@ -1279,4 +1279,18 @@
         android:id="@+id/googleFitDataFragment"
         android:name="com.oreo.ui.googlefit.GoogleFitDataFragment"
         android:label="fragment_google_fit_data" />
+    <fragment
+        android:id="@+id/googleFitDataSyncedFragment"
+        android:name="com.oreo.ui.googlefit.GoogleFitDataSyncedFragment"
+        android:label="fragment_google_fit_data_synced">
+        <argument
+            android:name="isSuccess"
+            app:argType="boolean" />
+        <argument
+            android:name="syncTitle"
+            app:argType="string" />
+        <argument
+            android:name="syncMessage"
+            app:argType="string" />
+    </fragment>
 </navigation>

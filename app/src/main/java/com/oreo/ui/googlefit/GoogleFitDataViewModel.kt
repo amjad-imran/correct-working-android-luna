@@ -11,6 +11,7 @@ import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.Event
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
@@ -32,6 +33,9 @@ constructor(
     val success = ArrayList<GoogleFitDataDisplayModel>()
     val fail = ArrayList<GoogleFitDataDisplayModel>()
     var unSyncedDataList = MutableLiveData<List<GoogleFitDataDisplayModel>>()
+        private set
+
+    var dataSyncingComplete = MutableLiveData<Event<Boolean>>()
         private set
 
     fun loadData() {
@@ -83,6 +87,34 @@ constructor(
         }
 
         return result
+    }
+
+    fun getSyncedMessage(): String {
+        var hasSleep = false
+        var hasWorkout = false
+        var hasNap = false
+        var hasBodyMeasurement = false
+
+        success.forEach {
+            when(it.type){
+                GoogleFitDataType.SLEEP -> {
+                    hasSleep = true
+                }
+                GoogleFitDataType.NAP -> {
+                    hasNap = true
+                }
+                GoogleFitDataType.WORKOUT -> {
+                    hasWorkout = true
+                }
+                GoogleFitDataType.BODY_MEASUREMENTS -> {
+                    hasBodyMeasurement = true
+                }
+            }
+        }
+
+
+        return "Great! Your have successfully synced {message pending}"
+
     }
 
 
@@ -198,6 +230,7 @@ constructor(
 
                 LOGS.d("sendDataToServer API response ")
             }
+            dataSyncingComplete.postValue(Event(true))
 
             LOGS.d("sendDataToServer API response end")
         }

@@ -247,4 +247,13 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun getSelectedData(): List<GoogleFitDataDisplayModel> {
         return mDataSet.filter { it.isSelected }
     }
+
+    fun removeSyncedData(success: List<GoogleFitDataDisplayModel>) {
+        success.forEach { data ->
+            mDataSet.removeIf { it ->
+                it.isDataSame(data)
+            }
+        }
+        notifyDataSetChanged()
+    }
 }
