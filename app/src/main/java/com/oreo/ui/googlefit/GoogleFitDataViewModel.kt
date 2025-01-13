@@ -71,5 +71,12 @@ class GoogleFitDataViewModel @Inject constructor(
         return result
     }
 
+    val success = ArrayList<GoogleFitDataDisplayModel>()
+    val fail = ArrayList<GoogleFitDataDisplayModel>()
+
+    fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
+
+    }
+
 
 }

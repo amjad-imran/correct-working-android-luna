@@ -42,7 +42,7 @@
         tools:text="24th Jan 25" />
 
     <ImageView
-        android:id="@+id/imageView60"
+        android:id="@+id/ivSelect"
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:src="@drawable/ic_google_fit_default"
@@ -95,17 +95,18 @@
             android:src="@drawable/ic_g_fit_clock" />
 
         <include
-            android:id="@+id/lytHour"
+            android:id="@+id/lytDurationHour"
             layout="@layout/layout_value_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp" />
+
         <include
-            android:id="@+id/lytMin"
+            android:id="@+id/lytDurationMin"
             layout="@layout/layout_value_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp" />
+            android:layout_marginStart="4dp" />
 
     </LinearLayout>
 

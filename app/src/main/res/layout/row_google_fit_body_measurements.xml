@@ -25,14 +25,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/text_body_measurements"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView60"
-        app:layout_constraintEnd_toStartOf="@+id/imageView60"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSelect"
+        app:layout_constraintEnd_toStartOf="@+id/ivSelect"
         app:layout_constraintStart_toEndOf="@+id/imageView63"
-        app:layout_constraintTop_toTopOf="@+id/imageView60" />
+        app:layout_constraintTop_toTopOf="@+id/ivSelect" />
 
 
     <ImageView
-        android:id="@+id/imageView60"
+        android:id="@+id/ivSelect"
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:src="@drawable/ic_google_fit_default"

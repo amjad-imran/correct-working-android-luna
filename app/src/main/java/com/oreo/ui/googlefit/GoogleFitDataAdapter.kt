@@ -3,10 +3,14 @@ package com.oreo.ui.googlefit
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowGoogleFitBodyMeasurementsBinding
 import com.noisefit.luna.databinding.RowGoogleFitSleepBinding
 import com.noisefit.luna.databinding.RowGoogleFitWorkoutBinding
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.GoogleFitDataDisplayModel
@@ -15,6 +19,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val mDataSet = ArrayList<GoogleFitDataDisplayModel>()
@@ -60,6 +65,34 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 this.root.visible()
             }
 
+            val rawData =
+                Gson().fromJson<WorkoutGoogleFit>(data.rawData ?: "")//do this in viewmodel instead
+            val calories = rawData.calories
+
+            if (calories == null || calories == 0.0f) {
+                binding.lytCaloriesBurn.apply {
+                    this.root.gone()
+                }
+                binding.vCalories.gone()
+            } else {
+                binding.lytCaloriesBurn.apply {
+                    tvValue.text = "${calories.roundToInt()}"
+                    tvUnit.text = "kcal"
+                    this.root.visible()
+                }
+                binding.vCalories.visible()
+            }
+
+            if (data.isSelected) {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_selected)
+            } else {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_default)
+            }
+
+            binding.root.setOnClickListener {
+                data.isSelected = data.isSelected.not()
+                notifyItemChanged(bindingAdapterPosition)
+            }
 
         }
     }
@@ -68,12 +101,72 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
 
+            val instant = Instant.ofEpochSecond(data.startTime)
+            val instantEnd = Instant.ofEpochSecond(data.endTime)
+
+            val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+            val end = ZonedDateTime.ofInstant(instantEnd, ZoneId.systemDefault())
+
+            binding.tvDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+
+            binding.lytStartTime.apply {
+                this.tvValue.text = start.format(DateTimeFormatter.ofPattern("hh:mm"))
+                this.tvUnit.text = start.format(DateTimeFormatter.ofPattern("a"))
+            }
+
+            binding.lytEndTime.apply {
+                this.tvValue.text = end.format(DateTimeFormatter.ofPattern("hh:mm"))
+                this.tvUnit.text = end.format(DateTimeFormatter.ofPattern("a"))
+            }
+
+            val duration = data.endTime - data.startTime
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                duration.toInt()
+            )
+            if (hour == 0) {
+                binding.lytDurationHour.root.gone()
+            } else {
+                binding.lytDurationHour.apply {
+                    tvValue.text = "$hour"
+                    tvUnit.text = "hr"
+                    this.root.visible()
+                }
+            }
+
+            binding.lytDurationMin.apply {
+                tvValue.text = "$minute"
+                tvUnit.text = "min"
+                this.root.visible()
+            }
+
+            if (data.isSelected) {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_selected)
+            } else {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_default)
+            }
+
+            binding.root.setOnClickListener {
+                data.isSelected = data.isSelected.not()
+                notifyItemChanged(bindingAdapterPosition)
+            }
+
         }
     }
 
     inner class ViewHolderBodyMeasurements(val binding: RowGoogleFitBodyMeasurementsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
+
+            if (data.isSelected) {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_selected)
+            } else {
+                binding.ivSelect.setImageResource(R.drawable.ic_google_fit_default)
+            }
+
+            binding.ivSelect.setOnClickListener {
+                data.isSelected = data.isSelected.not()
+                notifyItemChanged(bindingAdapterPosition)
+            }
 
         }
     }
@@ -149,5 +242,9 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()
+    }
+
+    fun getSelectedData(): List<GoogleFitDataDisplayModel> {
+        return mDataSet.filter { it.isSelected }
     }
 }
