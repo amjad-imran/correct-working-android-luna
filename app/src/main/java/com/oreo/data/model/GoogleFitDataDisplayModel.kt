@@ -1,6 +1,7 @@
 package com.oreo.data.model
 
 data class GoogleFitDataDisplayModel(
+    var id: Int,
     var isSelected: Boolean = false,
     val type: GoogleFitDataType,
     val startTime: Long,

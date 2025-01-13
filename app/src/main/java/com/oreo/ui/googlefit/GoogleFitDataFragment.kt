@@ -2,7 +2,6 @@ package com.oreo.ui.googlefit
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
@@ -31,6 +30,7 @@ class GoogleFitDataFragment :
         binding.rvMain.adapter = mAdapter
 
         viewModel.loadData()
+
     }
 
     override fun initListener() {
@@ -113,6 +113,7 @@ class GoogleFitDataFragment :
             if (state) {
                 tvMessage.text = message
                 tvMessage.visible()
+                btnRetry.gone()
                 image.setImageResource(R.drawable.ic_g_fit_success)
             } else {
                 tvMessage.gone()
