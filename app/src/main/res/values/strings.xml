@@ -1783,5 +1783,6 @@
     <string name="text_data_available_for_sync">Data available for sync</string>
     <string name="text_data_sync_available">We found some data in google fit which you can bring into Luna.</string>
     <string name="text_manage_data">Manage data</string>
+    <string name="text_select_data">Select data</string>
 
 </resources>

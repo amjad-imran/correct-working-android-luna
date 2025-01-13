@@ -58,7 +58,7 @@ class GoogleFitDataViewModel @Inject constructor(
                 }*/
                 result.add(
                     GoogleFitDataDisplayModel(
-                        type = GoogleFitDataType.WORKOUT,
+                        type = type,
                         startTime = it.startTime,
                         endTime = it.endTime,
                         duration = it.endTime - it.startTime,

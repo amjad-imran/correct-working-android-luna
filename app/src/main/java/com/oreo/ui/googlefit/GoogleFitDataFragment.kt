@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitDataBinding
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,25 +14,31 @@ class GoogleFitDataFragment :
     BaseFragment<FragmentGoogleFitDataBinding>(FragmentGoogleFitDataBinding::inflate) {
 
     private val viewModel: GoogleFitDataViewModel by viewModels()
-    private val mAdapter : GoogleFitDataAdapter by lazy {
+    private val mAdapter: GoogleFitDataAdapter by lazy {
         GoogleFitDataAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.tvTitle.text = getString(R.string.text_select_data)
+
         binding.rvMain.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMain.adapter = mAdapter
 
         viewModel.loadData()
     }
+
     override fun initListener() {
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
 
     }
 
     override fun subscribeObservers() {
 
-        viewModel.unSyncedDataList.observe(this){
+        viewModel.unSyncedDataList.observe(this) {
             mAdapter.setDataSet(it)
         }
 

@@ -9,5 +9,5 @@ data class GoogleFitDataDisplayModel(
 )
 
 enum class GoogleFitDataType(val type: Int) {
-    SLEEP(0), NAP(1), WORKOUT(2), BODY_MEASUREMENTS(2)
+    SLEEP(0), NAP(1), WORKOUT(2), BODY_MEASUREMENTS(3)
 }
