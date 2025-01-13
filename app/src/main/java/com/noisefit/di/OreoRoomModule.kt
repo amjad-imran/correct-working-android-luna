@@ -362,8 +362,11 @@ class OreoRoomModule {
 
     @Singleton
     @Provides
-    fun providesGoogleFitDataImpl(googleFitDataDao: OreoGFitDataDao): GoogleFitDataSourceImpl {
-        return GoogleFitDataSourceImpl(googleFitDataDao)
+    fun providesGoogleFitDataImpl(
+        googleFitDataDao: OreoGFitDataDao,
+        userHealthDataDataSource: OreoUserHealthDataDataSource
+    ): GoogleFitDataSourceImpl {
+        return GoogleFitDataSourceImpl(googleFitDataDao, userHealthDataDataSource)
     }
 
     @Singleton

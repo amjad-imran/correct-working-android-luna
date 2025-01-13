@@ -7,8 +7,8 @@ import com.noisefit_commans.models.WorkoutGoogleFit
 
 interface GoogleFitDataSource {
 
-    fun saveWorkouts(workoutList: List<WorkoutGoogleFit>)
-    fun saveSleeps(sleepList: List<SleepDataGoogleFit>)
+    suspend fun saveWorkouts(workoutList: List<WorkoutGoogleFit>)
+    suspend fun saveSleeps(sleepList: List<SleepDataGoogleFit>)
 
     fun saveBodyMeasurements(bodyMeasurement: BodyMeasurementModel)
 

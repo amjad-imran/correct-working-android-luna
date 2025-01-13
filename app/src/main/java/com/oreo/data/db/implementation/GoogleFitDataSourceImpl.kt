@@ -1,32 +1,57 @@
 package com.oreo.data.db.implementation
 
 import com.google.gson.Gson
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.BodyMeasurementModel
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoGFitDataDao
+import com.oreo.data.model.ServerUserHealthData
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class GoogleFitDataSourceImpl @Inject
 constructor(
-    private val googleFitDataDao: OreoGFitDataDao
+    private val googleFitDataDao: OreoGFitDataDao,
+    private val userHealthDataSource: OreoUserHealthDataDataSource,
 ) : GoogleFitDataSource {
 
-    override fun saveWorkouts(workoutList: List<WorkoutGoogleFit>) {
+    override suspend fun saveWorkouts(workoutList: List<WorkoutGoogleFit>) {
         val filteredData = ArrayList<WorkoutGoogleFit>()
 
-        val savedSleepData =
-            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
+
+        val compareTimestamps = ArrayList<Pair<Long, Long>>()
+
+        val savedSleepGoogleFitData =
+            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())?.map {
+                Pair(it.startTime, it.endTime)
+            } ?: ArrayList()
+        compareTimestamps.addAll(savedSleepGoogleFitData)
 
         val savedWorkoutData =
-            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
+            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())?.map {
+                Pair(it.startTime, it.endTime)
+            } ?: ArrayList()
+        compareTimestamps.addAll(savedWorkoutData)
+
+
+        compareTimestamps.addAll(getUserWorkoutAndSleepTimestamps())
 
         filteredData.addAll(workoutList.filter {
-            checkDataOverlap(it.startTime, it.endTime, savedSleepData, savedWorkoutData).not()
+            checkDataOverlap(
+                it.startTime,
+                it.endTime,
+                compareTimestamps,
+            ).not()
         })
 
         //Save workout
@@ -48,18 +73,102 @@ constructor(
         googleFitDataDao.insertAll(data)
     }
 
-    override fun saveSleeps(sleepList: List<SleepDataGoogleFit>) {
+    private suspend fun getUserWorkoutAndSleepTimestamps(): List<Pair<Long, Long>> {
+
+        val timestamps = ArrayList<Pair<Long, Long>>()
+
+        val zoneOffset = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now())
+
+        (1..3).forEach {
+            val date = DateFormats.getCurrentDateMinusDays(it - 1)
+
+            val userData = userHealthDataSource.getDataByDate(date)
+
+            val parsedData = Gson().fromJson<ServerUserHealthData>(
+                userData?.userHealthData ?: ""
+            )
+
+            parsedData.activity?.workout?.forEach {
+                val startTime = "${it.date} ${it.startTime}"
+                val endTime = "${it.date} ${it.startTime}"
+
+                timestamps.add(
+
+
+                    Pair(
+                        LocalDateTime.parse(
+                            startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+
+
+            parsedData.sleep?.sleeps?.forEach {
+                timestamps.add(
+                    Pair(
+                        LocalDateTime.parse(
+                            it.startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            it.endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+
+            parsedData.sleep?.naps?.forEach {
+                timestamps.add(
+                    Pair(
+                        LocalDateTime.parse(
+                            it.startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            it.endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+        }
+
+        return timestamps
+    }
+
+    override suspend fun saveSleeps(sleepList: List<SleepDataGoogleFit>) {
 
         val filteredData = ArrayList<SleepDataGoogleFit>()
 
-        val savedSleepData =
-            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
+        val compareTimestamps = ArrayList<Pair<Long, Long>>()
+
+        val savedSleepGoogleFitData =
+            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())?.map {
+                Pair(it.startTime, it.endTime)
+            } ?: ArrayList()
+        compareTimestamps.addAll(savedSleepGoogleFitData)
 
         val savedWorkoutData =
-            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
+            googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())?.map {
+                Pair(it.startTime, it.endTime)
+            } ?: ArrayList()
+        compareTimestamps.addAll(savedWorkoutData)
+
+        compareTimestamps.addAll(getUserWorkoutAndSleepTimestamps())
+
 
         filteredData.addAll(sleepList.filter {
-            checkDataOverlap(it.startTime, it.endTime, savedSleepData, savedWorkoutData).not()
+            checkDataOverlap(it.startTime, it.endTime, compareTimestamps).not()
         })
 
         //Save workout
@@ -83,20 +192,22 @@ constructor(
     private fun checkDataOverlap(
         startTime: Long,
         endTime: Long,
-        savedSleepData: List<GoogleFitDataDb>?,
-        savedWorkoutData: List<GoogleFitDataDb>?
+        compareData: List<Pair<Long, Long>>,
+        /*
+                savedSleepData: List<GoogleFitDataDb>?,
+                savedWorkoutData: List<GoogleFitDataDb>?*/
     ): Boolean {
         var dataOverlap = false
-        savedSleepData?.forEach {
+        compareData.forEach {
             val isOverlapping =
-                DateFormats.checkIfTimeOverlap(startTime, endTime, it.startTime, it.endTime)
+                DateFormats.checkIfTimeOverlap(startTime, endTime, it.first, it.second)
             if (dataOverlap.not() && isOverlapping) {
                 dataOverlap = true
             }
             LOGS.d("DATA_OVERLAP sleep $isOverlapping")
 
         }
-        if (dataOverlap) {
+        /*if (dataOverlap) {
             return true
         }
         savedWorkoutData?.forEach {
@@ -107,8 +218,7 @@ constructor(
             }
             LOGS.d("DATA_OVERLAP workout $isOverlapping")
 
-        }
-
+        }*/
         return dataOverlap
     }
 
