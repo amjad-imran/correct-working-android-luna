@@ -32,7 +32,6 @@ class GoogleFitDataFragment :
 
         viewModel.loadData()
 
-        viewModel.sendDataToServer(ArrayList())
     }
 
     override fun initListener() {

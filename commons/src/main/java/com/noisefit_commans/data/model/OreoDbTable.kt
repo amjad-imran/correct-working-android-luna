@@ -112,7 +112,8 @@ data class GoogleFitWorkoutData(
 
 
 @Entity(
-    tableName = "google_fit_data"
+    tableName = "google_fit_data",
+    indices = [Index(value = ["endTime", "startTime", "type"], unique = true)]
 )
 @Parcelize
 data class GoogleFitDataDb(
