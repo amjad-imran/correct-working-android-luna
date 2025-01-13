@@ -26,7 +26,7 @@ constructor(
             googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
 
         filteredData.addAll(workoutList.filter {
-            checkDataOverlap(it.startTime, it.endTime, savedSleepData,savedWorkoutData).not()
+            checkDataOverlap(it.startTime, it.endTime, savedSleepData, savedWorkoutData).not()
         })
 
         //Save workout
@@ -59,7 +59,7 @@ constructor(
             googleFitDataDao.getDataByType(GoogleFitDataType.SLEEP.name.lowercase())
 
         filteredData.addAll(sleepList.filter {
-            checkDataOverlap(it.startTime, it.endTime, savedSleepData,savedWorkoutData).not()
+            checkDataOverlap(it.startTime, it.endTime, savedSleepData, savedWorkoutData).not()
         })
 
         //Save workout
@@ -96,7 +96,7 @@ constructor(
             LOGS.d("DATA_OVERLAP sleep $isOverlapping")
 
         }
-        if(dataOverlap){
+        if (dataOverlap) {
             return true
         }
         savedWorkoutData?.forEach {
@@ -110,6 +110,18 @@ constructor(
         }
 
         return dataOverlap
+    }
+
+    override fun getUnSyncedData(): List<GoogleFitDataDb> {
+        return googleFitDataDao.getUnSyncedData()
+    }
+
+    override fun markDataSynced(id: Int) {
+        return googleFitDataDao.markDataSynced(id)
+    }
+
+    override fun deleteData(timestamp: Long) {
+        return googleFitDataDao.deleteData(timestamp)
     }
 
     override fun saveBodyMeasurements(bodyMeasurement: BodyMeasurementModel) {

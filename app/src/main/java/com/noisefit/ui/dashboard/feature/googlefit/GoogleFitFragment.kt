@@ -93,6 +93,15 @@ class GoogleFitFragment :
             tvTitleDisc.setTextColor(requireActivity().resources.getColor(com.noisefit_commans.R.color.text_accent_color))
 
         }
+        binding.lytToolbarWithDetails.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                if (isChecked.not()) {
+                    logOutFit()
+                }
+            }
+        }
+
+
         binding.lytToolbarWithDetails.apply {
             tvTitle.text = getString(R.string.text_google_fit)
             tvDesc.gone()
@@ -174,6 +183,7 @@ class GoogleFitFragment :
 
 
     private fun logOutFit() {
+        binding.progressBar.root.visible()
 
 
 //        if (oAuthPermissionsApproved()) {
@@ -185,6 +195,13 @@ class GoogleFitFragment :
             )
                 .disableFit()
                 .addOnSuccessListener {
+
+                    localDataStore.setStatusGoogleFitKey("sleep", false)
+                    localDataStore.setStatusGoogleFitKey("workout", false)
+                    localDataStore.setStatusGoogleFitKey("body_measurement", false)
+
+                    binding.progressBar.root.gone()
+
                     setGoogleFitSwitchState(false)
                     uiController.onDisplayError(getString(R.string.text_google_fit_disable))
                     localDataStore.setGoogleFitStatus(false)
@@ -198,6 +215,13 @@ class GoogleFitFragment :
                 }
                 .addOnFailureListener { e ->
                     uiController.onDisplayError(getString(R.string.text_google_fit_disable))
+
+                    localDataStore.setStatusGoogleFitKey("sleep", false)
+                    localDataStore.setStatusGoogleFitKey("workout", false)
+                    localDataStore.setStatusGoogleFitKey("body_measurement", false)
+
+                    binding.progressBar.root.gone()
+
                     localDataStore.setGoogleFitStatus(false)
                     setGoogleFitSwitchState(false)
                     GoogleSignIn.getClient(context, googleSignInOptions).signOut()
@@ -230,23 +254,76 @@ class GoogleFitFragment :
 
     private fun setGoogleFitSwitchState(isChecked: Boolean) {
         if (!isChecked) {
-            nullableBinding?.lytGoogleFitDisclosure?.apply {
-                tvConnection.visible()
-                tvConnectionText.visible()
-            }
-            //   binding.bConnect.setBackgroundDrawable()
-            nullableBinding?.bConnect?.text = getString(R.string.text_connect)
+            nullableBinding?.lytGoogleFitDisclosure?.root?.visible()
+            nullableBinding?.lytFeatureTile?.root?.visible()
+            nullableBinding?.bConnect?.visible()
+            binding.lytGoogleFitEnable.root.gone()
+            nullableBinding?.lytToolbarWithDetails?.switchMain?.gone()
         } else {
-            nullableBinding?.lytGoogleFitDisclosure?.apply {
-                tvConnection.gone()
-                tvConnectionText.gone()
+            nullableBinding?.lytGoogleFitDisclosure?.root?.gone()
+            nullableBinding?.lytFeatureTile?.root?.gone()
+            nullableBinding?.bConnect?.gone()
+            nullableBinding?.lytGoogleFitEnable?.root?.visible()
+            nullableBinding?.lytToolbarWithDetails?.switchMain?.apply {
+                visible()
+            }?.isChecked = true
+
+            initEnabledItems()
+        }
+    }
+
+    private fun initEnabledItems() {
+
+        nullableBinding?.lytGoogleFitEnable?.let {
+            val sleepStatus = localDataStore.getStatusGoogleFitKey("sleep")
+            val workoutStatus = localDataStore.getStatusGoogleFitKey("workout")
+            val bodyMeasurementStatus = localDataStore.getStatusGoogleFitKey("body_measurement")
+
+            it.lytSleep.tvName.text = getString(R.string.text_sleep)
+            it.lytSleep.imageView.setImageResource(R.drawable.ic_g_fit_nap)
+            it.lytSleep.switchMain.isChecked = sleepStatus
+            it.lytSleep.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    localDataStore.setStatusGoogleFitKey("sleep", isChecked)
+                }
+                checkIfAllOff()
             }
-            nullableBinding?.bConnect?.text = getString(R.string.text_disconnect)
+
+
+            it.lytWorkout.tvName.text = getString(R.string.text_workout)
+            it.lytWorkout.imageView.setImageResource(R.drawable.ic_g_fit_workout)
+            it.lytWorkout.switchMain.isChecked = workoutStatus
+            it.lytWorkout.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    localDataStore.setStatusGoogleFitKey("workout", isChecked)
+                }
+                checkIfAllOff()
+
+            }
+
+            it.lytMeasurements.tvName.text = getString(R.string.text_body_measurements)
+            it.lytMeasurements.imageView.setImageResource(R.drawable.ic_g_fit_measurements)
+            it.lytMeasurements.switchMain.isChecked = bodyMeasurementStatus
+            it.lytMeasurements.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    localDataStore.setStatusGoogleFitKey("body_measurement", isChecked)
+                }
+                checkIfAllOff()
+            }
+
         }
 
     }
 
+    private fun checkIfAllOff() {
+        nullableBinding?.lytGoogleFitEnable?.let {
+            if (!it.lytSleep.switchMain.isChecked && !it.lytWorkout.switchMain.isChecked && !it.lytMeasurements.switchMain.isChecked) {
 
+                logOutFit()
+            }
+        }
+
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -255,6 +332,11 @@ class GoogleFitFragment :
             AppCompatActivity.RESULT_OK -> {
                 try {
                     localDataStore.setGoogleFitStatus(true)
+
+                    localDataStore.setStatusGoogleFitKey("sleep", true)
+                    localDataStore.setStatusGoogleFitKey("workout", true)
+                    localDataStore.setStatusGoogleFitKey("body_measurement", true)
+
                     setGoogleFitSwitchState(true)
                     googleFitDataObservers.saveUserWeightAndHeight()
                     sessionManager.logInsiderAppEvent(

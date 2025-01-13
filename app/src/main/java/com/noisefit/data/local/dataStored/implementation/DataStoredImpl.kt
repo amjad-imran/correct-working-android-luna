@@ -74,6 +74,7 @@ private const val WATCH_LOGS_NAME = "watch_logs_name"
 private const val CONNECTION_SERVICE_STATE = "CONNECTION_SERVICE_STATE"
 private const val USER_ACTIVITIES = "user_activities"
 private const val GOOGLE_FIT_STATUS = "google_fit_status"
+private const val G_FIT_STATUS_KEY = "G_FIT_STATUS_KEY"
 private const val VERIFY_MOBILE_NUMBER = "verify_mobile_number"
 private const val IGNORE_VERSION_NUMBER = "IGNORE_VERSION_NUMBER"
 private const val LAST_SYNC_WITH_SERVER = "LAST_SYNC_WITH_SERVER"
@@ -1053,6 +1054,17 @@ class DataStoredImpl
 
     override fun setGoogleFitStatus(status: Boolean) {
         mPrefs.edit()?.putBoolean(GOOGLE_FIT_STATUS, status)?.apply()
+    }
+
+    /**
+     * key -> sleep, workout, body measurements
+     */
+    override fun setStatusGoogleFitKey(key: String, status: Boolean) {
+        mPrefs.edit()?.putBoolean(G_FIT_STATUS_KEY + "_$key", status)?.apply()
+    }
+
+    override fun getStatusGoogleFitKey(key: String): Boolean {
+        return mPrefs.getBoolean(G_FIT_STATUS_KEY + "_$key", true)
     }
 
     override fun setVerifyMobileNumberStatus(status: Boolean) {

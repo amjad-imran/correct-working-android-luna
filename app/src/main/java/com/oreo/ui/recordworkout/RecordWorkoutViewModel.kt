@@ -156,13 +156,16 @@ class RecordWorkoutViewModel @Inject constructor(
                         resource.data?.let { weather ->
                             if (sportStartTime != 0L && workout != null) {
                                 val weatherStatus =
-                                    getWeatherStatus(weather.current.weather?.firstOrNull())
-                                locationDataSource.updateWeatherInfoForLatLong(
-                                    lat,
-                                    lng,
-                                    weather.current.temp,
-                                    weatherStatus
-                                )
+                                    getWeatherStatus(weather.weather?.firstOrNull()?.id)
+                                if (weather.main?.temp != null) {
+                                    locationDataSource.updateWeatherInfoForLatLong(
+                                        lat,
+                                        lng,
+                                        weather.main?.temp!!,
+                                        weatherStatus
+                                    )
+                                }
+
                                 val newModel = workout!!.apply {
                                     this.isTempSet = true
                                 }
@@ -194,10 +197,10 @@ class RecordWorkoutViewModel @Inject constructor(
      * 7->Atmosphere
      * 8->Clouds
      */
-    private fun getWeatherStatus(weather: WeatherItem?): Int? {
-        val weatherId = weather?.id ?: return null
+    private fun getWeatherStatus(id: Int?): Int? {
+        id ?: return null
 
-        return when (weatherId) {
+        return when (id) {
             800 -> 0
             in 200..299 -> 2
             in 300..399 -> 3
@@ -264,7 +267,7 @@ class RecordWorkoutViewModel @Inject constructor(
     }
 
     fun getStoppedByRingMessage(error: String, showSave: Boolean): String {
-        return if (error.equals("charging",true)) {
+        return if (error.equals("charging", true)) {
             if (showSave) {
                 "Your workout has ended because you have kept your ring on charging. Make sure you wear your ring on your finger while doing workout. Do you want to save your current progress?"
             } else {

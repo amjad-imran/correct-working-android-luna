@@ -6,6 +6,7 @@ import com.noisefit.data.remote.abstraction.WeatherService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.models.weather.WeatherInfo
+import com.noisefit_commans.models.weather.WeatherInfoNew
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
@@ -25,7 +26,7 @@ class WeatherRepositoryImpl(
         lat: Double,
         long: Double,
         units: String,
-    ): Flow<Resource<WeatherInfo?>> {
+    ): Flow<Resource<WeatherInfoNew?>> {
         return safeApiCallFlowWeather(dispatcher) {
             weatherDataSource.getWeatherData(
                 lat,

@@ -117,6 +117,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateGoogleFitCard = MutableLiveData<Boolean>()
+    val stateGoogleFitCardDataSyncAvailable = MutableLiveData<Boolean>()
     val napsList = MutableLiveData<List<OreoNapData>>()
 
     val sleepAlert = MutableLiveData<SleepAlert?>()
@@ -370,7 +371,15 @@ class SummaryDataViewModelToday @Inject constructor(
 
             if (isGoogleFitEnabled) {
                 stateGoogleFitCard.postValue(false)
+                val isDataAvailableForSync = true
+
+                if (isDataAvailableForSync) {
+                    //TODO handle cross here
+                    stateGoogleFitCardDataSyncAvailable.postValue(true)
+                }
+
             } else {
+                stateGoogleFitCardDataSyncAvailable.postValue(false)
                 if (isGoogleFitCrossed) {
                     stateGoogleFitCard.postValue(false)
                 } else {
@@ -379,6 +388,7 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         } else {
             stateGoogleFitCard.postValue(false)
+            stateGoogleFitCardDataSyncAvailable.postValue(false)
         }
     }
 

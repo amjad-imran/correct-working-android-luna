@@ -479,10 +479,20 @@ class SummaryDataFragmentToday :
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
         }
+
         binding.contentMain.lytGoogleFit.ivCross.setOnClickListener {
             viewModel.ringDataStore.setGoogleFitCrossed(true)
             viewModel.stateGoogleFitCard.postValue(false)
         }
+
+        binding.contentMain.lytGoogleFitDataAvailable.tvGoogleFitTurnOn.setOnClickListener {
+            navigate(R.id.googleFitDataFragment)
+        }
+
+        binding.contentMain.lytGoogleFitDataAvailable.ivCross.setOnClickListener {
+
+        }
+
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
@@ -861,6 +871,19 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytGoogleFit.root.visible()
             } else {
                 binding.contentMain.lytGoogleFit.root.gone()
+            }
+        }
+
+        viewModel.stateGoogleFitCardDataSyncAvailable.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytGoogleFitDataAvailable.apply {
+                    textView91.text = getString(R.string.text_data_available_for_sync)
+                    textView92.text = getString(R.string.text_data_sync_available)
+                    tvGoogleFitTurnOn.text = getString(R.string.text_manage_data)
+                    this.root.visible()
+                }
+            } else {
+                binding.contentMain.lytGoogleFitDataAvailable.root.gone()
             }
         }
 

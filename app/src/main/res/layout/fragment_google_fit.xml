@@ -64,11 +64,23 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <include
+            android:id="@+id/lytGoogleFitEnable"
+            layout="@layout/layout_google_fit_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbarWithDetails"
+            tools:visibility="visible" />
+        <include
             android:id="@+id/progressBar"
             layout="@layout/default_loader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

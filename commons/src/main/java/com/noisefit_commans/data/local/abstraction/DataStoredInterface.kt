@@ -91,8 +91,12 @@ interface DataStoredInterface {
     fun getOldNotificationEnabledAppList(): List<NotificationApp>?
     fun getTimeFormat(): String?
     fun setTimeFormat(format: String)
+
     fun isEnableGoogleFit(): Boolean
     fun setGoogleFitStatus(status: Boolean)
+
+    fun setStatusGoogleFitKey(key: String, status: Boolean)
+    fun getStatusGoogleFitKey(key: String): Boolean
 
     fun setVerifyMobileNumberStatus(status: Boolean)
     fun getVerifyMobileNumberStatus(): Boolean
