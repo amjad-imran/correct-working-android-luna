@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit_commans.data.model.GoogleFitDataDb
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
@@ -18,6 +19,9 @@ class GoogleFitDataViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var unSyncedDataList = MutableLiveData<List<GoogleFitDataDisplayModel>>()
+        private set
+
+    var dataSyncingComplete = MutableLiveData<Event<Boolean>>()
         private set
 
     fun loadData() {
@@ -75,6 +79,37 @@ class GoogleFitDataViewModel @Inject constructor(
     val fail = ArrayList<GoogleFitDataDisplayModel>()
 
     fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
+
+
+        dataSyncingComplete.postValue(Event(true))
+
+    }
+
+    fun getSyncedMessage(): String {
+        var hasSleep = false
+        var hasWorkout = false
+        var hasNap = false
+        var hasBodyMeasurement = false
+
+        success.forEach {
+            when(it.type){
+                GoogleFitDataType.SLEEP -> {
+                    hasSleep = true
+                }
+                GoogleFitDataType.NAP -> {
+                    hasNap = true
+                }
+                GoogleFitDataType.WORKOUT -> {
+                    hasWorkout = true
+                }
+                GoogleFitDataType.BODY_MEASUREMENTS -> {
+                    hasBodyMeasurement = true
+                }
+            }
+        }
+
+
+        return "Great! Your have successfully synced {message pending}"
 
     }
 

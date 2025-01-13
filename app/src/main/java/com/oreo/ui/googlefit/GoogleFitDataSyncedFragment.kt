@@ -2,21 +2,25 @@ package com.oreo.ui.googlefit
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitDataSyncedBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class GoogleFitDataSyncedFragment :
     BaseFragment<FragmentGoogleFitDataSyncedBinding>(FragmentGoogleFitDataSyncedBinding::inflate) {
+    private val args: GoogleFitDataSyncedFragmentArgs by navArgs()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isSuccess = true
-        val syncMessage = "2 Items synced"
-        val message = "Great! Your have successfully synced workout and sleep"
+        val isSuccess = args.isSuccess
+        val syncMessage = args.syncTitle
+        val message = args.syncMessage
 
         setUI(isSuccess, syncMessage, message)
     }
