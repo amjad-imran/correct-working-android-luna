@@ -490,7 +490,7 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytGoogleFitDataAvailable.ivCross.setOnClickListener {
-
+            viewModel.stateGoogleFitCardDataSyncAvailable.postValue(false)
         }
 
 

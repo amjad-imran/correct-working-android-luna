@@ -107,6 +107,7 @@ class GoogleFitDataFragment :
     }
 
     private fun showSyncCompleteState(state: Boolean, title: String, message: String) {
+        binding.btnApprove.gone()
         binding.lytDataSyncStatus.apply {
             tvSyncMessage.text = title
             if (state) {
@@ -119,8 +120,10 @@ class GoogleFitDataFragment :
             }
             root.visible()
             btnRetry.setOnClickListener {
+                binding.btnApprove.visible()
                 binding.lytDataSyncStatus.root.gone()
 
+                checkAndSendData()
             }
         }
     }
