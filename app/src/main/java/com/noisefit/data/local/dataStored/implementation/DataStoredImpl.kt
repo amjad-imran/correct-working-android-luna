@@ -1057,7 +1057,7 @@ class DataStoredImpl
     }
 
     /**
-     * key -> sleep, workout, body measurements
+     * key -> sleep, workout, body_measurement
      */
     override fun setStatusGoogleFitKey(key: String, status: Boolean) {
         mPrefs.edit()?.putBoolean(G_FIT_STATUS_KEY + "_$key", status)?.apply()
