@@ -33,6 +33,7 @@ import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -214,6 +215,8 @@ private const val APP_LANGUAGE = "APP_LANGUAGE"
 private const val HAS_SELECTED_LANGUAGE = "HAS_SELECTED_LANGUAGE"
 private const val MAX_AMP = "MAX_AMP"
 
+private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -221,6 +224,15 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getAppBodyMeasurementsTimeStamp(): Long {
+        return mPrefs.getLong(APP_MEASUREMENT_TIMESTAMP, ZonedDateTime.now().toEpochSecond())
+    }
+
+    override fun saveAppBodyMeasurementsTimeStamp() {
+        mPrefs.edit()?.putLong(APP_MEASUREMENT_TIMESTAMP, ZonedDateTime.now().toEpochSecond())
+            ?.commit()
+    }
 
     override fun saveAudioMaxAmp(calibrated: Int) {
         mPrefs.edit()?.putInt(MAX_AMP, calibrated)?.commit()

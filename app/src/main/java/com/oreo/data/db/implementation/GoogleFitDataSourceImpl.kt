@@ -3,8 +3,8 @@ package com.oreo.data.db.implementation
 import com.google.gson.Gson
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.BodyMeasurementModel
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.GoogleFitDataDb
-import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
@@ -15,13 +15,13 @@ import com.oreo.data.db.database.OreoGFitDataDao
 import com.oreo.data.model.ServerUserHealthData
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class GoogleFitDataSourceImpl @Inject
 constructor(
     private val googleFitDataDao: OreoGFitDataDao,
+    private val localDataSource: DataStoredInterface,
     private val userHealthDataSource: OreoUserHealthDataDataSource,
 ) : GoogleFitDataSource {
 
@@ -238,8 +238,10 @@ constructor(
 
         val height = bodyMeasurement.height
         val weight = bodyMeasurement.weight
-        //val bodyFat = bodyMeasurement.bodyFat
 
+        //val bodyFat = bodyMeasurement.bodyFat
+        val userData = localDataSource.getUser()
+        val appTimestamp = localDataSource.getAppBodyMeasurementsTimeStamp()
 
         if (height != null) {
             val savedHeight =
@@ -249,15 +251,19 @@ constructor(
             if (savedHeight == null || savedHeight.startTime < height.timeStamp) {
                 googleFitDataDao.removeDataByType(GoogleFitDataType.HEIGHT.name.lowercase())
 
-                googleFitDataDao.insert(
-                    GoogleFitDataDb(
-                        isSynced = false,
-                        type = GoogleFitDataType.HEIGHT.name.lowercase(),
-                        data = Gson().toJson(height),
-                        startTime = height.timeStamp,
-                        endTime = height.timeStamp,
+                if ((height.timeStamp > appTimestamp) &&
+                    (height.value != (userData?.userInfo?.height?:0.0f))) {
+                    googleFitDataDao.insert(
+                        GoogleFitDataDb(
+                            isSynced = false,
+                            type = GoogleFitDataType.HEIGHT.name.lowercase(),
+                            data = Gson().toJson(height),
+                            startTime = height.timeStamp,
+                            endTime = height.timeStamp,
+                        )
                     )
-                )
+                }
+
             }
         }
         if (weight != null) {
@@ -269,15 +275,18 @@ constructor(
             if (savedWeight == null || savedWeight.startTime < weight.timeStamp) {
                 googleFitDataDao.removeDataByType(GoogleFitDataType.WEIGHT.name.lowercase())
 
-                googleFitDataDao.insert(
-                    GoogleFitDataDb(
-                        isSynced = false,
-                        type = GoogleFitDataType.WEIGHT.name.lowercase(),
-                        data = Gson().toJson(weight),
-                        startTime = weight.timeStamp,
-                        endTime = weight.timeStamp,
+                if ((weight.timeStamp > appTimestamp) &&
+                    (weight.value != (userData?.userInfo?.weight?:0.0f))) {
+                    googleFitDataDao.insert(
+                        GoogleFitDataDb(
+                            isSynced = false,
+                            type = GoogleFitDataType.WEIGHT.name.lowercase(),
+                            data = Gson().toJson(weight),
+                            startTime = weight.timeStamp,
+                            endTime = weight.timeStamp,
+                        )
                     )
-                )
+                }
             }
         }
     }

@@ -484,4 +484,7 @@ interface DataStoredInterface {
     fun saveAudioMaxAmp(calibrated: Int)
     fun getAudioMaxAmp(): Int
 
+    fun getAppBodyMeasurementsTimeStamp(): Long
+    fun saveAppBodyMeasurementsTimeStamp()
+
 }

@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.database.KeyValueDao
 import com.noisefit.data.local.db.implementation.KeyValueDataSourceImpl
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.GoogleFitDataSource
@@ -364,9 +365,10 @@ class OreoRoomModule {
     @Provides
     fun providesGoogleFitDataImpl(
         googleFitDataDao: OreoGFitDataDao,
-        userHealthDataDataSource: OreoUserHealthDataDataSource
+        userHealthDataDataSource: OreoUserHealthDataDataSource,
+        localDataSource: DataStoredInterface,
     ): GoogleFitDataSourceImpl {
-        return GoogleFitDataSourceImpl(googleFitDataDao, userHealthDataDataSource)
+        return GoogleFitDataSourceImpl(googleFitDataDao, localDataSource, userHealthDataDataSource)
     }
 
     @Singleton
