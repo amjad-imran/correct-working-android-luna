@@ -226,7 +226,7 @@ class DataStoredImpl
 ) : DataStoredInterface {
 
     override fun getAppBodyMeasurementsTimeStamp(): Long {
-        return mPrefs.getLong(APP_MEASUREMENT_TIMESTAMP, ZonedDateTime.now().toEpochSecond())
+        return mPrefs.getLong(APP_MEASUREMENT_TIMESTAMP, 0)
     }
 
     override fun saveAppBodyMeasurementsTimeStamp() {

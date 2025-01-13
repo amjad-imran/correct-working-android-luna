@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_g_fit_measurements"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView60"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSelect"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView60" />
+        app:layout_constraintTop_toTopOf="@+id/ivSelect" />
 
     <TextView
         android:id="@+id/textView143"

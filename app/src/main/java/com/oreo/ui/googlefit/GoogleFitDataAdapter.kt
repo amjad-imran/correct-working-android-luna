@@ -10,12 +10,14 @@ import com.noisefit.luna.databinding.RowGoogleFitSleepBinding
 import com.noisefit.luna.databinding.RowGoogleFitWorkoutBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.models.BodyMeasurementGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -157,6 +159,65 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
 
+
+            val measurementData = Gson().fromJson<BodyMeasurementGoogleFit>(data.rawData ?: "")
+
+            if (measurementData.gFitHeight != null) {
+                binding.lytHeight.apply {
+                    this.tvTitle.text = tvTitle.context.getString(R.string.height)
+                    tvCurrentValue.text = "${measurementData.userHeight}"
+
+                    val instant = Instant.ofEpochSecond(measurementData.userTimeStamp)
+                    val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+                    val instantChanged = Instant.ofEpochSecond(
+                        measurementData.gFitHeight?.timeStamp ?: ZonedDateTime.now().toEpochSecond()
+                    )
+                    val changedTime =
+                        ZonedDateTime.ofInstant(instantChanged, ZoneId.systemDefault())
+
+                    tvCurrentDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                    tvChangedDate.text =
+                        changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+
+                    tvChangedValue.text = "${measurementData.gFitHeight!!.value.roundToInt()}"
+                    this.root.visible()
+                }
+            } else {
+                binding.lytHeight.apply {
+                    this.root.gone()
+                }
+            }
+
+            if (measurementData.gFitWeight != null) {
+                binding.lytWeight.apply {
+                    this.tvTitle.text = tvTitle.context.getString(R.string.weight)
+                    tvCurrentValue.text = "${measurementData.userWeight}"
+
+                    val instant = Instant.ofEpochSecond(measurementData.userTimeStamp)
+                    val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+                    val instantChanged = Instant.ofEpochSecond(
+                        measurementData.gFitHeight?.timeStamp ?: ZonedDateTime.now().toEpochSecond()
+                    )
+                    val changedTime =
+                        ZonedDateTime.ofInstant(instantChanged, ZoneId.systemDefault())
+
+                    tvCurrentDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                    tvChangedDate.text =
+                        changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+
+                    tvChangedValue.text = "${measurementData.gFitHeight!!.value.roundToInt()}"
+                    this.root.visible()
+                }
+            } else {
+                binding.lytWeight.apply {
+                    this.root.gone()
+                }
+            }
+
+
+
             if (data.isSelected) {
                 binding.ivSelect.setImageResource(R.drawable.ic_google_fit_selected)
             } else {
@@ -225,7 +286,7 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             GoogleFitDataType.BODY_MEASUREMENTS.type -> {
-                (holder as ViewHolderSleep).bind(mDataSet[position])
+                (holder as ViewHolderBodyMeasurements).bind(mDataSet[position])
             }
 
             else -> {

@@ -6,7 +6,11 @@ import com.google.gson.Gson
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.models.BodyMeasurementGoogleFit
+import com.noisefit_commans.models.BodyMeasurementModel
+import com.noisefit_commans.models.BodyMeasurementValue
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
@@ -22,6 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "GoogleFitDataViewModel"
+
 @HiltViewModel
 class GoogleFitDataViewModel
 @Inject
@@ -29,6 +34,7 @@ constructor(
     private val googleFitDataSource: GoogleFitDataSource,
     private val userActivityRepository: OreoUserActivityRepository,
     private val offlineDataMapper: OfflineDataMapper,
+    private val localDataSource: DataStoredInterface,
 ) : BaseViewModel() {
     val success = ArrayList<GoogleFitDataDisplayModel>()
     val fail = ArrayList<GoogleFitDataDisplayModel>()
@@ -51,6 +57,15 @@ constructor(
 
         val result = ArrayList<GoogleFitDataDisplayModel>()
 
+
+        val userInfo = localDataSource.getUser()?.userInfo
+
+        val measurementObj = BodyMeasurementGoogleFit(
+            userTimeStamp = localDataSource.getAppBodyMeasurementsTimeStamp(),
+            userHeight = (userInfo?.height ?: 0),
+            userWeight = (userInfo?.weight ?: 0)
+        )
+
         data.forEach {
 
             //workout, sleep, height, weight, body_fat
@@ -64,6 +79,20 @@ constructor(
                 } else {
                     GoogleFitDataType.SLEEP
                 }
+            } else if (it.type.equals(
+                    com.oreo.data.db.implementation.GoogleFitDataType.HEIGHT.name.lowercase(),
+                    true
+                )
+            ) {
+                measurementObj.gFitHeight = Gson().fromJson<BodyMeasurementValue>(it.data ?: "")
+                null
+            } else if (it.type.equals(
+                    com.oreo.data.db.implementation.GoogleFitDataType.WEIGHT.name.lowercase(),
+                    true
+                )
+            ) {
+                measurementObj.gFitWeight = Gson().fromJson<BodyMeasurementValue>(it.data ?: "")
+                null
             } else {
                 null
             }
@@ -87,6 +116,19 @@ constructor(
             }
         }
 
+        if (measurementObj.gFitHeight != null || measurementObj.gFitWeight != null) {
+            result.add(
+                GoogleFitDataDisplayModel(
+                    id = 0,
+                    type = GoogleFitDataType.BODY_MEASUREMENTS,
+                    startTime = 0,
+                    endTime = 0,
+                    duration = 0,
+                    rawData = Gson().toJson(measurementObj),
+                )
+            )
+        }
+
         return result
     }
 
@@ -97,16 +139,19 @@ constructor(
         var hasBodyMeasurement = false
 
         success.forEach {
-            when(it.type){
+            when (it.type) {
                 GoogleFitDataType.SLEEP -> {
                     hasSleep = true
                 }
+
                 GoogleFitDataType.NAP -> {
                     hasNap = true
                 }
+
                 GoogleFitDataType.WORKOUT -> {
                     hasWorkout = true
                 }
+
                 GoogleFitDataType.BODY_MEASUREMENTS -> {
                     hasBodyMeasurement = true
                 }

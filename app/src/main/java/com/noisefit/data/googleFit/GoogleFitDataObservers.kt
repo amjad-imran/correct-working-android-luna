@@ -15,16 +15,12 @@ import com.google.android.gms.fitness.request.SessionInsertRequest
 import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
-import com.noisefit.data.model.BodyMeasurementModel
-import com.noisefit.data.model.BodyMeasurementValue
-import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
-import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit

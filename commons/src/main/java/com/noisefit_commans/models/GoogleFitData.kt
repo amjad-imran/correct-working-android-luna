@@ -54,6 +54,26 @@ data class WorkoutGoogleFit(
     var type: String? = null
 )
 
+data class BodyMeasurementGoogleFit(
+    val userTimeStamp: Long,
+    val userHeight: Int,
+    val userWeight: Int,
+    var gFitHeight: BodyMeasurementValue? = null,
+    var gFitWeight: BodyMeasurementValue? = null,
+)
+
+data class BodyMeasurementModel(
+    val height: BodyMeasurementValue? = null,
+    val weight: BodyMeasurementValue? = null,
+    val bodyFat: BodyMeasurementValue? = null,
+)
+
+data class BodyMeasurementValue(
+    val timeStamp: Long,
+    val value: Float,
+)
+
+
 //{"type":"HEART RATE","count":62,"min_count":0,"max_count":0,"unit":"bpm","time":"2021-05-17T05:31:06.718Z","resting_hr":0}
 //data class HeartDataGoogleFit(
 //    val time: Long,

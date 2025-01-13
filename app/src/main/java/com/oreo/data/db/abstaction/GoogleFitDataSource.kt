@@ -1,7 +1,7 @@
 package com.oreo.data.db.abstaction
 
-import com.noisefit.data.model.BodyMeasurementModel
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.models.BodyMeasurementModel
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 

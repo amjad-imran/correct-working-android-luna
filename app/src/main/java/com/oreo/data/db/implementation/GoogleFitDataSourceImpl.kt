@@ -2,9 +2,9 @@ package com.oreo.data.db.implementation
 
 import com.google.gson.Gson
 import com.noisefit.data.local.db.fromJson
-import com.noisefit.data.model.BodyMeasurementModel
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.models.BodyMeasurementModel
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
@@ -15,6 +15,7 @@ import com.oreo.data.db.database.OreoGFitDataDao
 import com.oreo.data.model.ServerUserHealthData
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -241,7 +242,11 @@ constructor(
 
         //val bodyFat = bodyMeasurement.bodyFat
         val userData = localDataSource.getUser()
-        val appTimestamp = localDataSource.getAppBodyMeasurementsTimeStamp()
+        var appTimestamp = localDataSource.getAppBodyMeasurementsTimeStamp()
+        if (appTimestamp == 0L) {
+            localDataSource.saveAppBodyMeasurementsTimeStamp()
+            appTimestamp = ZonedDateTime.now().toEpochSecond()
+        }
 
         if (height != null) {
             val savedHeight =
@@ -252,7 +257,8 @@ constructor(
                 googleFitDataDao.removeDataByType(GoogleFitDataType.HEIGHT.name.lowercase())
 
                 if ((height.timeStamp > appTimestamp) &&
-                    (height.value != (userData?.userInfo?.height?:0.0f))) {
+                    (height.value != (userData?.userInfo?.height ?: 0.0f))
+                ) {
                     googleFitDataDao.insert(
                         GoogleFitDataDb(
                             isSynced = false,
@@ -276,7 +282,8 @@ constructor(
                 googleFitDataDao.removeDataByType(GoogleFitDataType.WEIGHT.name.lowercase())
 
                 if ((weight.timeStamp > appTimestamp) &&
-                    (weight.value != (userData?.userInfo?.weight?:0.0f))) {
+                    (weight.value != (userData?.userInfo?.weight ?: 0.0f))
+                ) {
                     googleFitDataDao.insert(
                         GoogleFitDataDb(
                             isSynced = false,
