@@ -33,6 +33,7 @@ import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
@@ -176,6 +177,7 @@ object AppModule {
         napDataSource: OreoNapDataImpl,
         dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
         autoWorkoutDataSource: OreoAutoSportDataImpl,
+        googleFitDataSource: GoogleFitDataSource,
         gson: Gson
     ): AppRepository =
         AppRepositoryImpl(
@@ -190,6 +192,7 @@ object AppModule {
             napDataSource,
             dayTimeMovementDataSource,
             autoWorkoutDataSource,
+            googleFitDataSource,
             gson
         )
 

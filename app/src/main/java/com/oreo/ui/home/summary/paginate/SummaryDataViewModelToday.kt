@@ -373,14 +373,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             if (isGoogleFitEnabled) {
                 stateGoogleFitCard.postValue(false)
-                val isDataAvailableForSync = true
+                val isDataAvailableForSync = (googleFitDataSource.getUnSyncedData().isNotEmpty())
 
                 if (isDataAvailableForSync) {
                     //TODO handle cross here
 
-                    val isDataSyncPending = (googleFitDataSource.getUnSyncedData().size > 1)
-
-                    stateGoogleFitCardDataSyncAvailable.postValue(isDataSyncPending)
+                    stateGoogleFitCardDataSyncAvailable.postValue(true)
+                } else {
+                    stateGoogleFitCardDataSyncAvailable.postValue(false)
                 }
             } else {
                 stateGoogleFitCardDataSyncAvailable.postValue(false)

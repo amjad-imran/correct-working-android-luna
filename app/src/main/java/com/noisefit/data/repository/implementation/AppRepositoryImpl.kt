@@ -13,6 +13,7 @@ import com.noisefit.data.safeCacheCall
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
@@ -41,6 +42,7 @@ class AppRepositoryImpl(
     private val napDataSource: OreoNapDataImpl,
     private val dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
     private val autoWorkoutDataSource: OreoAutoSportDataImpl,
+    private val googleFitDataSource: GoogleFitDataSource,
     private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AppRepository {
@@ -66,6 +68,11 @@ class AppRepositoryImpl(
             respDataSource.deleteOldData(DELETE_DB_DAYS)
             sleepDataSource.deleteOldData(DELETE_DB_DAYS)
             napDataSource.deleteOldData(2)
+
+
+            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3)/1000
+            googleFitDataSource.deleteData(timeStampGFit)
+
             dayTimeMovementDataSource.deleteOldData(DELETE_DB_DAYS)
             autoWorkoutDataSource.deleteOldData(timeStamp)
 

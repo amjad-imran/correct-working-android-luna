@@ -662,7 +662,7 @@ constructor(
                     val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
                     val value = point.getValue(Field.FIELD_HEIGHT).asFloat()
                     if (timeStamp != 0L && value != 0f) {
-                        height = BodyMeasurementValue(timeStamp, value)
+                        height = BodyMeasurementValue(timeStamp, value * 100) //meters to cm
                     }
                 }
 

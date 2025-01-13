@@ -227,8 +227,13 @@ constructor(
         return googleFitDataDao.getUnSyncedData()
     }
 
-    override fun markDataSynced(id: Int) {
-        return googleFitDataDao.markDataSynced(id)
+    override fun markDataSynced(id: Int, type: com.oreo.data.model.GoogleFitDataType) {
+        if (type == com.oreo.data.model.GoogleFitDataType.BODY_MEASUREMENTS) {
+            googleFitDataDao.markDataSyncedByType(GoogleFitDataType.HEIGHT.name.lowercase())
+            return googleFitDataDao.markDataSyncedByType(GoogleFitDataType.WEIGHT.name.lowercase())
+        } else {
+            return googleFitDataDao.markDataSynced(id)
+        }
     }
 
     override fun deleteData(timestamp: Long) {

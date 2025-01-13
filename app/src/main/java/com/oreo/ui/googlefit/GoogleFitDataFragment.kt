@@ -1,6 +1,8 @@
 package com.oreo.ui.googlefit
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +19,9 @@ class GoogleFitDataFragment :
     BaseFragment<FragmentGoogleFitDataBinding>(FragmentGoogleFitDataBinding::inflate) {
 
     private val viewModel: GoogleFitDataViewModel by viewModels()
+
     private val mAdapter: GoogleFitDataAdapter by lazy {
-        GoogleFitDataAdapter()
+        GoogleFitDataAdapter(viewModel.sessionManager.isMetric())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,6 +118,11 @@ class GoogleFitDataFragment :
                 tvMessage.visible()
                 btnRetry.gone()
                 image.setImageResource(R.drawable.ic_g_fit_success)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navigateUpSafe()
+                }, 2000)
+
             } else {
                 tvMessage.gone()
                 image.setImageResource(R.drawable.ic_g_fit_failed)

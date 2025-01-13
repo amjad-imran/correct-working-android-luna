@@ -142,6 +142,14 @@ object DistanceUtil {
         return df.format(value * KG_TO_LBS)
     }
 
+    fun convertCmToFeetAndInches(cm: Double): Pair<Int, Double> {
+        val totalInches = cm / 2.54
+        val feet = (totalInches / 12).toInt()
+        val inches = totalInches % 12
+        return Pair(feet, inches)
+    }
+
+
     fun convertMiToKm(value: Int?): String {
         if (value == null) return "0"
         val df = DecimalFormat(".#",DecimalFormatSymbols(Locale.US))

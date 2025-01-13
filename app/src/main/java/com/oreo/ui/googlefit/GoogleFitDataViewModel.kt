@@ -3,13 +3,17 @@ package com.oreo.ui.googlefit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.AuthenticationRepository
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.GoogleFitDataDb
+import com.noisefit_commans.data.model.User
 import com.noisefit_commans.models.BodyMeasurementGoogleFit
-import com.noisefit_commans.models.BodyMeasurementModel
 import com.noisefit_commans.models.BodyMeasurementValue
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
@@ -24,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 private const val TAG = "GoogleFitDataViewModel"
 
@@ -33,8 +38,11 @@ class GoogleFitDataViewModel
 constructor(
     private val googleFitDataSource: GoogleFitDataSource,
     private val userActivityRepository: OreoUserActivityRepository,
+    private val userRepository: UserRepository,
     private val offlineDataMapper: OfflineDataMapper,
     private val localDataSource: DataStoredInterface,
+    val sessionManager: SessionManager,
+    private val authenticationRepository: AuthenticationRepository,
 ) : BaseViewModel() {
     val success = ArrayList<GoogleFitDataDisplayModel>()
     val fail = ArrayList<GoogleFitDataDisplayModel>()
@@ -269,7 +277,38 @@ constructor(
 
                     GoogleFitDataType.BODY_MEASUREMENTS -> {
 
+                        val parsedData = Gson().fromJson<BodyMeasurementGoogleFit>(
+                            googleFitDataDisplayModel.rawData ?: ""
+                        )
+                        val height = parsedData.gFitHeight?.value?.roundToInt()
+                        val weight = parsedData.gFitWeight?.value?.roundToInt()
 
+                        val request =
+                            createUserUpdateRequest(localDataSource.getUser(), height, weight)
+                                ?: return@launch
+
+                        userRepository.updateUserProfile(request).collect { resource ->
+                            when (resource) {
+                                is Resource.GenericError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                }
+
+                                is Resource.Loading -> {
+
+                                }
+
+                                is Resource.NetworkError -> {
+                                    fail.add(googleFitDataDisplayModel)
+                                }
+
+                                is Resource.Success -> {
+                                    resource.data?.data?.let {
+                                        authenticationRepository.saveUserInfo(it)
+                                        success.add(googleFitDataDisplayModel)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -279,7 +318,7 @@ constructor(
 
             viewModelScope.launch(Dispatchers.IO) {
                 success.map {
-                    googleFitDataSource.markDataSynced(it.id)
+                    googleFitDataSource.markDataSynced(it.id,it.type)
                 }
             }
 
@@ -287,6 +326,32 @@ constructor(
 
             LOGS.d("sendDataToServer API response end")
         }
+    }
+
+    private fun createUserUpdateRequest(user: User?, height: Int?, weight: Int?): JsonObject? {
+        if (user == null) return null
+
+        val userObject = JsonObject()
+
+        var userInfo: JsonObject? = null
+        try {
+            userInfo = JsonObject()
+
+            userInfo.apply {
+                addProperty("weight", weight ?: user.userInfo?.weight)
+                addProperty("height", height ?: user.userInfo?.height)
+                addProperty("dob", user.userInfo?.dob)
+                addProperty("gender", user.userInfo?.gender)
+                addProperty("step_length", 70)
+            }
+            userObject.add("info", userInfo)
+
+        } catch (exp: Exception) {
+            LOGS.d("User Info null")
+            userInfo = null
+        }
+        return userObject
+
     }
 
 

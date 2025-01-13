@@ -1,5 +1,6 @@
 package com.oreo.ui.googlefit
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,22 +9,25 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowGoogleFitBodyMeasurementsBinding
 import com.noisefit.luna.databinding.RowGoogleFitSleepBinding
 import com.noisefit.luna.databinding.RowGoogleFitWorkoutBinding
+import com.noisefit.ui.onboarding.onboardProfile.DefaultWeightInKg
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.models.BodyMeasurementGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DistanceUtil
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
-class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GoogleFitDataAdapter(val isMetric: Boolean) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val mDataSet = ArrayList<GoogleFitDataDisplayModel>()
 
     inner class ViewHolderWorkout(val binding: RowGoogleFitWorkoutBinding) :
@@ -159,13 +163,25 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
 
-
             val measurementData = Gson().fromJson<BodyMeasurementGoogleFit>(data.rawData ?: "")
 
             if (measurementData.gFitHeight != null) {
                 binding.lytHeight.apply {
+
+                    tvChangedValue.setTextGradient(
+                        Color.parseColor("#ffffff"),
+                        Color.parseColor("#DDC5FF"),
+                        Color.parseColor("#A665FF")
+                    )
+
                     this.tvTitle.text = tvTitle.context.getString(R.string.height)
-                    tvCurrentValue.text = "${measurementData.userHeight}"
+                    tvCurrentValue.text =
+                        if(isMetric){
+                            "${measurementData.userHeight}"
+                        }else{
+                            val (feet,inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.userHeight.toDouble())
+                            "$feet'${inches.roundToInt()}\""
+                        }
 
                     val instant = Instant.ofEpochSecond(measurementData.userTimeStamp)
                     val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
@@ -180,7 +196,13 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     tvChangedDate.text =
                         changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
 
-                    tvChangedValue.text = "${measurementData.gFitHeight!!.value.roundToInt()}"
+                    tvChangedValue.text = if(isMetric){
+                        "${measurementData.gFitHeight!!.value.roundToInt()}"
+                    }else{
+                        val (feet,inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
+                        "$feet'${inches.roundToInt()}\""
+                    }
+
                     this.root.visible()
                 }
             } else {
@@ -192,7 +214,20 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (measurementData.gFitWeight != null) {
                 binding.lytWeight.apply {
                     this.tvTitle.text = tvTitle.context.getString(R.string.weight)
-                    tvCurrentValue.text = "${measurementData.userWeight}"
+
+                    tvCurrentValue.text = if (isMetric) {
+                        "${measurementData.userWeight}"
+                    } else {
+                        DistanceUtil.convertKgToLbs(measurementData.userWeight).toDouble()
+                            .roundToInt()
+                            .toString()
+                    }
+
+                    tvChangedValue.setTextGradient(
+                        Color.parseColor("#ffffff"),
+                        Color.parseColor("#DDC5FF"),
+                        Color.parseColor("#A665FF")
+                    )
 
                     val instant = Instant.ofEpochSecond(measurementData.userTimeStamp)
                     val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
@@ -207,7 +242,15 @@ class GoogleFitDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     tvChangedDate.text =
                         changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
 
-                    tvChangedValue.text = "${measurementData.gFitHeight!!.value.roundToInt()}"
+
+                    val userWeight = measurementData.gFitWeight!!.value.roundToInt()
+                    tvChangedValue.text = if (isMetric) {
+                        "$userWeight"
+                    } else {
+                        DistanceUtil.convertKgToLbs(userWeight).toDouble().roundToInt()
+                            .toString()
+                    }
+
                     this.root.visible()
                 }
             } else {
