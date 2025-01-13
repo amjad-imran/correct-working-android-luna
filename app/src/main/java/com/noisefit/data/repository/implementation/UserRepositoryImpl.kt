@@ -2,27 +2,35 @@ package com.noisefit.data.repository.implementation
 
 import android.net.Uri
 import com.google.gson.JsonObject
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.model.GoalModel
-import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
-import com.noisefit_commans.data.model.*
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
-import com.noisefit_commans.data.response.*
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.Interest
-import com.noisefit_commans.models.*
+import com.noisefit_commans.data.model.RecentActivities
+import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.data.response.BaseApiResponseData
+import com.noisefit_commans.data.response.MessageResponse
+import com.noisefit_commans.data.response.UpdateDeviceResponse
+import com.noisefit_commans.data.response.UserResponse
+import com.noisefit_commans.models.SportsModeResponse
+import com.noisefit_commans.models.Units
+import com.noisefit_commans.models.UserGoals
+import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.RingLocationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -83,11 +91,12 @@ class UserRepositoryImpl(
 
     override suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?) {
         val enableGoogleFit = localDatSource.isEnableGoogleFit()
+        val syncWorkout = localDatSource.getStatusGoogleFitKey("workout")
         LOGS.i("SAVE Activity")
         AppLogs.sendAppLogs("Save to Google fit $sportsModeResponse")
 
         sportsModeResponse?.forEach { response ->
-            if (enableGoogleFit) {
+            if (enableGoogleFit && syncWorkout) {
                 val sportsMode = offlineDataMapper.convertSportDataToGoogleFit(response)
                 sportsMode?.let {
                     googleFitDataObservers.insertActivityData(sportsMode)

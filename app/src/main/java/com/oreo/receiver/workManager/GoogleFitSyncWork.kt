@@ -19,7 +19,12 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlin.coroutines.CoroutineContext
 
 private const val TAG = "GoogleFitSyncWork"
@@ -68,54 +73,46 @@ constructor(
          */
         job = syncDataScope.launch(Dispatchers.IO) {
             supervisorScope {
+                val syncSleep =
+                    localDataStore.getStatusGoogleFitKey("sleep")
+                val callSaveSleep = async {
+                    if (syncSleep) {
+                        val googleFitSleepData =
+                            syncRepository.getGoogleFitSleepUnSyncData(todayDate)
+                        LOGS.d("$TAG ${googleFitSleepData?.size}")
 
-                /*val callSaveSleep = async {
-                    val googleFitSleepData =
-                        syncRepository.getGoogleFitSleepUnSyncData(todayDate)
-                    LOGS.d("$TAG ${googleFitSleepData?.size}")
+                        LOGS.d("$TAG GET Sleep")
 
-                    LOGS.d("$TAG GET Sleep")
+                        googleFitSleepData?.let { sleepDataList ->
+                            sleepDataList.forEach { sleepData ->
+                                LOGS.d("$TAG google  inside sleep data")
+                                val googleSleepData =
+                                    offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
+                                LOGS.d("$TAG google  inside sleep data 2")
+                                LOGS.d("GOOGLE_SLEEP_DATA ${Gson().toJson(googleSleepData)}")
 
-                    googleFitSleepData?.let { sleepDataList ->
-                        sleepDataList.forEach { sleepData ->
-                            LOGS.d("$TAG google  inside sleep data")
-                            val googleSleepData =
-                                offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
-                            LOGS.d("$TAG google  inside sleep data 2")
-                            LOGS.d("GOOGLE_SLEEP_DATA ${Gson().toJson(googleSleepData)}")
-                            AppLogs.sendAppLogs(
-                                "Sleep Google Fit Parsed -> ${
-                                    Gson().toJson(
-                                        googleSleepData
-                                    )
-                                }"
-                            )
-                            googleSleepData?.let { sleepDataGoogleFit ->
-                                LOGS.d("$TAG google  inside sleep data 3")
-                                googleFitDataObservers.insertSleepData(
-                                    sleepDataGoogleFit, success = {
-                                        LOGS.d("$TAG google success sleep data")
-                                        AppLogs.sendAppLogs("Sleep Google Fit Sync success")
-                                        job = syncDataScope.launch {
-                                            syncRepository.updateGoogleFitUnSyncSleepStatus(
-                                                sleepData
-                                            )
-                                        }
-                                    },
-                                    failed = {
-                                        LOGS.d("google failed sleep")
+                                googleSleepData?.let { sleepDataGoogleFit ->
+                                    LOGS.d("$TAG google  inside sleep data 3")
+                                    googleFitDataObservers.insertSleepData(
+                                        sleepDataGoogleFit, success = {
+                                            LOGS.d("$TAG google success sleep data")
 
-                                    })
+                                        },
+                                        failed = {
+                                            LOGS.d("google failed sleep")
+
+                                        })
+                                }
+
                             }
 
-                        }
 
+                        }
 
                     }
 
                 }
 
-*/
 
                 /* val callGetWorkout = async {
                      LOGS.d("$TAG GET Workout")
@@ -252,8 +249,7 @@ constructor(
 
                 val callGetSleepSessions = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Activity")
-                    val syncSleep =
-                        localDataStore.getStatusGoogleFitKey("sleep")
+
                     if(syncSleep){
                         googleFitDataObservers.importSleepSessions(
                             success = { sleepList ->
@@ -293,8 +289,7 @@ constructor(
                  }*/
 
                 try {
-                    //callSaveSleep.await()
-
+                    callSaveSleep.await()
                     callGetBodyMeasurements.await()
                     callGetWorkoutSessions.await()
                     callGetSleepSessions.await()
