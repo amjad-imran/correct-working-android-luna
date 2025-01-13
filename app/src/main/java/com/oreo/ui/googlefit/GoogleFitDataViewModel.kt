@@ -10,8 +10,8 @@ import com.noisefit_commans.data.model.GoogleFitDataDb
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
@@ -76,6 +76,7 @@ constructor(
                 }*/
                 result.add(
                     GoogleFitDataDisplayModel(
+                        id = it.id,
                         type = type,
                         startTime = it.startTime,
                         endTime = it.endTime,
@@ -230,6 +231,13 @@ constructor(
 
                 LOGS.d("sendDataToServer API response ")
             }
+
+            viewModelScope.launch(Dispatchers.IO) {
+                success.map {
+                    googleFitDataSource.markDataSynced(it.id)
+                }
+            }
+
             dataSyncingComplete.postValue(Event(true))
 
             LOGS.d("sendDataToServer API response end")
