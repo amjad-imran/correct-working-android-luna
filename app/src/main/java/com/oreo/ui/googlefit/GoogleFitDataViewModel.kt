@@ -28,6 +28,8 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -88,6 +90,7 @@ constructor(
                 GoogleFitDataType.WORKOUT
             } else if (it.type.equals("sleep", true)) {
                 val duration = it.endTime - it.startTime
+                LOGS.d("dfkhdf $duration")
                 if (duration < (3 * 60 * 60)) {
                     GoogleFitDataType.NAP
                 } else {
@@ -179,6 +182,7 @@ constructor(
 
 
     fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
+        setLoading(true)
         viewModelScope.launch {
             LOGS.d("sendDataToServer API start")
             selectedItems.map { googleFitDataDisplayModel ->
@@ -333,10 +337,15 @@ constructor(
                 }
 
                 userHealthDataDataSource.clearDataByDates(dates.toList())
+                sessionManager.reloadTodayData.postValue(
+                    Event(true)
+                )
+                sessionManager.forceSyncData.postValue(Event(true))
+
+                kotlinx.coroutines.delay(1000L)
+                setLoading(false)
                 dataSyncingComplete.postValue(Event(true))
             }
-
-
             LOGS.d("sendDataToServer API response end")
         }
     }

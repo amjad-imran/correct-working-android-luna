@@ -91,7 +91,14 @@ constructor(
 
             parsedData.activity?.workout?.forEach {
                 val startTime = "${it.date} ${it.startTime}"
-                val endTime = "${it.date} ${it.startTime}"
+                val endTime = "${it.date} ${it.endTime}"
+
+                val start = LocalDateTime.parse(
+                    startTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).toEpochSecond(zoneOffset)
+
+                LOGS.d("dsfjhskdjfhf $start    -$startTime - $endTime")
 
                 timestamps.add(
 
@@ -194,9 +201,6 @@ constructor(
         startTime: Long,
         endTime: Long,
         compareData: List<Pair<Long, Long>>,
-        /*
-                savedSleepData: List<GoogleFitDataDb>?,
-                savedWorkoutData: List<GoogleFitDataDb>?*/
     ): Boolean {
         var dataOverlap = false
         compareData.forEach {
@@ -205,7 +209,7 @@ constructor(
             if (dataOverlap.not() && isOverlapping) {
                 dataOverlap = true
             }
-            LOGS.d("DATA_OVERLAP sleep $isOverlapping")
+            LOGS.d("DATA_OVERLAP $isOverlapping   -$startTime - $endTime  | ${it.first} - ${it.second}")
 
         }
         /*if (dataOverlap) {

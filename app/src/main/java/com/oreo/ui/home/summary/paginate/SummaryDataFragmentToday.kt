@@ -481,7 +481,7 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytGoogleFit.ivCross.setOnClickListener {
-            viewModel.ringDataStore.setGoogleFitCrossed(true)
+            viewModel.localDataStore.setGoogleFitCrossed(true)
             viewModel.stateGoogleFitCard.postValue(false)
         }
 
@@ -490,9 +490,9 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytGoogleFitDataAvailable.ivCross.setOnClickListener {
+            viewModel.localDataStore.setGoogleFitManageCrossed()
             viewModel.stateGoogleFitCardDataSyncAvailable.postValue(false)
         }
-
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false

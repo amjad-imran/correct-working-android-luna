@@ -133,7 +133,7 @@ constructor(
                                     localDataStore.setEndGameValue("")
                                     localDataStore.deleteYearlyGoal()
                                     localDataStore.setGoogleFitStatus(false)
-                                    ringDataStore.setGoogleFitCrossed(false)
+                                    localDataStore.setGoogleFitCrossed(false)
                                     _logoutSuccess.value = true
                                 }
                             }
@@ -173,9 +173,7 @@ constructor(
                         resource.data?.let {
                             repository.logoutUserLocally().collect {
                                 if (it) {
-                                    localDataStore.setGoogleFitStatus(false)
                                     localDataStore.setEndGameValue("")
-                                    ringDataStore.setGoogleFitCrossed(false)
                                     _logoutSuccess.value = true
                                 }
                             }

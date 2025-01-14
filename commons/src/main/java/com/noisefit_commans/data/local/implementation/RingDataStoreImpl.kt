@@ -33,7 +33,6 @@ private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 private const val RECORD_WORKOUT_TIMESTAMP = "RECORD_WORKOUT_TIMESTAMP"
 private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
 private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
-private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 
 private const val OTA_VERSION_NEW = "OTA_VERSION_NEW"
 private const val OTA_VERSION_NEW_TIMESTAMP = "OTA_VERSION_NEW_TIMESTAMP"
@@ -148,14 +147,6 @@ class RingDataStoreImpl
 
     override fun getOtaRemindDate(): String? {
         return mPrefs.getString(OTA_VERSION_REMIND, null)
-    }
-
-    override fun isGoogleFitCrossed(): Boolean {
-        return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
-    }
-
-    override fun setGoogleFitCrossed(status: Boolean) {
-        mPrefs.edit().putBoolean(GOOGLE_FIT_CROSSED, status).commit()
     }
 
     override fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>) {

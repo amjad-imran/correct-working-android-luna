@@ -32,6 +32,12 @@ interface DataStoredInterface {
     fun setBatteryAlertShown()
     fun clearUserLogoutData()
 
+    fun isGoogleFitCrossed(): Boolean
+    fun setGoogleFitCrossed(status: Boolean)
+
+    fun setGoogleFitManageCrossed()
+    fun isGoogleFitManageCrossed():Boolean
+
     @Deprecated("use updateUserToken()")
     fun updateDeviceToken(token: String?)
 
@@ -486,5 +492,7 @@ interface DataStoredInterface {
 
     fun getAppBodyMeasurementsTimeStamp(): Long
     fun saveAppBodyMeasurementsTimeStamp()
+
+    fun clearKey(key: String)
 
 }

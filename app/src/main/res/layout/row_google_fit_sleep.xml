@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="@+id/ivSelect" />
 
     <TextView
-        android:id="@+id/textView143"
+        android:id="@+id/tvTitle"
         style="@style/S18"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_marginTop="12dp"
         android:textColor="#99FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView143"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:text="24th Jan 25" />
 
     <ImageView

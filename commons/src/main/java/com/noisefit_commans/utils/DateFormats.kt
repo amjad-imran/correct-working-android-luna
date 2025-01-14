@@ -127,9 +127,6 @@ object DateFormats {
         startTime2: Long,
         endTime2: Long
     ): Boolean {
-       /* if(startTime1==startTime2) return true
-        if(endTime1==endTime2) return true*/
-
         return startTime1 <= endTime2 && startTime2 <= endTime1
     }
 

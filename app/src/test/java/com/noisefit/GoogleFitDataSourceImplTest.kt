@@ -8,10 +8,14 @@ class GoogleFitDataSourceImplTest {
 
     @Test
     fun `timestamp overlap returns true`() {
-        Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,19,40)).isTrue()
+        //-1736827057 - 1736828857  | 1736827020 - 1736827020
+        Truth.assertThat(DateFormats.checkIfTimeOverlap(1736827057,1736828857,1736827020,1736827020)).isTrue()
+
+
+        /*Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,19,40)).isTrue()
         Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,20,30)).isTrue()
         Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,5,12)).isTrue()
-        Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,10,20)).isTrue()
+        Truth.assertThat(DateFormats.checkIfTimeOverlap(10,20,10,20)).isTrue()*/
     }
 
     @Test

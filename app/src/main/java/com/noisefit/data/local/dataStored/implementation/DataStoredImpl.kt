@@ -33,6 +33,7 @@ import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -217,6 +218,9 @@ private const val MAX_AMP = "MAX_AMP"
 
 private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 
+private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
+private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -224,6 +228,32 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun isGoogleFitCrossed(): Boolean {
+        return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
+    }
+
+    override fun setGoogleFitCrossed(status: Boolean) {
+        mPrefs.edit().putBoolean(GOOGLE_FIT_CROSSED, status).commit()
+    }
+
+    override fun setGoogleFitManageCrossed() {
+        mPrefs.edit().putString(GOOGLE_FIT_SYNC_CROSSED, LocalDate.now().toString()).commit()
+    }
+
+    override fun isGoogleFitManageCrossed(): Boolean {
+        val savedDate = mPrefs.getString(GOOGLE_FIT_SYNC_CROSSED, null) ?: return false
+        val todayData = LocalDate.now().toString()
+        if (todayData.equals(savedDate, true)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    override fun clearKey(key: String) {
+        mPrefs.edit()?.remove(MAX_AMP)?.commit()
+    }
 
     override fun getAppBodyMeasurementsTimeStamp(): Long {
         return mPrefs.getLong(APP_MEASUREMENT_TIMESTAMP, 0)
@@ -449,6 +479,10 @@ class DataStoredImpl
         mPrefs.edit()?.remove(FMH_WALK_THROUGH)?.apply()
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
+
+        mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
+        mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
+        mPrefs.edit()?.remove(GOOGLE_FIT_SYNC_CROSSED)?.apply()
     }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {

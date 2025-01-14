@@ -107,6 +107,12 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
 
+            if(data.type==GoogleFitDataType.NAP){
+                binding.tvTitle.text = binding.tvTitle.context.getString(R.string.text_nap)
+            }else{
+                binding.tvTitle.text = binding.tvTitle.context.getString(R.string.text_sleep)
+            }
+
             val instant = Instant.ofEpochSecond(data.startTime)
             val instantEnd = Instant.ofEpochSecond(data.endTime)
 

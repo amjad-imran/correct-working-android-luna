@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
@@ -28,6 +29,8 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
+import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.SleepDataGoogleFit.SleepDataBreakup
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
@@ -107,6 +110,7 @@ class SummaryDataViewModelToday @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val hrDataConvertor: OreoHRDataConvertor,
     val googleFitDataSource: GoogleFitDataSource,
+    val googleFitDataObservers: GoogleFitDataObservers,
 ) : BaseViewModel() {
 
 
@@ -370,11 +374,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
             if (showGoogleFit == 1) {
                 val isGoogleFitEnabled = localDataStore.isEnableGoogleFit()
-                val isGoogleFitCrossed = ringDataStore.isGoogleFitCrossed()
+                val isGoogleFitCrossed = localDataStore.isGoogleFitCrossed()
 
                 if (isGoogleFitEnabled) {
                     stateGoogleFitCard.postValue(false)
-                    val isDataAvailableForSync = (googleFitDataSource.getUnSyncedData().isNotEmpty())
+                    val isDataAvailableForSync =
+                        (googleFitDataSource.getUnSyncedData().isNotEmpty())
 
                     if (isDataAvailableForSync) {
                         //TODO handle cross here
@@ -1604,6 +1609,39 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            val enableGoogleFit = localDataStore.isEnableGoogleFit()
+                            val syncSleep = localDataStore.getStatusGoogleFitKey("sleep")
+
+                            if (enableGoogleFit && syncSleep) {
+                                val zoneOffset =
+                                    ZoneId.systemDefault().rules.getOffset(LocalDateTime.now())
+
+                                val startTimeStamp = LocalDateTime.parse(
+                                    nap.startTime,
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                ).toEpochSecond(zoneOffset)
+                                val endTimeStamp = LocalDateTime.parse(
+                                    nap.endTime,
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                ).toEpochSecond(zoneOffset)
+
+                                googleFitDataObservers.insertSleepData(
+                                    SleepDataGoogleFit(
+                                        startTime = startTimeStamp * 1000,
+                                        endTime = endTimeStamp * 1000,
+                                        sleepArray = arrayListOf(
+                                            SleepDataBreakup(
+                                                startTime = startTimeStamp * 1000,
+                                                endTime = endTimeStamp * 1000,
+                                                sleepType = "light"
+                                            )
+                                        )
+                                    ),
+                                    success = {}, failed = {}
+                                )
+                            }
+
                             removeNapById(nap)
                             it.firstOrNull()?.let { napData ->
                                 if (napData.date != null) {

@@ -64,10 +64,6 @@ interface RingDataStore {
     fun getOngoingRecordWorkout(): Pair<Long, OWorkoutListModal>?
     fun deleteOngoingRecordWorkout()
 
-    fun isGoogleFitCrossed(): Boolean
-    fun setGoogleFitCrossed(status: Boolean)
-
-
     fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int)
     fun getNewOtaVersion(): Triple<String, Int, Long>?
     fun saveOtaVersionCheckTimeStamp()

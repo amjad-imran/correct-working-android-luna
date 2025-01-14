@@ -5,11 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OreoNapNetworkEntity
+import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -32,6 +35,8 @@ class OAddSleepViewModel
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val resourcesProvider: ResourcesProvider,
+    private val localDataStore:DataStoredInterface,
+    private val googleFitDataObservers: GoogleFitDataObservers,
     private val oreoStepsDataImpl: OreoSyncRepository,
 ) :
     BaseViewModel() {
@@ -270,12 +275,26 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            val googleFitStatus = localDataStore.isEnableGoogleFit()
+                            val syncSleep =
+                                localDataStore.getStatusGoogleFitKey("sleep")
+                            if(googleFitStatus && syncSleep){
+                                insetGoogleFitSleep(jsonArray)
+                            }
+
                             _addSleepResponse.postValue(Event(true))
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun insetGoogleFitSleep(jsonArray: JsonArray) {
+        /*googleFitDataObservers.insertSleepData(SleepDataGoogleFit(
+            startTime =
+        ))*/
     }
 
     fun isStartDateToday(): Boolean {

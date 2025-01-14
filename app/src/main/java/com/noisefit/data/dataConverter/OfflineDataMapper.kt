@@ -346,7 +346,7 @@ class OfflineDataMapper
     fun convert1GFWorkoutIntoJsonArray(data: WorkoutGoogleFit): JsonArray {
         val jsonArray = JsonArray()
         val requestObject = JsonObject().apply {
-            this.addProperty("duration", data.duration)
+            this.addProperty("duration", ((data.duration ?: 0) / 60))
             this.addProperty("calories", data.calories?.toInt() ?: 0)
             this.addProperty("activity_type", data.activity)
             this.addProperty("type", "google")
