@@ -21,12 +21,17 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -41,6 +46,7 @@ constructor(
     private val userRepository: UserRepository,
     private val offlineDataMapper: OfflineDataMapper,
     private val localDataSource: DataStoredInterface,
+    val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager,
     private val authenticationRepository: AuthenticationRepository,
 ) : BaseViewModel() {
@@ -317,12 +323,19 @@ constructor(
             }
 
             viewModelScope.launch(Dispatchers.IO) {
-                success.map {
-                    googleFitDataSource.markDataSynced(it.id,it.type)
+                val dates = HashSet<String>()
+                success.forEach {
+                    googleFitDataSource.markDataSynced(it.id, it.type)
+
+                    val instant = Instant.ofEpochSecond(it.startTime)
+                    val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+                    dates.add(start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 }
+
+                userHealthDataDataSource.clearDataByDates(dates.toList())
+                dataSyncingComplete.postValue(Event(true))
             }
 
-            dataSyncingComplete.postValue(Event(true))
 
             LOGS.d("sendDataToServer API response end")
         }

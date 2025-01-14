@@ -693,6 +693,12 @@ constructor(
             LOGS.d("$TAG please enable google fit")
             return
         }
+        val syncBodyMeasurements =
+            localDataStore.getStatusGoogleFitKey("body_measurement")
+        if (syncBodyMeasurements.not()) {
+            return
+        }
+
         val user = localDataStore.getUser()
         var height = user?.userInfo?.height?.toFloat() ?: 0f
         val weight = user?.userInfo?.weight ?: 0

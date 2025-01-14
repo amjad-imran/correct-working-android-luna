@@ -59,7 +59,7 @@ class GoogleFitDataFragment :
     private fun checkAndSendData() {
         val selectedItems = mAdapter.getSelectedData()
 
-        context.showShortToast("Selected Items ${selectedItems.size}")
+        //context.showShortToast("Selected Items ${selectedItems.size}")
         if (selectedItems.isNotEmpty()) {
             viewModel.sendDataToServer(selectedItems)
         }

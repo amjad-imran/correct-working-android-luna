@@ -87,6 +87,9 @@ class SessionManager
     var checkForVersionUpdateAbout = MutableLiveData<Event<Pair<Int, Int>>>()
 
 
+    var googleFitSyncCompleted = MutableLiveData<Event<Boolean>>()
+
+
     val customSuccessToast = MutableLiveData<Event<String>>()
 
     var lastOngoingWorkoutTimestamp: Long = 0L
@@ -727,6 +730,10 @@ class SessionManager
         } else {
             logMoEngageAppEvent(eventName)
         }
+    }
+
+    fun setGoogleFitSync() {
+        googleFitSyncCompleted.postValue(Event(true))
     }
 }
 

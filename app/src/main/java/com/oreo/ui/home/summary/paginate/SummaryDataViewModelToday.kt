@@ -364,35 +364,37 @@ class SummaryDataViewModelToday @Inject constructor(
         return false
     }
 
-    private fun handleGoogleFitCard() {
-        val showGoogleFit = ringDataStore.getDeviceFeatures()?.googleFit
+    fun handleGoogleFitCard() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val showGoogleFit = ringDataStore.getDeviceFeatures()?.googleFit
 
-        if (showGoogleFit == 1) {
-            val isGoogleFitEnabled = localDataStore.isEnableGoogleFit()
-            val isGoogleFitCrossed = ringDataStore.isGoogleFitCrossed()
+            if (showGoogleFit == 1) {
+                val isGoogleFitEnabled = localDataStore.isEnableGoogleFit()
+                val isGoogleFitCrossed = ringDataStore.isGoogleFitCrossed()
 
-            if (isGoogleFitEnabled) {
-                stateGoogleFitCard.postValue(false)
-                val isDataAvailableForSync = (googleFitDataSource.getUnSyncedData().isNotEmpty())
+                if (isGoogleFitEnabled) {
+                    stateGoogleFitCard.postValue(false)
+                    val isDataAvailableForSync = (googleFitDataSource.getUnSyncedData().isNotEmpty())
 
-                if (isDataAvailableForSync) {
-                    //TODO handle cross here
+                    if (isDataAvailableForSync) {
+                        //TODO handle cross here
 
-                    stateGoogleFitCardDataSyncAvailable.postValue(true)
+                        stateGoogleFitCardDataSyncAvailable.postValue(true)
+                    } else {
+                        stateGoogleFitCardDataSyncAvailable.postValue(false)
+                    }
                 } else {
                     stateGoogleFitCardDataSyncAvailable.postValue(false)
+                    if (isGoogleFitCrossed) {
+                        stateGoogleFitCard.postValue(false)
+                    } else {
+                        stateGoogleFitCard.postValue(true)
+                    }
                 }
             } else {
+                stateGoogleFitCard.postValue(false)
                 stateGoogleFitCardDataSyncAvailable.postValue(false)
-                if (isGoogleFitCrossed) {
-                    stateGoogleFitCard.postValue(false)
-                } else {
-                    stateGoogleFitCard.postValue(true)
-                }
             }
-        } else {
-            stateGoogleFitCard.postValue(false)
-            stateGoogleFitCardDataSyncAvailable.postValue(false)
         }
     }
 

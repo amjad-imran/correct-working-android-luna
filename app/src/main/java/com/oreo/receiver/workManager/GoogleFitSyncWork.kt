@@ -304,6 +304,7 @@ constructor(
             }
         }
 
+        sessionManager.setGoogleFitSync()
         returnSuccess(success)
     }
 

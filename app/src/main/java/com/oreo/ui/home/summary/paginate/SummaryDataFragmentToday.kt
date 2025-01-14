@@ -576,6 +576,12 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sessionManager.googleFitSyncCompleted.observe(this) {
+            it.getContent()?.let {
+                viewModel.handleGoogleFitCard()
+            }
+        }
+
         viewModel.findMyRingCard.observe(this) {
             if (it == true) {
                 binding.contentMain.lytFindMyRingAlert.root.visible()
@@ -1543,7 +1549,7 @@ class SummaryDataFragmentToday :
         lytStress.root.visible()
         lytStress.graphStress.updateData(data.data)
 
-        when (data.measureState) {
+        when (TapMeasureState.HIDE/*data.measureState*/) {
             TapMeasureState.NO_DEVICE -> {
                 lytStress.lottieAnimView.invisible()
                 lytStress.imvHrMeasure.visible()
@@ -1845,7 +1851,6 @@ class SummaryDataFragmentToday :
                 viewModel.findMyRingCard.postValue(false)
             }
         }
-
     }
 
 
