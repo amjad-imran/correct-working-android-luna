@@ -243,6 +243,7 @@ class SummaryDataFragmentToday :
         viewModel.checkForNewOtaVersion()
 
         handleFindMyRingCard()
+        viewModel.handleGoogleFitCard()
 
     }
 
@@ -317,6 +318,7 @@ class SummaryDataFragmentToday :
                         if (allow) {
                             viewModel.markWorkoutSyncedAll()
                             viewModel.removeAutoWorkoutCard()
+                            viewModel.handleGoogleFitCard()
                         }
                     }
                     navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {

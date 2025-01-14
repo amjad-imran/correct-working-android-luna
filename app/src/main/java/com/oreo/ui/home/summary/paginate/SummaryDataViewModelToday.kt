@@ -165,6 +165,9 @@ class SummaryDataViewModelToday @Inject constructor(
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
     var serverUserHealthData: ServerUserHealthData? = null
 
+    private var hasDetectedWorkout = false
+    private var hasDetectedNaps = false
+
     /**
      * Pair (hasDataLoaded,Female health data)
      */
@@ -203,7 +206,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
 
-            handleGoogleFitCard()
+            //handleGoogleFitCard()
 
         }
 
@@ -378,12 +381,27 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 if (isGoogleFitEnabled) {
                     stateGoogleFitCard.postValue(false)
+
+                    if (hasDetectedWorkout) {
+                        stateGoogleFitCardDataSyncAvailable.postValue(false)
+                        return@launch
+                    }
+
+                    if (hasDetectedNaps) {
+                        stateGoogleFitCardDataSyncAvailable.postValue(false)
+                        return@launch
+                    }
+
+                    val isGoogleFitSyncCrossed = localDataStore.isGoogleFitManageCrossed()
+                    if (isGoogleFitSyncCrossed) {
+                        stateGoogleFitCardDataSyncAvailable.postValue(false)
+                        return@launch
+                    }
+
                     val isDataAvailableForSync =
                         (googleFitDataSource.getUnSyncedData().isNotEmpty())
 
                     if (isDataAvailableForSync) {
-                        //TODO handle cross here
-
                         stateGoogleFitCardDataSyncAvailable.postValue(true)
                     } else {
                         stateGoogleFitCardDataSyncAvailable.postValue(false)
@@ -512,6 +530,9 @@ class SummaryDataViewModelToday @Inject constructor(
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+                hasDetectedWorkout = true
+            } else {
+                hasDetectedWorkout = false
             }
 
 
@@ -908,6 +929,7 @@ class SummaryDataViewModelToday @Inject constructor(
             handleSleepAlert(healthData.sleep)
 
         }
+        handleGoogleFitCard()
     }
 
     private fun checkIfIsAfter12(): Boolean {
@@ -1043,6 +1065,10 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val naps = userActivityRepository.getNapsToConfirm()
             napsList.postValue(naps ?: ArrayList())
+
+            hasDetectedNaps = !naps.isNullOrEmpty()
+
+            handleGoogleFitCard()
         }
     }
 
@@ -1650,6 +1676,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 }
                                 onNapAddSuccess.postValue(Event(napData))
                             }
+                            handleGoogleFitCard()
                         }
                     }
                 }
