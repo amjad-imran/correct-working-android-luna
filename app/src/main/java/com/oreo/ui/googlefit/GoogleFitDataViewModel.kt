@@ -331,7 +331,10 @@ constructor(
     private fun createUserUpdateRequest(user: User?, height: Int?, weight: Int?): JsonObject? {
         if (user == null) return null
 
-        val userObject = JsonObject()
+        val userObject = JsonObject().apply {
+            addProperty("first_name", user.firstName)
+            addProperty("image_url", user.imageUrl)
+        }
 
         var userInfo: JsonObject? = null
         try {
