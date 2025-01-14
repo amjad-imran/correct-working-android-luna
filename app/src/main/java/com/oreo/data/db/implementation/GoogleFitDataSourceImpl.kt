@@ -29,7 +29,6 @@ constructor(
     override suspend fun saveWorkouts(workoutList: List<WorkoutGoogleFit>) {
         val filteredData = ArrayList<WorkoutGoogleFit>()
 
-
         val compareTimestamps = ArrayList<Pair<Long, Long>>()
 
         val savedSleepGoogleFitData =

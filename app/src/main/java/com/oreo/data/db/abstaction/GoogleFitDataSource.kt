@@ -9,6 +9,7 @@ import com.oreo.data.model.GoogleFitDataType
 interface GoogleFitDataSource {
 
     suspend fun saveWorkouts(workoutList: List<WorkoutGoogleFit>)
+
     suspend fun saveSleeps(sleepList: List<SleepDataGoogleFit>)
 
     fun saveBodyMeasurements(bodyMeasurement: BodyMeasurementModel)
@@ -17,6 +18,6 @@ interface GoogleFitDataSource {
 
     fun markDataSynced(id: Int, type: GoogleFitDataType)
 
-    fun deleteData(timestamp:Long)
+    fun deleteData(timestamp: Long)
 
 }

@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -68,6 +69,10 @@ class GoogleFitDataFragment :
     override fun subscribeObservers() {
 
         viewModel.unSyncedDataList.observe(this) {
+            if(it.isEmpty()){
+                viewModel.sessionManager.googleFitSyncCompleted.postValue(Event(true))
+                navigateUpSafe()
+            }
             mAdapter.setDataSet(it)
         }
 

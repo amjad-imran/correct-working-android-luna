@@ -18,19 +18,20 @@ import com.noisefit_commans.models.BodyMeasurementValue
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
-import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -62,12 +63,141 @@ constructor(
 
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
+            setLoading(true)
+            //compare overlapping data
 
             val data = googleFitDataSource.getUnSyncedData()
-            unSyncedDataList.postValue(convertData(data))
+            val filteredData = ArrayList<GoogleFitDataDb>()
+
+            val userDataTimeStamps = getUserWorkoutAndSleepTimestamps()
+
+            data.forEach { localData ->
+                val overlap =
+                    checkDataOverlap(localData.startTime, localData.endTime, userDataTimeStamps)
+                if (overlap.not()) {
+                    filteredData.add(localData)
+                } else {
+                    googleFitDataSource.markDataSynced(
+                        localData.id,
+                        convertGoogleFitType(localData.type)
+                    )
+                }
+            }
+            //load date
+            unSyncedDataList.postValue(convertData(filteredData))
+            setLoading(false)
         }
 
     }
+
+    private fun convertGoogleFitType(type: String?): GoogleFitDataType {
+        return when (type) {
+            "sleep" -> GoogleFitDataType.SLEEP
+            "workout" -> GoogleFitDataType.WORKOUT
+            "height" -> GoogleFitDataType.BODY_MEASUREMENTS
+            "weight" -> GoogleFitDataType.BODY_MEASUREMENTS
+            else -> GoogleFitDataType.SLEEP
+        }
+    }
+
+    private fun checkDataOverlap(
+        startTime: Long,
+        endTime: Long,
+        compareData: List<Pair<Long, Long>>,
+    ): Boolean {
+        var dataOverlap = false
+        compareData.forEach {
+            val isOverlapping =
+                DateFormats.checkIfTimeOverlap(startTime, endTime, it.first, it.second)
+            if (dataOverlap.not() && isOverlapping) {
+                dataOverlap = true
+            }
+            LOGS.d("DATA_OVERLAP $isOverlapping   -$startTime - $endTime  | ${it.first} - ${it.second}")
+
+        }
+        return dataOverlap
+    }
+
+    private suspend fun getUserWorkoutAndSleepTimestamps(): List<Pair<Long, Long>> {
+
+        val timestamps = ArrayList<Pair<Long, Long>>()
+
+        val zoneOffset = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now())
+
+        (1..3).forEach {
+            val date = DateFormats.getCurrentDateMinusDays(it - 1)
+
+            val userData = userHealthDataDataSource.getDataByDate(date)
+
+            val parsedData = Gson().fromJson<ServerUserHealthData>(
+                userData?.userHealthData ?: ""
+            )
+
+            parsedData.activity?.workout?.forEach {
+                val startTime = "${it.date} ${it.startTime}"
+                val endTime = "${it.date} ${it.endTime}"
+
+                val start = LocalDateTime.parse(
+                    startTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).toEpochSecond(zoneOffset)
+
+                LOGS.d("dsfjhskdjfhf $start    -$startTime - $endTime")
+
+                timestamps.add(
+
+
+                    Pair(
+                        LocalDateTime.parse(
+                            startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+
+
+            parsedData.sleep?.sleeps?.forEach {
+                timestamps.add(
+                    Pair(
+                        LocalDateTime.parse(
+                            it.startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            it.endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+
+            parsedData.sleep?.naps?.forEach {
+                timestamps.add(
+                    Pair(
+                        LocalDateTime.parse(
+                            it.startTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).toEpochSecond(zoneOffset),
+                        LocalDateTime.parse(
+                            it.endTime,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        )
+                            .toEpochSecond(zoneOffset),
+                    )
+                )
+            }
+        }
+
+        return timestamps
+    }
+
 
     private fun convertData(data: List<GoogleFitDataDb>): List<GoogleFitDataDisplayModel> {
 
