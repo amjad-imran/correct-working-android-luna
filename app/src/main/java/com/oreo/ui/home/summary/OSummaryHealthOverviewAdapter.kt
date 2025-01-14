@@ -584,8 +584,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvBeta.setVisibilityByCondition(data.isBeta)
             binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
 
+            binding.tvStressValue.gone()
+            binding.tvStressStatus.gone()
+            binding.tvLastUpdate.gone()
 
-            if (data.value == 0) {
+            /*if (data.value == 0) {
                 binding.tvStressValue.gone()
                 binding.tvStressStatus.gone()
                 binding.tvLastUpdate.gone()
@@ -615,7 +618,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 } else {
                     binding.tvLastUpdate.text = ""
                 }
-            }
+            }*/
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressGraphClicked)

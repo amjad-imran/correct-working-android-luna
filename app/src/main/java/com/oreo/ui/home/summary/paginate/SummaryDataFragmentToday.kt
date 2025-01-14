@@ -1551,7 +1551,17 @@ class SummaryDataFragmentToday :
         lytStress.root.visible()
         lytStress.graphStress.updateData(data.data)
 
-        when (TapMeasureState.HIDE/*data.measureState*/) {
+
+        lytStress.lottieAnimView.gone()
+        lytStress.imvHrMeasure.gone()
+        lytStress.tvLastMeasure.gone()
+        lytStress.tvHeartValue.gone()
+        lytStress.tvHeartUnit.gone()
+        lytStress.tvEmptyConnect.gone()
+
+        return
+
+        when (data.measureState) {
             TapMeasureState.NO_DEVICE -> {
                 lytStress.lottieAnimView.invisible()
                 lytStress.imvHrMeasure.visible()
