@@ -199,7 +199,7 @@ class OreoRoomModule {
                         "`endTime` INTEGER NOT NULL," +
                         "PRIMARY KEY(`id`))"
             )
-            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_data_start_end_type ON  google_fit_data(startTime,endTime,type)")
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_data_endTime_startTime_type ON  google_fit_data(endTime,startTime,type)")
         }
     }
 
