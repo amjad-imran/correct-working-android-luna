@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowAiSummaryBinding
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.AiSummaryDataModel
 import com.oreo.data.model.DataMetrics
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>() {
+class DataMetricsAdapter(val isMetric: Boolean) :
+    RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>() {
     private val mDataSet = ArrayList<DataMetrics>()
 
 
@@ -21,7 +21,7 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataMetrics) {
 
-            val dataParsed = getDisplayDate(data, binding.tvType.context)
+            val dataParsed = getDisplayDate(data, binding.tvType.context, isMetric)
 
             binding.tvType.text = dataParsed?.name ?: ""
             binding.tvUnit.text = dataParsed?.unit ?: ""
@@ -33,7 +33,11 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
     /**
      * Pair(name,unit)
      */
-    fun getDisplayDate(data: DataMetrics, context: Context): AiSummaryDataModel? {
+    fun getDisplayDate(
+        data: DataMetrics,
+        context: Context,
+        isMetric: Boolean
+    ): AiSummaryDataModel? {
         if (data.value.isNullOrEmpty()) return null
 
         when (data.key) {
@@ -98,7 +102,7 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 data.value
             )
 
-            DataMetricKeys.REM.key-> {
+            DataMetricKeys.REM.key -> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )
@@ -113,7 +117,7 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 )
             }
 
-            DataMetricKeys.NEXT_PERIOD_DATE.key-> {
+            DataMetricKeys.NEXT_PERIOD_DATE.key -> {
                 val formattedDate = try {
                     LocalDate.parse(data.value).format(DateTimeFormatter.ofPattern("dd/MM/yy"))
                 } catch (exp: Exception) {
@@ -134,14 +138,14 @@ class DataMetricsAdapter : RecyclerView.Adapter<DataMetricsAdapter.ViewHolder>()
                 data.value
             )
 
-            DataMetricKeys.SKIN_TEMP_DEV.key-> return AiSummaryDataModel(
+            DataMetricKeys.SKIN_TEMP_DEV.key -> return AiSummaryDataModel(
                 name = context.getString(R.string.tex_skin_temp_dev).uppercase(),
                 isDate = false,
-                "C",
+                if (isMetric) "C" else "F",
                 data.value
             )
 
-            DataMetricKeys.SLEEP_NEED.key-> {
+            DataMetricKeys.SLEEP_NEED.key -> {
                 val (hours, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                     data.value.toFloatOrNull() ?: 0f
                 )

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.databinding.AiShareTemplate1Binding
 import com.noisefit.luna.databinding.FragmentShareSummaryBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.loadImage
@@ -32,12 +33,16 @@ import java.io.IOException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShareSummaryFragment :
     BaseFragment<FragmentShareSummaryBinding>(FragmentShareSummaryBinding::inflate) {
 
     private val args: ShareSummaryFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,7 +93,7 @@ class ShareSummaryFragment :
 
     private fun setRecycler(metrics: List<DataMetrics>?) {
         binding.lytTemplate.rvDataMetrics.layoutManager = LinearLayoutManager(requireContext())
-        binding.lytTemplate.rvDataMetrics.adapter = DataMetricsAdapter().apply {
+        binding.lytTemplate.rvDataMetrics.adapter = DataMetricsAdapter(sessionManager.isMetric()).apply {
             this.setDataSet(metrics ?: ArrayList())
         }
     }

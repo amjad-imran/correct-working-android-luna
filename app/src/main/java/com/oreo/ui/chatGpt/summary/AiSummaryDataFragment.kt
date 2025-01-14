@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.databinding.FragmentAiSummaryDataBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImage
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.DataMetrics
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AiSummaryDataFragment :
     BaseFragment<FragmentAiSummaryDataBinding>(FragmentAiSummaryDataBinding::inflate) {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
 
     companion object {
@@ -44,7 +50,7 @@ class AiSummaryDataFragment :
 
     private fun setRecycler(metrics: List<DataMetrics>?) {
         binding.rvDataMetrics.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvDataMetrics.adapter = DataMetricsAdapter().apply {
+        binding.rvDataMetrics.adapter = DataMetricsAdapter(sessionManager.isMetric()).apply {
             this.setDataSet(metrics ?: ArrayList())
         }
     }
