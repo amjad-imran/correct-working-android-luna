@@ -75,22 +75,22 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
             val height: Int = binding.rootView.height
 
             val layoutParams = binding.lytDailySummaryAvailable.root.layoutParams
-            layoutParams.height = (height.toFloat() * 0.65).roundToInt()
+            layoutParams.height = (height.toFloat() * viewModel.CARD_RATIO).roundToInt()
             binding.lytDailySummaryAvailable.root.layoutParams = layoutParams
 
             setVideo()
 
 
-            /* val layoutParamNoData = binding.lytNoData.root.layoutParams
-             layoutParamNoData.height = (height.toFloat() * 0.65).roundToInt()
-             binding.lytNoData.root.layoutParams = layoutParams*/
+            val layoutParamNoData = binding.lytNoData.root.layoutParams
+            layoutParamNoData.height = (height.toFloat() * viewModel.CARD_RATIO).roundToInt()
+            binding.lytNoData.root.layoutParams = layoutParams
 
-            /*val layoutParamNoDevice = binding.lytNoDevice.root.layoutParams
-            layoutParamNoDevice.height = (height.toFloat() * 0.65).roundToInt()
-            binding.lytNoDevice.root.layoutParams = layoutParams*/
+            val layoutParamNoDevice = binding.lytNoDevice.root.layoutParams
+            layoutParamNoDevice.height = (height.toFloat() * viewModel.CARD_RATIO).roundToInt()
+            binding.lytNoDevice.root.layoutParams = layoutParams
 
             val layoutParamGenerating = binding.lytGeneratingData.root.layoutParams
-            layoutParamGenerating.height = (height.toFloat() * 0.65).roundToInt()
+            layoutParamGenerating.height = (height.toFloat() * viewModel.CARD_RATIO).roundToInt()
             binding.lytGeneratingData.root.layoutParams = layoutParams
 
         }

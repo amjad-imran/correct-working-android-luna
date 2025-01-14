@@ -6,7 +6,7 @@
     android:viewportHeight="440">
   <path
       android:pathData="M0,0h343v440h-343z"
-      android:fillAlpha="0.7">
+      android:fillAlpha="0.8">
     <aapt:attr name="android:fillColor">
       <gradient 
           android:startX="110"
@@ -16,7 +16,7 @@
           android:type="linear">
         <item android:offset="0.01" android:color="#FF4EA6CC"/>
         <item android:offset="0.23" android:color="#FF4E88CC"/>
-        <item android:offset="0.48" android:color="#00274466"/>
+        <item android:offset="0.60" android:color="#00274466"/>
       </gradient>
     </aapt:attr>
   </path>

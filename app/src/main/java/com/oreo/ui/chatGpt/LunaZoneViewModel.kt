@@ -22,6 +22,7 @@ class LunaZoneViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val suggestedQuestions = MutableLiveData<List<SuggestedAiQuestions>>()
+    val CARD_RATIO = 0.55
 
     /**
      * Pair(workout,meal) state

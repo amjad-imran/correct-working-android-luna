@@ -35,7 +35,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="12dp"
-        android:textColor="#A8FFFF"
+        android:textColor="#D7FFFF"
         app:layout_constraintEnd_toEndOf="@+id/ivWorkoutPlan"
         app:layout_constraintStart_toStartOf="@+id/ivWorkoutPlan"
         app:layout_constraintTop_toTopOf="@+id/ivWorkoutPlan"

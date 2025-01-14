@@ -20,13 +20,13 @@ class SuggestedQuestionAdapter(val onQuestionClicked: (SuggestedAiQuestions) -> 
 
         fun bind(suggestedAiQuestions: SuggestedAiQuestions) {
             binding.tvQues.text = suggestedAiQuestions.ques
-            //binding.imageBg.loadImage(binding.imageBg.context, suggestedAiQuestions.bg_image)
+            binding.imageBg.loadImage(binding.imageBg.context, suggestedAiQuestions.bg_image)
             binding.ivQuesIcon.loadImage(binding.ivQuesIcon.context, suggestedAiQuestions.icon)
             binding.tvQues.setTextColor(Color.parseColor(suggestedAiQuestions.color ?: "#ffffff"))
 
-            binding.cardView.apply {
+            /*binding.cardView.apply {
                 setCardBackgroundColor(Color.parseColor(suggestedAiQuestions.bgColor ?: "#000000"))
-            }
+            }*/
             binding.root.setOnClickListener {
                 onQuestionClicked(suggestedAiQuestions)
             }

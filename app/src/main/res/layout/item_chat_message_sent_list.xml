@@ -17,15 +17,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvMessage"
-            style="@style/S16"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/back_chat_user_message"
-            android:lineSpacingExtra="6sp"
-            android:padding="12dp"
-            tools:text="sdfkjhkh kjsd hfkj hsdfkj shdkfj hsdkf" />
+            app:cardCornerRadius="14dp">
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/S16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back_chat_user_message_ai"
+                android:lineSpacingExtra="6sp"
+                android:padding="12dp"
+                tools:text="sdfkjhkh kjsd hfkj hsdfkj shdkfj hsdkf" />
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
