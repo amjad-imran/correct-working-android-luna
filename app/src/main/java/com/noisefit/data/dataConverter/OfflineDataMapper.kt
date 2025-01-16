@@ -290,7 +290,7 @@ class OfflineDataMapper
         val endInstant = Instant.ofEpochSecond(googleFitDataDisplayModel.endTime)
         val end = ZonedDateTime.ofInstant(endInstant, ZoneId.systemDefault())
 
-        jsonObject.addProperty("type", "manual")
+        jsonObject.addProperty("type", "google")
         jsonObject.addProperty(
             "date",
             start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -319,6 +319,7 @@ class OfflineDataMapper
         val endInstant = Instant.ofEpochSecond(data.endTime)
         val end = ZonedDateTime.ofInstant(endInstant, ZoneId.systemDefault())
         val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+
         jsonObject.addProperty(
             "date",
             date
@@ -338,6 +339,8 @@ class OfflineDataMapper
 
         val jsonFinalObject = JsonObject()
         jsonFinalObject.add("day_break_up", jsonObject)
+        jsonFinalObject.addProperty("type", "google")
+
         val jsonArray = JsonArray()
         jsonArray.add(jsonFinalObject)
         return Pair(jsonArray, date)

@@ -1786,5 +1786,7 @@
     <string name="text_data_sync_failed">Data sync failed</string>
     <string name="text_items_synced">%1$d Items synced</string>
     <string name="text_great_your_have_successfully_synced_your_data">Great! Your have successfully synced your data</string>
+    <string name="text_select_all">Select all</string>
+    <string name="text_please_select_at_least_1_option">Please select at-least 1 option</string>
 
 </resources>

@@ -14,6 +14,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvSelectAll"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/text_select_all"
+        android:textColor="#88B0FF"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMain"
         android:layout_width="0dp"
@@ -61,8 +75,8 @@
         layout="@layout/fragment_google_fit_data_synced"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:elevation="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

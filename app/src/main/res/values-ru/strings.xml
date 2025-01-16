@@ -1756,4 +1756,6 @@
     <string name="text_data_sync_failed">Сбой синхронизации данных</string>
     <string name="text_items_synced">%1$d элементов синхронизировано</string>
     <string name="text_great_your_have_successfully_synced_your_data">Отлично! Вы успешно синхронизировали свои данные</string>
+    <string name="text_select_all">Выбрать все</string>
+    <string name="text_please_select_at_least_1_option">Пожалуйста, выберите хотя бы 1 вариант</string>
 </resources>

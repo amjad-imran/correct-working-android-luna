@@ -1757,4 +1757,6 @@
     <string name="text_data_sync_failed">Gegevenssynchronisatie mislukt</string>
     <string name="text_items_synced">%1$d Items gesynchroniseerd</string>
     <string name="text_great_your_have_successfully_synced_your_data">Geweldig! U heeft uw gegevens succesvol gesynchroniseerd</string>
+    <string name="text_select_all">Selecteer alles</string>
+    <string name="text_please_select_at_least_1_option">Selecteer minimaal 1 optie</string>
 </resources>

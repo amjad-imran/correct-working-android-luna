@@ -66,7 +66,7 @@ constructor(
             setLoading(true)
 
             //remove old data
-            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3)/1000
+            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3) / 1000
             googleFitDataSource.deleteData(timeStampGFit)
 
             //compare overlapping data
@@ -319,6 +319,10 @@ constructor(
     fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
         setLoading(true)
         viewModelScope.launch {
+
+            success.clear()
+            fail.clear()
+
             LOGS.d("sendDataToServer API start")
             selectedItems.map { googleFitDataDisplayModel ->
                 LOGS.d("sendDataToServer API hit ")

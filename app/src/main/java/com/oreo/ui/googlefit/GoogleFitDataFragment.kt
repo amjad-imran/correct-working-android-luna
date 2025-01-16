@@ -38,6 +38,11 @@ class GoogleFitDataFragment :
     }
 
     override fun initListener() {
+
+        binding.tvSelectAll.setOnClickListener {
+            mAdapter.selectAll()
+        }
+
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -60,16 +65,18 @@ class GoogleFitDataFragment :
     private fun checkAndSendData() {
         val selectedItems = mAdapter.getSelectedData()
 
-        //context.showShortToast("Selected Items ${selectedItems.size}")
-        if (selectedItems.isNotEmpty()) {
-            viewModel.sendDataToServer(selectedItems)
+        if (selectedItems.isEmpty()) {
+            context.showShortToast(getString(R.string.text_please_select_at_least_1_option))
+            return
         }
+
+        viewModel.sendDataToServer(selectedItems)
     }
 
     override fun subscribeObservers() {
 
         viewModel.unSyncedDataList.observe(this) {
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 viewModel.sessionManager.googleFitSyncCompleted.postValue(Event(true))
                 navigateUpSafe()
             }
@@ -80,11 +87,7 @@ class GoogleFitDataFragment :
             it.getContent()?.let {
                 mAdapter.removeSyncedData(viewModel.success)
 
-                //check remaining data size
-                val itemCount = mAdapter.itemCount
-
-                //if greater than 1 show error
-                if (itemCount > 0) {
+                if (viewModel.fail.size > 0) {
                     showSyncCompleteState(false, getString(R.string.text_data_sync_failed), "")
                 } else {
                     /*val syncMessage = viewModel.getSyncedMessage()*/

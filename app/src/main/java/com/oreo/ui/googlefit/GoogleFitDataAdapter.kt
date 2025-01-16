@@ -269,7 +269,6 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
             }
 
 
-
             if (data.isSelected) {
                 binding.ivSelect.setImageResource(R.drawable.ic_google_fit_selected)
             } else {
@@ -366,6 +365,13 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
             mDataSet.removeIf { it ->
                 it.isDataSame(data)
             }
+        }
+        notifyDataSetChanged()
+    }
+
+    fun selectAll() {
+        mDataSet.forEach {
+            it.isSelected = true
         }
         notifyDataSetChanged()
     }

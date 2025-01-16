@@ -1741,4 +1741,6 @@
     <string name="text_data_sync_failed">การซิงค์ข้อมูลล้มเหลว</string>
     <string name="text_items_synced">%1$d รายการซิงค์แล้ว</string>
     <string name="text_great_your_have_successfully_synced_your_data">เยี่ยม! คุณได้ซิงค์ข้อมูลของคุณเรียบร้อยแล้ว</string>
+    <string name="text_select_all">เลือกทั้งหมด</string>
+    <string name="text_please_select_at_least_1_option">โปรดเลือกอย่างน้อย 1 ตัวเลือก</string>
 </resources>
