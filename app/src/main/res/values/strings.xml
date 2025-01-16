@@ -1783,5 +1783,8 @@
     <string name="text_data_sync_available">We found some data in google fit which you can bring into Luna.</string>
     <string name="text_manage_data">Manage data</string>
     <string name="text_select_data">Select data</string>
+    <string name="text_data_sync_failed">Data sync failed</string>
+    <string name="text_items_synced">%1$d Items synced</string>
+    <string name="text_great_your_have_successfully_synced_your_data">Great! Your have successfully synced your data</string>
 
 </resources>

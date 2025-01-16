@@ -78,7 +78,6 @@ class GoogleFitDataFragment :
 
         viewModel.dataSyncingComplete.observe(this) {
             it.getContent()?.let {
-                //todo remove data from adapter
                 mAdapter.removeSyncedData(viewModel.success)
 
                 //check remaining data size
@@ -86,13 +85,13 @@ class GoogleFitDataFragment :
 
                 //if greater than 1 show error
                 if (itemCount > 0) {
-                    showSyncCompleteState(false, "Data sync failed", "")
+                    showSyncCompleteState(false, getString(R.string.text_data_sync_failed), "")
                 } else {
-                    val syncMessage = viewModel.getSyncedMessage()
+                    /*val syncMessage = viewModel.getSyncedMessage()*/
                     showSyncCompleteState(
                         true,
-                        "${viewModel.success.size} Items synced",
-                        syncMessage
+                        getString(R.string.text_items_synced, viewModel.success.size),
+                        getString(R.string.text_great_your_have_successfully_synced_your_data)
                     )
                 }
             }

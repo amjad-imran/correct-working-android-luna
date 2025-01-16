@@ -1745,4 +1745,14 @@
     <string name="text_how_do_you_intend_to_use_luna">您打算如何使用 Luna？</string>
     <string name="text_please_select_all_that_apply">请选择所有适用的选项</string>
     <string name="text_type_here_dot">在这里输入..</string>
+    <string name="text_body_measurements">身体测量</string>
+    <string name="text_data_available_for_sync">可供同步的数据</string>
+    <string name="text_select_data">选择数据</string>
+    <string name="text_approve">批准</string>
+    <string name="text_meaure_accurate">导入此数据将帮助我们准确衡量您的分数。</string>
+    <string name="text_data_sync_available">我们在 google fit 中找到了一些数据，您可以将其带入 Luna。</string>
+    <string name="text_manage_data">管理数据</string>
+    <string name="text_data_sync_failed">数据同步失败</string>
+    <string name="text_items_synced">%1$d 项已同步</string>
+    <string name="text_great_your_have_successfully_synced_your_data">太棒了！您已成功同步数据</string>
 </resources>

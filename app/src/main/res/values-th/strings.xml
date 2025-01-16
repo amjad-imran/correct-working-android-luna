@@ -1731,4 +1731,14 @@
     <string name="text_how_do_you_intend_to_use_luna">คุณตั้งใจจะใช้ลูน่าอย่างไร?</string>
     <string name="text_please_select_all_that_apply">โปรดเลือกทุกข้อที่เกี่ยวข้อง</string>
     <string name="text_type_here_dot">พิมพ์ที่นี่..</string>
+    <string name="text_body_measurements">การวัดร่างกาย</string>
+    <string name="text_data_available_for_sync">ข้อมูลที่พร้อมสำหรับการซิงค์</string>
+    <string name="text_select_data">เลือกข้อมูล</string>
+    <string name="text_approve">อนุมัติ</string>
+    <string name="text_meaure_accurate">การนำเข้าข้อมูลนี้จะช่วยให้เราวัดคะแนนของคุณได้อย่างแม่นยำ</string>
+    <string name="text_data_sync_available">เราพบข้อมูลบางอย่างใน Google Fit ซึ่งคุณสามารถนำเข้าสู่ Luna ได้</string>
+    <string name="text_manage_data">จัดการข้อมูล</string>
+    <string name="text_data_sync_failed">การซิงค์ข้อมูลล้มเหลว</string>
+    <string name="text_items_synced">%1$d รายการซิงค์แล้ว</string>
+    <string name="text_great_your_have_successfully_synced_your_data">เยี่ยม! คุณได้ซิงค์ข้อมูลของคุณเรียบร้อยแล้ว</string>
 </resources>

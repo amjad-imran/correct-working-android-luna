@@ -1742,4 +1742,14 @@
     <string name="text_how_do_you_intend_to_use_luna">Wie wollen Sie Luna nutzen?</string>
     <string name="text_please_select_all_that_apply">Bitte wählen Sie alle zutreffenden Antworten aus</string>
     <string name="text_type_here_dot">Geben Sie hier ein..</string>
+    <string name="text_body_measurements">Körpermaße</string>
+    <string name="text_data_available_for_sync">Daten verfügbar zur Synchronisierung</string>
+    <string name="text_select_data">Daten auswählen</string>
+    <string name="text_approve">Genehmigen</string>
+    <string name="text_meaure_accurate">Durch den Import dieser Daten können wir Ihre Ergebnisse genau messen.</string>
+    <string name="text_data_sync_available">Wir haben in Google Fit einige Daten gefunden, die Sie in Luna übernehmen können.</string>
+    <string name="text_manage_data">Daten verwalten</string>
+    <string name="text_data_sync_failed">Datensynchronisation fehlgeschlagen</string>
+    <string name="text_items_synced">%1$d Elemente synchronisiert</string>
+    <string name="text_great_your_have_successfully_synced_your_data">Toll! Sie haben Ihre Daten erfolgreich synchronisiert</string>
 </resources>
