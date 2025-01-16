@@ -123,6 +123,7 @@ constructor(
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
                 //userActivityDataCallbacks?.onUserActivityDataReceived(UserActivityCallback.RingUserWorkoutData(Gson().toJson(data)))
+                AppLogs.sendAppLogs("RECORD_WORKOUT received workout $data")
                 sportModleInfoList.add(data)
             }
 
