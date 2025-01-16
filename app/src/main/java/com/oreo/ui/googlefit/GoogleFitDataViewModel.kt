@@ -64,6 +64,11 @@ constructor(
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
             setLoading(true)
+
+            //remove old data
+            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3)/1000
+            googleFitDataSource.deleteData(timeStampGFit)
+
             //compare overlapping data
 
             val data = googleFitDataSource.getUnSyncedData()

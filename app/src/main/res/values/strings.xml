@@ -1777,9 +1777,8 @@
     <string name="text_please_select_all_that_apply">Please select all that apply</string>
     <string name="text_type_here_dot">Type here..</string>
     <string name="text_approve">Approve</string>
-    <string name="text_meaure_accurate">Importing this data will help us accurately measure your readiness or sleep scores .</string>
+    <string name="text_meaure_accurate">Importing this data will help us accurately measure your scores .</string>
     <string name="text_body_measurements">Body measurements</string>
-    <string name="text_share_data_gogle_fit">We will share this data with Google Fit. We will not take this data from apple health.</string>
     <string name="text_data_available_for_sync">Data available for sync</string>
     <string name="text_data_sync_available">We found some data in google fit which you can bring into Luna.</string>
     <string name="text_manage_data">Manage data</string>
