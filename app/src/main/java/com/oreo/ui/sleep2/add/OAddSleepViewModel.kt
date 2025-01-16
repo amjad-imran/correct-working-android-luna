@@ -13,9 +13,11 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OreoNapNetworkEntity
 import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.SleepDataGoogleFit.SleepDataBreakup
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.model.OAddSleep
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
@@ -35,7 +38,8 @@ class OAddSleepViewModel
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val resourcesProvider: ResourcesProvider,
-    private val localDataStore:DataStoredInterface,
+    private val offlineDataMapper: OreoOfflineDataMapper,
+    private val localDataStore: DataStoredInterface,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val oreoStepsDataImpl: OreoSyncRepository,
 ) :
@@ -235,11 +239,59 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            val enableGoogleFit = localDataStore.isEnableGoogleFit()
+                            val syncSleep = localDataStore.getStatusGoogleFitKey("sleep")
+                            if (enableGoogleFit && syncSleep) {
+                                try {
+                                    jsonArray.forEach {
+                                        val breakup = (it as JsonObject).getAsJsonObject("day_break_up")
+                                        val startTime = breakup.get("start_time").asString
+                                        val endTime = breakup.get("end_time").asString
+                                        addSleepToGoogleFit(startTime+":00", endTime+":00")
+                                    }
+                                }catch (ignored:Exception){ }
+                            }
                             _addSleepResponse.postValue(Event(true))
                         }
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Start and end of format ->yyyy-MM-dd HH:mm:ss
+     */
+    private fun addSleepToGoogleFit(startTime: String, endTime: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val zoneOffset =
+                ZoneId.systemDefault().rules.getOffset(LocalDateTime.now())
+
+            val startTimeStamp = LocalDateTime.parse(
+                startTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).toEpochSecond(zoneOffset)
+            val endTimeStamp = LocalDateTime.parse(
+                endTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).toEpochSecond(zoneOffset)
+
+            googleFitDataObservers.insertSleepData(
+                SleepDataGoogleFit(
+                    startTime = startTimeStamp * 1000,
+                    endTime = endTimeStamp * 1000,
+                    sleepArray = arrayListOf(
+                        SleepDataBreakup(
+                            startTime = startTimeStamp * 1000,
+                            endTime = endTimeStamp * 1000,
+                            sleepType = "light"
+                        )
+                    )
+                ),
+                success = {}, failed = {}
+            )
         }
     }
 
@@ -276,11 +328,17 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-                            val googleFitStatus = localDataStore.isEnableGoogleFit()
-                            val syncSleep =
-                                localDataStore.getStatusGoogleFitKey("sleep")
-                            if(googleFitStatus && syncSleep){
-                                insetGoogleFitSleep(jsonArray)
+                            val enableGoogleFit = localDataStore.isEnableGoogleFit()
+                            val syncSleep = localDataStore.getStatusGoogleFitKey("sleep")
+                            if (enableGoogleFit && syncSleep) {
+                                try {
+                                    jsonArray.forEach {
+                                        (it as JsonObject)
+                                        val startTime = it.get("start_time").asString
+                                        val endTime = it.get("end_time").asString
+                                        addSleepToGoogleFit(startTime, endTime)
+                                    }
+                                }catch (ignored:Exception){ }
                             }
 
                             _addSleepResponse.postValue(Event(true))
@@ -289,12 +347,6 @@ constructor(
                 }
             }
         }
-    }
-
-    private fun insetGoogleFitSleep(jsonArray: JsonArray) {
-        /*googleFitDataObservers.insertSleepData(SleepDataGoogleFit(
-            startTime =
-        ))*/
     }
 
     fun isStartDateToday(): Boolean {

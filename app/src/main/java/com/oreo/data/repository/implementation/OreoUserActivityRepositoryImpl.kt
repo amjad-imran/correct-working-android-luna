@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.CACHE_CLEAR_DEFAULT
