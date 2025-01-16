@@ -32,3 +32,4 @@ include ':MPChartLib'
 include(":noisefit_zh_sdk")
 
 
+include ':timePickerSlider'

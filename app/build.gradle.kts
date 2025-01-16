@@ -341,6 +341,8 @@ dependencies {
     implementation(project(Modules.mpChartLib))
     implementation(project(Modules.noisefit_zh_sdk))
 
+    implementation(project(Modules.timePickerSlider))
+
     implementation(libs.anrwatchdog)
 
     implementation(platform(libs.kotlin.bom))

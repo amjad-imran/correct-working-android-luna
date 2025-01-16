@@ -1,7 +1,10 @@
 package com.oreo.ui.sleep2.sleepplanner
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -10,11 +13,15 @@ import com.noisefit.data.model.AlarmDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
+import com.noisefit.timepickerslider.TimeRangePicker
+import com.noisefit.timepickerslider.TimeRangePicker.ClockFace
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmBinding::inflate) {
@@ -30,6 +37,67 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUi()
+        initTimePicker()
+    }
+
+    private fun initTimePicker() {
+
+        binding.timePicker.apply {
+
+            thumbSize = 36f.dpToPixel().roundToInt()
+            sliderWidth = 40f.dpToPixel().roundToInt()
+            sliderColor = Color.TRANSPARENT
+            thumbColor = Color.WHITE
+            sliderRangeGradientStart = Color.parseColor("#7462A4")
+            sliderRangeGradientMiddle = Color.parseColor("#845A64")
+            sliderRangeGradientEnd = Color.parseColor("#1A1624")
+            thumbIconColor = Color.parseColor("#F79104")
+            thumbSizeActiveGrow = 1.0f
+            clockFace = ClockFace.APPLE
+            hourFormat = TimeRangePicker.HourFormat.FORMAT_24
+        }
+
+        binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
+            override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
+                //updateTimes()
+            }
+
+            override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
+                //updateTimes()
+            }
+
+            override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {
+                //updateDuration()
+            }
+        })
+
+        binding.timePicker.setOnDragChangeListener(object : TimeRangePicker.OnDragChangeListener {
+            override fun onDragStart(thumb: TimeRangePicker.Thumb): Boolean {
+                if(thumb != TimeRangePicker.Thumb.BOTH) {
+                    //animate(thumb, true)
+                }
+                return true
+            }
+
+            override fun onDragStop(thumb: TimeRangePicker.Thumb) {
+                if(thumb != TimeRangePicker.Thumb.BOTH) {
+                    //animate(thumb, false)
+                }
+
+                Log.d(
+                    "TimeRangePicker",
+                    "Start time: " + binding.timePicker.startTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "End time: " + binding.timePicker.endTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "Total duration: " + binding.timePicker.duration
+                )
+            }
+        })
     }
 
     private fun initUi() {

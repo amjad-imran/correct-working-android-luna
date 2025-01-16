@@ -4,6 +4,8 @@ object Modules {
     const val commons = ":commons"
     const val mpChartLib = ":MPChartLib"
     const val oreo = ":oreo"
+    const val timePickerSlider = ":timePickerSlider"
+
     const val customProgress=":customprogress"
 
 
