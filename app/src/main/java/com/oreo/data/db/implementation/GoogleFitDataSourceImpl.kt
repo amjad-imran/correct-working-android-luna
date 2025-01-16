@@ -84,11 +84,15 @@ constructor(
 
             val userData = userHealthDataSource.getDataByDate(date)
 
-            val parsedData = Gson().fromJson<ServerUserHealthData>(
-                userData?.userHealthData ?: ""
-            )
+            val parsedData = if (userData == null) {
+                null
+            } else {
+                Gson().fromJson<ServerUserHealthData?>(
+                    userData.userHealthData ?: ""
+                )
+            }
 
-            parsedData.activity?.workout?.forEach {
+            parsedData?.activity?.workout?.forEach {
                 val startTime = "${it.date} ${it.startTime}"
                 val endTime = "${it.date} ${it.endTime}"
 
@@ -117,7 +121,7 @@ constructor(
             }
 
 
-            parsedData.sleep?.sleeps?.forEach {
+            parsedData?.sleep?.sleeps?.forEach {
                 timestamps.add(
                     Pair(
                         LocalDateTime.parse(
@@ -133,7 +137,7 @@ constructor(
                 )
             }
 
-            parsedData.sleep?.naps?.forEach {
+            parsedData?.sleep?.naps?.forEach {
                 timestamps.add(
                     Pair(
                         LocalDateTime.parse(

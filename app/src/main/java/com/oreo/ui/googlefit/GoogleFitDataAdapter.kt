@@ -17,6 +17,7 @@ import com.noisefit_commans.models.BodyMeasurementGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.oreo.data.model.GoogleFitDataDisplayModel
 import com.oreo.data.model.GoogleFitDataType
@@ -39,7 +40,7 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
 
             val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
             val end = ZonedDateTime.ofInstant(instantEnd, ZoneId.systemDefault())
-            binding.tvDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+            binding.tvDate.text = DateFormats.getOrdinalDate(start.toLocalDate(), 1)
 
             binding.lytStartTime.apply {
                 this.tvValue.text = start.format(DateTimeFormatter.ofPattern("hh:mm"))
@@ -107,9 +108,9 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GoogleFitDataDisplayModel) {
 
-            if(data.type==GoogleFitDataType.NAP){
+            if (data.type == GoogleFitDataType.NAP) {
                 binding.tvTitle.text = binding.tvTitle.context.getString(R.string.text_nap)
-            }else{
+            } else {
                 binding.tvTitle.text = binding.tvTitle.context.getString(R.string.text_sleep)
             }
 
@@ -119,7 +120,7 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
             val start = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
             val end = ZonedDateTime.ofInstant(instantEnd, ZoneId.systemDefault())
 
-            binding.tvDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+            binding.tvDate.text = DateFormats.getOrdinalDate(start.toLocalDate(), 1)
 
             binding.lytStartTime.apply {
                 this.tvValue.text = start.format(DateTimeFormatter.ofPattern("hh:mm"))
@@ -182,10 +183,12 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
 
                     this.tvTitle.text = tvTitle.context.getString(R.string.height)
                     tvCurrentValue.text =
-                        if(isMetric){
+                        if (isMetric) {
                             "${measurementData.userHeight}"
-                        }else{
-                            val (feet,inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.userHeight.toDouble())
+                        } else {
+                            val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(
+                                measurementData.userHeight.toDouble()
+                            )
                             "$feet'${inches.roundToInt()}\""
                         }
 
@@ -198,14 +201,14 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                     val changedTime =
                         ZonedDateTime.ofInstant(instantChanged, ZoneId.systemDefault())
 
-                    tvCurrentDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                    tvCurrentDate.text = DateFormats.getOrdinalDate(start.toLocalDate(), 1)
                     tvChangedDate.text =
-                        changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                        DateFormats.getOrdinalDate(changedTime.toLocalDate(), 1)
 
-                    tvChangedValue.text = if(isMetric){
+                    tvChangedValue.text = if (isMetric) {
                         "${measurementData.gFitHeight!!.value.roundToInt()}"
-                    }else{
-                        val (feet,inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
+                    } else {
+                        val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
                         "$feet'${inches.roundToInt()}\""
                     }
 
@@ -244,9 +247,9 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                     val changedTime =
                         ZonedDateTime.ofInstant(instantChanged, ZoneId.systemDefault())
 
-                    tvCurrentDate.text = start.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                    tvCurrentDate.text = DateFormats.getOrdinalDate(start.toLocalDate(), 1)
                     tvChangedDate.text =
-                        changedTime.format(DateTimeFormatter.ofPattern("dd MMM yy"))
+                        DateFormats.getOrdinalDate(changedTime.toLocalDate(), 1)
 
 
                     val userWeight = measurementData.gFitWeight!!.value.roundToInt()

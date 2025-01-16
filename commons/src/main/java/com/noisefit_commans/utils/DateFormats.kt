@@ -20,6 +20,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalField
 import java.time.temporal.WeekFields
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -327,7 +328,13 @@ object DateFormats {
         val amPm = if (hours < 12) "AM" else "PM"
         val formattedHours = if (hours % 12 == 0) 12 else hours % 12
 
-        return String.format(locale = Locale.US,"%02d:%02d %s", formattedHours, remainingMinutes, amPm)
+        return String.format(
+            locale = Locale.US,
+            "%02d:%02d %s",
+            formattedHours,
+            remainingMinutes,
+            amPm
+        )
 
     }
 
@@ -508,7 +515,6 @@ object DateFormats {
     }
 
 
-
     fun formatMonthly(dateInput: String?): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
@@ -538,7 +544,7 @@ object DateFormats {
     fun getOrdinalDate(
         dateInput: String?,
         currentFormat: SimpleDateFormat,
-        languageCode:String
+        languageCode: String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
@@ -555,7 +561,7 @@ object DateFormats {
     fun getOrdinalDateToday(
         dateInput: String?,
         currentFormat: SimpleDateFormat,
-        languageCode:String
+        languageCode: String
     ): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
@@ -564,6 +570,16 @@ object DateFormats {
             val month = SimpleDateFormat("MMM", Locale(languageCode)).format(date)
             return "$day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun getOrdinalDate(date: LocalDate, format: Int): String {
+        return try {
+            val day = date.dayOfMonth
+            val monthYear = date.format(DateTimeFormatter.ofPattern("MMM yy"))
+            "$day${getDayOfMonthSuffix(day)} $monthYear"
+        } catch (ignored: Exception) {
             ""
         }
     }
@@ -1054,7 +1070,6 @@ object DateFormats {
         }
         return false
     }
-
 
 
     fun getConvertToDateFormat(
