@@ -45,7 +45,10 @@ import com.noisefit_commans.utils.ITEM_HEIGHT
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.db.abstaction.GoogleFitDataSource
+import com.oreo.data.model.GoogleFitDataType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
@@ -63,6 +66,7 @@ class ProfileEditViewModel
     val userRepository: UserRepository,
     val screenUtils: ScreenUtils,
     val authenticationRepository: AuthenticationRepository,
+    val googleFitDataSource: GoogleFitDataSource,
     val googleFitDataObservers: GoogleFitDataObservers,
     val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
@@ -326,9 +330,15 @@ class ProfileEditViewModel
     fun getGenderValue(): String {
 
         val tempGender: String =
-            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) resourcesProvider.getString(R.string.man)
-            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) resourcesProvider.getString(R.string.text_woman)
-            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) resourcesProvider.getString(R.string.text_non_binary)
+            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) resourcesProvider.getString(
+                R.string.man
+            )
+            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) resourcesProvider.getString(
+                R.string.text_woman
+            )
+            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) resourcesProvider.getString(
+                R.string.text_non_binary
+            )
             else resourcesProvider.getString(R.string.text_prefer_not_to_say)
         return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
     }
@@ -337,8 +347,12 @@ class ProfileEditViewModel
 
         val temp: String = when (lGender?.lowercase()) {
             "male", resourcesProvider.getString(R.string.man).lowercase() -> Gender.MALE.type
-            "female", resourcesProvider.getString(R.string.text_woman).lowercase() -> Gender.FEMALE.type
-            resourcesProvider.getString(R.string.text_non_binary).lowercase(), "other" -> Gender.OTHER.type
+            "female", resourcesProvider.getString(R.string.text_woman)
+                .lowercase() -> Gender.FEMALE.type
+
+            resourcesProvider.getString(R.string.text_non_binary)
+                .lowercase(), "other" -> Gender.OTHER.type
+
             else -> Gender.NotToSay.type
         }
         gender.value = temp
@@ -637,6 +651,15 @@ class ProfileEditViewModel
                             sessionManager.updateNotificationSettings(
                                 it.notificationsEnabledLuna ?: 1
                             )
+
+                            viewModelScope.launch(Dispatchers.IO) {
+                                googleFitDataSource.markDataSynced(
+                                    0,
+                                    GoogleFitDataType.BODY_MEASUREMENTS
+                                )
+                            }
+
+
                             _userDetailsUpdated.postValue(Event(true))
                         }
                     }
