@@ -199,6 +199,7 @@ class GoogleFitFragment :
                     localDataStore.setStatusGoogleFitKey("sleep", false)
                     localDataStore.setStatusGoogleFitKey("workout", false)
                     localDataStore.setStatusGoogleFitKey("body_measurement", false)
+                    localDataStore.setStatusGoogleFitKey("steps", false)
 
                     binding.progressBar.root.gone()
 
@@ -219,6 +220,7 @@ class GoogleFitFragment :
                     localDataStore.setStatusGoogleFitKey("sleep", false)
                     localDataStore.setStatusGoogleFitKey("workout", false)
                     localDataStore.setStatusGoogleFitKey("body_measurement", false)
+                    localDataStore.setStatusGoogleFitKey("steps", false)
 
                     binding.progressBar.root.gone()
 
@@ -278,6 +280,7 @@ class GoogleFitFragment :
             val sleepStatus = localDataStore.getStatusGoogleFitKey("sleep")
             val workoutStatus = localDataStore.getStatusGoogleFitKey("workout")
             val bodyMeasurementStatus = localDataStore.getStatusGoogleFitKey("body_measurement")
+            val stepsStatus = localDataStore.getStatusGoogleFitKey("steps")
 
             it.lytSleep.tvName.text = getString(R.string.text_sleep)
             it.lytSleep.imageView.setImageResource(R.drawable.ic_g_fit_nap)
@@ -311,6 +314,16 @@ class GoogleFitFragment :
                 checkIfAllOff()
             }
 
+            it.lytSteps.tvName.text = getString(R.string.text_steps)
+            it.lytSteps.imageView.setImageResource(R.drawable.ic_g_fit_steps)
+            it.lytSteps.switchMain.isChecked = stepsStatus
+            it.lytSteps.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    localDataStore.setStatusGoogleFitKey("steps", isChecked)
+                }
+                checkIfAllOff()
+            }
+
         }
 
     }
@@ -336,6 +349,7 @@ class GoogleFitFragment :
                     localDataStore.setStatusGoogleFitKey("sleep", true)
                     localDataStore.setStatusGoogleFitKey("workout", true)
                     localDataStore.setStatusGoogleFitKey("body_measurement", true)
+                    localDataStore.setStatusGoogleFitKey("steps", true)
 
                     setGoogleFitSwitchState(true)
                     googleFitDataObservers.saveUserWeightAndHeight()

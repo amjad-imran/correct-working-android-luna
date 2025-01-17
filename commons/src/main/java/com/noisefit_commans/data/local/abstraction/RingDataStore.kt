@@ -3,6 +3,8 @@ package com.noisefit_commans.data.local.abstraction
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.GoogleFitData
+import com.noisefit_commans.models.GoogleFitDataLastSync
 import com.noisefit_commans.models.ManualMeasurement
 
 interface RingDataStore {
@@ -90,6 +92,9 @@ interface RingDataStore {
     fun sleepAlertCrossedForDate(): String?
 
     fun saveRingPairedDate()
-    fun getRingPairedDate():String?
+    fun getRingPairedDate(): String?
+
+    fun getLastSyncedStepsData(): GoogleFitDataLastSync?
+    fun setLastSyncedStepsData(data: GoogleFitDataLastSync)
 
 }

@@ -15,6 +15,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoAutoSportData
@@ -30,12 +31,14 @@ import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.GoogleFitDataLastSync
 import com.noisefit_commans.models.StepDataGoogleFit
 
 import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.EncryptUtils
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
@@ -76,6 +79,7 @@ class OreoSyncRepositoryImpl(
     private val encryptUtils: EncryptUtils,
     private val lastSyncProvider: LastSyncProvider,
     private val testModeUtils: TestModeUtils,
+    private val ringDataStore: RingDataStore,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
     private val oreoGFitWorkoutDataImpl: OreoGFitWorkoutDataImpl,
@@ -196,6 +200,38 @@ class OreoSyncRepositoryImpl(
         return sleepDataImpl.getUnSyncGoogleFitData()
     }
 
+    override suspend fun getGoogleFitUnSyncDataSteps(date: String): StepDataGoogleFit? {
+        return getStepsData(date)
+    }
+
+    private suspend fun getStepsData(date: String): StepDataGoogleFit? {
+
+        val steps = stepsDataImpl.getTodayData(date)
+        LOGS.d("sdfkjhksdj $steps")
+
+        var lastSyncedSteps = ringDataStore.getLastSyncedStepsData()
+
+        if(lastSyncedSteps?.date.equals(date).not()){
+            lastSyncedSteps = null
+        }
+
+        if (steps == null || steps.totalSteps == 0) {
+            return null
+        }
+
+        var stepsToSync = steps.totalSteps
+        var startTimeSync = DateFormats.startOfDayTimeStamp()
+        val endTimeSync = DateFormats.getTimeStamp()
+
+        if (lastSyncedSteps != null) {
+            if (steps.totalSteps - lastSyncedSteps.steps < 20) {
+                return null
+            }
+            startTimeSync = lastSyncedSteps.stepsLastSync
+            stepsToSync = steps.totalSteps - lastSyncedSteps.steps
+        }
+        return StepDataGoogleFit(startTimeSync, endTimeSync, stepsToSync, steps.totalSteps)
+    }
 
     override suspend fun saveStressData(
         data: OreoStressDataBreakup
@@ -267,7 +303,7 @@ class OreoSyncRepositoryImpl(
                 val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync"
                 AppLogs.sendAppLogs("POST Multisync DATA SERVER $url -> ${Gson().toJson(it)}")
 
-                remoteDataSource.postOreoCombinedHistoryData(url, it,"2")
+                remoteDataSource.postOreoCombinedHistoryData(url, it, "2")
             }
 
         }
@@ -685,9 +721,12 @@ class OreoSyncRepositoryImpl(
     }
 
     override suspend fun updateGoogleFitUnSyncStepsStatus(date: String, data: StepDataGoogleFit) {
-        //TODO implement
+        ringDataStore.setLastSyncedStepsData(GoogleFitDataLastSync(
+            steps = data.totalSteps,
+            date = date,
+            stepsLastSync = DateFormats.getTimeStamp()
+        ))
 
-        //        googleFitDataImpl.updateSyncStepsStatus(date, data)
     }
 
     override suspend fun updateGoogleFitUnSyncSleepStatus(sleepData: OreoSleepData) {

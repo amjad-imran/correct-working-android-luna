@@ -59,7 +59,7 @@ constructor(
 
 
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
-        val todayDate = DateFormats.getTodaysDateString(7)
+        val todayDate = DateFormats.getTodaysDateString(10)
 
         /*var shouldUserObjectSync = false
         if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
@@ -73,6 +73,42 @@ constructor(
          */
         job = syncDataScope.launch(Dispatchers.IO) {
             supervisorScope {
+                val syncSteps =
+                    localDataStore.getStatusGoogleFitKey("steps")
+                val callSaveSteps = async {
+                    if (syncSteps) {
+                        val googleFitStepData =
+                            syncRepository.getGoogleFitUnSyncDataSteps(todayDate)
+
+                        googleFitStepData?.let { stepsData ->
+                            try {
+                                googleFitDataObservers.insertStepData(
+                                    stepsData, success = {
+                                        LOGS.d("$TAG google success steps")
+                                        job = syncDataScope.launch {
+
+                                            syncRepository.updateGoogleFitUnSyncStepsStatus(
+                                                todayDate,
+                                                stepsData
+                                            )
+                                        }
+
+
+                                    },
+                                    failed = {
+                                        LOGS.d("$TAG google failed steps")
+
+                                    })
+                            } catch (e: Exception) {
+                                LOGS.d("$TAG ${e.message}")
+                                e.printStackTrace()
+                            }
+                        }
+
+                    }
+                }
+
+
                 val syncSleep =
                     localDataStore.getStatusGoogleFitKey("sleep")
                 val callSaveSleep = async {
@@ -250,7 +286,7 @@ constructor(
                 val callGetSleepSessions = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Activity")
 
-                    if(syncSleep){
+                    if (syncSleep) {
                         googleFitDataObservers.importSleepSessions(
                             success = { sleepList ->
 
@@ -289,6 +325,7 @@ constructor(
                  }*/
 
                 try {
+                    callSaveSteps.await()
                     callSaveSleep.await()
                     callGetBodyMeasurements.await()
                     callGetWorkoutSessions.await()

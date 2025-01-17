@@ -7,6 +7,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.GoogleFitDataLastSync
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.utils.DateFormats
 import java.time.LocalDate
@@ -43,6 +44,7 @@ private const val STRESS_BETA_STATE = "STRESS_BETA_STATE"
 private const val ENABLE_AI_STATE_2 = "ENABLE_AI_STATE_2"
 private const val SLEEP_ALERT_REMOVE = "SLEEP_ALERT_REMOVE"
 private const val RING_PAIR_DATE = "RING_PAIR_DATE"
+private const val LAST_SYNC_STEPS = "LAST_SYNC_STEPS"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
@@ -54,6 +56,17 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+    override fun getLastSyncedStepsData(): GoogleFitDataLastSync? {
+        val lastSyncData = Gson().fromJson<GoogleFitDataLastSync>(
+            mPrefs.getString(LAST_SYNC_STEPS, "") ?: ""
+        )
+        return lastSyncData
+    }
+
+    override fun setLastSyncedStepsData(data: GoogleFitDataLastSync) {
+        mPrefs.edit().putString(LAST_SYNC_STEPS, gson.toJson(data)).commit()
+
+    }
 
     override fun saveRingPairedDate() {
         mPrefs.edit()?.putString(RING_PAIR_DATE, LocalDate.now().toString())?.commit()

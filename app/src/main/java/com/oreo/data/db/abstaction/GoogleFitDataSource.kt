@@ -18,6 +18,6 @@ interface GoogleFitDataSource {
 
     fun markDataSynced(id: Int, type: GoogleFitDataType)
 
-    fun deleteData(timestamp: Long)
+    fun deleteData()
 
 }

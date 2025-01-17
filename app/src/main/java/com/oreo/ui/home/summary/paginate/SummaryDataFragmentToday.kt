@@ -1038,22 +1038,25 @@ class SummaryDataFragmentToday :
                 is ConnectState.ConnectFailed -> {
                     viewModel.updateAlerts()
                     viewModel.stateDashRingBattery.postValue(Pair(false, null))
+                    viewModel.handleGoogleFitCard()
                 }
 
                 is ConnectState.Connecting -> {
                     viewModel.updateAlerts()
                     viewModel.stateDashRingBattery.postValue(Pair(false, null))
+                    viewModel.handleGoogleFitCard()
                 }
 
                 is ConnectState.ConnectSuccess -> {
                     viewModel.updateAlerts()
                     viewModel.handleBatteryAlert()
+                    viewModel.handleGoogleFitCard()
                 }
 
                 is ConnectState.UnPaired -> {
                     viewModel.updateAlerts()
                     viewModel.stateDashRingBattery.postValue(Pair(false, null))
-
+                    viewModel.handleGoogleFitCard()
                 }
 
                 else -> {}

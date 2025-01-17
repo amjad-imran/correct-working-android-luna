@@ -243,8 +243,18 @@ constructor(
         }
     }
 
-    override fun deleteData(timestamp: Long) {
-        return googleFitDataDao.deleteData(timestamp)
+    override fun deleteData() {
+        val workoutTimestamp = DateFormats.lastClearDataTimeStamp(3) / 1000
+        val sleepTimestamp = DateFormats.lastClearDataTimeStamp(2) / 1000
+
+        googleFitDataDao.deleteDataByTypeAndTimestamp(
+            GoogleFitDataType.WORKOUT.name.lowercase(),
+            workoutTimestamp
+        )
+        googleFitDataDao.deleteDataByTypeAndTimestamp(
+            GoogleFitDataType.SLEEP.name.lowercase(),
+            sleepTimestamp
+        )
     }
 
     override fun saveBodyMeasurements(bodyMeasurement: BodyMeasurementModel) {

@@ -288,6 +288,7 @@ object AppModule {
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
         keyValueDataSource: KeyValueDataSource,
+        ringDataStore: RingDataStore,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -309,6 +310,7 @@ object AppModule {
             encryptUtils,
             lastSyncProvider,
             testModeUtils,
+            ringDataStore,
             oreoAutoSportDataImpl,
             oreoRecordedWorkoutDataImpl,
             oreoGFitWorkoutDataImpl,

@@ -67,8 +67,7 @@ constructor(
             setLoading(true)
 
             //remove old data
-            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3) / 1000
-            googleFitDataSource.deleteData(timeStampGFit)
+            googleFitDataSource.deleteData()
 
             //compare overlapping data
 
