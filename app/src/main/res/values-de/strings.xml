@@ -1754,4 +1754,5 @@
     <string name="text_great_your_have_successfully_synced_your_data">Toll! Sie haben Ihre Daten erfolgreich synchronisiert</string>
     <string name="text_select_all">Alles auswählen</string>
     <string name="text_please_select_at_least_1_option">Bitte wählen Sie mindestens 1 Option aus</string>
+    <string name="text_google_fit_data_share">Wir werden diese Daten mit Google Fit teilen. Wir werden diese Daten nicht von Google Fit übernehmen.</string>
 </resources>

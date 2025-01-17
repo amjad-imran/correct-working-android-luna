@@ -244,8 +244,8 @@ constructor(
     }
 
     override suspend fun deleteData() {
-        val workoutTimestamp = DateFormats.lastClearDataTimeStamp(3) / 1000
-        val sleepTimestamp = DateFormats.lastClearDataTimeStamp(2) / 1000
+        val workoutTimestamp = DateFormats.lastClearDataTimeStamp(2) / 1000
+        val sleepTimestamp = DateFormats.lastClearDataTimeStamp(1) / 1000
 
         googleFitDataDao.deleteDataByTypeAndTimestamp(
             GoogleFitDataType.WORKOUT.name.lowercase(),

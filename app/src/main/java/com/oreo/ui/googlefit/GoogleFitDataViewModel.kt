@@ -226,7 +226,7 @@ constructor(
             } else if (it.type.equals("sleep", true)) {
                 val duration = it.endTime - it.startTime
                 LOGS.d("dfkhdf $duration")
-                if (duration < (3 * 60 * 60)) {
+                if (duration <= (3 * 60 * 60)) {
                     GoogleFitDataType.NAP
                 } else {
                     GoogleFitDataType.SLEEP
