@@ -326,14 +326,14 @@ class OfflineDataMapper
         )
         jsonObject.addProperty(
             "end_time",
-            end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
         )
         jsonObject.addProperty(
             "start_time",
-            start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
         )
 
-        val duration = (data.endTime - data.startTime) / 60
+        val duration = (data.endTime - data.startTime)
         jsonObject.addProperty("total_duration", duration)
         jsonObject.addProperty("active_calories", 0)
 

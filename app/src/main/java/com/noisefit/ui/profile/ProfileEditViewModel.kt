@@ -615,7 +615,7 @@ class ProfileEditViewModel
 
     }
 
-    fun updateUserProfile() {
+    fun updateUserProfile(removeGoogleFit: Boolean = true) {
         val request = createUserUpdateRequest()
 
 
@@ -635,7 +635,7 @@ class ProfileEditViewModel
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        updateUserProfile()
+                                        updateUserProfile(removeGoogleFit)
                                     }
 
                                     override fun no() {}
@@ -652,13 +652,14 @@ class ProfileEditViewModel
                                 it.notificationsEnabledLuna ?: 1
                             )
 
-                            viewModelScope.launch(Dispatchers.IO) {
-                                googleFitDataSource.markDataSynced(
-                                    0,
-                                    GoogleFitDataType.BODY_MEASUREMENTS
-                                )
+                            if(removeGoogleFit){
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    googleFitDataSource.markDataSynced(
+                                        0,
+                                        GoogleFitDataType.BODY_MEASUREMENTS
+                                    )
+                                }
                             }
-
 
                             _userDetailsUpdated.postValue(Event(true))
                         }
