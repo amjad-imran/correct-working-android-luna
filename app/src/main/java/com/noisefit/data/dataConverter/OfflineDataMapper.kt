@@ -322,7 +322,7 @@ class OfflineDataMapper
 
         jsonObject.addProperty(
             "date",
-            date
+            end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         )
         jsonObject.addProperty(
             "end_time",
