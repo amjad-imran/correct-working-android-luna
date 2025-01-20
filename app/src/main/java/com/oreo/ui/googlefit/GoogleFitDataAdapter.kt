@@ -208,9 +208,9 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                         DateFormats.getOrdinalDate(changedTime.toLocalDate(), 1)
 
                     tvChangedValue.text = if (isMetric) {
-                        "${measurementData.gFitHeight!!.value.roundToInt()}"
+                        "${measurementData.gFitHeight!!.value}"
                     } else {
-                        "${DistanceUtil.convertCmsToInch(measurementData.gFitHeight!!.value.roundToInt()).toDouble().roundToInt()}"
+                        "${DistanceUtil.convertCmsToInch(measurementData.gFitHeight!!.value).toDouble().roundToInt()}"
 
                         /*val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
                         "$feet'${inches.roundToInt()}\""*/
@@ -256,7 +256,7 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                         DateFormats.getOrdinalDate(changedTime.toLocalDate(), 1)
 
 
-                    val userWeight = measurementData.gFitWeight!!.value.roundToInt()
+                    val userWeight = measurementData.gFitWeight!!.value
                     tvChangedValue.text = if (isMetric) {
                         "$userWeight"
                     } else {

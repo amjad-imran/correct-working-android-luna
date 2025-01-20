@@ -654,7 +654,7 @@ constructor(
                     val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
                     val value = point.getValue(Field.FIELD_PERCENTAGE).asFloat()
                     if (timeStamp != 0L && value != 0f) {
-                        bodyFat = BodyMeasurementValue(timeStamp, value)
+                        bodyFat = BodyMeasurementValue(timeStamp, value.roundToInt())
                     }
 
                 }
@@ -663,7 +663,7 @@ constructor(
                     val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
                     val value = point.getValue(Field.FIELD_HEIGHT).asFloat()
                     if (timeStamp != 0L && value != 0f) {
-                        height = BodyMeasurementValue(timeStamp, value * 100) //meters to cm
+                        height = BodyMeasurementValue(timeStamp, (value * 100).roundToInt()) //meters to cm
                     }
                 }
 
@@ -671,7 +671,7 @@ constructor(
                     val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
                     val value = point.getValue(Field.FIELD_WEIGHT).asFloat()
                     if (timeStamp != 0L && value != 0f) {
-                        weight = BodyMeasurementValue(timeStamp, value.roundToInt().toFloat())
+                        weight = BodyMeasurementValue(timeStamp, value.roundToInt())
 
                     }
 
@@ -701,10 +701,10 @@ constructor(
         }
 
         val user = localDataStore.getUser()
-        var height = user?.userInfo?.height?.toFloat() ?: 0f
+        var height = user?.userInfo?.height?.toFloat() ?: 0.0f
         val weight = user?.userInfo?.weight ?: 0
 
-        if (height > 0) {
+        if (height > 0.0f) {
             height = DistanceUtil.centimeterToMeter(height)
         }
         LOGS.d("$TAG $height -- $weight")

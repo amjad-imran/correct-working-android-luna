@@ -429,8 +429,8 @@ constructor(
                         val parsedData = Gson().fromJson<BodyMeasurementGoogleFit>(
                             googleFitDataDisplayModel.rawData ?: ""
                         )
-                        val height = parsedData.gFitHeight?.value?.roundToInt()
-                        val weight = parsedData.gFitWeight?.value?.roundToInt()
+                        val height = parsedData.gFitHeight?.value
+                        val weight = parsedData.gFitWeight?.value
 
                         val request =
                             createUserUpdateRequest(localDataSource.getUser(), height, weight)

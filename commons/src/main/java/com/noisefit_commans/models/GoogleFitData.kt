@@ -76,7 +76,7 @@ data class BodyMeasurementModel(
 
 data class BodyMeasurementValue(
     val timeStamp: Long,
-    val value: Float,
+    val value: Int,
 )
 
 @Parcelize
