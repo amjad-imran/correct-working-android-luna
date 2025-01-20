@@ -10,6 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitDataBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
@@ -121,6 +122,8 @@ class GoogleFitDataFragment :
         binding.lytDataSyncStatus.apply {
             tvSyncMessage.text = title
             if (state) {
+                binding.toolbar.root.invisible()
+                binding.lytDataSyncStatus.lytToolbarSync.root.invisible()
                 tvMessage.text = message
                 tvMessage.visible()
                 btnRetry.gone()
@@ -131,6 +134,7 @@ class GoogleFitDataFragment :
                 }, 2000)
 
             } else {
+                binding.lytDataSyncStatus.lytToolbarSync.root.visible()
                 tvMessage.gone()
                 image.setImageResource(R.drawable.ic_g_fit_failed)
             }
