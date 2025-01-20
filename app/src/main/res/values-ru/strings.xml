@@ -988,7 +988,7 @@
     <string name="text_activities">Деятельность</string>
     <string name="text_nap_detected">Обнаружен сон</string>
     <string name="text_confirm">Подтверждать</string>
-    <string name="text_imported_from_google_fit">Импортировано из Google Fit.</string>
+    <string name="text_imported_from_google_fit">Импортировано из Google Fit</string>
     <string name="text_dismiss_detected_nap">Отклонить обнаруженный сон?</string>
     <string name="text_nap_remove_message">Эти данные о сне не могут быть восстановлены, если их однажды закрыть. Вы уверены, что хотите продолжить?</string>
     <string name="text_calculating_your_baseline">Расчет вашей базовой линии</string>
