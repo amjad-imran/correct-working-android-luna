@@ -455,8 +455,8 @@ class SummaryDataFragmentToday :
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
         }
 
-        binding.contentMain.lytSplanner.ivMore.setOnClickListener {
-            navigate(R.id.setAlarmFragment)
+        binding.contentMain.lytSplanner.root.setOnClickListener {
+            navigate(R.id.sleepPlannerFragment)
         }
         binding.contentMain.lytSplanner.lytBreathe.ivPlay.setOnClickListener {
             navigate(R.id.fragmentBreathExercise)

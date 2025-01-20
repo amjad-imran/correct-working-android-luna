@@ -4,12 +4,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
-import com.noisefit.data.model.AlarmDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
@@ -19,8 +15,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -56,48 +52,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             clockFace = ClockFace.APPLE
             hourFormat = TimeRangePicker.HourFormat.FORMAT_24
         }
-
-        binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
-            override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
-                //updateTimes()
-            }
-
-            override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
-                //updateTimes()
-            }
-
-            override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {
-                //updateDuration()
-            }
-        })
-
-        binding.timePicker.setOnDragChangeListener(object : TimeRangePicker.OnDragChangeListener {
-            override fun onDragStart(thumb: TimeRangePicker.Thumb): Boolean {
-                if(thumb != TimeRangePicker.Thumb.BOTH) {
-                    //animate(thumb, true)
-                }
-                return true
-            }
-
-            override fun onDragStop(thumb: TimeRangePicker.Thumb) {
-                if(thumb != TimeRangePicker.Thumb.BOTH) {
-                    //animate(thumb, false)
-                }
-
-                Log.d(
-                    "TimeRangePicker",
-                    "Start time: " + binding.timePicker.startTime
-                )
-                Log.d(
-                    "TimeRangePicker",
-                    "End time: " + binding.timePicker.endTime
-                )
-                Log.d(
-                    "TimeRangePicker",
-                    "Total duration: " + binding.timePicker.duration
-                )
-            }
-        })
     }
 
     private fun initUi() {
@@ -133,63 +87,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
     }
 
-    /*
-    * type
-    * 0-bedtime
-    * 1-wakeup time
-    * */
-    private fun showTimePicker(alarm: AlarmDataModel? = null, type: Int) {
-        viewModel.picker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_12H)
-            .setHour(12)
-            .setMinute(0)
-            .setTitleText("Select Alarm Time").build()
-
-        viewModel.picker.show(childFragmentManager, "AlarmManager")
-
-        var hour: Int
-        var state: String
-        viewModel.picker.addOnPositiveButtonClickListener {
-            if (viewModel.picker.hour > 12) {
-                hour = viewModel.picker.hour - 12
-                state = "PM"
-            } else {
-                hour = viewModel.picker.hour
-                state = "AM"
-
-            }
-
-            viewModel.calendar = Calendar.getInstance()
-            viewModel.calendar[Calendar.HOUR_OF_DAY] = viewModel.picker.hour
-            viewModel.calendar[Calendar.MINUTE] = viewModel.picker.minute
-            viewModel.calendar[Calendar.SECOND] = 0
-            viewModel.calendar[Calendar.MILLISECOND] = 0
-
-            if (alarm != null) {
-                alarm.hour = hour
-                alarm.minute = viewModel.picker.minute
-                alarm.state = state
-                alarm.timeInMillis = viewModel.calendar.timeInMillis
-//                viewModel.update(alarm)
-            } else {
-                val newAlarm = AlarmDataModel(
-                    hour = hour,
-                    minute = viewModel.picker.minute,
-                    state = state,
-                    timeInMillis = viewModel.calendar.timeInMillis
-                )
-                viewModel.insert(newAlarm, type)
-            }
-        }
-    }
-
     override fun initListener() {
-        binding.lytTopView.lytBedTime.root.setOnClickListener {
-            showTimePicker(type = 0)
-        }
-        binding.lytTopView.lytWakeupTime.root.setOnClickListener {
-            showTimePicker(type = 1)
-        }
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -216,27 +114,70 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     }
 
     override fun subscribeObservers() {
-        viewModel.alarmTimeUpdate.observe(this) {
-            it.getContent()?.let { it1 ->
-                val data = it1.first
-                val hour: String = if (data.hour < 9)
-                    "0${data.hour}"
-                else
-                    data.hour.toString()
-                val minute: String = if (data.minute < 9)
-                    "0${data.minute}"
-                else
-                    data.minute.toString()
+        viewModel.startEndTime.observe(this){
+            val start = it.first
+            val end = it.second
 
-                if (it1.second == 0) {
-                    binding.lytTopView.lytBedTime.tvTime.text = "$hour:$minute"
-                    binding.lytTopView.lytBedTime.tvTimeUnit.text = data.state.lowercase()
-                } else {
-                    binding.lytTopView.lytWakeupTime.tvTime.text = "$hour:$minute"
-                    binding.lytTopView.lytWakeupTime.tvTimeUnit.text = data.state.lowercase()
-                }
-            }
+            binding.lytTopView.lytBedTime.tvTime.text = "${start.hour}:${start.minute}"
+            binding.lytTopView.lytWakeupTime.tvTime.text = "${end.hour}:${end.minute}"
+
         }
+
+        binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
+            override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
+                //LOGS.d("TimeRangePicker, onStartTimeChange ${startTime.hour} - ${startTime.minute}")
+                viewModel.updateStartTime(startTime.hour,startTime.minute)
+            }
+
+            override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
+                LOGS.d("TimeRangePicker, onEndTimeChange ${endTime.hour} - ${endTime.minute}")
+                viewModel.updateEndTime(endTime.hour,endTime.minute)
+            }
+
+            override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {
+                //updateDuration()
+            }
+        })
+
+        binding.timePicker.setOnDragChangeListener(object : TimeRangePicker.OnDragChangeListener {
+            override fun onDragStart(thumb: TimeRangePicker.Thumb): Boolean {
+                if (thumb != TimeRangePicker.Thumb.BOTH) {
+                    //animate(thumb, true)
+                }
+                /*Log.d(
+                    "TimeRangePicker",
+                    "Start time: " + binding.timePicker.startTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "End time: " + binding.timePicker.endTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "Total duration: " + binding.timePicker.duration
+                )*/
+                return true
+            }
+
+            override fun onDragStop(thumb: TimeRangePicker.Thumb) {
+                if (thumb != TimeRangePicker.Thumb.BOTH) {
+                    //animate(thumb, false)
+                }
+
+               /* Log.d(
+                    "TimeRangePicker",
+                    "Start time: " + binding.timePicker.startTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "End time: " + binding.timePicker.endTime
+                )
+                Log.d(
+                    "TimeRangePicker",
+                    "Total duration: " + binding.timePicker.duration
+                )*/
+            }
+        })
     }
 
 }

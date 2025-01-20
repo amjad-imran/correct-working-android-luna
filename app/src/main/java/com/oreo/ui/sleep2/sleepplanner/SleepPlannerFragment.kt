@@ -144,10 +144,10 @@ class SleepPlannerFragment :
         binding.lytToolbar.view1.setOnClickListener {
             //
         }
-        binding.lytSetupGoal.ivMore.setOnClickListener {
+        binding.lytSetupGoal.root.setOnClickListener {
             navigate(R.id.dialogSaGoal)
         }
-        binding.lytSetupAlarm.ivMore.setOnClickListener {
+        binding.lytSetupAlarm.root.setOnClickListener {
             navigate(R.id.setAlarmFragment)
         }
         binding.lytBreathExercise.root.setOnClickListener {

@@ -3,6 +3,7 @@ package com.oreo.ui.sleep2.sleepplanner
 import android.os.Bundle
 import android.view.View
 import com.noisefit.data.model.SAGoalDataModel
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetGoalBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
@@ -72,9 +73,8 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
 
     private fun prepareData(): ArrayList<SAGoalDataModel> {
         val dataList = ArrayList<SAGoalDataModel>()
-        dataList.add(SAGoalDataModel(title = "Achieve 100% goal", false))
-        dataList.add(SAGoalDataModel(title = "Achieve 85% goal", false))
-        dataList.add(SAGoalDataModel(title = "Maintain weekly consistency", false))
+        dataList.add(SAGoalDataModel(title = getString(R.string.text_recover_sleep_debt), false,"key_1")) //todo key to be be changed
+        dataList.add(SAGoalDataModel(title = getString(R.string.text_establish_consistency), false,"key_1")) //todo key to be be changed
         return dataList
     }
 }
