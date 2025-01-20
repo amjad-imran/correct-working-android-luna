@@ -126,7 +126,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
             override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
                 //LOGS.d("TimeRangePicker, onStartTimeChange ${startTime.hour} - ${startTime.minute}")
-                viewModel.updateStartTime(startTime.hour,startTime.minute)
+
+                viewModel.updateStartTime(startTime.localTime)
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {

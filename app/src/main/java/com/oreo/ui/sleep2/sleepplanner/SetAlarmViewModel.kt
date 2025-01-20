@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.TimeDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalTime
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.min
@@ -83,7 +84,7 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
         //write code for save alarm
     }
 
-    fun updateStartTime(hour: Int, minute: Int) {
+    fun updateStartTime(time: LocalTime) {
         val lastValue = startEndTime.value!!
 
         startEndTime.postValue(

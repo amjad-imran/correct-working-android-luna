@@ -1132,7 +1132,6 @@ class TimeRangePicker @JvmOverloads constructor(
             get() = totalMinutes % 60
 
         val localTime: LocalTime
-            @RequiresApi(Build.VERSION_CODES.O)
             get() = LocalTime.of(hour, minute)
 
         val calendar: Calendar
