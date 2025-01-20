@@ -18,6 +18,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class GoogleFitDataSourceImpl @Inject
 constructor(
@@ -279,7 +280,7 @@ constructor(
                 googleFitDataDao.removeDataByType(GoogleFitDataType.HEIGHT.name.lowercase())
 
                 if ((height.timeStamp > appTimestamp) &&
-                    (height.value != (userData?.userInfo?.height ?: 0.0f))
+                    (height.value != (userData?.userInfo?.height ?: 0))
                 ) {
                     googleFitDataDao.insert(
                         GoogleFitDataDb(
@@ -304,7 +305,7 @@ constructor(
                 googleFitDataDao.removeDataByType(GoogleFitDataType.WEIGHT.name.lowercase())
 
                 if ((weight.timeStamp > appTimestamp) &&
-                    (weight.value != (userData?.userInfo?.weight ?: 0.0f))
+                    (weight.value != (userData?.userInfo?.weight ?: 0))
                 ) {
                     googleFitDataDao.insert(
                         GoogleFitDataDb(
