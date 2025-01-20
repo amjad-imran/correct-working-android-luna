@@ -392,6 +392,13 @@ class SummaryDataViewModelToday @Inject constructor(
                         return@launch
                     }
 
+                    //ring disconnected check
+                    if(sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                        stateGoogleFitCardDataSyncAvailable.postValue(false)
+                        return@launch
+                    }
+
+
                     val isGoogleFitSyncCrossed = localDataStore.isGoogleFitManageCrossed()
                     if (isGoogleFitSyncCrossed) {
                         stateGoogleFitCardDataSyncAvailable.postValue(false)

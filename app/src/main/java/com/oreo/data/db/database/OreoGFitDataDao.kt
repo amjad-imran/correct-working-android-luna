@@ -23,8 +23,11 @@ interface OreoGFitDataDao : BaseDao<GoogleFitDataDb> {
     fun markDataSynced(id: Int)
 
     @Query("UPDATE google_fit_data SET is_synced = 1 WHERE type = :type")
-    fun markDataSyncedByType(type:String)
+    fun markDataSyncedByType(type: String)
 
     @Query("DELETE FROM google_fit_data WHERE startTime < :timestamp")
     fun deleteData(timestamp: Long)
+
+    @Query("DELETE FROM google_fit_data WHERE type = :type AND startTime < :timeStamp")
+    fun deleteDataByTypeAndTimestamp(type: String, timeStamp: Long)
 }

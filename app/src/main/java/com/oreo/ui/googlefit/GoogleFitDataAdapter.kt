@@ -186,10 +186,12 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                         if (isMetric) {
                             "${measurementData.userHeight}"
                         } else {
+                            "${DistanceUtil.convertCmsToInch(measurementData.userHeight).toDouble().roundToInt()}"
+/*
                             val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(
                                 measurementData.userHeight.toDouble()
                             )
-                            "$feet'${inches.roundToInt()}\""
+                            "$feet'${inches.roundToInt()}\""*/
                         }
 
                     val instant = Instant.ofEpochSecond(measurementData.userTimeStamp)
@@ -208,8 +210,10 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                     tvChangedValue.text = if (isMetric) {
                         "${measurementData.gFitHeight!!.value.roundToInt()}"
                     } else {
-                        val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
-                        "$feet'${inches.roundToInt()}\""
+                        "${DistanceUtil.convertCmsToInch(measurementData.gFitHeight!!.value.roundToInt()).toDouble().roundToInt()}"
+
+                        /*val (feet, inches) = DistanceUtil.convertCmToFeetAndInches(measurementData.gFitHeight!!.value.toDouble())
+                        "$feet'${inches.roundToInt()}\""*/
                     }
 
                     this.root.visible()
@@ -267,7 +271,6 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
                     this.root.gone()
                 }
             }
-
 
 
             if (data.isSelected) {
@@ -366,6 +369,13 @@ class GoogleFitDataAdapter(val isMetric: Boolean) :
             mDataSet.removeIf { it ->
                 it.isDataSame(data)
             }
+        }
+        notifyDataSetChanged()
+    }
+
+    fun selectAll() {
+        mDataSet.forEach {
+            it.isSelected = true
         }
         notifyDataSetChanged()
     }

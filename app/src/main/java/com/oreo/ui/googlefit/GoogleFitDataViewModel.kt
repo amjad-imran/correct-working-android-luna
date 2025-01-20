@@ -9,6 +9,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
+import com.noisefit.ui.onboarding.onboardProfile.DefaultSleepGoal
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.GoogleFitDataDb
@@ -66,8 +67,7 @@ constructor(
             setLoading(true)
 
             //remove old data
-            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3)/1000
-            googleFitDataSource.deleteData(timeStampGFit)
+            googleFitDataSource.deleteData()
 
             //compare overlapping data
 
@@ -226,7 +226,7 @@ constructor(
             } else if (it.type.equals("sleep", true)) {
                 val duration = it.endTime - it.startTime
                 LOGS.d("dfkhdf $duration")
-                if (duration < (3 * 60 * 60)) {
+                if (duration <= (3 * 60 * 60)) {
                     GoogleFitDataType.NAP
                 } else {
                     GoogleFitDataType.SLEEP
@@ -319,6 +319,10 @@ constructor(
     fun sendDataToServer(selectedItems: List<GoogleFitDataDisplayModel>) {
         setLoading(true)
         viewModelScope.launch {
+
+            success.clear()
+            fail.clear()
+
             LOGS.d("sendDataToServer API start")
             selectedItems.map { googleFitDataDisplayModel ->
                 LOGS.d("sendDataToServer API hit ")
@@ -491,6 +495,7 @@ constructor(
         val userObject = JsonObject().apply {
             addProperty("first_name", user.firstName)
             addProperty("image_url", user.imageUrl)
+            addProperty("notifications_enabled_luna", user.notificationsEnabledLuna)
         }
 
         var userInfo: JsonObject? = null
@@ -505,6 +510,18 @@ constructor(
                 addProperty("step_length", 70)
             }
             userObject.add("info", userInfo)
+
+            val userGoals = JsonObject()
+            userGoals.apply {
+                addProperty("sleep_goals", user.userGoals?.sleepGoal ?: DefaultSleepGoal)
+                addProperty("step_goals", user.userGoals?.stepGoal)
+                addProperty("calories_goals", user.userGoals?.caloriesGoal)
+                addProperty("distance_goals", user.userGoals?.distanceGoal)
+                addProperty("unit_system", user.userGoals?.unitSystem)
+                addProperty("unit_system_luna", user.userGoals?.unitSystemLuna)
+            }
+
+            userObject.add("goal", userGoals)
 
         } catch (exp: Exception) {
             LOGS.d("User Info null")

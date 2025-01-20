@@ -59,12 +59,12 @@ class UnitSelectionFragment :
         binding.lytMetric.root.setOnClickListener {
             viewModel.setSelectedUnit(Units.METRIC)
             viewModel.convertValues()
-            viewModel.updateUserProfile()
+            viewModel.updateUserProfile(false)
         }
         binding.lytImperial.root.setOnClickListener {
             viewModel.setSelectedUnit(Units.IMPERIAL)
             viewModel.convertValues()
-            viewModel.updateUserProfile()
+            viewModel.updateUserProfile(false)
         }
 
         viewModel.getApiErrors().observe(this) {

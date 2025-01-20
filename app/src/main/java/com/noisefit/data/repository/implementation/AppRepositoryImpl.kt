@@ -70,8 +70,7 @@ class AppRepositoryImpl(
             napDataSource.deleteOldData(2)
 
 
-            val timeStampGFit = DateFormats.lastClearDataTimeStamp(3)/1000
-            googleFitDataSource.deleteData(timeStampGFit)
+            googleFitDataSource.deleteData()
 
             dayTimeMovementDataSource.deleteOldData(DELETE_DB_DAYS)
             autoWorkoutDataSource.deleteOldData(timeStamp)

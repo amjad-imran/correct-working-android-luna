@@ -1,5 +1,11 @@
 package com.noisefit_commans.models
 
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+
 data class SleepDataGoogleFit(
     var startTime: Long,
     var endTime: Long,
@@ -72,6 +78,13 @@ data class BodyMeasurementValue(
     val timeStamp: Long,
     val value: Float,
 )
+
+@Parcelize
+data class GoogleFitDataLastSync(
+    var steps: Int = 0,
+    var date: String = "",
+    var stepsLastSync: Long = 0L,
+) : Parcelable
 
 
 //{"type":"HEART RATE","count":62,"min_count":0,"max_count":0,"unit":"bpm","time":"2021-05-17T05:31:06.718Z","resting_hr":0}

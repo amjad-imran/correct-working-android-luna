@@ -25,6 +25,7 @@ import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.roundToInt
 import kotlin.time.toDuration
 
 private const val LUNA_ACTIVITY = "luna_activity"
@@ -670,7 +671,7 @@ constructor(
                     val timeStamp = point.getTimestamp(TimeUnit.SECONDS)
                     val value = point.getValue(Field.FIELD_WEIGHT).asFloat()
                     if (timeStamp != 0L && value != 0f) {
-                        weight = BodyMeasurementValue(timeStamp, value)
+                        weight = BodyMeasurementValue(timeStamp, value.roundToInt().toFloat())
 
                     }
 
@@ -839,7 +840,7 @@ constructor(
             FitnessActivities.BOXING -> "boxing"
             FitnessActivities.HIKING -> "hiking"
             FitnessActivities.SWIMMING -> "swimming"
-            else -> null
+            else -> "freestyle"
         }
     }
 

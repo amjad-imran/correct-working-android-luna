@@ -1755,4 +1755,7 @@
     <string name="text_data_sync_failed">Sincronizzazione dei dati non riuscita</string>
     <string name="text_items_synced">%1$d elementi sincronizzati</string>
     <string name="text_great_your_have_successfully_synced_your_data">Ottimo! Hai sincronizzato con successo i tuoi dati</string>
+    <string name="text_select_all">Seleziona tutto</string>
+    <string name="text_please_select_at_least_1_option">Seleziona almeno 1 opzione</string>
+    <string name="text_google_fit_data_share">Condivideremo questi dati con Google Fit. Non prenderemo questi dati da Google Fit.</string>
 </resources>
