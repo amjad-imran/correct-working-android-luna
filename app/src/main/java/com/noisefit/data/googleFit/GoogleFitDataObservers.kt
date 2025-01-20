@@ -985,8 +985,7 @@ constructor(
     ) {
 
         val endTime = ZonedDateTime.now()
-        val startTime = endTime.minusDays(1).withHour(0).withMinute(0).withSecond(0)
-
+        val startTime = endTime.minusDays(2).withHour(0).withMinute(0).withSecond(0)
         /*LOGS.d(
             "GoogleFitSyncWork",
             "start - ${startTime.toEpochSecond()} | end - ${endTime.toEpochSecond()}"
