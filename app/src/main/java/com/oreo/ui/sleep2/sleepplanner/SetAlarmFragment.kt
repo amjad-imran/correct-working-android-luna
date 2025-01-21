@@ -17,6 +17,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -39,6 +40,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     private fun initTimePicker() {
 
         binding.timePicker.apply {
+
+            minDurationMinutes = 3 * 60
+            maxDurationMinutes = 22 * 60
 
             thumbSize = 36f.dpToPixel().roundToInt()
             sliderWidth = 40f.dpToPixel().roundToInt()
@@ -118,21 +122,26 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             val start = it.first
             val end = it.second
 
-            binding.lytTopView.lytBedTime.tvTime.text = "${start.hour}:${start.minute}"
-            binding.lytTopView.lytWakeupTime.tvTime.text = "${end.hour}:${end.minute}"
+            binding.lytTopView.lytBedTime.tvTime.text = start.format(DateTimeFormatter.ofPattern("hh:mm"))
+            binding.lytTopView.lytBedTime.tvTimeUnit.text = start.format(DateTimeFormatter.ofPattern("a"))
+            binding.lytTopView.lytWakeupTime.tvTime.text = end.format(DateTimeFormatter.ofPattern("hh:mm"))
+            binding.lytTopView.lytWakeupTime.tvTimeUnit.text = end.format(DateTimeFormatter.ofPattern("a"))
+
+            val durationMinutes = viewModel.getDurationMinutes(it.first,it.second)
+            val hours = durationMinutes / 60
+            val minutes = durationMinutes % 60
+            binding.lytAlarmTime.tvHour.text = hours.toString()
+            binding.lytAlarmTime.tvMin.text = minutes.toString()
 
         }
 
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
             override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
-                //LOGS.d("TimeRangePicker, onStartTimeChange ${startTime.hour} - ${startTime.minute}")
-
-                viewModel.updateStartTime(startTime.localTime)
+                viewModel.updateTime(startTime.localTime,binding.timePicker.endTime.localTime)
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
-                //LOGS.d("TimeRangePicker, onEndTimeChange ${endTime.hour} - ${endTime.minute}")
-                viewModel.updateEndTime(endTime.localTime)
+                viewModel.updateTime(binding.timePicker.startTime.localTime,endTime.localTime)
             }
 
             override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {

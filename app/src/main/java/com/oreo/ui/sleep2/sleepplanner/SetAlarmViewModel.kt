@@ -10,10 +10,12 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.oreo.data.model.AlarmDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
+import com.noisefit.timepickerslider.TimeRangePicker
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.TimeDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Duration
 import java.time.LocalTime
 import java.util.Calendar
 import javax.inject.Inject
@@ -79,26 +81,23 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
         //write code for save alarm
     }
 
-    fun updateStartTime(time: LocalTime) {
-        val lastValue = startEndTime.value!!
-
+    fun updateTime(localTime: LocalTime, endTime: LocalTime) {
         startEndTime.postValue(
             Pair(
-                time, lastValue.second
+                localTime,
+                endTime
             )
         )
-
     }
 
-    fun updateEndTime(time: LocalTime) {
-        val lastValue = startEndTime.value!!
-
-        startEndTime.postValue(
-            Pair(
-                lastValue.first,
-                time
-            )
-        )
-
+    fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
+        return if (end.isAfter(start)) {
+            Duration.between(start, end).toMinutes()
+        } else {
+            val dayEnd = LocalTime.of(23, 59)
+            val dayStart = LocalTime.of(0, 0)
+            Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
+                .toMinutes()
+        }
     }
 }
