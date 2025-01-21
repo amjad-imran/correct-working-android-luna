@@ -96,6 +96,7 @@
                     tools:text="10:20 am" />
 
                 <include
+                    android:id="@+id/lineCalories"
                     layout="@layout/layout_line_separator"
                     android:layout_width="1dp"
                     android:layout_height="16dp"
