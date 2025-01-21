@@ -33,18 +33,33 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
 
             val time = DateFormats.convert24HourTo12(activity.startTime)
             if (time.isNotEmpty()) {
-                binding.tvStart.text ="${time.lowercase()}"
-            }else{
+                binding.tvStart.text = "${time.lowercase()}"
+            } else {
                 binding.tvStart.text = "-"
             }
 
-            binding.tvMin.text = if(activity.duration==null){
+            binding.tvMin.text = if (activity.duration == null) {
                 binding.root.context.getString(R.string.text_hypen_min)
-            }else{
-                binding.root.context.getString(R.string.text_value_min,"${activity.duration}")
+            } else {
+                binding.root.context.getString(R.string.text_value_min, "${activity.duration}")
             }
 
-            binding.tvCalories.text = binding.root.context.getString(R.string.text_value_kcal,"${activity.calories}")
+            try {
+                val calories = activity.calories?.toIntOrNull()
+                if (calories == null || calories == 0) {
+                    binding.lineCalories.root.gone()
+                    binding.tvCalories.gone()
+                } else {
+                    binding.lineCalories.root.visible()
+                    binding.tvCalories.visible()
+                    binding.tvCalories.text = binding.root.context.getString(
+                        R.string.text_value_kcal,
+                        "${activity.calories}"
+                    )
+                }
+            } catch (exp: Exception) {
+                binding.tvCalories
+            }
 
 
             if (activity.type.equals("apple", true)) {
@@ -52,12 +67,12 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
                     text = binding.root.context.getString(R.string.text_imported_from_health)
                     visible()
                 }
-            } else if(activity.type.equals("google", true)) {
+            } else if (activity.type.equals("google", true)) {
                 binding.tvImportedFrom.apply {
                     text = this.context.getString(R.string.text_imported_from_google_fit)
                     visible()
                 }
-            }else{
+            } else {
                 binding.tvImportedFrom.gone()
             }
 

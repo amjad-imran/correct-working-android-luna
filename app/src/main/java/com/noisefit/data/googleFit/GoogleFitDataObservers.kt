@@ -1005,7 +1005,7 @@ constructor(
         )
             .readSession(readRequestWorkout)
             .addOnSuccessListener { response ->
-                //LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
+                LOGS.d("GoogleFitSyncWork", "response: ${Gson().toJson(response)}")
 
                 for (session in response.sessions) {
                     //LOGS.d("GoogleFitSyncWork", "Session: $session")
@@ -1040,7 +1040,7 @@ constructor(
                                         workoutGoogleFit.distance =
                                             point.getValue(Field.FIELD_DISTANCE).asFloat()
                                         LOGS.d(
-                                            TAG,
+                                            "GoogleFitSyncWork",
                                             "distance " + point.getValue(Field.FIELD_DISTANCE)
                                                 .asFloat()
                                         )
@@ -1069,7 +1069,7 @@ constructor(
                                         workoutGoogleFit.steps =
                                             point.getValue(Field.FIELD_STEPS).asInt()
                                         LOGS.d(
-                                            TAG, "steps " + point.getValue(
+                                            "GoogleFitSyncWork", "steps " + point.getValue(
                                                 Field.FIELD_STEPS
                                             ).asInt()
                                         )
@@ -1079,7 +1079,7 @@ constructor(
                                         workoutGoogleFit.calories =
                                             point.getValue(Field.FIELD_CALORIES).asFloat()
                                         LOGS.d(
-                                            TAG,
+                                            "GoogleFitSyncWork",
                                             "calories " + point.getValue(Field.FIELD_CALORIES)
                                                 .asFloat()
                                         )
