@@ -58,7 +58,8 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
                     )
                 }
             } catch (exp: Exception) {
-                binding.tvCalories
+                binding.lineCalories.root.gone()
+                binding.tvCalories.gone()
             }
 
 
