@@ -28,18 +28,13 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
     var alarmSound: String? = null
     var alarmTimeUpdate = MutableLiveData<Event<Pair<AlarmDataModel, Int>>>()
 
-    var startEndTime = MutableLiveData<Pair<TimeDataModel, TimeDataModel>>()
+    var startEndTime = MutableLiveData<Pair<LocalTime, LocalTime>>()
 
     init {
         startEndTime.postValue(
             Pair(
-                TimeDataModel(
-                    hour = 22,
-                    minute = 0
-                ), TimeDataModel(
-                    hour = 6,
-                    minute = 0
-                )
+                LocalTime.of(22, 0),
+                LocalTime.of(6, 0)
             )
         )
     }
@@ -89,30 +84,19 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
 
         startEndTime.postValue(
             Pair(
-                TimeDataModel(
-                    hour = hour,
-                    minute = minute
-                ), TimeDataModel(
-                    hour = lastValue.second.hour,
-                    minute = 0
-                )
+                time, lastValue.second
             )
         )
 
     }
 
-    fun updateEndTime(hour: Int, minute: Int) {
+    fun updateEndTime(time: LocalTime) {
         val lastValue = startEndTime.value!!
 
         startEndTime.postValue(
             Pair(
-                TimeDataModel(
-                    hour = lastValue.first.hour,
-                    minute = lastValue.first.minute
-                ), TimeDataModel(
-                    hour = hour,
-                    minute = minute
-                )
+                lastValue.first,
+                time
             )
         )
 

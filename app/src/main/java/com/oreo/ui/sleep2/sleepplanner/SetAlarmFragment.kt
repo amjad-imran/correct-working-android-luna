@@ -114,7 +114,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     }
 
     override fun subscribeObservers() {
-        viewModel.startEndTime.observe(this){
+        viewModel.startEndTime.observe(this) {
             val start = it.first
             val end = it.second
 
@@ -131,8 +131,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
-                LOGS.d("TimeRangePicker, onEndTimeChange ${endTime.hour} - ${endTime.minute}")
-                viewModel.updateEndTime(endTime.hour,endTime.minute)
+                //LOGS.d("TimeRangePicker, onEndTimeChange ${endTime.hour} - ${endTime.minute}")
+                viewModel.updateEndTime(endTime.localTime)
             }
 
             override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {
@@ -165,18 +165,18 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                     //animate(thumb, false)
                 }
 
-               /* Log.d(
-                    "TimeRangePicker",
-                    "Start time: " + binding.timePicker.startTime
-                )
-                Log.d(
-                    "TimeRangePicker",
-                    "End time: " + binding.timePicker.endTime
-                )
-                Log.d(
-                    "TimeRangePicker",
-                    "Total duration: " + binding.timePicker.duration
-                )*/
+                /* Log.d(
+                     "TimeRangePicker",
+                     "Start time: " + binding.timePicker.startTime
+                 )
+                 Log.d(
+                     "TimeRangePicker",
+                     "End time: " + binding.timePicker.endTime
+                 )
+                 Log.d(
+                     "TimeRangePicker",
+                     "Total duration: " + binding.timePicker.duration
+                 )*/
             }
         })
     }
