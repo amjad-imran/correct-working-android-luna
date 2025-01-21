@@ -48,6 +48,8 @@ class SleepInternalDetailsViewModel @Inject constructor(
     var registerDate: Int = -1
     var source: String? = null
 
+    var isInitialLoadDone = false
+
     var isDeviationSelected = true
 
     lateinit var selectedLaunchMode: SleepInternalLaunchState

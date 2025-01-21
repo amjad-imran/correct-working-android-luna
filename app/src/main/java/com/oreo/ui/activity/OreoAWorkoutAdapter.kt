@@ -38,12 +38,27 @@ class OreoAWorkoutAdapter(val mListener: OnItemClickListener) :
                 "${activity.duration} min"
             }
 
-            binding.tvCalories.text = "${activity.calories} kcal"
-
+            try {
+                val calories = activity.calories?.toIntOrNull()
+                if (calories == null || calories == 0) {
+                    binding.lineCalories.root.gone()
+                    binding.tvCalories.gone()
+                } else {
+                    binding.lineCalories.root.visible()
+                    binding.tvCalories.visible()
+                    binding.tvCalories.text = binding.root.context.getString(
+                        R.string.text_value_kcal,
+                        "${activity.calories}"
+                    )
+                }
+            } catch (exp: Exception) {
+                binding.lineCalories.root.gone()
+                binding.tvCalories.gone()
+            }
 
             if (activity.type.equals("apple", true)) {
                 binding.tvImportedFrom.apply {
-                    text = "Imported from Health"
+                    text = binding.root.context.getString(R.string.text_imported_from_health)
                     visible()
                 }
             } else if (activity.type.equals("google", true)) {

@@ -96,7 +96,10 @@ class SleepInternalDetailsFragment :
         setRecycler()
         initViewPager()
 
-        viewModel.reloadData()
+        if (viewModel.isInitialLoadDone.not()) {
+            viewModel.reloadData()
+            viewModel.isInitialLoadDone = true
+        }
     }
 
     private fun initUi() {
@@ -238,7 +241,6 @@ class SleepInternalDetailsFragment :
                         "selection" to EventUtil.getEventName(data)
                     )
                 )
-
                 viewModel.reloadFragment.postValue(Event(data))
             }
 
