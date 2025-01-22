@@ -69,19 +69,21 @@
 
     <TextView
         android:id="@+id/tvMsg"
-        style="@style/H6"
+        style="@style/S14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="@dimen/side_margin"
+        android:layout_marginBottom="24dp"
+        android:alpha="0.72"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="3sp"
-        tools:text="Your ideal bedtime for today is 11:20 pm to achieve 100% of sleep goal "
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingBottom="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view1" />
+        app:layout_constraintTop_toBottomOf="@id/view1"
+        tools:text="Your ideal bedtime for today is 11:20 pm to achieve 100% of sleep goal " />
 
     <include
         android:id="@+id/divider1"
@@ -89,8 +91,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:visibility="gone"
-        tools:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tvMsg" />
+        app:layout_constraintTop_toBottomOf="@id/tvMsg"
+        tools:visibility="gone" />
 
     <include
         android:id="@+id/lytSetAlarm"
@@ -98,20 +100,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider1" />
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        tools:visibility="gone" />
 
     <include
         android:id="@+id/lytBreathe"
         layout="@layout/layout_dash_sp_sub_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="gone"
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginEnd="@dimen/side_margin"
-        app:layout_constraintTop_toBottomOf="@id/lytSetAlarm" />
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/lytSetAlarm"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

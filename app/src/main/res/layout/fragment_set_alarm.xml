@@ -44,16 +44,16 @@
                     android:layout_width="292dp"
                     android:layout_height="292dp"
                     android:layout_marginTop="42dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:padding="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytTopView"
                     app:trp_background_image="@drawable/image_back_time_picker"
                     app:trp_background_image_main="@drawable/image_back_timer_main"
-                    app:trp_thumbIconStart="@drawable/ic_plan_start"
-                    app:trp_thumbIconEnd="@drawable/ic_plan_end"
                     app:trp_clockLabelColor="#A3FFFFFF"
-                    app:trp_clockLabelSize="10sp" />
+                    app:trp_clockLabelSize="10sp"
+                    app:trp_thumbIconEnd="@drawable/ic_plan_end"
+                    app:trp_thumbIconStart="@drawable/ic_plan_start" />
 
                 <include
                     android:id="@+id/lytAlarmTime"
@@ -117,5 +117,16 @@
                     app:layout_constraintTop_toBottomOf="@id/lytAlarmSound" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

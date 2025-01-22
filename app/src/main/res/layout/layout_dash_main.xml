@@ -29,7 +29,7 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="gone" />
 
         <include

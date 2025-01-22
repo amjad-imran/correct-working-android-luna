@@ -61,6 +61,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
@@ -1976,6 +1977,13 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/status"
             remoteDataSource.getCalendarData(url, startDate, endDate)
+        }
+    }
+
+    override suspend fun getSleepPlannerDetails(): Flow<Resource<BaseApiResponse<SleepPlannerData>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/alarms/get"
+            remoteDataSource.getSleepPlannerDetails(url)
         }
     }
 }

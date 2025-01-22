@@ -6,15 +6,23 @@ import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.noisefit.data.base.ResourcesProvider
 import com.oreo.data.model.AlarmDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit.timepickerslider.TimeRangePicker
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.TimeDataModel
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalTime
 import java.util.Calendar
@@ -22,15 +30,21 @@ import javax.inject.Inject
 import kotlin.math.min
 
 @HiltViewModel
-class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
+class SetAlarmViewModel @Inject constructor(
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val resourcesProvider: ResourcesProvider,
+) : BaseViewModel() {
 
-    lateinit var picker: MaterialTimePicker
-    lateinit var calendar: Calendar
+    var lastSelectedPosition: Int?=null
+
     var selectedAlarmDays = ArrayList<String>()
     var alarmSound: String? = null
     var alarmTimeUpdate = MutableLiveData<Event<Pair<AlarmDataModel, Int>>>()
 
     var startEndTime = MutableLiveData<Pair<LocalTime, LocalTime>>()
+
+    val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
+
 
     init {
         startEndTime.postValue(
@@ -43,13 +57,13 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
 
     fun getAlarmData(): ArrayList<SAActiveDayDataModel> {
         val listData = ArrayList<SAActiveDayDataModel>()
-        listData.add(SAActiveDayDataModel("S", false))
-        listData.add(SAActiveDayDataModel("M", false))
-        listData.add(SAActiveDayDataModel("T", true))
-        listData.add(SAActiveDayDataModel("W", false))
-        listData.add(SAActiveDayDataModel("T", true))
-        listData.add(SAActiveDayDataModel("F", false))
-        listData.add(SAActiveDayDataModel("S", false))
+        listData.add(SAActiveDayDataModel("M", false, true, 0))
+        listData.add(SAActiveDayDataModel("T", false, false, 1))
+        listData.add(SAActiveDayDataModel("W", false, false, 2))
+        listData.add(SAActiveDayDataModel("T", false, false, 3))
+        listData.add(SAActiveDayDataModel("F", false, false, 4))
+        listData.add(SAActiveDayDataModel("S", false, false, 5))
+        listData.add(SAActiveDayDataModel("S", false, false, 6))
         return listData
     }
 
@@ -98,6 +112,45 @@ class SetAlarmViewModel @Inject constructor() : BaseViewModel() {
             val dayStart = LocalTime.of(0, 0)
             Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
                 .toMinutes()
+        }
+    }
+
+    fun getSleepPlanerDetails() {
+        viewModelScope.launch {
+
+            userActivityRepository.getSleepPlannerDetails().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getSleepPlanerDetails()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            sleepPlannerCard.postValue(it)
+                        }
+                    }
+                }
+            }
         }
     }
 }

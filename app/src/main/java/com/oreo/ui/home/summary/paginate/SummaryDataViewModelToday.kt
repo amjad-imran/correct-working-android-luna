@@ -55,6 +55,7 @@ import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.PeriodCard1
 import com.oreo.data.model.PeriodCard2
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
@@ -151,6 +152,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
+
+    val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
 
     val findMyRingCard = MutableLiveData<Boolean?>()
 
@@ -1864,6 +1867,33 @@ class SummaryDataViewModelToday @Inject constructor(
             localDataStore.hideFindMyRingLocationCard()
             findMyRingCard.postValue(false)
 
+        }
+    }
+
+    fun getSleepPlanerDetails() {
+        viewModelScope.launch {
+
+            userActivityRepository.getSleepPlannerDetails().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        //sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                       // setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            sleepPlannerCard.postValue(it)
+                        }
+                    }
+                }
+            }
         }
     }
 

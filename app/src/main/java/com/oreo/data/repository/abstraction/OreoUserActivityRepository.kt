@@ -23,6 +23,7 @@ import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.sleep.SleepDataResponse
@@ -162,5 +163,7 @@ interface OreoUserActivityRepository {
     suspend fun getCalendarData(startDate:String,endDate: String): Flow<Resource<BaseApiResponse<List<HealthCalendar>>>>
 
 
+    suspend fun getSleepPlannerDetails(
+    ): Flow<Resource<BaseApiResponse<SleepPlannerData>>>
 
 }

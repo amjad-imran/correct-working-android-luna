@@ -50,6 +50,7 @@ import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.ai.ChatHistoryItem
@@ -531,6 +532,11 @@ interface NetworkService {
         @Query("start_date") startDate: String?,
         @Query("end_date") endDate: String?,
     ): BaseApiResponse<List<HealthCalendar>>
+
+    @GET
+    suspend fun getSleepPlannerDetails(
+        @Url url: String,
+    ): BaseApiResponse<SleepPlannerData>
 
     /**
      * ===================================

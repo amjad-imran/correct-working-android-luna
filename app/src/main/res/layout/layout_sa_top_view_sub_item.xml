@@ -17,11 +17,11 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            style="@style/H6"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:textColor="#c5a8ed"
+            android:textColor="#A3FFFFFF"
             app:layout_constraintStart_toEndOf="@id/ivIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Bedtime" />
@@ -37,13 +37,13 @@
             tools:text="11:00" />
         <TextView
             android:id="@+id/tvTimeUnit"
-            style="@style/H5"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:textColor="@color/white_60"
             app:layout_constraintStart_toEndOf="@id/tvTime"
-            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvTime"
             tools:text="am" />
 
 

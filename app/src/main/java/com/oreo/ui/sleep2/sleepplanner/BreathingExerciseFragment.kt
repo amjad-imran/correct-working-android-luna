@@ -5,17 +5,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentBreathingExerciseBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.sleep2.sleepplanner.exercise.BreathingExerciseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BreathingExerciseFragment : BaseFragment<FragmentBreathingExerciseBinding>(FragmentBreathingExerciseBinding::inflate) {
+class BreathingExerciseFragment :
+    BaseFragment<FragmentBreathingExerciseBinding>(FragmentBreathingExerciseBinding::inflate) {
+
+    private val viewModel: BreathingExerciseViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
+        binding.lottieAnimationView.setAnimation(R.raw.anim_breathing_exercise)
+        binding.lottieAnimationView.playAnimation()
+        viewModel.startTimer()
     }
 
     override fun initListener() {
@@ -25,7 +40,23 @@ class BreathingExerciseFragment : BaseFragment<FragmentBreathingExerciseBinding>
     }
 
     override fun subscribeObservers() {
+        viewModel.timerRunning.observe(this) {
+            if (it == 0L) {
+                navigateUpSafe()
+                return@observe
+            } else {
+                val min = it / 60
+                val second = it % 60
 
+                binding.tvTimer.text = String.format("%d:%02d", min, second)
+            }
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.cancelTimer()
     }
 
 

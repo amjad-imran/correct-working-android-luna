@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemActiveDaysBinding
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.visible
 
 class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     RecyclerView.Adapter<SAActiveDaysAdapter.ViewHolder>() {
@@ -14,10 +17,13 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     inner class ViewHolder(val binding: ItemActiveDaysBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: SAActiveDayDataModel) {
-            if (data.isSelected) {
+            if (data.isSelected && data.isPreSelected.not()) {
                 binding.ivItem.setBackgroundResource(R.drawable.circle_select_sa)
-            } else
+            } else {
                 binding.ivItem.setBackgroundResource(R.drawable.circle_unselect_sa)
+            }
+            binding.ivSelectedDot.setVisibilityByCondition(data.isPreSelected)
+
             binding.tvHour.text = data.name
             binding.ivItem.setOnClickListener {
                 mListener.onItemClick(data, bindingAdapterPosition)
@@ -53,13 +59,17 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
         notifyDataSetChanged()
     }
 
-    fun updateItem(data: SAActiveDayDataModel, position: Int) {
-        mDataSet.forEachIndexed { index, dataModel ->
-            if (index == position) {
-                dataModel.isSelected = !data.isSelected
-            }
+    fun updateItem(position: Int) {
+        try {
+            val data = mDataSet[position]
+
+            data.isSelected = data.isSelected.not()
+            data.isPreSelected = false
+
+            notifyItemChanged(position)
+        } catch (exp: Exception) {
+            //Out of bound exception
         }
-        notifyDataSetChanged()
     }
 
     fun getSelectedValue(): ArrayList<String> {

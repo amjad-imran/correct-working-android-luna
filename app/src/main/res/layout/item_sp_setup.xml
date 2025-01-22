@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            style="@style/H6"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
@@ -25,21 +25,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/side_margin"
-            android:src="@drawable/ic_arrow_long_right"
+            android:src="@drawable/ic_arrow_planner_right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
         <TextView
-            style="@style/Small"
+            android:id="@+id/tvGoalText"
+            style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/side_margin"
             android:drawableEnd="@drawable/ic_sa_frwrd_arrow"
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
-            android:textColor="#88b0ff"
+            android:textColor="#88B0FF"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

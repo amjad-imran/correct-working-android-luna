@@ -1293,4 +1293,8 @@
             android:name="syncMessage"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetChangeSchedule"
+        android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetChangeSchedule"
+        android:label="BottomSheetChangeSchedule" />
 </navigation>

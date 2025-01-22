@@ -61,6 +61,7 @@ import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.SleepPlannerData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -89,6 +90,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -157,6 +159,8 @@ class SummaryDataFragmentToday :
 
         viewModel.getPeriodData()
         initSleepPlanerUi()
+
+        viewModel.getSleepPlanerDetails()
 
     }
 
@@ -577,6 +581,10 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.sleepPlannerCard.observe(this) {
+            setPlannerCardUi(it)
+        }
 
         viewModel.sessionManager.googleFitSyncCompleted.observe(this) {
             it.getContent()?.let {
@@ -1062,6 +1070,40 @@ class SummaryDataFragmentToday :
                 else -> {}
             }
 
+        }
+
+    }
+
+    private fun setPlannerCardUi(data: SleepPlannerData?) {
+        if (data == null) {
+            binding.contentMain.lytSplanner.root.gone()
+            return
+        }
+
+        binding.contentMain.lytSplanner.apply {
+            lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
+            lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
+            lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
+            lytWakeupTime.tvTitle.text = getString(R.string.text_wake_time)
+            
+            val bedTime = LocalTime.parse(
+                data.planner?.bed_time ?: "10:00:00",
+                DateTimeFormatter.ofPattern("HH:mm:ss")
+            )
+            val wakeTime = LocalTime.parse(
+                data.planner?.wake_time ?: "06:00:00",
+                DateTimeFormatter.ofPattern("HH:mm:ss")
+            )
+
+            lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+            lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a"))
+
+            lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+            lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a"))
+
+            tvMsg.text = data.planner?.nudge
+
+            root.visible()
         }
 
     }
