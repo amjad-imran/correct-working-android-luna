@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <declare-styleable name="PlannerClock">
+        <attr name="background_image_main" format="reference" />
+        <attr name="image_dial" format="reference" />
+        <attr name="hour_needle_image" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="CircularProgressBar">
         <attr name="archWidth" format="dimension" />
         <attr name="trackColor" format="color" />

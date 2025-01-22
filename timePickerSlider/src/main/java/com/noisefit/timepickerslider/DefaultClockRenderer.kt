@@ -137,6 +137,9 @@ class DefaultClockRenderer(private val picker: TimeRangePicker): BitmapCachedClo
     }
 
     private fun drawTicks(canvas: Canvas) {
+
+        //todo show background image_back_time_picker
+
         val radius = picker.clockRadius
         val hourTickInterval = if(picker.hourFormat == TimeRangePicker.HourFormat.FORMAT_24) 24 else 12
         val tickLength = _tickLength
@@ -169,7 +172,7 @@ class DefaultClockRenderer(private val picker: TimeRangePicker): BitmapCachedClo
             }
 
             // Hour tick
-            if (i % hourTick == 0) {
+            if (i % 12 == 0) {
                 _tickPaint.alpha = 180
                 _tickPaint.strokeWidth = _hourTickWidth
             } else {
@@ -184,7 +187,7 @@ class DefaultClockRenderer(private val picker: TimeRangePicker): BitmapCachedClo
     private val _drawLabelsPosition = PointF()
 
     private fun drawLabels(canvas: Canvas) {
-        val labels = when (picker.clockFace) {
+        val labels = LABELS_APPLE_24 /*when (picker.clockFace) {
             TimeRangePicker.ClockFace.APPLE -> {
                 if (picker.hourFormat == TimeRangePicker.HourFormat.FORMAT_24) {
                     LABELS_APPLE_24
@@ -199,7 +202,7 @@ class DefaultClockRenderer(private val picker: TimeRangePicker): BitmapCachedClo
                     LABELS_SAMSUNG_12
                 }
             }
-        }
+        }*/
 
         val bounds = _drawLabelsBounds
         val position = _drawLabelsPosition
@@ -233,7 +236,7 @@ class DefaultClockRenderer(private val picker: TimeRangePicker): BitmapCachedClo
     }
 
     companion object {
-        private val LABELS_APPLE_24 = arrayOf("0", "2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "22")
+        private val LABELS_APPLE_24 = arrayOf("12am", "", "", "6am", "", "", "12pm", "", "", "6pm", "", "")
         private val LABELS_APPLE_12 =  arrayOf("12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
 
         private val LABELS_SAMSUNG_24 = arrayOf("0", "6", "12", "18")

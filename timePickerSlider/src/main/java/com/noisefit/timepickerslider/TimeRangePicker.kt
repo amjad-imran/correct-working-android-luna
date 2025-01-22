@@ -60,6 +60,8 @@ class TimeRangePicker @JvmOverloads constructor(
 
     private var _thumbSize: Int = dpToPx(28f).toInt()
     private var _thumbSizeActiveGrow: Float = 1.2f
+    private var _backgroundImage: Drawable? = null
+    private var _backgroundImageMain: Drawable? = null
     private var _thumbIconStart: Drawable? = null
     private var _thumbIconEnd: Drawable? = null
     private var _thumbColor by Delegates.notNull<Int>()
@@ -69,7 +71,7 @@ class TimeRangePicker @JvmOverloads constructor(
 
     private var _clockVisible: Boolean = true
     private var _clockFace: ClockFace = ClockFace.APPLE
-    private var _clockLabelSize = spToPx(15f).toInt()
+    private var _clockLabelSize = spToPx(10f).toInt()
     private var _clockLabelColor by Delegates.notNull<Int>()
     private var _clockTickColor by Delegates.notNull<Int>()
 
@@ -234,6 +236,11 @@ class TimeRangePicker @JvmOverloads constructor(
             _thumbIconStart =
                 attr.getDrawable(R.styleable.TimeRangePicker_trp_thumbIconStart)?.mutate()
             _thumbIconEnd = attr.getDrawable(R.styleable.TimeRangePicker_trp_thumbIconEnd)?.mutate()
+            _backgroundImage =
+                attr.getDrawable(R.styleable.TimeRangePicker_trp_background_image)?.mutate()
+
+            _backgroundImageMain =
+                attr.getDrawable(R.styleable.TimeRangePicker_trp_background_image_main)?.mutate()
 
             // Clock
             _clockVisible =
@@ -423,6 +430,16 @@ class TimeRangePicker @JvmOverloads constructor(
             _middlePoint.y + _radius
         )
 
+        drawBackground(
+            canvas,
+            _backgroundImage,
+            _backgroundImageMain,
+            width.toFloat() / 2,
+            _radius - _sliderWidth / 2,
+            _middlePoint.x,
+            _middlePoint.y
+        )
+
         val sweepAngle =
             angleTo360(_angleStart - _angleEnd)
 
@@ -449,6 +466,7 @@ class TimeRangePicker @JvmOverloads constructor(
         val endThumbY = _thumbPositionCache.y
 
         // Draw start thumb
+
         canvas.drawArc(
             _sliderRect,
             -_angleStart - 0.25f,
@@ -462,6 +480,7 @@ class TimeRangePicker @JvmOverloads constructor(
             0f,
             if (_isGradientSlider) _sliderRangeGradientStart!! else _sliderRangeColor
         )
+
         drawThumb(
             canvas,
             _thumbStartPaint,
@@ -491,6 +510,44 @@ class TimeRangePicker @JvmOverloads constructor(
             _activeThumb == Thumb.END,
             endThumbX, endThumbY
         )
+    }
+
+    private fun drawBackground(
+        canvas: Canvas,
+        backgroundImage: Drawable?,
+        backgroundImageMain: Drawable?,
+        widthExternal: Float,
+        widthInternal: Float,
+        x: Float,
+        y: Float
+    ) {
+
+        if (backgroundImageMain != null) {
+            backgroundImageMain.setBounds(
+                (x - widthExternal).toInt(),
+                (y - widthExternal).toInt(),
+                (x + widthExternal).toInt(),
+                (y + widthExternal).toInt()
+            )
+            backgroundImageMain.draw(canvas)
+        }
+
+        val spacing = dpToPx(2f).toInt()
+
+
+        if (backgroundImage != null) {
+
+            backgroundImage.setBounds(
+                (x - widthInternal).toInt() + spacing,
+                (y - widthInternal).toInt() + spacing,
+                (x + widthInternal).toInt() - spacing,
+                (y + widthInternal).toInt() - spacing
+            )
+
+            backgroundImage.draw(canvas)
+        }
+
+
     }
 
     private fun drawRangeCap(
@@ -583,6 +640,7 @@ class TimeRangePicker @JvmOverloads constructor(
                     false
                 }
             }
+
             MotionEvent.ACTION_MOVE -> {
                 if (_activeThumb == Thumb.START || _activeThumb == Thumb.BOTH) {
                     val difference =
@@ -602,10 +660,12 @@ class TimeRangePicker @JvmOverloads constructor(
                                 _minDurationMinutes,
                                 _hourFormat
                             )
+
                             newDurationMinutes > _maxDurationMinutes -> _angleEnd + simpleMinutesToAngle(
                                 _maxDurationMinutes,
                                 _hourFormat
                             )
+
                             else -> newStartAngle
                         }
                     }
@@ -623,10 +683,12 @@ class TimeRangePicker @JvmOverloads constructor(
                             _minDurationMinutes,
                             _hourFormat
                         )
+
                         newDurationMinutes > _maxDurationMinutes -> _angleStart - simpleMinutesToAngle(
                             _maxDurationMinutes,
                             _hourFormat
                         )
+
                         else -> newEndAngle
                     }
                 }
@@ -635,6 +697,7 @@ class TimeRangePicker @JvmOverloads constructor(
                 invalidate()
                 return true
             }
+
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 _angleStart = minutesToAngle(
                     startTimeMinutes,
@@ -732,14 +795,14 @@ class TimeRangePicker @JvmOverloads constructor(
         _clockRadius = _radius - max(_thumbSize, _sliderWidth) / 2f - dpToPx(8f)
         invalidateBitmapCache()
 
-        if(invalidate) {
+        if (invalidate) {
             invalidate()
         }
     }
 
     private fun invalidateBitmapCache() {
         val renderer = _clockRenderer
-        if(renderer is BitmapCachedClockRenderer && renderer.isBitmapCacheEnabled) {
+        if (renderer is BitmapCachedClockRenderer && renderer.isBitmapCacheEnabled) {
             renderer.invalidateBitmapCache()
         }
     }
@@ -751,12 +814,12 @@ class TimeRangePicker @JvmOverloads constructor(
         get() = _clockRenderer
         set(value) {
             val oldRenderer = _clockRenderer
-            if(oldRenderer is BitmapCachedClockRenderer) {
+            if (oldRenderer is BitmapCachedClockRenderer) {
                 oldRenderer.recycleBitmapCache()
             }
 
             _clockRenderer = value
-            if(value is BitmapCachedClockRenderer) {
+            if (value is BitmapCachedClockRenderer) {
                 value.invalidateBitmapCache()
             }
             invalidate()

@@ -44,15 +44,15 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             minDurationMinutes = 3 * 60
             maxDurationMinutes = 22 * 60
 
-            thumbSize = 36f.dpToPixel().roundToInt()
+            thumbSize = 40f.dpToPixel().roundToInt()
             sliderWidth = 40f.dpToPixel().roundToInt()
             sliderColor = Color.TRANSPARENT
-            thumbColor = Color.WHITE
+            thumbColor = Color.TRANSPARENT
             sliderRangeGradientStart = Color.parseColor("#7462A4")
             sliderRangeGradientMiddle = Color.parseColor("#845A64")
             sliderRangeGradientEnd = Color.parseColor("#1A1624")
-            thumbIconColor = Color.parseColor("#F79104")
-            thumbSizeActiveGrow = 1.0f
+            //thumbIconColor = Color.parseColor("#F79104")
+            thumbSizeActiveGrow = 0f
             clockFace = ClockFace.APPLE
             hourFormat = TimeRangePicker.HourFormat.FORMAT_24
         }

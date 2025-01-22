@@ -25,6 +25,10 @@
         <attr name="trp_sliderRangeGradientMiddle" format="color" />
         <attr name="trp_sliderRangeGradientEnd" format="color" />
 
+        <attr name="trp_background_image" format="reference" />
+        <attr name="trp_background_image_main" format="reference" />
+
+
         <!-- Handle -->
         <attr name="trp_thumbIconStart" format="reference" />
         <attr name="trp_thumbIconEnd" format="reference" />

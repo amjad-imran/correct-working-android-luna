@@ -10,6 +10,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
 
 
 @AndroidEntryPoint
@@ -27,6 +28,9 @@ class SleepPlannerFragment :
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         setRecycler()
+
+
+        binding.plannerClock.setData(LocalTime.of(22,0),LocalTime.of(6,0),60L)
     }
 
     private fun setRecycler() {
@@ -74,7 +78,7 @@ class SleepPlannerFragment :
             lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
             lytBedTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_55
                 )
             )
@@ -86,13 +90,13 @@ class SleepPlannerFragment :
             lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
             lytWakeupTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_55
                 )
             )
             lytWakeupTime.tvTime.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_60
                 )
             )
@@ -107,7 +111,7 @@ class SleepPlannerFragment :
                 getString(R.string.text_bedtime)
             lytBedTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_55
                 )
             )
@@ -120,13 +124,13 @@ class SleepPlannerFragment :
                 getString(R.string.text_wakeup)
             lytWakeupTime.tvTitle.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_55
                 )
             )
             lytWakeupTime.tvTime.setTextColor(
                 ContextCompat.getColor(
-                    binding.view1.context,
+                    root.context,
                     R.color.white_60
                 )
             )
