@@ -8,7 +8,7 @@
         android:id="@+id/view23"
         android:layout_width="40dp"
         android:layout_height="2dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:alpha="0.2"
         android:background="@drawable/back_bottom_sheet_drag"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,25 +26,25 @@
         app:layout_constraintTop_toBottomOf="@id/view23" />
 
     <TextView
+        android:id="@+id/textView1"
         style="@style/H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:text="@string/text_goal_saved"
-        android:id="@+id/textView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView1" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSave"
+        android:id="@+id/btnDone"
         style="@style/PrimaryButtonStyle"
         android:layout_width="match_parent"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="@dimen/dimen_40dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="24dp"
         android:enabled="true"
         android:text="@string/text_done"
         android:textAllCaps="false"

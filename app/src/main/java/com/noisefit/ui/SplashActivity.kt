@@ -17,23 +17,17 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
-import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
-import com.noisefit_commans.data.BinaryActionCallback
-import com.noisefit_commans.data.ErrorResponse
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit.luna.databinding.ActivitySplashBinding
-import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.common.BaseActivity
-import com.noisefit_commans.ui.playAnimation
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.onboarding.PrivacyBottomDialogFragment
-import com.noisefit.util.ApplicationUtils
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
+import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.UniqueDiyWatchFaceSyncWorkName
 import com.noisefit.util.UniqueWatchFaceSyncWorkName
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_BUNDLE_INDEX
@@ -42,8 +36,10 @@ import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_BUNDLE_TYPE
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_INDEX_EXTRA
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_LINK
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
-import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.utils.Event
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 

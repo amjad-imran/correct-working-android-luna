@@ -35,7 +35,6 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -55,7 +54,7 @@ import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.PeriodCard1
 import com.oreo.data.model.PeriodCard2
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
@@ -77,8 +76,6 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration

@@ -10,6 +10,7 @@
             android:id="@+id/ivIcon"
             android:layout_width="12dp"
             android:layout_height="12dp"
+            app:tint="#8CFFFFFF"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTitle"
@@ -21,14 +22,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:textColor="#A3FFFFFF"
+            android:textColor="#8CFFFFFF"
             app:layout_constraintStart_toEndOf="@id/ivIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Bedtime" />
 
         <TextView
             android:id="@+id/tvTime"
-            style="@style/H2"
+            style="@style/S24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -37,11 +38,11 @@
             tools:text="11:00" />
         <TextView
             android:id="@+id/tvTimeUnit"
-            style="@style/S14"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:textColor="@color/white_60"
+            android:textColor="#99FFFFFF"
             app:layout_constraintStart_toEndOf="@id/tvTime"
             app:layout_constraintBaseline_toBaselineOf="@id/tvTime"
             tools:text="am" />

@@ -15,6 +15,7 @@ import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoNapNetworkEntity
 import com.noisefit_commans.data.model.OreoUserDataPost
+import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -50,7 +51,7 @@ import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
-import com.oreo.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.ai.ChatHistoryItem
@@ -537,6 +538,18 @@ interface NetworkService {
     suspend fun getSleepPlannerDetails(
         @Url url: String,
     ): BaseApiResponse<SleepPlannerData>
+
+    @POST
+    suspend fun updateAlarms(
+        @Url url: String,
+        @Body requestObject: PlannerAlarmData,
+    ): BaseApiResponse<Any>
+
+    @PUT
+    suspend fun updateSleepGoal(
+        @Url url: String,
+        @Body requestObject: JsonObject,
+    ): BaseApiResponse<Any>
 
     /**
      * ===================================

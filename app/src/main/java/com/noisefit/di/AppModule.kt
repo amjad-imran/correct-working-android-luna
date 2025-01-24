@@ -48,6 +48,7 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -56,6 +57,7 @@ import com.oreo.data.repository.implementation.FemaleHealthRepositoryImpl
 import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
+import com.oreo.util.alarm.AlarmUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -416,6 +418,7 @@ object AppModule {
         gson: Gson,
         bodyStressDataImpl: OreoBodyStressDataImpl,
         ringDataStore: RingDataStore,
+        localDataSource: DataStoredInterface,
         heartRateDataImpl: OreoHeartRateDataImpl,
         hrv: OreoStressDataImpl,
         bloodOxygenDataImpl: OreoBloodOxygenDataImpl,
@@ -436,6 +439,7 @@ object AppModule {
             remoteDataSource,
             gson,
             ringDataStore,
+            localDataSource,
             heartRateDataImpl,
             bodyStressDataImpl,
             hrv,
@@ -472,5 +476,23 @@ object AppModule {
     ): OreoHRDataConvertor {
         return OreoHRDataConvertor()
     }
+
+    @Singleton
+    @Provides
+    fun provideAlarmRepository(
+        localDataSource: DataStoredInterface,
+        alarmUtil: AlarmUtil
+    ): AlarmRepository {
+        return AlarmRepository(localDataSource, alarmUtil)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAlarmUtil(
+        @ApplicationContext appContext: Context
+    ): AlarmUtil {
+        return AlarmUtil(context = appContext)
+    }
+
 
 }

@@ -137,7 +137,7 @@ class RoundClockView @JvmOverloads constructor(
     private fun drawHourNeedle(canvas: Canvas, halfWidth: Float, middlePoint: PointF) {
 
         if (_hourNeedle != null) {
-            val margin = dpToPx(6f).roundToInt()
+            val margin = dpToPx(20f).roundToInt()
 
             _hourNeedle!!.setBounds(
                 (middlePoint.x - halfWidth).toInt() + margin,

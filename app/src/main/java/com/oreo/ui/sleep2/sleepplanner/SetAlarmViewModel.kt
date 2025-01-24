@@ -7,37 +7,44 @@ import android.graphics.Shader.TileMode
 import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.timepicker.MaterialTimePicker
 import com.noisefit.data.base.ResourcesProvider
-import com.oreo.data.model.AlarmDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
-import com.noisefit.timepickerslider.TimeRangePicker
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.AlarmTimingsData
+import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.oreo.data.model.SleepPlannerData
-import com.oreo.data.model.TimeDataModel
+import com.oreo.data.model.AlarmDataModel
+import com.noisefit_commans.data.model.SleepPlannerData
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.alarm.AlarmUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import javax.inject.Inject
-import kotlin.math.min
 
 @HiltViewModel
 class SetAlarmViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val resourcesProvider: ResourcesProvider,
+    private val alarmRepository: AlarmRepository,
+    private val alarmUtil: AlarmUtil,
 ) : BaseViewModel() {
 
-    var lastSelectedPosition: Int?=null
+    private var alarmsRawData: PlannerAlarmData? = null
 
-    var selectedAlarmDays = ArrayList<String>()
+
+    var lastSelectedPosition: Int? = null
+    var selectedAlarmDays = ArrayList<SAActiveDayDataModel>()
+
+
     var alarmSound: String? = null
     var alarmTimeUpdate = MutableLiveData<Event<Pair<AlarmDataModel, Int>>>()
 
@@ -45,8 +52,12 @@ class SetAlarmViewModel @Inject constructor(
 
     val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
 
+    var alarmUpdated = MutableLiveData<Event<Boolean>>()
+
 
     init {
+        alarmsRawData = alarmRepository.getAlarmsData()
+
         startEndTime.postValue(
             Pair(
                 LocalTime.of(22, 0),
@@ -57,13 +68,13 @@ class SetAlarmViewModel @Inject constructor(
 
     fun getAlarmData(): ArrayList<SAActiveDayDataModel> {
         val listData = ArrayList<SAActiveDayDataModel>()
-        listData.add(SAActiveDayDataModel("M", false, true, 0))
-        listData.add(SAActiveDayDataModel("T", false, false, 1))
-        listData.add(SAActiveDayDataModel("W", false, false, 2))
-        listData.add(SAActiveDayDataModel("T", false, false, 3))
-        listData.add(SAActiveDayDataModel("F", false, false, 4))
-        listData.add(SAActiveDayDataModel("S", false, false, 5))
-        listData.add(SAActiveDayDataModel("S", false, false, 6))
+        listData.add(SAActiveDayDataModel("M", false, true, Calendar.MONDAY))
+        listData.add(SAActiveDayDataModel("T", false, false, Calendar.TUESDAY))
+        listData.add(SAActiveDayDataModel("W", false, false, Calendar.WEDNESDAY))
+        listData.add(SAActiveDayDataModel("T", false, false, Calendar.THURSDAY))
+        listData.add(SAActiveDayDataModel("F", false, false, Calendar.FRIDAY))
+        listData.add(SAActiveDayDataModel("S", false, false, Calendar.SATURDAY))
+        listData.add(SAActiveDayDataModel("S", false, false, Calendar.SUNDAY))
         return listData
     }
 
@@ -93,7 +104,12 @@ class SetAlarmViewModel @Inject constructor(
 
     fun saveAlarm() {
         //write code for save alarm
+
+        //alarmUtil.scheduleWeeklyAlarm(Calendar.MONDAY, 11, 35)
+
+        alarmRepository.saveAlarm(LocalTime.of(22, 0), LocalTime.of(6, 0), Calendar.MONDAY)
     }
+
 
     fun updateTime(localTime: LocalTime, endTime: LocalTime) {
         startEndTime.postValue(
@@ -152,5 +168,97 @@ class SetAlarmViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateAlarms() {
+        viewModelScope.launch {
+
+            if (startEndTime.value == null) return@launch
+
+            val request = generateAlarmRequest(selectedAlarmDays, alarmsRawData)
+
+            userActivityRepository.updateAlarms(request).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        updateAlarms()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            alarmRepository.updateAlarms(request)
+                            alarmUpdated.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun generateAlarmRequest(
+        selectedAlarmDays: ArrayList<SAActiveDayDataModel>,
+        alarmsRawData: PlannerAlarmData?
+    ): PlannerAlarmData {
+
+        /*val bedTime = startEndTime.value!!.first.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val wakeTime = startEndTime.value!!.second.format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
+
+        val bedTime = LocalTime.of(3,0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+        val wakeTime = LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+        val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
+
+        selectedAlarmDays.forEach {
+            when (it.dayKey) {
+                Calendar.MONDAY -> {
+                    returnData.mon = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.TUESDAY -> {
+                    returnData.tue = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.WEDNESDAY -> {
+                    returnData.wed = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.THURSDAY -> {
+                    returnData.thu = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.FRIDAY -> {
+                    returnData.fri = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.SATURDAY -> {
+                    returnData.sat = AlarmTimingsData(bedTime, wakeTime)
+                }
+
+                Calendar.SUNDAY -> {
+                    returnData.sun = AlarmTimingsData(bedTime, wakeTime)
+                }
+            }
+        }
+        return returnData
     }
 }

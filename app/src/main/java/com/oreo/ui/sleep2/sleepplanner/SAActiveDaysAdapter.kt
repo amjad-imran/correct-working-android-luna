@@ -72,16 +72,11 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
         }
     }
 
-    fun getSelectedValue(): ArrayList<String> {
-        val listData = ArrayList<String>()
-        mDataSet.forEach {
-            if (it.isSelected) {
-                listData.add(it.name)
-            }
+    fun getSelectedValue(): List<SAActiveDayDataModel> {
+        return mDataSet.filter {
+            it.isSelected && it.isPreSelected.not()
         }
-        return listData
     }
-
 
 }
 

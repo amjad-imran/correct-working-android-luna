@@ -1,4 +1,4 @@
-package com.oreo.ui.sleep2.sleepplanner
+package com.oreo.ui.sleep2.sleepplanner.planner
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,6 +24,7 @@ class SAGoalAdapter(val listener: OnGoalItemClick) :
             binding.tvTitle.text = data.title
 
             binding.root.setOnClickListener {
+                updateItem(bindingAdapterPosition)
                 listener.onItemClick(data, bindingAdapterPosition)
             }
             if (bindingAdapterPosition == mDataSet.size - 1) {
@@ -52,24 +53,30 @@ class SAGoalAdapter(val listener: OnGoalItemClick) :
     }
 
 
-    fun setData(resultData: List<SAGoalDataModel>?) {
+    fun setData(resultData: List<SAGoalDataModel>) {
         mDataSet.clear()
-        notifyDataSetChanged()
-        if (resultData != null) {
-            mDataSet.addAll(resultData)
-        }
+        mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
 
-    fun updateItem(data: SAGoalDataModel, position: Int) {
+    fun updateItem(position: Int) {
         mDataSet.forEachIndexed { index, saGoalData ->
             if (index == position) {
-                saGoalData.isChecked = !data.isChecked
+                saGoalData.isChecked = saGoalData.isChecked.not()
             } else {
                 saGoalData.isChecked = false
             }
         }
         notifyDataSetChanged()
+    }
+
+    fun selectByKey(key: String) :Boolean{
+        val index = mDataSet.indexOfFirst { it.key.equals(key, true) }
+        if (index != -1) {
+            updateItem(index)
+            return true
+        }
+        return false
     }
 
 }

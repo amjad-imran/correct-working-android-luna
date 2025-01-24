@@ -1796,5 +1796,6 @@
     <string name="text_4_7_8"><![CDATA[4-7-8 breathing helps to relax\nyour mind & body]]></string>
     <string name="text_this_day_already_has_a_schedule">This day already has a schedule</string>
     <string name="text_would_you_like_to_select_it">Would you like to select it?</string>
+    <string name="text_add_new_alarm">Add new alarm</string>
 
 </resources>

@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +32,6 @@ import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.constants.WatchInfoGlobals.GEN_2_DEVICE_ID
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
@@ -44,7 +42,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
@@ -54,14 +51,12 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.share.ShareUtil
-import com.noisefit_commans.utils.share.ShareUtil.SUPPORT_URL
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -72,7 +67,6 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
-import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
@@ -89,7 +83,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -158,51 +151,9 @@ class SummaryDataFragmentToday :
         viewModel.date = date
 
         viewModel.getPeriodData()
-        initSleepPlanerUi()
 
         viewModel.getSleepPlanerDetails()
 
-    }
-
-    private fun initSleepPlanerUi() {
-
-        binding.contentMain.lytSplanner.apply {
-            lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-
-            lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
-            lytBedTime.tvTitle.setTextColor(
-                ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.root.context,
-                    R.color.white_64
-                )
-            )
-            lytBedTime.tvTimeUnit.setTextColor(
-                ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.root.context,
-                    R.color.white
-                )
-            )
-            lytBedTime.tvTime.text = "11:00"
-            lytBedTime.tvTimeUnit.text = getString(R.string.text_pm)
-
-            lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-
-            lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
-            lytWakeupTime.tvTitle.setTextColor(
-                ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.root.context,
-                    com.noisefit_commans.R.color.white_64
-                )
-            )
-            lytWakeupTime.tvTimeUnit.setTextColor(
-                ContextCompat.getColor(
-                    binding.contentMain.lytSplanner.root.context,
-                    R.color.white
-                )
-            )
-            lytWakeupTime.tvTime.text = "7:30"
-            lytWakeupTime.tvTimeUnit.text = getString(R.string.text_am)
-        }
     }
 
     private fun setNapsPager() {
@@ -1102,6 +1053,7 @@ class SummaryDataFragmentToday :
             lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a"))
 
             tvMsg.text = data.planner?.nudge
+
 
             root.visible()
         }

@@ -952,7 +952,7 @@
     </fragment>
     <fragment
         android:id="@+id/sleepPlannerFragment"
-        android:name="com.oreo.ui.sleep2.sleepplanner.SleepPlannerFragment"
+        android:name="com.oreo.ui.sleep2.sleepplanner.planner.SleepPlannerFragment"
         android:label="fragment_sleep_planner" />
     <fragment
         android:id="@+id/setAlarmFragment"
@@ -960,11 +960,11 @@
         android:label="fragment_set_alarm" />
     <dialog
         android:id="@+id/dialogSaGoal"
-        android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetSetYourGoal"
+        android:name="com.oreo.ui.sleep2.sleepplanner.planner.BottomSheetSetYourGoal"
         android:label="SetYourGoal" />
     <fragment
         android:id="@+id/fragmentBreathExercise"
-        android:name="com.oreo.ui.sleep2.sleepplanner.BreathingExerciseFragment"
+        android:name="com.oreo.ui.sleep2.sleepplanner.exercise.BreathingExerciseFragment"
         android:label="breathing_exercise" />
     <fragment
         android:id="@+id/sleepInternalDetailsFragment"

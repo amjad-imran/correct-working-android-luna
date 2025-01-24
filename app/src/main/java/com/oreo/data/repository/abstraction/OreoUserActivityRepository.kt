@@ -6,6 +6,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
@@ -23,7 +24,7 @@ import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
-import com.oreo.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.sleep.SleepDataResponse
@@ -165,5 +166,13 @@ interface OreoUserActivityRepository {
 
     suspend fun getSleepPlannerDetails(
     ): Flow<Resource<BaseApiResponse<SleepPlannerData>>>
+
+    suspend fun updateAlarms(
+        request: PlannerAlarmData
+    ): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun updateUserSleepGoal(
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>>
 
 }

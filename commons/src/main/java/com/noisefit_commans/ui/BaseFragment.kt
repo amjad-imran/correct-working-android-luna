@@ -119,7 +119,7 @@ abstract class BaseFragment<VB : ViewBinding>(
             } catch (e: Exception) {
                 LOGS.w(
                     "BaseFragment",
-                    "Navigation with id is in danger. Google please save us -> BaseFragment -> navigate method"
+                    "Navigation with id is in danger. Google please save us -> BaseFragment -> navigate method ${e.message}"
                 )
             }
 

@@ -1,17 +1,12 @@
-package com.oreo.ui.sleep2.sleepplanner
+package com.oreo.ui.sleep2.sleepplanner.exercise
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentBreathingExerciseBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
-import com.oreo.ui.sleep2.sleepplanner.exercise.BreathingExerciseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +36,8 @@ class BreathingExerciseFragment :
 
     override fun subscribeObservers() {
         viewModel.timerRunning.observe(this) {
+            if (it == null) return@observe
+
             if (it == 0L) {
                 navigateUpSafe()
                 return@observe

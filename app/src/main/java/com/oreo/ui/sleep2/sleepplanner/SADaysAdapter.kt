@@ -1,5 +1,6 @@
 package com.oreo.ui.sleep2.sleepplanner
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,18 +8,34 @@ import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemActiveDaysBinding
 import com.noisefit.luna.databinding.ItemAlarmDaysBinding
+import com.noisefit_commans.data.model.AlarmTimingsData
 import com.oreo.data.model.FHFlowIconsModel
+import java.util.Calendar
 
 class SADaysAdapter() :
     RecyclerView.Adapter<SADaysAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<String>()
+    private var mDataSet = ArrayList<Int>()
 
     inner class ViewHolder(val binding: ItemAlarmDaysBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
+        fun bind(dayKey: Int) {
 
-            binding.tvTitle.text=data
+            binding.tvTitle.text = getDayName(dayKey, binding.root.context)
 
+        }
+
+        private fun getDayName(dayKey: Int, context: Context?): String {
+            return when (dayKey) {
+                Calendar.MONDAY -> "Mon"
+                Calendar.TUESDAY -> "Tue"
+                Calendar.WEDNESDAY -> "Wed"
+                Calendar.THURSDAY -> "Thu"
+                Calendar.FRIDAY -> "Fri"
+                Calendar.SATURDAY -> "Sat"
+                Calendar.SUNDAY -> "Sun"
+
+                else -> ""
+            }
         }
     }
 
@@ -40,15 +57,11 @@ class SADaysAdapter() :
     }
 
 
-    fun setData(resultData: List<String>?) {
+    fun setData(resultData: List<Int>) {
         mDataSet.clear()
-        notifyDataSetChanged()
-        if (resultData != null) {
-            mDataSet.addAll(resultData)
-        }
+        mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
-
 
 
 }

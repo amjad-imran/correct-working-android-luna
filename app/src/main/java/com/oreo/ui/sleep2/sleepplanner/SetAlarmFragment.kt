@@ -93,38 +93,19 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         binding.lytTopView.lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_sleep)
         binding.lytTopView.lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
 
-
-        /*binding.lytTopView.lytBedTime.tvTime.text = "00:00"
-        binding.lytTopView.lytBedTime.tvTimeUnit.text = "am"
-
-        binding.lytTopView.lytWakeupTime.tvTime.text = "07:00"
-        binding.lytTopView.lytWakeupTime.tvTimeUnit.text = "am"
-        binding.lytAlarmTime.tvHour.text = "7"
-        binding.lytAlarmTime.tvMin.text = "00"
-        binding.lytAlarmTime.tvHour.paint.setShader(
-            viewModel.setViewGradient(
-                binding,
-                4.toString()
-            )
-        )
-        binding.lytAlarmTime.tvMin.paint.setShader(
-            viewModel.setViewGradient(
-                binding,
-                30.toString()
-            )
-        )*/
-
-
     }
 
     override fun initListener() {
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
         binding.btnSave.setOnClickListener {
-            viewModel.selectedAlarmDays = mAdapter.getSelectedValue()
-            viewModel.saveAlarm()
+            viewModel.selectedAlarmDays.clear()
+            viewModel.selectedAlarmDays.addAll(mAdapter.getSelectedValue())
+            viewModel.updateAlarms()
         }
+
         binding.lytAlarmSound.lytSoundView.tvSoundName.setOnClickListener {
             setFragmentResultListener(ALARM_SOUND) { _, bundle ->
                 val data = bundle.getString("soundName")
@@ -133,6 +114,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
             navigate(R.id.dialogAlarmSound)
         }
+
         binding.lytAlarmSound.switchMain.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {
                 binding.lytAlarmSound.lytSoundView.root.visible()
@@ -159,6 +141,12 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 binding.progressBar.root.visible()
             } else {
                 binding.progressBar.root.gone()
+            }
+        }
+
+        viewModel.alarmUpdated.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
             }
         }
 

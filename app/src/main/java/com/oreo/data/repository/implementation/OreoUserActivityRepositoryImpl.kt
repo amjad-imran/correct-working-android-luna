@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.CACHE_CLEAR_DEFAULT
@@ -26,6 +25,7 @@ import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -61,7 +61,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
-import com.oreo.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
@@ -90,6 +90,7 @@ class OreoUserActivityRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val gson: Gson,
     private val ringDataStore: RingDataStore,
+    private val localDataStore: DataStoredInterface,
     private val heartRateDataImpl: OreoHeartRateDataImpl,
     private val stressDataImpl: OreoBodyStressDataImpl,
     private val hrv: OreoStressDataImpl,
@@ -1794,7 +1795,8 @@ class OreoUserActivityRepositoryImpl(
             }
 
             val serverResult = safeApiCallFlow(dispatcher) {
-                val url = "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/help_and_support/answers/${quesId}"
+                val url =
+                    "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/help_and_support/answers/${quesId}"
                 remoteDataSource.getHSQAnswer(url)
             }
 
@@ -1981,9 +1983,110 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getSleepPlannerDetails(): Flow<Resource<BaseApiResponse<SleepPlannerData>>> {
+        return flow {
+            var resultData: SleepPlannerData? = null
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val data = localDataStore.getSleepPlannerData()
+
+                return@safeCacheCall data
+
+            }
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+
+            /*if (resultData!=null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }*/
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/alarms/get"
+
+                remoteDataSource.getSleepPlannerDetails(url)
+            }
+
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData!=null) {
+                safeCacheCall(Dispatchers.IO) {
+                    localDataStore.setSleepPlannerData(resultData)
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override suspend fun updateAlarms(request: PlannerAlarmData): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/alarms/get"
-            remoteDataSource.getSleepPlannerDetails(url)
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/alarm"
+            remoteDataSource.updateAlarms(url, request)
+        }
+    }
+
+    override suspend fun updateUserSleepGoal(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/goal/update"
+            remoteDataSource.updateSleepGoal(url, request)
         }
     }
 }
