@@ -62,12 +62,9 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     }
 
 
-    fun setData(resultData: List<SAActiveDayDataModel>?) {
+    fun setData(resultData: List<SAActiveDayDataModel>) {
         mDataSet.clear()
-        notifyDataSetChanged()
-        if (resultData != null) {
-            mDataSet.addAll(resultData)
-        }
+        mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
 
@@ -87,6 +84,12 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     fun getSelectedValue(): List<SAActiveDayDataModel> {
         return mDataSet.filter {
             it.isSelected && it.isPreSelected.not()
+        }
+    }
+
+    fun getUnselectedItems(): List<SAActiveDayDataModel> {
+        return mDataSet.filter {
+            it.isSelected.not() && it.isPreSelected.not()
         }
     }
 

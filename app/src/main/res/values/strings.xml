@@ -1799,5 +1799,6 @@
     <string name="text_add_new_alarm">Add new alarm</string>
     <string name="text_sleep_nduration">Sleep\nduration</string>
     <string name="text_volume_message">Please ensure notification volume is not muted to listen to this alarm</string>
+    <string name="text_delete_alarm">Delete alarm</string>
 
 </resources>

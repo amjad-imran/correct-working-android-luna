@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -33,6 +34,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 if (data.isPreSelected) {
                     showAlreadyExistDialog()
                 } else {
+                    viewModel.deleteMode.postValue(false)
                     mAdapter.updateItem(position)
                 }
             }
@@ -46,6 +48,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             if (change && viewModel.lastSelectedPosition != null) {
                 mAdapter.updateItem(viewModel.lastSelectedPosition!!)
                 viewModel.lastSelectedPosition = null
+                viewModel.deleteMode.postValue(false)
             }
         }
         navigate(R.id.bottomSheetChangeSchedule)
@@ -94,6 +97,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         binding.lytTopView.lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_sleep)
         binding.lytTopView.lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
 
+        if (viewModel.editModeSelectedTime != null) {
+            viewModel.deleteMode.postValue(true)
+        }
     }
 
     override fun initListener() {
@@ -102,9 +108,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
 
         binding.btnSave.setOnClickListener {
-            viewModel.selectedAlarmDays.clear()
-            viewModel.selectedAlarmDays.addAll(mAdapter.getSelectedValue())
-            viewModel.updateAlarms()
+            val selectedAlarms = mAdapter.getSelectedValue()
+            if (selectedAlarms.isEmpty()) return@setOnClickListener
+            viewModel.updateAlarms(selectedAlarms, mAdapter.getUnselectedItems())
         }
 
         binding.lytAlarmSound.lytSoundView.tvSoundName.setOnClickListener {
@@ -119,6 +125,15 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
     }
 
     override fun subscribeObservers() {
+        viewModel.deleteMode.observe(this) {
+            if (it) {
+                binding.btnSave.text = getString(R.string.text_delete_alarm)
+                binding.btnSave.setTextColor(Color.parseColor("#FF7C94"))
+            } else {
+                binding.btnSave.text = getString(R.string.text_save_the_alarm)
+                binding.btnSave.setTextColor(Color.parseColor("#FFFFFF"))
+            }
+        }
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -150,7 +165,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 val start = viewModel.editModeSelectedTime!!.first
                 val end = viewModel.editModeSelectedTime!!.second
 
-
                 binding.timePicker.setPeriod(start, end)
             }
             binding.lytMain.visible()
@@ -174,17 +188,22 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             val hours = durationMinutes / 60
             val minutes = durationMinutes % 60
             binding.lytAlarmTime.tvHour.text = hours.toString()
-            binding.lytAlarmTime.tvMin.text = minutes.toString()
-
+            binding.lytAlarmTime.tvMin.text = String.format("%02d", minutes)
         }
 
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
             override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
                 viewModel.updateTime(startTime.localTime, binding.timePicker.endTime.localTime)
+                if (viewModel.editModeSelectedTime != null) {
+                    viewModel.deleteMode.postValue(false)
+                }
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
                 viewModel.updateTime(binding.timePicker.startTime.localTime, endTime.localTime)
+                if (viewModel.editModeSelectedTime != null) {
+                    viewModel.deleteMode.postValue(false)
+                }
             }
 
             override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {}

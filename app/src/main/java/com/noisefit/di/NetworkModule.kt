@@ -1,18 +1,22 @@
 package com.noisefit.di
 
 import android.content.Context
+import com.google.gson.GsonBuilder
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.remote.HeaderInterceptorAudio
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.NetworkConnectionInterceptor
 import com.noisefit.data.remote.NetworkConnectionInterceptorShop
 import com.noisefit.data.remote.NetworkConstants
-import com.noisefit.data.remote.abstraction.*
+import com.noisefit.data.remote.abstraction.DownloadService
+import com.noisefit.data.remote.abstraction.NetworkService
+import com.noisefit.data.remote.abstraction.TokenRefreshApi
+import com.noisefit.data.remote.abstraction.WeatherService
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit.luna.BuildConfig
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.tryCatch
@@ -30,6 +34,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -37,7 +42,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetroFit(client: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
+        .baseUrl(BuildConfig.BASE_URL)//GsonBuilder().serializeNulls().create()
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

@@ -34,13 +34,13 @@ class SetAlarmViewModel @Inject constructor(
     private val alarmRepository: AlarmRepository,
 ) : BaseViewModel() {
 
+    var deleteMode = MutableLiveData(false)
     private var alarmsRawData: PlannerAlarmData? = null
 
     var editModeSelectedTime: Pair<LocalTime, LocalTime>? = null
 
 
     var lastSelectedPosition: Int? = null
-    var selectedAlarmDays = ArrayList<SAActiveDayDataModel>()
 
 
     var alarmSound: String? = null
@@ -55,7 +55,6 @@ class SetAlarmViewModel @Inject constructor(
 
     fun getAlarmData(alarms: PlannerAlarmData?): ArrayList<SAActiveDayDataModel> {
         val listData = ArrayList<SAActiveDayDataModel>()
-
 
         val timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
 
@@ -143,15 +142,6 @@ class SetAlarmViewModel @Inject constructor(
         alarmTimeUpdate.postValue(Event(Pair(newAlarm, type)))
     }
 
-    fun saveAlarm() {
-        //write code for save alarm
-
-        //alarmUtil.scheduleWeeklyAlarm(Calendar.MONDAY, 11, 35)
-
-        alarmRepository.saveAlarm(LocalTime.of(22, 0), LocalTime.of(6, 0), Calendar.MONDAY)
-    }
-
-
     fun updateTime(localTime: LocalTime, endTime: LocalTime) {
         startEndTime.postValue(
             Pair(
@@ -212,12 +202,15 @@ class SetAlarmViewModel @Inject constructor(
         }
     }
 
-    fun updateAlarms() {
+    fun updateAlarms(
+        selectedAlarmDays: List<SAActiveDayDataModel>,
+        unselectedItems: List<SAActiveDayDataModel>
+    ) {
         viewModelScope.launch {
 
             if (startEndTime.value == null) return@launch
 
-            val request = generateAlarmRequest(selectedAlarmDays, alarmsRawData)
+            val request = generateAlarmRequest(selectedAlarmDays, alarmsRawData, unselectedItems)
 
             userActivityRepository.updateAlarms(request).collect { resource ->
                 when (resource) {
@@ -235,7 +228,10 @@ class SetAlarmViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        updateAlarms()
+                                        updateAlarms(
+                                            selectedAlarmDays,
+                                            unselectedItems
+                                        )
                                     }
 
                                     override fun no() {
@@ -257,48 +253,85 @@ class SetAlarmViewModel @Inject constructor(
     }
 
     private fun generateAlarmRequest(
-        selectedAlarmDays: ArrayList<SAActiveDayDataModel>,
-        alarmsRawData: PlannerAlarmData?
+        selectedAlarmDays: List<SAActiveDayDataModel>,
+        alarmsRawData: PlannerAlarmData?,
+        unselectedItems: List<SAActiveDayDataModel>
     ): PlannerAlarmData {
 
-        /*val bedTime = startEndTime.value!!.first.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val wakeTime = startEndTime.value!!.second.format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
+        val bedTime = startEndTime.value!!.first.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val wakeTime = startEndTime.value!!.second.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
-        val bedTime = LocalTime.of(3, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-
+        /*val bedTime = LocalTime.of(3, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val wakeTime =
-            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
 
         val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
+
+        val deleteMode = this.deleteMode.value == true
 
         selectedAlarmDays.forEach {
             when (it.dayKey) {
                 Calendar.MONDAY -> {
-                    returnData.mon = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.mon = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.TUESDAY -> {
-                    returnData.tue = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.tue = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.WEDNESDAY -> {
-                    returnData.wed = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.wed = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.THURSDAY -> {
-                    returnData.thu = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.thu = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.FRIDAY -> {
-                    returnData.fri = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.fri = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.SATURDAY -> {
-                    returnData.sat = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.sat = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
                 }
 
                 Calendar.SUNDAY -> {
-                    returnData.sun = AlarmTimingsData(bedTime, wakeTime)
+                    returnData.sun = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                }
+            }
+        }
+
+        if (editModeSelectedTime != null) { //Edit mode
+
+            unselectedItems.forEach {
+                when (it.dayKey) {
+                    Calendar.MONDAY -> {
+                        returnData.mon = null
+                    }
+
+                    Calendar.TUESDAY -> {
+                        returnData.tue = null
+                    }
+
+                    Calendar.WEDNESDAY -> {
+                        returnData.wed = null
+                    }
+
+                    Calendar.THURSDAY -> {
+                        returnData.thu = null
+                    }
+
+                    Calendar.FRIDAY -> {
+                        returnData.fri = null
+                    }
+
+                    Calendar.SATURDAY -> {
+                        returnData.sat = null
+                    }
+
+                    Calendar.SUNDAY -> {
+                        returnData.sun = null
+                    }
                 }
             }
         }
