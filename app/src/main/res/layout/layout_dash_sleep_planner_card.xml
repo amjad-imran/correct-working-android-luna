@@ -40,14 +40,45 @@
         app:layout_constraintTop_toTopOf="@id/textView1"
         tools:ignore="ContentDescription" />
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="126dp"
-        android:layout_height="126dp"
+    <com.oreo.ui.custom.RoundClockViewDash
+        android:id="@+id/clock"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="6dp"
+        app:background_image_main="@drawable/image_back_planner_2"
+        app:image_dial="@drawable/image_dial_planner"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/lytWakeupTime"
+        app:layout_constraintStart_toEndOf="@id/lytBedTime"
         app:layout_constraintTop_toBottomOf="@id/ivMore" />
+
+    <TextView
+        android:id="@+id/tvDuration"
+        style="@style/S28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textDuration"
+        app:layout_constraintEnd_toEndOf="@+id/clock"
+        app:layout_constraintStart_toStartOf="@+id/clock"
+        app:layout_constraintTop_toTopOf="@+id/clock"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="8:04" />
+
+    <TextView
+        android:id="@+id/textDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/S12"
+        android:fontFamily="@font/gilroy_medium"
+        android:text="@string/text_sleep_nduration"
+        android:textColor="#D5B7FF"
+        app:layout_constraintBottom_toBottomOf="@+id/clock"
+        app:layout_constraintEnd_toEndOf="@+id/clock"
+        app:layout_constraintStart_toStartOf="@+id/clock"
+        app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
 
     <include
         android:id="@+id/lytBedTime"
@@ -55,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/side_margin"
-        app:layout_constraintBottom_toBottomOf="@id/view1"
+        app:layout_constraintBottom_toBottomOf="@id/clock"
         app:layout_constraintStart_toStartOf="parent" />
 
     <include
@@ -64,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/side_margin"
-        app:layout_constraintBottom_toBottomOf="@id/view1"
+        app:layout_constraintBottom_toBottomOf="@id/clock"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -82,7 +113,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@id/clock"
         tools:text="Your ideal bedtime for today is 11:20 pm to achieve 100% of sleep goal " />
 
     <include

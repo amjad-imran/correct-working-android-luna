@@ -957,7 +957,16 @@
     <fragment
         android:id="@+id/setAlarmFragment"
         android:name="com.oreo.ui.sleep2.sleepplanner.SetAlarmFragment"
-        android:label="fragment_set_alarm" />
+        android:label="fragment_set_alarm" >
+        <argument
+            android:name="bed_time"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="wake_time"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
     <dialog
         android:id="@+id/dialogSaGoal"
         android:name="com.oreo.ui.sleep2.sleepplanner.planner.BottomSheetSetYourGoal"

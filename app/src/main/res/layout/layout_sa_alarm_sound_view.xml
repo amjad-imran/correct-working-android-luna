@@ -9,37 +9,40 @@
 
         <TextView
             android:id="@+id/tvLabel"
-            style="@style/H5"
+            style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="18dp"
             android:gravity="center_horizontal"
+            android:text="@string/text_alarm_sounds"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/text_alarm_sounds" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchMain"
-            style="@style/CustomSwitch3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/side_margin"
-            app:layout_constraintBottom_toBottomOf="@+id/tvLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvLabel" />
-        <include layout="@layout/layout_alarm_sound_view"
-            android:layout_height="wrap_content"
+        <include
             android:id="@+id/lytSoundView"
+            layout="@layout/layout_alarm_sound_view"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/switchMain"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintTop_toBottomOf="@id/tvLabel" />
+
+
+        <TextView
+            style="@style/S12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/text_volume_message"
+            android:textColor="#6BFFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="18dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="@dimen/side_margin"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytSoundView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

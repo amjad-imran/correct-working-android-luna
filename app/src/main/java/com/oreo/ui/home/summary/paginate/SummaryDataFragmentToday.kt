@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -1036,7 +1038,7 @@ class SummaryDataFragmentToday :
             lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
             lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
             lytWakeupTime.tvTitle.text = getString(R.string.text_wake_time)
-            
+
             val bedTime = LocalTime.parse(
                 data.planner?.bed_time ?: "10:00:00",
                 DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -1054,6 +1056,29 @@ class SummaryDataFragmentToday :
 
             tvMsg.text = data.planner?.nudge
 
+            clock.setData(bedTime, wakeTime, data.planner?.debt ?: 0L)
+
+            val durationMinutes = viewModel.getDurationMinutes(bedTime, wakeTime)
+            val hours = durationMinutes / 60
+            val minutes = durationMinutes % 60
+
+            tvDuration.text =  String.format("%d:%02d", hours, minutes)
+
+            tvDuration.setTextColor(Color.parseColor("#FFFFFF"))
+            val textShader: Shader = LinearGradient(
+                0f,
+                tvDuration.paint.measureText(tvDuration.text.toString()),
+                0f,
+                0f,
+                intArrayOf(
+                    Color.parseColor("#D5B6FF"),
+                    Color.parseColor("#D5B6FF"),
+                    Color.parseColor("#FFFFFF"),
+                ),
+                floatArrayOf(0f,0.5f,1f),
+                Shader.TileMode.CLAMP
+            )
+            tvDuration.paint.shader = textShader
 
             root.visible()
         }

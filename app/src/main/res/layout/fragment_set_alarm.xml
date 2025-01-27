@@ -26,8 +26,11 @@
             app:layout_constraintTop_toBottomOf="@id/lytToolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lytMain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <include
                     android:id="@+id/lytTopView"

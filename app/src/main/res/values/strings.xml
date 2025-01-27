@@ -1797,5 +1797,7 @@
     <string name="text_this_day_already_has_a_schedule">This day already has a schedule</string>
     <string name="text_would_you_like_to_select_it">Would you like to select it?</string>
     <string name="text_add_new_alarm">Add new alarm</string>
+    <string name="text_sleep_nduration">Sleep\nduration</string>
+    <string name="text_volume_message">Please ensure notification volume is not muted to listen to this alarm</string>
 
 </resources>

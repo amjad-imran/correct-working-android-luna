@@ -807,6 +807,13 @@ class TimeRangePicker @JvmOverloads constructor(
         }
     }
 
+    fun setPeriod(start: LocalTime, end: LocalTime) {
+        startTimeMinutes = start.hour * 60 + end.minute
+        endTimeMinutes = end.hour * 60 + end.minute
+        updateGradient()
+        invalidate()
+    }
+
     val clockRadius: Float
         get() = _clockRadius
 

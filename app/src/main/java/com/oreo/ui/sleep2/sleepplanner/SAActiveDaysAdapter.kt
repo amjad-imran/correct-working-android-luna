@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemActiveDaysBinding
-import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
-import com.noisefit_commans.ui.visible
+import java.util.Calendar
 
 class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
     RecyclerView.Adapter<SAActiveDaysAdapter.ViewHolder>() {
@@ -24,10 +23,23 @@ class SAActiveDaysAdapter(val mListener: OnActiveDayItemClick) :
             }
             binding.ivSelectedDot.setVisibilityByCondition(data.isPreSelected)
 
-            binding.tvHour.text = data.name
+            binding.tvHour.text = getDayName(data.dayKey)
             binding.ivItem.setOnClickListener {
                 mListener.onItemClick(data, bindingAdapterPosition)
-                notifyDataSetChanged()
+                notifyItemChanged(bindingAdapterPosition)
+            }
+        }
+
+        private fun getDayName(dayKey: Int): String {
+            return when (dayKey) {
+                Calendar.MONDAY -> "M"
+                Calendar.TUESDAY -> "T"
+                Calendar.WEDNESDAY -> "W"
+                Calendar.THURSDAY -> "T"
+                Calendar.FRIDAY -> "F"
+                Calendar.SATURDAY -> "S"
+                Calendar.SUNDAY -> "S"
+                else -> ""
             }
         }
     }

@@ -2,25 +2,20 @@ package com.oreo.ui.sleep2.sleepplanner
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.data.local.AppStaticData
+import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit.timepickerslider.TimeRangePicker
 import com.noisefit.timepickerslider.TimeRangePicker.ClockFace
-import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
-import com.noisefit.ui.profile.ProfileEditFragmentDirections
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -28,6 +23,9 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmBinding::inflate) {
     private val viewModel: SetAlarmViewModel by viewModels()
+
+    val args: SetAlarmFragmentArgs by navArgs()
+
     private val mAdapter: SAActiveDaysAdapter by lazy {
         SAActiveDaysAdapter(object : OnActiveDayItemClick {
             override fun onItemClick(data: SAActiveDayDataModel, position: Int) {
@@ -55,8 +53,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUi()
+
         initTimePicker()
+        viewModel.setEditMode(args.bedTime, args.wakeTime)
+
+        initUi()
 
         viewModel.getSleepPlanerDetails()
     }
@@ -115,14 +116,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             navigate(R.id.dialogAlarmSound)
         }
 
-        binding.lytAlarmSound.switchMain.setOnCheckedChangeListener { compoundButton, b ->
-            if (b) {
-                binding.lytAlarmSound.lytSoundView.root.visible()
-            } else {
-                binding.lytAlarmSound.lytSoundView.root.gone()
-            }
-        }
-
     }
 
     override fun subscribeObservers() {
@@ -136,7 +129,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 uiController.onApiErrorReceived(response)
             }
         }
-        viewModel.getLoading().observe(viewLifecycleOwner) {
+        viewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar.root.visible()
             } else {
@@ -151,9 +144,16 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
 
         viewModel.sleepPlannerCard.observe(this) {
-            //updateUiData(it)
+            mAdapter.setData(viewModel.getAlarmData(it?.alarms))
 
-            mAdapter.setData(viewModel.getAlarmData())
+            if (viewModel.editModeSelectedTime != null) {
+                val start = viewModel.editModeSelectedTime!!.first
+                val end = viewModel.editModeSelectedTime!!.second
+
+
+                binding.timePicker.setPeriod(start, end)
+            }
+            binding.lytMain.visible()
         }
 
 

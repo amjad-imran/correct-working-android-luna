@@ -7,7 +7,6 @@ import android.graphics.Shader.TileMode
 import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
@@ -21,7 +20,6 @@ import com.oreo.data.model.AlarmDataModel
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.util.alarm.AlarmUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -33,12 +31,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SetAlarmViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
-    private val resourcesProvider: ResourcesProvider,
     private val alarmRepository: AlarmRepository,
-    private val alarmUtil: AlarmUtil,
 ) : BaseViewModel() {
 
     private var alarmsRawData: PlannerAlarmData? = null
+
+    var editModeSelectedTime: Pair<LocalTime, LocalTime>? = null
 
 
     var lastSelectedPosition: Int? = null
@@ -55,26 +53,69 @@ class SetAlarmViewModel @Inject constructor(
     var alarmUpdated = MutableLiveData<Event<Boolean>>()
 
 
-    init {
-        alarmsRawData = alarmRepository.getAlarmsData()
+    fun getAlarmData(alarms: PlannerAlarmData?): ArrayList<SAActiveDayDataModel> {
+        val listData = ArrayList<SAActiveDayDataModel>()
 
-        startEndTime.postValue(
-            Pair(
-                LocalTime.of(22, 0),
-                LocalTime.of(6, 0)
+
+        val timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+        listData.add(
+            generateDayData(
+                alarms?.mon,
+                Calendar.MONDAY,
+                timeFormat,
+                editModeSelectedTime
             )
         )
-    }
+        listData.add(
+            generateDayData(
+                alarms?.tue,
+                Calendar.TUESDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
+        listData.add(
+            generateDayData(
+                alarms?.wed,
+                Calendar.WEDNESDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
+        listData.add(
+            generateDayData(
+                alarms?.thu,
+                Calendar.THURSDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
+        listData.add(
+            generateDayData(
+                alarms?.fri,
+                Calendar.FRIDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
+        listData.add(
+            generateDayData(
+                alarms?.sat,
+                Calendar.SATURDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
+        listData.add(
+            generateDayData(
+                alarms?.sun,
+                Calendar.SUNDAY,
+                timeFormat,
+                editModeSelectedTime
+            )
+        )
 
-    fun getAlarmData(): ArrayList<SAActiveDayDataModel> {
-        val listData = ArrayList<SAActiveDayDataModel>()
-        listData.add(SAActiveDayDataModel("M", false, true, Calendar.MONDAY))
-        listData.add(SAActiveDayDataModel("T", false, false, Calendar.TUESDAY))
-        listData.add(SAActiveDayDataModel("W", false, false, Calendar.WEDNESDAY))
-        listData.add(SAActiveDayDataModel("T", false, false, Calendar.THURSDAY))
-        listData.add(SAActiveDayDataModel("F", false, false, Calendar.FRIDAY))
-        listData.add(SAActiveDayDataModel("S", false, false, Calendar.SATURDAY))
-        listData.add(SAActiveDayDataModel("S", false, false, Calendar.SUNDAY))
         return listData
     }
 
@@ -162,6 +203,7 @@ class SetAlarmViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
+                            alarmsRawData = it?.alarms
                             sleepPlannerCard.postValue(it)
                         }
                     }
@@ -222,9 +264,10 @@ class SetAlarmViewModel @Inject constructor(
         /*val bedTime = startEndTime.value!!.first.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val wakeTime = startEndTime.value!!.second.format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
 
-        val bedTime = LocalTime.of(3,0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val bedTime = LocalTime.of(3, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
-        val wakeTime = LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val wakeTime =
+            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
 
@@ -260,5 +303,46 @@ class SetAlarmViewModel @Inject constructor(
             }
         }
         return returnData
+    }
+
+    fun setEditMode(bedTime: String?, wakeTime: String?) {
+        if (bedTime != null && wakeTime != null) {
+            editModeSelectedTime = Pair(
+                LocalTime.parse(bedTime, DateTimeFormatter.ofPattern("HH:mm:ss")),
+                LocalTime.parse(wakeTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            )
+            startEndTime.value = (editModeSelectedTime)
+        } else {
+            startEndTime.value = (
+                    Pair(
+                        LocalTime.of(22, 0),
+                        LocalTime.of(6, 0)
+                    )
+                    )
+        }
+    }
+
+    private fun generateDayData(
+        alarmDay: AlarmTimingsData?,
+        dayKey: Int,
+        timeFormat: DateTimeFormatter,
+        editModeSelectedTime: Pair<LocalTime, LocalTime>?
+    ): SAActiveDayDataModel {
+
+        if (editModeSelectedTime == null) {
+            return SAActiveDayDataModel(false, alarmDay != null, dayKey)
+        }
+
+        return if (alarmDay == null) {
+            SAActiveDayDataModel(false, false, dayKey)
+        } else {
+            val bed = LocalTime.parse(alarmDay.bed_time, timeFormat)
+            val wake = LocalTime.parse(alarmDay.wake_time, timeFormat)
+            if (bed == editModeSelectedTime.first && wake == editModeSelectedTime.second) {
+                SAActiveDayDataModel(true, false, dayKey)
+            } else {
+                SAActiveDayDataModel(false, true, dayKey)
+            }
+        }
     }
 }

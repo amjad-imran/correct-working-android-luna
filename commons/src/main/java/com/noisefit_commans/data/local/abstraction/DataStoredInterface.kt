@@ -36,7 +36,7 @@ interface DataStoredInterface {
     fun setGoogleFitCrossed(status: Boolean)
 
     fun setGoogleFitManageCrossed()
-    fun isGoogleFitManageCrossed():Boolean
+    fun isGoogleFitManageCrossed(): Boolean
 
     @Deprecated("use updateUserToken()")
     fun updateDeviceToken(token: String?)
@@ -494,5 +494,8 @@ interface DataStoredInterface {
     fun saveAppBodyMeasurementsTimeStamp()
 
     fun clearKey(key: String)
+
+    fun getSleepPlannerData(): SleepPlannerData?
+    fun setSleepPlannerData(data: SleepPlannerData?)
 
 }

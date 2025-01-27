@@ -8,8 +8,8 @@
 
         <ImageView
             android:id="@+id/ivIcon"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             app:tint="#8CFFFFFF"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,8 +41,7 @@
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:textColor="#99FFFFFF"
+            android:layout_marginStart="4dp"
             app:layout_constraintStart_toEndOf="@id/tvTime"
             app:layout_constraintBaseline_toBaselineOf="@id/tvTime"
             tools:text="am" />

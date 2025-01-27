@@ -10,7 +10,8 @@ import com.oreo.ui.sleep2.sleepplanner.SADaysAdapter
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class AlarmsAdapter : RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
+class AlarmsAdapter(val onAlarmClicked: (AlarmDisplayModel) -> Unit) :
+    RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     private val mDataSet = ArrayList<AlarmDisplayModel>()
 
@@ -27,7 +28,8 @@ class AlarmsAdapter : RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
 
                 val bedTime = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-                val wakeTime = LocalTime.parse(data.wakeTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+                val wakeTime =
+                    LocalTime.parse(data.wakeTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a"))
@@ -41,6 +43,10 @@ class AlarmsAdapter : RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
             binding.rvDays.adapter = SADaysAdapter().apply {
                 this.setData(data.selectedDays)
+            }
+
+            binding.root.setOnClickListener {
+                onAlarmClicked(data)
             }
 
         }

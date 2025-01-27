@@ -2,6 +2,7 @@ package com.oreo.ui.sleep2.sleepplanner.planner
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,8 +35,7 @@ class SleepPlannerFragment :
 
     private fun setupUi() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_sleep_planner)
-        binding.lytToolbar.view1.visible()
-        binding.lytToolbar.view1.setBackgroundResource(R.drawable.ic_info_oreo)
+        binding.lytToolbar.view1.gone()
 
         binding.lytSetupGoal.tvTitle.text = getString(R.string.text_setup_your_goal)
 
@@ -54,6 +54,12 @@ class SleepPlannerFragment :
         binding.lytToolbar.view1.setOnClickListener {
             //
         }
+
+        binding.lytAddNewAlarm.root.setOnClickListener {
+            navigate(R.id.setAlarmFragment,
+                bundle = bundleOf("bed_time" to null, "wake_time" to null))
+        }
+
         binding.lytSetupGoal.root.setOnClickListener {
             setFragmentResultListener(SA_GOAL) { _, bundle ->
                 val reload = bundle.getBoolean("reload")
@@ -64,7 +70,8 @@ class SleepPlannerFragment :
             navigate(R.id.dialogSaGoal)
         }
         binding.lytSetupAlarm.root.setOnClickListener {
-            navigate(R.id.setAlarmFragment)
+            navigate(R.id.setAlarmFragment,
+                bundle = bundleOf("bed_time" to null, "wake_time" to null))
         }
         binding.lytBreathExercise.root.setOnClickListener {
             navigate(R.id.fragmentBreathExercise)
@@ -153,7 +160,12 @@ class SleepPlannerFragment :
             val alarmsList = viewModel.generateAlarmData(alarms!!)
 
             binding.rvAlarms.visible()
-            binding.rvAlarms.adapter = AlarmsAdapter().apply {
+            binding.rvAlarms.adapter = AlarmsAdapter(onAlarmClicked = { data ->
+                navigate(
+                    R.id.setAlarmFragment,
+                    bundle = bundleOf("bed_time" to data.bedTime, "wake_time" to data.wakeTime)
+                )
+            }).apply {
                 this.setData(alarmsList)
             }
 
