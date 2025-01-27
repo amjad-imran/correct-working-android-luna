@@ -1,6 +1,5 @@
 package com.noisefit_commans.data.model
 
-import android.icu.util.Calendar
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -70,3 +69,10 @@ data class AlarmTimingsData(
     val bed_time: String? = null,
     val wake_time: String? = null,
 ) : Parcelable
+
+
+enum class SleepCardDashState {
+    SET_ALARM,
+    BREATHING_EXERCISE,
+    NONE
+}

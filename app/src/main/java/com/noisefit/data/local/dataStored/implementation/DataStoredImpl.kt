@@ -34,8 +34,10 @@ import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -89,7 +91,7 @@ private const val STRESS_LAST_SYNC_HASH = "STRESS_LAST_SYNC_HASH"
 private const val SLEEP_LAST_SYNC_HASH = "SLEEP_LAST_SYNC_HASH"
 private const val BODY_TEMP_LAST_SYNC_HASH = "BODY_TEMP_LAST_SYNC_HASH"
 private const val MAPS_LAT_LONG = "MAPS_LAT_LONG"
-private const val APP_OPEN_COUNT = "APP_OPEN_COUNT"
+private const val APP_OPEN_COUNT_TODAY = "APP_OPEN_COUNT_TODAY"
 private const val NOTIFICATION_80_STATUS = "NOTIFICATION_80_STATUS"
 private const val NOTIFICATION_80_STATUS_TIME = "NOTIFICATION_80_STATUS_TIME"
 private const val DEVICE_FEATURE_SYNC_TIME = "DEVICE_FEATURE_SYNC_TIME_1"
@@ -1071,12 +1073,28 @@ class DataStoredImpl
         return mPrefs.getBoolean(NOTIFICATION_GOAL_STATUS, false)
     }
 
-    override fun getAppOpenCount(): Int {
-        return mPrefs.getInt(APP_OPEN_COUNT, 0)
+    override fun getAppOpenCount(): Pair<LocalDate, Int> {
+        val dateToday = LocalDate.now()
+        val savedData = mPrefs.getString(APP_OPEN_COUNT_TODAY, null)
+        if (savedData != null) {
+            val parsedData: Pair<LocalDate,Int> = gson.fromJson(savedData, object : TypeToken<Pair<LocalDate,Int>>() {}.type)
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            return if (parsedData.first.format(dateFormatter).equals(dateToday.format(dateFormatter))) {
+                parsedData
+            } else {
+                Pair(dateToday, 0)
+            }
+        } else {
+            return Pair(dateToday, 0)
+        }
+
     }
 
     override fun incrementAppOpenCount() {
-        mPrefs.edit()?.putInt(APP_OPEN_COUNT, getAppOpenCount() + 1)?.commit()
+        var lastAppOpen = getAppOpenCount()
+        lastAppOpen = Pair(lastAppOpen.first, lastAppOpen.second + 1)
+        LOGS.d("sdflksldkhslfk $lastAppOpen")
+        mPrefs.edit()?.putString(APP_OPEN_COUNT_TODAY, gson.toJson(lastAppOpen))?.commit()
     }
 
     override fun isAutoStartEnabled(): Boolean {

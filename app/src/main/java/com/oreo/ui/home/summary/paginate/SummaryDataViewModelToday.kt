@@ -22,6 +22,9 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.data.model.PlannerAlarmData
+import com.noisefit_commans.data.model.SleepCardDashState
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -35,6 +38,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -54,7 +58,6 @@ import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.PeriodCard1
 import com.oreo.data.model.PeriodCard2
 import com.oreo.data.model.ServerUserHealthData
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
@@ -150,7 +153,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
 
-    val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
+    val sleepPlannerCard = MutableLiveData<Pair<SleepPlannerData, SleepCardDashState>?>()
 
     val findMyRingCard = MutableLiveData<Boolean?>()
 
@@ -203,7 +206,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
-
 
 
             //handleGoogleFitCard()
@@ -393,7 +395,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     //ring disconnected check
-                    if(sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                    if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                         stateGoogleFitCardDataSyncAvailable.postValue(false)
                         return@launch
                     }
@@ -1867,6 +1869,23 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    private fun checkIfAlarmSetForToday(alarms: PlannerAlarmData?): Boolean {
+        if (alarms == null) {
+            return false
+        }
+
+        return when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+            Calendar.MONDAY -> alarms.mon != null
+            Calendar.TUESDAY -> alarms.tue != null
+            Calendar.WEDNESDAY -> alarms.wed != null
+            Calendar.THURSDAY -> alarms.thu != null
+            Calendar.FRIDAY -> alarms.fri != null
+            Calendar.SATURDAY -> alarms.sat != null
+            Calendar.SUNDAY -> alarms.sun != null
+            else -> false
+        }
+    }
+
     fun getSleepPlanerDetails() {
         viewModelScope.launch {
 
@@ -1877,7 +1896,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     is Resource.Loading -> {
-                       // setLoading(resource.loading)
+                        // setLoading(resource.loading)
                     }
 
                     is Resource.NetworkError -> {
@@ -1886,12 +1905,52 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            sleepPlannerCard.postValue(it)
+                            it?.let {
+                                sleepPlannerCard.postValue(Pair(it, getPlannerCardState(it)))
+                            } ?: run {
+                                sleepPlannerCard.postValue(null)
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun getPlannerCardState(sleepPlannerData: SleepPlannerData): SleepCardDashState {
+        return if (showBreathingExercise(sleepPlannerData.planner?.bed_time)) {
+            SleepCardDashState.BREATHING_EXERCISE
+        } else {
+            val currentTime = LocalTime.now()
+            val isAlarmSetForToday = checkIfAlarmSetForToday(sleepPlannerData.alarms)
+            if (currentTime.hour >= 14 && isAlarmSetForToday.not()) {
+                SleepCardDashState.SET_ALARM
+            } else {
+                val appOpenCount = localDataStore.getAppOpenCount().second
+                if (appOpenCount > 1 && isAlarmSetForToday.not()) {
+                    SleepCardDashState.SET_ALARM
+                } else {
+                    SleepCardDashState.NONE
+                }
+            }
+        }
+    }
+
+    private fun showBreathingExercise(bedTime: String?): Boolean {
+        var breathingExercise = false
+        if (bedTime != null) {
+            val parsedTime = LocalTime.parse(
+                bedTime,
+                DateTimeFormatter.ofPattern("HH:mm:ss")
+            )
+            val currentTime = LocalTime.now()
+            val minutes =
+                ((parsedTime.hour * 60) + parsedTime.minute) - ((currentTime.hour * 60) + currentTime.minute)
+            if (minutes <= 30) {
+                breathingExercise = true
+            }
+        }
+        return breathingExercise
     }
 
     fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {

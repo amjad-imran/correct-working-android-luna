@@ -1043,4 +1043,8 @@ constructor(
             }
         }
     }
+
+    fun incrementOpenCount() {
+        localDataStore.incrementAppOpenCount()
+    }
 }

@@ -15,6 +15,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserGoals
 import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.models.WatchFace
+import java.time.LocalDate
 
 
 interface DataStoredInterface {
@@ -153,8 +154,9 @@ interface DataStoredInterface {
 
     fun saveAndGetLocation(data: List<LocationDataModel>): List<LocationDataModel>
     fun clearLocation()
+
     fun incrementAppOpenCount()
-    fun getAppOpenCount(): Int
+    fun getAppOpenCount(): Pair<LocalDate,Int>
 
     fun get80NotificationTimeStamp(): Long
     fun getNotificationCompleteTimeStamp(): Long

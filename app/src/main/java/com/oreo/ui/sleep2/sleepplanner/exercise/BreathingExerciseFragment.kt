@@ -15,11 +15,6 @@ class BreathingExerciseFragment :
 
     private val viewModel: BreathingExerciseViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     override fun onResume() {
         super.onResume()
         binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE

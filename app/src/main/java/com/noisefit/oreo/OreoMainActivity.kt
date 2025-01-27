@@ -975,7 +975,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.loginFreshChatUser()
 
-
+        viewModel.incrementOpenCount()
     }
 
 

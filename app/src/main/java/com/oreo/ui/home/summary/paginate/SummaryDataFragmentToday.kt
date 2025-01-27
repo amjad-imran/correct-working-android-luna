@@ -36,6 +36,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
@@ -154,7 +155,6 @@ class SummaryDataFragmentToday :
 
         viewModel.getPeriodData()
 
-        viewModel.getSleepPlanerDetails()
 
     }
 
@@ -201,6 +201,8 @@ class SummaryDataFragmentToday :
 
         handleFindMyRingCard()
         viewModel.handleGoogleFitCard()
+
+        viewModel.getSleepPlanerDetails()
 
     }
 
@@ -391,6 +393,18 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
+        binding.contentMain.lytSplanner.lytSetAlarm.root.setOnClickListener {
+            navigate(
+                R.id.setAlarmFragment,
+                bundle = bundleOf("bed_time" to null, "wake_time" to null)
+            )
+        }
+        binding.contentMain.lytSplanner.lytBreathe.root.setOnClickListener {
+            navigate(
+                R.id.fragmentBreathExercise
+            )
+        }
 
         binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
             viewModel.hideFindMyRingPermCard()
@@ -1027,11 +1041,12 @@ class SummaryDataFragmentToday :
 
     }
 
-    private fun setPlannerCardUi(data: SleepPlannerData?) {
+    private fun setPlannerCardUi(data: Pair<SleepPlannerData, SleepCardDashState>?) {
         if (data == null) {
             binding.contentMain.lytSplanner.root.gone()
             return
         }
+        val plannerData = data.first
 
         binding.contentMain.lytSplanner.apply {
             lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
@@ -1040,11 +1055,11 @@ class SummaryDataFragmentToday :
             lytWakeupTime.tvTitle.text = getString(R.string.text_wake_time)
 
             val bedTime = LocalTime.parse(
-                data.planner?.bed_time ?: "10:00:00",
+                plannerData.planner?.bed_time ?: "22:00:00",
                 DateTimeFormatter.ofPattern("HH:mm:ss")
             )
             val wakeTime = LocalTime.parse(
-                data.planner?.wake_time ?: "06:00:00",
+                plannerData.planner?.wake_time ?: "06:00:00",
                 DateTimeFormatter.ofPattern("HH:mm:ss")
             )
 
@@ -1054,15 +1069,15 @@ class SummaryDataFragmentToday :
             lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
             lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a"))
 
-            tvMsg.text = data.planner?.nudge
+            tvMsg.text = plannerData.planner?.nudge
 
-            clock.setData(bedTime, wakeTime, data.planner?.debt ?: 0L)
+            clock.setData(bedTime, wakeTime, plannerData.planner?.debt ?: 0L)
 
             val durationMinutes = viewModel.getDurationMinutes(bedTime, wakeTime)
             val hours = durationMinutes / 60
             val minutes = durationMinutes % 60
 
-            tvDuration.text =  String.format("%d:%02d", hours, minutes)
+            tvDuration.text = String.format("%d:%02d", hours, minutes)
 
             tvDuration.setTextColor(Color.parseColor("#FFFFFF"))
             val textShader: Shader = LinearGradient(
@@ -1075,10 +1090,30 @@ class SummaryDataFragmentToday :
                     Color.parseColor("#D5B6FF"),
                     Color.parseColor("#FFFFFF"),
                 ),
-                floatArrayOf(0f,0.5f,1f),
+                floatArrayOf(0f, 0.5f, 1f),
                 Shader.TileMode.CLAMP
             )
             tvDuration.paint.shader = textShader
+
+            when (data.second) {
+                SleepCardDashState.SET_ALARM -> {
+                    this.divider1.root.visible()
+                    this.lytSetAlarm.root.visible()
+                    this.lytBreathe.root.gone()
+                }
+
+                SleepCardDashState.BREATHING_EXERCISE -> {
+                    this.divider1.root.visible()
+                    this.lytSetAlarm.root.gone()
+                    this.lytBreathe.root.visible()
+                }
+
+                SleepCardDashState.NONE -> {
+                    this.divider1.root.gone()
+                    this.lytSetAlarm.root.gone()
+                    this.lytBreathe.root.gone()
+                }
+            }
 
             root.visible()
         }
