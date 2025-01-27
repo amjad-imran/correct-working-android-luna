@@ -151,17 +151,6 @@ class SetAlarmViewModel @Inject constructor(
         )
     }
 
-    fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
-        return if (end.isAfter(start)) {
-            Duration.between(start, end).toMinutes()
-        } else {
-            val dayEnd = LocalTime.of(23, 59)
-            val dayStart = LocalTime.of(0, 0)
-            Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
-                .toMinutes()
-        }
-    }
-
     fun getSleepPlanerDetails() {
         viewModelScope.launch {
 

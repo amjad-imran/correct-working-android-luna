@@ -17,6 +17,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -184,7 +185,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             binding.lytTopView.lytWakeupTime.tvTimeUnit.text =
                 end.format(DateTimeFormatter.ofPattern("a"))
 
-            val durationMinutes = viewModel.getDurationMinutes(it.first, it.second)
+            val durationMinutes = DateTimeUtil.getDurationMinutes(it.first, it.second)
             val hours = durationMinutes / 60
             val minutes = durationMinutes % 60
             binding.lytAlarmTime.tvHour.text = hours.toString()

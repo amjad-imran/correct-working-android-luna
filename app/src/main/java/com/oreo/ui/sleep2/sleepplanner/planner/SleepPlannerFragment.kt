@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.ui.sleep2.sleepplanner.SADaysAdapter
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -56,8 +57,10 @@ class SleepPlannerFragment :
         }
 
         binding.lytAddNewAlarm.root.setOnClickListener {
-            navigate(R.id.setAlarmFragment,
-                bundle = bundleOf("bed_time" to null, "wake_time" to null))
+            navigate(
+                R.id.setAlarmFragment,
+                bundle = bundleOf("bed_time" to null, "wake_time" to null)
+            )
         }
 
         binding.lytSetupGoal.root.setOnClickListener {
@@ -70,8 +73,10 @@ class SleepPlannerFragment :
             navigate(R.id.dialogSaGoal)
         }
         binding.lytSetupAlarm.root.setOnClickListener {
-            navigate(R.id.setAlarmFragment,
-                bundle = bundleOf("bed_time" to null, "wake_time" to null))
+            navigate(
+                R.id.setAlarmFragment,
+                bundle = bundleOf("bed_time" to null, "wake_time" to null)
+            )
         }
         binding.lytBreathExercise.root.setOnClickListener {
             navigate(R.id.fragmentBreathExercise)
@@ -137,8 +142,17 @@ class SleepPlannerFragment :
             binding.lytSetupGoal.ivMore.visible()
         }
 
+        /* binding.plannerClock.setData(
+             LocalTime.of(22,0)*//*bedTime*//*,
+            LocalTime.of(5,0)*//*wakeTime*//*,
+            *//*(data.planner?.debt ?: 0) / 60*//*60
+        )*/
 
-        binding.plannerClock.setData(bedTime, wakeTime, (data.planner?.debt ?: 0) / 60)
+        binding.plannerClock.setData(
+            bedTime,
+            wakeTime,
+            (data.planner?.debt ?: 0) / 60
+        )
 
         updateAlarmUi(data.alarms)
 

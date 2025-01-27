@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PathMeasure
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
@@ -15,13 +16,13 @@ import android.view.View
 import com.noisefit.luna.R
 import com.noisefit.timepickerslider.utils.dpToPx
 import com.noisefit_commans.utils.LOGS
+import com.oreo.util.DateTimeUtil
 import java.time.LocalTime
 import java.util.Calendar
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
-
 
 class RoundClockView @JvmOverloads constructor(
     context: Context,
@@ -37,6 +38,7 @@ class RoundClockView @JvmOverloads constructor(
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
     private var debtMinutes = 0L
+    private var durationMinutes = 0L
 
     private lateinit var arcPaint: Paint
     private lateinit var arcPaintStroke: Paint
@@ -138,23 +140,27 @@ class RoundClockView @JvmOverloads constructor(
           canvas.drawLine(centerX, centerY, hourHandX, hourHandY, handPaint)*/
     }
 
-    private fun drawText(canvas: Canvas, path: Path, halfWidth: Float, middlePoint: PointF) {
-
-        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL_AND_STROKE
-            textSize = dpToPx(12f)
-            color = Color.parseColor("#C5A8ED")
-        }
-
-        val text = "7h 32m"
+    private fun drawText(
+        canvas: Canvas,
+        halfWidth: Float,
+        middlePoint: PointF,
+        textAngle: Float,
+        text: String,
+        textPaint: Paint
+    ) {
         val textBounds = Rect()
-
         textPaint.getTextBounds(text, 0, text.length, textBounds)
 
         val circlePath = Path()
         circlePath.addCircle(middlePoint.x, middlePoint.y, halfWidth, Path.Direction.CCW)
-        canvas.drawTextOnPath(text, circlePath, 0f, 0f, textPaint)
 
+        canvas.save()
+
+        val centerOffset = 10f + textAngle
+
+        canvas.rotate(centerOffset, middlePoint.x, middlePoint.y)
+        canvas.drawTextOnPath(text, circlePath, 0f, 0f, textPaint)
+        canvas.restore()
     }
 
     private fun drawHourNeedle(canvas: Canvas, halfWidth: Float, middlePoint: PointF) {
@@ -187,15 +193,15 @@ class RoundClockView @JvmOverloads constructor(
         if (startTime != null && endTime != null) {
 
             val startAngle = calculateAngle(startTime!!.hour, startTime!!.minute)
-            val end = (calculateAngle(endTime!!.hour, endTime!!.minute))
+            val endAngle = (calculateAngle(endTime!!.hour, endTime!!.minute))
 
             val degree = if (startAngle < 0) {
-                abs(startAngle) + end
+                abs(startAngle) + endAngle
             } else {
-                if (end < startAngle) {
-                    360f - startAngle + end
+                if (endAngle < startAngle) {
+                    360f - startAngle + endAngle
                 } else {
-                    startAngle + end
+                    startAngle + endAngle
                 }
             }
 
@@ -207,22 +213,80 @@ class RoundClockView @JvmOverloads constructor(
             val path = Path()
             path.addArc(sleepArcRectF, startAngle, degree)
 
+            val computeAngle = if (endAngle > startAngle) {
+                (startAngle + endAngle) / 2
+            } else {
+                (startAngle + 360 + endAngle) / 2
+            }
+
+            LOGS.d("textAngle start $startAngle | end $endAngle   -> $computeAngle")
+
+            val hours = durationMinutes / 60
+            val minutes = durationMinutes % 60
+
+            val textDuration = String.format("%dh %dm", hours, minutes)
+
             drawText(
                 canvas,
-                path,
                 width.toFloat() / 2,
-                _middlePoint
+                _middlePoint,
+                computeAngle,
+                textDuration,
+                Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL_AND_STROKE
+                    textSize = dpToPx(12f)
+                    color = Color.parseColor("#C5A8ED")
+                }
             )
 
 
             val debtStart = endTime!!.minusMinutes(debtMinutes)
 
             val debtStartAngle = (calculateAngle(debtStart.hour, debtStart.minute))
-            val debtDegree = end - debtStartAngle
+            val debtDegree = endAngle - debtStartAngle
 
-            canvas.drawArc(sleepArcRectF, startAngle+1, degree - debtDegree, false, arcPaintStroke)
+            canvas.drawArc(
+                sleepArcRectF,
+                startAngle + 1,
+                degree - debtDegree,
+                false,
+                arcPaintStroke
+            )
 
             canvas.drawArc(sleepArcRectF, debtStartAngle, debtDegree, false, debtPaintStroke)
+
+
+            val computeAngle2 = if (endAngle > debtStartAngle) {
+                (debtStartAngle + endAngle) / 2
+            } else {
+                (debtStartAngle + 360 + endAngle) / 2
+            }
+
+            if (debtMinutes > 0) {
+                val hours2 = debtMinutes / 60
+                val minutes2 = debtMinutes % 60
+
+                val textDuration2 = if (hours2 > 0) {
+                    String.format("+%dh %dm", hours2, minutes2)
+                } else {
+                    String.format("+%dm", hours2, minutes2)
+                }
+
+                drawText(
+                    canvas,
+                    width.toFloat() / 2,
+                    _middlePoint,
+                    computeAngle2,
+                    textDuration2,
+                    Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        style = Paint.Style.FILL_AND_STROKE
+                        textSize = dpToPx(12f)
+                        color = Color.parseColor("#A477FF")
+                    }
+                )
+            }
+
+
 
             drawAngleLines(canvas, startAngle)
 
@@ -328,6 +392,7 @@ class RoundClockView @JvmOverloads constructor(
         this.startTime = start
         this.endTime = end
         this.debtMinutes = debtMinutes
+        this.durationMinutes = DateTimeUtil.getDurationMinutes(start, end)
         invalidate()
     }
 

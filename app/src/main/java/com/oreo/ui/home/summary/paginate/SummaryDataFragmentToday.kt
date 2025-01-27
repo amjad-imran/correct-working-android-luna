@@ -1071,7 +1071,7 @@ class SummaryDataFragmentToday :
 
             tvMsg.text = plannerData.planner?.nudge
 
-            clock.setData(bedTime, wakeTime, plannerData.planner?.debt ?: 0L)
+            clock.setData(bedTime, wakeTime, (plannerData.planner?.debt ?: 0) / 60)
 
             val durationMinutes = viewModel.getDurationMinutes(bedTime, wakeTime)
             val hours = durationMinutes / 60

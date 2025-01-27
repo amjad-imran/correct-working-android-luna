@@ -5,11 +5,25 @@ import android.text.format.DateUtils
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalTime
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 object DateTimeUtil {
+
+
+    fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
+        return if (end.isAfter(start)) {
+            Duration.between(start, end).toMinutes()
+        } else {
+            val dayEnd = LocalTime.of(23, 59)
+            val dayStart = LocalTime.of(0, 0)
+            Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
+                .toMinutes()
+        }
+    }
 
 
     fun getRelativeTime(
