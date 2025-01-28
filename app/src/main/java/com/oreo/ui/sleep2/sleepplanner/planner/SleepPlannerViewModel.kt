@@ -22,10 +22,6 @@ class SleepPlannerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
-    fun getAlarmDays(): List<String> {
-        return arrayListOf("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
-    }
-
     val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
 
 

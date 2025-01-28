@@ -1,8 +1,11 @@
 package com.oreo.ui.sleep2.sleepplanner
 
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -18,9 +21,9 @@ import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -81,7 +84,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             thumbColor = Color.TRANSPARENT
             sliderRangeGradientStart = Color.parseColor("#7462A4")
             sliderRangeGradientMiddle = Color.parseColor("#845A64")
-            sliderRangeGradientEnd = Color.parseColor("#1A1624")
+            sliderRangeGradientEnd = Color.parseColor("#845A64")
             //thumbIconColor = Color.parseColor("#F79104")
             thumbSizeActiveGrow = 0f
             clockFace = ClockFace.APPLE
@@ -183,6 +186,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
                 viewModel.setDefaultTone(viewModel.editModeSelectedTime!!)
             }
+            //binding.timePicker.setSleepMinDuration(it?.planner?.min_duration ?: 0L)
             binding.lytMain.visible()
         }
 
@@ -205,6 +209,12 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             val minutes = durationMinutes % 60
             binding.lytAlarmTime.tvHour.text = hours.toString()
             binding.lytAlarmTime.tvMin.text = String.format("%02d", minutes)
+
+            val isDurationMin = viewModel.isDurationMin(durationMinutes)
+
+            setTextGradient(isDurationMin, binding.lytAlarmTime.tvHour)
+            setTextGradient(isDurationMin, binding.lytAlarmTime.tvMin)
+
         }
 
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
@@ -213,6 +223,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 if (viewModel.editModeSelectedTime != null) {
                     viewModel.deleteMode.postValue(false)
                 }
+                setPickerGradient(startTime.localTime, binding.timePicker.endTime.localTime)
+
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
@@ -220,10 +232,65 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 if (viewModel.editModeSelectedTime != null) {
                     viewModel.deleteMode.postValue(false)
                 }
+                setPickerGradient(binding.timePicker.startTime.localTime, endTime.localTime)
+
             }
 
             override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {}
         })
+    }
+
+    fun setPickerGradient(start: LocalTime, end: LocalTime) {
+        val durationMinutes = DateTimeUtil.getDurationMinutes(start, end)
+
+        if (viewModel.isDurationMin(durationMinutes)) {
+            binding.timePicker.apply {
+                sliderRangeGradientStart = Color.parseColor("#A46262")
+                sliderRangeGradientMiddle = Color.parseColor("#BF5B6D")
+                sliderRangeGradientEnd = Color.parseColor("#BF5B6D")
+            }
+        } else {
+            binding.timePicker.apply {
+                sliderRangeGradientStart = Color.parseColor("#7462A4")
+                sliderRangeGradientMiddle = Color.parseColor("#845A64")
+                sliderRangeGradientEnd = Color.parseColor("#845A64")
+            }
+        }
+    }
+
+    private fun setTextGradient(durationMin: Boolean, text: TextView) {
+        if (durationMin) {
+            text.setTextColor(Color.parseColor("#FFFFFF"))
+            val textShader: Shader = LinearGradient(
+                0f,
+                text.paint.measureText(text.text.toString()),
+                0f,
+                0f,
+                intArrayOf(
+                    Color.parseColor("#FF7C94"),
+                    Color.parseColor("#FFC8D2"),
+                ),
+                floatArrayOf(0f, 1f),
+                Shader.TileMode.CLAMP
+            )
+            text.paint.shader = textShader
+        } else {
+            text.setTextColor(Color.parseColor("#FFFFFF"))
+            val textShader: Shader = LinearGradient(
+                0f,
+                text.paint.measureText(text.text.toString()),
+                0f,
+                0f,
+                intArrayOf(
+                    Color.parseColor("#C5A8ED"),
+                    Color.parseColor("#FFFFFF"),
+                ),
+                floatArrayOf(0f, 1f),
+                Shader.TileMode.CLAMP
+            )
+            text.paint.shader = textShader
+        }
+
     }
 
 }

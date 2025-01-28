@@ -814,6 +814,12 @@ class TimeRangePicker @JvmOverloads constructor(
         invalidate()
     }
 
+    fun setSleepMinDuration(minDuration: Long) {
+        minSleepDuration = minDuration
+        updateGradient()
+        invalidate()
+    }
+
     val clockRadius: Float
         get() = _clockRadius
 
@@ -869,6 +875,8 @@ class TimeRangePicker @JvmOverloads constructor(
             _angleStart = minutesToAngle(value, _hourFormat)
             invalidate()
         }
+
+    var minSleepDuration: Long = 0
 
     var endTime: Time
         get() = Time(

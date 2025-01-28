@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.AlarmDataModel
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
@@ -416,5 +417,13 @@ class SetAlarmViewModel @Inject constructor(
                     it.second.wake_time.equals(editModeSelectedTime.second.format(formatter), true)
         }
         selectedTone.postValue(alarmTonesList().find { it.key == (alarm?.second?.audio ?: 1) })
+    }
+
+    fun isDurationMin(durationMinutes: Long): Boolean {
+        val min = (sleepPlannerCard.value?.planner?.min_duration ?: 0) / 60
+        if (min == 0L) return false
+
+        return durationMinutes<=min
+
     }
 }
