@@ -14,18 +14,23 @@ import com.noisefit_commans.ui.visible
 class AlarmSoundAdapter(val listener: OnSoundItemClick) :
     RecyclerView.Adapter<AlarmSoundAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<AlarmSoundDataModel>()
+    private var selectedKey = 1
 
     inner class ViewHolder(val binding: ItemAlarmSoundBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AlarmSoundDataModel) {
 
-            if (data.isChecked)
+            if (data.key == selectedKey)
                 binding.ivChecked.setImageResource(R.drawable.ic_goal_selected_rb)
             else
                 binding.ivChecked.setImageResource(R.drawable.ic_goal_unselect_rb)
+
             binding.tvTitle.text = data.title
 
             binding.root.setOnClickListener {
+                selectedKey = data.key
+                notifyDataSetChanged()
+
                 listener.onItemClick(data, bindingAdapterPosition)
             }
 
@@ -50,26 +55,12 @@ class AlarmSoundAdapter(val listener: OnSoundItemClick) :
     }
 
 
-    fun setData(resultData: List<AlarmSoundDataModel>?) {
+    fun setData(resultData: List<AlarmSoundDataModel>,selectedKey:Int) {
+        this.selectedKey = selectedKey
         mDataSet.clear()
-        notifyDataSetChanged()
-        if (resultData != null) {
-            mDataSet.addAll(resultData)
-        }
+        mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
-
-    fun updateItem(data: AlarmSoundDataModel, position: Int) {
-        mDataSet.forEachIndexed { index, saGoalData ->
-            if (index == position) {
-                saGoalData.isChecked = !data.isChecked
-            } else {
-                saGoalData.isChecked = false
-            }
-        }
-        notifyDataSetChanged()
-    }
-
 }
 
 interface OnSoundItemClick {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.luna.databinding.BottomSheetAlarmSoundBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
@@ -13,12 +14,14 @@ const val ALARM_SOUND = "ALARM_SOUND"
 class BottomSheetAlarmSound : BaseBottomSheetWithTransparent<BottomSheetAlarmSoundBinding>(
     BottomSheetAlarmSoundBinding::inflate
 ) {
-    private var soundName: String = "N/A"
+    private var selectedTone: AlarmSoundDataModel? = null
+
+    private val args: BottomSheetAlarmSoundArgs by navArgs()
+
     private val soundAdapter: AlarmSoundAdapter by lazy {
         AlarmSoundAdapter(object : OnSoundItemClick {
             override fun onItemClick(data: AlarmSoundDataModel, position: Int) {
-                soundAdapter.updateItem(data, position)
-                soundName = data.title
+                selectedTone = data
             }
         })
     }
@@ -26,21 +29,26 @@ class BottomSheetAlarmSound : BaseBottomSheetWithTransparent<BottomSheetAlarmSou
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+
+        val tones = args.alarmToneList
+        selectedTone = tones.find { it.key == args.selectedKey }
+        soundAdapter.setData(tones.toList(), selectedTone?.key ?: 1)
     }
 
     private fun setRecycler() {
         with(binding.rvSound) {
             adapter = soundAdapter
         }
-        soundAdapter.setData(prepareData())
     }
 
     override fun initListener() {
         binding.btnSave.setOnClickListener {
-            setFragmentResult(
-                ALARM_SOUND,
-                bundleOf("soundName" to soundName)
-            )
+            if (selectedTone != null) {
+                setFragmentResult(
+                    ALARM_SOUND,
+                    bundleOf("alarmTone" to selectedTone)
+                )
+            }
             navigateUpSafe()
         }
 
@@ -52,22 +60,5 @@ class BottomSheetAlarmSound : BaseBottomSheetWithTransparent<BottomSheetAlarmSou
 
     override fun subscribeObservers() {
 
-    }
-
-    private fun prepareData(): ArrayList<AlarmSoundDataModel> {
-        val dataList = ArrayList<AlarmSoundDataModel>()
-        dataList.add(AlarmSoundDataModel(title = "BeepBeep", false))
-        dataList.add(AlarmSoundDataModel(title = "Helios", false))
-        dataList.add(AlarmSoundDataModel(title = "Bazzle", false))
-        dataList.add(AlarmSoundDataModel(title = "BeepBeep", false))
-        dataList.add(AlarmSoundDataModel(title = "Helios", false))
-        dataList.add(AlarmSoundDataModel(title = "Bazzle", false))
-        dataList.add(AlarmSoundDataModel(title = "BeepBeep", false))
-        dataList.add(AlarmSoundDataModel(title = "Helios", false))
-        dataList.add(AlarmSoundDataModel(title = "Bazzle", false))
-        dataList.add(AlarmSoundDataModel(title = "BeepBeep", false))
-        dataList.add(AlarmSoundDataModel(title = "Helios", false))
-        dataList.add(AlarmSoundDataModel(title = "Bazzle", false))
-        return dataList
     }
 }

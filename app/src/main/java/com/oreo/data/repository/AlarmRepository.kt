@@ -2,8 +2,8 @@ package com.oreo.data.repository
 
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.PlannerAlarmData
-import com.noisefit_commans.utils.LOGS
 import com.oreo.util.alarm.AlarmUtil
+import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -38,7 +38,9 @@ class AlarmRepository @Inject constructor(
         alarmsData?.getNonNullAlarms()?.forEach {
             val wakeTime =
                 LocalTime.parse(it.second.wake_time, DateTimeFormatter.ofPattern("HH:mm:ss"))
-            alarmUtil.scheduleWeeklyAlarm(it.first, wakeTime.hour, wakeTime.minute)
+            alarmUtil.scheduleWeeklyAlarm(it.first, wakeTime.hour, wakeTime.minute,
+                getAlarmToneByKey(it.second.audio?:1)
+            )
         }
     }
 

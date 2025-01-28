@@ -1004,6 +1004,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     ) {
         if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY, true)) {
             navController?.navigate(R.id.detectWorkoutListFragment)
+        }else if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_BREATHING, true)) {
+            navController?.navigate(R.id.fragmentBreathExercise)
         }
     }
 

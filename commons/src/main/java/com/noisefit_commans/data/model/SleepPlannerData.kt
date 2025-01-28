@@ -68,6 +68,7 @@ data class PlannerAlarmData(
 data class AlarmTimingsData(
     val bed_time: String? = null,
     val wake_time: String? = null,
+    val audio: Int? = null,
 ) : Parcelable
 
 

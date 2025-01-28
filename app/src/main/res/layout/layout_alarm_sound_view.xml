@@ -13,8 +13,9 @@
             android:layout_height="wrap_content"
             android:text="@string/text_sounds_and_volume"
             android:textColor="#A3FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSoundName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/tvSoundName" />
 
         <TextView
             android:id="@+id/tvSoundName"
@@ -23,9 +24,9 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_sa_frwrd_arrow"
             android:textColor="#88B0FF"
-            app:layout_constraintBottom_toBottomOf="@id/textView1"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textView1"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UseCompatTextViewDrawableXml"
             tools:text="Helios" />
 

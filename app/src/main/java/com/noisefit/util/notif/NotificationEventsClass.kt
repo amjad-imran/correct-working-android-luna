@@ -43,6 +43,7 @@ object NotificationEventsClass {
     const val NOTIFICATION_TYPE_USER_PROFILE_REQUEST = "userprofile"
 
 
+    const val LOCAL_NOTIFICATION_BREATHING = "LOCAL_NOTIFICATION_BREATHING"
     const val LOCAL_NOTIFICATION_WORKOUT_KEY = "autoworkoutnotification"
     const val LOCAL_NOTIFICATION_KEY = "stepgoalnotification"
     const val LOCAL_SLEEP_NOTIFICATION_KEY= "localsleepnotification"

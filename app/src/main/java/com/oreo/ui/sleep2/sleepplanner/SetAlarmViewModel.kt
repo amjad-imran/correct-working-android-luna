@@ -7,8 +7,10 @@ import android.graphics.Shader.TileMode
 import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -20,6 +22,7 @@ import com.oreo.data.model.AlarmDataModel
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -43,7 +46,6 @@ class SetAlarmViewModel @Inject constructor(
     var lastSelectedPosition: Int? = null
 
 
-    var alarmSound: String? = null
     var alarmTimeUpdate = MutableLiveData<Event<Pair<AlarmDataModel, Int>>>()
 
     var startEndTime = MutableLiveData<Pair<LocalTime, LocalTime>>()
@@ -51,6 +53,7 @@ class SetAlarmViewModel @Inject constructor(
     val sleepPlannerCard = MutableLiveData<SleepPlannerData?>()
 
     var alarmUpdated = MutableLiveData<Event<Boolean>>()
+    var selectedTone = MutableLiveData<AlarmSoundDataModel>(alarmTonesList().first())
 
 
     fun getAlarmData(alarms: PlannerAlarmData?): ArrayList<SAActiveDayDataModel> {
@@ -252,40 +255,69 @@ class SetAlarmViewModel @Inject constructor(
 
         val bedTime = LocalTime.of(3, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val wakeTime =
-            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            LocalTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
 
         val deleteMode = this.deleteMode.value == true
+        val selectedToneKey = selectedTone.value?.key ?: 1
 
         selectedAlarmDays.forEach {
             when (it.dayKey) {
                 Calendar.MONDAY -> {
-                    returnData.mon = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.mon = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.TUESDAY -> {
-                    returnData.tue = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.tue = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.WEDNESDAY -> {
-                    returnData.wed = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.wed = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.THURSDAY -> {
-                    returnData.thu = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.thu = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.FRIDAY -> {
-                    returnData.fri = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.fri = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.SATURDAY -> {
-                    returnData.sat = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.sat = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
 
                 Calendar.SUNDAY -> {
-                    returnData.sun = if (deleteMode) null else AlarmTimingsData(bedTime, wakeTime)
+                    returnData.sun = if (deleteMode) null else AlarmTimingsData(
+                        bedTime,
+                        wakeTime,
+                        selectedToneKey
+                    )
                 }
             }
         }
@@ -366,5 +398,23 @@ class SetAlarmViewModel @Inject constructor(
                 SAActiveDayDataModel(false, true, dayKey)
             }
         }
+    }
+
+    fun alarmTonesList(): List<AlarmSoundDataModel> {
+        val dataList = ArrayList<AlarmSoundDataModel>()
+        dataList.add(AlarmSoundDataModel(title = "Lofi", false, getAlarmToneByKey(1), 1))
+        dataList.add(AlarmSoundDataModel(title = "Thailand", false, getAlarmToneByKey(2), 2))
+        dataList.add(AlarmSoundDataModel(title = "Singapore", false, getAlarmToneByKey(3), 3))
+        dataList.add(AlarmSoundDataModel(title = "Scotland", false, getAlarmToneByKey(4), 4))
+        return dataList
+    }
+
+    fun setDefaultTone(editModeSelectedTime: Pair<LocalTime, LocalTime>) {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val alarm = alarmsRawData?.getNonNullAlarms()?.find {
+            it.second.bed_time.equals(editModeSelectedTime.first.format(formatter), true) &&
+                    it.second.wake_time.equals(editModeSelectedTime.second.format(formatter), true)
+        }
+        selectedTone.postValue(alarmTonesList().find { it.key == (alarm?.second?.audio ?: 1) })
     }
 }

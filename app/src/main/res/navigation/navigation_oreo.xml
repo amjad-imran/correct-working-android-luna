@@ -957,7 +957,7 @@
     <fragment
         android:id="@+id/setAlarmFragment"
         android:name="com.oreo.ui.sleep2.sleepplanner.SetAlarmFragment"
-        android:label="fragment_set_alarm" >
+        android:label="fragment_set_alarm">
         <argument
             android:name="bed_time"
             app:argType="string"
@@ -998,7 +998,14 @@
     <dialog
         android:id="@+id/dialogAlarmSound"
         android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetAlarmSound"
-        android:label="AlarmSound" />
+        android:label="AlarmSound">
+        <argument
+            android:name="alarmToneList"
+            app:argType="com.noisefit.data.model.AlarmSoundDataModel[]" />
+        <argument
+            android:name="selectedKey"
+            app:argType="integer" />
+    </dialog>
     <fragment
         android:id="@+id/dropDownFragment"
         android:name="com.oreo.ui.sleep2.ODropDownFragment"

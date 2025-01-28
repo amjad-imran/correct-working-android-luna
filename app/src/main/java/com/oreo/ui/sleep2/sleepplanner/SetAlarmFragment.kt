@@ -3,9 +3,11 @@ package com.oreo.ui.sleep2.sleepplanner
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
@@ -116,16 +118,28 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
         binding.lytAlarmSound.lytSoundView.tvSoundName.setOnClickListener {
             setFragmentResultListener(ALARM_SOUND) { _, bundle ->
-                val data = bundle.getString("soundName")
-                viewModel.alarmSound = data
-                binding.lytAlarmSound.lytSoundView.tvSoundName.text = data
+                val data = bundle.getParcelable("alarmTone") as? AlarmSoundDataModel
+                if (data != null) {
+                    viewModel.selectedTone.postValue(data)
+                    viewModel.deleteMode.postValue(false)
+                }
             }
-            navigate(R.id.dialogAlarmSound)
+            navigate(
+                R.id.dialogAlarmSound,
+                bundleOf(
+                    "alarmToneList" to viewModel.alarmTonesList().toTypedArray(),
+                    "selectedKey" to (viewModel.selectedTone.value?.key ?: 1)
+                )
+            )
         }
 
     }
 
     override fun subscribeObservers() {
+
+        viewModel.selectedTone.observe(this) {
+            binding.lytAlarmSound.lytSoundView.tvSoundName.text = it.title
+        }
         viewModel.deleteMode.observe(this) {
             if (it) {
                 binding.btnSave.text = getString(R.string.text_delete_alarm)
@@ -165,8 +179,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             if (viewModel.editModeSelectedTime != null) {
                 val start = viewModel.editModeSelectedTime!!.first
                 val end = viewModel.editModeSelectedTime!!.second
-
                 binding.timePicker.setPeriod(start, end)
+
+                viewModel.setDefaultTone(viewModel.editModeSelectedTime!!)
             }
             binding.lytMain.visible()
         }

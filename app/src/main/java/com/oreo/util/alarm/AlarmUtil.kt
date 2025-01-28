@@ -5,7 +5,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.noisefit.luna.R
 import com.noisefit.ui.SplashActivity
+import com.noisefit_commans.utils.LOGS
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -14,10 +16,12 @@ class AlarmUtil @Inject constructor(
 ) {
 
     @SuppressLint("ScheduleExactAlarm")
-    fun scheduleWeeklyAlarm(dayOfWeek: Int, hour: Int, minute: Int) {
+    fun scheduleWeeklyAlarm(dayOfWeek: Int, hour: Int, minute: Int, alarmTone: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(context, AlarmReceiver::class.java)
+        intent.putExtra("alarmTone", alarmTone)
+
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             dayOfWeek, // Unique request code for each day
@@ -51,6 +55,9 @@ class AlarmUtil @Inject constructor(
             pendingIntent
         )
 
+
+        preAlarmNotificationSchedule(context, dayOfWeek * 100, calendar.timeInMillis)
+
         // Schedule the alarm
         /*alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -58,6 +65,38 @@ class AlarmUtil @Inject constructor(
             AlarmManager.INTERVAL_DAY * 7,
             pendingIntent
         )*/
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private fun preAlarmNotificationSchedule(context: Context, notificationId: Int, millis:Long) {
+        val beforeMillis = /*30*/1 * 60 * 1000L
+        val title = "Test title"
+        val message = "Test message"
+
+        val intent = Intent(context, WindDownNotification::class.java)
+
+        intent.putExtra("titleExtra", title)
+        intent.putExtra("messageExtra", message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val scheduleTime = millis-beforeMillis
+
+        if(scheduleTime>Calendar.getInstance().timeInMillis){
+            LOGS.d("dsfjhskdjfhk ${millis-beforeMillis}  | $beforeMillis notification scheduled")
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                millis-beforeMillis,
+                pendingIntent
+            )
+        }
     }
 
     /**
@@ -85,6 +124,17 @@ class AlarmUtil @Inject constructor(
         days.forEach {
             cancelWeeklyAlarm(it)
         }
+    }
 
+    companion object {
+        fun getAlarmToneByKey(key: Int): Int {
+            return when (key) {
+                1 -> R.raw.track_1_lofi
+                2 -> R.raw.track_2_thailand
+                3 -> R.raw.track_3_singapore
+                4 -> R.raw.track_4_scotland
+                else -> R.raw.track_1_lofi
+            }
+        }
     }
 }

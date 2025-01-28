@@ -17,10 +17,12 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
 import com.noisefit.ui.SplashActivity
+import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import java.io.IOException
 
 
 const val SLEEP_ALARM_CHANNEL = "SLEEP_ALARM_CHANNEL"
+const val SLEEP_WIND_DOWN_CHANNEL = "SLEEP_WIND_DOWN_CHANNEL"
 
 class AlarmService : Service() {
 
@@ -48,7 +50,9 @@ class AlarmService : Service() {
         val alarmTitle = "Alarm title here"
 
         try {
-            mediaPlayer = MediaPlayer.create(this, R.raw.track_1_lofi)
+            val track =
+                intent?.getIntExtra("alarmTone", getAlarmToneByKey(1)) ?: getAlarmToneByKey(1)
+            mediaPlayer = MediaPlayer.create(this, track)
             mediaPlayer?.isLooping = true
             mediaPlayer?.start()
         } catch (ex: IOException) {

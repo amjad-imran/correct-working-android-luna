@@ -55,6 +55,8 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.oreo.util.alarm.WindDownNotification" android:exported="true" />
+
         <service android:name="com.oreo.util.alarm.AlarmService"
             android:permission="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
             android:foregroundServiceType="mediaPlayback"/>
