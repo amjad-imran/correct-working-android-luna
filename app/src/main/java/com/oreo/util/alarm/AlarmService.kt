@@ -24,14 +24,13 @@ const val SLEEP_ALARM_CHANNEL = "SLEEP_ALARM_CHANNEL"
 
 class AlarmService : Service() {
 
-    private val mediaPlayer: MediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
     private var ringtone: Uri? = null
 
 
     override fun onCreate() {
         super.onCreate()
-        mediaPlayer.isLooping = true
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         ringtone = RingtoneManager.getActualDefaultRingtoneUri(
             this.baseContext, RingtoneManager.TYPE_ALARM
@@ -49,8 +48,9 @@ class AlarmService : Service() {
         val alarmTitle = "Alarm title here"
 
         try {
-            mediaPlayer.setDataSource(this.baseContext, ringtone!!)
-            mediaPlayer.prepareAsync()
+            mediaPlayer = MediaPlayer.create(this, R.raw.track_1_lofi)
+            mediaPlayer?.isLooping = true
+            mediaPlayer?.start()
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
@@ -69,15 +69,13 @@ class AlarmService : Service() {
 
         val notification: Notification = NotificationCompat.Builder(
             this, SLEEP_ALARM_CHANNEL
-        ).setContentTitle("Ring Ring .. Ring Ring").setContentText(alarmTitle)
+        ).setContentTitle("Luna Ring").setContentText(alarmTitle)
             .setSmallIcon(R.drawable.ic_luna_small).setSound(null)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setOngoing(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
+            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
             .build()
-
-        mediaPlayer.setOnPreparedListener { mediaPlayer -> mediaPlayer.start() }
 
         val pattern = longArrayOf(0, 100, 1000)
         vibrator!!.vibrate(pattern, 0)
@@ -105,8 +103,8 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        mediaPlayer.stop()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
         vibrator!!.cancel()
     }
 

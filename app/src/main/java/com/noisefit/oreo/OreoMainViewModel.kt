@@ -44,6 +44,7 @@ import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -78,6 +79,7 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
+    val alarmRepository: AlarmRepository
 ) : BaseViewModel() {
 
 
@@ -1046,5 +1048,9 @@ constructor(
 
     fun incrementOpenCount() {
         localDataStore.incrementAppOpenCount()
+    }
+
+    fun rescheduleAlarms() {
+        alarmRepository.rescheduleAlarms()
     }
 }

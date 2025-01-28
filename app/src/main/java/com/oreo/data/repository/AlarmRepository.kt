@@ -2,6 +2,7 @@ package com.oreo.data.repository
 
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.PlannerAlarmData
+import com.noisefit_commans.utils.LOGS
 import com.oreo.util.alarm.AlarmUtil
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -13,11 +14,6 @@ class AlarmRepository @Inject constructor(
     private val alarmUtil: AlarmUtil,
 ) {
 
-    fun saveAlarm(bedTime: LocalTime, wakeTime: LocalTime, day: Int) {
-        //val savedAlarms = localDataStore.getSavedAlarms()
-
-
-    }
 
     fun getAlarmsData(): PlannerAlarmData? {
         return localDataStore.getSleepPlannerData()?.alarms
@@ -30,6 +26,10 @@ class AlarmRepository @Inject constructor(
             localDataStore.setSleepPlannerData(savedData)
         }
         scheduleAlarms(savedData?.alarms)
+    }
+
+    fun rescheduleAlarms() {
+        scheduleAlarms(getAlarmsData())
     }
 
     private fun scheduleAlarms(alarmsData: PlannerAlarmData?) {

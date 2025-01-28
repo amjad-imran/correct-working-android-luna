@@ -4,21 +4,44 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
+import android.widget.Toast
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.repository.AlarmRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var alarmRepository: AlarmRepository
+
 
     override fun onReceive(context: Context, intent: Intent?) {
 
-        val intentService = Intent(context, AlarmService::class.java)
-        val bundle = Bundle()
-        //bundle.putSerializable(context.getString(R.string.arg_alarm_obj), alarm1)
-        //intentService.putExtra(context.getString(R.string.bundle_alarm_obj), bundle)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intentService)
-        } else {
-            context.startService(intentService)
-        }
+        if (Intent.ACTION_BOOT_COMPLETED == intent?.action || Intent.ACTION_REBOOT == intent?.action) {
+            val toastText = String.format("Alarm Reboot")
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
 
+            alarmRepository.rescheduleAlarms()
+        } else {
+            val pendingIntent = Intent(context, AlarmService::class.java)
+            //val bundle = Bundle()
+            //bundle.putSerializable(context.getString(R.string.arg_alarm_obj), alarm1)
+            //intentService.putExtra(context.getString(R.string.bundle_alarm_obj), bundle)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(pendingIntent)
+            } else {
+                context.startService(pendingIntent)
+            }
+
+            LOGS.i("Alarm ringing")
+
+            /* val fullScreenIntent = Intent(context, AlarmActivity::class.java).apply {
+                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+             }
+             context.startActivity(fullScreenIntent)*/
+        }
     }
 }

@@ -125,6 +125,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     navController?.navigate(R.id.bottomSheetForceUpdate)
                 }, 3000)*/
+
+        viewModel.rescheduleAlarms()
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {

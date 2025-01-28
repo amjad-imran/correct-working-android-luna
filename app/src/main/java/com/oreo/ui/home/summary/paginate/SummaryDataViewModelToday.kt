@@ -1875,13 +1875,13 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-            Calendar.MONDAY -> alarms.mon != null
-            Calendar.TUESDAY -> alarms.tue != null
-            Calendar.WEDNESDAY -> alarms.wed != null
-            Calendar.THURSDAY -> alarms.thu != null
-            Calendar.FRIDAY -> alarms.fri != null
-            Calendar.SATURDAY -> alarms.sat != null
-            Calendar.SUNDAY -> alarms.sun != null
+            Calendar.MONDAY -> alarms.tue != null
+            Calendar.TUESDAY -> alarms.wed != null
+            Calendar.WEDNESDAY -> alarms.thu != null
+            Calendar.THURSDAY -> alarms.fri != null
+            Calendar.FRIDAY -> alarms.sat != null
+            Calendar.SATURDAY -> alarms.sun != null
+            Calendar.SUNDAY -> alarms.mon!= null
             else -> false
         }
     }

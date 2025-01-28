@@ -1,9 +1,11 @@
 package com.oreo.util.alarm
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.noisefit.ui.SplashActivity
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -11,6 +13,7 @@ class AlarmUtil @Inject constructor(
     private val context: Context,
 ) {
 
+    @SuppressLint("ScheduleExactAlarm")
     fun scheduleWeeklyAlarm(dayOfWeek: Int, hour: Int, minute: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -36,13 +39,25 @@ class AlarmUtil @Inject constructor(
             }
         }
 
-        // Schedule the alarm
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * 7, // Weekly interval
+        val showIntent = PendingIntent.getActivity(
+            context,
+            dayOfWeek,
+            Intent(context, SplashActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setAlarmClock(
+            AlarmManager.AlarmClockInfo(calendar.timeInMillis, showIntent),
             pendingIntent
         )
+
+        // Schedule the alarm
+        /*alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY * 7,
+            pendingIntent
+        )*/
     }
 
     /**
