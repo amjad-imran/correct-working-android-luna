@@ -16,7 +16,6 @@ import android.os.IBinder
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
-import com.noisefit.ui.SplashActivity
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import java.io.IOException
 
@@ -39,6 +38,7 @@ class AlarmService : Service() {
         )
     }
 
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (intent?.action == "STOP_SERVICE") {
@@ -47,63 +47,82 @@ class AlarmService : Service() {
             return START_NOT_STICKY
         }
 
-        val alarmTitle = "Alarm title here"
+        WakeLockManager.acquireServiceLock()
+//        try {
+//            val track =
+//                intent?.getIntExtra("alarmTone", getAlarmToneByKey(1)) ?: getAlarmToneByKey(1)
+//            mediaPlayer = MediaPlayer.create(this, track)
+//            mediaPlayer?.isLooping = true
+//            mediaPlayer?.start()
+//        } catch (ex: IOException) {
+//            ex.printStackTrace()
+//        }
+//
+//        val stopIntent = Intent(this, AlarmService::class.java).apply {
+//            action = "STOP_SERVICE"
+//        }
+//        val stopPendingIntent = PendingIntent.getService(
+//            this,
+//            0,
+//            stopIntent,
+//            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+//        )
 
-        try {
-            val track =
-                intent?.getIntExtra("alarmTone", getAlarmToneByKey(1)) ?: getAlarmToneByKey(1)
-            mediaPlayer = MediaPlayer.create(this, track)
-            mediaPlayer?.isLooping = true
-            mediaPlayer?.start()
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
 
-        val stopIntent = Intent(this, AlarmService::class.java).apply {
-            action = "STOP_SERVICE"
-        }
-        val stopPendingIntent = PendingIntent.getService(
-            this,
-            0,
-            stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
+        showForegroundNotification()
 
-        createNotificationChannel()
 
-        val notification: Notification = NotificationCompat.Builder(
-            this, SLEEP_ALARM_CHANNEL
-        ).setContentTitle("Luna Ring").setContentText(alarmTitle)
-            .setSmallIcon(R.drawable.ic_luna_small).setSound(null)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setOngoing(true)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
-            .build()
+//        val notification: Notification = NotificationCompat.Builder(
+//            this, SLEEP_ALARM_CHANNEL
+//        ).setContentTitle("Luna Ring").setContentText(alarmTitle)
+//            .setSmallIcon(R.drawable.ic_luna_small).setSound(null)
+//            .setCategory(NotificationCompat.CATEGORY_ALARM)
+//            .setOngoing(true)
+//            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+//            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
+//            .build()
 
         val pattern = longArrayOf(0, 100, 1000)
         vibrator!!.vibrate(pattern, 0)
 
-        startForeground(9090, notification)
-
         return START_STICKY
+    }
+
+
+    private fun showForegroundNotification() {
+        createNotificationChannel()
+        val notificationIntent = Intent(this, AlarmActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
+            .setContentTitle("Luna Ring")
+            .setContentText("Alarm title here")
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOngoing(true)
+            .setSmallIcon(R.drawable.ic_luna_small)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setFullScreenIntent(pendingIntent, true) // Ensures full-screen intent
+            .setContentIntent(pendingIntent)
+//            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
+            .build()
+        startForeground(1, notification)
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                SLEEP_ALARM_CHANNEL,
-                "Sleep Alarm",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notification channel for Alarm"
-            }
-
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+                SLEEP_ALARM_CHANNEL, "Alarm Service", NotificationManager.IMPORTANCE_HIGH
+            )
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager.createNotificationChannel(channel)
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

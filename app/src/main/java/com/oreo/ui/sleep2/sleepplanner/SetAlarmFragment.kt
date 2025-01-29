@@ -1,10 +1,20 @@
 package com.oreo.ui.sleep2.sleepplanner
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Context.AUDIO_SERVICE
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.media.AudioManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -16,11 +26,15 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit.timepickerslider.TimeRangePicker
 import com.noisefit.timepickerslider.TimeRangePicker.ClockFace
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
@@ -108,12 +122,143 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
     }
 
+
+    private fun setVolumeSeekbar() {
+        val audioManager = requireActivity().getSystemService(AUDIO_SERVICE) as AudioManager
+        binding.lytAlarmSound.lytSoundView.apply {
+            volumeSeekBar.progress = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+            volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+            ivHighVol.setOnClickListener {
+
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    AudioManager.ADJUST_RAISE,
+                    0
+                )
+                val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+                volumeSeekBar.progress = currentVolume
+            }
+            ivLowVol.setOnClickListener {
+                LOGS.d("ljdfshjkhsfdhfds low")
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    AudioManager.ADJUST_LOWER,
+                    0
+                )
+                val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+                volumeSeekBar.progress = currentVolume
+            }
+            volumeSeekBar.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+
+
+                    if (!fromUser) {
+                        return
+                    }
+
+                    if (progress < 1) {
+                        seekBar?.progress = 1
+                    }
+
+
+                    audioManager.setStreamVolume(
+                        AudioManager.STREAM_ALARM,
+                        progress,
+                        0
+                    );
+
+
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+                }
+
+            })
+        }
+
+
+    }
+
+    private fun showAllowAlarmPermission(isScheduleAlarm: Boolean) {
+        uiController.onApiErrorReceived(
+            ErrorResponse(
+                UIComponentType.AreYouSureDialog(
+                    getString(R.string.text_permission_required),
+                    getString(R.string.text_permission_denial_alarm),
+                    false,
+                    getString(R.string.text_allow),
+                    object : BinaryActionCallback {
+                        override fun yes() {
+                            if (isScheduleAlarm) {
+                                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                                intent.setData(Uri.parse("package:" + requireActivity().packageName))
+                                requireActivity().startActivity(intent)
+                            } else {
+                                val intent =
+                                    Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
+                                intent.setData(Uri.parse("package:" + requireActivity().packageName))
+                                requireActivity().startActivity(intent)
+                            }
+
+                        }
+
+                        override fun no() {
+
+                        }
+                    }
+                )
+            )
+        )
+
+    }
+
+    private fun hasFullScreenIntentPermission(): Boolean {
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            notificationManager.canUseFullScreenIntent()
+        } else {
+            true
+        }
+    }
+
+    private fun hasExactAlarmPermission(): Boolean {
+        val notificationManager =
+            requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            notificationManager.canScheduleExactAlarms()
+        } else {
+            true
+        }
+    }
+
     override fun initListener() {
+        setVolumeSeekbar()
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
 
         binding.btnSave.setOnClickListener {
+
+            if (!hasExactAlarmPermission()) {
+                showAllowAlarmPermission(true)
+                return@setOnClickListener
+            }
+
+            if (!hasFullScreenIntentPermission()) {
+                showAllowAlarmPermission(false)
+                return@setOnClickListener
+            }
             val selectedAlarms = mAdapter.getSelectedValue()
             if (selectedAlarms.isEmpty()) return@setOnClickListener
             viewModel.updateAlarms(selectedAlarms, mAdapter.getUnselectedItems())
