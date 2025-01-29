@@ -8,15 +8,14 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
-import com.noisefit.ui.SplashActivity
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import java.io.IOException
 
@@ -28,15 +27,14 @@ class AlarmService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private var ringtone: Uri? = null
 
 
     override fun onCreate() {
         super.onCreate()
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        ringtone = RingtoneManager.getActualDefaultRingtoneUri(
-            this.baseContext, RingtoneManager.TYPE_ALARM
-        )
+        /*        ringtone = RingtoneManager.getActualDefaultRingtoneUri(
+                    this.baseContext, RingtoneManager.TYPE_ALARM
+                )*/
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -53,6 +51,16 @@ class AlarmService : Service() {
             val track =
                 intent?.getIntExtra("alarmTone", getAlarmToneByKey(1)) ?: getAlarmToneByKey(1)
             mediaPlayer = MediaPlayer.create(this, track)
+
+            mediaPlayer?.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM) // Use alarm usage
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC) // Use music as the content type
+                    .build()
+            )
+            //setVolumeControlStream(AudioManager.STREAM_ALARM)
+
+
             mediaPlayer?.isLooping = true
             mediaPlayer?.start()
         } catch (ex: IOException) {

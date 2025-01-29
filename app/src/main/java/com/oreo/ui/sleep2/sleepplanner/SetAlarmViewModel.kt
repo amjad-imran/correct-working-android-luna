@@ -256,7 +256,7 @@ class SetAlarmViewModel @Inject constructor(
 
         val bedTime = LocalTime.of(3, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val wakeTime =
-            LocalTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
 
