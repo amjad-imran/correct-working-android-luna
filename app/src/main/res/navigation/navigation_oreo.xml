@@ -1239,6 +1239,9 @@
         <argument
             android:name="data"
             app:argType="com.noisefit.data.model.AiWorkout[]" />
+        <argument
+            android:name="workoutType"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/aiMealPlanFragment"
@@ -1313,4 +1316,15 @@
         android:id="@+id/bottomSheetChangeSchedule"
         android:name="com.oreo.ui.sleep2.sleepplanner.BottomSheetChangeSchedule"
         android:label="BottomSheetChangeSchedule" />
+    <fragment
+        android:id="@+id/aiMealDetailFragment"
+        android:name="com.oreo.ui.chatGpt.functions.AiMealDetailFragment"
+        android:label="AiMealDetailFragment">
+        <argument
+            android:name="meal"
+            app:argType="com.noisefit.data.model.AiMeal" />
+        <argument
+            android:name="mealName"
+            app:argType="string" />
+    </fragment>
 </navigation>

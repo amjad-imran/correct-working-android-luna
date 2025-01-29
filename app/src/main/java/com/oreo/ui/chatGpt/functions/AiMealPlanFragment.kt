@@ -1,8 +1,12 @@
 package com.oreo.ui.chatGpt.functions
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
@@ -29,32 +33,21 @@ class AiMealPlanFragment :
     }
 
     private val mealsAdapter: MealsAdapter by lazy {
-        MealsAdapter(onMealSelected = { meal ->
-           /* val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                null,
-                null,
-                AITopics.GENERAL,
-                meal
-            )
-            navigate(frag, bundle)*/
-        }, onEditClicked = {
-            navigate(AiMealPlanFragmentDirections.actionAiMealPlanFragmentToChatGptFragment(
-                "",
-                "",
-                getString(R.string.text_build_me_a_weekly_diet_plan),
-                "",
-                AITopics.GENERAL,
-                PlanType.DIET
-            ))
+        MealsAdapter(onMealSelected = { view,meal, mealName ->
+           /* findNavController().navigate(R.id.aiMealDetailFragment,
+                args = bundleOf("meal" to meal, "mealName" to mealName),
+                navOptions = null,
+                navigatorExtras = FragmentNavigatorExtras(view to "sharedImage_"))*/
+
+            navigate(R.id.aiMealDetailFragment, bundleOf("meal" to meal, "mealName" to mealName))
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_diet_plan)
+        binding.toolbar.tvTitle.text = getString(R.string.text_nutrition_plan)
+        binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
         viewModel.getMealPlans()
 
         setRecycler()
@@ -74,11 +67,24 @@ class AiMealPlanFragment :
             navigateUpSafe()
         }
 
-        binding.ivMic.setOnClickListener {
-            val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.DIET
+        /*  binding.ivMic.setOnClickListener {
+              val (frag, bundle) = AudioAiFragment.getStartData(
+                  PlanType.DIET
+              )
+              navigate(frag, bundle)
+          }*/
+
+        binding.ivEdit.setOnClickListener {
+            navigate(
+                AiMealPlanFragmentDirections.actionAiMealPlanFragmentToChatGptFragment(
+                    "",
+                    "",
+                    getString(R.string.text_build_me_a_weekly_diet_plan),
+                    "",
+                    AITopics.GENERAL,
+                    PlanType.DIET
+                )
             )
-            navigate(frag, bundle)
         }
     }
 

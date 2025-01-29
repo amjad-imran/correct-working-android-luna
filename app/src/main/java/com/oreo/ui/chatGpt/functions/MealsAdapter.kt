@@ -1,9 +1,11 @@
 package com.oreo.ui.chatGpt.functions
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.model.AiMeal
 import com.noisefit.data.model.AiMeals
 import com.noisefit.luna.databinding.RowAiWorkoutBinding
 import com.noisefit.luna.databinding.RowMealDataBinding
@@ -11,8 +13,9 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 
-class MealsAdapter(val onMealSelected: (AiMeals) -> Unit, val onEditClicked: () -> Unit) :
+class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
+
     private val mDataSet = ArrayList<AiMeals>()
 
     inner class ViewHolder(val binding: RowMealDataBinding) :
@@ -21,23 +24,10 @@ class MealsAdapter(val onMealSelected: (AiMeals) -> Unit, val onEditClicked: () 
 
             binding.tvTitle.text = data.meal_type
             binding.rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvMeals.adapter = SubMealAdapter(data.meal ?: ArrayList())
+            binding.rvMeals.adapter = SubMealAdapter(data.meal ?: ArrayList(), onMealSelected = {
+                onMealSelected.invoke(binding.root,it,data.meal_type?:"")
+            })
 
-            binding.vRoot.setOnClickListener {
-                onMealSelected.invoke(data)
-            }
-
-            if (bindingAdapterPosition == mDataSet.size - 1) {
-                binding.tvEditDietPlan.visible()
-            } else {
-                binding.tvEditDietPlan.gone()
-            }
-
-            binding.ivMealImage.loadImage(binding.ivMealImage.context, data.img)
-
-            binding.tvEditDietPlan.setOnClickListener {
-                onEditClicked()
-            }
         }
 
     }

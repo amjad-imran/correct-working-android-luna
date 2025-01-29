@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeableImageView12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+    <TextView
+        android:id="@+id/tvProtein"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#00460B"
+        app:layout_constraintEnd_toEndOf="@+id/textView148"
+        app:layout_constraintStart_toStartOf="@+id/textView148"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="10gm" />
+
+    <TextView
+        android:id="@+id/textView148"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="Protein"
+        android:textColor="#99094B13"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProtein" />
+
+    <TextView
+        android:id="@+id/tvFibre"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:textColor="#00460B"
+        app:layout_constraintEnd_toEndOf="@+id/textView147"
+        app:layout_constraintStart_toEndOf="@+id/textView148"
+        app:layout_constraintTop_toTopOf="@+id/tvProtein"
+        tools:text="10gm" />
+
+    <TextView
+        android:id="@+id/textView147"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Fibre"
+        android:textColor="#99094B13"
+        app:layout_constraintEnd_toStartOf="@+id/textView149"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView148"
+        app:layout_constraintTop_toTopOf="@+id/textView148" />
+
+    <TextView
+        android:id="@+id/tvFat"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#00460B"
+        app:layout_constraintEnd_toEndOf="@+id/textView149"
+        app:layout_constraintStart_toEndOf="@+id/textView147"
+        app:layout_constraintTop_toTopOf="@+id/tvProtein"
+        tools:text="10gm" />
+
+    <TextView
+        android:id="@+id/textView149"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Fat"
+        android:textColor="#99094B13"
+        app:layout_constraintEnd_toStartOf="@+id/textView150"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView147"
+        app:layout_constraintTop_toTopOf="@+id/textView148" />
+
+    <TextView
+        android:id="@+id/tvCarbs"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#00460B"
+        app:layout_constraintEnd_toEndOf="@+id/textView150"
+        app:layout_constraintStart_toEndOf="@+id/textView149"
+        app:layout_constraintTop_toTopOf="@+id/tvProtein"
+        tools:text="10gm" />
+
+    <TextView
+        android:id="@+id/textView150"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:text="Carbs"
+        android:textColor="#99094B13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView149"
+        app:layout_constraintTop_toTopOf="@+id/textView148" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

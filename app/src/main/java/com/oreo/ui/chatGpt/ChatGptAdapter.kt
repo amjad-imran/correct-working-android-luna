@@ -219,11 +219,11 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             binding.lytMeal.apply {
                 tvTitle.gone()
                 imageView58.gone()
-                tvEditDietPlan.gone()
+                //tvEditDietPlan.gone()
                 root.visible()
-                ivMealImage.loadImage(ivMealImage.context, data.meal.img)
+                //ivMealImage.loadImage(ivMealImage.context, data.meal.img)
                 rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
-                rvMeals.adapter = SubMealAdapter(data.meal.meal ?: ArrayList())
+                rvMeals.adapter = SubMealAdapter(data.meal.meal ?: ArrayList()){}
             }
 
         }

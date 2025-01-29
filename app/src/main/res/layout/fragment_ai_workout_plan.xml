@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/image_back_luna_ai_new"
+    android:background="@drawable/back_ai_nutrition"
     tools:context="com.oreo.ui.chatGpt.functions.AiMealPlanFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -16,15 +16,35 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/layout_toolbar"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_collapseMode="pin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/layout_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="pin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivEdit"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="16dp"
+                    app:contentPadding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#0affffff"
+                    android:src="@drawable/ic_edit_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -66,18 +86,6 @@
                 android:layout_marginHorizontal="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivMic"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="#F2FFFA"
-        app:contentPadding="12dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="8dp"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
-        android:src="@drawable/ic_ai_mic_black"/>
 
     <include
         android:id="@+id/progressBar"

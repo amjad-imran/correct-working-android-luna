@@ -1,13 +1,19 @@
 package com.oreo.ui.chatGpt.functions
 
+import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.AiWorkout
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiWorkoutDetailBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -19,8 +25,16 @@ class AiWorkoutDetailFragment :
     BaseFragment<FragmentAiWorkoutDetailBinding>(FragmentAiWorkoutDetailBinding::inflate) {
 
     val navArgs: AiWorkoutDetailFragmentArgs by navArgs()
+    private val TIMER_DURATION = 3000L
 
-    var dataList = ArrayList<AiWorkout>()
+    private var dataList = ArrayList<AiWorkout>()
+
+    //move to viewModel
+    private var timer: CountDownTimer? = null
+    private val messagesStrings = ArrayList<String>()
+    private val displayMessage = MutableLiveData<String>()
+    private var currentPos = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,21 +42,33 @@ class AiWorkoutDetailFragment :
 
         this.dataList.clear()
         this.dataList.addAll(dataList)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setUI()
+        setUI(navArgs.workoutType)
     }
 
-    private fun setUI() {
+    private fun setUI(workoutType: String) {
+        binding.toolbar.tvTitle.text = getString(R.string.text_workout)
+        binding.toolbar.tvTitle.setTextColor(Color.parseColor("#A8FFFF"))
+
         val workout = dataList.first()
 
-        binding.tvWorkoutName.text = workout.workout_name
-        binding.tvSetsData.text = workout.reps
-        binding.tvDescription.text = workout.description
+        messagesStrings.add("Find alternatives of ${workout.workout_name}")
+        messagesStrings.add("How does ${workout.workout_name} help my body")
+        messagesStrings.add("Find alternatives of ${workout.workout_name}")
+
+        displayMessage.postValue(getWorkoutAiString(currentPos))
+        startTimer()
+
+        binding.lytWorkoutDetails.apply {
+            tvWorkoutType.text = workoutType
+            // workout.reps
+
+            tvWorkoutName.text = workout.workout_name
+            tvDescription.text = workout.description
+        }
 
         if (dataList.size > 1) {
             binding.ivNext.visible()
@@ -58,19 +84,19 @@ class AiWorkoutDetailFragment :
         binding.ivMic.setOnClickListener {
             val workout = dataList.first()
             val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.WORKOUT,
+                PlanType.NONE,
                 workout.workout_name
             )
             navigate(frag, bundle)
         }
         binding.ivTextChat.setOnClickListener {
+            val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
+                ques,
                 null,
-                null,
-                AITopics.GENERAL,
-                workout = dataList.first()
+                AITopics.GENERAL
             )
             navigate(frag, bundle)
         }
@@ -90,10 +116,39 @@ class AiWorkoutDetailFragment :
 
     private fun onNextClicked() {
         this.dataList.removeAt(0)
-        setUI()
+        setUI(navArgs.workoutType)
     }
 
     override fun subscribeObservers() {
 
+        displayMessage.observe(this) {
+            if (it.isNotEmpty()) {
+                binding.tvMessages.text = it
+            }
+        }
+    }
+
+    private fun getWorkoutAiString(position: Int): String {
+        return messagesStrings.getOrNull(position) ?: ""
+    }
+
+    private fun startTimer() {
+        timer?.cancel()
+        timer = object : CountDownTimer(TIMER_DURATION, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+
+            }
+
+            override fun onFinish() {
+                currentPos += 1
+
+                if (currentPos >= (messagesStrings.size - 1)) {
+                    currentPos = 0
+                }
+                displayMessage.postValue(getWorkoutAiString(currentPos))
+                startTimer()
+            }
+        }
+        timer?.start()
     }
 }

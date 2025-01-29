@@ -1800,5 +1800,8 @@
     <string name="text_sleep_nduration">Sleep\nduration</string>
     <string name="text_volume_message">Please ensure notification volume is not muted to listen to this alarm</string>
     <string name="text_delete_alarm">Delete alarm</string>
+    <string name="text_nutrition_plan">Nutrition Plan</string>
+    <string name="text_details">Details</string>
+    <string name="text_description">Description</string>
 
 </resources>
