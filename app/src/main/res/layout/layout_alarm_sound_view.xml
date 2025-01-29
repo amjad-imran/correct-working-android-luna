@@ -34,7 +34,8 @@
             android:id="@+id/ivLowVol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="10dp"
+            android:padding="@dimen/dimen_4dp"
             android:src="@drawable/ic_volume_up"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView1"
@@ -43,9 +44,10 @@
         <SeekBar
             android:id="@+id/volumeSeekBar"
             android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
+            android:paddingTop="@dimen/dimen_4dp"
+            android:paddingBottom="@dimen/dimen_4dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
             android:thumb="@null"
             app:layout_constraintBottom_toBottomOf="@id/ivLowVol"
             app:layout_constraintEnd_toStartOf="@id/ivHighVol"
@@ -56,10 +58,12 @@
             android:id="@+id/ivHighVol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:padding="@dimen/dimen_4dp"
             android:src="@drawable/ic_volume_upto"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeSeekBar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView1"
+
+            app:layout_constraintTop_toTopOf="@+id/volumeSeekBar"
             tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

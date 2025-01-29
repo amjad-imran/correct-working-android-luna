@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.noisefit.luna.R
-import com.noisefit.ui.SplashActivity
 import com.noisefit_commans.utils.LOGS
 import java.util.Calendar
 import javax.inject.Inject
@@ -46,7 +45,7 @@ class AlarmUtil @Inject constructor(
         val showIntent = PendingIntent.getActivity(
             context,
             dayOfWeek,
-            Intent(context, SplashActivity::class.java),
+            Intent(context, AlarmActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -56,6 +55,9 @@ class AlarmUtil @Inject constructor(
         )
 
 
+//        alarmManager.setExactAndAllowWhileIdle(
+//            AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent
+//        );
         preAlarmNotificationSchedule(context, dayOfWeek * 100, calendar.timeInMillis)
 
         // Schedule the alarm

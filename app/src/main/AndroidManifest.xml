@@ -33,6 +33,11 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
 
     <!--<uses-feature android:name="android.software.companion_device_setup"/>-->
     <application
@@ -58,6 +63,11 @@
         <receiver android:name="com.oreo.util.alarm.WindDownNotification" android:exported="true" />
 
         <service android:name="com.oreo.util.alarm.AlarmService"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:taskAffinity=""
             android:permission="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
             android:foregroundServiceType="mediaPlayback"/>
 
@@ -97,10 +107,12 @@
 
         <activity android:name="com.oreo.util.alarm.AlarmActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"/>
+            android:showWhenLocked="true" />
         <activity
             android:name="com.noisefit.ui.SplashActivity"
             android:exported="true"
