@@ -284,7 +284,7 @@ class ONapDetailsFragment :
             val preFix2: String
             val newRScore = it.readinessScore
             val oldRScore = it.prevReadinessScore
-            if (oldRScore != null && newRScore != null) {
+            if (oldRScore != null && newRScore != null && (newRScore - oldRScore != 0)) {
                 if (newRScore > oldRScore) {
                     diffRScore = (newRScore - oldRScore).toString()
                     preFix2 = "+"
@@ -338,7 +338,7 @@ class ONapDetailsFragment :
             val newSScore = it.sleepScore
             val oldSScore = it.prevSleepScore
             var isScoreGreater = false
-            if (oldSScore != null && newSScore != null) {
+            if (oldSScore != null && newSScore != null && (newSScore - oldSScore != 0)) {
                 if (newSScore > oldSScore) {
                     diffScore = (newSScore - oldSScore).toString()
                     preFix = "+"
