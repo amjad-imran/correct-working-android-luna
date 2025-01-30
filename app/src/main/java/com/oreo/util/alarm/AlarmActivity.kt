@@ -2,11 +2,15 @@ package com.oreo.util.alarm
 
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.noisefit.luna.databinding.ActivityAlarmBinding
+import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.utils.LOGS
 
 
@@ -34,45 +38,36 @@ class AlarmActivity : AppCompatActivity() {
         turnScreenOn()
         binding = ActivityAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val alarmTime = intent?.getStringExtra("time")
 
-
-//        mediaPlayer = MediaPlayer()
-//        try {
-//            mediaPlayer!!.setDataSource(
-//                this,
-//                Uri.parse("android.resource://"+ packageName +"/"+R.raw.track_1_lofi)
-//            )
-//            mediaPlayer!!.setAudioAttributes(
-//                AudioAttributes.Builder()
-//                    .setUsage(AudioAttributes.USAGE_ALARM)
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                    .build()
-//            )
-//            mediaPlayer!!.prepare()
-//            mediaPlayer?.isLooping = true // Repeat audio until dismissed
-//            mediaPlayer?.start()
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
-
-
-        // Initialize MediaPlayer
-//        mediaPlayer = MediaPlayer.create(this, R.raw.track_1_lofi)
-//        mediaPlayer?.setAudioStreamType(AudioManager.STREAM_ALARM);
-//        mediaPlayer?.isLooping = true // Repeat audio until dismissed
-//        mediaPlayer?.start()
-
+        binding.tvAlarmTime.text = alarmTime
+        setTextColor()
         // Set up the dismiss button
         binding.tvDismiss.setOnClickListener {
             LOGS.d("sadhjdsadjaskdsa dismiss")
             stopService()
-//            mediaPlayer?.stop()
-//            mediaPlayer?.release()
-//            mediaPlayer = null
-//            ringtone?.stop()
-            //wakeLock.release()
             finish()
         }
+    }
+
+    private fun setTextColor() {
+        binding.tvAlarmTime.apply {
+            setTextColor(Color.parseColor("#FFFFFF"))
+            val textShader: Shader = LinearGradient(
+                0f,
+                this.paint.measureText(this.text.toString()),
+                0f,
+                0f,
+                intArrayOf(
+                    Color.parseColor("#EDCDA8"),
+                    Color.parseColor("#DC7D38"),
+                ),
+                floatArrayOf(0f, 1f),
+                Shader.TileMode.CLAMP
+            )
+            this.paint.shader = textShader
+        }
+
     }
 
     private fun stopService() {
@@ -88,14 +83,6 @@ class AlarmActivity : AppCompatActivity() {
         LOGS.d("sadhjdsadjaskdsa onDestroy")
         stopService()
 
-//        try {
-//            mediaPlayer?.stop()
-//        } catch (e: Exception) {
-//
-//        }
-
-//        ringtone?.stop()
-//        ringtone = null
     }
 
 

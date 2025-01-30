@@ -29,6 +29,10 @@ class AlarmReceiver : BroadcastReceiver() {
                 "alarmTone",
                 intent?.getIntExtra("alarmTone", getAlarmToneByKey(1))
             )
+            pendingIntent.putExtra(
+                "time",
+                intent?.getStringExtra("time")
+            )
             //val bundle = Bundle()
             //bundle.putSerializable(context.getString(R.string.arg_alarm_obj), alarm1)
             //intentService.putExtra(context.getString(R.string.bundle_alarm_obj), bundle)
@@ -40,10 +44,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
             LOGS.i("Alarm ringing")
 
-            /* val fullScreenIntent = Intent(context, AlarmActivity::class.java).apply {
-                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-             }
-             context.startActivity(fullScreenIntent)*/
         }
     }
 }

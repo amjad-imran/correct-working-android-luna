@@ -9,7 +9,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
@@ -44,11 +43,12 @@ class AlarmService : Service() {
             stopService()
             return START_NOT_STICKY
         }
+        val tone = intent?.getIntExtra("alarmTone", AlarmUtil.getAlarmToneByKey(1))
 
         ringtone = null
         ringtone = RingtoneManager.getRingtone(
             applicationContext,
-            Uri.parse("android.resource://" + packageName + "/" + R.raw.track_1_lofi)
+            Uri.parse("android.resource://" + packageName + "/" + AlarmUtil.getAlarmToneByKey(tone!!))
         )
         ringtone!!.setAudioAttributes(
             AudioAttributes.Builder()
@@ -57,7 +57,7 @@ class AlarmService : Service() {
         )
         ringtone?.play()
         WakeLockManager.acquireServiceLock()
-        showForegroundNotification()
+        showForegroundNotification(intent)
         val pattern = longArrayOf(0, 100, 1000)
         vibrator!!.vibrate(pattern, 0)
 
@@ -65,15 +65,20 @@ class AlarmService : Service() {
     }
 
 
-    private fun showForegroundNotification() {
+    private fun showForegroundNotification(intent: Intent?) {
         createNotificationChannel()
         val notificationIntent = Intent(this, AlarmActivity::class.java)
+        notificationIntent.putExtra(
+            "time",
+            intent?.getStringExtra("time")
+        )
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
         val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
             .setContentTitle("Luna Ring")
             .setContentText("Alarm title here")

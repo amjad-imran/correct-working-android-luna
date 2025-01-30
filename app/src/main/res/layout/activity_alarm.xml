@@ -4,37 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cc000000"
+    android:background="#000000"
     android:fitsSystemWindows="true"
     tools:context="com.oreo.util.alarm.AlarmActivity">
 
 
     <TextView
-        android:id="@+id/textView145"
-        style="@style/S16"
+        android:id="@+id/tvAlarmTime"
+        style="@style/S18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Alarm"
-        android:textColor="@color/white_60"
-        android:textSize="60sp"
+        android:lineSpacingExtra="-67sp"
+        android:text="@string/text_alarm"
+        android:textColor="#EDCDA8"
+        android:textSize="82sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTextAlarm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="10:06" />
+
+    <TextView
+        android:id="@+id/tvTextAlarm"
+        style="@style/S18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="-22sp"
+        android:text="@string/text_alarm"
+        android:textColor="#EDCDA8"
         app:layout_constraintBottom_toTopOf="@+id/tvDismiss"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvDismiss"
-        style="@style/S16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dismiss"
-        android:textColor="@color/white_60"
-        android:textSize="60dp"
+    <ImageView
+        android:layout_width="0dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_alarm_ring"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView145" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/tvDismiss"
+        style="@style/SecondaryNapButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="76dp"
+        android:text="@string/stop"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
