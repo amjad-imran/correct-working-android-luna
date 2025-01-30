@@ -139,7 +139,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 volumeSeekBar.progress = currentVolume
             }
             ivLowVol.setOnClickListener {
-                LOGS.d("ljdfshjkhsfdhfds low")
                 audioManager.adjustStreamVolume(
                     AudioManager.STREAM_ALARM,
                     AudioManager.ADJUST_LOWER,
@@ -360,6 +359,15 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             setTextGradient(isDurationMin, binding.lytAlarmTime.tvHour)
             setTextGradient(isDurationMin, binding.lytAlarmTime.tvMin)
 
+            if (isDurationMin) {
+                binding.ivTick.gone()
+                binding.tvGoalDesc.text =
+                    getString(R.string.text_this_schedule_does_not_meet_your_sleep_goal)
+            } else {
+                binding.ivTick.visible()
+                binding.tvGoalDesc.text =
+                    getString(R.string.text_this_schedule_meets_your_sleep_goal)
+            }
         }
 
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
