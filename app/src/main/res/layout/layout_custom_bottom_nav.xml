@@ -200,15 +200,20 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
 
-        <ImageView
+
+
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/ivLunaAi"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:padding="6dp"
-            android:src="@drawable/ic_dash_luna_zone_default"
+            android:scaleType="fitXY"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_luna_bottom_menu" />
 
         <TextView
             style="@style/Tinny"
@@ -222,7 +227,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLunaAi" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </LinearLayout>

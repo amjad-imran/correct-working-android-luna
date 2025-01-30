@@ -12,14 +12,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.os.postDelayed
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.freshchat.consumer.sdk.Freshchat
@@ -62,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import java.time.LocalDate
+import kotlin.text.toFloat
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -127,6 +127,51 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }, 3000)*/
 
         viewModel.rescheduleAlarms()
+        setLunaIcon()
+    }
+
+    private fun setLunaIcon() {
+
+
+      /*  binding.navView.ivLunaAi.post {
+            val viewWidth = 36f * resources.displayMetrics.density
+            val viewHeight = 36f * resources.displayMetrics.density
+
+            // Get the animation's intrinsic width and height
+            val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
+            val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
+
+            // Calculate the scale factors
+            val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
+            val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
+
+            // Apply the scale
+            binding.navView.ivLunaAi.scaleX = scaleX
+            binding.navView.ivLunaAi.scaleY = scaleY
+
+        }*/
+
+        /*binding.navView.ivLunaAi.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                // Remove the listener to avoid multiple calls
+                binding.navView.ivLunaAi.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                val viewWidth = 36f * resources.displayMetrics.density
+                val viewHeight = 36f * resources.displayMetrics.density
+
+                // Get the animation's intrinsic width and height
+                val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
+                val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
+
+                // Calculate the scale factors
+                val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
+                val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
+
+                // Apply the scale
+                binding.navView.ivLunaAi.scaleX = scaleX
+                binding.navView.ivLunaAi.scaleY = scaleY
+            }
+        })*/
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {
@@ -1044,7 +1089,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
 
                 binding.navView.apply {
@@ -1070,7 +1115,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
@@ -1094,7 +1139,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
@@ -1117,7 +1162,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
@@ -1140,7 +1185,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
 
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_selected)
+                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_selected)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
