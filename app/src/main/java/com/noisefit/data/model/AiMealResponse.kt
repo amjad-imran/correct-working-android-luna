@@ -18,6 +18,11 @@ data class AiMeals(
 @Parcelize
 data class AiMeal(
     val portion: String? = null,
+    val calories: String? = null,
+    val fat: String? = null,
+    val fibre: String? = null,
+    val protein: String? = null,
+    val carbohydrate: String? = null,
     val meal_name: String? = null,
     val description: String? = null,
 ) : Parcelable

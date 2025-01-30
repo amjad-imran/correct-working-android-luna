@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.AiMeal
 import com.noisefit.luna.databinding.RowSubMealBinding
+import com.noisefit_commans.ui.gone
 
-class SubMealAdapter(val mDataSet: List<AiMeal>) :
+class SubMealAdapter(val mDataSet: List<AiMeal>, val onMealSelected: (AiMeal) -> Unit) :
     RecyclerView.Adapter<SubMealAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: RowSubMealBinding) :
@@ -14,6 +15,10 @@ class SubMealAdapter(val mDataSet: List<AiMeal>) :
         fun bind(data: AiMeal) {
             binding.tvTitle.text = data.meal_name
             binding.tvSubTitle.text = data.portion
+
+            binding.root.setOnClickListener {
+                onMealSelected(data)
+            }
         }
     }
 

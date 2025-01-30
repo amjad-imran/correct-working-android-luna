@@ -1946,7 +1946,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val currentTime = LocalTime.now()
             val minutes =
                 ((parsedTime.hour * 60) + parsedTime.minute) - ((currentTime.hour * 60) + currentTime.minute)
-            if (minutes <= 30) {
+            if (minutes <= 60) {
                 breathingExercise = true
             }
         }

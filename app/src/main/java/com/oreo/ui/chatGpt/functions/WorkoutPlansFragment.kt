@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt.functions
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -32,7 +33,13 @@ class WorkoutPlansFragment :
     private val viewModel: WorkoutPlanViewModel by viewModels()
     private val mAdapter: AiWorkoutAdapter by lazy {
         AiWorkoutAdapter(onWorkoutSelected = {
-            navigate(R.id.aiWorkoutDetailFragment, bundleOf("data" to it.toTypedArray()))
+            navigate(
+                R.id.aiWorkoutDetailFragment,
+                bundleOf(
+                    "data" to it.toTypedArray(),
+                    "workoutType" to (viewModel.dayTitle.value ?: "")
+                )
+            )
         })
     }
 
@@ -41,7 +48,8 @@ class WorkoutPlansFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_workout_plan)
+        binding.toolbar.tvTitle.text = getString(R.string.text_workout)
+        binding.toolbar.tvTitle.setTextColor(Color.parseColor("#A8FFFF"))
 
         viewModel.getWorkoutPlans()
         setRecycler()
