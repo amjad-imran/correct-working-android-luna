@@ -72,7 +72,7 @@ class AlarmUtil @Inject constructor(
 
     @SuppressLint("ScheduleExactAlarm")
     private fun preAlarmNotificationSchedule(context: Context, notificationId: Int, millis:Long) {
-        val beforeMillis = /*30*/1 * 60 * 1000L
+        val beforeMillis = 60 * 60 * 1000L
         val title = "Test title"
         val message = "Test message"
 
