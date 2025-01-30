@@ -7,6 +7,8 @@ import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -24,6 +26,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,8 +40,7 @@ class OAddSleepViewModel
 @Inject
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
-    private val resourcesProvider: ResourcesProvider,
-    private val offlineDataMapper: OreoOfflineDataMapper,
+    private val keyValueDataSource: KeyValueDataSource,
     private val localDataStore: DataStoredInterface,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val oreoStepsDataImpl: OreoSyncRepository,
@@ -245,14 +247,19 @@ constructor(
                             if (enableGoogleFit && syncSleep) {
                                 try {
                                     jsonArray.forEach {
-                                        val breakup = (it as JsonObject).getAsJsonObject("day_break_up")
+                                        val breakup =
+                                            (it as JsonObject).getAsJsonObject("day_break_up")
                                         val startTime = breakup.get("start_time").asString
                                         val endTime = breakup.get("end_time").asString
-                                        addSleepToGoogleFit(startTime+":00", endTime+":00")
+                                        addSleepToGoogleFit(startTime + ":00", endTime + ":00")
                                     }
-                                }catch (ignored:Exception){ }
+                                } catch (ignored: Exception) {
+                                }
                             }
-                            _addSleepResponse.postValue(Event(true))
+                            withContext(Dispatchers.IO) {
+                                keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
+                                _addSleepResponse.postValue(Event(true))
+                            }
                         }
                     }
                 }
@@ -338,7 +345,8 @@ constructor(
                                         val endTime = it.get("end_time").asString
                                         addSleepToGoogleFit(startTime, endTime)
                                     }
-                                }catch (ignored:Exception){ }
+                                } catch (ignored: Exception) {
+                                }
                             }
 
                             _addSleepResponse.postValue(Event(true))

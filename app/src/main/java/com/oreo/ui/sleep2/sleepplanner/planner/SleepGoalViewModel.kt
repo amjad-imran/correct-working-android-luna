@@ -11,7 +11,9 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,9 +59,11 @@ class SleepGoalViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            localDataStore.setSleepPlannerData(null)
-                            userSelectedGoal.postValue(Event(it?.goal ?: ""))
-                            newSelectedGoalKey = it?.goal
+                            withContext(Dispatchers.IO){
+                                userActivityRepository.removeSleepPlannerData()
+                                userSelectedGoal.postValue(Event(it?.goal ?: ""))
+                                newSelectedGoalKey = it?.goal
+                            }
                         }
                     }
                 }

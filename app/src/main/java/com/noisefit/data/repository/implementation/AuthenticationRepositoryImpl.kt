@@ -124,6 +124,7 @@ class AuthenticationRepositoryImpl(
     override suspend fun logoutUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
 
             val url = "${BuildConfig.BASE_URL_NEW}/auth_v2/logout"

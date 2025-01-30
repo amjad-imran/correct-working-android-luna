@@ -68,18 +68,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/timePicker" />
 
-                <TextView
-                    android:id="@+id/tvGoalDesc"
-                    style="@style/Small"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/lytGoalDesc"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="12dp"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/white_60"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lytAlarmTime"
-                    tools:text="This schedule does not meet your sleep goal" />
+                    app:layout_constraintTop_toBottomOf="@id/lytAlarmTime">
+
+                    <ImageView
+                        android:id="@+id/ivTick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_tick_sleep_planner" />
+
+                    <TextView
+                        android:id="@+id/tvGoalDesc"
+                        style="@style/Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:textColor="@color/white_60"
+                        tools:text="This schedule does not meet your sleep goal" />
+                </LinearLayout>
 
                 <include
                     android:id="@+id/lytActiveDays"
@@ -89,7 +105,7 @@
                     android:layout_marginStart="@dimen/side_margin"
                     android:layout_marginTop="34dp"
                     android:layout_marginEnd="@dimen/side_margin"
-                    app:layout_constraintTop_toBottomOf="@id/tvGoalDesc" />
+                    app:layout_constraintTop_toBottomOf="@id/lytGoalDesc" />
 
                 <include
                     android:id="@+id/lytAlarmSound"

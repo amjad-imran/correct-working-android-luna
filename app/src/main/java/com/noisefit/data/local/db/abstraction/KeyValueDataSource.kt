@@ -10,6 +10,10 @@ interface KeyValueDataSource {
         keyValue: KeyValue
     )
 
+    suspend fun updateData(
+        keyValue: KeyValue
+    )
+
     suspend fun getData(key: String, type: KeyValueDataType): KeyValue?
 
     suspend fun removeDataByKey(key: String, type: KeyValueDataType)
@@ -18,5 +22,6 @@ interface KeyValueDataSource {
 }
 
 enum class KeyValueDataType {
-    CONTRIBUTORS, H_AND_S, LEARN, RECORD_WORKOUT, FEMALE_CYCLE_HISTORY, FEMALE_SYMPTOMS_ICON, FEMALE_HEALTH_CURRENT_DAY_V2
+    CONTRIBUTORS, H_AND_S, LEARN, RECORD_WORKOUT, FEMALE_CYCLE_HISTORY, FEMALE_SYMPTOMS_ICON, FEMALE_HEALTH_CURRENT_DAY_V2,
+    SLEEP_PLANNER
 }

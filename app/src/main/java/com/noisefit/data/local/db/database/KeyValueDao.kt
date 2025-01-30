@@ -19,4 +19,5 @@ interface KeyValueDao : BaseDao<KeyValue> {
 
     @Query("DELETE FROM key_value WHERE type = :type")
     fun deleteByType(type: String)
+
 }

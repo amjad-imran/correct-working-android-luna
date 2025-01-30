@@ -1,35 +1,81 @@
 package com.oreo.data.repository
 
+import androidx.compose.runtime.key
+import com.google.gson.Gson
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.PlannerAlarmData
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.util.alarm.AlarmUtil
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
 class AlarmRepository @Inject constructor(
-    private val localDataStore: DataStoredInterface,
+    private val keyValueDataSource: KeyValueDataSource,
+    private val gson: Gson,
     private val alarmUtil: AlarmUtil,
 ) {
+    suspend fun getAlarmsData(): PlannerAlarmData? {
+        val localData =
+            keyValueDataSource.getData("", KeyValueDataType.SLEEP_PLANNER) ?: return null
 
-
-    fun getAlarmsData(): PlannerAlarmData? {
-        return localDataStore.getSleepPlannerData()?.alarms
+        val data = localData.value?.let {
+            Gson().fromJson<SleepPlannerData>(
+                it
+            )
+        }
+        return data?.alarms
     }
 
-    fun updateAlarms(alarms: PlannerAlarmData) {
-        val savedData = localDataStore.getSleepPlannerData()
+    suspend fun updateAlarms(alarms: PlannerAlarmData) {
+        val localData =
+            keyValueDataSource.getData("", KeyValueDataType.SLEEP_PLANNER)
+
+        val savedData = localData?.value?.let {
+            Gson().fromJson<SleepPlannerData>(
+                it
+            )
+        }
+
         if (savedData != null) {
             savedData.alarms = alarms
-            localDataStore.setSleepPlannerData(savedData)
+
+
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.SLEEP_PLANNER)
+            keyValueDataSource.insertData(
+                KeyValue(
+                    key = "",
+                    value = gson.toJson(savedData),
+                    type = KeyValueDataType.SLEEP_PLANNER.name
+                )
+            )
+
+            //TODO check
+            /*keyValueDataSource.updateData(
+                KeyValue(
+                    key = "",
+                    value = gson.toJson(savedData),
+                    type = KeyValueDataType.SLEEP_PLANNER.name
+                )
+            )*/
         }
+
         scheduleAlarms(savedData?.alarms)
     }
 
     fun rescheduleAlarms() {
-        scheduleAlarms(getAlarmsData())
+        GlobalScope.launch(Dispatchers.IO) {
+            scheduleAlarms(getAlarmsData())
+        }
     }
 
     private fun scheduleAlarms(alarmsData: PlannerAlarmData?) {
@@ -38,8 +84,9 @@ class AlarmRepository @Inject constructor(
         alarmsData?.getNonNullAlarms()?.forEach {
             val wakeTime =
                 LocalTime.parse(it.second.wake_time, DateTimeFormatter.ofPattern("HH:mm:ss"))
-            alarmUtil.scheduleWeeklyAlarm(it.first, wakeTime.hour, wakeTime.minute,
-                getAlarmToneByKey(it.second.audio?:1)
+            alarmUtil.scheduleWeeklyAlarm(
+                it.first, wakeTime.hour, wakeTime.minute,
+                getAlarmToneByKey(it.second.audio ?: 1)
             )
         }
     }

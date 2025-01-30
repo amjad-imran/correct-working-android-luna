@@ -14,7 +14,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,6 +36,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.SleepCardDashState
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
@@ -59,7 +59,6 @@ import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -202,7 +201,7 @@ class SummaryDataFragmentToday :
         handleFindMyRingCard()
         viewModel.handleGoogleFitCard()
 
-        viewModel.getSleepPlanerDetails()
+        //viewModel.getSleepPlanerDetails()
 
     }
 
@@ -216,6 +215,7 @@ class SummaryDataFragmentToday :
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
+                viewModel.getSleepPlanerDetails()
             }
         }
     }

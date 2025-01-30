@@ -3,6 +3,8 @@ package com.oreo.ui.chatGpt.audio
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
+import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -43,7 +45,14 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
+import kotlin.collections.addAll
+import kotlin.math.abs
+import kotlin.math.log10
+import kotlin.math.max
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -56,6 +65,10 @@ class AudioAiViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var isMicOn: Boolean = false
+
+    val aiTalkingAmplitude = MutableLiveData<Int>()
+    val audioSessionId = MutableLiveData<Event<Int>>()
+    val TALKING_MAX_AMPLITUDE = 32767
 
     var AMPLITUDE_MAX = 100
     private val SILENCE_DURATION: Long = 2000
@@ -214,6 +227,13 @@ class AudioAiViewModel @Inject constructor(
 
             audioTrack?.play()
 
+           /* audioSessionId.postValue(
+                Event(
+                    audioTrack?.audioSessionId ?: -1
+                )
+            )*/
+
+
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
                 var line: String
                 while ((reader.readLine().also { line = it }) != null) {
@@ -225,7 +245,7 @@ class AudioAiViewModel @Inject constructor(
 
                             val audioData = try {
                                 response.choices?.get(0)?.delta?.audio?.data
-                            }catch (exp:Exception){
+                            } catch (exp: Exception) {
                                 null
                             }
 
@@ -239,6 +259,20 @@ class AudioAiViewModel @Inject constructor(
                             if (audioData != null) {
                                 val decodedAudio = Base64.decode(audioData, Base64.DEFAULT)
                                 audioTrack?.write(decodedAudio, 0, decodedAudio.size)
+
+
+                                /*val amplitude = calculateAmplitude(decodedAudio)
+                                val dB = calculateAmplitudeDb(decodedAudio)*/
+
+                                //LOGS.d("Amplitude___", "Peak: $amplitude")//(0 - 32767)
+                                //LOGS.d("Amplitude___", "dB: $dB")
+
+                                //aiTalkingAmplitude.postValue(amplitude)
+
+
+                                /* val chunk = audioData.sliceArray(startIndex until endIndex)
+                                 val maxAmplitude = findMaxAmplitude(chunk)*/
+
                             }
                         }
 
@@ -265,18 +299,6 @@ class AudioAiViewModel @Inject constructor(
         }
     }
 
-    private fun logInputStream() {
-        try {
-            val reader = BufferedReader(InputStreamReader(inputStream))
-            val resp: StringBuilder = StringBuilder()
-            var line: String?
-            while ((reader.readLine().also { line = it }) != null) {
-                resp.append(line).append('\n')
-            }
-            LOGS.d("VOICE_RECORDER error -> $resp")
-        } catch (exp: Exception) {
-        }
-    }
 
     fun sendRecordingToServer(): Boolean {
         var recordingSent = false
@@ -352,7 +374,9 @@ class AudioAiViewModel @Inject constructor(
                 when (it) {
                     RecorderState.RECORDING -> {
                         setLoading(false)
-                        audioAiState.postValue(AudioAiState.LISTENING)
+                        if (audioAiState.value != AudioAiState.LISTENING) {
+                            audioAiState.value = AudioAiState.SPEAK_NOW
+                        }
                     }
 
                     RecorderState.STOP -> {}
@@ -380,6 +404,7 @@ class AudioAiViewModel @Inject constructor(
                     startNewRecording(false)
                 }
             } else {
+                audioAiState.value = AudioAiState.LISTENING
                 lastSoundTime = currentTime
                 peakCount += 1
             }
@@ -507,5 +532,5 @@ class AudioAiViewModel @Inject constructor(
 }
 
 enum class AudioAiState {
-    DEFAULT, LISTENING, GENERATING, AI_TALKING, AI_TALKING_STOP
+    DEFAULT, SPEAK_NOW, LISTENING, GENERATING, AI_TALKING, AI_TALKING_STOP
 }

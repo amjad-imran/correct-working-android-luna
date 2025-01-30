@@ -1982,17 +1982,43 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun removeSleepPlannerData() {
+        keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
+    }
+
     override suspend fun getSleepPlannerDetails(): Flow<Resource<BaseApiResponse<SleepPlannerData>>> {
         return flow {
+            val type = KeyValueDataType.SLEEP_PLANNER
             var resultData: SleepPlannerData? = null
+
 
             val cacheResult = safeCacheCall(Dispatchers.IO) {
 
-                val data = localDataStore.getSleepPlannerData()
+                val localData = keyValueDataSource.getData("", type) ?: return@safeCacheCall null
 
-                return@safeCacheCall data
+                val lastCallTime = localData.getSafeLastSyncValue()
 
+                val shouldCallApi = lastCallTime.checkDayDifferenceMoreOne()
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", KeyValueDataType.SLEEP_PLANNER)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<SleepPlannerData>(
+                            it
+                        )
+                    }
+                }
             }
+
             cacheResult.collect { resource ->
                 when (resource) {
                     is CacheResult.Success -> {
@@ -2008,8 +2034,7 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
 
-
-            /*if (resultData!=null) {
+            if (resultData != null) {
                 emit(
                     Resource.Success(
                         BaseApiResponse(
@@ -2019,14 +2044,13 @@ class OreoUserActivityRepositoryImpl(
                     )
                 )
                 return@flow
-            }*/
+            }
+
 
             val serverResult = safeApiCallFlow(dispatcher) {
                 val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/alarms/get"
-
                 remoteDataSource.getSleepPlannerDetails(url)
             }
-
 
             serverResult.collect { resource ->
                 when (resource) {
@@ -2051,9 +2075,15 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
 
-            if (resultData!=null) {
+            if (resultData != null) {
                 safeCacheCall(Dispatchers.IO) {
-                    localDataStore.setSleepPlannerData(resultData)
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.SLEEP_PLANNER.name
+                        )
+                    )
                 }.collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {

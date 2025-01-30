@@ -497,7 +497,4 @@ interface DataStoredInterface {
 
     fun clearKey(key: String)
 
-    fun getSleepPlannerData(): SleepPlannerData?
-    fun setSleepPlannerData(data: SleepPlannerData?)
-
 }

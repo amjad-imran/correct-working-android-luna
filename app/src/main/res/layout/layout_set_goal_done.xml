@@ -40,8 +40,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
         style="@style/PrimaryButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_marginStart="12dp"
+        android:layout_width="0dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"

@@ -54,7 +54,7 @@ interface OreoUserActivityRepository {
     /**
      * @param date - YYYY-MM-dd
      */
-    suspend fun getHrDataByDate(date:String): OreoHeartRate?
+    suspend fun getHrDataByDate(date: String): OreoHeartRate?
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
@@ -73,8 +73,15 @@ interface OreoUserActivityRepository {
     suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<OActivityListModal>>>
     suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>>
 
-    suspend fun addManualSleep(request: JsonArray,date:String): Flow<Resource<BaseApiResponseData<Any>>>
-    suspend fun addManualNap(request: JsonArray,date:String): Flow<Resource<BaseApiResponseData<Any>>>
+    suspend fun addManualSleep(
+        request: JsonArray,
+        date: String
+    ): Flow<Resource<BaseApiResponseData<Any>>>
+
+    suspend fun addManualNap(
+        request: JsonArray,
+        date: String
+    ): Flow<Resource<BaseApiResponseData<Any>>>
 
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
@@ -161,11 +168,16 @@ interface OreoUserActivityRepository {
     suspend fun addSleep(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
 
 
-    suspend fun getCalendarData(startDate:String,endDate: String): Flow<Resource<BaseApiResponse<List<HealthCalendar>>>>
+    suspend fun getCalendarData(
+        startDate: String,
+        endDate: String
+    ): Flow<Resource<BaseApiResponse<List<HealthCalendar>>>>
 
 
     suspend fun getSleepPlannerDetails(
     ): Flow<Resource<BaseApiResponse<SleepPlannerData>>>
+
+    suspend fun removeSleepPlannerData()
 
     suspend fun updateAlarms(
         request: PlannerAlarmData
