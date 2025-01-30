@@ -9,6 +9,7 @@ import com.noisefit_commans.utils.LOGS
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
+private const val TAG = "WakeLockManager"
 object WakeLockManager {
     private val wakelockCounter = AtomicInteger(0)
     private val wakeLockIds = CopyOnWriteArrayList<Int>()
@@ -20,13 +21,13 @@ object WakeLockManager {
         pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimpleAlarmClock:AlertServicePusher")
 
     fun acquireServiceLock() {
-        LOGS.d { "Acquired service wakelock" }
-        serviceWakelock.acquire(60 * 60_000)
+        LOGS.d ("$TAG Acquired service wakelock" )
+        serviceWakelock.acquire(2 * 60 * 1000L)
     }
 
     fun releaseServiceLock() {
         if (serviceWakelock.isHeld) {
-            LOGS.d { "Released service wakelock" }
+            LOGS.d("$TAG Released service wakelock" )
             serviceWakelock.release()
         }
     }
@@ -40,7 +41,7 @@ object WakeLockManager {
         wakelockCounter.incrementAndGet().also { count ->
             wakeLockIds.add(count)
             intent.putExtra(COUNT, count)
-            LOGS.d { "Acquired $transitionWakelock #$count" }
+            LOGS.d { "$TAG Acquired $transitionWakelock #$count" }
         }
     }
 
