@@ -365,7 +365,8 @@ class SetAlarmViewModel @Inject constructor(
     ): SAActiveDayDataModel {
 
         if (editModeSelectedTime == null) {
-            return SAActiveDayDataModel(false, alarmDay != null, dayKey)
+            val isPreSelected = alarmDay!=null
+            return SAActiveDayDataModel(isPreSelected.not(), isPreSelected, dayKey)
         }
 
         return if (alarmDay == null) {
