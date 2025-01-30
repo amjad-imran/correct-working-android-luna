@@ -110,6 +110,7 @@ class NetworkConnectionInterceptor(
     }
     private suspend fun removeOfflineUserData() {
         database.clearAllTables()
+        keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
         keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
         keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
     }

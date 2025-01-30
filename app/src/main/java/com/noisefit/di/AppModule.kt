@@ -480,10 +480,11 @@ object AppModule {
     @Singleton
     @Provides
     fun provideAlarmRepository(
-        localDataSource: DataStoredInterface,
+        keyValueDataSource: KeyValueDataSource,
+        gson: Gson,
         alarmUtil: AlarmUtil
     ): AlarmRepository {
-        return AlarmRepository(localDataSource, alarmUtil)
+        return AlarmRepository(keyValueDataSource, gson, alarmUtil)
     }
 
     @Singleton

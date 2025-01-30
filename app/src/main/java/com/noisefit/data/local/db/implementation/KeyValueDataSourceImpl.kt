@@ -16,6 +16,9 @@ constructor(
         keyValueDao.insert(keyValue)
     }
 
+    override suspend fun updateData(keyValue: KeyValue) {
+        keyValueDao.update(keyValue)
+    }
     override suspend fun getData(key: String, type: KeyValueDataType): KeyValue? {
         return keyValueDao.getData(key, type.name)
     }

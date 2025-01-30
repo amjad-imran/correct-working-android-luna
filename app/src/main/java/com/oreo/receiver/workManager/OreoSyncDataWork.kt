@@ -227,7 +227,9 @@ constructor(
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
-
+                                    if (userActivities.second.sleepData.isNullOrEmpty().not()) {
+                                        keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
+                                    }
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
 

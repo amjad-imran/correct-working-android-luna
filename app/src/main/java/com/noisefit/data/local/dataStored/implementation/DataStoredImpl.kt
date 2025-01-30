@@ -224,7 +224,6 @@ private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 
-private const val SLEEP_PLANNER_DATA = "SLEEP_PLANNER_DATA"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -233,20 +232,6 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
-
-    override fun getSleepPlannerData(): SleepPlannerData? {
-        return mPrefs.getString(SLEEP_PLANNER_DATA, null)
-            ?.let { Gson().fromJson<SleepPlannerData>(it) }
-    }
-
-    override fun setSleepPlannerData(data: SleepPlannerData?) {
-        if (data == null) {
-            mPrefs.edit()?.remove(SLEEP_PLANNER_DATA)?.commit()
-        } else {
-            mPrefs.edit()?.putString(SLEEP_PLANNER_DATA, gson.toJson(data))?.commit()
-        }
-
-    }
 
     override fun isGoogleFitCrossed(): Boolean {
         return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)

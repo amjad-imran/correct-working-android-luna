@@ -25,7 +25,9 @@ import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -214,8 +216,10 @@ class SetAlarmViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            alarmRepository.updateAlarms(request)
-                            alarmUpdated.postValue(Event(true))
+                            withContext(Dispatchers.IO){
+                                alarmRepository.updateAlarms(request)
+                                alarmUpdated.postValue(Event(true))
+                            }
                         }
                     }
                 }
