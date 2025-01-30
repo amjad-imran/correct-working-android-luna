@@ -8,7 +8,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -16,72 +18,46 @@ import android.os.IBinder
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
-import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
-import java.io.IOException
+import com.noisefit_commans.utils.LOGS
 
+private const val ALARM_FOREGROUND_KEY = 1230
 
 const val SLEEP_ALARM_CHANNEL = "SLEEP_ALARM_CHANNEL"
 const val SLEEP_WIND_DOWN_CHANNEL = "SLEEP_WIND_DOWN_CHANNEL"
 
 class AlarmService : Service() {
 
-    private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private var ringtone: Uri? = null
+    private var ringtone: Ringtone? = null
 
 
     override fun onCreate() {
         super.onCreate()
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        ringtone = RingtoneManager.getActualDefaultRingtoneUri(
-            this.baseContext, RingtoneManager.TYPE_ALARM
-        )
+
     }
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (intent?.action == "STOP_SERVICE") {
-            stopForeground(true)
-            stopSelf()
+            stopService()
             return START_NOT_STICKY
         }
 
+        ringtone = null
+        ringtone = RingtoneManager.getRingtone(
+            applicationContext,
+            Uri.parse("android.resource://" + packageName + "/" + R.raw.track_1_lofi)
+        )
+        ringtone!!.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+        )
+        ringtone?.play()
         WakeLockManager.acquireServiceLock()
-//        try {
-//            val track =
-//                intent?.getIntExtra("alarmTone", getAlarmToneByKey(1)) ?: getAlarmToneByKey(1)
-//            mediaPlayer = MediaPlayer.create(this, track)
-//            mediaPlayer?.isLooping = true
-//            mediaPlayer?.start()
-//        } catch (ex: IOException) {
-//            ex.printStackTrace()
-//        }
-//
-//        val stopIntent = Intent(this, AlarmService::class.java).apply {
-//            action = "STOP_SERVICE"
-//        }
-//        val stopPendingIntent = PendingIntent.getService(
-//            this,
-//            0,
-//            stopIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-//        )
-
-
         showForegroundNotification()
-
-
-//        val notification: Notification = NotificationCompat.Builder(
-//            this, SLEEP_ALARM_CHANNEL
-//        ).setContentTitle("Luna Ring").setContentText(alarmTitle)
-//            .setSmallIcon(R.drawable.ic_luna_small).setSound(null)
-//            .setCategory(NotificationCompat.CATEGORY_ALARM)
-//            .setOngoing(true)
-//            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-//            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
-//            .build()
-
         val pattern = longArrayOf(0, 100, 1000)
         vibrator!!.vibrate(pattern, 0)
 
@@ -109,7 +85,7 @@ class AlarmService : Service() {
             .setContentIntent(pendingIntent)
 //            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
             .build()
-        startForeground(1, notification)
+        startForeground(ALARM_FOREGROUND_KEY, notification)
     }
 
     private fun createNotificationChannel() {
@@ -124,11 +100,18 @@ class AlarmService : Service() {
         }
     }
 
+    private fun stopService(){
+        WakeLockManager.releaseServiceLock()
+        stopForeground(true)
+        stopSelf()
+        vibrator?.cancel()
+        ringtone?.stop()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        vibrator!!.cancel()
+        LOGS.d("sadhjdsadjaskdsa service destoryed")
+        stopService()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

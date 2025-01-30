@@ -108,7 +108,7 @@
         <activity android:name="com.oreo.util.alarm.AlarmActivity"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
