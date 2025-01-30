@@ -20,6 +20,7 @@ class AlarmUtil @Inject constructor(
 
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra("alarmTone", alarmTone)
+        intent.putExtra("time", "$hour:$minute")
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
