@@ -55,8 +55,6 @@ class SetAlarmViewModel @Inject constructor(
 
     var alarmUpdated = MutableLiveData<Event<Boolean>>()
     var selectedTone = MutableLiveData<AlarmSoundDataModel>(alarmTonesList().first())
-
-
     fun getAlarmData(alarms: PlannerAlarmData?): ArrayList<SAActiveDayDataModel> {
         val listData = ArrayList<SAActiveDayDataModel>()
 
@@ -120,26 +118,6 @@ class SetAlarmViewModel @Inject constructor(
         )
 
         return listData
-    }
-
-    fun setViewGradient(binding: FragmentSetAlarmBinding, hour: String): Shader {
-        val paint: TextPaint = binding.lytAlarmTime.tvHour.paint
-        val width = paint.measureText(hour)
-
-        val textShader: Shader = LinearGradient(
-            0f,
-            0f,
-            width,
-            20f,
-            intArrayOf(
-                Color.parseColor("#ffc8d2"),
-                Color.parseColor("#ff7c94")
-            ),
-            null,
-            TileMode.CLAMP
-        )
-        return textShader
-
     }
 
     fun insert(newAlarm: AlarmDataModel, type: Int) {
@@ -357,6 +335,8 @@ class SetAlarmViewModel @Inject constructor(
                 }
             }
         }
+        returnData.goal = sleepPlannerCard.value?.goal
+
         return returnData
     }
 
@@ -423,7 +403,7 @@ class SetAlarmViewModel @Inject constructor(
         val min = (sleepPlannerCard.value?.planner?.min_duration ?: 0) / 60
         if (min == 0L) return false
 
-        return durationMinutes<=min
+        return durationMinutes <= min
 
     }
 }

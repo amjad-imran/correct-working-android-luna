@@ -29,6 +29,7 @@ data class PlannerAlarmData(
     var fri: AlarmTimingsData? = null,
     var sat: AlarmTimingsData? = null,
     var sun: AlarmTimingsData? = null,
+    var goal: String? = null,
 ) : Parcelable {
 
     /**
