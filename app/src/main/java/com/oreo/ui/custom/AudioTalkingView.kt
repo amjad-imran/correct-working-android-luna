@@ -41,9 +41,14 @@ class AudioTalkingView @JvmOverloads constructor(
 
     private var ovalWidth = 0f
 
-    // Update width based on amplitude
     fun updateAmplitude(percent: Int) {
-        ovalWidth = (percent.toFloat() / 100) * width
+        var calculatedPercent = percent
+        if (percent > 100) {
+            calculatedPercent = 100
+        } else if (percent < 60) {
+            calculatedPercent = 60
+        }
+        ovalWidth = (calculatedPercent.toFloat() / 100) * width
         invalidate()
     }
 
@@ -52,62 +57,46 @@ class AudioTalkingView @JvmOverloads constructor(
         val centerX = width / 2f
         val centerY = height / 2f
 
-        // Draw an oval with fixed height and dynamic width
+
         val viewHeight = height.toFloat()
+        drawRoundRect(canvas, centerX, centerY, ovalWidth, viewHeight, paint20)
 
+        val width40 = ovalWidth * 0.85f
+        val height40 = height * 0.9f
+        drawRoundRect(canvas, centerX, centerY, width40, height40, paint40)
+
+
+        val width60 = ovalWidth * 0.7f
+        val height60 = height * 0.8f
+        drawRoundRect(canvas, centerX, centerY, width60, height60, paint60)
+
+        val width80 = ovalWidth * 0.55f
+        val height80 = height * 0.7f
+        drawRoundRect(canvas, centerX, centerY, width80, height80, paint80)
+
+
+        val width100 = ovalWidth * 0.4f
+        val height100 = height * 0.6f
+        drawRoundRect(canvas, centerX, centerY, width100, height100, paint100)
+
+    }
+
+    fun drawRoundRect(
+        canvas: Canvas,
+        centerX: Float,
+        centerY: Float,
+        width: Float,
+        height: Float,
+        paint: Paint
+    ) {
         canvas.drawRoundRect(
-            centerX - ovalWidth / 2,
-            centerY - viewHeight / 2,
-            centerX + ovalWidth / 2,
-            centerY + viewHeight / 2,
-            viewHeight / 2,
-            viewHeight / 2,
-            paint20
-        )
-
-        val width40 = ovalWidth * 0.8f
-        canvas.drawRoundRect(
-            centerX - width40 / 2,
-            centerY - viewHeight / 2,
-            centerX + width40 / 2,
-            centerY + viewHeight / 2,
-            viewHeight / 2,
-            viewHeight / 2,
-            paint40
-        )
-
-
-        val width60 = ovalWidth * 0.6f
-        canvas.drawRoundRect(
-            centerX - width60 / 2,
-            centerY - viewHeight / 2,
-            centerX + width60 / 2,
-            centerY + viewHeight / 2,
-            viewHeight / 2,
-            viewHeight / 2,
-            paint60
-        )
-
-        val width80 = ovalWidth * 0.4f
-        canvas.drawRoundRect(
-            centerX - width80 / 2,
-            centerY - viewHeight / 2,
-            centerX + width80 / 2,
-            centerY + viewHeight / 2,
-            viewHeight / 2,
-            viewHeight / 2,
-            paint80
-        )
-
-        val width100 = ovalWidth * 0.2f
-        canvas.drawRoundRect(
-            centerX - width100 / 2,
-            centerY - viewHeight / 2,
-            centerX + width100 / 2,
-            centerY + viewHeight / 2,
-            viewHeight / 2,
-            viewHeight / 2,
-            paint80
+            centerX - width / 2,
+            centerY - height / 2,
+            centerX + width / 2,
+            centerY + height / 2,
+            height / 2,
+            height / 2,
+            paint
         )
     }
 }

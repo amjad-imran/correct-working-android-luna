@@ -33,6 +33,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.repository.AlarmRepository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -60,6 +61,7 @@ class NetworkConnectionInterceptor(
     private val watchDataStore: WatchDataStore,
     private val resourcesProvider: ResourcesProvider,
     private val watchesSdk: WatchesSDK,
+    private val alarmRepository: AlarmRepository,
     private val keyValueDataSource: KeyValueDataSource,
     private val database: OreoDataBase,
     private val tokenRefreshApi: TokenRefreshApi,
@@ -90,6 +92,7 @@ class NetworkConnectionInterceptor(
         localDataStore.saveAudioMaxAmp(0)
 
         GlobalScope.launch(Dispatchers.IO) {
+            alarmRepository.cancelAllAlarms()
             removeOfflineUserData()
         }
 

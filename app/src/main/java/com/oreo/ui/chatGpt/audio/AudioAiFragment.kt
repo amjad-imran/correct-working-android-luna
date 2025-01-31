@@ -5,12 +5,13 @@ import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.media.audiofx.Visualizer
 import android.net.Uri
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -26,7 +27,14 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.ceil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 
 @AndroidEntryPoint
@@ -34,6 +42,10 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
     val viewModel: AudioAiViewModel by viewModels()
     val args: AudioAiFragmentArgs by navArgs()
+    private var mVisualizer: Visualizer? = null
+    private var dotAnimationJob: Job? = null
+
+
 
     companion object {
         fun getStartData(
@@ -103,11 +115,44 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         videoView.stopPlayback()
         videoView.setOnPreparedListener { it.isLooping = true }
         videoView.start()
+
+        adjustVideoSize(0.6f)
+
+        /*videoView.setOnPreparedListener { mediaPlayer ->
+            val videoRatio = mediaPlayer.videoWidth / mediaPlayer.videoHeight.toFloat()
+            val screenRatio = videoView.width / videoView.height.toFloat()
+            var scaleX = videoRatio / screenRatio
+
+            val defaultScale = 0.6f
+
+            LOGS.d("SDfsdfsdf $scaleX")
+            //scaleX *= defaultScale
+            //scaleX = 5f
+
+            LOGS.d("SDfsdfsdf $scaleX")
+
+            if (scaleX >= 1f) {
+                videoView.scaleX = scaleX
+            } else {
+                videoView.scaleY = 1f / scaleX
+            }
+        }*/
+    }
+
+    private fun adjustVideoSize(heightPercent: Float) {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.root)
+
+        constraintSet.constrainPercentHeight(R.id.videoView, heightPercent)
+
+        constraintSet.applyTo(binding.root)
     }
 
 
     override fun onDestroyView() {
         viewModel.cleanup()
+        mVisualizer?.release()
+        dotAnimationJob?.cancel()
         super.onDestroyView()
     }
 
@@ -211,67 +256,29 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                  text = "Amplitude: $it\nAMPLITUDE_MAX - ${viewModel.AMPLITUDE_MAX}"
              }
          }*/
-        var mVisualizer: Visualizer? = null
 
         viewModel.audioSessionId.observe(this) {
             it.getContent()?.let {
                 if (it != -1) {
-                    mVisualizer = Visualizer(it)
-                    mVisualizer?.setCaptureSize(Visualizer.getCaptureSizeRange()[1])
-                    mVisualizer!!.setDataCaptureListener(object : Visualizer.OnDataCaptureListener {
-                        override fun onWaveFormDataCapture(
-                            visualizer: Visualizer, bytes: ByteArray,
-                            samplingRate: Int
-                        ) {
-                            //LOGS.d("dskfjhskdfhskdjf $visualizer\n$bytes\n$samplingRate")
-                           /* this.mRawAudioBytes = bytes
-                            invalidate()*/
-
-                            if (bytes != null) {
-                                val density = 50
-                                val barWidth: Float = 100.toFloat() / density
-                                val div: Float = bytes.size.toFloat() / density
-                                //paint.setStrokeWidth(barWidth - gap)
-
-                                for (i in 0 until density) {
-                                    val bytePosition = ceil((i * div).toDouble()).toInt()
-                                    /*val top = 10 +
-                                            ((Math.abs(bytes.get(bytePosition)) + 128)) * 10 / 128*/
-                                    val barX = (i * barWidth) + (barWidth / 2)
-
-                                    LOGS.d("dskfjhskdfhskdjf   $barX - $barWidth")
-                                }
-                            }
-                        }
-
-                        override fun onFftDataCapture(
-                            visualizer: Visualizer, bytes: ByteArray,
-                            samplingRate: Int
-                        ) {
-                        }
-                    }, Visualizer.getMaxCaptureRate() / 2, true, false)
-
-                    mVisualizer!!.setEnabled(true)
+                    setUpVisualizer(it)
 
                 }
             }
         }
 
-        viewModel.aiTalkingAmplitude.observe(this) {
-            val percent = it * 100 / viewModel.TALKING_MAX_AMPLITUDE
-            LOGS.d("Amplitude___ percent: $percent")
-            binding.talkingView.updateAmplitude(percent)
-        }
 
         viewModel.audioAiState.observe(this) {
             when (it) {
                 AudioAiState.DEFAULT -> {
+                    dotAnimationJob?.cancel()
                     binding.talkingView.gone()
                     binding.tvMessage.text = ""
                     micStateOff()
                 }
 
                 AudioAiState.SPEAK_NOW -> {
+                    dotAnimationJob?.cancel()
+                    adjustVideoSize(0.6f)
                     binding.talkingView.gone()
                     binding.tvMessage.text = getString(R.string.text_speak_now)
                     micStateOn()
@@ -279,24 +286,32 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
                 AudioAiState.LISTENING -> {
                     binding.talkingView.gone()
-                    binding.tvMessage.text = getString(R.string.text_listening_dot)
+                    startDotAnimation(getString(R.string.text_listening))
                     micStateShowStop()
                 }
 
                 AudioAiState.GENERATING -> {
+                    adjustVideoSize(0.9f)
                     binding.talkingView.gone()
-                    binding.tvMessage.text = getString(R.string.text_analysing_dot)
+
+                    startDotAnimation(getString(R.string.text_analysing))
+
                     micStateGenerating()
                     viewModel.stopRecording(true)
                 }
 
                 AudioAiState.AI_TALKING -> {
+                    dotAnimationJob?.cancel()
+                    adjustVideoSize(0.6f)
                     binding.tvMessage.text = ""
                     showTalkingWidget()
                     micStateOff()
                 }
 
                 AudioAiState.AI_TALKING_STOP -> {
+                    dotAnimationJob?.cancel()
+                    adjustVideoSize(0.6f)
+                    mVisualizer?.release()
                     binding.talkingView.gone()
                     viewModel.startNewRecording(false)
                 }
@@ -352,6 +367,83 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         }
     }
 
+    private fun startDotAnimation(text: String) {
+        if (viewModel.lastAnimatingText.equals(text, true)) {
+            return
+        }
+        dotAnimationJob?.cancel()
+        viewModel.lastAnimatingText = text
+        dotAnimationJob = CoroutineScope(Dispatchers.Main).launch {
+            var dotCount = 0
+            while (true) {
+                nullableBinding?.tvMessage?.text = text + ".".repeat(dotCount)
+                dotCount = (dotCount + 1) % 4
+                delay(500) // Update every 500ms
+            }
+        }
+    }
+
+    private fun setUpVisualizer(audioSessionId: Int) {
+        if (mVisualizer != null) {
+            mVisualizer?.release()
+        }
+
+        mVisualizer = Visualizer(audioSessionId)
+        mVisualizer?.setCaptureSize(Visualizer.getCaptureSizeRange()[1])
+        mVisualizer?.setDataCaptureListener(object : Visualizer.OnDataCaptureListener {
+            override fun onWaveFormDataCapture(
+                visualizer: Visualizer, bytes: ByteArray,
+                samplingRate: Int
+            ) {
+                /*  val amplitude: Float = calculateAmplitude(bytes)
+
+                  LOGS.d("sdkflhsldkfhsdkl $amplitude")*/
+                //audioVisualizerView.setAmplitude(amplitude)
+
+            }
+
+            override fun onFftDataCapture(
+                visualizer: Visualizer, bytes: ByteArray,
+                samplingRate: Int
+            ) {
+                val amplitude = calculateAmplitudeFromFft(bytes)
+
+                val multiplied = (amplitude * 1.5f)
+                LOGS.d("sdkflhsldkfhsdkl onFftDataCapture ${multiplied.roundToInt()}")
+
+                nullableBinding?.talkingView?.updateAmplitude(multiplied.roundToInt())
+
+            }
+        }, Visualizer.getMaxCaptureRate() / 2, false, true)
+
+        mVisualizer?.setEnabled(true)
+    }
+
+
+    val MAX_POSSIBLE_MAGNITUDE: Float =
+        sqrt((128 * 128 + 128 * 128).toDouble()).toFloat() // ~181.02
+    private val smoothingFactor = 0.2f
+    private var smoothedAmplitude = 0f
+
+    private fun calculateAmplitudeFromFft(fft: ByteArray): Float {
+        var maxMagnitude = 0f
+        for (i in 1 until fft.size / 2) {
+            val real = fft[i * 2].toFloat()
+            val imaginary = fft[i * 2 + 1].toFloat()
+            val magnitude =
+                sqrt((real * real + imaginary * imaginary).toDouble()).toFloat()
+            if (magnitude > maxMagnitude) {
+                maxMagnitude = magnitude
+            }
+        }
+        val normalizedAmplitude = maxMagnitude / MAX_POSSIBLE_MAGNITUDE
+        val scaledAmplitude =
+            min((normalizedAmplitude * 100).toDouble(), 100.0).toFloat()
+        smoothedAmplitude =
+            (scaledAmplitude * smoothingFactor) + (smoothedAmplitude * (1 - smoothingFactor))
+        return if (smoothedAmplitude < 1.0f) 0f else smoothedAmplitude
+    }
+
     private fun showTalkingWidget() {
         binding.talkingView.visible()
     }
@@ -363,13 +455,13 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         val alphaAnimation: ObjectAnimator =
             ObjectAnimator.ofFloat(binding.imageGradientLayer, View.ALPHA, 1f, 0f)
         alphaAnimation.apply {
-            duration = 1000
+            duration = 1500
             start()
         }
 
         alphaAnimation.doOnEnd {
-            binding.imageGradientLayer.gone()
-            binding.ivMic.visible()
+            nullableBinding?.imageGradientLayer?.gone()
+            nullableBinding?.ivMic?.visible()
             viewModel.startNewRecording(true)
         }
     }

@@ -17,6 +17,7 @@ import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.repository.AlarmRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,6 +30,7 @@ class AuthenticationRepositoryImpl(
     private val localDataSource: DataStoredInterface,
 //    private val cleverTapAPI: CleverTapAPI?,
     private val keyValueDataSource: KeyValueDataSource,
+    private val alarmRepository: AlarmRepository,
     private val database: OreoDataBase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AuthenticationRepository {
@@ -126,6 +128,7 @@ class AuthenticationRepositoryImpl(
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+            alarmRepository.cancelAllAlarms()
 
             val url = "${BuildConfig.BASE_URL_NEW}/auth_v2/logout"
             remoteDataSource.logoutUser(url)

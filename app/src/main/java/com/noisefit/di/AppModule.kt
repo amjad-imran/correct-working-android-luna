@@ -156,12 +156,14 @@ object AppModule {
 //        cleverTapAPI: CleverTapAPI?,
         keyValueDataSource: KeyValueDataSource,
         database: OreoDataBase,
+        alarmRepository: AlarmRepository,
         localDataSource: DataStoredInterface
     ): AuthenticationRepository =
         AuthenticationRepositoryImpl(
             remoteDataSource,
             localDataSource,
             keyValueDataSource,
+            alarmRepository,
             database/*cleverTapAPI*/
         )
 

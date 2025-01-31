@@ -78,8 +78,12 @@ class AlarmRepository @Inject constructor(
         }
     }
 
-    private fun scheduleAlarms(alarmsData: PlannerAlarmData?) {
+    fun cancelAllAlarms(){
         alarmUtil.cancelAllAlarms()
+    }
+
+    private fun scheduleAlarms(alarmsData: PlannerAlarmData?) {
+        cancelAllAlarms()
 
         alarmsData?.getNonNullAlarms()?.forEach {
             val wakeTime =

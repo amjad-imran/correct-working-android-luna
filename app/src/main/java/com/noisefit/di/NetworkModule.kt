@@ -21,6 +21,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.tryCatch
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.repository.AlarmRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -187,6 +188,7 @@ object NetworkModule {
         watchesSdk: WatchesSDK,
         resourcesProvider: ResourcesProvider,
         keyValueDataSource: KeyValueDataSource,
+        alarmRepository: AlarmRepository,
         database: OreoDataBase,
         tokenService: TokenRefreshApi,
     ): NetworkConnectionInterceptor =
@@ -198,6 +200,7 @@ object NetworkModule {
             watchDataStore,
             resourcesProvider,
             watchesSdk,
+            alarmRepository,
             keyValueDataSource,
             database,
             tokenService

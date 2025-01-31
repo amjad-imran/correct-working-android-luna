@@ -64,11 +64,10 @@ class AudioAiViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
+    var lastAnimatingText: String?=null
     var isMicOn: Boolean = false
 
-    val aiTalkingAmplitude = MutableLiveData<Int>()
     val audioSessionId = MutableLiveData<Event<Int>>()
-    val TALKING_MAX_AMPLITUDE = 32767
 
     var AMPLITUDE_MAX = 100
     private val SILENCE_DURATION: Long = 2000
@@ -227,11 +226,11 @@ class AudioAiViewModel @Inject constructor(
 
             audioTrack?.play()
 
-           /* audioSessionId.postValue(
+            audioSessionId.postValue(
                 Event(
                     audioTrack?.audioSessionId ?: -1
                 )
-            )*/
+            )
 
 
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -259,19 +258,6 @@ class AudioAiViewModel @Inject constructor(
                             if (audioData != null) {
                                 val decodedAudio = Base64.decode(audioData, Base64.DEFAULT)
                                 audioTrack?.write(decodedAudio, 0, decodedAudio.size)
-
-
-                                /*val amplitude = calculateAmplitude(decodedAudio)
-                                val dB = calculateAmplitudeDb(decodedAudio)*/
-
-                                //LOGS.d("Amplitude___", "Peak: $amplitude")//(0 - 32767)
-                                //LOGS.d("Amplitude___", "dB: $dB")
-
-                                //aiTalkingAmplitude.postValue(amplitude)
-
-
-                                /* val chunk = audioData.sliceArray(startIndex until endIndex)
-                                 val maxAmplitude = findMaxAmplitude(chunk)*/
 
                             }
                         }
@@ -448,6 +434,7 @@ class AudioAiViewModel @Inject constructor(
         audioTrack?.release()
         job?.cancel()
         requestCall?.cancel()
+        waveRecorder?.stopRecording(true)
         viewModelScope.launch(Dispatchers.IO) {
             inputStream?.close()
         }
