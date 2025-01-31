@@ -41,7 +41,7 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun askQuestionToChatGpt(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/chat"
             remoteDataSource.askQuestionToChatGpt(url, jsonObject)
 
         }
@@ -49,7 +49,7 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/message/polling"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/message/polling"
             remoteDataSource.pollForAnswer(url, jsonObject)
 
         }
@@ -57,7 +57,7 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun getChatHistory(): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat-history"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/chat-history"
             remoteDataSource.getChatHistory(url)
 
         }
@@ -65,21 +65,21 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun getChatHistoryByDate(date: String?): Flow<Resource<BaseApiResponse<List<ChatHistoryItem>?>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/date-history"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/date-history"
             remoteDataSource.getChatHistoryByDate(url, date)
         }
     }
 
     override suspend fun deleteChatHistory(threadId: String): Flow<Resource<BaseApiResponse<Any?>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/delete"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/delete"
             remoteDataSource.deleteChatHistory(url, threadId)
         }
     }
 
     override suspend fun generateThreadId(): Flow<Resource<BaseApiResponse<ThreadIdResponse?>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/new-chat"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/new-chat"
             remoteDataSource.generateThreadId(url)
         }
     }
@@ -87,7 +87,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun loadMessagesByThreadId(threadId: String): Flow<Resource<BaseApiResponse<ChatMessagesResponse>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat?thread_id=$threadId"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/chat?thread_id=$threadId"
             remoteDataSource.loadMessagesByThreadId(url)
         }
     }
@@ -98,7 +98,7 @@ class OreoDeviceRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<String>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/generateTitle"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/generateTitle"
             remoteDataSource.generateThreadTitle(url, ques, threadId)
         }
     }
@@ -109,9 +109,9 @@ class OreoDeviceRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<Any>?>> {
         return safeApiCallFlow(dispatcher) {
             val url = if (planType == PlanType.NONE) {
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/stopStream?thread_id=$threadId"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/stopStream?thread_id=$threadId"
             } else {
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/stopStream?type=${planType.name.lowercase()}"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/stopStream?type=${planType.name.lowercase()}"
             }
             remoteDataSource.stopResponseGeneration(url)
         }
@@ -120,7 +120,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getAiTopQuestions(aiTopic: AITopics): Flow<Resource<BaseApiResponse<TopQuestionsResponse>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/suggested-questions?type=${aiTopic.name.lowercase()}"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/suggested-questions?type=${aiTopic.name.lowercase()}"
             remoteDataSource.getAiTopQuestions(url)
         }
     }
@@ -144,7 +144,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/digest"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/digest"
             remoteDataSource.getDailySummaryData(url)
         }
     }
@@ -152,7 +152,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getLunaZoneData(): Flow<Resource<BaseApiResponse<LunaZoneResponse>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/dashboard"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/dashboard"
             remoteDataSource.getLunaZoneData(url)
         }
     }
@@ -176,7 +176,7 @@ class OreoDeviceRepositoryImpl(
     override suspend fun getCredentials(): Flow<Resource<BaseApiResponse<AiCreds>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/ai-credentials"
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/ai-credentials"
             remoteDataSource.getCredentials(url)
         }
     }

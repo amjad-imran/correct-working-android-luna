@@ -140,7 +140,7 @@ class AudioAiViewModel @Inject constructor(
             //val inputText = "Please respond based on the content of the audio."
 
             val body =
-                ("{ \"model\": \"gpt-4o-audio-preview\", \"modalities\": [\"text\", \"audio\"], \"audio\":" +
+                ("{ \"model\": \"gpt-4o-mini-audio-preview\", \"modalities\": [\"text\", \"audio\"], \"audio\":" +
                         " { \"voice\": \"alloy\", \"format\": \"pcm16\" }, \"messages\": " +
                         "[ { \"role\": \"user\", \"content\": [ { \"type\": \"text\", \"text\": \"${audioPrompt ?: DEFAULT_AUDIO_PROMPT}\" }," +
                         " {\"type\": \"input_audio\", \"input_audio\": { \"data\": \"$base64String\", \"format\": \"wav\"}}]}], \"stream\": true}").toRequestBody(

@@ -233,9 +233,9 @@ class ChatGptViewModel
                 Request.Builder()
                     .apply {
                         when (planType) {
-                            PlanType.WORKOUT -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/workout/stream?message=$prompt")
-                            PlanType.DIET -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/diet/stream?message=$prompt")
-                            PlanType.NONE, null -> url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt&thread_id=$threadId")
+                            PlanType.WORKOUT -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/stream?message=$prompt")
+                            PlanType.DIET -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/stream?message=$prompt")
+                            PlanType.NONE, null -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream?message=$prompt&thread_id=$threadId")
                         }
                         userToken?.let {
                             this.addHeader("access-token", "Bearer ${userToken.access_token}")
