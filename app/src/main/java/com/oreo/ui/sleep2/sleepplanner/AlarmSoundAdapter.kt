@@ -27,6 +27,11 @@ class AlarmSoundAdapter(val listener: OnSoundItemClick) :
 
             binding.tvTitle.text = data.title
 
+            if (bindingAdapterPosition == mDataSet.size - 1) {
+                binding.divider.gone()
+            } else {
+                binding.divider.visible()
+            }
             binding.root.setOnClickListener {
                 selectedKey = data.key
                 notifyDataSetChanged()
@@ -55,7 +60,7 @@ class AlarmSoundAdapter(val listener: OnSoundItemClick) :
     }
 
 
-    fun setData(resultData: List<AlarmSoundDataModel>,selectedKey:Int) {
+    fun setData(resultData: List<AlarmSoundDataModel>, selectedKey: Int) {
         this.selectedKey = selectedKey
         mDataSet.clear()
         mDataSet.addAll(resultData)
