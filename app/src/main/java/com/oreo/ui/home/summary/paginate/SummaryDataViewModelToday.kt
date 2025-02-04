@@ -38,7 +38,6 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -798,8 +797,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 else -> {
                     val currentTime = DateFormats.getTimeFormat()
 
-                    val isBefore8 = DateFormats.isTimeBefore(currentTime,"20:00")
-                    if(isBefore8){
+                    val isBefore8 = DateFormats.isTimeBefore(currentTime, "20:00")
+                    if (isBefore8) {
                         sleepPlannerData.second?.let {
                             userActivities.add(OHealthOverview.SleepPlannerCard(it))
                         }
@@ -829,7 +828,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         userActivities.add(OHealthOverview.LunaAiCard())
                     }
 
-                    if(isBefore8.not()){
+                    if (isBefore8.not()) {
                         sleepPlannerData.second?.let {
                             userActivities.add(OHealthOverview.SleepPlannerCard(it))
                         }
@@ -1930,6 +1929,12 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
 
+                            it?.let {
+                                /*it.planner?.bed_time = "22:00:00"
+                                it.planner?.wake_time = "05:00:00"*/
+                                it.dashState = getPlannerCardState(it)
+                            }
+
                             sleepPlannerData = Pair(true, it)
                             sleepPlannerDataLoaded.postValue(Event(true))
                         }
@@ -1940,7 +1945,11 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getPlannerCardState(sleepPlannerData: SleepPlannerData): SleepCardDashState {
-        return if (showBreathingExercise(sleepPlannerData.planner?.bed_time)) {
+        return if (showBreathingExercise(
+                sleepPlannerData.planner?.bed_time,
+                sleepPlannerData.planner?.wake_time
+            )
+        ) {
             SleepCardDashState.BREATHING_EXERCISE
         } else {
             val currentTime = LocalTime.now()
@@ -1958,18 +1967,32 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun showBreathingExercise(bedTime: String?): Boolean {
+    private fun showBreathingExercise(bedTime: String?, wakeTime: String?): Boolean {
         var breathingExercise = false
-        if (bedTime != null) {
+        if (bedTime != null && wakeTime != null) {
             val parsedTime = LocalTime.parse(
                 bedTime,
                 DateTimeFormatter.ofPattern("HH:mm:ss")
             )
-            val currentTime = LocalTime.now()
+            val parsedWakeTime = LocalTime.parse(
+                wakeTime,
+                DateTimeFormatter.ofPattern("HH:mm:ss")
+            )
+
+            val currentTime = LocalTime.now() //LocalTime.of(21,0)
+
             val minutes =
                 ((parsedTime.hour * 60) + parsedTime.minute) - ((currentTime.hour * 60) + currentTime.minute)
             if (minutes <= 60) {
                 breathingExercise = true
+            }
+
+            if(breathingExercise.not()){
+                val minutesWakeTime =
+                    ((currentTime.hour * 60) + currentTime.minute)- ((parsedWakeTime.hour * 60) + parsedWakeTime.minute)
+                if (minutesWakeTime <= 0) {
+                    breathingExercise = true
+                }
             }
         }
         return breathingExercise

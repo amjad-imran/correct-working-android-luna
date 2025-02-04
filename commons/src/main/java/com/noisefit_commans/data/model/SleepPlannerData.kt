@@ -13,8 +13,8 @@ data class SleepPlannerData(
 
 @Parcelize
 data class PlannerData(
-    val bed_time: String? = null,//24 hours format
-    val wake_time: String? = null,//24 hours format
+    var bed_time: String? = null,//24 hours format
+    var wake_time: String? = null,//24 hours format
     val debt: Long? = null,//in seconds
     val duration: Long? = null,//in seconds
     val min_duration: Long? = null,//in seconds
