@@ -154,7 +154,7 @@ class RoundClockViewDash @JvmOverloads constructor(
         y: Float
     ) {
         if (backgroundImageMain != null) {
-            val margin = dpToPx(6f).roundToInt()
+            val margin = dpToPx(8f).roundToInt()
 
             backgroundImageMain.setBounds(
                 (x - widthExternal).toInt() + margin,
@@ -165,7 +165,7 @@ class RoundClockViewDash @JvmOverloads constructor(
             backgroundImageMain.draw(canvas)
         }
         if (imageDial != null) {
-            val margin = dpToPx(16f).roundToInt()
+            val margin = dpToPx(8f).roundToInt()
 
             imageDial.setBounds(
                 (x - widthExternal).toInt() + margin,

@@ -90,7 +90,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         binding.timePicker.apply {
 
             minDurationMinutes = 3 * 60
-            maxDurationMinutes = 22 * 60
+            maxDurationMinutes = 20 * 60
 
             thumbSize = 40f.dpToPixel().roundToInt()
             sliderWidth = 40f.dpToPixel().roundToInt()

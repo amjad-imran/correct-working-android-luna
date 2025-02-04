@@ -64,8 +64,7 @@ class AiWorkoutDetailFragment :
 
         binding.lytWorkoutDetails.apply {
             tvWorkoutType.text = workoutType
-            // workout.reps
-
+            tvReps.text = workout.reps
             tvWorkoutName.text = workout.workout_name
             tvDescription.text = workout.description
         }

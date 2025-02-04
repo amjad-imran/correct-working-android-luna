@@ -201,8 +201,7 @@ class SummaryDataFragmentToday :
         handleFindMyRingCard()
         viewModel.handleGoogleFitCard()
 
-        //viewModel.getSleepPlanerDetails()
-
+        viewModel.getSleepPlanerDetails()
     }
 
 
@@ -215,7 +214,6 @@ class SummaryDataFragmentToday :
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
-                viewModel.getSleepPlanerDetails()
             }
         }
     }
@@ -1050,9 +1048,9 @@ class SummaryDataFragmentToday :
 
         binding.contentMain.lytSplanner.apply {
             lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-            lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
+            lytBedTime.tvTitle.text = "Bed time"//getString(R.string.text_bedtime)
             lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-            lytWakeupTime.tvTitle.text = getString(R.string.text_wake_time)
+            lytWakeupTime.tvTitle.text = "Wake time"//getString(R.string.text_wake_time)
 
             val bedTime = LocalTime.parse(
                 plannerData.planner?.bed_time ?: "22:00:00",
@@ -1064,10 +1062,10 @@ class SummaryDataFragmentToday :
             )
 
             lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-            lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a"))
+            lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
 
             lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-            lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a"))
+            lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
 
             tvMsg.text = plannerData.planner?.nudge
 

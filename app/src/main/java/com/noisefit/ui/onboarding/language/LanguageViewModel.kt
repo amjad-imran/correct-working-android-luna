@@ -62,6 +62,7 @@ class LanguageViewModel @Inject constructor(
             userActivityRepository.clearAllHealthData()
             lastSyncProvider.removeSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
             keyValueDataSource.removeDataByKey("", KeyValueDataType.LEARN)
+            keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
 
             //Female health Data
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)

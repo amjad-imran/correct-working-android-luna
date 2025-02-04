@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -88,7 +89,8 @@ class TroubleShootBottomSheetFragment :
 
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
-                    ShareUtil.openExternalUrl(it, SUPPORT_URL)
+                    Freshchat.showConversations(requireContext())
+                    //ShareUtil.openExternalUrl(it, SUPPORT_URL)
                 }
             }
         }

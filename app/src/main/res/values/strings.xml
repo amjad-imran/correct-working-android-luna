@@ -1804,7 +1804,6 @@
     <string name="text_details">Details</string>
     <string name="text_description">Description</string>
     <string name="text_alarm">Alarm</string>
-    <string name="text_analysing_dot">Analysing..</string>
     <string name="text_this_schedule_meets_your_sleep_goal">This schedule meets your sleep goal</string>
     <string name="text_this_schedule_does_not_meet_your_sleep_goal">This schedule does not meet your sleep goal</string>
     <string name="text_listening">Listening</string>

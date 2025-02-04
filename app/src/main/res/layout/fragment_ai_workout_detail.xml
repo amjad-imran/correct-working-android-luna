@@ -15,28 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvNextWorkout"
-        style="@style/S14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:text="@string/text_next_workout"
-        android:textColor="#6AB7FF"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toStartOf="@+id/ivNext"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="22dp"
-        android:src="@drawable/ic_double_next"
-        app:layout_constraintBottom_toBottomOf="@+id/tvNextWorkout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvNextWorkout" />
-
     <include
         android:id="@+id/lytWorkoutDetails"
         layout="@layout/card_ai_workout_details"
@@ -48,6 +26,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/tvNextWorkout"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:padding="6dp"
+        android:text="@string/text_next_workout"
+        android:textColor="#6AB7FF"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNext"
+        app:layout_constraintEnd_toStartOf="@+id/ivNext"
+        app:layout_constraintTop_toBottomOf="@id/ivNext"
+        app:layout_constraintTop_toTopOf="@id/ivNext" />
+
+    <ImageView
+        android:id="@+id/ivNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/ic_double_next"
+        app:layout_constraintEnd_toEndOf="@id/lytWorkoutDetails"
+        app:layout_constraintTop_toBottomOf="@id/lytWorkoutDetails" />
 
 
     <TextView
@@ -85,18 +86,17 @@
         app:shimmer_repeat_mode="restart"
         tools:text="@string/text_generating_your_daily_health_digest" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMic"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="72dp"
-        android:background="#40FFFFFF"
-        android:src="@drawable/ic_ai_mic"
-        app:contentPadding="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/anim_ai_mic" />
 
     <ImageView
         android:id="@+id/ivTextChat"

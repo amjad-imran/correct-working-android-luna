@@ -12,7 +12,7 @@ import javax.inject.Inject
 class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
 
     var timer: CountDownTimer? = null
-    private val TOTAL_TIME = 3 * 19 * 1000L
+    private val TOTAL_TIME = 4 * 19 * 1000L
 
     val timerRunning = MutableLiveData<Long?>(null)//seconds remaining
 
