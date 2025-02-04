@@ -3,12 +3,17 @@ package com.noisefit_commans.data.model
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+
+data class SleepPlannerDisplayModel(
+    val planner: SleepPlannerData?,
+    var dashState: SleepCardDashState = SleepCardDashState.None
+)
+
 @Parcelize
 data class SleepPlannerData(
     val planner: PlannerData? = null,
     var alarms: PlannerAlarmData? = null,
     val goal: String? = null,
-    var dashState: SleepCardDashState = SleepCardDashState.NONE
 ) : Parcelable
 
 @Parcelize
@@ -74,8 +79,9 @@ data class AlarmTimingsData(
 ) : Parcelable
 
 
-enum class SleepCardDashState {
-    SET_ALARM,
-    BREATHING_EXERCISE,
-    NONE
+sealed class SleepCardDashState {
+    data object SetAlarm : SleepCardDashState()
+    data class AlarmSet(val data: AlarmTimingsData) : SleepCardDashState()
+    data object BreathingExercise : SleepCardDashState()
+    data object None : SleepCardDashState()
 }

@@ -21,10 +21,12 @@ import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.AlarmTimingsData
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -611,6 +613,7 @@ class SummaryDataViewModelToday @Inject constructor(
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()
+            val hasSleep = sleepModel.sleepScore != null && sleepModel.sleepScore != 0
 
 
             val daySlot = getDaySlot()
@@ -658,7 +661,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
                     sleepPlannerData.second?.let {
-                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                        userActivities.add(
+                            OHealthOverview.SleepPlannerCard(
+                                SleepPlannerDisplayModel(
+                                    it,
+                                    getPlannerCardState(it, hasSleep)
+                                )
+                            )
+                        )
                     }
                 }
 
@@ -727,7 +737,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
                     sleepPlannerData.second?.let {
-                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                        userActivities.add(
+                            OHealthOverview.SleepPlannerCard(
+                                SleepPlannerDisplayModel(
+                                    it,
+                                    getPlannerCardState(it, hasSleep)
+                                )
+                            )
+                        )
                     }
                 }
 
@@ -788,7 +805,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
                     sleepPlannerData.second?.let {
-                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                        userActivities.add(
+                            OHealthOverview.SleepPlannerCard(
+                                SleepPlannerDisplayModel(
+                                    it,
+                                    getPlannerCardState(it, hasSleep)
+                                )
+                            )
+                        )
                     }
 
 
@@ -800,7 +824,14 @@ class SummaryDataViewModelToday @Inject constructor(
                     val isBefore8 = DateFormats.isTimeBefore(currentTime, "20:00")
                     if (isBefore8) {
                         sleepPlannerData.second?.let {
-                            userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                            userActivities.add(
+                                OHealthOverview.SleepPlannerCard(
+                                    SleepPlannerDisplayModel(
+                                        it,
+                                        getPlannerCardState(it, hasSleep)
+                                    )
+                                )
+                            )
                         }
                     }
 
@@ -830,7 +861,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     if (isBefore8.not()) {
                         sleepPlannerData.second?.let {
-                            userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                            userActivities.add(
+                                OHealthOverview.SleepPlannerCard(
+                                    SleepPlannerDisplayModel(
+                                        it,
+                                        getPlannerCardState(it, hasSleep)
+                                    )
+                                )
+                            )
                         }
                     }
 
@@ -1892,20 +1930,20 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun checkIfAlarmSetForToday(alarms: PlannerAlarmData?): Boolean {
+    private fun checkIfAlarmSetForToday(alarms: PlannerAlarmData?): AlarmTimingsData? {
         if (alarms == null) {
-            return false
+            return null
         }
 
         return when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-            Calendar.MONDAY -> alarms.tue != null
-            Calendar.TUESDAY -> alarms.wed != null
-            Calendar.WEDNESDAY -> alarms.thu != null
-            Calendar.THURSDAY -> alarms.fri != null
-            Calendar.FRIDAY -> alarms.sat != null
-            Calendar.SATURDAY -> alarms.sun != null
-            Calendar.SUNDAY -> alarms.mon != null
-            else -> false
+            Calendar.MONDAY -> alarms.tue
+            Calendar.TUESDAY -> alarms.wed
+            Calendar.WEDNESDAY -> alarms.thu
+            Calendar.THURSDAY -> alarms.fri
+            Calendar.FRIDAY -> alarms.sat
+            Calendar.SATURDAY -> alarms.sun
+            Calendar.SUNDAY -> alarms.mon
+            else -> null
         }
     }
 
@@ -1928,13 +1966,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-
-                            it?.let {
-                                /*it.planner?.bed_time = "22:00:00"
-                                it.planner?.wake_time = "05:00:00"*/
-                                it.dashState = getPlannerCardState(it)
-                            }
-
                             sleepPlannerData = Pair(true, it)
                             sleepPlannerDataLoaded.postValue(Event(true))
                         }
@@ -1944,30 +1975,42 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getPlannerCardState(sleepPlannerData: SleepPlannerData): SleepCardDashState {
+    private fun getPlannerCardState(
+        sleepPlannerData: SleepPlannerData,
+        sleepExists: Boolean
+    ): SleepCardDashState {
         return if (showBreathingExercise(
                 sleepPlannerData.planner?.bed_time,
-                sleepPlannerData.planner?.wake_time
+                sleepPlannerData.planner?.wake_time,
+                sleepExists,
             )
         ) {
-            SleepCardDashState.BREATHING_EXERCISE
+            SleepCardDashState.BreathingExercise
         } else {
             val currentTime = LocalTime.now()
-            val isAlarmSetForToday = checkIfAlarmSetForToday(sleepPlannerData.alarms)
-            if (currentTime.hour >= 14 && isAlarmSetForToday.not()) {
-                SleepCardDashState.SET_ALARM
+            val nextAlarm = checkIfAlarmSetForToday(sleepPlannerData.alarms)
+            if (currentTime.hour >= 14 && nextAlarm == null) {
+                SleepCardDashState.SetAlarm
             } else {
                 val appOpenCount = localDataStore.getAppOpenCount().second
-                if (appOpenCount > 1 && isAlarmSetForToday.not()) {
-                    SleepCardDashState.SET_ALARM
+                if (appOpenCount > 1) {
+                    if (nextAlarm != null) {
+                        SleepCardDashState.AlarmSet(nextAlarm)
+                    } else {
+                        SleepCardDashState.SetAlarm
+                    }
                 } else {
-                    SleepCardDashState.NONE
+                    SleepCardDashState.None
                 }
             }
         }
     }
 
-    private fun showBreathingExercise(bedTime: String?, wakeTime: String?): Boolean {
+    private fun showBreathingExercise(
+        bedTime: String?,
+        wakeTime: String?,
+        sleepExists: Boolean
+    ): Boolean {
         var breathingExercise = false
         if (bedTime != null && wakeTime != null) {
             val parsedTime = LocalTime.parse(
@@ -1987,11 +2030,13 @@ class SummaryDataViewModelToday @Inject constructor(
                 breathingExercise = true
             }
 
-            if(breathingExercise.not()){
-                val minutesWakeTime =
-                    ((currentTime.hour * 60) + currentTime.minute)- ((parsedWakeTime.hour * 60) + parsedWakeTime.minute)
-                if (minutesWakeTime <= 0) {
-                    breathingExercise = true
+            if (breathingExercise.not()) {
+                if (currentTime.isAfter(LocalTime.of(0, 0)) && sleepExists.not()) {
+                    val minutesWakeTime =
+                        ((currentTime.hour * 60) + currentTime.minute) - ((parsedWakeTime.hour * 60) + parsedWakeTime.minute)
+                    if (minutesWakeTime <= 0) {
+                        breathingExercise = true
+                    }
                 }
             }
         }

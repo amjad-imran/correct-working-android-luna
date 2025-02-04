@@ -1,6 +1,7 @@
 package com.oreo.data.model
 
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -32,7 +33,7 @@ sealed class OHealthOverview {
         OHealthOverview()
 
     class SleepPlannerCard(
-        val data: SleepPlannerData
+        val data: SleepPlannerDisplayModel
     ) : OHealthOverview()
 
 

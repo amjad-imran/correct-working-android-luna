@@ -232,7 +232,8 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
-            R.layout.layout_dash_sleep_planner_card->{
+
+            R.layout.layout_dash_sleep_planner_card -> {
                 HomeRecyclerViewHolder.SleepPlannerViewHolder(
                     LayoutDashSleepPlannerCardBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
@@ -338,6 +339,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
+
             is HomeRecyclerViewHolder.SleepPlannerViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.SleepPlannerCard)
             }
@@ -527,7 +529,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
 
             binding.apply {
-                val plannerData = data.data
+                val plannerData = data.data.planner!!
 
                 lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
                 lytBedTime.tvTitle.text = "Bed time"//getString(R.string.text_bedtime)
@@ -544,10 +546,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-                lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                lytBedTime.tvTimeUnit.text =
+                    bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-                lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                lytWakeupTime.tvTimeUnit.text =
+                    wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
 
                 tvMsg.text = plannerData.planner?.nudge
 
@@ -575,25 +579,42 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
                 tvDuration.paint.shader = textShader
 
-                when (plannerData.dashState) {
-                    SleepCardDashState.SET_ALARM -> {
+                when (data.data.dashState) {
+                    SleepCardDashState.SetAlarm -> {
                         this.divider1.root.visible()
-                        this.lytSetAlarm.root.visible()
+                        this.lytSetAlarm.apply {
+                            ivAlarmMore.visible()
+                            tvAlarmTime.gone()
+                            root.visible()
+                        }
                         this.lytBreathe.root.gone()
                     }
 
-                    SleepCardDashState.BREATHING_EXERCISE -> {
+                    SleepCardDashState.BreathingExercise -> {
                         this.divider1.root.visible()
                         this.lytSetAlarm.root.gone()
                         this.lytBreathe.root.visible()
                     }
 
-                    SleepCardDashState.NONE -> {
+                    SleepCardDashState.None -> {
                         this.divider1.root.gone()
                         this.lytSetAlarm.root.gone()
                         this.lytBreathe.root.gone()
                     }
 
+                    is SleepCardDashState.AlarmSet -> {
+                        this.divider1.root.visible()
+                        this.lytSetAlarm.apply {
+                            ivAlarmMore.gone()
+                            tvAlarmTime.visible()
+                            tvAlarmTime.text = LocalTime.parse(
+                                (data.data.dashState as SleepCardDashState.AlarmSet).data.wake_time,
+                                DateTimeFormatter.ofPattern("HH:mm:ss")
+                            ).format(DateTimeFormatter.ofPattern("hh:mm a"))
+                            root.visible()
+                        }
+                        this.lytBreathe.root.gone()
+                    }
                 }
 
                 root.visible()
@@ -603,12 +624,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked)
             }
             binding.lytSetAlarm.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked)
+                if (data.data.dashState !is SleepCardDashState.AlarmSet) {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked)
+                }
             }
             binding.lytBreathe.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked)
             }
         }
+
         fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
             return if (end.isAfter(start)) {
                 Duration.between(start, end).toMinutes()
