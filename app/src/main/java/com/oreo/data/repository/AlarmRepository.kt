@@ -1,11 +1,9 @@
 package com.oreo.data.repository
 
-import androidx.compose.runtime.key
 import com.google.gson.Gson
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.SleepPlannerData
@@ -78,7 +76,7 @@ class AlarmRepository @Inject constructor(
         }
     }
 
-    fun cancelAllAlarms(){
+    fun cancelAllAlarms() {
         alarmUtil.cancelAllAlarms()
     }
 
@@ -88,9 +86,12 @@ class AlarmRepository @Inject constructor(
         alarmsData?.getNonNullAlarms()?.forEach {
             val wakeTime =
                 LocalTime.parse(it.second.wake_time, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val bedTime =
+                LocalTime.parse(it.second.bed_time, DateTimeFormatter.ofPattern("HH:mm:ss"))
+
             alarmUtil.scheduleWeeklyAlarm(
                 it.first, wakeTime.hour, wakeTime.minute,
-                getAlarmToneByKey(it.second.audio ?: 1)
+                getAlarmToneByKey(it.second.audio ?: 1),bedTime
             )
         }
     }

@@ -384,6 +384,22 @@ class SummaryDataFragmentToday :
                         this.putString("source", "homepage")
                     })
                 }
+
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked -> {
+                    navigate(
+                        R.id.setAlarmFragment,
+                        bundle = bundleOf("bed_time" to null, "wake_time" to null)
+                    )
+                }
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked -> {
+
+                        navigate(
+                            R.id.fragmentBreathExercise
+                        )
+                }
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked ->{
+                    navigate(R.id.sleepPlannerFragment)
+                }
             }
         }
 
@@ -391,18 +407,6 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
-
-        binding.contentMain.lytSplanner.lytSetAlarm.root.setOnClickListener {
-            navigate(
-                R.id.setAlarmFragment,
-                bundle = bundleOf("bed_time" to null, "wake_time" to null)
-            )
-        }
-        binding.contentMain.lytSplanner.lytBreathe.root.setOnClickListener {
-            navigate(
-                R.id.fragmentBreathExercise
-            )
-        }
 
         binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
             viewModel.hideFindMyRingPermCard()
@@ -422,13 +426,6 @@ class SummaryDataFragmentToday :
                 navigate(R.id.stressSplashFragment)
             }
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
-        }
-
-        binding.contentMain.lytSplanner.root.setOnClickListener {
-            navigate(R.id.sleepPlannerFragment)
-        }
-        binding.contentMain.lytSplanner.lytBreathe.ivPlay.setOnClickListener {
-            navigate(R.id.fragmentBreathExercise)
         }
 
         binding.contentMain.lytAppUpdate.root.setOnClickListener {
@@ -547,10 +544,6 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.sleepPlannerCard.observe(this) {
-            setPlannerCardUi(it)
-        }
-
         viewModel.sessionManager.googleFitSyncCompleted.observe(this) {
             it.getContent()?.let {
                 viewModel.handleGoogleFitCard()
@@ -642,6 +635,11 @@ class SummaryDataFragmentToday :
             }
         }*/
         viewModel.femaleHealthDataLoaded.observe(this) {
+            it.getContent()?.let {
+                loadData()
+            }
+        }
+        viewModel.sleepPlannerDataLoaded.observe(this) {
             it.getContent()?.let {
                 loadData()
             }
@@ -1035,85 +1033,6 @@ class SummaryDataFragmentToday :
                 else -> {}
             }
 
-        }
-
-    }
-
-    private fun setPlannerCardUi(data: Pair<SleepPlannerData, SleepCardDashState>?) {
-        if (data == null) {
-            binding.contentMain.lytSplanner.root.gone()
-            return
-        }
-        val plannerData = data.first
-
-        binding.contentMain.lytSplanner.apply {
-            lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-            lytBedTime.tvTitle.text = "Bed time"//getString(R.string.text_bedtime)
-            lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-            lytWakeupTime.tvTitle.text = "Wake time"//getString(R.string.text_wake_time)
-
-            val bedTime = LocalTime.parse(
-                plannerData.planner?.bed_time ?: "22:00:00",
-                DateTimeFormatter.ofPattern("HH:mm:ss")
-            )
-            val wakeTime = LocalTime.parse(
-                plannerData.planner?.wake_time ?: "06:00:00",
-                DateTimeFormatter.ofPattern("HH:mm:ss")
-            )
-
-            lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-            lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
-
-            lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-            lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
-
-            tvMsg.text = plannerData.planner?.nudge
-
-            clock.setData(bedTime, wakeTime, (plannerData.planner?.debt ?: 0) / 60)
-
-            val durationMinutes = viewModel.getDurationMinutes(bedTime, wakeTime)
-            val hours = durationMinutes / 60
-            val minutes = durationMinutes % 60
-
-            tvDuration.text = String.format("%d:%02d", hours, minutes)
-
-            tvDuration.setTextColor(Color.parseColor("#FFFFFF"))
-            val textShader: Shader = LinearGradient(
-                0f,
-                tvDuration.paint.measureText(tvDuration.text.toString()),
-                0f,
-                0f,
-                intArrayOf(
-                    Color.parseColor("#D5B6FF"),
-                    Color.parseColor("#D5B6FF"),
-                    Color.parseColor("#FFFFFF"),
-                ),
-                floatArrayOf(0f, 0.5f, 1f),
-                Shader.TileMode.CLAMP
-            )
-            tvDuration.paint.shader = textShader
-
-            when (data.second) {
-                SleepCardDashState.SET_ALARM -> {
-                    this.divider1.root.visible()
-                    this.lytSetAlarm.root.visible()
-                    this.lytBreathe.root.gone()
-                }
-
-                SleepCardDashState.BREATHING_EXERCISE -> {
-                    this.divider1.root.visible()
-                    this.lytSetAlarm.root.gone()
-                    this.lytBreathe.root.visible()
-                }
-
-                SleepCardDashState.NONE -> {
-                    this.divider1.root.gone()
-                    this.lytSetAlarm.root.gone()
-                    this.lytBreathe.root.gone()
-                }
-            }
-
-            root.visible()
         }
 
     }

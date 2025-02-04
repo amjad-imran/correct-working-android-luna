@@ -1808,5 +1808,7 @@
     <string name="text_this_schedule_does_not_meet_your_sleep_goal">This schedule does not meet your sleep goal</string>
     <string name="text_listening">Listening</string>
     <string name="text_analysing">Analysing</string>
+    <string name="text_bedtime_reminder">Bedtime Reminder</string>
+    <string name="text_bed_time_message">Good time to start lowering your light exposure, you need to sleep by %1$s for maximum recovery.</string>
 
 </resources>

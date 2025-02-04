@@ -153,8 +153,6 @@ class SummaryDataViewModelToday @Inject constructor(
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
 
-    val sleepPlannerCard = MutableLiveData<Pair<SleepPlannerData, SleepCardDashState>?>()
-
     val findMyRingCard = MutableLiveData<Boolean?>()
 
     val healthMonitorCardData = MutableLiveData<HealthTrend?>()
@@ -176,6 +174,9 @@ class SummaryDataViewModelToday @Inject constructor(
      */
     var femaleHealthData: Pair<Boolean, FemaleHealthUserInfoModel?> = Pair(false, null)
     var femaleHealthDataLoaded = MutableLiveData<Event<Boolean>>()
+
+    var sleepPlannerData: Pair<Boolean, SleepPlannerData?> = Pair(false, null)
+    var sleepPlannerDataLoaded = MutableLiveData<Event<Boolean>>()
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -657,6 +658,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (nap.isNotEmpty()) {
                         userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
+                    sleepPlannerData.second?.let {
+                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                    }
                 }
 
                 1 -> {
@@ -723,6 +727,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         } else {
                         }
                     }
+                    sleepPlannerData.second?.let {
+                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                    }
                 }
 
                 2 -> {
@@ -781,11 +788,23 @@ class SummaryDataViewModelToday @Inject constructor(
                             )
                         }
                     }
+                    sleepPlannerData.second?.let {
+                        userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                    }
 
 
                 }
 
                 else -> {
+                    val currentTime = DateFormats.getTimeFormat()
+
+                    val isBefore8 = DateFormats.isTimeBefore(currentTime,"20:00")
+                    if(isBefore8){
+                        sleepPlannerData.second?.let {
+                            userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                        }
+                    }
+
                     if ((healthData.activity?.activeCalories ?: 0) > 0) {
 
                         val activeCalories = healthData.activity?.activeCalories ?: 0
@@ -810,6 +829,11 @@ class SummaryDataViewModelToday @Inject constructor(
                         userActivities.add(OHealthOverview.LunaAiCard())
                     }
 
+                    if(isBefore8.not()){
+                        sleepPlannerData.second?.let {
+                            userActivities.add(OHealthOverview.SleepPlannerCard(it))
+                        }
+                    }
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleep_score != null) {
@@ -1881,7 +1905,7 @@ class SummaryDataViewModelToday @Inject constructor(
             Calendar.THURSDAY -> alarms.fri != null
             Calendar.FRIDAY -> alarms.sat != null
             Calendar.SATURDAY -> alarms.sun != null
-            Calendar.SUNDAY -> alarms.mon!= null
+            Calendar.SUNDAY -> alarms.mon != null
             else -> false
         }
     }
@@ -1905,11 +1929,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            it?.let {
-                                sleepPlannerCard.postValue(Pair(it, getPlannerCardState(it)))
-                            } ?: run {
-                                sleepPlannerCard.postValue(null)
-                            }
+
+                            sleepPlannerData = Pair(true, it)
+                            sleepPlannerDataLoaded.postValue(Event(true))
                         }
                     }
                 }

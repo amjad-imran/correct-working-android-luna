@@ -1,5 +1,8 @@
 package com.oreo.ui.home.summary
 
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -13,6 +16,7 @@ import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.LayoutChatCardDashBinding
 import com.noisefit.luna.databinding.LayoutDashHealthMonitorBinding
+import com.noisefit.luna.databinding.LayoutDashSleepPlannerCardBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -33,6 +37,7 @@ import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
+import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
@@ -52,6 +57,9 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.util.DateTimeUtil
 import com.oreo.util.UtilClass.seriesItemWithoutInset
+import java.time.Duration
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -67,6 +75,9 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 
     object OnAiCardClicked : OSummaryHealthOverviewClickEnum()
+    object OnSleepPlannerCardClicked : OSummaryHealthOverviewClickEnum()
+    object OnSleepPlannerAlarmClicked : OSummaryHealthOverviewClickEnum()
+    object OnSleepPlannerBreathingClicked : OSummaryHealthOverviewClickEnum()
     class OnHealthMonitorCardClicked(val data: HealthTrend) : OSummaryHealthOverviewClickEnum()
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
 
@@ -221,6 +232,13 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
+            R.layout.layout_dash_sleep_planner_card->{
+                HomeRecyclerViewHolder.SleepPlannerViewHolder(
+                    LayoutDashSleepPlannerCardBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
 
 //            R.layout.list_o_w_demo_card_item -> HomeRecyclerViewHolder.DemoViewHolder(
 //                ListOWDemoCardItemBinding.inflate(
@@ -320,6 +338,9 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
+            is HomeRecyclerViewHolder.SleepPlannerViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.SleepPlannerCard)
+            }
 
             is HomeRecyclerViewHolder.DashHealthMonitorViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.HealthMonitorCard)
@@ -360,6 +381,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
             is OHealthOverview.GotYourPeriod -> R.layout.list_dash_got_period
             is OHealthOverview.HealthMonitorCard -> R.layout.layout_dash_health_monitor
+            is OHealthOverview.SleepPlannerCard -> R.layout.layout_dash_sleep_planner_card
         }
     }
 
@@ -390,6 +412,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
 
     class DashHealthMonitorViewHolder(private val binding: LayoutDashHealthMonitorBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -494,6 +517,107 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 R.drawable.ic_health_good
             }
             return drawable
+        }
+    }
+
+    class SleepPlannerViewHolder(private val binding: LayoutDashSleepPlannerCardBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.SleepPlannerCard,
+        ) {
+
+            binding.apply {
+                val plannerData = data.data
+
+                lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
+                lytBedTime.tvTitle.text = "Bed time"//getString(R.string.text_bedtime)
+                lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
+                lytWakeupTime.tvTitle.text = "Wake time"//getString(R.string.text_wake_time)
+
+                val bedTime = LocalTime.parse(
+                    plannerData.planner?.bed_time ?: "22:00:00",
+                    DateTimeFormatter.ofPattern("HH:mm:ss")
+                )
+                val wakeTime = LocalTime.parse(
+                    plannerData.planner?.wake_time ?: "06:00:00",
+                    DateTimeFormatter.ofPattern("HH:mm:ss")
+                )
+
+                lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+                lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+
+                lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+                lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+
+                tvMsg.text = plannerData.planner?.nudge
+
+                clock.setData(bedTime, wakeTime, (plannerData.planner?.debt ?: 0) / 60)
+
+                val durationMinutes = getDurationMinutes(bedTime, wakeTime)
+                val hours = durationMinutes / 60
+                val minutes = durationMinutes % 60
+
+                tvDuration.text = String.format("%d:%02d", hours, minutes)
+
+                tvDuration.setTextColor(Color.parseColor("#FFFFFF"))
+                val textShader: Shader = LinearGradient(
+                    0f,
+                    tvDuration.paint.measureText(tvDuration.text.toString()),
+                    0f,
+                    0f,
+                    intArrayOf(
+                        Color.parseColor("#D5B6FF"),
+                        Color.parseColor("#D5B6FF"),
+                        Color.parseColor("#FFFFFF"),
+                    ),
+                    floatArrayOf(0f, 0.5f, 1f),
+                    Shader.TileMode.CLAMP
+                )
+                tvDuration.paint.shader = textShader
+
+                when (plannerData.dashState) {
+                    SleepCardDashState.SET_ALARM -> {
+                        this.divider1.root.visible()
+                        this.lytSetAlarm.root.visible()
+                        this.lytBreathe.root.gone()
+                    }
+
+                    SleepCardDashState.BREATHING_EXERCISE -> {
+                        this.divider1.root.visible()
+                        this.lytSetAlarm.root.gone()
+                        this.lytBreathe.root.visible()
+                    }
+
+                    SleepCardDashState.NONE -> {
+                        this.divider1.root.gone()
+                        this.lytSetAlarm.root.gone()
+                        this.lytBreathe.root.gone()
+                    }
+
+                }
+
+                root.visible()
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked)
+            }
+            binding.lytSetAlarm.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked)
+            }
+            binding.lytBreathe.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked)
+            }
+        }
+        fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
+            return if (end.isAfter(start)) {
+                Duration.between(start, end).toMinutes()
+            } else {
+                val dayEnd = LocalTime.of(23, 59)
+                val dayStart = LocalTime.of(0, 0)
+                Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
+                    .toMinutes()
+            }
         }
     }
 

@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -15,7 +17,13 @@ class AlarmUtil @Inject constructor(
 ) {
 
     @SuppressLint("ScheduleExactAlarm")
-    fun scheduleWeeklyAlarm(dayOfWeek: Int, hour: Int, minute: Int, alarmTone: Int) {
+    fun scheduleWeeklyAlarm(
+        dayOfWeek: Int,
+        hour: Int,
+        minute: Int,
+        alarmTone: Int,
+        bedTime: LocalTime
+    ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(context, AlarmReceiver::class.java)
@@ -55,11 +63,29 @@ class AlarmUtil @Inject constructor(
             pendingIntent
         )
 
+        val calendarBedTime = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_WEEK, dayOfWeek)
+            set(Calendar.HOUR_OF_DAY, bedTime.hour)
+            set(Calendar.MINUTE, bedTime.minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+
+            // Ensure the alarm is set for the future
+            if (before(Calendar.getInstance())) {
+                add(Calendar.WEEK_OF_YEAR, 1)
+            }
+        }
+
 
 //        alarmManager.setExactAndAllowWhileIdle(
 //            AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent
 //        );
-        preAlarmNotificationSchedule(context, dayOfWeek * 100, calendar.timeInMillis)
+        preAlarmNotificationSchedule(
+            context,
+            dayOfWeek * 100,
+            calendarBedTime.timeInMillis,
+            bedTime
+        )
 
         // Schedule the alarm
         /*alarmManager.setRepeating(
@@ -71,10 +97,19 @@ class AlarmUtil @Inject constructor(
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    private fun preAlarmNotificationSchedule(context: Context, notificationId: Int, millis:Long) {
+    private fun preAlarmNotificationSchedule(
+        context: Context,
+        notificationId: Int,
+        millis: Long,
+        bedTime: LocalTime,
+    ) {
         val beforeMillis = 60 * 60 * 1000L
-        val title = "Test title"
-        val message = "Test message"
+        val title = context.getString(R.string.text_bedtime_reminder)
+
+
+        val sleepTime = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+        val message =
+            context.getString(R.string.text_bed_time_message, sleepTime)
 
         val intent = Intent(context, WindDownNotification::class.java)
 
@@ -90,13 +125,13 @@ class AlarmUtil @Inject constructor(
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val scheduleTime = millis-beforeMillis
+        val scheduleTime = millis - beforeMillis
 
-        if(scheduleTime>Calendar.getInstance().timeInMillis){
-            LOGS.d("dsfjhskdjfhk ${millis-beforeMillis}  | $beforeMillis notification scheduled")
+        if (scheduleTime > Calendar.getInstance().timeInMillis) {
+            LOGS.d("dsfjhskdjfhk ${millis - beforeMillis}  | $beforeMillis notification scheduled")
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
-                millis-beforeMillis,
+                millis - beforeMillis,
                 pendingIntent
             )
         }

@@ -8,6 +8,7 @@ data class SleepPlannerData(
     val planner: PlannerData? = null,
     var alarms: PlannerAlarmData? = null,
     val goal: String? = null,
+    var dashState: SleepCardDashState = SleepCardDashState.NONE
 ) : Parcelable
 
 @Parcelize

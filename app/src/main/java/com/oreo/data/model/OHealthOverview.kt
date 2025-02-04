@@ -1,5 +1,6 @@
 package com.oreo.data.model
 
+import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -29,6 +30,10 @@ sealed class OHealthOverview {
         val isBeta: Boolean = false
     ) :
         OHealthOverview()
+
+    class SleepPlannerCard(
+        val data: SleepPlannerData
+    ) : OHealthOverview()
 
 
     class LunaAiCard(
@@ -94,7 +99,7 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class StressDashDataModel(
-        var data: StressCombineModel?=null,
+        var data: StressCombineModel? = null,
         val listData: List<Int>? = null,
         var lastTime: String? = "",
         var value: Int? = null,

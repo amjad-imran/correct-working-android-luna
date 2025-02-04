@@ -160,7 +160,10 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
                 OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {}
-                is OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked -> TODO()
+                is OSummaryHealthOverviewClickEnum.OnHealthMonitorCardClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked -> {}
             }
         }
 
