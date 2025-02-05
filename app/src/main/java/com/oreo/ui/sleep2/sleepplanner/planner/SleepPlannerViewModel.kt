@@ -97,7 +97,13 @@ class SleepPlannerViewModel @Inject constructor(
         for ((key, models) in groupedData) {
             val (startTime, endTime) = key
 
-            val days = models.map { it.first }
+            val days = models.map { it.first } as ArrayList
+            if(days.size>1){
+                if (days.first()==1) {
+                    days.removeFirst()
+                    days.add(1)
+                }
+            }
 
             combinedList.add(
                 AlarmDisplayModel(
