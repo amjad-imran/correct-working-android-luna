@@ -18,16 +18,16 @@ class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
 
     fun startTimer() {
         timer?.cancel()
-        timerRunning.postValue(null)
+        timerRunning.value = (null)
         Handler(Looper.getMainLooper()).postDelayed({
-            timerRunning.postValue(TOTAL_TIME / 1000)
+            timerRunning.value = (TOTAL_TIME / 1000)
             timer = object : CountDownTimer(TOTAL_TIME, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    timerRunning.postValue(millisUntilFinished / 1000)
+                    timerRunning.value = (millisUntilFinished / 1000)
                 }
 
                 override fun onFinish() {
-                    timerRunning.postValue(0L)
+                    timerRunning.value = (0L)
                 }
             }
             timer?.start()
@@ -35,6 +35,7 @@ class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun cancelTimer() {
+        timerRunning.value = (null)
         timer?.cancel()
     }
 

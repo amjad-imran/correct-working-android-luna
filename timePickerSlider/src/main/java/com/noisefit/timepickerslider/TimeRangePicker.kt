@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Parcelable
 import android.text.format.DateFormat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.*
@@ -609,6 +610,9 @@ class TimeRangePicker @JvmOverloads constructor(
         }
     }
 
+    var isMaxReached = false
+    var isMinReached = false
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
@@ -642,6 +646,8 @@ class TimeRangePicker @JvmOverloads constructor(
             }
 
             MotionEvent.ACTION_MOVE -> {
+                Log.d("sdfjksdhfkjshdkfj", "kjhkj $_activeThumb")
+
                 if (_activeThumb == Thumb.START || _activeThumb == Thumb.BOTH) {
                     val difference =
                         differenceBetweenAngles(_angleStart, touchAngle) - _touchOffsetAngle

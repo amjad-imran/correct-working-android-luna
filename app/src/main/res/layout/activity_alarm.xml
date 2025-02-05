@@ -21,8 +21,10 @@
         android:textSize="82sp"
         app:layout_constraintBottom_toTopOf="@+id/tvTextAlarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.40"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="10:06" />
 
     <TextView
@@ -34,17 +36,17 @@
         android:lineSpacingExtra="-22sp"
         android:text="@string/text_alarm"
         android:textColor="#EDCDA8"
-        app:layout_constraintBottom_toTopOf="@+id/tvDismiss"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAlarmTime" />
 
     <ImageView
+        android:id="@+id/imageView68"
         android:layout_width="0dp"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
         android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:src="@drawable/bg_alarm_ring"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,12 +62,13 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="76dp"
         android:text="@string/stop"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextAlarm"
+        app:layout_constraintVertical_bias="0.7"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

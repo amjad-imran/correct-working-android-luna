@@ -1,5 +1,6 @@
 package com.oreo.ui.sleep2.sleepplanner.planner
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,10 +33,12 @@ class AlarmsAdapter(val onAlarmClicked: (AlarmDisplayModel) -> Unit) :
                     LocalTime.parse(data.wakeTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-                lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a"))
+                lytBedTime.tvTimeUnit.text = bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                lytBedTime.tvTimeUnit.setTextColor(Color.parseColor("#99FFFFFF"))
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-                lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a"))
+                lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                lytWakeupTime.tvTimeUnit.setTextColor(Color.parseColor("#99FFFFFF"))
 
             }
 

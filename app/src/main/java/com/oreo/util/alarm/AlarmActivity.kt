@@ -60,9 +60,10 @@ class AlarmActivity : AppCompatActivity() {
                 0f,
                 intArrayOf(
                     Color.parseColor("#EDCDA8"),
+                    Color.parseColor("#EDCDA8"),
                     Color.parseColor("#DC7D38"),
                 ),
-                floatArrayOf(0f, 1f),
+                floatArrayOf(0f,0.5f, 1f),
                 Shader.TileMode.CLAMP
             )
             this.paint.shader = textShader

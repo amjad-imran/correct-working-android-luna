@@ -10,6 +10,7 @@ import com.noisefit_commans.utils.LOGS
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 class AlarmUtil @Inject constructor(
@@ -28,7 +29,7 @@ class AlarmUtil @Inject constructor(
 
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra("alarmTone", alarmTone)
-        intent.putExtra("time", "$hour:$minute")
+        intent.putExtra("time",   String.format(locale = Locale.US, "%02d:%02d", hour, minute))
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,

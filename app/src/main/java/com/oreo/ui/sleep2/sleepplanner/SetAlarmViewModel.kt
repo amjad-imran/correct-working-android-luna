@@ -408,7 +408,7 @@ class SetAlarmViewModel @Inject constructor(
         val min = (sleepPlannerCard.value?.planner?.min_duration ?: 0) / 60
         if (min == 0L) return false
 
-        return durationMinutes <= min
+        return durationMinutes < min
 
     }
 }

@@ -31,7 +31,10 @@ class BreathingExerciseFragment :
 
     override fun subscribeObservers() {
         viewModel.timerRunning.observe(this) {
-            if (it == null) return@observe
+            if (it == null){
+                binding.tvTimer.text = ""
+                return@observe
+            }
 
             if (it == 0L) {
                 navigateUpSafe()
