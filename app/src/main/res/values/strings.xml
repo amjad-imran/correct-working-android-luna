@@ -1032,7 +1032,7 @@
     <string name="text_bo_else">Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep.</string>
     <string name="text_active_duration">Active duration</string>
     <string name="text_maximum">Maximum</string>
-    <string name="text_ms">ms</string>
+    <string name="text_ms" translatable="false">ms</string>
     <string name="text_remind_me_later">Remind me later</string>
     <string name="text_update_my_app">Update my app</string>
     <string name="text_update_my_ring">Update my ring</string>
@@ -1811,5 +1811,15 @@
     <string name="text_bedtime_reminder">Bedtime Reminder</string>
     <string name="text_bed_time_message">Good time to start lowering your light exposure, you need to sleep by %1$s for maximum recovery.</string>
     <string name="text_i_am_already_pregnant">I am already pregnant</string>
+    <string name="text_lofi">Lofi</string>
+    <string name="text_thailand">Thailand</string>
+    <string name="text_singapore">Singapore</string>
+    <string name="text_scotland">Scotland</string>
+    <string name="text_find_alternatives_of_value">Find alternatives of %1$s</string>
+    <string name="text_how_does_help_my_body_value">How does %1$s help my body</string>
+    <string name="text_how_do_i_do_value">How do I do %1$s</string>
+    <string name="text_find_alternatives_of_for_my_diet_value">"Find alternatives of %1$s for  my diet "</string>
+    <string name="text_what_are_the_nutritional_benefits_of_value">What are the nutritional benefits of %1$s</string>
+    <string name="text_give_me_a_recipe_for_value">Give me a recipe for %1$s</string>
 
 </resources>

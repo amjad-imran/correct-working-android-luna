@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.AiMeal
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiMealDetailBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.chatGpt.AITopics
@@ -74,9 +75,17 @@ class AiMealDetailFragment :
         binding.toolbar.tvTitle.text = mealName
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
 
-        messagesStrings.add("Find alternatives of ${meal.meal_name} for  my diet ")
-        messagesStrings.add("What are the nutritional benefits of ${meal.meal_name}")
-        messagesStrings.add("Give me a recipe for ${meal.meal_name}")
+        messagesStrings.add(
+            getString(
+                R.string.text_find_alternatives_of_for_my_diet_value,
+                meal.meal_name
+            ))
+        messagesStrings.add(
+            getString(
+                R.string.text_what_are_the_nutritional_benefits_of_value,
+                meal.meal_name
+            ))
+        messagesStrings.add(getString(R.string.text_give_me_a_recipe_for_value, meal.meal_name))
 
         displayMessage.postValue(getWorkoutAiString(currentPos))
         startTimer()

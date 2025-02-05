@@ -7,6 +7,7 @@ import android.graphics.Shader.TileMode
 import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
@@ -38,6 +39,7 @@ import javax.inject.Inject
 class SetAlarmViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val alarmRepository: AlarmRepository,
+    private val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     var deleteMode = MutableLiveData(false)
@@ -388,10 +390,10 @@ class SetAlarmViewModel @Inject constructor(
 
     fun alarmTonesList(): List<AlarmSoundDataModel> {
         val dataList = ArrayList<AlarmSoundDataModel>()
-        dataList.add(AlarmSoundDataModel(title = "Lofi", false, getAlarmToneByKey(1), 1))
-        dataList.add(AlarmSoundDataModel(title = "Thailand", false, getAlarmToneByKey(2), 2))
-        dataList.add(AlarmSoundDataModel(title = "Singapore", false, getAlarmToneByKey(3), 3))
-        dataList.add(AlarmSoundDataModel(title = "Scotland", false, getAlarmToneByKey(4), 4))
+        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_lofi), false, getAlarmToneByKey(1), 1))
+        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_thailand), false, getAlarmToneByKey(2), 2))
+        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_singapore), false, getAlarmToneByKey(3), 3))
+        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_scotland), false, getAlarmToneByKey(4), 4))
         return dataList
     }
 

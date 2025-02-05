@@ -55,9 +55,17 @@ class AiWorkoutDetailFragment :
 
         val workout = dataList.first()
 
-        messagesStrings.add("Find alternatives of ${workout.workout_name}")
-        messagesStrings.add("How does ${workout.workout_name} help my body")
-        messagesStrings.add("Find alternatives of ${workout.workout_name}")
+        messagesStrings.add(
+            getString(
+                R.string.text_find_alternatives_of_value,
+                workout.workout_name
+            ))
+        messagesStrings.add(
+            getString(
+                R.string.text_how_does_help_my_body_value,
+                workout.workout_name
+            ))
+        messagesStrings.add(getString(R.string.text_how_do_i_do_value, workout.workout_name))
 
         displayMessage.postValue(getWorkoutAiString(currentPos))
         startTimer()
