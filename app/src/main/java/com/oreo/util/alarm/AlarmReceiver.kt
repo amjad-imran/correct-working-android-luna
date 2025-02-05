@@ -24,6 +24,18 @@ class AlarmReceiver : BroadcastReceiver() {
         if (Intent.ACTION_BOOT_COMPLETED == intent?.action || Intent.ACTION_REBOOT == intent?.action) {
             alarmRepository.rescheduleAlarms()
         } else {
+
+            val millis = intent?.getLongExtra("millis", 0L) ?: 0L
+
+            LOGS.d("sdfjkhskdjfhksfj $millis - ${System.currentTimeMillis()}")
+
+            if (millis != 0L) {
+                val current = System.currentTimeMillis()
+                if (current > (millis + 60 * 1000)) {
+                    return
+                }
+            }
+
             val pendingIntent = Intent(context, AlarmService::class.java)
             pendingIntent.putExtra(
                 "alarmTone",
@@ -33,9 +45,6 @@ class AlarmReceiver : BroadcastReceiver() {
                 "time",
                 intent?.getStringExtra("time")
             )
-            //val bundle = Bundle()
-            //bundle.putSerializable(context.getString(R.string.arg_alarm_obj), alarm1)
-            //intentService.putExtra(context.getString(R.string.bundle_alarm_obj), bundle)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(pendingIntent)
             } else {

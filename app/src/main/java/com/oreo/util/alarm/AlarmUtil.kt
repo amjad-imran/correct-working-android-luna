@@ -31,12 +31,7 @@ class AlarmUtil @Inject constructor(
         intent.putExtra("alarmTone", alarmTone)
         intent.putExtra("time",   String.format(locale = Locale.US, "%02d:%02d", hour, minute))
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            dayOfWeek, // Unique request code for each day
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
 
         // Set the alarm time
         val calendar = Calendar.getInstance().apply {
@@ -51,6 +46,13 @@ class AlarmUtil @Inject constructor(
                 add(Calendar.WEEK_OF_YEAR, 1)
             }
         }
+        intent.putExtra("millis",calendar.timeInMillis)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            dayOfWeek, // Unique request code for each day
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val showIntent = PendingIntent.getActivity(
             context,

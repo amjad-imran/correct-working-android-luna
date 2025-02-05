@@ -822,7 +822,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     val currentTime = DateFormats.getTimeFormat()
 
                     val isBefore8 = DateFormats.isTimeBefore(currentTime, "20:00")
-                    if (isBefore8) {
+                    if (isBefore8.not()) {
                         sleepPlannerData.second?.let {
                             userActivities.add(
                                 OHealthOverview.SleepPlannerCard(
@@ -859,7 +859,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         userActivities.add(OHealthOverview.LunaAiCard())
                     }
 
-                    if (isBefore8.not()) {
+                    if (isBefore8) {
                         sleepPlannerData.second?.let {
                             userActivities.add(
                                 OHealthOverview.SleepPlannerCard(
