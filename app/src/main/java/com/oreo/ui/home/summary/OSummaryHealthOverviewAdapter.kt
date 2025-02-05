@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.hookedonplay.decoviewlib.events.DecoEvent
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
@@ -60,6 +61,7 @@ import com.oreo.util.UtilClass.seriesItemWithoutInset
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -547,11 +549,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytBedTime.tvTimeUnit.text =
-                    bedTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                    bedTime.format(DateTimeFormatter.ofPattern("a",
+                        Locale("en")
+                    )).lowercase()
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytWakeupTime.tvTimeUnit.text =
-                    wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                    wakeTime.format(DateTimeFormatter.ofPattern("a",Locale("en"))).lowercase()
 
                 tvMsg.text = plannerData.planner?.nudge
 

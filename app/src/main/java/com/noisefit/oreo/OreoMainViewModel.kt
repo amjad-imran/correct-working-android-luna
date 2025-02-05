@@ -238,7 +238,21 @@ constructor(
         stateConnectHelp.postValue(false)
     }
 
+    var lastCallTime = 0L
+
     fun getUserHealthData(startDate: String?, endDate: String?) {
+
+        if (lastCallTime == 0L) {
+            lastCallTime = System.currentTimeMillis()
+        } else {
+            val diff = System.currentTimeMillis() - lastCallTime
+            if (diff < 1000) {
+                return
+            } else {
+                lastCallTime = System.currentTimeMillis()
+            }
+        }
+
         isFetchRequestOnGoing = true
         viewModelScope.launch {
             userActivityRepository.getUserHealthData(
@@ -639,30 +653,30 @@ constructor(
         /*if (response?.sleep == null) return*/
 
         //Sleep
-       /* response.sleep?.let {
-            if ((it.sleep_score?.value ?: 0) > 75 && (it.totalSleep?.value
-                    ?: 0) >= 25200 && (it.totalSleep?.value
-                    ?: 0) <= 32400
-            ) {
-                val timeStamp = localDataStore.getSleepNotificationTimeStamp()
+        /* response.sleep?.let {
+             if ((it.sleep_score?.value ?: 0) > 75 && (it.totalSleep?.value
+                     ?: 0) >= 25200 && (it.totalSleep?.value
+                     ?: 0) <= 32400
+             ) {
+                 val timeStamp = localDataStore.getSleepNotificationTimeStamp()
 
-                if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
-                    pushNotificationSleep.postValue(
-                        Event(
-                            PushLocalNotification(
-                                "Good sleep last night",
-                                "You got enough sleep hours today. This helps with higher recovery, cognitive & immune system function",
-                                NotificationEventsClass.LOCAL_SLEEP_NOTIFICATION_KEY
-                            )
-                        )
-                    )
-                    localDataStore.setSleepNotificationTimeStamp()
-                }
-            }
-        }*/
+                 if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
+                     pushNotificationSleep.postValue(
+                         Event(
+                             PushLocalNotification(
+                                 "Good sleep last night",
+                                 "You got enough sleep hours today. This helps with higher recovery, cognitive & immune system function",
+                                 NotificationEventsClass.LOCAL_SLEEP_NOTIFICATION_KEY
+                             )
+                         )
+                     )
+                     localDataStore.setSleepNotificationTimeStamp()
+                 }
+             }
+         }*/
 
         val currentHour = java.time.LocalDateTime.now().hour
-        if(currentHour >=12){
+        if (currentHour >= 12) {
             return
         }
 
@@ -672,7 +686,11 @@ constructor(
                 val nudge = it.dashNudges?.firstOrNull()
                 if (it.readinessScore?.value != null && nudge != null) {
                     NotificationUtil.pushNotification(
-                        NoiseFitApplicationMain.context!!, nudge.label, nudge.message, NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY, "1"
+                        NoiseFitApplicationMain.context!!,
+                        nudge.label,
+                        nudge.message,
+                        NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY,
+                        "1"
                     )
 
                     /*pushNotificationReadiness.postValue(
@@ -870,17 +888,17 @@ constructor(
      */
     fun handleAddWorkoutVisibility() {
         /*viewModelScope.launch(Dispatchers.IO) {*/
-            if (sessionManager.connectedDeviceRing.value == null) {
-                addWorkoutCtaVisibility.postValue(false)
-                return
-            }
-            if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-                addWorkoutCtaVisibility.postValue(true)
-                isActivityWorkAdd = true
-            } else {
-                addWorkoutCtaVisibility.postValue(false)
-                isActivityWorkAdd = false
-            }
+        if (sessionManager.connectedDeviceRing.value == null) {
+            addWorkoutCtaVisibility.postValue(false)
+            return
+        }
+        if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
+            addWorkoutCtaVisibility.postValue(true)
+            isActivityWorkAdd = true
+        } else {
+            addWorkoutCtaVisibility.postValue(false)
+            isActivityWorkAdd = false
+        }
         /*}*/
     }
 
