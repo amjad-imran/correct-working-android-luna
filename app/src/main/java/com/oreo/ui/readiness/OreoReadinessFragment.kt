@@ -78,7 +78,7 @@ class OreoReadinessFragment :
                 version: Int
             ) {
                 openContributorBottomSheet(resultData, position, version)
-                handleEvent(resultData[position].title)
+                //handleEvent(resultData[position].title)
             }
 
         })
@@ -180,6 +180,13 @@ class OreoReadinessFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
+
+                            uiController.logAppEvent(
+                                MoEngageLunaAppEvents.aichat_initiated_clicked,
+                                hashMapOf("source" to "readiness")
+                            )
+
+
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.READINESS)
@@ -533,6 +540,11 @@ class OreoReadinessFragment :
         setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
             val selectedDate =
                 bundle.getString("selected_date") ?: return@setFragmentResultListener
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.calender_day_selected,
+                hashMapOf("source" to "readiness")
+            )
 
             mainViewModel.onCalendarDateSelected(selectedDate)
             mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
@@ -1164,6 +1176,10 @@ class OreoReadinessFragment :
         }
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
+        uiController.logAppEvent(
+            MoEngageLunaAppEvents.day_selected,
+            hashMapOf("source" to "readiness")
+        )
         mainViewModel.selectedDate = chartModel.date!!
         val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
         if (returnDate != null) {

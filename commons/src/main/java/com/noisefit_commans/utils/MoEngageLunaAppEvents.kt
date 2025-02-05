@@ -24,8 +24,21 @@ object MoEngageLunaAppEvents {
     const val health_monitor_calen_change_click = "health_monitor_calen_change_click"
     const val drop_down_selected = "drop_down_selected"
     /**
-     * Sleep Events add ===============
+     * Sleep Events end ===============
      */
+
+    /**
+     * Readiness Events =============================
+     */
+    const val score_interval_change = "score_interval_change"
+
+
+
+    /**
+     * Readiness Events end ================================
+     */
+
+
 
     /**
      * AI Events start =========================

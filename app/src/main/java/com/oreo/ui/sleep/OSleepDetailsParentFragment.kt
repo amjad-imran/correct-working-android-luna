@@ -52,6 +52,8 @@ class OSleepDetailsParentFragment :
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> {
+
+                        sendEvent("day", mViewModel.itemClickType)
                         mViewModel.selectedTab = 0
                         var clickedType = ""
                         when (mViewModel.itemType) {
@@ -94,6 +96,8 @@ class OSleepDetailsParentFragment :
                     }
 
                     1 -> {
+                        sendEvent("week", mViewModel.itemClickType)
+
                         mViewModel.selectedTab = 1
                         var clickedViewType = ""
                         when (mViewModel.itemType) {
@@ -135,6 +139,8 @@ class OSleepDetailsParentFragment :
                     }
 
                     else -> {
+                        sendEvent("month", mViewModel.itemClickType)
+
                         mViewModel.selectedTab = 2
                         var clickedType = ""
                         when (mViewModel.itemType) {
@@ -189,6 +195,29 @@ class OSleepDetailsParentFragment :
         })
     }
 
+    private fun sendEvent(interval: String, itemClickType: ViewItemClickType?) {
+
+        var source: String? = null
+        source = when (itemClickType) {
+            ViewItemClickType.READINESS_SCORE -> "readiness"
+            ViewItemClickType.RESTING_HR -> "resting_heart_rate"
+            ViewItemClickType.HR_VARIABILITY -> "hrv"
+            ViewItemClickType.BODY_TEMPERATURE -> "skin_temperature"
+            ViewItemClickType.RESPIRATORY_RATE -> "respiratory_rate"
+            else -> null
+        }
+
+        if (source != null) {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.score_interval_change,
+                hashMapOf(
+                    "source" to source,
+                    "interval" to interval
+                )
+            )
+        }
+    }
+
     override fun initListener() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_sleep_score_lower)
         binding.lytToolbar.backBtn.setOnClickListener {
@@ -198,7 +227,7 @@ class OSleepDetailsParentFragment :
         }
         binding.lytToolbar.view1.setSafeOnClickListener {
             mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
-            args.infoData?.let{data->
+            args.infoData?.let { data ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", data)
                 })
@@ -281,6 +310,7 @@ class OSleepDetailsParentFragment :
             ViewItemClickType.DISTANCE -> {
                 trendTitle = getString(R.string.text_distance)
             }
+
             ViewItemClickType.AVG_TEMP -> {
                 trendTitle = "Body temperature"
             }
