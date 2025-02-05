@@ -31,7 +31,7 @@ class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
                 }
             }
             timer?.start()
-        }, 4000)
+        }, 3000)
     }
 
     fun cancelTimer() {

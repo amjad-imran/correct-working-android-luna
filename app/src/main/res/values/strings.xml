@@ -1123,7 +1123,7 @@
     <string name="text_tracking_my_pregnancy">Tracking my pregnancy</string>
     <string name="text_tracking_privacy_desc">Be prepared for your next period and learn more about your body with statistics on previous cycles.</string>
     <string name="text_tracking_privacy_desc_2">Find out your fertility window and when you are likely to ovulate.</string>
-    <string name="text_tracking_privacy_desc_3">Monitor your body weight changes and log your well-being during your pregnancy.</string>
+    <string name="text_tracking_privacy_desc_3">Luna currently does not support pregnancy feature. The period tracker will not work for this goal.</string>
     <string name="text_not_sure">Not Sure</string>
     <string name="text_how_long_does_your_period_usually_last">How long does your period usually last?</string>
     <string name="text_how_long_does_your_cycle_usually_last">How long is your typical cycle?</string>
@@ -1810,5 +1810,6 @@
     <string name="text_analysing">Analysing</string>
     <string name="text_bedtime_reminder">Bedtime Reminder</string>
     <string name="text_bed_time_message">Good time to start lowering your light exposure, you need to sleep by %1$s for maximum recovery.</string>
+    <string name="text_i_am_already_pregnant">I am already pregnant</string>
 
 </resources>

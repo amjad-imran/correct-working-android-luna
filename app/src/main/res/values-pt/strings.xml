@@ -1096,7 +1096,6 @@
     <string name="text_tracking_my_pregnancy">Acompanhando minha gravidez</string>
     <string name="text_tracking_privacy_desc">Esteja preparado para a próxima menstruação e aprenda mais sobre o seu corpo com estatísticas dos ciclos anteriores.</string>
     <string name="text_tracking_privacy_desc_2">Descubra sua janela de fertilidade e quando é provável que você ovule.</string>
-    <string name="text_tracking_privacy_desc_3">Monitore as mudanças no peso corporal e registre seu bem-estar durante a gravidez.</string>
     <string name="text_not_sure">Não tenho certeza</string>
     <string name="text_how_long_does_your_period_usually_last">Quanto tempo normalmente dura a sua menstruação?</string>
     <string name="text_how_long_does_your_cycle_usually_last">Quanto tempo dura o seu ciclo típico?</string>
@@ -1754,4 +1753,6 @@
     <string name="text_select_all">Selecionar tudo</string>
     <string name="text_please_select_at_least_1_option">Selecione pelo menos 1 opção</string>
     <string name="text_google_fit_data_share">Compartilharemos esses dados com o Google Fit. Não retiraremos esses dados do Google Fit.</string>
+    <string name="text_4_7_8">A respiração 4-7-8 ajuda a relaxar sua mente e corpo</string>
+    <string name="text_delete_alarm">excluir alarme</string>
 </resources>

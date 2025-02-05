@@ -585,6 +585,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.visible()
                             tvAlarmTime.gone()
+                            tvSetUpAlarm.text =this.root.context.getString(R.string.text_set_up_alarm)
+                            tvSetUpAlarm.setTextColor(Color.parseColor("#88b0ff"))
                             root.visible()
                         }
                         this.lytBreathe.root.gone()
@@ -607,10 +609,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.gone()
                             tvAlarmTime.visible()
+                            tvSetUpAlarm.text =root.context.getString(R.string.text_alarm_set_for)
+                            tvSetUpAlarm.setTextColor(Color.parseColor("#FFFFFF"))
                             tvAlarmTime.text = LocalTime.parse(
                                 (data.data.dashState as SleepCardDashState.AlarmSet).data.wake_time,
                                 DateTimeFormatter.ofPattern("HH:mm:ss")
-                            ).format(DateTimeFormatter.ofPattern("hh:mm a"))
+                            ).format(DateTimeFormatter.ofPattern("hh:mm a")).lowercase()
                             root.visible()
                         }
                         this.lytBreathe.root.gone()

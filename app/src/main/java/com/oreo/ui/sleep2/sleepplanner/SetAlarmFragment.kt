@@ -61,6 +61,17 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         })
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initTimePicker()
+        viewModel.setEditMode(args.bedTime, args.wakeTime)
+
+        initUi()
+
+        viewModel.getSleepPlanerDetails()
+    }
+
     private fun showAlreadyExistDialog() {
 
         setFragmentResultListener(CHANGE_SCHEDULE) { _, bundle ->
@@ -72,17 +83,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
         }
         navigate(R.id.bottomSheetChangeSchedule)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initTimePicker()
-        viewModel.setEditMode(args.bedTime, args.wakeTime)
-
-        initUi()
-
-        viewModel.getSleepPlanerDetails()
     }
 
     private fun initTimePicker() {
@@ -329,6 +329,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 binding.timePicker.setPeriod(start, end)
 
                 viewModel.setDefaultTone(viewModel.editModeSelectedTime!!)
+            }else{
+                binding.timePicker.setPeriod(LocalTime.of(22, 0), LocalTime.of(6, 0))
             }
             //binding.timePicker.setSleepMinDuration(it?.planner?.min_duration ?: 0L)
             binding.lytMain.visible()

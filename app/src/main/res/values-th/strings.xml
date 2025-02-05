@@ -8,7 +8,6 @@
     <string name="text_email_hint">รหัสอีเมล</string>
     <string name="text_back_button">ปุ่มย้อนกลับ</string>
     <string name="text_no_device_found">ไม่พบอุปกรณ์</string>
-    <string name="text_get_started">เริ่มต้นเลย</string>
     <string name="text_shop">ร้านค้า</string>
     <string name="text_activity">การออกกำลังกาย</string>
     <string name="text_watchfaces">หน้าปัดนาฬิกา</string>
@@ -1087,7 +1086,6 @@
     <string name="text_tracking_my_pregnancy">ติดตามการตั้งครรภ์ของฉัน</string>
     <string name="text_tracking_privacy_desc">เตรียมพร้อมสำหรับรอบเดือนถัดไปและเรียนรู้เพิ่มเติมเกี่ยวกับร่างกายของคุณพร้อมสถิติในรอบก่อนหน้า</string>
     <string name="text_tracking_privacy_desc_2">ค้นหาช่วงการเจริญพันธุ์ของคุณและช่วงเวลาที่คุณมีแนวโน้มที่จะตกไข่</string>
-    <string name="text_tracking_privacy_desc_3">ติดตามการเปลี่ยนแปลงน้ำหนักตัวของคุณและบันทึกความเป็นอยู่ที่ดีของคุณในระหว่างตั้งครรภ์</string>
     <string name="text_not_sure">ไม่แน่ใจ</string>
     <string name="text_how_long_does_your_period_usually_last">ปกติประจำเดือนของคุณจะอยู่ได้นานแค่ไหน?</string>
     <string name="text_how_long_does_your_cycle_usually_last">วงจรปกติของคุณนานแค่ไหน?</string>
@@ -1744,4 +1742,6 @@
     <string name="text_select_all">เลือกทั้งหมด</string>
     <string name="text_please_select_at_least_1_option">โปรดเลือกอย่างน้อย 1 ตัวเลือก</string>
     <string name="text_google_fit_data_share">เราจะแชร์ข้อมูลนี้กับ Google Fit เราจะไม่นำข้อมูลนี้มาจาก Google Fit</string>
+    <string name="text_4_7_8">การหายใจแบบ 4-7-8 ช่วยผ่อนคลายจิตใจและร่างกายของคุณ</string>
+    <string name="text_delete_alarm">ลบการปลุก</string>
 </resources>

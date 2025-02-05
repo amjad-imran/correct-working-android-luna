@@ -8,7 +8,6 @@
     <string name="text_email_hint">Identifiant de courrier électronique</string>
     <string name="text_back_button">Bouton Retour</string>
     <string name="text_no_device_found">Aucun appareil trouvé</string>
-    <string name="text_get_started">Commencer</string>
     <string name="text_shop">Boutique</string>
     <string name="text_activity">Entraînements</string>
     <string name="text_watchfaces">Cadrans de montre</string>
@@ -1120,7 +1119,6 @@
     <string name="text_tracking_my_pregnancy">Suivre ma grossesse</string>
     <string name="text_tracking_privacy_desc">Préparez-vous pour vos prochaines règles et apprenez-en davantage sur votre corps grâce aux statistiques sur les cycles précédents.</string>
     <string name="text_tracking_privacy_desc_2">Découvrez votre fenêtre de fertilité et le moment où vous êtes susceptible d\'ovuler.</string>
-    <string name="text_tracking_privacy_desc_3">Surveillez les changements de votre poids corporel et enregistrez votre bien-être pendant votre grossesse.</string>
     <string name="text_not_sure">Pas sûr</string>
     <string name="text_how_long_does_your_period_usually_last">Combien de temps durent habituellement vos règles ?</string>
     <string name="text_how_long_does_your_cycle_usually_last">Quelle est la durée de votre cycle typique ?</string>
@@ -1756,4 +1754,6 @@
     <string name="text_select_all">Tout sélectionner</string>
     <string name="text_please_select_at_least_1_option">Veuillez sélectionner au moins 1 option</string>
     <string name="text_google_fit_data_share">Nous partagerons ces données avec Google Fit. Nous ne récupérerons pas ces données de Google Fit.</string>
+    <string name="text_4_7_8">La respiration 4-7-8 aide à détendre votre esprit et votre corps</string>
+    <string name="text_delete_alarm">supprimer l\'alarme</string>
 </resources>
