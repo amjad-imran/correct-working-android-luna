@@ -17,10 +17,14 @@ class BreathingExerciseFragment :
 
     override fun onResume() {
         super.onResume()
-        binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
-        binding.lottieAnimationView.setAnimation(R.raw.anim_breathing_exercise)
-        binding.lottieAnimationView.playAnimation()
-        viewModel.startTimer()
+        if(viewModel.navigateBack){
+            navigateUpSafe()
+        }else{
+            binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
+            binding.lottieAnimationView.setAnimation(R.raw.anim_breathing_exercise)
+            binding.lottieAnimationView.playAnimation()
+            viewModel.startTimer()
+        }
     }
 
     override fun initListener() {
@@ -51,6 +55,7 @@ class BreathingExerciseFragment :
 
     override fun onPause() {
         super.onPause()
+        viewModel.navigateBack = true
         viewModel.cancelTimer()
     }
 

@@ -11,6 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
 
+    var navigateBack: Boolean = false
+
     var timer: CountDownTimer? = null
     private val TOTAL_TIME = 4 * 19 * 1000L
 
