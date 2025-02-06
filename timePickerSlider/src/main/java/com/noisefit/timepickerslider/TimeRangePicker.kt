@@ -657,22 +657,28 @@ class TimeRangePicker @JvmOverloads constructor(
                         angleToPreciseMinutes(_angleEnd, _hourFormat)
                     )
 
-                    if (_activeThumb == Thumb.BOTH) {
+
+                    if (newDurationMinutes > _maxDurationMinutes || newDurationMinutes < _minDurationMinutes) {
                         _angleStart = newStartAngle
                         _angleEnd = angleTo720(_angleEnd + difference)
                     } else {
-                        _angleStart = when {
-                            newDurationMinutes < _minDurationMinutes -> _angleEnd + simpleMinutesToAngle(
-                                _minDurationMinutes,
-                                _hourFormat
-                            )
+                        if (_activeThumb == Thumb.BOTH) {
+                            _angleStart = newStartAngle
+                            _angleEnd = angleTo720(_angleEnd + difference)
+                        } else {
+                            _angleStart = when {
+                                newDurationMinutes < _minDurationMinutes -> _angleEnd + simpleMinutesToAngle(
+                                    _minDurationMinutes,
+                                    _hourFormat
+                                )
 
-                            newDurationMinutes > _maxDurationMinutes -> _angleEnd + simpleMinutesToAngle(
-                                _maxDurationMinutes,
-                                _hourFormat
-                            )
+                                newDurationMinutes > _maxDurationMinutes -> _angleEnd + simpleMinutesToAngle(
+                                    _maxDurationMinutes,
+                                    _hourFormat
+                                )
 
-                            else -> newStartAngle
+                                else -> newStartAngle
+                            }
                         }
                     }
                 } else if (_activeThumb == Thumb.END) {
@@ -684,19 +690,26 @@ class TimeRangePicker @JvmOverloads constructor(
                         angleToPreciseMinutes(newEndAngle, _hourFormat)
                     )
 
-                    _angleEnd = when {
-                        newDurationMinutes < _minDurationMinutes -> _angleStart - simpleMinutesToAngle(
-                            _minDurationMinutes,
-                            _hourFormat
-                        )
+                    if (newDurationMinutes > _maxDurationMinutes || newDurationMinutes < _minDurationMinutes) {
+                        _angleStart = angleTo720(_angleStart + difference)
+                        _angleEnd = newEndAngle
+                    } else {
+                        _angleEnd = when {
+                            newDurationMinutes < _minDurationMinutes -> _angleStart - simpleMinutesToAngle(
+                                _minDurationMinutes,
+                                _hourFormat
+                            )
 
-                        newDurationMinutes > _maxDurationMinutes -> _angleStart - simpleMinutesToAngle(
-                            _maxDurationMinutes,
-                            _hourFormat
-                        )
+                            newDurationMinutes > _maxDurationMinutes -> _angleStart - simpleMinutesToAngle(
+                                _maxDurationMinutes,
+                                _hourFormat
+                            )
 
-                        else -> newEndAngle
+                            else -> newEndAngle
+                        }
                     }
+
+
                 }
 
                 anglesChanged(_activeThumb!!)

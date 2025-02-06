@@ -109,8 +109,7 @@ class AlarmUtil @Inject constructor(
         val beforeMillis = 60 * 60 * 1000L
         val title = context.getString(R.string.text_bedtime_reminder)
 
-
-        val sleepTime = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+        val sleepTime = bedTime.format(DateTimeFormatter.ofPattern("hh:mm a")).lowercase()
         val message =
             context.getString(R.string.text_bed_time_message, sleepTime)
 
@@ -131,13 +130,24 @@ class AlarmUtil @Inject constructor(
         val scheduleTime = millis - beforeMillis
 
         if (scheduleTime > Calendar.getInstance().timeInMillis) {
-            LOGS.d("dsfjhskdjfhk ${millis - beforeMillis}  | $beforeMillis notification scheduled")
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 millis - beforeMillis,
                 pendingIntent
             )
         }
+    }
+
+    private fun cancelPreAlarmNotification(notificationId: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, WindDownNotification::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationId, // Use the same request code
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
     }
 
     /**
@@ -164,6 +174,7 @@ class AlarmUtil @Inject constructor(
         )
         days.forEach {
             cancelWeeklyAlarm(it)
+            cancelPreAlarmNotification(it * 100)
         }
     }
 
