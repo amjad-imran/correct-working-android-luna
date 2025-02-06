@@ -1793,4 +1793,5 @@
     <string name="text_find_alternatives_of_for_my_diet_value">Buscar alternativas de %1$s para mi dieta</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">¿Cuáles son los beneficios nutricionales de %1$s?</string>
     <string name="text_give_me_a_recipe_for_value">Dame una receta para %1$s</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">Por favor conecta tu anillo para agregar sueño</string>
 </resources>

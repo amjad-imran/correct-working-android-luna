@@ -1791,4 +1791,5 @@
     <string name="text_find_alternatives_of_for_my_diet_value">Vind alternatieven van %1$s voor mijn dieet</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">Wat zijn de voedingsvoordelen van %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Geef me een recept voor %1$s</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">Sluit je ring aan om slaap toe te voegen</string>
 </resources>

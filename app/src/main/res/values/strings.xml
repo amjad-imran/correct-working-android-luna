@@ -1821,5 +1821,6 @@
     <string name="text_find_alternatives_of_for_my_diet_value">"Find alternatives of %1$s for  my diet "</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">What are the nutritional benefits of %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Give me a recipe for %1$s</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">Please connect your ring to add sleep</string>
 
 </resources>

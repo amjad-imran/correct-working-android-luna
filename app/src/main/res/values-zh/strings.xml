@@ -1788,4 +1788,5 @@
     <string name="text_find_alternatives_of_for_my_diet_value">为我的饮食寻找 %1$s 的替代品</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">%1$s 有什么营养价值</string>
     <string name="text_give_me_a_recipe_for_value">给我 %1$s 的食谱</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">请连接您的戒指以添加睡眠</string>
 </resources>

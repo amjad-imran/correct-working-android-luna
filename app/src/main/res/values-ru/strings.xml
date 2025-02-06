@@ -1790,4 +1790,5 @@
     <string name="text_find_alternatives_of_for_my_diet_value">Найдите альтернативу %1$s для моей диеты</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">Какова питательная ценность %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Дайте мне рецепт %1$s</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">Пожалуйста, подключите кольцо, чтобы добавить сон</string>
 </resources>

@@ -1785,4 +1785,5 @@
     <string name="text_find_alternatives_of_for_my_diet_value">Encontre alternativas de %1$s para minha dieta</string>
     <string name="text_what_are_the_nutritional_benefits_of_value">Quais são os benefícios nutricionais de %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Dê-me uma receita para %1$s</string>
+    <string name="text_please_connect_your_ring_to_add_sleep">Conecte seu anel para adicionar sono</string>
 </resources>

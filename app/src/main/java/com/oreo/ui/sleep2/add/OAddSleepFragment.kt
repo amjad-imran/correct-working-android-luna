@@ -33,6 +33,11 @@ class OAddSleepFragment :
 
     override fun initListener() {
         binding.lytToolbar.tvSave.setOnClickListener {
+            if (mainViewModel.isDeviceConnected().not()) {
+                context.showShortToast(getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                return@setOnClickListener
+            }
+
             if (viewModel.startTimeSleep.day.isEmpty()) {
                 uiController.onDisplayError("Please select start time")
                 return@setOnClickListener

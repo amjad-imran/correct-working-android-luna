@@ -323,10 +323,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
           }*/
     }
 
-    private fun showAddSleep() {
-        binding.blurViewSelector.gone()
-        navController?.navigate(R.id.fragmentAddSleep)
-    }
+
 
     private fun onLogPeriodClicked() {
         binding.blurViewSelector.gone()
@@ -337,6 +334,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
+    }
+
+    private fun showAddSleep() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        if (viewModel.isDeviceConnected()) {
+            navController?.navigate(R.id.fragmentAddSleep)
+        }else{
+            showShortToast(getString(R.string.text_please_connect_your_ring_to_add_sleep))
+        }
     }
 
     private fun showAddWorkout() {
