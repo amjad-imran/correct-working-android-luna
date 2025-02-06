@@ -226,7 +226,16 @@ class OSleepDetailsParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setSafeOnClickListener {
-            mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
+
+            if(mViewModel.itemClickType == ViewItemClickType.READINESS_SCORE){
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.info_clicked,
+                    hashMapOf("source" to "readiness","section" to "readiness_score")
+                )
+            }
+
+            //mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
+
             args.infoData?.let { data ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", data)

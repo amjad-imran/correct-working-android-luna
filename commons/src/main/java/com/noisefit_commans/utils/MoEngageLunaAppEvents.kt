@@ -31,6 +31,8 @@ object MoEngageLunaAppEvents {
      * Readiness Events =============================
      */
     const val score_interval_change = "score_interval_change"
+    const val score_clicked = "score_clicked"
+    const val readiness_trend_clicked = "readiness_trend_clicked"
 
 
 

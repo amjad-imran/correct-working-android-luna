@@ -48,6 +48,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import com.oreo.util.EventUtil
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -649,6 +650,12 @@ class OreoReadinessFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
                 putString("date", mainViewModel.selectedDate)
             })
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.score_clicked,
+                hashMapOf("source" to "readiness")
+            )
+
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_readiness_score_click)
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
@@ -666,8 +673,10 @@ class OreoReadinessFragment :
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
 
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_resting_hr_click)
-
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.readiness_trend_clicked,
+                hashMapOf("readiness_trend" to "resting_heart_rate")
+            )
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -680,7 +689,10 @@ class OreoReadinessFragment :
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
 
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hr_variability_click)
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.readiness_trend_clicked,
+                hashMapOf("readiness_trend" to "hrv")
+            )
         }
 
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
@@ -706,7 +718,12 @@ class OreoReadinessFragment :
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 )
 
-                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_skin_temp_click)
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.readiness_trend_clicked,
+                    hashMapOf("health_monitor_name" to "skin_temperature")
+                )
+
+                //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_skin_temp_click)
 
             }
         }
@@ -720,7 +737,10 @@ class OreoReadinessFragment :
                 mainViewModel.selectedDate ?: LocalDate.now()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_respiratory_rate_click)
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.readiness_trend_clicked,
+                hashMapOf("readiness_trend" to "respiratory_rate")
+            )
         }
 
 
