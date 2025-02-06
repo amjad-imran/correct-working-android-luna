@@ -84,7 +84,7 @@
     <com.oreo.ui.custom.AudioTalkingView
         android:id="@+id/talkingView"
         android:layout_width="184dp"
-        android:layout_height="56dp"
+        android:layout_height="22dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/ivMic"
         app:layout_constraintEnd_toEndOf="parent"

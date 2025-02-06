@@ -1777,4 +1777,6 @@
     <string name="text_what_are_the_nutritional_benefits_of_value">%1$s มีประโยชน์ทางโภชนาการอะไรบ้าง</string>
     <string name="text_give_me_a_recipe_for_value">ขอสูตร %1$s หน่อยสิ</string>
     <string name="text_please_connect_your_ring_to_add_sleep">โปรดเชื่อมต่อแหวนของคุณเพื่อเพิ่มการนอนหลับ</string>
+    <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเริ่มกิจกรรมของคุณ</string>
+    <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเพิ่มการนอนหลับของคุณ</string>
 </resources>

@@ -1794,4 +1794,6 @@
     <string name="text_what_are_the_nutritional_benefits_of_value">¿Cuáles son los beneficios nutricionales de %1$s?</string>
     <string name="text_give_me_a_recipe_for_value">Dame una receta para %1$s</string>
     <string name="text_please_connect_your_ring_to_add_sleep">Por favor conecta tu anillo para agregar sueño</string>
+    <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Espere a que se complete la sincronización antes de comenzar su actividad.</string>
+    <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Espere a que se complete la sincronización antes de agregar su sueño</string>
 </resources>

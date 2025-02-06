@@ -19,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.freshchat.consumer.sdk.Freshchat
@@ -50,6 +51,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.data.model.TapMeasureState
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
@@ -59,6 +61,7 @@ import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
 import java.time.LocalDate
 import kotlin.text.toFloat
@@ -133,23 +136,23 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun setLunaIcon() {
 
 
-      /*  binding.navView.ivLunaAi.post {
-            val viewWidth = 36f * resources.displayMetrics.density
-            val viewHeight = 36f * resources.displayMetrics.density
+        /*  binding.navView.ivLunaAi.post {
+              val viewWidth = 36f * resources.displayMetrics.density
+              val viewHeight = 36f * resources.displayMetrics.density
 
-            // Get the animation's intrinsic width and height
-            val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
-            val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
+              // Get the animation's intrinsic width and height
+              val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
+              val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
 
-            // Calculate the scale factors
-            val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
-            val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
+              // Calculate the scale factors
+              val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
+              val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
 
-            // Apply the scale
-            binding.navView.ivLunaAi.scaleX = scaleX
-            binding.navView.ivLunaAi.scaleY = scaleY
+              // Apply the scale
+              binding.navView.ivLunaAi.scaleX = scaleX
+              binding.navView.ivLunaAi.scaleY = scaleY
 
-        }*/
+          }*/
 
         /*binding.navView.ivLunaAi.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -324,7 +327,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
 
-
     private fun onLogPeriodClicked() {
         binding.blurViewSelector.gone()
         val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate)
@@ -339,27 +341,69 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun showAddSleep() {
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
-        if (viewModel.isDeviceConnected()) {
-            navController?.navigate(R.id.fragmentAddSleep)
-        }else{
+        if(viewModel.isDeviceConnected().not()){
             showShortToast(getString(R.string.text_please_connect_your_ring_to_add_sleep))
+            return
+        }
+
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            this@OreoMainActivity.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    withContext(Dispatchers.Main){
+                        showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_adding_sleep))
+                    }
+                    return@launch
+                }
+                withContext(Dispatchers.Main){
+                    navController?.navigate(R.id.fragmentAddSleep)
+                }
+            }
         }
     }
 
     private fun showAddWorkout() {
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
-        if (viewModel.isDeviceConnected()) {
-            navController?.navigate(R.id.addWorkoutFragment)
-        } else {
+        if (viewModel.isDeviceConnected().not()) {
             showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+            return
+        }
+
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            this@OreoMainActivity.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    withContext(Dispatchers.Main){
+                        showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+                    }
+                    return@launch
+                }
+                withContext(Dispatchers.Main){
+                    navController?.navigate(R.id.addWorkoutFragment)
+                }
+            }
         }
     }
 
     private fun showRecordWorkout() {
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
-        navController?.navigate(R.id.selectWorkoutFragment)
+
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            this@OreoMainActivity.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    withContext(Dispatchers.Main) {
+                        showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+                    }
+                    return@launch
+                }
+                withContext(Dispatchers.Main){
+                    navController?.navigate(R.id.selectWorkoutFragment)
+                }
+            }
+        }
     }
 
     private fun animateFabUp() {
@@ -623,7 +667,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         } else {
             onApiErrorReceived(
                 ErrorResponse(
-                    UIComponentType.AreYouSureDialog(getString(R.string.text_permission_required),
+                    UIComponentType.AreYouSureDialog(
+                        getString(R.string.text_permission_required),
                         getString(R.string.text_permission_denial_bluetooth),
                         false,
                         getString(R.string.text_allow),
@@ -1056,7 +1101,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     ) {
         if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY, true)) {
             navController?.navigate(R.id.detectWorkoutListFragment)
-        }else if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_BREATHING, true)) {
+        } else if (notificationType.equals(
+                NotificationEventsClass.LOCAL_NOTIFICATION_BREATHING,
+                true
+            )
+        ) {
             navController?.navigate(R.id.fragmentBreathExercise)
         }
     }

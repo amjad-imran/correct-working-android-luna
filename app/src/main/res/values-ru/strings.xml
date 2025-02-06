@@ -1791,4 +1791,6 @@
     <string name="text_what_are_the_nutritional_benefits_of_value">Какова питательная ценность %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Дайте мне рецепт %1$s</string>
     <string name="text_please_connect_your_ring_to_add_sleep">Пожалуйста, подключите кольцо, чтобы добавить сон</string>
+    <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Прежде чем начинать занятие, дождитесь завершения синхронизации.</string>
+    <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Прежде чем добавлять сведения о сне, дождитесь завершения синхронизации.</string>
 </resources>

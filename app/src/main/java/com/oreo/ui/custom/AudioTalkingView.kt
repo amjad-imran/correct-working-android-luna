@@ -13,89 +13,69 @@ class AudioTalkingView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val paint100 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-        alpha = 255
-        style = Paint.Style.FILL
-    }
-    private val paint80 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-        alpha = 204
-        style = Paint.Style.FILL
-    }
-    private val paint60 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-        alpha = 153
-        style = Paint.Style.FILL
-    }
-    private val paint40 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-        alpha = 102
-        style = Paint.Style.FILL
-    }
-    private val paint20 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-        alpha = 51
-        style = Paint.Style.FILL
-    }
+    private val baseColor = Color.parseColor("#E2E6F1")
+
+
+    private val paints = listOf(
+        createPaint(0x1A), // 20
+        createPaint(0x33), // 40
+        createPaint(0x4D), // 60
+        createPaint(0x66), // 80
+        createPaint(0xFF)  // 100
+    )
+
+    private val widthMultipliers = listOf(1.0f, 0.85f, 0.70f, 0.55f, 0.45f)
 
     private var ovalWidth = 0f
+    private var centerX = 0f
+    private var centerY = 0f
+    private var heightLayer = 0f
+
+    private fun createPaint(alpha: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = baseColor and 0x00FFFFFF or (alpha shl 24)
+        style = Paint.Style.FILL
+    }
 
     fun updateAmplitude(percent: Int) {
-        var calculatedPercent = percent
-        if (percent > 100) {
-            calculatedPercent = 100
-        } else if (percent < 60) {
-            calculatedPercent = 60
-        }
-        ovalWidth = (calculatedPercent.toFloat() / 100) * width
+        ovalWidth = (percent.coerceIn(60, 100).toFloat() / 100) * width
         invalidate()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        centerX = w / 2f
+        centerY = h / 2f
+        heightLayer = h.toFloat()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val centerX = width / 2f
-        val centerY = height / 2f
 
-
-        val viewHeight = height.toFloat()
-        drawRoundRect(canvas, centerX, centerY, ovalWidth, viewHeight, paint20)
-
-        val width40 = ovalWidth * 0.85f
-        val height40 = height * 0.9f
-        drawRoundRect(canvas, centerX, centerY, width40, height40, paint40)
-
-
-        val width60 = ovalWidth * 0.7f
-        val height60 = height * 0.8f
-        drawRoundRect(canvas, centerX, centerY, width60, height60, paint60)
-
-        val width80 = ovalWidth * 0.55f
-        val height80 = height * 0.7f
-        drawRoundRect(canvas, centerX, centerY, width80, height80, paint80)
-
-
-        val width100 = ovalWidth * 0.4f
-        val height100 = height * 0.6f
-        drawRoundRect(canvas, centerX, centerY, width100, height100, paint100)
-
+        for (i in 0..4) {
+            drawRoundRect(
+                canvas,
+                ovalWidth * widthMultipliers[i],
+                paints[i]
+            )
+        }
     }
 
-    fun drawRoundRect(
+    private fun drawRoundRect(
         canvas: Canvas,
-        centerX: Float,
-        centerY: Float,
         width: Float,
-        height: Float,
         paint: Paint
     ) {
+        val halfWidth = width / 2
+        val halfHeight = heightLayer / 2
+        val radius = heightLayer / 2
+
         canvas.drawRoundRect(
-            centerX - width / 2,
-            centerY - height / 2,
-            centerX + width / 2,
-            centerY + height / 2,
-            height / 2,
-            height / 2,
+            centerX - halfWidth,
+            centerY - halfHeight,
+            centerX + halfWidth,
+            centerY + halfHeight,
+            radius,
+            radius,
             paint
         )
     }

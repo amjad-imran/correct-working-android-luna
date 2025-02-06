@@ -406,7 +406,6 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 val amplitude = calculateAmplitudeFromFft(bytes)
 
                 val multiplied = (amplitude * 1.5f)
-                LOGS.d("sdkflhsldkfhsdkl onFftDataCapture ${multiplied.roundToInt()}")
 
                 nullableBinding?.talkingView?.updateAmplitude(multiplied.roundToInt())
 

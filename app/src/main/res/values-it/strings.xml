@@ -1790,4 +1790,6 @@
     <string name="text_what_are_the_nutritional_benefits_of_value">Quali sono i benefici nutrizionali di %1$s</string>
     <string name="text_give_me_a_recipe_for_value">Dammi una ricetta per %1$s</string>
     <string name="text_please_connect_your_ring_to_add_sleep">Collega il tuo anello per aggiungere sonno</string>
+    <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Attendi il completamento della sincronizzazione prima di iniziare l\'attività</string>
+    <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Attendi il completamento della sincronizzazione prima di aggiungere il sonno</string>
 </resources>

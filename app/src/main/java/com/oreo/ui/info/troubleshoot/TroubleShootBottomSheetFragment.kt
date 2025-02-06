@@ -295,7 +295,7 @@ class TroubleShootBottomSheetFragment :
                 title = getString(R.string.text_still_not_connecting),
                 message = getString(R.string.text_reach_out_to_us_by_tapping),
                 image = R.drawable.image_ts_4,
-                ctaText = getString(R.string.text_contact_us),
+                ctaText = getString(R.string.text_live_support),
                 action = TroubleShootActionType.CONTACT_US
             )
         )
