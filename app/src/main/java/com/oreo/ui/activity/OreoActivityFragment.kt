@@ -17,15 +17,11 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.px
-import com.noisefit_commans.constants.SyncEvents
-import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -38,6 +34,7 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.Contributor
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.DayTimeDataModel
 import com.oreo.data.model.OActivityListModal
@@ -54,7 +51,6 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -87,6 +83,12 @@ class OreoActivityFragment :
     }
 
     private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
+
+       /* uiController.logAppEvent(
+            MoEngageLunaAppEvents.workout_selected,
+            hashMapOf("action" to "view_all", "source" to "activity")
+        )*/
+
         if (data.getDisplayVersionType() == 2) {
             navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
                 putString("workoutId", data.id ?: "")
@@ -106,29 +108,40 @@ class OreoActivityFragment :
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
-                handleEvent(resultData[position].title)
+                handleEvent(resultData[position].contriType)
                 //                }
             }
         })
     }
 
-    private fun handleEvent(title: String) {
-        var eventName = ""
-        when (title) {
-            "Stay active" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_stay_click
-            "Move every hour" -> eventName =
-                MoEngageLunaAppEvents.luna_activity_contributors_move_click
+    private fun handleEvent(contriType: Contributor) {
+        var contriName: String? = null
 
-            "Calorie goal" -> eventName =
-                MoEngageLunaAppEvents.luna_activity_contributors_calorie_click
-
-            "Training frequency" -> eventName =
-                MoEngageLunaAppEvents.luna_activity_contributors_tfreq_click
-
-            "Training volume" -> eventName =
-                MoEngageLunaAppEvents.luna_activity_contributors_tvol_click
+        contriName = when (contriType) {
+            Contributor.SLEEP_SCORE -> null
+            Contributor.ACTIVITY_SCORE -> null
+            Contributor.RECOVERY_INDEX -> null
+            Contributor.SLEEP_REGULARITY -> null
+            Contributor.SLEEP_BALANCE -> null
+            Contributor.AVERAGE_HR -> null
+            Contributor.ACTIVITY_BALANCE -> null
+            Contributor.HRV_BALANCE -> null
+            Contributor.SKIN_TEMP -> null
+            Contributor.SLEEP_DURATION -> null
+            Contributor.STAY_ACTIVE -> "stay_active"
+            Contributor.MOVE_EVERY_HOUR -> "move_every_hour"
+            Contributor.CALORIE_GOAL -> "calorie_goal"
+            Contributor.TRAINING_FREQUENCY -> "training_frequency"
+            Contributor.TRAINING_VOLUME -> "training_volume"
         }
-        mViewModel.sessionManager.logMoEngageAppEvent(eventName)
+
+        if (contriName != null) {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.activity_analysis_clicked,
+                hashMapOf("contributor" to contriName, "source" to "activity")
+            )
+        }
+
 
     }
 
@@ -182,6 +195,12 @@ class OreoActivityFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
+
+                            uiController.logAppEvent(
+                                MoEngageLunaAppEvents.aichat_initiated_clicked,
+                                hashMapOf("source" to "activity")
+                            )
+
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.ACTIVITY)
@@ -614,6 +633,11 @@ class OreoActivityFragment :
             val selectedDate =
                 bundle.getString("selected_date") ?: return@setFragmentResultListener
 
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.calender_day_selected,
+                hashMapOf("source" to "activity")
+            )
+
             mainViewModel.onCalendarDateSelected(selectedDate)
             mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
         }
@@ -794,7 +818,14 @@ class OreoActivityFragment :
         })
 
         binding.lytDailyMovement.bInfo.setOnClickListener {
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_movement_info_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                hashMapOf("source" to "activity", "section" to "movement_analysis")
+            )
+
+
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_movement_info_click)
             mViewModel.contributorInfo.value?.daytime_movement?.let {
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", it)
@@ -825,9 +856,17 @@ class OreoActivityFragment :
         }
 
         binding.lytWorkouts.ivViewAll.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.workout_selected,
+                hashMapOf("action" to "view_all", "source" to "activity")
+            )
             navigate(R.id.oActivityListFragment)
         }
         binding.lytWorkouts.textView66.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.workout_selected,
+                hashMapOf("action" to "view_all", "source" to "activity")
+            )
             navigate(R.id.oActivityListFragment)
         }
 
@@ -840,7 +879,12 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.activity_score)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_activity_score_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.score_clicked,
+                hashMapOf("source" to "activity")
+            )
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_activity_score_click)
         }
         binding.lytAScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -851,7 +895,13 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.active_calories)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_goal_progress_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.activity_analysis_clicked,
+                hashMapOf("analysis_type" to "goal_progress")
+            )
+
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_goal_progress_click)
         }
         binding.lytAScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -862,7 +912,13 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_calories)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_total_calories_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.activity_analysis_clicked,
+                hashMapOf("analysis_type" to "total_calories")
+            )
+
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_total_calories_click)
         }
         binding.lytAScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -873,7 +929,13 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_steps)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_steps_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.activity_analysis_clicked,
+                hashMapOf("analysis_type" to "steps")
+            )
+
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_steps_click)
         }
         binding.lytAScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -884,7 +946,12 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_distance)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_distance_click)
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.activity_analysis_clicked,
+                hashMapOf("analysis_type" to "distance")
+            )
+            //mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_distance_click)
         }
 
 
@@ -975,6 +1042,12 @@ class OreoActivityFragment :
         }
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
+
+        uiController.logAppEvent(
+            MoEngageLunaAppEvents.day_selected,
+            hashMapOf("source" to "activity")
+        )
+
         mainViewModel.selectedDate = chartModel.date!!
         val returnDate = mainViewModel.updateSelectedDateActivity(mainViewModel.selectedDate)
         if (returnDate != null) {

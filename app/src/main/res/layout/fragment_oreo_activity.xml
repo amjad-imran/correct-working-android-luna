@@ -10,10 +10,6 @@
             android:layout_height="match_parent"
             tools:background="@color/black">
 
-
-
-
-
             <ImageView
                 android:id="@+id/imageView48"
                 android:layout_width="match_parent"
@@ -181,10 +177,6 @@
                 android:visibility="gone"
                 tools:visibility="visible"
                 app:constraint_referenced_ids="imageView48,lytToolbar,rvTopGraph" />
-
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
