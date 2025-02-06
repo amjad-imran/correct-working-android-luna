@@ -53,9 +53,10 @@ class AiMealDetailFragment :
         }
 
         binding.ivMic.setOnClickListener {
+            val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.NONE,
-                null
+                PlanType.DIET,
+                ques,
             )
             navigate(frag, bundle)
         }

@@ -27,6 +27,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatCompletionResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.util.audiorecorder.RecorderState
 import com.oreo.util.audiorecorder.WaveRecorder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,8 +65,12 @@ class AudioAiViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
-    var lastAnimatingText: String?=null
+    var lastAnimatingText: String? = null
     var isMicOn: Boolean = false
+
+    var isFirstLoad = true
+    var planType: PlanType? = null
+    var planQusetion: String? = null
 
     val audioSessionId = MutableLiveData<Event<Int>>()
 

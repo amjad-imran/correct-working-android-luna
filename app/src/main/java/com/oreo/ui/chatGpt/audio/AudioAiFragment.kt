@@ -46,7 +46,6 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
     private var dotAnimationJob: Job? = null
 
 
-
     companion object {
         fun getStartData(
             planType: PlanType,
@@ -66,13 +65,17 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         //binding.tvMessage.text = getString(R.string.text_setting_up)
 
         if (viewModel.isCalibrated().not()) {
-            navigate(AudioAiFragmentDirections.actionAudioAiFragmentToAudioAiCalibrationFragment(
-                args.text
-            ).apply {
-                planType = args.planType
-            })
+            navigate(
+                AudioAiFragmentDirections.actionAudioAiFragmentToAudioAiCalibrationFragment(
+                    args.text
+                ).apply {
+                    planType = args.planType
+                })
             return
         }
+
+        viewModel.planType = args.planType
+        viewModel.planQusetion = args.text
 
         /*if (args.planType == PlanType.WORKOUT) {
             binding.tvAskLuna.visible()
@@ -117,26 +120,6 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
         videoView.start()
 
         adjustVideoSize(0.6f)
-
-        /*videoView.setOnPreparedListener { mediaPlayer ->
-            val videoRatio = mediaPlayer.videoWidth / mediaPlayer.videoHeight.toFloat()
-            val screenRatio = videoView.width / videoView.height.toFloat()
-            var scaleX = videoRatio / screenRatio
-
-            val defaultScale = 0.6f
-
-            LOGS.d("SDfsdfsdf $scaleX")
-            //scaleX *= defaultScale
-            //scaleX = 5f
-
-            LOGS.d("SDfsdfsdf $scaleX")
-
-            if (scaleX >= 1f) {
-                videoView.scaleX = scaleX
-            } else {
-                videoView.scaleY = 1f / scaleX
-            }
-        }*/
     }
 
     private fun adjustVideoSize(heightPercent: Float) {
@@ -280,19 +263,30 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     dotAnimationJob?.cancel()
                     adjustVideoSize(0.6f)
                     binding.talkingView.gone()
-                    binding.tvMessage.text = getString(R.string.text_speak_now)
+                    if (viewModel.planType !=PlanType.NONE && viewModel.isFirstLoad) {
+                        binding.tvAskLuna.visible()
+                        binding.tvMessage.text =
+                            viewModel.planQusetion ?: getString(R.string.text_speak_now)
+                    } else {
+                        binding.tvAskLuna.gone()
+                        binding.tvMessage.text = getString(R.string.text_speak_now)
+                    }
                     micStateOn()
                 }
 
                 AudioAiState.LISTENING -> {
+                    viewModel.isFirstLoad = false
                     binding.talkingView.gone()
+                    binding.tvAskLuna.gone()
                     startDotAnimation(getString(R.string.text_listening))
                     micStateShowStop()
                 }
 
                 AudioAiState.GENERATING -> {
+                    viewModel.isFirstLoad = false
                     adjustVideoSize(0.9f)
                     binding.talkingView.gone()
+                    binding.tvAskLuna.gone()
 
                     startDotAnimation(getString(R.string.text_analysing))
 
@@ -301,7 +295,9 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 }
 
                 AudioAiState.AI_TALKING -> {
+                    viewModel.isFirstLoad = false
                     dotAnimationJob?.cancel()
+                    binding.tvAskLuna.gone()
                     adjustVideoSize(0.6f)
                     binding.tvMessage.text = ""
                     showTalkingWidget()
@@ -309,13 +305,14 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                 }
 
                 AudioAiState.AI_TALKING_STOP -> {
+                    viewModel.isFirstLoad = false
                     dotAnimationJob?.cancel()
+                    binding.tvAskLuna.gone()
                     adjustVideoSize(0.6f)
                     mVisualizer?.release()
                     binding.talkingView.gone()
                     viewModel.startNewRecording(false)
                 }
-
             }
         }
 

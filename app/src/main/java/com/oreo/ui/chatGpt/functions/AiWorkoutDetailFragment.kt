@@ -89,10 +89,11 @@ class AiWorkoutDetailFragment :
     override fun initListener() {
 
         binding.ivMic.setOnClickListener {
-            val workout = dataList.first()
+            //val workout = dataList.first()
+            val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.NONE,
-                workout.workout_name
+                PlanType.WORKOUT,
+                ques
             )
             navigate(frag, bundle)
         }
