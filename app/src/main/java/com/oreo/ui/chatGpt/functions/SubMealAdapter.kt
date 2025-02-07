@@ -14,7 +14,7 @@ class SubMealAdapter(val mDataSet: List<AiMeal>, val onMealSelected: (AiMeal) ->
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AiMeal) {
             binding.tvTitle.text = data.meal_name
-            binding.tvSubTitle.text = data.portion
+            binding.tvSubTitle.text = "${data.portion} | ${data.calories}kcal"
 
             binding.root.setOnClickListener {
                 onMealSelected(data)

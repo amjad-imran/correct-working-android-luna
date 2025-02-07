@@ -35,11 +35,16 @@ class AiMealDetailFragment :
         //binding.lytMealDetails.root.transitionName = "sharedImage_" // Same as in RecyclerView
         //startPostponedEnterTransition()
 
-        setUI(navArgs.meal,navArgs.mealName)
+        setUI(navArgs.meal, navArgs.mealName)
     }
 
 
     override fun initListener() {
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.ivTextChat.setOnClickListener {
             val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = ChatGptFragment.getStartData(
@@ -80,12 +85,14 @@ class AiMealDetailFragment :
             getString(
                 R.string.text_find_alternatives_of_for_my_diet_value,
                 meal.meal_name
-            ))
+            )
+        )
         messagesStrings.add(
             getString(
                 R.string.text_what_are_the_nutritional_benefits_of_value,
                 meal.meal_name
-            ))
+            )
+        )
         messagesStrings.add(getString(R.string.text_give_me_a_recipe_for_value, meal.meal_name))
 
         displayMessage.postValue(getWorkoutAiString(currentPos))
@@ -97,10 +104,10 @@ class AiMealDetailFragment :
             tvNutrition.text = "${meal.portion} | ${meal.calories}kcal"
 
             lytNutritionData.apply {
-                tvProtein.text = if(meal.protein.isNullOrEmpty()) "-" else meal.protein
-                tvFibre.text = if(meal.fibre.isNullOrEmpty()) "-" else meal.fibre
-                tvFat.text = if(meal.fat.isNullOrEmpty()) "-" else meal.fat
-                tvCarbs.text = if(meal.carbohydrate.isNullOrEmpty()) "-" else meal.carbohydrate
+                tvProtein.text = if (meal.protein.isNullOrEmpty()) "-" else meal.protein
+                tvFibre.text = if (meal.fibre.isNullOrEmpty()) "-" else meal.fibre
+                tvFat.text = if (meal.fat.isNullOrEmpty()) "-" else meal.fat
+                tvCarbs.text = if (meal.carbohydrate.isNullOrEmpty()) "-" else meal.carbohydrate
             }
         }
 

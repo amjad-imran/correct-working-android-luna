@@ -15,6 +15,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.noisefit.luna.R
 import com.noisefit.timepickerslider.utils.dpToPx
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.utils.LOGS
 import com.oreo.util.DateTimeUtil
 import java.time.LocalTime
@@ -269,7 +270,7 @@ class RoundClockView @JvmOverloads constructor(
                 val textDuration2 = if (hours2 > 0) {
                     String.format("+%dh %dm", hours2, minutes2)
                 } else {
-                    String.format("+%dm", hours2, minutes2)
+                    String.format("+%dm", minutes2)
                 }
 
                 drawText(
