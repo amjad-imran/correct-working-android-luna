@@ -44,7 +44,6 @@ class AlarmActivity : AppCompatActivity() {
         setTextColor()
         // Set up the dismiss button
         binding.tvDismiss.setOnClickListener {
-            LOGS.d("sadhjdsadjaskdsa dismiss")
             stopService()
             finish()
         }
@@ -52,16 +51,16 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun setTextColor() {
         binding.tvAlarmTime.apply {
-            setTextColor(Color.parseColor("#FFFFFF"))
+            setTextColor(Color.parseColor("#EDCDA8"))
             val textShader: Shader = LinearGradient(
                 0f,
                 this.paint.measureText(this.text.toString()),
                 0f,
                 0f,
                 intArrayOf(
+                    Color.parseColor("#EDCDA8"),
+                    Color.parseColor("#EDCDA8"),
                     Color.parseColor("#DC7D38"),
-                    Color.parseColor("#EDCDA8"),
-                    Color.parseColor("#EDCDA8"),
                 ),
                 floatArrayOf(0f,0.5f, 1f),
                 Shader.TileMode.CLAMP
@@ -81,7 +80,6 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LOGS.d("sadhjdsadjaskdsa onDestroy")
         stopService()
 
     }

@@ -55,7 +55,13 @@ class AlarmService : Service() {
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .build()
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ringtone?.isLooping = true
+        }
+
         ringtone?.play()
+
         WakeLockManager.acquireServiceLock()
         showForegroundNotification(intent)
         val pattern = longArrayOf(0, 100, 1000)
