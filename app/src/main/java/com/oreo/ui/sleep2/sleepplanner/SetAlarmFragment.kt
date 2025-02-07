@@ -16,6 +16,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -60,7 +61,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
                     uiController.logAppEvent(
                         MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
-                        hashMapOf("source" to "sleep","target" to "active_days")
+                        hashMapOf("source" to "sleep", "target" to "active_days")
                     )
                 }
             }
@@ -119,9 +120,22 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         }
 
         binding.lytTopView.lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_sleep)
+
+        binding.lytTopView.lytBedTime.ivIcon.setColorFilter(
+            Color.parseColor("#C5A8ED"),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        )
+
+
         binding.lytTopView.lytBedTime.tvTitle.text = getString(R.string.text_bedtime)
+        binding.lytTopView.lytBedTime.tvTitle.setTextColor(Color.parseColor("#C5A8ED"))
         binding.lytTopView.lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_sleep)
+        binding.lytTopView.lytWakeupTime.ivIcon.setColorFilter(
+            Color.parseColor("#C5A8ED"),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        )
         binding.lytTopView.lytWakeupTime.tvTitle.text = getString(R.string.text_wakeup)
+        binding.lytTopView.lytWakeupTime.tvTitle.setTextColor(Color.parseColor("#C5A8ED"))
 
         if (viewModel.editModeSelectedTime != null) {
             viewModel.deleteMode.postValue(true)
@@ -269,7 +283,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
             uiController.logAppEvent(
                 MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
-                hashMapOf("source" to "sleep","target" to "save_the_alarm")
+                hashMapOf("source" to "sleep", "target" to "save_the_alarm")
             )
 
             viewModel.updateAlarms(selectedAlarms, mAdapter.getUnselectedItems())
@@ -285,7 +299,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
             uiController.logAppEvent(
                 MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
-                hashMapOf("source" to "sleep","target" to "alarm_sounds")
+                hashMapOf("source" to "sleep", "target" to "alarm_sounds")
             )
 
             navigate(
@@ -346,7 +360,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 binding.timePicker.setPeriod(start, end)
 
                 viewModel.setDefaultTone(viewModel.editModeSelectedTime!!)
-            }else{
+            } else {
                 binding.timePicker.setPeriod(LocalTime.of(22, 0), LocalTime.of(6, 0))
             }
             //binding.timePicker.setSleepMinDuration(it?.planner?.min_duration ?: 0L)
