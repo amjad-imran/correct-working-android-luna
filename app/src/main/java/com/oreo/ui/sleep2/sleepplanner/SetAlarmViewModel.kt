@@ -1,10 +1,5 @@
 package com.oreo.ui.sleep2.sleepplanner
 
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
-import android.graphics.Shader.TileMode
-import android.text.TextPaint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
@@ -12,7 +7,6 @@ import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.FragmentSetAlarmBinding
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.AlarmTimingsData
@@ -21,7 +15,9 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.AlarmDataModel
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
@@ -29,7 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -40,6 +35,7 @@ class SetAlarmViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val alarmRepository: AlarmRepository,
     private val resourcesProvider: ResourcesProvider,
+    private var vibrationUtils: VibrationUtils
 ) : BaseViewModel() {
 
     var deleteMode = MutableLiveData(false)
@@ -129,12 +125,22 @@ class SetAlarmViewModel @Inject constructor(
     }
 
     fun updateTime(localTime: LocalTime, endTime: LocalTime) {
-        startEndTime.postValue(
+
+        performHapticFeedback(localTime,endTime)
+
+        startEndTime.value = (
             Pair(
                 localTime,
                 endTime
             )
         )
+    }
+    private fun performHapticFeedback(startTime: LocalTime, endTime: LocalTime) {
+        val lastValue = startEndTime.value ?: return
+
+        if(lastValue.first!=startTime || lastValue.second!=endTime){
+            vibrationUtils.vibrate(HAPTIC_VIBRATION)
+        }
     }
 
     fun getSleepPlanerDetails() {
