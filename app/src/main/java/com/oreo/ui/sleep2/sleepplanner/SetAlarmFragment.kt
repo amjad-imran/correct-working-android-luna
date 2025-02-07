@@ -35,6 +35,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
@@ -56,6 +57,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                 } else {
                     viewModel.deleteMode.postValue(false)
                     mAdapter.updateItem(position)
+
+                    uiController.logAppEvent(
+                        MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
+                        hashMapOf("source" to "sleep","target" to "active_days")
+                    )
                 }
             }
         })
@@ -260,6 +266,12 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
             val selectedAlarms = mAdapter.getSelectedValue()
             if (selectedAlarms.isEmpty()) return@setOnClickListener
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
+                hashMapOf("source" to "sleep","target" to "save_the_alarm")
+            )
+
             viewModel.updateAlarms(selectedAlarms, mAdapter.getUnselectedItems())
         }
 
@@ -271,6 +283,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
                     viewModel.deleteMode.postValue(false)
                 }
             }
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
+                hashMapOf("source" to "sleep","target" to "alarm_sounds")
+            )
+
             navigate(
                 R.id.dialogAlarmSound,
                 bundleOf(

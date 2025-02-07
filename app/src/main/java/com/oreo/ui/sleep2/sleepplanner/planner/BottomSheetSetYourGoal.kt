@@ -12,10 +12,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.data.model.SAGoalDataModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetGoalBinding
+import com.noisefit.oreo.OreoMainActivity
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SA_GOAL = "SA_GOAL"
@@ -31,8 +33,20 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
             override fun onItemClick(data: SAGoalDataModel, position: Int) {
                 viewModel.newSelectedGoalKey = data.key
                 binding.lytSetGoalView.btnSave.isEnabled = true
+
+                sendEvent(data.key)
             }
         })
+    }
+
+    private fun sendEvent(target: String) {
+        try {
+            (activity as OreoMainActivity).logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_goal_info,
+                hashMapOf("source" to "sleep", "target" to target)
+            )
+        } catch (exp: Exception) {
+        }
     }
 
 
@@ -60,9 +74,11 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
                 SA_GOAL,
                 bundleOf("reload" to true)
             )
+            sendEvent("save")
             navigateUpSafe()
         }
         binding.lytSetGoalView.btnCancel.setOnClickListener {
+            sendEvent("cancel")
             navigateUpSafe()
         }
     }
@@ -120,6 +136,7 @@ class BottomSheetSetYourGoal : BaseBottomSheetWithTransparent<BottomSheetGoalBin
         )
         return dataList
     }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog =
             super.onCreateDialog(savedInstanceState) as BottomSheetDialog

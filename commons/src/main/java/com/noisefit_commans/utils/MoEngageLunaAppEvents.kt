@@ -50,12 +50,26 @@ object MoEngageLunaAppEvents {
     const val live_workout_selection = "live_workout_selection"
     const val past_workout_entry = "past_workout_entry"
     const val workout_clicked = "workout_clicked"
-
-
     /**
      * Activity Events End=============================
      */
 
+    /**
+     * Sleep planner start=====
+     */
+
+    const val sleep_planner = "sleep_planner"
+    const val sleep_planner_goal = "sleep_planner_goal"
+    const val sleep_planner_goal_info = "sleep_planner_goal_info"
+    const val sleep_planner_setup_alarm = "sleep_planner_setup_alarm"
+    const val sleep_planner_setup_alarm_info = "sleep_planner_setup_alarm_info"
+    const val sleep_planner_exercise = "sleep_planner_exercise"
+
+    /**
+     * Sleep planner End ======
+     */
+
+    const val cycle_track = "cycle_track"
 
 
 

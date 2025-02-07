@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.sleep2.sleepplanner.SADaysAdapter
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,15 +71,28 @@ class SleepPlannerFragment :
                     viewModel.getSleepPlanerDetails()
                 }
             }
+
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_goal,
+                hashMapOf("source" to "sleep")
+            )
+
             navigate(R.id.dialogSaGoal)
         }
         binding.lytSetupAlarm.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_setup_alarm,
+                hashMapOf("source" to "sleep")
+            )
             navigate(
                 R.id.setAlarmFragment,
                 bundle = bundleOf("bed_time" to null, "wake_time" to null)
             )
         }
         binding.lytBreathExercise.root.setOnClickListener {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.sleep_planner_exercise
+            )
             navigate(R.id.fragmentBreathExercise)
         }
 

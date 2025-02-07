@@ -222,6 +222,11 @@ class OMyProfileFragment :
         viewModel.showFemaleHealthSplash.observe(this) {
             it?.getContent()?.let {
                 if (it) {
+                    uiController.logAppEvent(
+                        MoEngageLunaAppEvents.cycle_track
+                    )
+
+
                     navigate(R.id.cycleTrackerSettingsNewFragment)
                 }
             }

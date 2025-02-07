@@ -386,6 +386,10 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked -> {
+                    uiController.logAppEvent(
+                        MoEngageLunaAppEvents.sleep_planner_setup_alarm,
+                        hashMapOf("source" to "sleep")
+                    )
                     navigate(
                         R.id.setAlarmFragment,
                         bundle = bundleOf("bed_time" to null, "wake_time" to null)
@@ -398,6 +402,9 @@ class SummaryDataFragmentToday :
                         )
                 }
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked ->{
+                    uiController.logAppEvent(
+                        MoEngageLunaAppEvents.sleep_planner
+                    )
                     navigate(R.id.sleepPlannerFragment)
                 }
             }
