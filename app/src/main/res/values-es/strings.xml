@@ -1796,4 +1796,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Por favor conecta tu anillo para agregar sueño</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Espere a que se complete la sincronización antes de comenzar su actividad.</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Espere a que se complete la sincronización antes de agregar su sueño</string>
+    <string name="text_set_goal">Establecer meta</string>
 </resources>

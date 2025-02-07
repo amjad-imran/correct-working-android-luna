@@ -1791,4 +1791,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">请连接您的戒指以添加睡眠</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">请等待同步完成后再开始您的活动</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">请等待同步完成后再添加您的睡眠</string>
+    <string name="text_set_goal">设定目标</string>
 </resources>

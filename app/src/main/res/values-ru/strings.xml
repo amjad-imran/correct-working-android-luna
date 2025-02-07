@@ -1793,4 +1793,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Пожалуйста, подключите кольцо, чтобы добавить сон</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Прежде чем начинать занятие, дождитесь завершения синхронизации.</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Прежде чем добавлять сведения о сне, дождитесь завершения синхронизации.</string>
+    <string name="text_set_goal">Установить цель</string>
 </resources>

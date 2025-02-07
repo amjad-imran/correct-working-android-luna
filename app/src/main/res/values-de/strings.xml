@@ -1789,4 +1789,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Bitte schließen Sie Ihren Ring an, um den Schlaf hinzuzufügen</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Bitte warten Sie, bis die Synchronisierung abgeschlossen ist, bevor Sie mit Ihrer Aktivität beginnen</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Bitte warten Sie, bis die Synchronisierung abgeschlossen ist, bevor Sie Ihren Schlaf hinzufügen</string>
+    <string name="text_set_goal">Ziel setzen</string>
 </resources>

@@ -1788,4 +1788,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Conecte seu anel para adicionar sono</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Aguarde a conclusão da sincronização antes de iniciar sua atividade</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Aguarde a conclusão da sincronização antes de adicionar seu sono</string>
+    <string name="text_set_goal">Definir meta</string>
 </resources>

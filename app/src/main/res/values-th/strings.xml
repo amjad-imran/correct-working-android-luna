@@ -1779,4 +1779,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">โปรดเชื่อมต่อแหวนของคุณเพื่อเพิ่มการนอนหลับ</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเริ่มกิจกรรมของคุณ</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเพิ่มการนอนหลับของคุณ</string>
+    <string name="text_set_goal">กำหนดเป้าหมาย</string>
 </resources>

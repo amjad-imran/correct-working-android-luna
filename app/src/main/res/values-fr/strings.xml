@@ -1791,4 +1791,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Veuillez connecter votre bague pour ajouter du sommeil</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Veuillez attendre la fin de la synchronisation avant de commencer votre activité</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Veuillez attendre la fin de la synchronisation avant d\'ajouter votre sommeil</string>
+    <string name="text_set_goal">Définir un objectif</string>
 </resources>

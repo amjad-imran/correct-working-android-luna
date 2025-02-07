@@ -1825,5 +1825,6 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Please wait for sync to complete before starting your activity</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Please wait for sync to complete before adding your sleep
 </string>
+    <string name="text_set_goal">Set Goal</string>
 
 </resources>

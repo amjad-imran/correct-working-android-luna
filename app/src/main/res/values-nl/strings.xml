@@ -1794,4 +1794,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Sluit je ring aan om slaap toe te voegen</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Wacht tot de synchronisatie is voltooid voordat u met uw activiteit begint</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Wacht tot de synchronisatie is voltooid voordat u uw slaap toevoegt</string>
+    <string name="text_set_goal">Stel doel in</string>
 </resources>

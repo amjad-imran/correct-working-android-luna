@@ -1792,4 +1792,5 @@
     <string name="text_please_connect_your_ring_to_add_sleep">Collega il tuo anello per aggiungere sonno</string>
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Attendi il completamento della sincronizzazione prima di iniziare l\'attività</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Attendi il completamento della sincronizzazione prima di aggiungere il sonno</string>
+    <string name="text_set_goal">Imposta obiettivo</string>
 </resources>

@@ -206,6 +206,8 @@ class NetworkConnectionInterceptor(
             throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         } catch (e: HttpException) {
             throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
+        }catch (e: StringIndexOutOfBoundsException) {//For interceptor crash
+            throw IOException(resourcesProvider.getString(R.string.text_error_connecting_to_internet))
         }
     }
 

@@ -534,9 +534,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val plannerData = data.data.planner!!
 
                 lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-                lytBedTime.tvTitle.text = "Bed time"//getString(R.string.text_bedtime)
+                lytBedTime.tvTitle.text = "Bed time"//binding.root.context.getString(R.string.text_bedtime)//"Bed time"
                 lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-                lytWakeupTime.tvTitle.text = "Wake time"//getString(R.string.text_wake_time)
+                lytWakeupTime.tvTitle.text = "Wake time"//binding.root.context.getString(R.string.text_wake_time)//"Wake time"
 
                 val bedTime = LocalTime.parse(
                     plannerData.planner?.bed_time ?: "22:00:00",

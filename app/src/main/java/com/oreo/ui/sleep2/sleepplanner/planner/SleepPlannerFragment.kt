@@ -39,7 +39,7 @@ class SleepPlannerFragment :
         binding.lytToolbar.tvTitle.text = getString(R.string.text_sleep_planner)
         binding.lytToolbar.view1.gone()
 
-        binding.lytSetupGoal.tvTitle.text = getString(R.string.text_setup_your_goal)
+        binding.lytSetupGoal.tvTitle.text = getString(R.string.text_set_goal)
 
 
         binding.lytLegend1.tvTitle.text = getString(R.string.text_extra_sleep_need)
