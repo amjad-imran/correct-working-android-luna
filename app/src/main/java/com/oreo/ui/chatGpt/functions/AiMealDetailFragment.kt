@@ -101,7 +101,7 @@ class AiMealDetailFragment :
         binding.lytMealDetails.apply {
             tvMealName.text = meal.meal_name
             tvDescription.text = meal.description
-            tvNutrition.text = "${meal.portion} | ${meal.calories}kcal"
+            tvNutrition.text = "${meal.portion} | ${meal.calories}"
 
             lytNutritionData.apply {
                 tvProtein.text = if (meal.protein.isNullOrEmpty()) "-" else meal.protein
