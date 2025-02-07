@@ -1188,13 +1188,13 @@
     <string name="text_need">brauchen</string>
     <string name="text_hours">Std.</string>
     <string name="text_desc_msg">Diese Messwerte werden ausgewertet, während Sie nachts schlafen. Wenn Sie während dieser Zeit messen, wird das Rauschen in Ihren Daten verringert, sodass Ihnen genauere Messwerte angezeigt werden</string>
-    <string name="text_extra_sleep_need">Zusätzlicher Schlafbedarf</string>
+    <string name="text_extra_sleep_need">Schulden Schlaf</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Ihre ideale Zeit im Bett für heute Nacht ist</string>
     <string name="text_breathing_exercise">Atemübung</string>
     <string name="text_sleep_planner">Schlafplaner</string>
     <string name="text_setup_your_goal">Legen Sie Ihr Ziel fest</string>
     <string name="text_setup_alarm">Alarm einrichten</string>
-    <string name="text_avg_sleep_duration">Durchschnittliche Schlafdauer</string>
+    <string name="text_avg_sleep_duration">Durchschnittlicher Schlafbedarf</string>
     <string name="text_alarm_sounds">Alarm ertönt</string>
     <string name="text_save_the_alarm">Speichern Sie den Alarm</string>
     <string name="text_set_alarm">Alarm einstellen</string>

@@ -1,14 +1,17 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivColorBox"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:background="#a477ff"
+            android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -21,9 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@string/text_extra_sleep_need"
+            tools:text="dsfhskdjfhksjdfh kj khjsd hfk sjdf khsdjfh ksjdfh ksjdhfk sdjfhklsdjfhkj dsf kj kdshf jsdf"
             android:textColor="@color/white_60"
             app:layout_constraintBottom_toBottomOf="@id/ivColorBox"
             app:layout_constraintStart_toEndOf="@id/ivColorBox"
             app:layout_constraintTop_toTopOf="@id/ivColorBox" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

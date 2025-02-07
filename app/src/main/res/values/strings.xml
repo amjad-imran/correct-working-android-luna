@@ -1215,7 +1215,7 @@
     <string name="text_need">need</string>
     <string name="text_hours">hours</string>
     <string name="text_desc_msg">These metrics are assessed while you sleep at night. Measuring during this time decreases noise in your data to present more accurate metrics to you</string>
-    <string name="text_extra_sleep_need">Extra sleep need</string>
+    <string name="text_extra_sleep_need">Sleep Debt</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Your ideal time in bed for tonight is</string>
     <string name="text_breathing_exercise">Breathing exercise</string>
     <string name="text_sleep_planner">Sleep planner</string>

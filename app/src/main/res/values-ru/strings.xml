@@ -1189,13 +1189,13 @@
     <string name="text_need">нуждаться</string>
     <string name="text_hours">часы</string>
     <string name="text_desc_msg">Эти показатели оцениваются, пока вы спите ночью. Измерения в это время уменьшают шум в ваших данных и предоставляют вам более точные показатели.</string>
-    <string name="text_extra_sleep_need">Дополнительная потребность во сне</string>
+    <string name="text_extra_sleep_need">Долг сна</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Ваше идеальное время в постели сегодня вечером</string>
     <string name="text_breathing_exercise">Дыхательное упражнение</string>
     <string name="text_sleep_planner">планировщик сна</string>
     <string name="text_setup_your_goal">Настройте свою цель</string>
     <string name="text_setup_alarm">Установить будильник</string>
-    <string name="text_avg_sleep_duration">Средняя продолжительность сна</string>
+    <string name="text_avg_sleep_duration">Среднее необходимое время сна</string>
     <string name="text_alarm_sounds">Звуки будильника</string>
     <string name="text_save_the_alarm">Сохранить будильник</string>
     <string name="text_set_alarm">Установить будильник</string>

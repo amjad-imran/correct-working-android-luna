@@ -1179,13 +1179,13 @@
     <string name="text_need">ความต้องการ</string>
     <string name="text_hours">ชั่วโมง</string>
     <string name="text_desc_msg">ตัวชี้วัดเหล่านี้ได้รับการประเมินในขณะที่คุณนอนหลับตอนกลางคืน การวัดในช่วงเวลานี้จะลดเสียงรบกวนในข้อมูลของคุณเพื่อนำเสนอการวัดที่แม่นยำยิ่งขึ้นให้กับคุณ</string>
-    <string name="text_extra_sleep_need">จำเป็นต้องนอนเพิ่ม</string>
+    <string name="text_extra_sleep_need">หนี้การนอน</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">เวลาที่เหมาะที่สุดในการเข้านอนของคุณในคืนนี้คือ</string>
     <string name="text_breathing_exercise">การออกกำลังกายการหายใจ</string>
     <string name="text_sleep_planner">วางแผนการนอน</string>
     <string name="text_setup_your_goal">ตั้งเป้าหมายของคุณ</string>
     <string name="text_setup_alarm">ตั้งปลุก</string>
-    <string name="text_avg_sleep_duration">ระยะเวลาการนอนหลับเฉลี่ย</string>
+    <string name="text_avg_sleep_duration">การนอนเฉลี่ยที่ต้องการ</string>
     <string name="text_alarm_sounds">เสียงปลุก</string>
     <string name="text_save_the_alarm">บันทึกการปลุก</string>
     <string name="text_set_alarm">ตั้งปลุก</string>

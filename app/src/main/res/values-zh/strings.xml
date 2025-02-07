@@ -1187,13 +1187,13 @@
     <string name="text_need">需要</string>
     <string name="text_hours">小时</string>
     <string name="text_desc_msg">这些指标是在您晚上睡觉时评估的。在此期间进行测量会减少数据中的噪音，从而为您提供更准确的指标</string>
-    <string name="text_extra_sleep_need">额外睡眠需要</string>
+    <string name="text_extra_sleep_need">睡眠债</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">您今晚理想的上床时间是</string>
     <string name="text_breathing_exercise">呼吸练习</string>
     <string name="text_sleep_planner">睡眠规划器</string>
     <string name="text_setup_your_goal">设定你的目标</string>
     <string name="text_setup_alarm">设置闹钟</string>
-    <string name="text_avg_sleep_duration">平均睡眠时间</string>
+    <string name="text_avg_sleep_duration">平均所需睡眠</string>
     <string name="text_alarm_sounds">警报声</string>
     <string name="text_save_the_alarm">保存闹钟</string>
     <string name="text_set_alarm">设置闹钟</string>

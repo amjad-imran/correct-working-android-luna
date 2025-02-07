@@ -1188,13 +1188,13 @@
     <string name="text_need">precisar</string>
     <string name="text_hours">horas</string>
     <string name="text_desc_msg">Essas métricas são avaliadas enquanto você dorme à noite. Medir durante esse período diminui o ruído em seus dados para apresentar métricas mais precisas a você</string>
-    <string name="text_extra_sleep_need">Necessidade de sono extra</string>
+    <string name="text_extra_sleep_need">Dívida de sono</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Seu horário ideal para dormir esta noite é</string>
     <string name="text_breathing_exercise">Exercício respiratório</string>
     <string name="text_sleep_planner">planejador de sono</string>
     <string name="text_setup_your_goal">Configure sua meta</string>
     <string name="text_setup_alarm">Configurar alarme</string>
-    <string name="text_avg_sleep_duration">Duração média do sono</string>
+    <string name="text_avg_sleep_duration">Média de sono necessária</string>
     <string name="text_alarm_sounds">Sons de alarme</string>
     <string name="text_save_the_alarm">Salve o alarme</string>
     <string name="text_set_alarm">Definir alarme</string>

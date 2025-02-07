@@ -38,6 +38,7 @@ class AlarmsAdapter(val onAlarmClicked: (AlarmDisplayModel) -> Unit) :
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytWakeupTime.tvTimeUnit.text = wakeTime.format(DateTimeFormatter.ofPattern("a")).lowercase()
+                lytWakeupTime.tvTime.setTextColor(Color.parseColor("#99FFFFFF"))
                 lytWakeupTime.tvTimeUnit.setTextColor(Color.parseColor("#99FFFFFF"))
 
             }

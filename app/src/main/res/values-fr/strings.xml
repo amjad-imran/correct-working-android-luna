@@ -1213,13 +1213,13 @@
     <string name="text_need">besoin</string>
     <string name="text_hours">heures</string>
     <string name="text_desc_msg">Ces mesures sont évaluées pendant que vous dormez la nuit. Mesurer pendant cette période réduit le bruit dans vos données pour vous présenter des mesures plus précises</string>
-    <string name="text_extra_sleep_need">Besoin de sommeil supplémentaire</string>
+    <string name="text_extra_sleep_need">Dette de sommeil</string>
     <string name="text_your_ideal_time_in_bed_for_tonight_is">Votre moment idéal au lit ce soir est</string>
     <string name="text_breathing_exercise">Exercice de respiration</string>
     <string name="text_sleep_planner">planificateur de sommeil</string>
     <string name="text_setup_your_goal">Définissez votre objectif</string>
     <string name="text_setup_alarm">Configurer l\'alarme</string>
-    <string name="text_avg_sleep_duration">Durée moyenne du sommeil</string>
+    <string name="text_avg_sleep_duration">Sommeil moyen nécessaire</string>
     <string name="text_alarm_sounds">L\'alarme sonne</string>
     <string name="text_save_the_alarm">Enregistrez l\'alarme</string>
     <string name="text_set_alarm">Définir l\'alarme</string>
