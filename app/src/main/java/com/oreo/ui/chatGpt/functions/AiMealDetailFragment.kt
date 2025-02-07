@@ -120,7 +120,7 @@ class AiMealDetailFragment :
             override fun onFinish() {
                 currentPos += 1
 
-                if (currentPos >= (messagesStrings.size - 1)) {
+                if (currentPos > (messagesStrings.size - 1)) {
                     currentPos = 0
                 }
                 displayMessage.postValue(getWorkoutAiString(currentPos))
