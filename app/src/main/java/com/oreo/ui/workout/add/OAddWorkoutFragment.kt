@@ -715,6 +715,13 @@ class OAddWorkoutFragment :
 
                 )
                 context.showShortToast(getString(R.string.text_workout_added_successfully))
+
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.past_workout_entry,
+                    hashMapOf("source" to "activity",
+                        "description" to "workout_start",
+                        "workout_name" to "${it.first.activityType}")
+                )
                 navigateUpSafe()
             }
         }

@@ -44,6 +44,12 @@ object MoEngageLunaAppEvents {
     const val activity_analysis_clicked = "readiness_trend_clicked"
     const val contributor_clicked = "contributor_clicked"
     const val workout_selected = "workout_selected"
+    const val workout_add_button_clicked = "workout_add_button_clicked"
+    const val past_workout_started = "past_workout_started"
+    const val live_workout_started = "live_workout_started"
+    const val live_workout_selection = "live_workout_selection"
+    const val past_workout_entry = "past_workout_entry"
+    const val workout_clicked = "workout_clicked"
 
 
     /**

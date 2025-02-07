@@ -270,37 +270,20 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
-            if (viewModel.isActivityWorkAdd)
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
-            else
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
         binding.lytAddWorkoutSelector.ivAddWorkoutManual.setOnClickListener {
-            if (viewModel.isActivityWorkAdd)
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
-            else
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
-
 
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
             animateFabDown()
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
-            if (viewModel.isActivityWorkAdd)
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
-            else
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
         binding.lytAddWorkoutSelector.ivRecordWorkout.setOnClickListener {
-            if (viewModel.isActivityWorkAdd)
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
-            else
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
 
@@ -313,6 +296,20 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.addWorkoutCtaVisibility.postValue(false)
             viewModel.isActivityWorkAdd = false
             animateFabUp()
+
+
+            if(navController?.currentDestination?.id ==R.id.navigation_oreo_workouts ||
+                navController?.currentDestination?.id ==R.id.oActivityListFragment){
+                logAppEvent(
+                    MoEngageLunaAppEvents.workout_add_button_clicked,
+                    hashMapOf("source" to "activity")
+                )
+            }else{
+                logAppEvent(
+                    MoEngageLunaAppEvents.workout_add_button_clicked,
+                    hashMapOf("source" to "homepage")
+                )
+            }
 
             //binding.blurViewSelector.visible()
         }
@@ -363,6 +360,19 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun showAddWorkout() {
+        if(navController?.currentDestination?.id ==R.id.navigation_oreo_workouts ||
+            navController?.currentDestination?.id ==R.id.oActivityListFragment){
+            logAppEvent(
+                MoEngageLunaAppEvents.past_workout_started,
+                hashMapOf("source" to "activity")
+            )
+        }else{
+            logAppEvent(
+                MoEngageLunaAppEvents.past_workout_started,
+                hashMapOf("source" to "homepage")
+            )
+        }
+
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
         if (viewModel.isDeviceConnected().not()) {
@@ -387,6 +397,19 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun showRecordWorkout() {
+        if(navController?.currentDestination?.id ==R.id.navigation_oreo_workouts ||
+            navController?.currentDestination?.id ==R.id.oActivityListFragment){
+            logAppEvent(
+                MoEngageLunaAppEvents.live_workout_started,
+                hashMapOf("source" to "activity")
+            )
+        }else{
+            logAppEvent(
+                MoEngageLunaAppEvents.live_workout_started,
+                hashMapOf("source" to "homepage")
+            )
+        }
+
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
 

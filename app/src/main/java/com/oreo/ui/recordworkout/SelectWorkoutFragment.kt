@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.workout.add.OSelectWorkoutAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -77,6 +78,11 @@ class SelectWorkoutFragment :
             navigate(R.id.bottomSheetWorkoutInProgress)
             return
         }
+
+        uiController.logAppEvent(
+            MoEngageLunaAppEvents.live_workout_selection,
+            hashMapOf("source" to "activity","workout_name" to "${oWorkoutListModal.activityType}")
+        )
 
         startWorkout(oWorkoutListModal)
 

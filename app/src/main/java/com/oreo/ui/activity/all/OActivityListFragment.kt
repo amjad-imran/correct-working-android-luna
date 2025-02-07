@@ -196,7 +196,15 @@ class OActivityListFragment :
 
     override fun onActivitySelected(activity: OActivityListModal, position: Int) {
         LOGS.d("onActivitySelected activity=$activity")
-        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workout_item_click)
+        //viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workout_item_click)
+
+        uiController.logAppEvent(
+            MoEngageLunaAppEvents.workout_clicked,
+            hashMapOf("source" to "activity",
+                "description" to "old_workout_check",
+                "workout_name" to "${activity.activityType}")
+        )
+
         if(activity.getDisplayVersionType()==2){
             navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
                 putString("workoutId", activity.id ?: "")

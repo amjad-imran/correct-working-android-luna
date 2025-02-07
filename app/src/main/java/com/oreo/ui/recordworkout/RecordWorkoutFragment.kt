@@ -1,7 +1,6 @@
 package com.oreo.ui.recordworkout
 
 import android.Manifest
-import android.animation.Animator
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -28,9 +27,7 @@ import com.google.android.gms.tasks.Task
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
-import com.noisefit.ui.onboarding.pairing.find.FindDeviceListFragment
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -40,14 +37,12 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
-import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -203,6 +198,9 @@ class RecordWorkoutFragment :
                     if (delete) {
                         viewModel.markedDeleted = true
                         viewModel.markForDelete(viewModel.sportStartTime)
+                        logActivityEvent("workout_end_delete")
+                    }else{
+                        logActivityEvent("workout_end_save")
                     }
                 }
             }
@@ -257,6 +255,8 @@ class RecordWorkoutFragment :
             binding.btnStartWorkout.visible()
             sendStartWorkoutCommand()
 
+            logActivityEvent("workout_start")
+
         }
 
         binding.btnPauseResume.setOnClickListener {
@@ -272,6 +272,8 @@ class RecordWorkoutFragment :
                         2
                     )
                 )
+                logActivityEvent("workout_pause")
+
             } else if (viewModel.currentWorkoutState == 2) {
                 val sportId = viewModel.workout?.ringId ?: -1
 
@@ -282,6 +284,7 @@ class RecordWorkoutFragment :
                         3
                     )
                 )
+                logActivityEvent("workout_resume")
             }
         }
 
@@ -292,6 +295,8 @@ class RecordWorkoutFragment :
             }
 
             onCrossClicked()
+            logActivityEvent("workout_end")
+
         }
 
         binding.ivCross.setOnClickListener {
@@ -320,6 +325,17 @@ class RecordWorkoutFragment :
             }
         }
 
+    }
+
+    private fun logActivityEvent(description: String) {
+        uiController.logAppEvent(
+            MoEngageLunaAppEvents.live_workout_selection,
+            hashMapOf(
+                "source" to "activity",
+                "description" to description,
+                "workout_name" to "${viewModel.workout?.activityType}"
+            )
+        )
     }
 
     private fun showPermDetailsDialog() {

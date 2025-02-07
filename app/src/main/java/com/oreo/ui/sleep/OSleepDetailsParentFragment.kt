@@ -197,21 +197,64 @@ class OSleepDetailsParentFragment :
 
     private fun sendEvent(interval: String, itemClickType: ViewItemClickType?) {
 
-        var source: String? = null
-        source = when (itemClickType) {
-            ViewItemClickType.READINESS_SCORE -> "readiness"
-            ViewItemClickType.RESTING_HR -> "resting_heart_rate"
-            ViewItemClickType.HR_VARIABILITY -> "hrv"
-            ViewItemClickType.BODY_TEMPERATURE -> "skin_temperature"
-            ViewItemClickType.RESPIRATORY_RATE -> "respiratory_rate"
-            else -> null
+        var analysis: String? = null
+        var event: String? = null
+
+        when (itemClickType) {
+            ViewItemClickType.READINESS_SCORE -> {
+                analysis = "readiness_score"
+                event = MoEngageLunaAppEvents.score_interval_change
+            }
+
+            ViewItemClickType.RESTING_HR -> {
+                analysis = "resting_heart_rate"
+            }
+
+            ViewItemClickType.HR_VARIABILITY -> {
+                analysis = "hrv"
+            }
+
+            ViewItemClickType.BODY_TEMPERATURE -> {
+                analysis = "skin_temperature"
+            }
+
+            ViewItemClickType.RESPIRATORY_RATE -> {
+                analysis = "respiratory_rate"
+            }
+
+            ViewItemClickType.ACTIVITY_SCORE -> {
+                event = "activity_analysis_interval_changed"
+                analysis = "activity_score"
+            }
+
+            ViewItemClickType.ACTIVE_CALORIES -> {
+                event = "activity_analysis_interval_changed"
+                analysis = "goal_progress"
+            }
+
+            ViewItemClickType.TOTAL_CALORIES_BURNED -> {
+                event = "activity_analysis_interval_changed"
+                analysis = "total_calories"
+            }
+
+            ViewItemClickType.STEPS -> {
+                event = "activity_analysis_interval_changed"
+                analysis = "steps"
+            }
+
+            ViewItemClickType.DISTANCE -> {
+                event = "activity_analysis_interval_changed"
+                analysis = "distance"
+            }
+
+            else -> {}
         }
 
-        if (source != null) {
+        if (analysis != null && event != null) {
             uiController.logAppEvent(
-                MoEngageLunaAppEvents.score_interval_change,
+                event,
                 hashMapOf(
-                    "source" to source,
+                    "analysis" to analysis,
                     "interval" to interval
                 )
             )
@@ -227,12 +270,8 @@ class OSleepDetailsParentFragment :
         }
         binding.lytToolbar.view1.setSafeOnClickListener {
 
-            if(mViewModel.itemClickType == ViewItemClickType.READINESS_SCORE){
-                uiController.logAppEvent(
-                    MoEngageLunaAppEvents.info_clicked,
-                    hashMapOf("source" to "readiness","section" to "readiness_score")
-                )
-            }
+            sendInfoEvent()
+
 
             //mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
 
@@ -247,6 +286,40 @@ class OSleepDetailsParentFragment :
         binding.lytToolbar.ivAddFriend.invisible()
         binding.lytToolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
 
+    }
+
+    private fun sendInfoEvent() {
+        var section: String? = null
+
+        when (mViewModel.itemClickType) {
+            ViewItemClickType.READINESS_SCORE -> {
+                section = "readiness_score"
+            }
+            ViewItemClickType.ACTIVITY_SCORE -> {
+                section = "activity score"
+            }
+            ViewItemClickType.ACTIVE_CALORIES -> {
+                section = "goal_progress"
+            }
+            ViewItemClickType.TOTAL_CALORIES_BURNED -> {
+                section = "total_calories"
+            }
+            ViewItemClickType.STEPS -> {
+                section = "steps"
+            }
+            ViewItemClickType.DISTANCE -> {
+                section = "distance"
+            }
+            null -> {}
+            else ->{}
+        }
+
+        if (section != null) {
+            uiController.logAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                hashMapOf("source" to "readiness", "section" to section)
+            )
+        }
     }
 
     override fun subscribeObservers() {

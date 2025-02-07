@@ -342,7 +342,6 @@ class OAddWorkoutViewModel
                             userHealthDataDataSource.clearDataByDates(listOf(date))
                             delay(100)
 
-
                             val sportObj = SportsModeResponse(
                                 date = date,
                                 distance = 0,
