@@ -89,6 +89,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
@@ -2011,50 +2012,43 @@ class SummaryDataViewModelToday @Inject constructor(
         wakeTime: String?,
         sleepExists: Boolean
     ): Boolean {
-        var breathingExercise = false
-        if (bedTime != null && wakeTime != null) {
-            val parsedTime = LocalTime.parse(
-                bedTime,
-                DateTimeFormatter.ofPattern("HH:mm:ss")
-            )
-            val parsedWakeTime = LocalTime.parse(
-                wakeTime,
-                DateTimeFormatter.ofPattern("HH:mm:ss")
-            )
+        if (bedTime.isNullOrEmpty() || wakeTime.isNullOrEmpty()) {
+            return false
+        }
 
-            val currentTime = LocalTime.now() //LocalTime.of(21,0)
+        val dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val currentTime = LocalTime.now()
 
-            val minutes =
-                ((parsedTime.hour * 60) + parsedTime.minute) - ((currentTime.hour * 60) + currentTime.minute)
-            if (minutes <= 60) {
-                breathingExercise = true
-            }
+        try {
+            val parsedBedTime = LocalTime.parse(bedTime, dateFormatter)
+            val parsedWakeTime = LocalTime.parse(wakeTime, dateFormatter)
 
-            if (breathingExercise.not()) {
-                if (currentTime.isAfter(LocalTime.of(0, 0)) && sleepExists.not()) {
-                    val minutesWakeTime =
-                        ((currentTime.hour * 60) + currentTime.minute) - ((parsedWakeTime.hour * 60) + parsedWakeTime.minute)
-                    if (minutesWakeTime <= 0) {
-                        breathingExercise = true
-                    }
+            if (parsedBedTime.isAfter(parsedWakeTime)) {
+                if (currentTime.isBefore(parsedWakeTime)) {
+                    val minutesToWakeTime = ChronoUnit.MINUTES.between(currentTime, parsedWakeTime)
+                    return minutesToWakeTime >= 0
+                }
+
+                if (currentTime.isBefore(parsedBedTime)) {
+                    val minutesToBedTime = ChronoUnit.MINUTES.between(currentTime, parsedBedTime)
+                    return minutesToBedTime <= 60
+                }
+            } else {
+                val minutesToBedTime = ChronoUnit.MINUTES.between(currentTime, parsedBedTime)
+                if (minutesToBedTime in 0..60) {
+                    return true
+                }
+
+                if (!sleepExists && currentTime.isAfter(LocalTime.MIDNIGHT)) {
+                    return currentTime.isBefore(parsedWakeTime)
                 }
             }
-        }
-        return breathingExercise
-    }
 
-    fun getDurationMinutes(start: LocalTime, end: LocalTime): Long {
-        return if (end.isAfter(start)) {
-            Duration.between(start, end).toMinutes()
-        } else {
-            val dayEnd = LocalTime.of(23, 59)
-            val dayStart = LocalTime.of(0, 0)
-            Duration.between(start, dayEnd).toMinutes() + 1 + Duration.between(dayStart, end)
-                .toMinutes()
+            return false
+        } catch (e: IllegalArgumentException) {
+            return false
         }
     }
-
-
 }
 
 data class SleepAlert(
