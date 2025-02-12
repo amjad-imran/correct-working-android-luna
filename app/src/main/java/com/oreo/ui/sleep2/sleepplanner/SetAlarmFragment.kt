@@ -72,9 +72,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
         super.onViewCreated(view, savedInstanceState)
 
         initTimePicker()
-        viewModel.setEditMode(args.bedTime, args.wakeTime)
-
-        initUi()
 
         viewModel.getSleepPlanerDetails()
     }
@@ -351,6 +348,13 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
         }
 
+        viewModel.initUi.observe(this) {
+            it.getContent()?.let {
+                viewModel.setEditMode(args.bedTime, args.wakeTime)
+                initUi()
+            }
+        }
+
         viewModel.sleepPlannerCard.observe(this) {
             mAdapter.setData(viewModel.getAlarmData(it?.alarms))
 
@@ -361,7 +365,15 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
                 viewModel.setDefaultTone(viewModel.editModeSelectedTime!!)
             } else {
-                binding.timePicker.setPeriod(LocalTime.of(22, 0), LocalTime.of(6, 0))
+                if (viewModel.predictedUserTime != null) {
+                    binding.timePicker.setPeriod(
+                        viewModel.predictedUserTime!!.first,
+                        viewModel.predictedUserTime!!.second
+                    )
+                } else {
+                    binding.timePicker.setPeriod(LocalTime.of(22, 0), LocalTime.of(6, 0))
+                }
+
             }
             //binding.timePicker.setSleepMinDuration(it?.planner?.min_duration ?: 0L)
             binding.lytMain.visible()

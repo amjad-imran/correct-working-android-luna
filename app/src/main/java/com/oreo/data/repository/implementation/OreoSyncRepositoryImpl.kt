@@ -1,6 +1,8 @@
 package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
@@ -59,6 +61,8 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class OreoSyncRepositoryImpl(
     private val localDatSource: DataStoredInterface,
@@ -211,7 +215,7 @@ class OreoSyncRepositoryImpl(
 
         var lastSyncedSteps = ringDataStore.getLastSyncedStepsData()
 
-        if(lastSyncedSteps?.date.equals(date).not()){
+        if (lastSyncedSteps?.date.equals(date).not()) {
             lastSyncedSteps = null
         }
 
@@ -308,6 +312,29 @@ class OreoSyncRepositoryImpl(
 
         }
 
+    }
+
+    override suspend fun logErrorServer(
+        error: String,
+        data: String
+    ): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val dateToday = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val dataObj = JsonObject().apply {
+                addProperty("error_reason", error)
+                addProperty("data", data)
+                addProperty("date", dateToday)
+            }
+            val jsonArray = JsonArray().apply {
+                add(dataObj)
+            }
+            val requestObject = JsonObject().apply {
+                add("data", jsonArray)
+            }
+
+            val url = "${BuildConfig.OREO_BASE_URL}/luna/sleep/v3/log-errors"
+            remoteDataSource.logErrorServer(url, requestObject)
+        }
     }
 
     override suspend fun postSleepHistoryData(data: OreoUserSyncActivities): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>? {
@@ -721,11 +748,13 @@ class OreoSyncRepositoryImpl(
     }
 
     override suspend fun updateGoogleFitUnSyncStepsStatus(date: String, data: StepDataGoogleFit) {
-        ringDataStore.setLastSyncedStepsData(GoogleFitDataLastSync(
-            steps = data.totalSteps,
-            date = date,
-            stepsLastSync = DateFormats.getTimeStamp()
-        ))
+        ringDataStore.setLastSyncedStepsData(
+            GoogleFitDataLastSync(
+                steps = data.totalSteps,
+                date = date,
+                stepsLastSync = DateFormats.getTimeStamp()
+            )
+        )
 
     }
 

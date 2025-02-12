@@ -648,6 +648,12 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<List<ReferralsMain>>
 
+    @POST
+    suspend fun logErrorServer(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
+
 
     /**
      * ---------------------------------------------------------------------------------

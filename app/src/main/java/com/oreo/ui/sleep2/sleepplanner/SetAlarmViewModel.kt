@@ -39,9 +39,15 @@ class SetAlarmViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var deleteMode = MutableLiveData(false)
+
+
+    var predictedUserTime: Pair<LocalTime, LocalTime>? = null
+
     private var alarmsRawData: PlannerAlarmData? = null
 
     var editModeSelectedTime: Pair<LocalTime, LocalTime>? = null
+
+    val initUi = MutableLiveData<Event<Boolean>>()
 
 
     var lastSelectedPosition: Int? = null
@@ -126,19 +132,20 @@ class SetAlarmViewModel @Inject constructor(
 
     fun updateTime(localTime: LocalTime, endTime: LocalTime) {
 
-        performHapticFeedback(localTime,endTime)
+        performHapticFeedback(localTime, endTime)
 
         startEndTime.value = (
-            Pair(
-                localTime,
-                endTime
-            )
-        )
+                Pair(
+                    localTime,
+                    endTime
+                )
+                )
     }
+
     private fun performHapticFeedback(startTime: LocalTime, endTime: LocalTime) {
         val lastValue = startEndTime.value ?: return
 
-        if(lastValue.first!=startTime || lastValue.second!=endTime){
+        if (lastValue.first != startTime || lastValue.second != endTime) {
             vibrationUtils.vibrate(HAPTIC_VIBRATION)
         }
     }
@@ -174,8 +181,18 @@ class SetAlarmViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
+                            predictedUserTime = try {
+                                Pair(
+                                    LocalTime.parse(it?.planner?.bed_time),
+                                    LocalTime.parse(it?.planner?.wake_time)
+                                )
+                            } catch (exp: Exception) {
+                                null
+                            }
                             alarmsRawData = it?.alarms
-                            sleepPlannerCard.postValue(it)
+                            initUi.value = (Event(true))
+                            sleepPlannerCard.value = (it)
+
                         }
                     }
                 }
@@ -224,7 +241,7 @@ class SetAlarmViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            withContext(Dispatchers.IO){
+                            withContext(Dispatchers.IO) {
                                 alarmRepository.updateAlarms(request)
                                 alarmUpdated.postValue(Event(true))
                             }
@@ -360,12 +377,18 @@ class SetAlarmViewModel @Inject constructor(
             )
             startEndTime.value = (editModeSelectedTime)
         } else {
-            startEndTime.value = (
-                    Pair(
-                        LocalTime.of(22, 0),
-                        LocalTime.of(6, 0)
-                    )
-                    )
+
+            if (predictedUserTime != null) {
+                startEndTime.value = (Pair(
+                    predictedUserTime!!.first,
+                    predictedUserTime!!.second
+                ))
+            } else {
+                startEndTime.value = (Pair(
+                    LocalTime.of(22, 0),
+                    LocalTime.of(6, 0)
+                ))
+            }
         }
     }
 
@@ -377,7 +400,7 @@ class SetAlarmViewModel @Inject constructor(
     ): SAActiveDayDataModel {
 
         if (editModeSelectedTime == null) {
-            val isPreSelected = alarmDay!=null
+            val isPreSelected = alarmDay != null
             return SAActiveDayDataModel(isPreSelected.not(), isPreSelected, dayKey)
         }
 
@@ -396,10 +419,38 @@ class SetAlarmViewModel @Inject constructor(
 
     fun alarmTonesList(): List<AlarmSoundDataModel> {
         val dataList = ArrayList<AlarmSoundDataModel>()
-        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_lofi), false, getAlarmToneByKey(1), 1))
-        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_thailand), false, getAlarmToneByKey(2), 2))
-        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_singapore), false, getAlarmToneByKey(3), 3))
-        dataList.add(AlarmSoundDataModel(title = resourcesProvider.getString(R.string.text_scotland), false, getAlarmToneByKey(4), 4))
+        dataList.add(
+            AlarmSoundDataModel(
+                title = resourcesProvider.getString(R.string.text_lofi),
+                false,
+                getAlarmToneByKey(1),
+                1
+            )
+        )
+        dataList.add(
+            AlarmSoundDataModel(
+                title = resourcesProvider.getString(R.string.text_thailand),
+                false,
+                getAlarmToneByKey(2),
+                2
+            )
+        )
+        dataList.add(
+            AlarmSoundDataModel(
+                title = resourcesProvider.getString(R.string.text_singapore),
+                false,
+                getAlarmToneByKey(3),
+                3
+            )
+        )
+        dataList.add(
+            AlarmSoundDataModel(
+                title = resourcesProvider.getString(R.string.text_scotland),
+                false,
+                getAlarmToneByKey(4),
+                4
+            )
+        )
         return dataList
     }
 

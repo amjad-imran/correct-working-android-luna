@@ -30,7 +30,6 @@ import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -46,9 +45,8 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MoEngageAppEventParams
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.repository.abstraction.ErrorServerCases
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -60,11 +58,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
-import java.util.logging.Handler
 import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
@@ -316,6 +312,7 @@ constructor(
         timer = Timer("DelayConnection", false).schedule(SyncingTimeOut) {
 //            sessionManager.logAppEvent(FunnelEvents.SyncEvents.Syncing_Completed.name, eventProperty)
             //syncTime()
+            LOGS.d("dskflskdjfhksjdhfkjdf DelayConnection timeout $isDataReceived")
             AppLogs.sendAppLogs("OreoSyncDataWork timer time out SyncingTimeOut : $SyncingTimeOut  isDataReceived: $isDataReceived")
             if (isDataReceived) {
                 return@schedule returnSuccess(success)
@@ -323,6 +320,8 @@ constructor(
                 return@schedule returnSuccess(failed)
             }
         }
+
+        val dataLogString = StringBuilder("")
 
 
 //        sessionManager.logAppEvent(FunnelEvents.SyncEvents.Syncing_Start.name, eventProperty)
@@ -335,6 +334,10 @@ constructor(
                     when (userActivityCallback) {
                         is UserActivityCallback.StepsDataObtainedOreo -> {
                             LOGS.d("OreoSyncDataWork: ${userActivityCallback.stepsData}")
+
+                            dataLogString.append("Steps - received")
+                            dataLogString.append("\n")
+
                             AppLogs.sendAppLogs("SAVING_STEPS_DATA Started")
                             syncDataScope.launch {
                                 syncRepository.saveStepsData(userActivityCallback.stepsData)
@@ -369,6 +372,10 @@ constructor(
 
                         is UserActivityCallback.HeartHistoryObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${Gson().toJson(userActivityCallback.heartRateData)}")
+                            dataLogString.append("HR - received")
+                            dataLogString.append("\n")
+
+
                             syncDataScope.launch {
                                 syncRepository.saveHeartRateData(userActivityCallback.heartRateData)
                                     .collect { resource ->
@@ -400,6 +407,9 @@ constructor(
                         }
 
                         is UserActivityCallback.HealthScoreObtainedOreo -> {
+                            dataLogString.append("Health Score - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveHealthScoreData(
                                     userActivityCallback.score,
@@ -429,6 +439,9 @@ constructor(
                         }
 
                         is UserActivityCallback.NapObtainedOreo -> {
+                            dataLogString.append("Nap - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveNapData(userActivityCallback.napList)
                                     .collect { resource ->
@@ -459,6 +472,9 @@ constructor(
                         }
 
                         is UserActivityCallback.SleepDataObtainedOreo -> {
+                            dataLogString.append("Sleep - received")
+                            dataLogString.append("\n")
+
                             //      LOGS.d("OreoSyncDataWork: sleep data ${Gson().toJson(userActivityCallback.sleepData)}")
                             syncDataScope.launch {
                                 syncRepository.saveSleepData(userActivityCallback.sleepData)
@@ -493,6 +509,9 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoBloodOxygenObtained -> {
+                            dataLogString.append("Blood Oxygen - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveBloodOxygenData(userActivityCallback.bloodOxygen)
                                     .collect { resource ->
@@ -520,6 +539,9 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRingDayTimeMovementObtained -> {
+                            dataLogString.append("Day Time Movement - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveDayTimeMovementData(userActivityCallback.dayTimeMovement)
                                     .collect { resource ->
@@ -547,6 +569,9 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRespiratoryDataObtained -> {
+                            dataLogString.append("Respiratory Data - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveRespiratoryData(userActivityCallback.respiratoryData)
                                     .collect { resource ->
@@ -574,6 +599,9 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoBodyStressDataObtained -> {
+                            dataLogString.append("Body Stress - received")
+                            dataLogString.append("\n")
+
                             syncDataScope.launch {
                                 syncRepository.saveBodyStressData(userActivityCallback.bodyStressData)
                                     .collect { resource ->
@@ -602,6 +630,9 @@ constructor(
 
 
                         is UserActivityCallback.StressDataObtainedOreo -> {
+                            dataLogString.append("HRV - received")
+                            dataLogString.append("\n")
+
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
                             syncDataScope.launch {
                                 syncRepository.saveStressData(userActivityCallback.stressData)
@@ -635,6 +666,9 @@ constructor(
                         }
 
                         is UserActivityCallback.BodyTemperatureObtainedOreo -> {
+                            dataLogString.append("Body Temp - received")
+                            dataLogString.append("\n")
+
                             LOGS.d(
                                 TAG,
                                 "OreoSyncDataWork:::: BodyTemperatureObtained"
@@ -697,6 +731,15 @@ constructor(
                                 timer = Timer("DelayConnection", false).schedule(syncTime) {
                                     //syncTime()
                                     AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $syncTime  isDataReceived: $isDataReceived")
+                                    LOGS.d("dskflskdjfhksjdhfkjdf DelayConnection 2 timeout $isDataReceived - syncTime - $syncTime")
+
+                                    GlobalScope.launch(Dispatchers.IO) {
+                                        syncRepository.logErrorServer(
+                                            ErrorServerCases.TIMEOUT.name,
+                                            dataLogString.toString()
+                                        )
+                                    }
+
                                     if (isDataReceived) {
                                         return@schedule returnSuccess(success)
                                     } else {

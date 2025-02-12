@@ -12,12 +12,14 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationServices
+import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.R
 import com.noisefit_commans.data.db.LocationModel
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LocaleHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,8 +65,11 @@ class LocationService : Service() {
     }
 
     private fun start() {
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(getString(R.string.text_tracking_location))
+            .setContentTitle(NoisefitApplication.context?.let {
+                LocaleHelper.getResourcesBasedOnLanguage(it).getString(R.string.text_tracking_location)
+            }?:getString(R.string.text_tracking_location))
             //.setContentText("Location: null")
             .setSmallIcon(R.drawable.icon_transparent)
             .setOngoing(true)

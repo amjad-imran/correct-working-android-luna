@@ -24,6 +24,8 @@ class SAGoalAdapter(val listener: OnGoalItemClick) :
             binding.tvTitle.text = data.title
 
             binding.root.setOnClickListener {
+                if(data.isChecked) return@setOnClickListener
+
                 updateItem(bindingAdapterPosition)
                 listener.onItemClick(data, bindingAdapterPosition)
             }

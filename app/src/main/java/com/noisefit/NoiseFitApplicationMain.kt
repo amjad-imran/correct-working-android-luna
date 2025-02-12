@@ -64,6 +64,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         fun updateUserLanguage(language: AppLanguage) {
             appLanguage = language
             LocaleHelper.setLocale(context!!, language.languageCode)
+            NoisefitApplication.setLocale(appLanguage.languageCode)
         }
     }
 
@@ -82,6 +83,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             appLanguage = language
             localDataStore.saveSelectedAppLanguage(language.languageCode)
         }
+        NoisefitApplication.setLocale(appLanguage.languageCode)
         registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager,resourcesProvider))
         FileLogsUtils.initLogs(applicationContext)
         AppLogs.initAppLogs(applicationContext)

@@ -587,9 +587,9 @@ class OAddWorkoutViewModel
         return if(intensity.equals("easy",true)){
             resourcesProvider.getString(R.string.text_easy)
         }else if(intensity.equals("moderate",true)){
-            resourcesProvider.getString(R.string.text_easy)
+            resourcesProvider.getString(R.string.text_moderate)
         }else if(intensity.equals("hard",true)){
-            resourcesProvider.getString(R.string.text_easy)
+            resourcesProvider.getString(R.string.text_hard)
         }else{
             ""
         }

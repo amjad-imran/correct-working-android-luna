@@ -26,9 +26,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface OreoSyncRepository {
 
+
     suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>>
 
-    suspend fun getMovementData(date:String): Flow<CacheResult<String?>>
+    suspend fun getMovementData(date: String): Flow<CacheResult<String?>>
 
     suspend fun getRecordedWorkouts(): Flow<CacheResult<List<RecordedWorkoutData>?>>
     suspend fun saveRecordedWorkouts(data: List<RecordedWorkoutData>): Flow<CacheResult<Boolean?>>
@@ -48,7 +49,7 @@ interface OreoSyncRepository {
 
     suspend fun getGoogleFitUnSyncDataSteps(date: String): StepDataGoogleFit?
 
-    suspend fun getGoogleFitSleepUnSyncData(date: String):  List<OreoSleepData>?
+    suspend fun getGoogleFitSleepUnSyncData(date: String): List<OreoSleepData>?
     suspend fun saveStressData(
         data: OreoStressDataBreakup
     ): Flow<CacheResult<Boolean?>>
@@ -82,6 +83,8 @@ interface OreoSyncRepository {
     suspend fun deleteServerSyncData(data: OreoUserSyncRawData)
 
     suspend fun deleteSleepServerSyncData(data: OreoUserSyncRawData)
+
+    suspend fun logErrorServer(error: String, data: String): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun postDataToServer(data: OreoUserSyncActivities): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>?
 
@@ -124,4 +127,8 @@ interface OreoSyncRepository {
     suspend fun getGFitUnSyncWorkout(): Flow<CacheResult<List<GoogleFitWorkoutData>?>>
 
     suspend fun updateGFitSyncWorkout(syncData: List<GoogleFitWorkoutData>): Flow<CacheResult<Int?>>
+}
+
+enum class ErrorServerCases {
+    TIMEOUT
 }

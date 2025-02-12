@@ -158,6 +158,9 @@ class SleepDashViewModel @Inject constructor(
                                 weekStart = weekStart.plusDays(1)
                                 currentWeekDates.add(weekStart)
                             }
+                            if (currentWeekDates.isEmpty().not()) {
+                                notifyDateChange.value = Event(currentWeekDates.last())
+                            }
 
                             trendsData.postValue(generateTrendsData())
                         }
