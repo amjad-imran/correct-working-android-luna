@@ -3,6 +3,9 @@ package com.oreo.ui.chatGpt.audio
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.media.audiofx.Visualizer
 import android.net.Uri
 import android.os.Bundle
@@ -72,6 +75,23 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
                     planType = args.planType
                 })
             return
+        }
+
+        binding.tvMessage.apply {
+            setTextColor(Color.parseColor("#80E4FF"))
+            val textShader: Shader = LinearGradient(
+                0f,
+                this.paint.measureText(this.text.toString()),
+                0f,
+                0f,
+                intArrayOf(
+                    Color.parseColor("#80E4FF"),
+                    Color.parseColor("#74D0FF"),
+                ),
+                floatArrayOf(0f, 1f),
+                Shader.TileMode.CLAMP
+            )
+            this.paint.shader = textShader
         }
 
         viewModel.planType = args.planType

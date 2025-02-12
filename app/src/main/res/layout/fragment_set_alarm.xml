@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnSave"
+            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytToolbar">
@@ -118,24 +119,23 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytActiveDays" />
-
-                <Button
-                    android:id="@+id/btnSave"
-                    style="@style/SecondaryButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="36dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:text="@string/text_save_the_alarm"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lytAlarmSound" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/SecondaryButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/text_save_the_alarm"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
             android:id="@+id/progressBar"

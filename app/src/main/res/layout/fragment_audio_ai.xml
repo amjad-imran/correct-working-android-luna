@@ -78,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView62"
-        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_bias="0.50"
         tools:text="Setting up" />
 
     <com.oreo.ui.custom.AudioTalkingView
@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView62"
-        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_bias="0.50"
         tools:visibility="visible" />
 
     <com.google.android.material.imageview.ShapeableImageView
