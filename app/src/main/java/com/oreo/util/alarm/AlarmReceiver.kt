@@ -27,8 +27,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
             val millis = intent?.getLongExtra("millis", 0L) ?: 0L
 
-            LOGS.d("sdfjkhskdjfhksfj $millis - ${System.currentTimeMillis()}")
-
             if (millis != 0L) {
                 val current = System.currentTimeMillis()
                 if (current > (millis + 60 * 1000)) {

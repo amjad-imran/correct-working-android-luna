@@ -47,6 +47,7 @@
             android:paddingTop="@dimen/dimen_4dp"
             android:paddingBottom="@dimen/dimen_4dp"
             android:layout_height="wrap_content"
+            android:progressTint="#88B0FF"
             android:background="@null"
             android:thumb="@null"
             app:layout_constraintBottom_toBottomOf="@id/ivLowVol"

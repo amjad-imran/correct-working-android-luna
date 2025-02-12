@@ -18,6 +18,7 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
+import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 
 private const val ALARM_FOREGROUND_KEY = 1230
 
@@ -48,7 +49,7 @@ class AlarmService : Service() {
         ringtone = null
         ringtone = RingtoneManager.getRingtone(
             applicationContext,
-            Uri.parse("android.resource://" + packageName + "/" + AlarmUtil.getAlarmToneByKey(tone!!))
+            Uri.parse("android.resource://" + packageName + "/" + tone!!)
         )
         ringtone!!.setAudioAttributes(
             AudioAttributes.Builder()

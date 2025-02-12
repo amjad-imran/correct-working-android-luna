@@ -51,16 +51,16 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun setTextColor() {
         binding.tvAlarmTime.apply {
-            setTextColor(Color.parseColor("#EDCDA8"))
+            setTextColor(Color.parseColor("#DC7D38"))
             val textShader: Shader = LinearGradient(
                 0f,
                 this.paint.measureText(this.text.toString()),
                 0f,
                 0f,
                 intArrayOf(
-                    Color.parseColor("#EDCDA8"),
-                    Color.parseColor("#EDCDA8"),
                     Color.parseColor("#DC7D38"),
+                    Color.parseColor("#DC7D38"),
+                    Color.parseColor("#EDCDA8"),
                 ),
                 floatArrayOf(0f,0.5f, 1f),
                 Shader.TileMode.CLAMP

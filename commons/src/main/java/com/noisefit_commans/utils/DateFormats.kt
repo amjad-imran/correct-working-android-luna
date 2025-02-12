@@ -1048,11 +1048,9 @@ object DateFormats {
             val date1 = SimpleDateFormat("HH:mm", defaultLocale).parse(time)
             val date2 = SimpleDateFormat("HH:mm", defaultLocale).parse(startTime)
             val date3 = SimpleDateFormat("HH:mm", defaultLocale).parse(endTime)
-            LOGS.d("TIME_TEST", "isTimeBetween $date1 $date2 $date3")
             return (date1.after(date2) && date1.before(date3)) ||
                     (date1.equals(date2) || date1.equals(date3))
         } catch (e: ParseException) {
-            LOGS.d("TIME_TEST", "isTimeBetween ${e.message}")
             e.printStackTrace()
         }
         return false
@@ -1438,12 +1436,9 @@ object DateFormats {
         val calendar = Calendar.getInstance()
         val currentHourOfDay = calendar[Calendar.HOUR_OF_DAY]
 
-        LOGS.d("isTimeBetween $hourOfDay $currentHourOfDay")
         if (hourOfDay == currentHourOfDay) {
-            LOGS.d("isTimeBetween yes")
             return true
         }
-        LOGS.d("isTimeBetween no")
         return false
 
     }
