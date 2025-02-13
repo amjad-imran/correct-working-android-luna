@@ -236,7 +236,7 @@ constructor(
                      )
                  }*/
 
-                val callGetBodyMeasurements = async(Dispatchers.IO) {
+               /* val callGetBodyMeasurements = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Body measurements")
                     val syncBodyMeasurements =
                         localDataStore.getStatusGoogleFitKey("body_measurement")
@@ -256,7 +256,7 @@ constructor(
                         )
                     }
 
-                }
+                }*/
 
 
                 val callGetWorkoutSessions = async(Dispatchers.IO) {
@@ -283,7 +283,7 @@ constructor(
                     }
                 }
 
-                val callGetSleepSessions = async(Dispatchers.IO) {
+               /* val callGetSleepSessions = async(Dispatchers.IO) {
                     LOGS.d("$TAG GET Activity")
 
                     if (syncSleep) {
@@ -306,30 +306,15 @@ constructor(
                             }
                         )
                     }
-                }
+                }*/
 
-                /* val callGetSleep = async {
-                     LOGS.d("$TAG GET Sleep")
-
-                     googleFitDataObservers.importSleepData(
-                         success = { sleepList ->
-
-                             LOGS.d("$TAG Sleep import session ${sleepList.size}")
-
-                             LOGS.d(TAG,"Sleep data - ${Gson().toJson(sleepList)}")
-                         },
-                         failed = {
-                             LOGS.d("$TAG GET Sleep failed")
-                         }
-                     )
-                 }*/
 
                 try {
                     callSaveSteps.await()
                     callSaveSleep.await()
-                    callGetBodyMeasurements.await()
+                    //callGetBodyMeasurements.await()
                     callGetWorkoutSessions.await()
-                    callGetSleepSessions.await()
+                    //callGetSleepSessions.await()
 
                 } catch (e: Exception) {
                     e.printStackTrace()
