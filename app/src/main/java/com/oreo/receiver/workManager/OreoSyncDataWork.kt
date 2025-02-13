@@ -56,6 +56,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.Calendar
@@ -737,7 +738,7 @@ constructor(
                                         syncRepository.logErrorServer(
                                             ErrorServerCases.TIMEOUT.name,
                                             dataLogString.toString()
-                                        )
+                                        ).collect()
                                     }
 
                                     if (isDataReceived) {

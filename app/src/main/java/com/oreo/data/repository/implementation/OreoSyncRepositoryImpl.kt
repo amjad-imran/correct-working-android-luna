@@ -332,7 +332,7 @@ class OreoSyncRepositoryImpl(
                 add("data", jsonArray)
             }
 
-            val url = "${BuildConfig.OREO_BASE_URL}/luna/sleep/v3/log-errors"
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/log-errors"
             remoteDataSource.logErrorServer(url, requestObject)
         }
     }

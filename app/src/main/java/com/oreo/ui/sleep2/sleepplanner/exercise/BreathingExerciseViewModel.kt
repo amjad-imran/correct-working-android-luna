@@ -11,10 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
 
-    var navigateBack: Boolean = false
 
     var timer: CountDownTimer? = null
-    private val TOTAL_TIME = (4 * 19 * 1000L) + 1000L
+    private val TOTAL_TIME = (6 * 19 * 1000L) + 1000L
 
     val timerRunning = MutableLiveData<Long?>(null)//seconds remaining
 
@@ -33,7 +32,7 @@ class BreathingExerciseViewModel @Inject constructor() : BaseViewModel() {
                 }
             }
             timer?.start()
-        }, 3000)
+        }, 0)
     }
 
     fun cancelTimer() {
