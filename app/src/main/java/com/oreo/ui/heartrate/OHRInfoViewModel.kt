@@ -42,7 +42,7 @@ class OHRInfoViewModel @Inject constructor(
         )
         infoListData.add(
             OHRInfoDataModel(
-                title = resourcesProvider.getString(R.string.text_header_to_be_given),
+                title = ""/*resourcesProvider.getString(R.string.text_header_to_be_given)*/,
                 banner = R.drawable.ic_ohr_info_headers_bars,
                 description =
                 resourcesProvider.getString(R.string.text_hr_content_5)

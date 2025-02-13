@@ -87,8 +87,8 @@ class AlarmService : Service() {
         )
 
         val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
-            .setContentTitle("Luna Ring")
-            .setContentText("Alarm title here")
+            .setContentTitle("Rise and Shine!")
+            .setContentText("A new day, a fresh start! Your body is ready to go, your time to wakeup is here.")
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_luna_small)
@@ -122,7 +122,6 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LOGS.d("sadhjdsadjaskdsa service destoryed")
         stopService()
     }
 

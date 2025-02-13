@@ -40,6 +40,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -2018,6 +2019,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         val currentTime = LocalTime.now()
+        //val currentTime = LocalTime.of(0,2)
 
         try {
             val parsedBedTime = LocalTime.parse(bedTime, dateFormatter)
@@ -2034,7 +2036,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     return minutesToBedTime <= 60
                 }
             } else {
-                val minutesToBedTime = ChronoUnit.MINUTES.between(currentTime, parsedBedTime)
+                var minutesToBedTime = ChronoUnit.MINUTES.between(currentTime, parsedBedTime)
+                if (minutesToBedTime < 0) {
+                    minutesToBedTime = 1440 + minutesToBedTime
+                }
+
                 if (minutesToBedTime in 0..60) {
                     return true
                 }
