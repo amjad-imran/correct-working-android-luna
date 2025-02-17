@@ -114,7 +114,7 @@ class AlarmService : Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setFullScreenIntent(pendingIntent, true) // Ensures full-screen intent
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
+            //.addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
             .build()
         startForeground(ALARM_FOREGROUND_KEY, notification)
     }
