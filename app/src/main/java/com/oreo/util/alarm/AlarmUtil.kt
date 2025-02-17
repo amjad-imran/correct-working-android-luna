@@ -9,9 +9,11 @@ import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.ranges.contains
 
 class AlarmUtil @Inject constructor(
     private val context: Context,
@@ -23,14 +25,14 @@ class AlarmUtil @Inject constructor(
         hour: Int,
         minute: Int,
         alarmTone: Int,
+        wakeTime: LocalTime,
         bedTime: LocalTime
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra("alarmTone", alarmTone)
-        intent.putExtra("time",   String.format(locale = Locale.US, "%02d:%02d", hour, minute))
-
+        intent.putExtra("time", String.format(locale = Locale.US, "%02d:%02d", hour, minute))
 
 
         // Set the alarm time
@@ -46,7 +48,7 @@ class AlarmUtil @Inject constructor(
                 add(Calendar.WEEK_OF_YEAR, 1)
             }
         }
-        intent.putExtra("millis",calendar.timeInMillis)
+        intent.putExtra("millis", calendar.timeInMillis)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             dayOfWeek, // Unique request code for each day
@@ -83,10 +85,19 @@ class AlarmUtil @Inject constructor(
 //        alarmManager.setExactAndAllowWhileIdle(
 //            AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent
 //        );
+
+        val isPreviousDay = isPreviousDay(wakeTime, bedTime)
+
+        val reminderMillis = if(isPreviousDay){
+            calendarBedTime.timeInMillis - 24 * 60 * 60 * 1000
+        }else{
+            calendarBedTime.timeInMillis
+        }
+
         preAlarmNotificationSchedule(
             context,
             dayOfWeek * 100,
-            calendarBedTime.timeInMillis,
+            reminderMillis,
             bedTime
         )
 
@@ -97,6 +108,10 @@ class AlarmUtil @Inject constructor(
             AlarmManager.INTERVAL_DAY * 7,
             pendingIntent
         )*/
+    }
+
+    private fun isPreviousDay(parsedWakeTime: LocalTime, parsedBedTime: LocalTime): Boolean {
+        return parsedBedTime.isAfter(parsedWakeTime)
     }
 
     @SuppressLint("ScheduleExactAlarm")

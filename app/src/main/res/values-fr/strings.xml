@@ -1799,4 +1799,6 @@
     <string name="text_great">Super !</string>
     <string name="text_session_completed">Séance terminée</string>
     <string name="text_restart">Redémarrage</string>
+    <string name="text_rise_and_shine">Lève-toi et brille !</string>
+    <string name="text_alarm_message">Une nouvelle journée, un nouveau départ ! Votre corps est prêt à partir, votre heure de réveil est là.</string>
 </resources>

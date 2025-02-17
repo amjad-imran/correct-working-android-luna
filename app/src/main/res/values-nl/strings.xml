@@ -1802,4 +1802,6 @@
     <string name="text_great">Geweldig !</string>
     <string name="text_session_completed">Sessie voltooid</string>
     <string name="text_restart">Opnieuw opstarten</string>
+    <string name="text_rise_and_shine">Sta op en straal!</string>
+    <string name="text_alarm_message">Een nieuwe dag, een frisse start! Je lichaam is klaar om te gaan, je tijd om wakker te worden is hier.</string>
 </resources>

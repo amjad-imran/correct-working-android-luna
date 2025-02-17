@@ -1796,4 +1796,6 @@
     <string name="text_great">Ótimo !</string>
     <string name="text_session_completed">Sessão concluída</string>
     <string name="text_restart">Reiniciar</string>
+    <string name="text_rise_and_shine">Levante-se e brilhe!</string>
+    <string name="text_alarm_message">Um novo dia, um novo começo! Seu corpo está pronto para ir, sua hora de acordar chegou.</string>
 </resources>

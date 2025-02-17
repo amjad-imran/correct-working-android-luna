@@ -1799,4 +1799,6 @@
     <string name="text_great">伟大的 ！</string>
     <string name="text_session_completed">会话已完成</string>
     <string name="text_restart">重新启动</string>
+    <string name="text_rise_and_shine">崛起并闪耀！</string>
+    <string name="text_alarm_message">新的一天，新的开始！你的身体已经准备好了，你醒来的时间到了。</string>
 </resources>

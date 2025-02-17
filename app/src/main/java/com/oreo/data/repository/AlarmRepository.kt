@@ -91,7 +91,7 @@ class AlarmRepository @Inject constructor(
 
             alarmUtil.scheduleWeeklyAlarm(
                 it.first, wakeTime.hour, wakeTime.minute,
-                getAlarmToneByKey(it.second.audio ?: 1),bedTime
+                getAlarmToneByKey(it.second.audio ?: 1),wakeTime,bedTime
             )
         }
     }

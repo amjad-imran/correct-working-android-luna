@@ -1797,4 +1797,6 @@
     <string name="text_great">Großartig !</string>
     <string name="text_session_completed">Sitzung abgeschlossen</string>
     <string name="text_restart">Neustart</string>
+    <string name="text_rise_and_shine">Raus aus den Federn!</string>
+    <string name="text_alarm_message">Ein neuer Tag, ein Neuanfang! Ihr Körper ist bereit zu gehen, Ihre Zeit zum Aufwachen ist da.</string>
 </resources>

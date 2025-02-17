@@ -1835,5 +1835,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_great">Great !</string>
     <string name="text_session_completed">Session completed</string>
     <string name="text_restart">Restart</string>
+    <string name="text_rise_and_shine">Rise and Shine!</string>
+    <string name="text_alarm_message">A new day, a fresh start! Your body is ready to go, your time to wakeup is here.</string>
 
 </resources>

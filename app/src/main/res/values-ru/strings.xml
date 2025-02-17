@@ -1801,4 +1801,6 @@
     <string name="text_great">Большой !</string>
     <string name="text_session_completed">Сессия завершена</string>
     <string name="text_restart">Перезапуск</string>
+    <string name="text_rise_and_shine">Восстань и сияй!</string>
+    <string name="text_alarm_message">Новый день, новое начало! Ваше тело готово к работе, пришло время проснуться.</string>
 </resources>

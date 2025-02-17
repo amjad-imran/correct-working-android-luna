@@ -1800,4 +1800,6 @@
     <string name="text_great">Grande !</string>
     <string name="text_session_completed">Sessione completata</string>
     <string name="text_restart">Ricomincia</string>
+    <string name="text_rise_and_shine">Alzati e risplendi!</string>
+    <string name="text_alarm_message">Un nuovo giorno, un nuovo inizio! Il tuo corpo è pronto per partire, il tuo momento di svegliarti è qui.</string>
 </resources>

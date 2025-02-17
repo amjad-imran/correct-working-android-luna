@@ -1787,4 +1787,6 @@
     <string name="text_great">ยอดเยี่ยม !</string>
     <string name="text_session_completed">เซสชันเสร็จสมบูรณ์</string>
     <string name="text_restart">รีสตาร์ท</string>
+    <string name="text_rise_and_shine">ลุกขึ้นและส่องแสง!</string>
+    <string name="text_alarm_message">วันใหม่ เริ่มต้นใหม่! ร่างกายของคุณพร้อมที่จะไป ถึงเวลาตื่นนอนของคุณแล้ว</string>
 </resources>

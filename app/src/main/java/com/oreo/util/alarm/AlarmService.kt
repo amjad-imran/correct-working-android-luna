@@ -16,19 +16,27 @@ import android.os.Build
 import android.os.IBinder
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 private const val ALARM_FOREGROUND_KEY = 1230
 
 const val SLEEP_ALARM_CHANNEL = "SLEEP_ALARM_CHANNEL"
 const val SLEEP_WIND_DOWN_CHANNEL = "SLEEP_WIND_DOWN_CHANNEL"
 
+
+@AndroidEntryPoint
 class AlarmService : Service() {
 
     private var vibrator: Vibrator? = null
     private var ringtone: Ringtone? = null
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
 
 
     override fun onCreate() {
@@ -86,16 +94,27 @@ class AlarmService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+
+        val dismissIntent = Intent(this, AlarmService::class.java).apply {
+            action = "STOP_SERVICE"
+        }
+        val stopPendingIntent = PendingIntent.getService(
+            this,
+            0,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
-            .setContentTitle("Rise and Shine!")
-            .setContentText("A new day, a fresh start! Your body is ready to go, your time to wakeup is here.")
+            .setContentTitle(resourcesProvider.getString(R.string.text_rise_and_shine))
+            .setContentText(resourcesProvider.getString(R.string.text_alarm_message))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_luna_small)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setFullScreenIntent(pendingIntent, true) // Ensures full-screen intent
             .setContentIntent(pendingIntent)
-//            .addAction(R.drawable.ic_stop, "Dismiss", stopPendingIntent)
+            .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
             .build()
         startForeground(ALARM_FOREGROUND_KEY, notification)
     }
@@ -112,7 +131,7 @@ class AlarmService : Service() {
         }
     }
 
-    private fun stopService(){
+    private fun stopService() {
         WakeLockManager.releaseServiceLock()
         stopForeground(true)
         stopSelf()
