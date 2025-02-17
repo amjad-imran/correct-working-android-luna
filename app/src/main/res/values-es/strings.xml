@@ -1797,4 +1797,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Espere a que se complete la sincronización antes de comenzar su actividad.</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Espere a que se complete la sincronización antes de agregar su sueño</string>
     <string name="text_set_goal">Establecer meta</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Variaciones de la frecuencia cardíaca a lo largo del día</string>
+    <string name="text_hr_content_6">Su frecuencia cardíaca fluctúa según sus niveles de actividad y sueño. El gráfico destaca los momentos clave:\n🌙 Hora de dormir (representada por el ícono de la luna): Disminuye la frecuencia cardíaca durante el sueño, lo que indica un estado de descanso.\n🏃 Frecuencia cardíaca de actividad (representada por el ícono de correr): picos de frecuencia cardíaca más altos durante la actividad física.\nEsta información le ayudará a comprender cómo cambia su frecuencia cardíaca durante los diferentes períodos del día y garantizará que mantenga un equilibrio saludable entre descanso y actividad.</string>
+    <string name="text_breathing">Respiración</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Un tranquilizante natural para el sistema nervioso. Esto alivia las tensiones corporales antes de dormir.</string>
+    <string name="text_great">Excelente !</string>
+    <string name="text_session_completed">Sesión completada</string>
+    <string name="text_restart">Reanudar</string>
 </resources>

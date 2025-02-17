@@ -1792,4 +1792,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Veuillez attendre la fin de la synchronisation avant de commencer votre activité</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Veuillez attendre la fin de la synchronisation avant d\'ajouter votre sommeil</string>
     <string name="text_set_goal">Définir un objectif</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Variations de la fréquence cardiaque tout au long de la journée</string>
+    <string name="text_hr_content_6">Votre fréquence cardiaque fluctue en fonction de votre niveau d\'activité et de votre sommeil. Le graphique met en évidence les moments clés :\n🌙 Temps de sommeil (représenté par l\'icône de la lune) : Diminution de la fréquence cardiaque pendant le sommeil, indiquant un état de repos.\n🏃 Fréquence cardiaque d\'activité (représentée par l\'icône de course à pied) : des pics de fréquence cardiaque plus élevés pendant l\'activité physique.\nCes informations vous aident à comprendre comment votre fréquence cardiaque évolue au cours des différentes périodes de la journée et garantissent que vous maintenez un équilibre sain entre repos et activité.</string>
+    <string name="text_breathing">Respiration</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Un tranquillisant naturel pour le système nerveux. Cela apaise vos tensions corporelles avant de dormir</string>
+    <string name="text_great">Super !</string>
+    <string name="text_session_completed">Séance terminée</string>
+    <string name="text_restart">Redémarrage</string>
 </resources>

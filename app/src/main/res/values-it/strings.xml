@@ -1793,4 +1793,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Attendi il completamento della sincronizzazione prima di iniziare l\'attività</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Attendi il completamento della sincronizzazione prima di aggiungere il sonno</string>
     <string name="text_set_goal">Imposta obiettivo</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Variazioni della frequenza cardiaca durante il giorno</string>
+    <string name="text_hr_content_6">La frequenza cardiaca varia in base ai livelli di attività e al sonno. Il grafico evidenzia i momenti chiave:\n🌙 Durata del sonno (rappresentata dall\'icona della luna): frequenza cardiaca più bassa durante il sonno, che indica uno stato di riposo.\n🏃 Frequenza cardiaca attività (rappresentata dall\'icona della corsa): picchi di frequenza cardiaca più elevati durante l\'attività fisica.\nQuesti approfondimenti ti aiutano a capire come cambia la tua frequenza cardiaca durante i diversi periodi della giornata e ti assicurano di mantenere un sano equilibrio tra riposo e attività.</string>
+    <string name="text_breathing">Respirazione</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Un tranquillante naturale per il sistema nervoso. Questo allevia le tensioni corporee prima di dormire</string>
+    <string name="text_great">Grande !</string>
+    <string name="text_session_completed">Sessione completata</string>
+    <string name="text_restart">Ricomincia</string>
 </resources>

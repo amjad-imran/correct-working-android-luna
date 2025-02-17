@@ -1790,4 +1790,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Bitte warten Sie, bis die Synchronisierung abgeschlossen ist, bevor Sie mit Ihrer Aktivität beginnen</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Bitte warten Sie, bis die Synchronisierung abgeschlossen ist, bevor Sie Ihren Schlaf hinzufügen</string>
     <string name="text_set_goal">Ziel setzen</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Herzfrequenzvariationen im Tagesverlauf</string>
+    <string name="text_hr_content_6">Ihre Herzfrequenz schwankt je nach Aktivitätsniveau und Schlaf. Die Grafik hebt Schlüsselmomente hervor:\n🌙 Schlafzeit (dargestellt durch das Mondsymbol): Niedrigere Herzfrequenz während des Schlafs, was auf einen erholsamen Zustand hinweist.\n🏃 Aktivitätsherzfrequenz (dargestellt durch das Laufsymbol): Höhere Herzfrequenzspitzen bei körperlicher Aktivität.\nDiese Erkenntnisse helfen Ihnen zu verstehen, wie sich Ihre Herzfrequenz zu verschiedenen Tageszeiten verändert, und stellen sicher, dass Sie ein gesundes Gleichgewicht zwischen Ruhe und Aktivität aufrechterhalten.</string>
+    <string name="text_breathing">Atmung</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Ein natürliches Beruhigungsmittel für das Nervensystem. Dadurch werden Ihre körperlichen Spannungen vor dem Schlafengehen gelindert</string>
+    <string name="text_great">Großartig !</string>
+    <string name="text_session_completed">Sitzung abgeschlossen</string>
+    <string name="text_restart">Neustart</string>
 </resources>

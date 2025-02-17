@@ -1795,4 +1795,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Wacht tot de synchronisatie is voltooid voordat u met uw activiteit begint</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Wacht tot de synchronisatie is voltooid voordat u uw slaap toevoegt</string>
     <string name="text_set_goal">Stel doel in</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Hartslagvariaties gedurende de dag</string>
+    <string name="text_hr_content_6">Uw hartslag fluctueert op basis van uw activiteitenniveau en slaap. De grafiek belicht de belangrijkste momenten:\n🌙 Slaaptijd (weergegeven door het maanpictogram): lagere hartslag tijdens de slaap, wat een rustgevende toestand aangeeft.\n🏃 Activiteitshartslag (weergegeven door het hardlooppictogram): hogere hartslagpieken tijdens fysieke activiteit.\nDeze inzichten helpen u te begrijpen hoe uw hartslag verandert tijdens verschillende perioden van de dag en zorgen ervoor dat u een gezond evenwicht behoudt tussen rust en activiteit.</string>
+    <string name="text_breathing">Ademhaling</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Een natuurlijk kalmeringsmiddel voor het zenuwstelsel. Dit kalmeert uw lichamelijke spanningen voordat u gaat slapen</string>
+    <string name="text_great">Geweldig !</string>
+    <string name="text_session_completed">Sessie voltooid</string>
+    <string name="text_restart">Opnieuw opstarten</string>
 </resources>

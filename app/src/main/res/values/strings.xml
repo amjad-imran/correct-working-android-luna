@@ -1826,5 +1826,14 @@
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Please wait for sync to complete before adding your sleep
 </string>
     <string name="text_set_goal">Set Goal</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Heart Rate Variations Throughout the Day</string>
+    <string name="text_hr_content_6">Your heart rate fluctuates based on your activity levels and sleep. The graph highlights key moments:\n🌙 Sleep Time (represented by the moon icon): Lower heart rate during sleep, indicating a restful state.\n
+🏃 Activity Heart Rate (represented by the running icon): Higher heart rate spikes during physical activity.\n
+These insights help you understand how your heart rate changes during different periods of the day and ensure you’re maintaining a healthy balance between rest and activity.</string>
+    <string name="text_breathing">Breathing</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">A natural tranquilliser for the nervous system. This soothes your bodily tensions before sleep</string>
+    <string name="text_great">Great !</string>
+    <string name="text_session_completed">Session completed</string>
+    <string name="text_restart">Restart</string>
 
 </resources>

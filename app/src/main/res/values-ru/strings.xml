@@ -1794,4 +1794,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">Прежде чем начинать занятие, дождитесь завершения синхронизации.</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">Прежде чем добавлять сведения о сне, дождитесь завершения синхронизации.</string>
     <string name="text_set_goal">Установить цель</string>
+    <string name="text_heart_rate_variations_throughout_the_day">Изменения частоты сердечных сокращений в течение дня</string>
+    <string name="text_hr_content_6">Частота пульса колеблется в зависимости от уровня вашей активности и сна. На графике выделены ключевые моменты:\n🌙 Время сна (обозначено значком луны): снижение частоты пульса во время сна, что указывает на состояние покоя.\n🏃 Частота пульса при активности (отображается значком бега): во время физической активности резко возрастает частота пульса.\nЭти данные помогут вам понять, как меняется частота пульса в разные периоды дня, и убедиться, что вы поддерживаете здоровый баланс между отдыхом и активностью.</string>
+    <string name="text_breathing">Дыхание</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">Натуральный транквилизатор для нервной системы. Это успокаивает ваше телесное напряжение перед сном.</string>
+    <string name="text_great">Большой !</string>
+    <string name="text_session_completed">Сессия завершена</string>
+    <string name="text_restart">Перезапуск</string>
 </resources>

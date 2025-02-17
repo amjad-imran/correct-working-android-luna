@@ -75,25 +75,6 @@ class BreathingExerciseFragment :
             )
             textView.paint.shader = textShader
         }
-
-
-
-        /*textView.post {
-            val height = textView.textSize
-
-            val textShader: Shader = LinearGradient(
-                0f,
-                0f,
-                0f,
-                height,
-                intArrayOf(
-                    Color.parseColor("#EBDDFF"),
-                    Color.parseColor("#C5A8ED"),
-                ),
-                Shader.TileMode.CLAMP
-            )
-            textView.paint.shader = textShader
-        }*/
     }
 
     override fun initListener() {

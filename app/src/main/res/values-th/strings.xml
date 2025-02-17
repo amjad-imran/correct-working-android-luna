@@ -1780,4 +1780,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเริ่มกิจกรรมของคุณ</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">โปรดรอให้การซิงค์เสร็จสิ้นก่อนที่จะเพิ่มการนอนหลับของคุณ</string>
     <string name="text_set_goal">กำหนดเป้าหมาย</string>
+    <string name="text_heart_rate_variations_throughout_the_day">ความผันผวนของอัตราการเต้นของหัวใจตลอดทั้งวัน</string>
+    <string name="text_hr_content_6">อัตราการเต้นของหัวใจของคุณผันผวนตามระดับกิจกรรมและการนอนหลับของคุณ กราฟเน้นช่วงเวลาสำคัญ:\n🌙 เวลานอน (แสดงด้วยไอคอนรูปพระจันทร์): อัตราการเต้นของหัวใจลดลงระหว่างการนอนหลับ ซึ่งบ่งบอกถึงสภาวะพักผ่อน\n🏃 อัตราการเต้นของหัวใจของกิจกรรม (แสดงด้วยไอคอนการวิ่ง): อัตราการเต้นของหัวใจสูงขึ้นอย่างรวดเร็วระหว่างออกกำลังกาย\nข้อมูลเชิงลึกเหล่านี้ช่วยให้คุณเข้าใจว่าอัตราการเต้นของหัวใจเปลี่ยนแปลงไปอย่างไรในช่วงเวลาต่างๆ ของวัน และช่วยให้แน่ใจว่าคุณจะรักษาสมดุลระหว่างการพักผ่อนและกิจกรรมต่างๆ ได้ดี</string>
+    <string name="text_breathing">การหายใจ</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">ยากล่อมประสาทตามธรรมชาติสำหรับระบบประสาท วิธีนี้จะบรรเทาความตึงเครียดทางร่างกายก่อนเข้านอน</string>
+    <string name="text_great">ยอดเยี่ยม !</string>
+    <string name="text_session_completed">เซสชันเสร็จสมบูรณ์</string>
+    <string name="text_restart">รีสตาร์ท</string>
 </resources>

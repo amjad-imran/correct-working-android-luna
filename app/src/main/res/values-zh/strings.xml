@@ -1792,4 +1792,11 @@
     <string name="text_please_wait_for_sync_to_complete_before_starting_your_activity">请等待同步完成后再开始您的活动</string>
     <string name="text_please_wait_for_sync_to_complete_before_adding_sleep">请等待同步完成后再添加您的睡眠</string>
     <string name="text_set_goal">设定目标</string>
+    <string name="text_heart_rate_variations_throughout_the_day">全天心率变化</string>
+    <string name="text_hr_content_6">您的心率会根据您的活动水平和睡眠而波动。该图突出显示了关键时刻：\n🌙 睡眠时间（以月亮图标表示）：睡眠时心率较低，表示处于休息状态。\n🏃 活动心率（由跑步图标表示）：体力活动期间心率峰值较高。\n这些见解可帮助您了解一天中不同时段的心率如何变化，并确保您在休息和活动之间保持健康的平衡。</string>
+    <string name="text_breathing">呼吸</string>
+    <string name="text_a_natural_tranquilliser_for_the_nervous_system">神经系统的天然镇静剂。这可以在睡前缓解身体的紧张感</string>
+    <string name="text_great">伟大的 ！</string>
+    <string name="text_session_completed">会话已完成</string>
+    <string name="text_restart">重新启动</string>
 </resources>
