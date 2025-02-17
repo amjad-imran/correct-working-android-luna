@@ -81,7 +81,7 @@ class BreathingExerciseFragment :
         binding.lytStateStart.ivStart.setOnClickListener {
             binding.lytStateStart.root.gone()
             binding.imageBack.gone()
-            startLottie(6)
+            startLottie()
         }
 
         binding.lytToolbar.backBtn.setOnClickListener {
@@ -93,15 +93,15 @@ class BreathingExerciseFragment :
 
         binding.lytStateCompleted.btnRestart.setOnClickListener {
             binding.lytStateCompleted.root.gone()
-            startLottie(6)
+            startLottie()
         }
     }
 
-    private fun startLottie(repeatCount: Int) {
+    private fun startLottie() {
         binding.lottieAnimationView.visible()
         binding.tvTimer.visible()
 
-        binding.lottieAnimationView.repeatCount = repeatCount
+        binding.lottieAnimationView.repeatCount = 5
         binding.lottieAnimationView.setAnimation(R.raw.anim_breathing_exercise)
         //binding.lottieAnimationView.setAnimation(R.raw.anim_ai_mic)
 
@@ -135,8 +135,8 @@ class BreathingExerciseFragment :
             }
 
             if (it == 0L) {
-                navigateUpSafe()
-                return@observe
+                /*navigateUpSafe()
+                return@observe*/
             } else {
                 val min = it / 60
                 val second = it % 60

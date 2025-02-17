@@ -31,7 +31,8 @@ class OHRInfoAdapter :
             if (resultData.banner == null) {
                 binding.ivBanner.gone()
             } else {
-                binding.ivBanner.loadImage(binding.ivBanner.context, resultData.banner)
+                binding.ivBanner.visible()
+                binding.ivBanner.setImageResource(resultData.banner)
             }
             if (bindingAdapterPosition == mDataSet.size - 1) {
                 binding.divider1.root.gone()
