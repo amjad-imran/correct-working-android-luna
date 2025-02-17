@@ -85,6 +85,8 @@ constructor(
 
     val FAB_ANIM_TIME = 500L
 
+    var isBottomNavGifPlaying = false
+
     var registerDate: Int = -1
     var temperatureBaseLine: Float? = null
     val DEFAULT_TEMPERATURE_BASELINE = 98.6f

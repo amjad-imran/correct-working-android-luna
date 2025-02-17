@@ -72,8 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/anim_ai_mic_green"
-        app:lottie_speed="0.5" />
+        app:lottie_rawRes="@raw/anim_ai_mic_green" />
 
     <ImageView
         android:id="@+id/ivTextChat"
