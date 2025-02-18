@@ -736,7 +736,7 @@ constructor(
 
                                     GlobalScope.launch(Dispatchers.IO) {
                                         syncRepository.logErrorServer(
-                                            ErrorServerCases.TIMEOUT.name,
+                                            ErrorServerCases.SYNC_TIMEOUT.name,
                                             dataLogString.toString()
                                         ).collect()
                                     }

@@ -325,14 +325,11 @@ class OreoSyncRepositoryImpl(
                 addProperty("data", data)
                 addProperty("date", dateToday)
             }
-            val jsonArray = JsonArray().apply {
-                add(dataObj)
-            }
             val requestObject = JsonObject().apply {
-                add("data", jsonArray)
+                add("data", dataObj)
             }
 
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/log-errors"
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v3/log-errors"
             remoteDataSource.logErrorServer(url, requestObject)
         }
     }

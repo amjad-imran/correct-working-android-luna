@@ -130,5 +130,5 @@ interface OreoSyncRepository {
 }
 
 enum class ErrorServerCases {
-    TIMEOUT
+    SYNC_TIMEOUT
 }
