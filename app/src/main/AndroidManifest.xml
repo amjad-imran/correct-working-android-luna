@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/> -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -34,9 +34,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
 
     <!--<uses-feature android:name="android.software.companion_device_setup"/>-->
@@ -53,22 +53,49 @@
         tools:replace="android:allowBackup">
 
 
-        <receiver android:name="com.oreo.util.alarm.AlarmReceiver" android:exported="true" >
+        <receiver
+            android:name="com.oreo.util.alarm.AlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.oreo.util.alarm.WindDownNotification" android:exported="true" />
+        <receiver
+            android:name="com.oreo.util.alarm.WindDownNotification"
+            android:exported="true" />
 
-        <service android:name="com.oreo.util.alarm.AlarmService"
-            android:exported="false"
+        <receiver
+            android:name="com.oreo.widget.WidgetProviderOne"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_1" />
+        </receiver>
+
+        <receiver
+            android:name="com.oreo.widget.WidgetProviderTwo"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_2" />
+        </receiver>
+
+        <service
+            android:name="com.oreo.util.alarm.AlarmService"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
             android:excludeFromRecents="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
             android:launchMode="singleInstance"
-            android:taskAffinity=""
             android:permission="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
-            android:foregroundServiceType="mediaPlayback"/>
+            android:taskAffinity="" />
 
         <service
             android:name="com.noisefit_commans.location.LocationService"
@@ -104,14 +131,15 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name="com.oreo.util.alarm.AlarmActivity"
-            android:exported="true"
+        <activity
+            android:name="com.oreo.util.alarm.AlarmActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:launchMode="singleTask"
             android:showForAllUsers="true"
             android:showOnLockScreen="true"
-            android:turnScreenOn="true"
-            android:showWhenLocked="true" />
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
         <activity
             android:name="com.noisefit.ui.SplashActivity"
             android:exported="true"
@@ -273,16 +301,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-     <!--   <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.noisefit.luna.fileprovider.freshchat"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/freshchat_file_provider_paths" />
-        </provider>
--->
+        <!--   <provider
+               android:name="androidx.core.content.FileProvider"
+               android:authorities="com.noisefit.luna.fileprovider.freshchat"
+               android:exported="false"
+               android:grantUriPermissions="true">
+               <meta-data
+                   android:name="android.support.FILE_PROVIDER_PATHS"
+                   android:resource="@xml/freshchat_file_provider_paths" />
+           </provider>
+   -->
 
         <provider
             android:name="com.noisefit.util.exception.UncaughtExceptionHandlerContentProvider"
