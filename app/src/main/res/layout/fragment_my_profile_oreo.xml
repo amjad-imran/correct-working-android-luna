@@ -68,6 +68,16 @@
                 <!--                    app:layout_constraintTop_toTopOf="@+id/imvProfile" />-->
 
                 <include
+                    android:id="@+id/lytUpdateToViewReferral"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="24dp"
+                    layout="@layout/layout_update_to_view_referral"/>
+                <include
                     android:id="@+id/lytReferralAvailable"
                     layout="@layout/layout_settings_referral_available"
                     android:layout_width="match_parent"

@@ -1806,4 +1806,12 @@
     <string name="text_restart">Reanudar</string>
     <string name="text_rise_and_shine">¡Levántate y brilla!</string>
     <string name="text_alarm_message">¡Un nuevo día, un nuevo comienzo! Tu cuerpo está listo para funcionar, tu momento de despertar está aquí.</string>
+    <string name="text_breathing_message">Prepararse\nEncuentre un espacio cómodo y tranquilo,\nadoptar una postura relajada</string>
+    <string name="text_this_reward_can_only_be_claimed_once">Esta recompensa sólo se puede reclamar una vez.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Actualiza la aplicación para ver la referencia</string>
+    <string name="text_update">Actualizar</string>
+    <string name="text_update_the_app_to_see_the_referral">Actualiza la aplicación para ver la referencia</string>
+    <string name="text_get_ready">Prepárate</string>
+    <string name="text_breathing_message_2">Encuentra un lugar cómodo y tranquilo, y adopta una postura relajada</string>
+
 </resources>

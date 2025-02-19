@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_ref_1"
+    tools:layout_height="400dp"
+    android:background="@drawable/bg_ref_masters"
     tools:context="com.oreo.ui.referral.type.ReferralPrizeFragment">
 
     <TextView
@@ -15,7 +16,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:textColor="#ffecec"
+        android:textColor="#F5F3E8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-        tools:src="@drawable/image_article_1_banner" />
+        tools:src="@drawable/image_play_breathing" />
 
     <TextView
         android:id="@+id/textView132"
@@ -46,7 +47,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:textColor="#ffecec"
+        android:textColor="#F5F3E8"
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/tvPrizeWorth"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +63,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="48dp"
         android:gravity="center"
-        android:textColor="#ffecec"
+        android:textColor="#99F5F3E8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

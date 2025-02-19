@@ -11,6 +11,8 @@ data class ReferralInfoResponse(
     val hasNotification: Boolean,
     @SerializedName("has_referral")
     val hasReferral: Boolean,
+    @SerializedName("show_referral")
+    val showReferral: Boolean,
     @SerializedName("remaining_days")
     val remainingDays: Int? = null,
     @SerializedName("referral_title")

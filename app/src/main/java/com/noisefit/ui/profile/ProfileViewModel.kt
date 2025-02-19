@@ -190,8 +190,8 @@ constructor(
         _userGender.value = getFormattedGender(_user.value?.userInfo?.gender)
     }
 
-    fun getFormattedGender(gender:String?): String {
-        if(gender==null) return ""
+    fun getFormattedGender(gender: String?): String {
+        if (gender == null) return ""
 
         val tempGender: String = if (gender.lowercase() == Gender.MALE.type.lowercase())
             resourcesProvider.getString(R.string.man)
@@ -330,11 +330,14 @@ constructor(
 
         val crossedCampaignId = localDataStore.getCrossedCampaign()
         val hideTopBanner = crossedCampaignId == referralInfoResponse.campaignId
+        if (referralInfoResponse.showReferral.not()) {
+            return ReferralRunningState.UpdateToViewReferral
+        }
 
         return if (referralInfoResponse.banner.isNullOrEmpty()) {
-            if(referralInfoResponse.prize!=null){
+            if (referralInfoResponse.prize != null) {
                 ReferralRunningState.PrizeOnlyState
-            }else{
+            } else {
                 if (referralInfoResponse.hasReferral) {
                     ReferralRunningState.ReferralOnlyState
                 } else {
@@ -372,9 +375,11 @@ sealed class ReferralRunningState {
         val prizeTitle: String? = null
     ) :
         ReferralRunningState()
-    data object PrizeOnlyState:ReferralRunningState()
+
+    data object PrizeOnlyState : ReferralRunningState()
 
     data object ReferralAndCampaignState : ReferralRunningState()
     data object ReferralOnlyState : ReferralRunningState()
+    data object UpdateToViewReferral : ReferralRunningState()
     data object Default : ReferralRunningState()
 }

@@ -1804,4 +1804,12 @@
     <string name="text_restart">Opnieuw opstarten</string>
     <string name="text_rise_and_shine">Sta op en straal!</string>
     <string name="text_alarm_message">Een nieuwe dag, een frisse start! Je lichaam is klaar om te gaan, je tijd om wakker te worden is hier.</string>
+    <string name="text_breathing_message">Maak je klaar\nZoek een comfortabele, rustige ruimte,\nneem plaats in een ontspannen houding</string>
+    <string name="text_this_reward_can_only_be_claimed_once">Deze beloning kan slechts één keer worden geclaimd.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Upgrade de app om de verwijzing te zien</string>
+    <string name="text_update">Bijwerken</string>
+    <string name="text_update_the_app_to_see_the_referral">Werk de app bij om de verwijzing te zien</string>
+    <string name="text_get_ready">Maak je klaar</string>
+    <string name="text_breathing_message_2">Zoek een comfortabele, rustige plek en neem een ontspannen houding aan</string>
+
 </resources>

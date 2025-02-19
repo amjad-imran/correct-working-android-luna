@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.noisefit.data.model.referral.CardStyle2
 import com.noisefit.data.model.referral.CardStyle3
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentReferralType2Binding
 import com.noisefit.luna.databinding.FragmentReferralType3Binding
 import com.noisefit_commans.ui.BaseFragment
@@ -58,13 +59,15 @@ class ReferralType3Fragment :
         }
         binding.ivConnector.setImageResource(cardData.ringConnectRes)
 
-        binding.tvDate.setTextColor(cardData.textColor)
         binding.tvName.setTextColor(cardData.textColor)
         binding.textPurchased.setTextColor(cardData.textColor)
         binding.textDelivered.setTextColor(cardData.textColor)
 
-        binding.tvDate.text =
-            LocalDate.parse(cardData.date).format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+        //binding.tvDate.setTextColor(cardData.textColor)
+        binding.tvDate.text = getString(R.string.text_this_reward_can_only_be_claimed_once)
+
+        /*binding.tvDate.text =
+            LocalDate.parse(cardData.date).format(DateTimeFormatter.ofPattern("dd MMM yyyy"))*/
     }
 
     override fun initListener() {
