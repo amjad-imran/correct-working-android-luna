@@ -93,6 +93,7 @@ class BreathingExerciseFragment :
 
         binding.lytStateCompleted.btnRestart.setOnClickListener {
             binding.lytStateCompleted.root.gone()
+            binding.lytToolbar.root.visible()
             startLottie()
         }
     }
@@ -111,6 +112,7 @@ class BreathingExerciseFragment :
             }
 
             override fun onAnimationEnd(animation: Animator) {
+                binding.lytToolbar.root.gone()
                 binding.lottieAnimationView.gone()
                 binding.imageBack.visible()
                 binding.tvTimer.gone()
