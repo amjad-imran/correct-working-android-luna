@@ -1802,4 +1802,9 @@
     <string name="text_restart">Ricomincia</string>
     <string name="text_rise_and_shine">Alzati e risplendi!</string>
     <string name="text_alarm_message">Un nuovo giorno, un nuovo inizio! Il tuo corpo è pronto per partire, il tuo momento di svegliarti è qui.</string>
+    <string name="text_breathing_message">Preparati\nTrova uno spazio confortevole e tranquillo,\nassumere una postura rilassata</string>
+    <string name="text_this_reward_can_only_be_claimed_once">Questo premio può essere richiesto solo una volta.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Aggiorna l\'app per vedere il riferimento</string>
+    <string name="text_update">Aggiorna</string>
+
 </resources>

@@ -1789,4 +1789,9 @@
     <string name="text_restart">รีสตาร์ท</string>
     <string name="text_rise_and_shine">ลุกขึ้นและส่องแสง!</string>
     <string name="text_alarm_message">วันใหม่ เริ่มต้นใหม่! ร่างกายของคุณพร้อมที่จะไป ถึงเวลาตื่นนอนของคุณแล้ว</string>
+    <string name="text_breathing_message">เตรียมตัวให้พร้อม\nหาพื้นที่สบายๆ เงียบสงบ\nอยู่ในท่าที่ผ่อนคลาย</string>
+    <string name="text_this_reward_can_only_be_claimed_once">รางวัลนี้สามารถขอรับได้เพียงครั้งเดียวเท่านั้น</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">อัปเกรดแอปเพื่อดูการแนะนำ</string>
+    <string name="text_update">อัปเดต</string>
+
 </resources>

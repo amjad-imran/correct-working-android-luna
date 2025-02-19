@@ -1801,4 +1801,9 @@
     <string name="text_restart">Redémarrage</string>
     <string name="text_rise_and_shine">Lève-toi et brille !</string>
     <string name="text_alarm_message">Une nouvelle journée, un nouveau départ ! Votre corps est prêt à partir, votre heure de réveil est là.</string>
+    <string name="text_breathing_message">Se préparer\nTrouvez un espace confortable et calme,\ns\'installer dans une posture détendue</string>
+    <string name="text_this_reward_can_only_be_claimed_once">Cette récompense ne peut être réclamée qu\'une seule fois.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Mettez à niveau l\'application pour voir la recommandation</string>
+    <string name="text_update">Mettre à jour</string>
+
 </resources>

@@ -82,8 +82,12 @@
     <TextView
         android:id="@+id/tvDate"
         style="@style/S18"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:textColor="#E8E6DB99"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

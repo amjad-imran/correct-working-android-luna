@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +55,10 @@ class OMyProfileFragment :
         /*binding.lytReferralNo.tvMyReferrals.setOnClickListener {
             navigate(R.id.myReferralsFragment)
         }*/
+
+        binding.lytUpdateToViewReferral.tvUpdateNow.setOnClickListener {
+            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
+        }
 
         binding.rowSelectLanguage.setOnClickListener {
             navigate(R.id.languageFragment, bundleOf("hideContinue" to true))
@@ -191,6 +196,7 @@ class OMyProfileFragment :
         viewModel.referralRunningState.observe(this) {
             when (it) {
                 is ReferralRunningState.CampaignRunningState -> {
+                    binding.lytUpdateToViewReferral.root.gone()
                     binding.lytReferralAvailable.root.visible()
                     binding.lytReferralAvailable.apply {
                         tvReferralMessage.text = it.prizeTitle
@@ -201,11 +207,18 @@ class OMyProfileFragment :
 
                 ReferralRunningState.ReferralOnlyState, ReferralRunningState.ReferralAndCampaignState,
                 ReferralRunningState.PrizeOnlyState -> {
+                    binding.lytUpdateToViewReferral.root.gone()
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.visible()
                 }
+                ReferralRunningState.UpdateToViewReferral->{
+                    binding.lytUpdateToViewReferral.root.visible()
+                    binding.lytReferralAvailable.root.gone()
+                    binding.rowReferral.gone()
+                }
 
                 ReferralRunningState.Default -> {
+                    binding.lytUpdateToViewReferral.root.gone()
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.gone()
                 }

@@ -1803,4 +1803,9 @@
     <string name="text_restart">Перезапуск</string>
     <string name="text_rise_and_shine">Восстань и сияй!</string>
     <string name="text_alarm_message">Новый день, новое начало! Ваше тело готово к работе, пришло время проснуться.</string>
+    <string name="text_breathing_message">Будьте готовы\nНайдите удобное, тихое место,\nпринять расслабленную позу</string>
+    <string name="text_this_reward_can_only_be_claimed_once">Эту награду можно получить только один раз.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Обновите приложение, чтобы увидеть реферальную ссылку</string>
+    <string name="text_update">Обновить</string>
+
 </resources>

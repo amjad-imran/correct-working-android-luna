@@ -1837,5 +1837,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_restart">Restart</string>
     <string name="text_rise_and_shine">Rise and Shine!</string>
     <string name="text_alarm_message">A new day, a fresh start! Your body is ready to go, your time to wakeup is here.</string>
+    <string name="text_breathing_message">Get Ready\nFind a comfortable, quiet space,\nsettle into a relaxed posture</string>
+    <string name="text_this_reward_can_only_be_claimed_once">This reward can only be claimed once.</string>
+    <string name="text_upgrade_the_app_to_see_the_referral">Upgrade the app to see the referral</string>
+    <string name="text_update">Update</string>
 
 </resources>

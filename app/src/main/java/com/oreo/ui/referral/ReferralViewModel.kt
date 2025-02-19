@@ -91,8 +91,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_2,
-                            textColor = Color.parseColor("#080004")
+                            backgroundRes = R.drawable.bg_ref_masters/*R.drawable.bg_ref_2*/,
+                            textColor = Color.parseColor("#F5F3E8")
                         )
                     )
                 )
@@ -102,8 +102,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_3,
-                            textColor = Color.parseColor("#ffffff")
+                            backgroundRes = R.drawable.bg_ref_masters/*R.drawable.bg_ref_3*/,
+                            textColor = Color.parseColor("#F5F3E8")
                         )
                     )
                 )
@@ -113,8 +113,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_4,
-                            textColor = Color.parseColor("#f2efe7")
+                            backgroundRes = R.drawable.bg_ref_masters/*R.drawable.bg_ref_4*/,
+                            textColor = Color.parseColor("#F5F3E8")
                         )
                     )
                 )
@@ -124,8 +124,8 @@ class ReferralViewModel @Inject constructor(
                         CardStyle2(
                             title = it.title,
                             subTitle = it.subTitle,
-                            backgroundRes = R.drawable.bg_ref_7,
-                            textColor = Color.parseColor("#172719")
+                            backgroundRes =R.drawable.bg_ref_masters/* R.drawable.bg_ref_7*/,
+                            textColor = Color.parseColor("#F5F3E8")
                         )
                     )
                 )
@@ -154,6 +154,8 @@ class ReferralViewModel @Inject constructor(
     }
 
     private fun getFriendsCard(referredCount: Int): Pair<Int, Int> {
+        return Pair(R.drawable.bg_ref_masters, Color.parseColor("#F5F3E8"))
+
         val modVal = referredCount % 5
         return when (modVal) {
             0 -> Pair(R.drawable.bg_ref_2, Color.parseColor("#080004"))
@@ -169,6 +171,12 @@ class ReferralViewModel @Inject constructor(
      * Ring filled, default, join drawable
      */
     private fun getRadioButtons(referredCount: Int): Triple<Int, Int, Int> {
+        return Triple(
+            R.drawable.ic_ref_status_filled_master,
+            R.drawable.ic_ref_status_ring_master,
+            R.drawable.ic_ring_join_master
+        )
+
         val modVal = referredCount % 5
         return when (modVal) {
             0 -> Triple(
