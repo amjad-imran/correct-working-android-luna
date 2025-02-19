@@ -72,6 +72,7 @@ import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.FitnessDataCallBack
 import com.zhapp.ble.callback.RealTimeDataCallBack
 import com.zhapp.ble.callback.SportCallBack
+import com.zhapp.ble.parsing.ParsingStateManager
 import com.zhapp.ble.parsing.ParsingStateManager.SendCmdStateListener
 import com.zhapp.ble.parsing.SendCmdState
 import kotlinx.coroutines.coroutineScope
@@ -337,6 +338,15 @@ constructor(
                                 SyncEvents.Success(progress, total)
                             )
                         )
+
+                        //ReceptionStatus ->0: indicates not received, 1: indicates received
+                        ControlBleTools.getInstance().ringExecutesDeleteDailyData(1,
+                            object : ParsingStateManager.SendCmdStateListener() {
+                                override fun onState(p0: SendCmdState?) {
+                                    LOGS.d(TAG, "ringExecutesDeleteDailyData onState $p0")
+                                }
+                            })
+
                         AppLogs.sendAppLogs("$TRACK_TAG Sync data complete")
                     }
 
@@ -581,7 +591,7 @@ constructor(
                     testDataString
                 )*/
 
-                if(p0.isExistSleep.not()){
+                if (p0.isExistSleep.not()) {
                     AppLogs.sendAppLogs("$TRACK_TAG Sleep exists : false")
                     return
                 }
