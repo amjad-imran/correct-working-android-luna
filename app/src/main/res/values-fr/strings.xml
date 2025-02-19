@@ -1805,5 +1805,8 @@
     <string name="text_this_reward_can_only_be_claimed_once">Cette récompense ne peut être réclamée qu\'une seule fois.</string>
     <string name="text_upgrade_the_app_to_see_the_referral">Mettez à niveau l\'application pour voir la recommandation</string>
     <string name="text_update">Mettre à jour</string>
+    <string name="text_update_the_app_to_see_the_referral">Mettez à jour l\'application pour voir la recommandation</string>
+    <string name="text_get_ready">Préparez-vous</string>
+    <string name="text_breathing_message_2">Trouvez un endroit confortable et calme, et adoptez une posture détendue</string>
 
 </resources>

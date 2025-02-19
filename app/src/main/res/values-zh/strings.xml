@@ -1805,5 +1805,8 @@
     <string name="text_this_reward_can_only_be_claimed_once">该奖励只能领取一次。</string>
     <string name="text_upgrade_the_app_to_see_the_referral">升级应用以查看推荐</string>
     <string name="text_update">更新</string>
+    <string name="text_update_the_app_to_see_the_referral">更新应用以查看推荐</string>
+    <string name="text_get_ready">准备好</string>
+    <string name="text_breathing_message_2">找到一个舒适安静的地方，保持放松的姿势</string>
 
 </resources>

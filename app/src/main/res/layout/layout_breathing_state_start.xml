@@ -22,26 +22,14 @@
         style="@style/S20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_breathing"
-        app:layout_constraintBottom_toTopOf="@+id/text478"
+        android:textSize="42sp"
+        android:text="@string/text_get_ready"
+        app:layout_constraintBottom_toTopOf="@+id/textView145"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivStart"
         app:layout_constraintVertical_bias="0.25"
         app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/text478"
-        style="@style/S24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="4-7-8"
-        android:textSize="42sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView145"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBreathing" />
 
     <TextView
         android:id="@+id/textView145"
@@ -50,12 +38,12 @@
         android:layout_marginHorizontal="64dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="@string/text_breathing_message"
+        android:text="@string/text_breathing_message_2"
         android:textColor="#8CD8C2F6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text478" />
+        app:layout_constraintTop_toBottomOf="@+id/textBreathing" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,7 +51,7 @@ class BreathingExerciseFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setTextGradient(binding.lytStateStart.textBreathing)
-        setTextGradient(binding.lytStateStart.text478)
+        //setTextGradient(binding.lytStateStart.text478)
         setTextGradient(binding.lytStateCompleted.textGreat)
         setTextGradient(binding.lytStateCompleted.textSessionComplete)
 

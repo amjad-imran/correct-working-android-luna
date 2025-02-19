@@ -1810,5 +1810,8 @@
     <string name="text_this_reward_can_only_be_claimed_once">Esta recompensa sólo se puede reclamar una vez.</string>
     <string name="text_upgrade_the_app_to_see_the_referral">Actualiza la aplicación para ver la referencia</string>
     <string name="text_update">Actualizar</string>
+    <string name="text_update_the_app_to_see_the_referral">Actualiza la aplicación para ver la referencia</string>
+    <string name="text_get_ready">Prepárate</string>
+    <string name="text_breathing_message_2">Encuentra un lugar cómodo y tranquilo, y adopta una postura relajada</string>
 
 </resources>

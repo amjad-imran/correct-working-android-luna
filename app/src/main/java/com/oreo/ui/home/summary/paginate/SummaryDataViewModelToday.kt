@@ -2028,7 +2028,7 @@ class SummaryDataViewModelToday @Inject constructor(
             if (parsedBedTime.isAfter(parsedWakeTime)) {
                 if (currentTime.isBefore(parsedWakeTime)) {
                     val minutesToWakeTime = ChronoUnit.MINUTES.between(currentTime, parsedWakeTime)
-                    return minutesToWakeTime >= 0
+                    return minutesToWakeTime >= 0 && sleepExists.not()
                 }
 
                 if (currentTime.isBefore(parsedBedTime)) {

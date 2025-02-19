@@ -1793,5 +1793,8 @@
     <string name="text_this_reward_can_only_be_claimed_once">รางวัลนี้สามารถขอรับได้เพียงครั้งเดียวเท่านั้น</string>
     <string name="text_upgrade_the_app_to_see_the_referral">อัปเกรดแอปเพื่อดูการแนะนำ</string>
     <string name="text_update">อัปเดต</string>
+    <string name="text_update_the_app_to_see_the_referral">อัปเดตแอปเพื่อดูการแนะนำ</string>
+    <string name="text_get_ready">เตรียมตัวให้พร้อม</string>
+    <string name="text_breathing_message_2">หาสถานที่ที่เงียบสงบและสบาย แล้วนั่งในท่าที่ผ่อนคลาย</string>
 
 </resources>

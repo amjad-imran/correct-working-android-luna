@@ -1803,5 +1803,8 @@
     <string name="text_this_reward_can_only_be_claimed_once">Diese Belohnung kann nur einmal beansprucht werden.</string>
     <string name="text_upgrade_the_app_to_see_the_referral">Aktualisiere die App, um die Empfehlung zu sehen</string>
     <string name="text_update">Aktualisieren</string>
+    <string name="text_update_the_app_to_see_the_referral">Aktualisiere die App, um die Empfehlung zu sehen</string>
+    <string name="text_get_ready">Mach dich bereit</string>
+    <string name="text_breathing_message_2">Finde einen bequemen, ruhigen Ort und nimm eine entspannte Haltung ein</string>
 
 </resources>
