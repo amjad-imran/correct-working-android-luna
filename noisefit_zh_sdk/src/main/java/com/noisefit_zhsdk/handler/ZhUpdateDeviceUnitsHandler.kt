@@ -1203,158 +1203,7 @@ constructor(
     }
 
     override fun setWatchFace(watchFace: WatchFace) {
-        LOGS.d(watchFace)
 
-        if (!ControlBleTools.getInstance().isConnect) return
-
-//        CallBackUtils.watchFaceInstallCallBack = WatchFaceInstallCallBack {
-//            //“WatchFaceInstallResultBean.code” Installation result status code // 0: Verification failed 1: Installation failed 2: Installation succeeded
-//            if(it.code == 2)
-//                AppLogs.sendAppLogs("watchface installation : success")
-//            else if(it.code == 1)
-//                AppLogs.sendAppLogs("watchface installation : failed")
-//            else if(it.code == 0)
-//                AppLogs.sendAppLogs("watchface installation : verification failed")
-//        }
-        val version = "443"
-        val md5 = "1305828"
-        val file1 = File(Uri.parse(watchFace.localFilePath).path!!)
-        //val md5 = calculateMD5(file1)//"1305828"
-
-        ControlBleTools.getInstance()
-            .getDeviceWatchFace(
-                watchFace.id.toString(),
-                file1.sizeInKb.toInt(),
-                true,
-                object : DeviceWatchFaceFileStatusListener {
-                    override fun onSuccess(statusValue: Int, statusName: String) {
-                        LOGS.i("statusName : $statusName")
-                        when (statusName) {
-                            "READY" -> {
-                                val fileByte: ByteArray = file1.readBytes()
-                                ControlBleTools.getInstance().startUploadBigData(
-                                    BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,
-                                    fileByte,
-                                    object : UploadBigDataListener {
-                                        override fun onSuccess() {
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                                    WatchUpdateStatus(
-                                                        status = UpdateStatus.COMPLETED,
-                                                        wStatus = WatchFaceEventsConstants.Complete
-                                                    )
-                                                )
-                                            )
-
-                                            AppLogs.sendAppLogs("watchface transfer : completed")
-                                        }
-
-                                        override fun onProgress(
-                                            curPiece: Int,
-                                            dataPackTotalPieceLength: Int
-                                        ) {
-                                            val percentage =
-                                                curPiece * 100 / dataPackTotalPieceLength
-                                            val progressPercent = try {
-                                                curPiece * 100 / dataPackTotalPieceLength
-                                            } catch (exp: Exception) {
-                                                0
-                                            }
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                                    WatchUpdateStatus(
-                                                        status = UpdateStatus.PROGRESS,
-                                                        percentagePercentage = progressPercent
-                                                    )
-                                                )
-                                            )
-
-                                            LOGS.i("WatchFace : $percentage")
-                                        }
-
-                                        override fun onTimeout() {
-
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                                    WatchUpdateStatus(
-                                                        status = UpdateStatus.ERROR,
-                                                        wStatus = statusName
-                                                    )
-                                                )
-                                            )
-                                            AppLogs.sendAppLogs(
-                                                LogEvents.WatchFace,
-                                                WatchFaceEvents.TransferTimeout
-                                            )
-                                        }
-                                    })
-                            }
-
-                            "LOW_BATTERY" -> {
-                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                    UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                        WatchUpdateStatus(
-                                            status = UpdateStatus.BATTERY_LOW,
-                                            wStatus = statusName
-                                        )
-                                    )
-                                )
-                                AppLogs.sendAppLogs(
-                                    LogEvents.WatchFace,
-                                    WatchFaceEvents.TransferFailed.apply {
-                                        comment = "LOW_BATTERY"
-                                    })
-                            }
-
-                            else -> {
-
-
-                                var errorMessage = ""
-                                if (statusName.lowercase() == "busy") {
-                                    errorMessage = "Device is busy. Please try again later"
-                                }
-
-
-                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                    UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                        WatchUpdateStatus(
-                                            status = UpdateStatus.ERROR,
-                                            message = errorMessage,
-                                            wStatus = statusName
-                                        )
-                                    )
-                                )
-
-                                AppLogs.sendAppLogs(
-                                    LogEvents.WatchFace,
-                                    WatchFaceEvents.TransferFailed.apply {
-                                        comment = statusName
-                                    })
-                            }
-                            /*"BUSY" -> {
-                            }
-                            "DOWNGRADE", "DUPLICATED", "LOW_STORAGE" -> {
-                            }
-                            "LOW_BATTERY" -> {
-                            }*/
-                        }
-                    }
-
-                    override fun timeOut() {
-                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                            UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                                WatchUpdateStatus(
-                                    status = UpdateStatus.ERROR,
-                                    wStatus = "device file status failed"
-                                )
-                            )
-                        )
-                        AppLogs.sendAppLogs(
-                            LogEvents.WatchFace,
-                            WatchFaceEvents.TransferTimeout
-                        )
-                    }
-                })
     }
 
 
@@ -1572,44 +1421,7 @@ constructor(
     }
 
     private fun sendWatchData(data: ByteArray) {
-        ControlBleTools.getInstance().startUploadBigData(
-            BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,
-            data, object : UploadBigDataListener {
-                override fun onSuccess() {
-                    testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                        UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                            WatchUpdateStatus(status = UpdateStatus.COMPLETED)
-                        )
-                    )
-                    AppLogs.sendAppLogs("custom watchface transfer: completed")
-                }
 
-                override fun onProgress(curPiece: Int, dataPackTotalPieceLength: Int) {
-                    val progressPercent = try {
-                        curPiece * 100 / dataPackTotalPieceLength
-                    } catch (exp: Exception) {
-                        0
-                    }
-                    testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                        UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-
-                            WatchUpdateStatus(
-                                status = UpdateStatus.PROGRESS,
-                                percentagePercentage = progressPercent
-                            )
-                        )
-                    )
-                }
-
-                override fun onTimeout() {
-                    testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                        UpdateDeviceDataCallback.CustomizeWatchFaceProgress(
-                            WatchUpdateStatus(status = UpdateStatus.ERROR)
-                        )
-                    )
-                    AppLogs.sendAppLogs("custom watchface : error")
-                }
-            })
     }
 
 
@@ -1630,6 +1442,7 @@ constructor(
                                 ControlBleTools.getInstance().startUploadBigData(
                                     BleCommonAttributes.UPLOAD_BIG_DATA_OTA,
                                     fileByte,
+                                    true,
                                     object : UploadBigDataListener {
                                         override fun onSuccess() {
                                             WatchInfoGlobals.isWatchDataUpdating = false
@@ -1659,7 +1472,7 @@ constructor(
                                             LOGS.d("firmware_upgrade : $percentage")
                                         }
 
-                                        override fun onTimeout() {
+                                        override fun onTimeout(p0: String?) {
                                             WatchInfoGlobals.isWatchDataUpdating = false
                                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                                 UpdateDeviceDataCallback.FirmwareUpgradeProgress(
@@ -2038,109 +1851,7 @@ constructor(
     }
 
     override fun updateAPGSData(data1: Uri, data2: Uri) {
-        val file1: File = File(data1.path)
-        val version = "443"
-        val md5 = "1305828"
-        ControlBleTools.getInstance()
-            .getDeviceLargeFileState(
-                true,
-                version,
-                md5,
-                object : DeviceLargeFileStatusListener {
-                    override fun onSuccess(statusValue: Int, statusName: String) {
-                        when (statusName) {
-                            "READY" -> {
-                                val fileByte: ByteArray = file1.readBytes()
-                                ControlBleTools.getInstance().startUploadBigData(
-                                    BleCommonAttributes.UPLOAD_BIG_DATA_LTO,
-                                    fileByte,
-                                    object : UploadBigDataListener {
-                                        override fun onSuccess() {
-                                            WatchInfoGlobals.isWatchDataUpdating = false
-                                            LOGS.d(
-                                                "noise_fit_event:noisefit_nav+",
-                                                "updateAPGSData : Success"
-                                            )
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.AGPSUpdateProgress(
-                                                    UpdateStatus.COMPLETED
-                                                )
-                                            )
-                                        }
 
-                                        override fun onProgress(
-                                            curPiece: Int,
-                                            dataPackTotalPieceLength: Int
-                                        ) {//todo here
-                                            WatchInfoGlobals.isWatchDataUpdating = true
-
-
-                                            val percentage =
-                                                curPiece * 100 / dataPackTotalPieceLength
-                                            LOGS.d(
-                                                "noise_fit_event:noisefit_nav+",
-                                                "updateAPGSData $percentage"
-                                            )
-
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.AGPSUpdateProgress(
-                                                    UpdateStatus.PROGRESS,
-                                                    progress = percentage
-                                                )
-                                            )
-
-                                        }
-
-                                        override fun onTimeout() {
-                                            WatchInfoGlobals.isWatchDataUpdating = false
-                                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                                UpdateDeviceDataCallback.AGPSUpdateProgress(
-                                                    status = UpdateStatus.ERROR
-                                                )
-                                            )
-                                            AppLogs.sendAppLogs(
-                                                LogEvents.Agps,
-                                                AgpsEvents.TransferTimeout
-                                            )
-                                        }
-                                    })
-                            }
-
-                            else -> {
-                                WatchInfoGlobals.isWatchDataUpdating = false
-                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                    UpdateDeviceDataCallback.AGPSUpdateProgress(
-                                        status = UpdateStatus.ERROR
-                                    )
-                                )
-                                AppLogs.sendAppLogs(
-                                    LogEvents.Agps,
-                                    AgpsEvents.Other
-                                )
-                            }
-                            /*"BUSY" ->
-                            "DOWNGRADE", "DUPLICATED", "LOW_STORAGE" ->
-                            "LOW_BATTERY" -> */
-                        }
-                    }
-
-                    override fun timeOut() {
-                        WatchInfoGlobals.isWatchDataUpdating = false
-                        LOGS.d(
-                            "noise_fit_event:noisefit_nav+",
-                            "updateAPGSData : onTimeout"
-                        )
-                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                            UpdateDeviceDataCallback.AGPSUpdateProgress(
-                                status = UpdateStatus.ERROR
-                            )
-                        )
-                        AppLogs.sendAppLogs(
-                            LogEvents.Agps,
-                            AgpsEvents.TransferTimeout
-                        )
-                    }
-                })
     }
 
     override fun setHeartRateAlert(heartRateAlert: HeartRateAlert) {
