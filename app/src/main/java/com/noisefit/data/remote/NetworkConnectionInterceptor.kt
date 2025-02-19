@@ -228,7 +228,7 @@ class NetworkConnectionInterceptor(
             addHeader("device-manufacturer", Build.BRAND)
             addHeader("os-version", Build.VERSION.RELEASE)
             addHeader("platform", "android")
-            //addHeader("epoch-time", System.currentTimeMillis().toString())
+            addHeader("epoch-time", System.currentTimeMillis().toString())
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
