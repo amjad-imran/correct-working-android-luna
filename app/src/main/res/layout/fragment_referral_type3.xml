@@ -84,7 +84,7 @@
         style="@style/S18"
         android:layout_width="0dp"
         android:gravity="center"
-        android:textColor="#E8E6DB99"
+        android:textColor="#99E8E6DB"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
