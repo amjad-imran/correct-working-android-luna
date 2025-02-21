@@ -210,7 +210,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             ErrorResponse(
                 UIComponentType.AreYouSureDialog(
                     getString(R.string.text_permission_required),
-                    getString(R.string.text_permission_denial_alarm),
+                    if (isScheduleAlarm) "Luna Ring app requires alarm permission to maintain your ring's connectivity and to display alarms." else "This alarm will be displayed on a full-screen. Please grant the permission on the next step",
                     false,
                     getString(R.string.text_allow),
                     object : BinaryActionCallback {
