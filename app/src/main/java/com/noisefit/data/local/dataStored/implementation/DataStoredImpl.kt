@@ -91,7 +91,7 @@ private const val STRESS_LAST_SYNC_HASH = "STRESS_LAST_SYNC_HASH"
 private const val SLEEP_LAST_SYNC_HASH = "SLEEP_LAST_SYNC_HASH"
 private const val BODY_TEMP_LAST_SYNC_HASH = "BODY_TEMP_LAST_SYNC_HASH"
 private const val MAPS_LAT_LONG = "MAPS_LAT_LONG"
-private const val APP_OPEN_COUNT_TODAY = "APP_OPEN_COUNT_TODAY"
+private const val APP_OPEN_COUNT_TODAY = "APP_OPEN_COUNT_TODAY_2"
 private const val NOTIFICATION_80_STATUS = "NOTIFICATION_80_STATUS"
 private const val NOTIFICATION_80_STATUS_TIME = "NOTIFICATION_80_STATUS_TIME"
 private const val DEVICE_FEATURE_SYNC_TIME = "DEVICE_FEATURE_SYNC_TIME_1"
@@ -1058,19 +1058,19 @@ class DataStoredImpl
         return mPrefs.getBoolean(NOTIFICATION_GOAL_STATUS, false)
     }
 
-    override fun getAppOpenCount(): Pair<LocalDate, Int> {
+    override fun getAppOpenCount(): Pair<String, Int> {
         val dateToday = LocalDate.now()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val savedData = mPrefs.getString(APP_OPEN_COUNT_TODAY, null)
         if (savedData != null) {
-            val parsedData: Pair<LocalDate,Int> = gson.fromJson(savedData, object : TypeToken<Pair<LocalDate,Int>>() {}.type)
-            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            return if (parsedData.first.format(dateFormatter).equals(dateToday.format(dateFormatter))) {
+            val parsedData: Pair<String,Int> = gson.fromJson(savedData, object : TypeToken<Pair<String,Int>>() {}.type)
+            return if (parsedData.first.equals(dateToday.format(dateFormatter))) {
                 parsedData
             } else {
-                Pair(dateToday, 0)
+                Pair(dateToday.format(dateFormatter), 0)
             }
         } else {
-            return Pair(dateToday, 0)
+            return Pair(dateToday.format(dateFormatter), 0)
         }
 
     }

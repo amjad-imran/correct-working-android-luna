@@ -156,7 +156,7 @@ interface DataStoredInterface {
     fun clearLocation()
 
     fun incrementAppOpenCount()
-    fun getAppOpenCount(): Pair<LocalDate,Int>
+    fun getAppOpenCount(): Pair<String,Int>
 
     fun get80NotificationTimeStamp(): Long
     fun getNotificationCompleteTimeStamp(): Long
