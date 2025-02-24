@@ -27,6 +27,9 @@ interface OreoUserHealthDataDao : BaseDao<UserHealthData> {
     @Query("SELECT trendData FROM user_health_data where date = :date")
     fun getTodayTrend(date: String): String?
 
+    @Query("SELECT impact FROM user_health_data where date = :date")
+    fun getTodayImpact(date: String): String?
+
     /*@Query("Delete FROM day_time_movement where date = :date")
     fun deleteTodayData(date: String)
 

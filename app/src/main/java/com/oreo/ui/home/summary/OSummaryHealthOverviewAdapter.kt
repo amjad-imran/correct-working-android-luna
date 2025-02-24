@@ -62,6 +62,7 @@ import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.abs
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -534,9 +535,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val plannerData = data.data.planner!!
 
                 lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-                lytBedTime.tvTitle.text = "Bed time"//binding.root.context.getString(R.string.text_bedtime)//"Bed time"
+                lytBedTime.tvTitle.text =
+                    "Bed time"//binding.root.context.getString(R.string.text_bedtime)//"Bed time"
                 lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-                lytWakeupTime.tvTitle.text = "Wake time"//binding.root.context.getString(R.string.text_wake_time)//"Wake time"
+                lytWakeupTime.tvTitle.text =
+                    "Wake time"//binding.root.context.getString(R.string.text_wake_time)//"Wake time"
 
                 val bedTime = LocalTime.parse(
                     plannerData.planner?.bed_time ?: "22:00:00",
@@ -549,13 +552,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytBedTime.tvTimeUnit.text =
-                    bedTime.format(DateTimeFormatter.ofPattern("a",
-                        Locale("en")
-                    )).lowercase()
+                    bedTime.format(
+                        DateTimeFormatter.ofPattern(
+                            "a",
+                            Locale("en")
+                        )
+                    ).lowercase()
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytWakeupTime.tvTimeUnit.text =
-                    wakeTime.format(DateTimeFormatter.ofPattern("a",Locale("en"))).lowercase()
+                    wakeTime.format(DateTimeFormatter.ofPattern("a", Locale("en"))).lowercase()
 
                 tvMsg.text = plannerData.planner?.nudge
 
@@ -589,7 +595,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.visible()
                             tvAlarmTime.gone()
-                            tvSetUpAlarm.text =this.root.context.getString(R.string.text_set_up_alarm)
+                            tvSetUpAlarm.text =
+                                this.root.context.getString(R.string.text_set_up_alarm)
                             tvSetUpAlarm.setTextColor(Color.parseColor("#88b0ff"))
                             root.visible()
                         }
@@ -613,7 +620,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.gone()
                             tvAlarmTime.visible()
-                            tvSetUpAlarm.text =root.context.getString(R.string.text_alarm_set_for)
+                            tvSetUpAlarm.text = root.context.getString(R.string.text_alarm_set_for)
                             tvSetUpAlarm.setTextColor(Color.parseColor("#FFFFFF"))
                             tvAlarmTime.text = LocalTime.parse(
                                 (data.data.dashState as SleepCardDashState.AlarmSet).data.wake_time,
@@ -873,6 +880,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -988,6 +1013,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -1095,6 +1138,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvSleepEnd.text = DateFormats.formatDate(
                 data.data.endTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
             )
+
+            val impact = data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
@@ -1234,6 +1295,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+
+
+            val impact = data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
@@ -1269,6 +1350,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 (data.data.activeCalories ?: 0) * 2//For 50 kcal only, change accordingly
 
             binding.tvTotalCalories.text = "${data.caloriesGoal}"
+
+            val impact = data.data.impact
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
@@ -1364,6 +1462,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                  binding.tvMin.text = "-"
              }*/
 
+
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)

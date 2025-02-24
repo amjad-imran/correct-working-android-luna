@@ -65,6 +65,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_8_9)
             .addMigrations(MIGRATION_9_10)
             .addMigrations(MIGRATION_10_11)
+            .addMigrations(MIGRATION_11_12)
             .build()
     }
 
@@ -200,6 +201,11 @@ class OreoRoomModule {
                         "PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_data_endTime_startTime_type ON  google_fit_data(endTime,startTime,type)")
+        }
+    }
+    private val MIGRATION_11_12: Migration = object : Migration(11, 12) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("Alter TABLE `user_health_data` ADD COLUMN impact TEXT")
         }
     }
 

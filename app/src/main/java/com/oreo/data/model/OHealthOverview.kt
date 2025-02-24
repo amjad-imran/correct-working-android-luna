@@ -60,12 +60,14 @@ sealed class OHealthOverview {
         val data: ODashboardSleepModel,
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList(),
         val startTime: String,
-        val endTime: String
+        val endTime: String,
+        val impact: Int? = null
     ) : OHealthOverview()
 
     class SleepMinimal(
         val data: ODashboardSleepModel,
-        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
+        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList(),
+        val impact: Int? = null
     ) : OHealthOverview()
 
     object SleepWaiting : OHealthOverview()

@@ -52,6 +52,7 @@ import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
@@ -459,7 +460,11 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
 
-    fun parseHealthData(healthData: ServerUserHealthData, trendsData: TrendsData?) {
+    fun parseHealthData(
+        healthData: ServerUserHealthData,
+        trendsData: TrendsData?,
+        impactData: ImpactData?
+    ) {
 
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -558,7 +563,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 nudges = healthData.readiness?.dashNudges,
                 totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
-                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
+                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0,
+                impact = impactData?.readinessScore
             )
 
             val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
@@ -611,7 +617,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
                 nudges = healthData.activity?.dash_nudges,
-                steps = healthData.activity?.steps ?: 0
+                steps = healthData.activity?.steps ?: 0,
+                impact = impactData?.activityScore
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()
@@ -639,7 +646,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -693,7 +701,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -768,8 +777,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
-                                    )
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore)
                                 )
                                 if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
@@ -879,7 +888,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
-                                        sleepModel, makeSleepArray(newSleepArray)
+                                        sleepModel, makeSleepArray(newSleepArray),
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -917,7 +927,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                             healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
                                                 ?: "",
                                             healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
-                                                ?: ""
+                                                ?: "",
+                                            impact = impactData?.sleepScore
                                         )
                                     )
                                 }

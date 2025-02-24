@@ -30,8 +30,8 @@ data class ODashboardReadinessModel(
     val totalScoreImpact: Int? = null,
     val status: String? = "",
     val nudges: List<Nudges>? = null,
-
-    )
+    val impact: Int? = null
+)
 
 data class ODashboardActivityScoreModel(
     val activityScore: Int? = null,
@@ -57,7 +57,8 @@ data class ODashboardActivityModel(
     val inactiveMinutes: Int? = null,
     val status: String? = "",
     val nudges: List<Nudges>? = null,
-    val steps: Int = 0
+    val steps: Int = 0,
+    val impact: Int? = null
 )
 
 data class ODashboardSleepModel(

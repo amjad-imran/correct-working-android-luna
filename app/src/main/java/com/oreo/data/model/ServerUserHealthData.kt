@@ -16,6 +16,7 @@ import kotlinx.parcelize.Parcelize
 data class ServerUserHealthResponse(
     val data: List<ServerUserHealthData>,
     val trends: TrendsData? = null,
+    val impact: ImpactData? = null,
     @SerializedName("register_date")
     val registerDate: Int? = null,
 
@@ -39,6 +40,12 @@ data class TrendsData(
     @SerializedName("sleepScoreAvg")
     val sleepScoreAvg: ODashboardSleepScoreModel? = null,
     val welcome: WelcomeData? = null
+)
+
+data class ImpactData(
+    val activityScore:Int?=null,
+    val sleepScore:Int?=null,
+    val readinessScore:Int?=null,
 )
 
 data class ServerUserHealthData(

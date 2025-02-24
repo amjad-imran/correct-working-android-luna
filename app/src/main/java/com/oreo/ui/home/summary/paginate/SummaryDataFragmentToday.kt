@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -35,8 +33,6 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
-import com.noisefit_commans.data.model.SleepCardDashState
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
@@ -56,6 +52,7 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -85,7 +82,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -213,14 +209,14 @@ class SummaryDataFragmentToday :
                 viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
-                setUi(dash.first, dash.second)
+                setUi(dash.first, dash.second,dash.third)
             }
         }
     }
 
-    private fun setUi(data: ServerUserHealthData, trendsData: TrendsData?) {
+    private fun setUi(data: ServerUserHealthData, trendsData: TrendsData?, impactData: ImpactData?) {
         viewModel.initTodayData()
-        viewModel.parseHealthData(data, trendsData)
+        viewModel.parseHealthData(data, trendsData,impactData)
     }
 
 

@@ -39,6 +39,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
@@ -100,6 +101,7 @@ constructor(
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
+    var impactData: ImpactData? = null
     var stressFirstDate: String? = null
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
@@ -199,6 +201,7 @@ constructor(
     private fun resetHealthCacheData() {
         userHealthData.clear()
         trendsData = null
+        impactData = null
         stressFirstDate = null
         stressBeta = false
         _dashboard.value = ArrayList()
@@ -311,6 +314,7 @@ constructor(
                             if (it.trends != null) {
                                 trendsData = it.trends
                             }
+                            impactData = it.impact
 
                             _dashboard.value = getDaysList()
 
@@ -605,9 +609,9 @@ constructor(
         return returnSelectedDate
     }
 
-    fun getDashBoardData(date: String): Pair<ServerUserHealthData, TrendsData?>? {
+    fun getDashBoardData(date: String): Triple<ServerUserHealthData, TrendsData?, ImpactData?>? {
         val dayData = userHealthData[date] ?: return null
-        return Pair(dayData, trendsData)
+        return Triple(dayData, trendsData, impactData)
     }
 
     fun getStressData(date: String): ServerUserHealthData? {

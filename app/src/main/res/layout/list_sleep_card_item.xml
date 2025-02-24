@@ -5,8 +5,8 @@
     style="@style/ModalStyleTransparentOreo"
 
     android:layout_width="match_parent"
-    android:layout_marginTop="24dp"
     android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
     tools:ignore="MissingDefaultResource">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -16,11 +16,11 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_sleep_card_bg1"
-        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -32,6 +32,18 @@
         android:text="@string/text_sleep"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/lytTrend"
+        layout="@layout/layout_health_trend_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/textView"
+        app:layout_constraintStart_toEndOf="@id/textView"
+        app:layout_constraintTop_toTopOf="@id/textView" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -51,19 +63,19 @@
         android:id="@+id/lottieAnimationView"
         android:layout_width="196dp"
         android:layout_height="120dp"
-        app:lottie_imageAssetsFolder="images"
-        android:layout_marginTop="@dimen/dimen_8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:lottie_imageAssetsFolder="images" />
 
 
     <TextView
         android:id="@+id/tvValue"
         style="@style/H32"
-        android:layout_marginTop="58dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
@@ -71,12 +83,13 @@
     <TextView
         android:id="@+id/tvStatus"
         style="@style/H5"
-        android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toBottomOf="@+id/tvValue" />
+
     <include
         android:id="@+id/lytNapLabel"
         layout="@layout/layout_nap_dash_label"
@@ -125,23 +138,23 @@
     <TextView
         android:id="@+id/tvSleepStart"
         style="@style/H6"
-        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_8dp"
-        tools:text="dfsjjkfds"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sleepPgbr" />
+        app:layout_constraintTop_toBottomOf="@+id/sleepPgbr"
+        tools:text="dfsjjkfds" />
 
     <TextView
         android:id="@+id/tvSleepEnd"
         style="@style/H6"
-        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sleepPgbr" />
 
@@ -190,8 +203,8 @@
             android:id="@+id/tvSleepHour"
             style="@style/H5"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -200,12 +213,12 @@
         <TextView
             android:id="@+id/textHour"
             style="@style/H6"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="@dimen/dimen_2dp"
             android:text="@string/text_hr"
+            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour"
             app:layout_constraintStart_toEndOf="@+id/tvSleepHour" />
@@ -224,12 +237,12 @@
         <TextView
             android:id="@+id/textMins"
             style="@style/H6"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="@dimen/dimen_2dp"
             android:text="@string/text_mins"
+            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvSleepMinute"
             app:layout_constraintStart_toEndOf="@+id/tvSleepMinute" />
@@ -267,13 +280,13 @@
 
         <TextView
             android:id="@+id/tvHrUnit"
-            android:text="@string/text_ms"
             style="@style/H6"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="@dimen/dimen_2dp"
+            android:text="@string/text_ms"
+            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvHrValue"
             app:layout_constraintEnd_toEndOf="parent"
