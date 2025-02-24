@@ -2064,6 +2064,8 @@ class SummaryDataViewModelToday @Inject constructor(
             return false
         } catch (e: IllegalArgumentException) {
             return false
+        } catch (e: DateTimeParseException) {
+            return false
         }
     }
 }

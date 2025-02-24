@@ -1798,5 +1798,7 @@
     <string name="text_breathing_message_2">หาสถานที่ที่เงียบสงบและสบาย แล้วนั่งในท่าที่ผ่อนคลาย</string>
     <string name="text_ring_charged_title">⚡ ภารกิจเสร็จสมบูรณ์!</string>
     <string name="text_ring_charged_message">แหวนของคุณชาร์จเต็ม 100% แล้ว พร้อมซิงค์ เปล่งประกาย และเติมพลังให้วันของคุณ ไปกันเลย!</string>
+    <string name="text_luna_ai_voice_calibration">การปรับเทียบเสียง Luna AI</string>
+    <string name="text_please_select_a_time_after_8_pm">โปรดเลือกเวลาหลัง 20.00 น.</string>
 
 </resources>

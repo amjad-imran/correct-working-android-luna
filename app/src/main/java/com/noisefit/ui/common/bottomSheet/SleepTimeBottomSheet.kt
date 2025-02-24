@@ -16,7 +16,7 @@ import com.oreo.data.model.OAddSleep
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
-private const val YESTERDAY_HOUR = 22
+private const val YESTERDAY_HOUR = 20
 const val SLEEP_TIME_REQUEST_KEY = "SLEEP_TIME_REQUEST_KEY"
 
 @AndroidEntryPoint
@@ -89,7 +89,7 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
                     binding.lytTimePicker.timePicker.currentMinute = 0
                     if (!showYesterdayToast) {
                         showYesterdayToast = true
-                        context.showShortToast(getString(R.string.text_please_select_a_time_after_10_pm))
+                        context.showShortToast(getString(R.string.text_please_select_a_time_after_8_pm))
                     }
 
                 }

@@ -1815,5 +1815,7 @@
     <string name="text_breathing_message_2">Encuentra un lugar cómodo y tranquilo, y adopta una postura relajada</string>
     <string name="text_ring_charged_title">⚡ ¡Misión completada!</string>
     <string name="text_ring_charged_message">Tu anillo está ahora 100 % cargado y listo para sincronizarse, brillar y potenciar tu día. ¡Adelante!</string>
+    <string name="text_luna_ai_voice_calibration">Calibración de voz de Luna AI</string>
+    <string name="text_please_select_a_time_after_8_pm">Por favor seleccione una hora después de las 8 pm</string>
 
 </resources>
