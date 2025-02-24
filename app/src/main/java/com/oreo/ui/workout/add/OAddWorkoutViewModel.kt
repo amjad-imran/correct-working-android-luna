@@ -54,7 +54,7 @@ class OAddWorkoutViewModel
 
     var userDayData: ServerUserHealthData? = null
 
-    val minimumWorkoutTime = 20
+    val minimumWorkoutTime = 10
     val maxWorkoutTime = 180
 
     var autoSport = MutableLiveData<Boolean>()
