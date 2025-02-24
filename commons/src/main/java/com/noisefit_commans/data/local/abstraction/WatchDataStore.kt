@@ -13,6 +13,10 @@ import com.noisefit_commans.models.WorldClocksPushData
 
 interface WatchDataStore {
 
+    fun setFullyChargedTrigger()
+    fun getFullyChargedTrigger(): Boolean
+    fun resetFullyChargedTrigger()
+
     fun setWatchIgnoreVersion(number: Int)
     fun getWatchIgnoreVersion(): Int
 

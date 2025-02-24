@@ -102,7 +102,7 @@ constructor(
      }*/
 
     fun handleBatteryNotification(
-        currentBatteryLevel: Int
+        currentBatteryLevel: Int, isCharging: Boolean = false
     ) {
 
         if (currentBatteryLevel < 20) {
@@ -135,18 +135,41 @@ constructor(
             } ?: return
 
             val message =
-                resourcesProvider.getString(R.string.text_ring_battery_low_value, batteryLevelMessage.toString())
+                resourcesProvider.getString(
+                    R.string.text_ring_battery_low_value,
+                    batteryLevelMessage.toString()
+                )
 
             if (notificationShown[level.name] == true) {
                 return
             }
             watchDataStore.setChargingNotificationShown(level)
-            if(sessionManager.showLocalNotification()){
+            if (sessionManager.showLocalNotification()) {
                 pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
             }
         } else {
             watchDataStore.resetChargingNotificationData()
             removeBatteryNotification()
+        }
+
+
+        if (currentBatteryLevel == 99 && isCharging) {
+            watchDataStore.setFullyChargedTrigger()
+        } else if (currentBatteryLevel == 100) {
+            val isTriggerSet = watchDataStore.getFullyChargedTrigger()
+            if (isTriggerSet) {
+                //show notification
+                pushFullyChargedNotification(NoiseFitApplicationMain.context!!,
+                    resourcesProvider.getString(R.string.text_ring_charged_title),
+                    resourcesProvider.getString(
+                        R.string.text_ring_charged_message
+                    ))
+                //reset trigger
+                watchDataStore.resetFullyChargedTrigger()
+            }
+        } else {
+            watchDataStore.resetFullyChargedTrigger()
+            //reset trigger
         }
     }
 
@@ -276,6 +299,20 @@ constructor(
             content,
             NotificationEventsClass.NOTIFICATION_TYPE_WATCH_LOW_BATTERY,
             index
+        )
+    }
+
+    private fun pushFullyChargedNotification(
+        context: Context,
+        title: String,
+        content: String,
+    ){
+        NotificationUtil.pushNotification(
+            context,
+            title,
+            content,
+            NotificationEventsClass.NOTIFICATION_TYPE_BATTERY_FULL,
+            "4"
         )
     }
 }

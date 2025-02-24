@@ -1844,5 +1844,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_update_the_app_to_see_the_referral">Update the app to see the referral</string>
     <string name="text_get_ready">Get Ready</string>
     <string name="text_breathing_message_2">Find a comfortable, quiet space, settle into a relaxed posture</string>
+    <string name="text_ring_charged_title">⚡ Mission Complete!</string>
+    <string name="text_ring_charged_message">Your ring is now 100% charged and ready to sync, glow, and power up your day. Engage!</string>
 
 </resources>

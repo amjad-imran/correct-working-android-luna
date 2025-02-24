@@ -1810,5 +1810,7 @@
     <string name="text_update_the_app_to_see_the_referral">Обновите приложение, чтобы увидеть реферальную ссылку</string>
     <string name="text_get_ready">Приготовьтесь</string>
     <string name="text_breathing_message_2">Найдите удобное, тихое место и примите расслабленную позу</string>
+    <string name="text_ring_charged_title">⚡ Миссия выполнена!</string>
+    <string name="text_ring_charged_message">Ваше кольцо полностью заряжено и готово к синхронизации, свечению и усилению вашего дня. Вперёд!</string>
 
 </resources>

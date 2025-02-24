@@ -1796,5 +1796,7 @@
     <string name="text_update_the_app_to_see_the_referral">อัปเดตแอปเพื่อดูการแนะนำ</string>
     <string name="text_get_ready">เตรียมตัวให้พร้อม</string>
     <string name="text_breathing_message_2">หาสถานที่ที่เงียบสงบและสบาย แล้วนั่งในท่าที่ผ่อนคลาย</string>
+    <string name="text_ring_charged_title">⚡ ภารกิจเสร็จสมบูรณ์!</string>
+    <string name="text_ring_charged_message">แหวนของคุณชาร์จเต็ม 100% แล้ว พร้อมซิงค์ เปล่งประกาย และเติมพลังให้วันของคุณ ไปกันเลย!</string>
 
 </resources>

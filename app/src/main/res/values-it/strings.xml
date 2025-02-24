@@ -1809,5 +1809,7 @@
     <string name="text_update_the_app_to_see_the_referral">Aggiorna l\'app per vedere il riferimento</string>
     <string name="text_get_ready">Preparati</string>
     <string name="text_breathing_message_2">Trova un luogo comodo e tranquillo e assumi una postura rilassata</string>
+    <string name="text_ring_charged_title">⚡ Missione completata!</string>
+    <string name="text_ring_charged_message">Il tuo anello è ora carico al 100% e pronto per sincronizzarsi, brillare e dare energia alla tua giornata. Vai!</string>
 
 </resources>

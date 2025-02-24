@@ -1806,5 +1806,7 @@
     <string name="text_update_the_app_to_see_the_referral">Aktualisiere die App, um die Empfehlung zu sehen</string>
     <string name="text_get_ready">Mach dich bereit</string>
     <string name="text_breathing_message_2">Finde einen bequemen, ruhigen Ort und nimm eine entspannte Haltung ein</string>
+    <string name="text_ring_charged_title">⚡ Mission erfüllt!</string>
+    <string name="text_ring_charged_message">Dein Ring ist jetzt zu 100 % aufgeladen und bereit zum Synchronisieren, Leuchten und um deinen Tag zu starten. Los geht’s!</string>
 
 </resources>

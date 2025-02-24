@@ -1805,5 +1805,7 @@
     <string name="text_update_the_app_to_see_the_referral">Atualize o aplicativo para ver a referência</string>
     <string name="text_get_ready">Prepare-se</string>
     <string name="text_breathing_message_2">Encontre um lugar confortável e tranquilo e adote uma postura relaxada</string>
+    <string name="text_ring_charged_title">⚡ Missão cumprida!</string>
+    <string name="text_ring_charged_message">Seu anel está agora 100% carregado e pronto para sincronizar, brilhar e energizar o seu dia. Vamos nessa!</string>
 
 </resources>

@@ -1723,6 +1723,7 @@ constructor() : LifecycleService() {
                 }
 
                 is QueryCallback.BatteryAlertObtained -> {
+                    LOGS.d("sdfkjhsdkjfhksdjf BatteryAlertObtained ${queryCallback.batteryLevel}")
                     batteryNotificationUtils.handleBatteryNotification(
                         queryCallback.batteryLevel
                     )
@@ -1730,13 +1731,14 @@ constructor() : LifecycleService() {
 
                 is QueryCallback.BatteryDataObtained -> {
                     val percent = queryCallback.batteryData.percentage ?: 0
+                    LOGS.d("sdfkjhsdkjfhksdjf BatteryDataObtained ${percent} - ${queryCallback.batteryData.isCharging}")
                     sessionManager.batteryPercentRing.postValue(percent)
                     sessionManager.isRingCharging.postValue(queryCallback.batteryData.isCharging)
 
                     LOGS.d(TAG, "battery Level Ring : $percent")
 
                     batteryNotificationUtils.handleBatteryNotification(
-                        percent
+                        percent,queryCallback.batteryData.isCharging
                     )
                     /* val lastBatteryLevel = watchDataStore.getBatteryPercentRing()
                      batteryNotificationUtils.handleBatteryNotification(

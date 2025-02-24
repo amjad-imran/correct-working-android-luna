@@ -1808,5 +1808,7 @@
     <string name="text_update_the_app_to_see_the_referral">更新应用以查看推荐</string>
     <string name="text_get_ready">准备好</string>
     <string name="text_breathing_message_2">找到一个舒适安静的地方，保持放松的姿势</string>
+    <string name="text_ring_charged_title">⚡ 任务完成！</string>
+    <string name="text_ring_charged_message">你的戒指已充满 100%，准备同步、发光，并为你的一天充能。行动吧！</string>
 
 </resources>

@@ -19,6 +19,7 @@ object NotificationEventsClass {
     const val NOTIFICATION_TYPE_SETTINGS = "settings"
     const val NOTIFICATION_TYPE_DEVICE_INFO = "deviceinfo"
     const val NOTIFICATION_TYPE_WATCH_LOW_BATTERY = "watchlowbattery"
+    const val NOTIFICATION_TYPE_BATTERY_FULL = "NOTIFICATION_TYPE_BATTERY_FULL"
     const val NOTIFICATION_TYPE_SHOP = "shopscreen"
     const val NOTIFICATION_TYPE_BUDDY = "buddyscreen"
     const val NOTIFICATION_TYPE_MANAGE = "managescreen"

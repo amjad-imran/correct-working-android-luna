@@ -1808,5 +1808,7 @@
     <string name="text_update_the_app_to_see_the_referral">Mettez à jour l\'application pour voir la recommandation</string>
     <string name="text_get_ready">Préparez-vous</string>
     <string name="text_breathing_message_2">Trouvez un endroit confortable et calme, et adoptez une posture détendue</string>
+    <string name="text_ring_charged_title">⚡ Mission accomplie !</string>
+    <string name="text_ring_charged_message">Votre bague est maintenant chargée à 100 % et prête à se synchroniser, briller et dynamiser votre journée. Lancez-vous !</string>
 
 </resources>
