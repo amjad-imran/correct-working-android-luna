@@ -21,6 +21,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,6 +56,10 @@ class OMyProfileFragment :
         /*binding.lytReferralNo.tvMyReferrals.setOnClickListener {
             navigate(R.id.myReferralsFragment)
         }*/
+
+        binding.llLunaAiCalibration.setOnClickListener {
+            navigate(R.id.audioAiCalibrationFragment,bundleOf("planType" to PlanType.NONE, "text" to null))
+        }
 
         binding.lytUpdateToViewReferral.tvUpdateNow.setOnClickListener {
             ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
@@ -211,7 +216,8 @@ class OMyProfileFragment :
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.visible()
                 }
-                ReferralRunningState.UpdateToViewReferral->{
+
+                ReferralRunningState.UpdateToViewReferral -> {
                     binding.lytUpdateToViewReferral.root.visible()
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.gone()

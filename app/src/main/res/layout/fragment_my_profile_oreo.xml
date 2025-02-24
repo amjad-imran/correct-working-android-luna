@@ -112,6 +112,18 @@
                     app:text="@string/text_your_profile" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llLunaAiCalibration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_luna_ai_calibration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/include14"
+                    app:text="@string/text_luna_ai_voice_calibration" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowSelectLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
