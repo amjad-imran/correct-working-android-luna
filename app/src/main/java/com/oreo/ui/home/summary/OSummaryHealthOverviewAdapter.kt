@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -814,6 +815,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val scoreValue = data.data.readinessScore ?: 0
 
             binding.tvScore.text = scoreValue.toString()
+            val statusColor = ContextCompat.getColor(
+                binding.root.context,
+                getStatusColors(data.data.statusCode ?: "")
+            )
+
+            binding.tvScoreValue.setTextColor(statusColor)
             binding.tvScoreValue.text = data.data.status
 
             if (data.data.nudges.isNullOrEmpty()) {
@@ -922,6 +929,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             } else {
                 binding.tvValue.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
                 binding.tvStatus.text = data.data.status
 //                binding.tvTodayDesc.visible()
             }
@@ -1059,6 +1072,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvSleepScore.text = scoreValue.toString()
             binding.tvSleepStatus.text = data.data.status
+            val statusColor = ContextCompat.getColor(
+                binding.root.context,
+                getStatusColors(data.data.statusCode ?: "")
+            )
+
+            binding.tvSleepStatus.setTextColor(statusColor)
 
             val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 data.data.totalSleep ?: 0
@@ -1211,6 +1230,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.textMins.visible()
 
                 binding.tvValue.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
+
                 binding.tvStatus.text = data.data.status
                 binding.tvSleepStart.setTextColor(R.color.white.getColor())
                 binding.tvSleepEnd.setTextColor(R.color.white.getColor())
@@ -1294,7 +1320,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
 
             }
-
 
 
             val impact = data.impact
@@ -1772,6 +1797,21 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.GotPeriodClicked(false))
             }
         }
+    }
+
+    fun getStatusColors(status: String): Int {
+        val color: Int = if (status.equals("warning", true)) {
+            R.color.sleep_warning
+        } else if (status.equals("good", true)) {
+            R.color.sleep_good
+        } else if (status.equals("optimal", true)) {
+            R.color.sleep_optimal
+        } else if (status.equals("fair", true)) {
+            R.color.color_fair
+        } else {
+            R.color.white_12_72
+        }
+        return color
     }
 
 }

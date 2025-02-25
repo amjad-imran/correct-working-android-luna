@@ -562,6 +562,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
+                statusCode = healthData.readiness?.readinessScore?.status,
                 nudges = healthData.readiness?.dashNudges,
                 totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
@@ -607,6 +608,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 restingHr = healthData.sleep?.avg_hrv,
                 sleepStage = newSleepArray ?: ArrayList(),
                 status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
+                statusCode = healthData.sleep?.sleep_score?.status,
                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                 totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
@@ -618,6 +620,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
+                statusCode = healthData.activity?.activityScore?.status,
                 nudges = healthData.activity?.dash_nudges,
                 steps = healthData.activity?.steps ?: 0,
                 impact = impactData?.activityScore
