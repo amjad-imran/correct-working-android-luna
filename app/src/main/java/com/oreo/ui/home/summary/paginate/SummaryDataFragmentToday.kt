@@ -77,6 +77,7 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -209,14 +210,18 @@ class SummaryDataFragmentToday :
                 viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
-                setUi(dash.first, dash.second,dash.third)
+                setUi(dash.first, dash.second, dash.third)
             }
         }
     }
 
-    private fun setUi(data: ServerUserHealthData, trendsData: TrendsData?, impactData: ImpactData?) {
+    private fun setUi(
+        data: ServerUserHealthData,
+        trendsData: TrendsData?,
+        impactData: ImpactData?
+    ) {
         viewModel.initTodayData()
-        viewModel.parseHealthData(data, trendsData,impactData)
+        viewModel.parseHealthData(data, trendsData, impactData)
     }
 
 
@@ -391,13 +396,15 @@ class SummaryDataFragmentToday :
                         bundle = bundleOf("bed_time" to null, "wake_time" to null)
                     )
                 }
+
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked -> {
 
-                        navigate(
-                            R.id.fragmentBreathExercise
-                        )
+                    navigate(
+                        R.id.fragmentBreathExercise
+                    )
                 }
-                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked ->{
+
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked -> {
                     uiController.logAppEvent(
                         MoEngageLunaAppEvents.sleep_planner
                     )
@@ -1529,7 +1536,7 @@ class SummaryDataFragmentToday :
         lytStress.graphStress.updateData(data.data)
 
 
-        lytStress.lottieAnimView.gone()
+        /*lytStress.lottieAnimView.gone()
         lytStress.imvHrMeasure.gone()
         lytStress.tvLastMeasure.gone()
         lytStress.tvHeartValue.gone()
@@ -1620,9 +1627,9 @@ class SummaryDataFragmentToday :
 
             if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
                 context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
-                /*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                *//*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
                     this.measureState = TapMeasureState.ERROR
-                })*/
+                })*//*
                 return@setOnClickListener
             }
 
@@ -1653,41 +1660,48 @@ class SummaryDataFragmentToday :
             }
 
             return@setOnClickListener
-        }
+        }*/
 
 
         /*binding.graphStress.updateData(data.data)
         binding.tvBeta.setVisibilityByCondition(data.isBeta)
-        binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+        binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
 
 
-        if (data.value == 0) {
-            binding.tvStressValue.gone()
-            binding.tvStressStatus.gone()
-            binding.tvLastUpdate.gone()
+        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
+
+
+        if (lastMeasuredValue == 0) {
+            lytStress.tvStressValue.gone()
+            lytStress.tvStressStatus.gone()
+            lytStress.tvLastUpdate.gone()
         } else {
-            binding.tvStressValue.visible()
-            binding.tvStressStatus.visible()
-            binding.tvLastUpdate.visible()
+            lytStress.tvStressValue.visible()
+            lytStress.tvStressStatus.visible()
+            lytStress.tvLastUpdate.visible()
 
-            binding.tvStressValue.text = "${data.value}"
-            binding.tvStressStatus.text = data.valueStatus
+            lytStress.tvStressValue.text = "$lastMeasuredValue"
+            val (displayValue, displayColor) = viewModel.getStressStatus(lastMeasuredValue)
+            lytStress.tvStressStatus.text = displayValue
+            lytStress.tvStressStatus.setTextColor(displayColor)
 
-            if (data.isToday) {
-                val lastUpdatedTimestamp = data.timeStamp
-                if (lastUpdatedTimestamp == 0L) {
-                    binding.tvLastUpdate.text = ""
-                } else {
-                    binding.tvLastUpdate.text =
-                        binding.tvLastUpdate.context.getString(
-                            R.string.text_updated_value,
-                            DateFormats.getRelativeTime(lastUpdatedTimestamp)
-                        )
-                }
+
+            val lastUpdatedTimestamp =
+                DateTimeUtil.getTodayMidnightTimestamp() + lastMeasuredIndex * 15 * 60 * 1000
+
+            if (lastUpdatedTimestamp == 0L) {
+                lytStress.tvLastUpdate.text = ""
             } else {
-                binding.tvLastUpdate.text = ""
+                lytStress.tvLastUpdate.text =
+                    lytStress.tvLastUpdate.context.getString(
+                        R.string.text_updated_value,
+                        DateTimeUtil.getRelativeTime(
+                            lastUpdatedTimestamp,
+                            viewModel.resourceProvider
+                        ).lowercase()
+                    )
             }
-        }*/
+        }
     }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {

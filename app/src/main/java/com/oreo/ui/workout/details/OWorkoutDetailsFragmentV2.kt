@@ -253,6 +253,11 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.tvDistanceTitle.text = topValue.third
         binding.lytTop.lytActivityItem.tvDistanceValue.text = topValue.first
         binding.lytTop.lytActivityItem.tvDistanceUnit.text = topValue.second
+        if (viewModel.isDistanceShow) {
+            binding.lytTop.lytActivityItem.ivEditDistance.visible()
+        } else {
+            binding.lytTop.lytActivityItem.ivEditDistance.gone()
+        }
 
         //binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
 
@@ -554,6 +559,7 @@ class OWorkoutDetailsFragmentV2 :
         val btnUpdate = popupView.findViewById<Button?>(R.id.btnUpdate)
         val btnCancel = popupView.findViewById<Button?>(R.id.btnCancel)
 
+        etDistance.setText(binding.lytTop.lytActivityItem.tvDistanceValue.text)
 
 
         btnUpdate.setOnClickListener(View.OnClickListener { v: View? ->
@@ -570,7 +576,7 @@ class OWorkoutDetailsFragmentV2 :
                         viewModel.updateDistance(distanceValue)
                         popupWindow.dismiss()
                     } else {
-                        viewModel.sendMessage("Distance should be less than 350 km") //todo update message - pending from product
+                        viewModel.sendMessage(getString(R.string.text_max_limit_350_km_enter_a_valid_distance))
                     }
                 }
             } catch (e: Exception) {

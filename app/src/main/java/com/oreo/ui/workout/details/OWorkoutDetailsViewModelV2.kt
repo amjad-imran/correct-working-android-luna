@@ -55,6 +55,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
     var workoutId: String? = null
+    var isDistanceShow = false
 
     var avgValue: String = ""
     var workoutDetailsExpanded = false
@@ -245,6 +246,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
     fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
         if (showDistance(data)) {
+            isDistanceShow = true
             val distanceToUse =
                 if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(

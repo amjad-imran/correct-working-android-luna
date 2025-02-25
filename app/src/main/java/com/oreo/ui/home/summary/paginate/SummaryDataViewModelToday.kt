@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary.paginate
 
+import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -79,6 +80,7 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.StressCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -778,7 +780,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
                                         newSleepArray?.lastOrNull()?.end_time ?: "",
-                                        impact = impactData?.sleepScore)
+                                        impact = impactData?.sleepScore
+                                    )
                                 )
                                 if (isAfter12.not()) {
                                     healthData.sleep?.healthTrend?.let {
@@ -1134,13 +1137,28 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    fun getStressStatus(value: Int?): String {
+    /**
+     * Returns value and color
+     */
+    fun getStressStatus(value: Int?): Pair<String, Int> {
         return when (value) {
-            0 -> ""
-            in 1..34 -> resourceProvider.getString(R.string.text_relaxed)
-            in 35..69 -> resourceProvider.getString(R.string.text_focussed)
-            in 70..100 -> resourceProvider.getString(R.string.text_stressed)
-            else -> ""
+            0 -> Pair("", Color.parseColor("#FFFFFF"))
+            in 1..34 -> Pair(
+                resourceProvider.getString(R.string.text_relaxed),
+                Color.parseColor("#3FE8B5")
+            )
+
+            in 35..69 -> Pair(
+                resourceProvider.getString(R.string.text_focussed),
+                Color.parseColor("#FFED91")
+            )
+
+            in 70..100 -> Pair(
+                resourceProvider.getString(R.string.text_stressed),
+                Color.parseColor("#FFAD60")
+            )
+
+            else -> Pair("", Color.parseColor("#FFFFFF"))
         }
     }
 
@@ -2067,6 +2085,19 @@ class SummaryDataViewModelToday @Inject constructor(
         } catch (e: DateTimeParseException) {
             return false
         }
+    }
+
+    /**
+     * get last measured value from the list and seconds
+     */
+    fun getLastMeasuredValue(data: List<Int>?): Pair<Int, Int> {
+        if (data.isNullOrEmpty()) return Pair(0, 0)
+
+        val lastIndex = data.indexOfLast { it != 0 && it != 255 }
+        if (lastIndex != -1) {
+            return Pair(data[lastIndex], lastIndex)
+        }
+        return Pair(0, 0)
     }
 }
 
