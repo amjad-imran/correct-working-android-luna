@@ -1848,5 +1848,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_ring_charged_message">Your ring is now 100% charged and ready to sync, glow, and power up your day. Engage!</string>
     <string name="text_luna_ai_voice_calibration">Luna AI Voice calibration</string>
     <string name="text_please_select_a_time_after_8_pm">Please select a time after 8 PM</string>
+    <string name="text_modify_distance">Modify Distance</string>
 
 </resources>

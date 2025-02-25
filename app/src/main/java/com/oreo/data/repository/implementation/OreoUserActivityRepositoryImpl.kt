@@ -1650,6 +1650,16 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun updateWorkoutDistance(
+        workoutId: String,
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/record-workout/$workoutId"
+            remoteDataSource.updateWorkoutDistance(url,request)
+        }
+    }
+
     private fun shouldCallBannerApi(
         serverTime: Long, localTime: Long
     ): Boolean {
