@@ -1675,6 +1675,7 @@ class SummaryDataFragmentToday :
             lytStress.tvStressValue.gone()
             lytStress.tvStressStatus.gone()
             lytStress.tvLastUpdate.gone()
+            lytStress.lytTrend.root.gone()
         } else {
             lytStress.tvStressValue.visible()
             lytStress.tvStressStatus.visible()
@@ -1687,7 +1688,41 @@ class SummaryDataFragmentToday :
 
 
             val lastUpdatedTimestamp =
-                DateTimeUtil.getTodayMidnightTimestamp() + lastMeasuredIndex * 15 * 60 * 1000
+                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 15 * 60 * 1000
+
+
+            val currentTimeStamp = DateFormats.getTimeStamp()
+            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+            if (timeDiff <= (15 * 60 * 1000)) {
+
+                val trendPercent = viewModel.getStressTrend(data.listData, lastMeasuredIndex)
+
+                if (trendPercent != null && trendPercent != 0) {
+                    if (trendPercent > 0) {
+                        lytStress.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                            tvPercent.text = "$trendPercent%"
+                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                            root.visible()
+                        }
+
+                    } else {
+                        lytStress.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                            tvPercent.text = "${abs(trendPercent)}%"
+                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                            root.visible()
+                        }
+                    }
+                } else {
+                    lytStress.lytTrend.root.gone()
+                }
+            } else {
+                lytStress.lytTrend.root.gone()
+            }
+
 
             if (lastUpdatedTimestamp == 0L) {
                 lytStress.tvLastUpdate.text = ""
@@ -1713,6 +1748,49 @@ class SummaryDataFragmentToday :
                 viewModel.serverUserHealthData, data
             ), 3, data.minValues, data.maxValues
         )
+
+        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.rawData)
+
+        if (lastMeasuredValue == 0) {
+            lytHeartRate.lytTrend.root.gone()
+        } else {
+            val lastUpdatedTimestamp =
+                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
+
+
+            val currentTimeStamp = DateFormats.getTimeStamp()
+            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+            if (timeDiff <= (5 * 60 * 1000)) {
+
+                val trendPercent = viewModel.getHrTrend(data.rawData, lastMeasuredIndex)
+
+                if (trendPercent != null && trendPercent != 0) {
+                    if (trendPercent > 0) {
+                        lytHeartRate.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                            tvPercent.text = "$trendPercent%"
+                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                            root.visible()
+                        }
+                    } else {
+                        lytHeartRate.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                            tvPercent.text = "${abs(trendPercent)}%"
+                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                            root.visible()
+                        }
+                    }
+                } else {
+                    lytHeartRate.lytTrend.root.gone()
+                }
+            } else {
+                lytHeartRate.lytTrend.root.gone()
+            }
+        }
+
+
 
         when (data.measureState) {
             TapMeasureState.NO_DEVICE -> {

@@ -1408,9 +1408,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val scoreValue = data.data.activityScore
 
             if (scoreValue == null) {
-                binding.tvActivityScore.text = "--"
+                //binding.tvActivityScore.text = "--"
+                binding.tvValue.text = "--"
+                binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_no_data)
+
             } else {
-                binding.tvActivityScore.text = scoreValue.toString()
+                binding.tvValue.text = scoreValue.toString()
+                //binding.tvActivityScore.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
+                binding.tvStatus.text = data.data.status
             }
 
 
@@ -1421,29 +1432,33 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
-            val caloriesGoalText = "${data.caloriesGoal}"
-            binding.tvTotalCalories.text = caloriesGoalText
+            //binding.tvTotalCalories.text = caloriesGoalText
 
-            binding.tvActiveCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
+            /*binding.tvActiveCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
                 data.data.activeCalories.toString()
             } else {
                 "--"
+            }*/
+
+            val caloriesGoalText = "${data.caloriesGoal}"
+            binding.tvActivityScore.text = if ((data.data.activeCalories ?: 0) > 0) {
+                data.data.activeCalories.toString()+"/$caloriesGoalText"
+            } else {
+                "--/$caloriesGoalText"
             }
 
-            binding.dynamicArcView.deleteAll()
-
-            binding.dynamicArcView.configureAngles(180, 0)
-            binding.dynamicArcView.addSeries(
-                seriesItemWithoutInset(
-                    binding.dynamicArcView.context, 100f, 100f, R.color.activity_track_back, 18f
+            if ((scoreValue ?: 0) >= 0) {
+                binding.dynamicArcView.repeatCount = 0
+                binding.dynamicArcView.setAnimation(R.raw.lottie_meter_activity)
+                binding.dynamicArcView.setMaxProgress(
+                    MiscUtil.scorePercentCalculator(
+                        (scoreValue ?: 0).toFloat()
+                    )
                 )
-            )
+                binding.dynamicArcView.playAnimation()
 
-            val distanceIndex: Int = binding.dynamicArcView.addSeries(
-                seriesItemWithoutInset(
-                    binding.dynamicArcView.context, 0f, 100f, R.color.activity_arc, 18f
-                )
-            )
+            }
+
 
             var caloriesPercent =
                 ((data.data.activeCalories ?: 0).toFloat() / data.caloriesGoal.toFloat()) * 100
@@ -1451,11 +1466,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (caloriesPercent > 100) {
                 caloriesPercent = 100f
             }
-
-            binding.dynamicArcView.addEvent(
-                DecoEvent.Builder(caloriesPercent).setIndex(distanceIndex).setDuration(1000L)
-                    .build()
-            )
 
             binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
 

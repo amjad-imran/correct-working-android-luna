@@ -2102,6 +2102,56 @@ class SummaryDataViewModelToday @Inject constructor(
         }
         return Pair(0, 0)
     }
+
+    fun getStressTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
+
+        if (listData.isNullOrEmpty()) return null
+
+        if (lastMeasuredIndex > 1) {
+            val lastMeasuredValue = listData[lastMeasuredIndex]
+            val secondLastMeasuredValue = listData[lastMeasuredIndex - 1]
+            //val thirdLastMeasuredValue = listData[lastMeasuredIndex - 2]
+
+            val sum = lastMeasuredValue + secondLastMeasuredValue /*+ thirdLastMeasuredValue*/
+
+            val average = sum.toFloat() / 2
+            val roundedAverage = Math.round(average)
+
+            val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
+            val roundedPercentInc = Math.round(percentInc)
+
+            return roundedPercentInc
+        }
+        return null
+    }
+
+    fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
+
+        if (listData.isNullOrEmpty()) return null
+
+        if (lastMeasuredIndex > 4) {
+            val lastMeasuredValue = listData[lastMeasuredIndex]
+            val second = listData[lastMeasuredIndex - 1]
+            val third = listData[lastMeasuredIndex - 2]
+            val fourth = listData[lastMeasuredIndex - 3]
+            val fifth = listData[lastMeasuredIndex - 4]
+
+            if (second == 0 || third == 0 || fourth == 0 || fifth == 0) {
+                return null
+            }
+
+            val sum = lastMeasuredValue + second + third + fourth + fifth
+
+            val average = sum.toFloat() / 5
+            val roundedAverage = Math.round(average)
+
+            val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
+            val roundedPercentInc = Math.round(percentInc)
+
+            return roundedPercentInc
+        }
+        return null
+    }
 }
 
 data class SleepAlert(

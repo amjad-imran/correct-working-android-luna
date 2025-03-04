@@ -297,6 +297,7 @@ class SummaryDataViewModel @Inject constructor(
         val measureState = TapMeasureState.HIDE
         return OHealthOverview.HeartRateDataModel(
             listData,
+            rawData = breakupArray,
             average = average,
             "0",
             value = lastHrValue?.first.toString(),

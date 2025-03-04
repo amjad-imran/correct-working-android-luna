@@ -93,6 +93,7 @@ sealed class OHealthOverview {
 //    ) : OHealthOverview()
     class HeartRateDataModel(
         val listData: List<HRModel>? = null,
+        val rawData:List<Int>?=null,
         val average: Float,
         var lastTime: String? = "",
         var value: String? = "",

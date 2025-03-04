@@ -431,7 +431,7 @@ class OreoOnlineDataMapper
 
         return if (value != null && index != -1) {
             val timestamp =
-                (DateFormats.dateFormat3().parse(date)?.time ?: 0L) + ((index * 15) * 60000)
+                (DateFormats.dateFormat3().parse(date)?.time ?: 0L) + (((index+1) * 15) * 60000)
             Pair(value, timestamp)
         } else {
             Pair(0, 0)
