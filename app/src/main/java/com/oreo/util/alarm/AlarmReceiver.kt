@@ -1,10 +1,12 @@
 package com.oreo.util.alarm;
 
+import android.app.Service.START_NOT_STICKY
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.AlarmRepository
@@ -24,6 +26,10 @@ class AlarmReceiver : BroadcastReceiver() {
         if (Intent.ACTION_BOOT_COMPLETED == intent?.action || Intent.ACTION_REBOOT == intent?.action) {
             alarmRepository.rescheduleAlarms()
         } else {
+
+            if(NotificationManagerCompat.from(context).areNotificationsEnabled().not()){
+                return
+            }
 
             val millis = intent?.getLongExtra("millis", 0L) ?: 0L
 

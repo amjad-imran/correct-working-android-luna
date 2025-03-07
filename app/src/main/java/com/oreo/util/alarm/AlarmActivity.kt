@@ -10,14 +10,23 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.noisefit.luna.databinding.ActivityAlarmBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.setTextGradient
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AlarmActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAlarmBinding
 //    private var mediaPlayer: MediaPlayer? = null
+
+    @Inject
+    lateinit var sessionManager: SessionManager
+
+    private var isStopCalled = false
 
     //    private var ringtone: Ringtone? = null
     private fun turnScreenOn() {
@@ -30,7 +39,8 @@ class AlarmActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +72,7 @@ class AlarmActivity : AppCompatActivity() {
                     Color.parseColor("#DC7D38"),
                     Color.parseColor("#EDCDA8"),
                 ),
-                floatArrayOf(0f,0.5f, 1f),
+                floatArrayOf(0f, 0.5f, 1f),
                 Shader.TileMode.CLAMP
             )
             this.paint.shader = textShader
@@ -71,6 +81,13 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     private fun stopService() {
+        isStopCalled = true
+        sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.alarm_notification_close,
+            HashMap<String, Any>().apply {
+                this["source"] = "stop"
+            })
+
         val myService = Intent(
             this,
             AlarmService::class.java
@@ -80,7 +97,10 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopService()
+
+        if (isStopCalled.not()) {
+            stopService()
+        }
 
     }
 

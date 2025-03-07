@@ -72,6 +72,11 @@ object MoEngageLunaAppEvents {
     const val cycle_track = "cycle_track"
 
 
+    const val alarm_notification = "alarm_notification"
+    const val alarm_notification_close = "alarm_notification_close"
+
+
+
 
     /**
      * AI Events start =========================
