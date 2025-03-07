@@ -1812,5 +1812,7 @@
     <string name="text_ring_charged_message">Votre bague est maintenant chargée à 100 % et prête à se synchroniser, briller et dynamiser votre journée. Lancez-vous !</string>
     <string name="text_luna_ai_voice_calibration">Calibration de la voix Luna AI</string>
     <string name="text_please_select_a_time_after_8_pm">Veuillez sélectionner une heure après 20 h</string>
+    <string name="text_modify_distance">Modifier la distance</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">Limite maximale : 350 km. Veuillez saisir une distance valide.</string>
 
 </resources>

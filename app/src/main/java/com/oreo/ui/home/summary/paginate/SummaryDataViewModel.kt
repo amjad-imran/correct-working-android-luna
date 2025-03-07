@@ -94,6 +94,7 @@ class SummaryDataViewModel @Inject constructor(
                                 readinessScore = it?.readinessScore?.value,
                                 status = it?.readinessScore?.text?.capitalizeWords(),
                                 nudges = it?.dashNudges,
+                                statusCode = healthData.readiness?.readinessScore?.status,
                                 totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
                                 noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
@@ -144,6 +145,7 @@ class SummaryDataViewModel @Inject constructor(
                                 restingHr = healthData.sleep?.avg_hrv,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
                                 status = it?.sleep_score?.text?.capitalizeWords(),
+                                statusCode = healthData.sleep?.sleep_score?.status,
                                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                                 totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
@@ -171,6 +173,7 @@ class SummaryDataViewModel @Inject constructor(
                                 activityScore = it?.activityScore?.value,
                                 activeCalories = it?.activeCalories ?: 0,
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
+                                statusCode = healthData.activity?.activityScore?.status,
                                 status = it?.activityScore?.level?.capitalizeWords(),
                                 nudges = it?.dash_nudges,
                                 steps = healthData.activity?.steps ?: 0

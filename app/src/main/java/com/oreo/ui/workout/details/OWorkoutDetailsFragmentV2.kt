@@ -253,7 +253,7 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.tvDistanceTitle.text = topValue.third
         binding.lytTop.lytActivityItem.tvDistanceValue.text = topValue.first
         binding.lytTop.lytActivityItem.tvDistanceUnit.text = topValue.second
-        if (viewModel.isDistanceShow) {
+        if (viewModel.isDistanceShown && viewModel.isTodayWorkout()) {
             binding.lytTop.lytActivityItem.ivEditDistance.visible()
         } else {
             binding.lytTop.lytActivityItem.ivEditDistance.gone()

@@ -1812,5 +1812,7 @@
     <string name="text_ring_charged_message">你的戒指已充满 100%，准备同步、发光，并为你的一天充能。行动吧！</string>
     <string name="text_luna_ai_voice_calibration">Luna AI 语音校准</string>
     <string name="text_please_select_a_time_after_8_pm">请选择在 20:00 之后的时间</string>
+    <string name="text_modify_distance">修改距离</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">最大限制：350 公里。请输入有效的距离。</string>
 
 </resources>

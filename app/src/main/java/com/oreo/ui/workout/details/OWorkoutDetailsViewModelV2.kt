@@ -33,6 +33,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.Days
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
@@ -55,7 +56,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
     var workoutId: String? = null
-    var isDistanceShow = false
+    var isDistanceShown = false
 
     var avgValue: String = ""
     var workoutDetailsExpanded = false
@@ -244,9 +245,22 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
     }
 
+    fun isTodayWorkout(): Boolean {
+        try {
+            val workoutDate = org.joda.time.LocalDate.parse(_workoutDetailsResponse.value?.date)
+            val todayDate = org.joda.time.LocalDate.now()
+
+            val days = Days.daysBetween(workoutDate, todayDate).days
+            return days==0
+
+        }catch (exp:Exception){
+            return false
+        }
+    }
+
     fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
         if (showDistance(data)) {
-            isDistanceShow = true
+            isDistanceShown = true
             val distanceToUse =
                 if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(
@@ -591,18 +605,18 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     }
 
     fun updateDistance(distanceValue: Float) {
-        if(workoutId==null) return
+        if (workoutId == null) return
 
         val distanceInMeters = distanceValue * 1000
         val distanceInMetersInt = distanceInMeters.toInt()
 
         val requestObj = JsonObject().apply {
-            this.addProperty("distance",distanceInMetersInt)
+            this.addProperty("distance", distanceInMetersInt)
         }
 
         viewModelScope.launch {
             userActivityRepository.updateWorkoutDistance(
-                workoutId!!,requestObj
+                workoutId!!, requestObj
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {

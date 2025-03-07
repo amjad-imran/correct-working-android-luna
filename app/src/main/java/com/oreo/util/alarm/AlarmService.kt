@@ -18,8 +18,6 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
-import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -105,6 +103,11 @@ class AlarmService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+
+        val deleteIntent =
+            PendingIntent.getService(this, 0, dismissIntent, PendingIntent.FLAG_MUTABLE)
+
+
         val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
             .setContentTitle(resourcesProvider.getString(R.string.text_rise_and_shine))
             .setContentText(resourcesProvider.getString(R.string.text_alarm_message))
@@ -112,6 +115,7 @@ class AlarmService : Service() {
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_luna_small)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDeleteIntent(deleteIntent)
             .setFullScreenIntent(pendingIntent, true) // Ensures full-screen intent
             .setContentIntent(pendingIntent)
             //.addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)

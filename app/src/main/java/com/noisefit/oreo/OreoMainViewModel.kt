@@ -314,7 +314,8 @@ constructor(
                             if (it.trends != null) {
                                 trendsData = it.trends
                             }
-                            impactData = it.impact
+
+
 
                             _dashboard.value = getDaysList()
 
@@ -338,6 +339,7 @@ constructor(
                                 dashTodayReload.value = Event(true)
                                 lunaZoneReload.value = Event(true)
                                 //sleepDashTodayReload.value = Event(true)
+                                impactData = it.impact
                             }
 
                             val todayData = userHealthData[getTodayDate()]

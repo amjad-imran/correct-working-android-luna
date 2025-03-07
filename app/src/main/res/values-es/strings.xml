@@ -1817,5 +1817,7 @@
     <string name="text_ring_charged_message">Tu anillo está ahora 100 % cargado y listo para sincronizarse, brillar y potenciar tu día. ¡Adelante!</string>
     <string name="text_luna_ai_voice_calibration">Calibración de voz de Luna AI</string>
     <string name="text_please_select_a_time_after_8_pm">Por favor seleccione una hora después de las 8 pm</string>
+    <string name="text_modify_distance">Modificar distancia</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">Límite máximo: 350 km. Ingrese una distancia válida.</string>
 
 </resources>
