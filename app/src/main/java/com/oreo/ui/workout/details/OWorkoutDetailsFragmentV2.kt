@@ -62,6 +62,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.max
 
 
 private const val maxLatLngPadding = 180
@@ -549,13 +550,19 @@ class OWorkoutDetailsFragmentV2 :
             true // focusable
         )
 
-        val rootView =
-            binding.root  //: View? = (anchorView.getContext() as Activity).getWindow().getDecorView()
         //dimBackground(rootView, 0.5f)
         //dimBehind(popupWindow)
         popupWindow.showAsDropDown(anchorView)
 
         val etDistance = popupView.findViewById<EditText?>(R.id.etDistance)
+        val isMetric = viewModel.sessionManager.isMetric()
+
+        if(isMetric){
+            etDistance.setHint("0.0 km")
+        }else{
+            etDistance.setHint("0.0 mi")
+        }
+
         val btnUpdate = popupView.findViewById<Button?>(R.id.btnUpdate)
         val btnCancel = popupView.findViewById<Button?>(R.id.btnCancel)
 
@@ -572,11 +579,23 @@ class OWorkoutDetailsFragmentV2 :
                 val distanceValue = distance.toFloat()//in km
                 if (distanceValue > 0) {
 
-                    if (distanceValue <= 350) {
+                    val isMetric = viewModel.sessionManager.isMetric()
+
+                    val maxDistance :Int
+                    val errorMessage :String
+                    if(isMetric){
+                        maxDistance = 350
+                        errorMessage = getString(R.string.text_max_limit_350_km_enter_a_valid_distance)
+                    }else{
+                        maxDistance = 217
+                        errorMessage = getString(R.string.text_max_limit_enter_a_valid_distance_miles)
+                    }
+
+                    if (distanceValue <= maxDistance) {
                         viewModel.updateDistance(distanceValue)
                         popupWindow.dismiss()
                     } else {
-                        viewModel.sendMessage(getString(R.string.text_max_limit_350_km_enter_a_valid_distance))
+                        viewModel.sendMessage(errorMessage)
                     }
                 }
             } catch (e: Exception) {

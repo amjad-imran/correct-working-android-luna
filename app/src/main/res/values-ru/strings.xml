@@ -1816,5 +1816,6 @@
     <string name="text_please_select_a_time_after_8_pm">Пожалуйста, выберите время после 20:00</string>
     <string name="text_modify_distance">Изменить расстояние</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Максимальный предел: 350 км. Введите корректное расстояние.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">Максимальный предел: 217 миль. Введите действительное расстояние.</string>
 
 </resources>

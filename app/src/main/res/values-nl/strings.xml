@@ -1817,5 +1817,6 @@
     <string name="text_please_select_a_time_after_8_pm">Selecteer een tijd na 20.00 uur</string>
     <string name="text_modify_distance">Afstand wijzigen</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Maximale limiet: 350 km. Voer een geldige afstand in.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">Maximale limiet: 217 mijl. Voer een geldige afstand in.</string>
 
 </resources>

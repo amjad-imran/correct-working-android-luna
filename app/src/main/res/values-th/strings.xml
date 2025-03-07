@@ -1802,5 +1802,6 @@
     <string name="text_please_select_a_time_after_8_pm">โปรดเลือกเวลาหลัง 20.00 น.</string>
     <string name="text_modify_distance">ปรับระยะทาง</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">ขีดจำกัดสูงสุด: 350 กม. กรุณาใส่ระยะทางที่ถูกต้อง.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">ขีดจำกัดสูงสุด: 217 ไมล์. กรุณากรอกระยะทางที่ถูกต้อง.</string>
 
 </resources>

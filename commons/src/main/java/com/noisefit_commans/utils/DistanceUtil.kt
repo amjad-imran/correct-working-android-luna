@@ -303,7 +303,7 @@ object DistanceUtil {
         } else kmToMeters(distance)
     }
 
-    private fun milesToMeters(miles: Double): Long {
+    fun milesToMeters(miles: Double): Long {
         return (miles * 1609.3399658203125).toLong()
     }
 

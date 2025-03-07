@@ -22,6 +22,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
@@ -607,7 +608,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     fun updateDistance(distanceValue: Float) {
         if (workoutId == null) return
 
-        val distanceInMeters = distanceValue * 1000
+        val distanceInMeters = if(sessionManager.isMetric()){
+            distanceValue * 1000
+        }else{
+            DistanceUtil.milesToMeters(distanceValue.toDouble())
+            //distanceValue * 1609.34
+        }
         val distanceInMetersInt = distanceInMeters.toInt()
 
         val requestObj = JsonObject().apply {

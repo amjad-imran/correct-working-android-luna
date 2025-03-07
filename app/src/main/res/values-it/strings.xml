@@ -1815,5 +1815,6 @@
     <string name="text_please_select_a_time_after_8_pm">Seleziona un orario dopo le 20:00</string>
     <string name="text_modify_distance">Modifica la distanza</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Limite massimo: 350 km. Inserisci una distanza valida.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">Limite massimo: 217 miglia. Inserisci una distanza valida.</string>
 
 </resources>

@@ -1814,5 +1814,6 @@
     <string name="text_please_select_a_time_after_8_pm">请选择在 20:00 之后的时间</string>
     <string name="text_modify_distance">修改距离</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">最大限制：350 公里。请输入有效的距离。</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">最大限制：217英里。请输入有效的距离。</string>
 
 </resources>
