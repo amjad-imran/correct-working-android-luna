@@ -2112,6 +2112,12 @@ class SummaryDataViewModelToday @Inject constructor(
             val secondLastMeasuredValue = listData[lastMeasuredIndex - 1]
             //val thirdLastMeasuredValue = listData[lastMeasuredIndex - 2]
 
+            if (lastMeasuredValue == 0 || secondLastMeasuredValue == 0 ||
+                lastMeasuredValue == 255 || secondLastMeasuredValue == 255
+            ) {
+                return null
+            }
+
             val sum = lastMeasuredValue + secondLastMeasuredValue /*+ thirdLastMeasuredValue*/
 
             val average = sum.toFloat() / 2
@@ -2127,22 +2133,27 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
 
+
         if (listData.isNullOrEmpty()) return null
 
-        if (lastMeasuredIndex > 4) {
+        if (lastMeasuredIndex > 5) {
             val lastMeasuredValue = listData[lastMeasuredIndex]
             val second = listData[lastMeasuredIndex - 1]
             val third = listData[lastMeasuredIndex - 2]
             val fourth = listData[lastMeasuredIndex - 3]
             val fifth = listData[lastMeasuredIndex - 4]
+            val sixth = listData[lastMeasuredIndex - 5]
 
-            if (second == 0 || third == 0 || fourth == 0 || fifth == 0) {
+            if (second == 0 || third == 0 || fourth == 0 || fifth == 0 || sixth == 0 || lastMeasuredValue == 0) {
+                return null
+            }
+            if (second == 255 || third == 255 || fourth == 255 || fifth == 255 || sixth == 255 || lastMeasuredValue == 255) {
                 return null
             }
 
-            val sum = lastMeasuredValue + second + third + fourth + fifth
+            val sum = lastMeasuredValue + second + third + fourth + fifth + sixth
 
-            val average = sum.toFloat() / 5
+            val average = sum.toFloat() / 6
             val roundedAverage = Math.round(average)
 
             val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
