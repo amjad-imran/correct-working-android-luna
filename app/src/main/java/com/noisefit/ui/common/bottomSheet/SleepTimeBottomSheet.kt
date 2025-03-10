@@ -57,50 +57,57 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
         binding.lytTimePicker.timePicker.setOnTimeChangedListener { _, hour, minute ->
-            if (addSleep.day.equals("Today", true)) {
-
-                if (hour > currentHour) {
-                    binding.lytTimePicker.timePicker.currentHour = currentHour
-                    binding.lytTimePicker.timePicker.currentMinute = currentMinute
-                    if (!showTodayToast) {
-                        showTodayToast = true
-                        context.showShortToast(getString(R.string.text_please_select_a_time_before_current_time))
-                    }
-
-                } else {
-                    if (hour != currentHour && minute != 0) {
-                        showTodayToast = false
-                    }
-
-                    addSleep.hour = handleMinutes(hour)
-                    addSleep.minute = handleMinutes(minute)
-                }
-            } else {
-                if (hour >= YESTERDAY_HOUR) {
-                    if (hour != YESTERDAY_HOUR && minute != 0) {
-                        showYesterdayToast = false
-                    }
-
-                    addSleep.hour = handleMinutes(hour)
-                    addSleep.minute = handleMinutes(minute)
-                } else {
-
-                    binding.lytTimePicker.timePicker.currentHour = YESTERDAY_HOUR
-                    binding.lytTimePicker.timePicker.currentMinute = 0
-                    if (!showYesterdayToast) {
-                        showYesterdayToast = true
-                        context.showShortToast(getString(R.string.text_please_select_a_time_after_8_pm))
-                    }
-
-                }
-
-            }
-
+            checkCondition(hour, currentHour, currentMinute, minute)
         }
 
         binding.lytTimePicker.timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
         setWheelPicker()
 
+    }
+
+    private fun checkCondition(hour: Int, currentHour: Int, currentMinute: Int, minute: Int) {
+
+        if (addSleep.day.equals("Today", true)) {
+
+            if (hour > currentHour) {
+                binding.lytTimePicker.timePicker.currentHour = currentHour
+                binding.lytTimePicker.timePicker.currentMinute = currentMinute
+                if (!showTodayToast) {
+                    showTodayToast = true
+                    context.showShortToast(getString(R.string.text_please_select_a_time_before_current_time))
+                }
+
+            } else {
+                if (hour != currentHour && minute != 0) {
+                    showTodayToast = false
+                }
+
+                addSleep.hour = handleMinutes(hour)
+                addSleep.minute = handleMinutes(minute)
+            }
+        } else {
+            if (hour >= YESTERDAY_HOUR) {
+                if (hour != YESTERDAY_HOUR && minute != 0) {
+                    showYesterdayToast = false
+                }
+
+                addSleep.hour = handleMinutes(hour)
+                addSleep.minute = handleMinutes(minute)
+            } else {
+
+                binding.lytTimePicker.timePicker.currentHour = YESTERDAY_HOUR
+                binding.lytTimePicker.timePicker.currentMinute = 0
+                addSleep.day = "Yesterday"
+                wheelAdapter.selectedItemPosition = getUpdatedIndex()
+
+                if (!showYesterdayToast) {
+                    showYesterdayToast = true
+                    context.showShortToast(getString(R.string.text_please_select_a_time_after_8_pm))
+                }
+
+            }
+
+        }
     }
 
     private fun handleMinutes(value: Int): String {
@@ -130,6 +137,14 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         wheelAdapter.data = dayList
         wheelAdapter.setOnItemSelectedListener { item ->
             addSleep.day = item.split(" ")[0]
+
+            val calendar = Calendar.getInstance()
+            val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+            val currentMinute = calendar.get(Calendar.MINUTE)
+            val hour = binding.lytTimePicker.timePicker.currentHour
+            val minute = binding.lytTimePicker.timePicker.currentMinute
+            checkCondition(hour, currentHour, currentMinute, minute)
+
         }
         wheelAdapter.bind(binding.lytTimePicker.wheelPicker)
         wheelAdapter.selectedItemPosition = getUpdatedIndex()

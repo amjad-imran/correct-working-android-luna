@@ -614,7 +614,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             DistanceUtil.milesToMeters(distanceValue.toDouble())
             //distanceValue * 1609.34
         }
-        val distanceInMetersInt = distanceInMeters.toInt()
+        val distanceInMetersInt = distanceInMeters.toDouble().roundToInt()
 
         val requestObj = JsonObject().apply {
             this.addProperty("distance", distanceInMetersInt)
