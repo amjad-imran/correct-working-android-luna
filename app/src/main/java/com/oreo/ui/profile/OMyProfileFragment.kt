@@ -74,6 +74,14 @@ class OMyProfileFragment :
         }
 
         binding.rowReferral.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "refer_and_earn"
+                    this["description"] = "button_clicked"
+                })
+
             if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState ||
                 viewModel.referralRunningState.value is ReferralRunningState.CampaignRunningState ||
                 viewModel.referralRunningState.value is ReferralRunningState.PrizeOnlyState
@@ -101,16 +109,31 @@ class OMyProfileFragment :
                 showFaqCategoriesAsGrid(false)
             })*/
 
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "live_support"
+                })
+
             Freshchat.showConversations(requireContext())
         }
 
         binding.rowSettings.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "settings"
+                })
             navigate(R.id.settingsFragment)
         }
 
         binding.rowAbout.setUpdateAvailable(viewModel.localDataStore.isNewAppVersionAvailable())
         binding.rowAbout.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "about"
+                })
             navigate(R.id.aboutFragment)
         }
         binding.backBtn.setOnClickListener {
@@ -127,7 +150,6 @@ class OMyProfileFragment :
 //            )
 //        }
         binding.rowFeedBack.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rate_us_click)
             navigate(R.id.rateUsOreo)
         }
 
@@ -137,7 +159,13 @@ class OMyProfileFragment :
 //        }
 
         binding.llMyProfile.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_your_profile_click)
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "your_profile"
+                })
+
             goToProfile()
         }
         binding.tvName.setOnClickListener {
@@ -151,12 +179,6 @@ class OMyProfileFragment :
         }
 
         binding.rowHelp.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.luna_help_support_click,
-                HashMap<String, Any>().apply {
-                    this[MoEngageAppEventParams.operating_system] = "Android"
-                    this[MoEngageAppEventParams.mobile_manufacturer] = viewModel.getDeviceName()
-                })
             navigate(R.id.oreoHelpAndSupportFragment)
         }
 
@@ -167,6 +189,11 @@ class OMyProfileFragment :
                 if (isSelected) {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_allow_click)
                     viewModel.logoutUser()
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.user_ham_clicked,
+                        HashMap<String, Any>().apply {
+                            this["property"] = "logout"
+                        })
                 } else {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_cancel_click)
                 }

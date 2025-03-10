@@ -111,7 +111,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
         binding.lytHeader.profileView1.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "just_clicked"
+                })
             navigate(R.id.OMyProfileFragment)
         }
 

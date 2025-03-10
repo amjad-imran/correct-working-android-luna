@@ -23,6 +23,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -102,11 +103,23 @@ class ReferralFragment : BaseFragment<FragmentReferralBinding>(FragmentReferralB
             mLastClickTime = SystemClock.elapsedRealtime()
 
             if (viewModel.referralCode.value?.referralCode.isNullOrEmpty()) {
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.user_ham_clicked,
+                    HashMap<String, Any>().apply {
+                        this["property"] = "refer_and_earn"
+                        this["description"] = "claim_code"
+                    })
                 viewModel.getReferCode()
             } else {
 
                 context?.let { ctx ->
                     viewModel.referralCode.value?.shareMessage?.let {
+                        viewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.user_ham_clicked,
+                            HashMap<String, Any>().apply {
+                                this["property"] = "refer_and_earn"
+                                this["description"] = "share_code"
+                            })
                         ShareUtil.shareText(ctx, it)
                     }
                 }

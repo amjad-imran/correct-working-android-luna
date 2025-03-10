@@ -22,10 +22,13 @@ class OHelpAndSupportFragment :
         OHealthSupportAdapter(object : OHealthSupportAdapter.OHSClickListener {
             override fun onItemClickListener(id: String, title: String) {
                 mViewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.luna_support_option_click,
+                    MoEngageLunaAppEvents.user_ham_clicked,
                     HashMap<String, Any>().apply {
-                        this[MoEngageAppEventParams.option_title] = title
+                        this["property"] = "faq"
+                        this["faq_asked"] = title
                     })
+
+
                 navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
                     putString("title", title)
                     putString("id", id)

@@ -31,10 +31,12 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
                     })
 
                 }
+
                 viewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.luna_learnmore_card_click,
+                    MoEngageLunaAppEvents.user_ham_clicked,
                     HashMap<String, Any>().apply {
-                        this[MoEngageAppEventParams.card_title] = data.title ?: ""
+                        this["property"] = "learn_more"
+                        this["learn_more_selected"] = data.title ?: ""
                     })
             }
         })

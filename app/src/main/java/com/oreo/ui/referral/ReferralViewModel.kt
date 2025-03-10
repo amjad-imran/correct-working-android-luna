@@ -12,6 +12,7 @@ import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -26,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ReferralViewModel @Inject constructor(
     private val referralRepository: ReferralRepository,
-    private val localDataStore: DataStoredInterface
+    private val localDataStore: DataStoredInterface,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     var referralInfo = MutableLiveData<ReferralInfoResponse>()

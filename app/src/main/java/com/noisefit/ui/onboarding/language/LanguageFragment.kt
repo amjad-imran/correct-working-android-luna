@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +29,12 @@ class LanguageFragment : BaseFragment<FragmentLanguageBinding>(FragmentLanguageB
         LanguagesAdapter(object : LanguageSelectionListener {
             override fun onLanguageSelected(language: AppLanguage) {
                 if (viewModel.hideContinue) {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.user_ham_clicked,
+                        HashMap<String, Any>().apply {
+                            this["property"] = "app_language"
+                            this["language_selected"] = language.languageCode
+                        })
                     viewModel.updateSelectedLanguage(language)
                 } else {
                     //binding.btnContinue.visible()
@@ -69,6 +76,13 @@ class LanguageFragment : BaseFragment<FragmentLanguageBinding>(FragmentLanguageB
     override fun initListener() {
         binding.btnContinue.setOnClickListener {
             viewModel.selectedLanguage.let {
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.user_ham_clicked,
+                    HashMap<String, Any>().apply {
+                        this["property"] = "app_language"
+                        this["language_selected"] = it
+                    })
+
                 viewModel.updateSelectedLanguage(ApplicationUtils.getAppLanguageByCode(it))
             }
         }

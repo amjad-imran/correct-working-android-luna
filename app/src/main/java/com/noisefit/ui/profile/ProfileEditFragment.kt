@@ -175,7 +175,13 @@ class ProfileEditFragment :
                 return@setOnClickListener
             }
 
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_save_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "your_profile"
+                    this["property_description"] = "edit_save"
+                })
+
             viewModel.updateUserProfile()
 
 

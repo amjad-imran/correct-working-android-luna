@@ -94,7 +94,7 @@ object MoEngageLunaAppEvents {
 
     const val luna_homepage_visit = "luna_homepage_visit"
     const val luna_activity_sync_manual = "luna_activity_sync_manual"
-    const val luna_hamburger_click = "luna_hamburger_click"
+    const val user_ham_clicked = "user_ham_clicked"
     const val luna_your_profile_click = "luna_your_profile_click"
     const val luna_profile_edit_click = "luna_profile_edit_click"
     const val luna_profile_save_click = "luna_profile_save_click"

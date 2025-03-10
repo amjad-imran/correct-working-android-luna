@@ -13,6 +13,7 @@ import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.AppRepository
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.auth.AuthMode
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
@@ -31,6 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LanguageViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
+    var sessionManager: SessionManager,
     private val userRepository: UserRepository,
     private val lastSyncProvider: LastSyncProvider,
     private val keyValueDataSource: KeyValueDataSource,
