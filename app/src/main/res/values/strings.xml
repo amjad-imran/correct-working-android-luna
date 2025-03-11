@@ -1854,5 +1854,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_basic">Basic</string>
     <string name="text_notification_toggle_message">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
     <string name="text_hydration">Hydration</string>
+    <string name="text_daily_goals">Daily Goals</string>
 
 </resources>
