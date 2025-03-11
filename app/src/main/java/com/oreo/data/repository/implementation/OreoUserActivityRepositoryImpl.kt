@@ -68,6 +68,7 @@ import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.sleep.SleepDataResponse
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -108,6 +109,7 @@ class OreoUserActivityRepositoryImpl(
     private val userHealthDataSource: OreoUserHealthDataDataSource,
     private val lastSyncProvider: LastSyncProvider,
     private val offlineApiStore: IOfflineApiResponseStore,
+    val alarmRepository: AlarmRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
 
@@ -2092,7 +2094,6 @@ class OreoUserActivityRepositoryImpl(
                     }
 
                     is Resource.Success -> {
-
                         resource.data?.data?.let { response ->
                             resultData = response
                         }
@@ -2112,6 +2113,8 @@ class OreoUserActivityRepositoryImpl(
                 }.collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
+                            alarmRepository.rescheduleAlarms()
+
                             emit(
                                 Resource.Success(
                                     BaseApiResponse(

@@ -436,7 +436,8 @@ object AppModule {
         onlineDataMapper: OreoOnlineDataMapper,
         lastSyncProvider: LastSyncProvider,
         userHealthDataSource: OreoUserHealthDataDataSource,
-        offlineApiStore: IOfflineApiResponseStore
+        offlineApiStore: IOfflineApiResponseStore,
+        alarmRepository: AlarmRepository
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
@@ -458,7 +459,8 @@ object AppModule {
             onlineDataMapper,
             userHealthDataSource,
             lastSyncProvider,
-            offlineApiStore
+            offlineApiStore,
+            alarmRepository
         )
 
     @Singleton
