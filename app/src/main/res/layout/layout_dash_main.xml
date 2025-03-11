@@ -11,6 +11,13 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/lytNotificationCard"
+            layout="@layout/layout_notification_card"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
             android:id="@+id/lytSpGraphCard"
             layout="@layout/layout_dash_sleep_planner_graph_card"
             android:layout_width="match_parent"
@@ -170,14 +177,14 @@
 
         <include
             android:id="@+id/lytStressGraph"
+            layout="@layout/layout_stress_dash_measure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
-            tools:visibility="visible"
-            layout="@layout/layout_stress_dash_measure"/>
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/lytHeartRate"

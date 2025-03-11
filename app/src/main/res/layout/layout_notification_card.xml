@@ -28,30 +28,62 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView70"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
         android:adjustViewBounds="true"
         android:src="@drawable/back_steps_goals"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView69"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView85"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/textView89"
         style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/text_steps"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNotificationSteps"
         app:layout_constraintStart_toStartOf="@+id/imageView70"
+        app:layout_constraintTop_toTopOf="@+id/ivNotificationSteps" />
+
+    <com.oreo.ui.custom.StepsProgressBarArch
+        android:id="@+id/progressSteps"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvSteps"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintStart_toStartOf="@+id/imageView70"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotificationSteps" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_goal_steps_walking"
+        app:layout_constraintBottom_toBottomOf="@+id/progressSteps"
+        app:layout_constraintEnd_toEndOf="@+id/progressSteps"
+        app:layout_constraintStart_toStartOf="@+id/progressSteps"
+        app:layout_constraintTop_toTopOf="@+id/progressSteps" />
+
+    <ImageView
+        android:id="@+id/ivNotificationSteps"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_notification_on"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
         app:layout_constraintTop_toTopOf="@+id/imageView70" />
 
     <TextView
@@ -59,7 +91,7 @@
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:textColor="#9FFFE5"
         app:layout_constraintBottom_toBottomOf="@+id/imageView70"
         app:layout_constraintEnd_toStartOf="@+id/tvStepsGoal"
@@ -73,7 +105,7 @@
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:textColor="#A39FFFE5"
         app:layout_constraintBottom_toBottomOf="@+id/imageView70"
         app:layout_constraintEnd_toEndOf="@+id/imageView70"
@@ -86,7 +118,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
         android:adjustViewBounds="true"
         android:src="@drawable/back_hydrate_goals"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,15 +128,60 @@
         app:layout_constraintStart_toEndOf="@+id/imageView70"
         app:layout_constraintTop_toBottomOf="@+id/textView85" />
 
+    <ImageView
+        android:id="@+id/ivNotificationHydrate"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_notification_on"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69"
+        app:layout_constraintTop_toTopOf="@+id/imageView69" />
+
+    <com.oreo.ui.custom.HydrateProgressBarArch
+        android:id="@+id/progressHydrate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvSteps"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69"
+        app:layout_constraintStart_toStartOf="@+id/imageView69"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotificationHydrate" />
+
+    <ImageView
+        android:id="@+id/ivGlassImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_glass_0"
+        app:layout_constraintBottom_toBottomOf="@+id/progressHydrate"
+        app:layout_constraintEnd_toEndOf="@+id/progressHydrate"
+        app:layout_constraintStart_toStartOf="@+id/progressHydrate"
+        app:layout_constraintTop_toTopOf="@+id/progressHydrate" />
+
     <TextView
+        android:id="@+id/textView153"
         style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Hydrate"
-        app:layout_constraintStart_toEndOf="@+id/imageView70"
-        app:layout_constraintTop_toTopOf="@+id/imageView69" />
+        android:layout_marginStart="8dp"
+        android:text="@string/text_hydrate"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNotificationHydrate"
+        app:layout_constraintStart_toStartOf="@+id/imageView69"
+        app:layout_constraintTop_toTopOf="@+id/ivNotificationHydrate" />
 
+    <ImageView
+        android:id="@+id/ivHydrateMinus"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_hydrate_minus"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintStart_toStartOf="@+id/imageView69" />
+
+    <ImageView
+        android:id="@+id/ivHydratePlus"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_hydrate_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
