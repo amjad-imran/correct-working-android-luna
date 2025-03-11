@@ -65,9 +65,68 @@ class NotificationSettingFragment :
             } else {
                 viewModel.notificationSetting.value = 0
             }
+
+            binding.lytOther.switchOtherMain.isEnabled = isChecked
+            if (isChecked.not()) {
+                disableOtherNotifications()
+            }
+
             viewModel.updateUserProfile()
         }
 
+        binding.lytOther.switchOtherMain.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
+            binding.lytOther.lytHydration.switchMain.isChecked = isChecked
+            binding.lytOther.lytSteps.switchMain.isChecked = isChecked
+            binding.lytOther.lytSleep.switchMain.isChecked = isChecked
+
+            binding.lytOther.lytHydration.switchMain.isEnabled = isChecked
+            binding.lytOther.lytSteps.switchMain.isEnabled = isChecked
+            binding.lytOther.lytSleep.switchMain.isEnabled = isChecked
+
+        }
+
+        binding.lytOther.lytHydration.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+            checkOtherNotifications()
+        }
+        binding.lytOther.lytSteps.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+            checkOtherNotifications()
+        }
+        binding.lytOther.lytSleep.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+            checkOtherNotifications()
+        }
+
+    }
+
+    fun checkOtherNotifications() {
+        if (binding.lytOther.lytHydration.switchMain.isChecked.not() &&
+            binding.lytOther.lytSteps.switchMain.isChecked.not() &&
+            binding.lytOther.lytSleep.switchMain.isChecked.not()
+        ) {
+            binding.lytOther.switchOtherMain.isChecked = false
+            binding.lytOther.lytHydration.switchMain.isEnabled = false
+            binding.lytOther.lytSleep.switchMain.isEnabled = false
+            binding.lytOther.lytSteps.switchMain.isEnabled = false
+        }
+    }
+
+    private fun disableOtherNotifications() {
+        binding.lytOther.switchOtherMain.isChecked = false
+        binding.lytOther.lytHydration.switchMain.isChecked = false
+        binding.lytOther.lytSteps.switchMain.isChecked = false
+        binding.lytOther.lytSleep.switchMain.isChecked = false
     }
 
     override fun subscribeObservers() {
