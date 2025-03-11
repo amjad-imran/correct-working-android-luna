@@ -27,7 +27,7 @@ class AiSummaryViewModel @Inject constructor(
     var isPaused = false
 
     var currentStoryIndex = 0
-    val storyDuration = 5000L
+    val storyDuration = 6000L
 
     private val _dailySummaryData = MutableLiveData<Event<List<AiDailySummaryModel>>>()
     val dailySummaryData: MutableLiveData<Event<List<AiDailySummaryModel>>> = _dailySummaryData
