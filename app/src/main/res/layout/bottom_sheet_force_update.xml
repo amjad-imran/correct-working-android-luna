@@ -42,7 +42,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:text="@string/text_app_update_required"
+                android:text="@string/text_luna_app_update_is_here"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
@@ -58,7 +58,7 @@
                 android:layout_marginEnd="32dp"
                 android:gravity="center"
                 android:lineSpacingExtra="6sp"
-                android:text="@string/text_force_update_message"
+                android:text="@string/text_get_the_latest_features"
                 android:textColor="@color/white_64"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
