@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
@@ -492,9 +493,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideAlarmUtil(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
+        resourcesProvider: ResourcesProvider,
     ): AlarmUtil {
-        return AlarmUtil(context = appContext)
+        return AlarmUtil(context = appContext, resourcesProvider)
     }
 
 

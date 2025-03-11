@@ -101,6 +101,11 @@ class OMyProfileFragment :
         }
 
         binding.rowCycleTracker.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "cycle_tracking"
+                })
             viewModel.getCycleTrackerInfo()
 //            navigate(R.id.cycleTrackerStreakFragment)
         }

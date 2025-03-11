@@ -611,7 +611,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         val distanceInMeters = if(sessionManager.isMetric()){
             distanceValue * 1000
         }else{
-            DistanceUtil.milesToMeters(distanceValue.toDouble())
+            DistanceUtil.milesToMetersDouble(distanceValue.toDouble())
             //distanceValue * 1609.34
         }
         val distanceInMetersInt = distanceInMeters.toDouble().roundToInt()

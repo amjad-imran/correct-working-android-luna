@@ -88,6 +88,10 @@ object MoEngageLunaAppEvents {
     const val Home_lunaai_suggested_question = "home_lunaai_suggested_question"
     const val Home_lunaai_mic_button = "home_lunaai_mic_button"
 
+
+    const val full_charge_notification = "full_charge_notification"
+
+
     /**
      * AI Events End =========================
      */

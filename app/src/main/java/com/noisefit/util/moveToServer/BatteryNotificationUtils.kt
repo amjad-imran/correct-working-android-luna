@@ -14,6 +14,7 @@ import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import javax.inject.Inject
 
 private const val TAG = "BatteryNotificationUtils"
@@ -159,6 +160,8 @@ constructor(
             val isTriggerSet = watchDataStore.getFullyChargedTrigger()
             if (isTriggerSet) {
                 //show notification
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.full_charge_notification)
                 pushFullyChargedNotification(NoiseFitApplicationMain.context!!,
                     resourcesProvider.getString(R.string.text_ring_charged_title),
                     resourcesProvider.getString(
