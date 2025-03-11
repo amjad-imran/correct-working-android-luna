@@ -8,6 +8,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentNotificationSettingBinding
 import com.noisefit.ui.profile.ProfileEditViewModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -22,14 +23,30 @@ class NotificationSettingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_notification)
+
+        initUi()
+    }
+
+    private fun initUi() {
+
+        binding.toolbar.tvTitle.text = getString(R.string.text_notifications)
+
+        binding.switchMaster.isChecked = viewModel.notificationSetting.value == 1
+        binding.lytNotificationMain.switchMain.isChecked = viewModel.notificationSetting.value == 1
 
         binding.lytNotificationMain.apply {
-            tvTitle.text = getString(R.string.text_enable_notifications)
-            tvMessage.text = getString(R.string.text_notification_message)
+            switchMain.isEnabled = false
+            switchMain.alpha = 0.5f
+            tvMessage.text = getString(R.string.text_notification_toggle_message)
+            tvMessage.visible()
         }
 
-        binding.lytNotificationMain.switchMain.isChecked = viewModel.notificationSetting.value == 1
+        binding.lytOther.apply {
+            lytHydration.tvTitle.text = getString(R.string.text_hydration)
+            lytSteps.tvTitle.text = getString(R.string.text_steps)
+            lytSleep.tvTitle.text = getString(R.string.text_sleep)
+        }
+
     }
 
     override fun initListener() {
@@ -37,9 +54,11 @@ class NotificationSettingFragment :
             navigateUpSafe()
         }
 
-        binding.lytNotificationMain.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.switchMaster.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (!buttonView.isPressed) return@setOnCheckedChangeListener
+
+            binding.lytNotificationMain.switchMain.isChecked = isChecked
 
             if (isChecked) {
                 viewModel.notificationSetting.value = 1

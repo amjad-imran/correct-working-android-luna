@@ -21,10 +21,10 @@
         android:layout_height="48dp"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/side_margin"
+        android:text="@string/text_basic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/text_metric" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchMain"
@@ -43,12 +43,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/side_margin"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_marginTop="8dp"
-        android:textColor="#80ffffff"
         android:lineSpacingExtra="4sp"
+        tools:text="@string/text_notification_toggle_message"
+        android:textColor="#80ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-        tools:text="Measures in meters, kilograms, and litres." />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
