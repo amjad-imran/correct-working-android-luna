@@ -71,6 +71,7 @@
     <TextView
         android:id="@+id/tvValue"
         style="@style/H32"
+        android:textSize="40sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
@@ -83,8 +84,6 @@
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8dp"
-
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/dynamicArcView"
         app:layout_constraintStart_toStartOf="@+id/dynamicArcView"
