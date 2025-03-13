@@ -1858,5 +1858,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_hydrate">Hydrate</string>
     <string name="text_luna_app_update_is_here">Luna App Update is Here! 🚀</string>
     <string name="text_get_the_latest_features">Get the latest features, improved performance, and a smoother experience.</string>
+    <string name="text_small_duration">duration</string>
+    <string name="text_starting_in">Starting in</string>
+    <string name="text_pause">Pause</string>
 
 </resources>

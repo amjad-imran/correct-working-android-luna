@@ -32,6 +32,7 @@ import com.noisefit_commans.models.SedentaryData
 import com.noisefit_commans.models.StockSymbol
 import com.noisefit_commans.models.StockSymbolList
 import com.noisefit_commans.models.SwitchSetting
+import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.models.WorldClockList
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
@@ -352,6 +353,32 @@ constructor(
                 isCharging = true
             }
             LOGS.w("Realtime Data battery Info : ${p0.batteryInfo} Steps: ${p0.steps} Calories: ${p0.calories}")
+
+            if (p0.steps != null || p0.calories != null || p0.heartRate != null) {
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.WorkoutRealTimeDataObtained(
+                        WorkoutRealTimeData(
+                            timestamp = System.currentTimeMillis(),
+                            steps = try {
+                                p0.steps.toIntOrNull()
+                            }catch (exp:Exception){null},
+                            distance = try {
+                                p0.distance.toLongOrNull()
+                            }catch (exp:Exception){null},
+                            calorieValue =try {
+                                p0.calories.toIntOrNull()
+                            }catch (exp:Exception){null},
+                            hrValue =try {
+                                p0.heartRate.toIntOrNull()
+                            }catch (exp:Exception){null},
+
+                        )
+                    )
+                )
+
+            }
+
+
             if (capacity != null) {
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.BatteryDataObtained(

@@ -36,6 +36,7 @@ import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserLocation
+import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -115,6 +116,8 @@ class SessionManager
     var isRingCharging = MutableLiveData(false)
 
     var firmwareLogsStatus = MutableLiveData(-1)
+
+    var realtimeWorkoutData = MutableLiveData<WorkoutRealTimeData>()
 
     var reloadTodayData = MutableLiveData<Event<Boolean>>()
 

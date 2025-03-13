@@ -553,6 +553,26 @@
             app:popUpToInclusive="true" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/recordWorkoutFragmentV2"
+        android:name="com.oreo.ui.recordworkout.v2.RecordWorkoutFragmentV2"
+        android:label="fragment_record_workout_v2">
+        <argument
+            android:name="workout"
+            app:argType="com.noisefit_commans.data.model.OWorkoutListModal" />
+        <argument
+            android:name="onGoingWorkout"
+            android:defaultValue="@null"
+            app:argType="com.noisefit_commans.data.model.DetectedOngoingWorkout"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_recordWorkoutFragment_v2_to_oWorkoutDetailsFragment"
+            app:destination="@id/oWorkoutDetailsFragmentV2"
+            app:popUpTo="@id/recordWorkoutFragmentV2"
+            app:popUpToInclusive="true" />
+
+    </fragment>
     <fragment
         android:id="@+id/addWorkoutSelectorFragment"
         android:name="com.oreo.ui.recordworkout.AddWorkoutSelectorFragment"

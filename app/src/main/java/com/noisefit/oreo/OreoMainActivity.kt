@@ -249,7 +249,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
                 navController?.navigate(
-                    R.id.recordWorkoutFragment,
+                    R.id.recordWorkoutFragmentV2,
                     bundleOf("workout" to it)
                 )
             }
@@ -817,9 +817,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.sessionManager.ongoingWorkoutDetected.observe(this) {
             it.getContent()?.let { pair ->
-                if (navController?.currentDestination?.id != R.id.recordWorkoutFragment) {
+                if (navController?.currentDestination?.id != R.id.recordWorkoutFragmentV2) {
                     navController?.navigate(
-                        R.id.recordWorkoutFragment, bundleOf(
+                        R.id.recordWorkoutFragmentV2, bundleOf(
                             "workout" to pair.second,
                             "onGoingWorkout" to pair.first,
                         )
