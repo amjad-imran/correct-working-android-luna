@@ -336,10 +336,10 @@ constructor(
                             dataReload.value = Event(reloadDays)
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
+                                impactData = it.impact
                                 dashTodayReload.value = Event(true)
                                 lunaZoneReload.value = Event(true)
                                 //sleepDashTodayReload.value = Event(true)
-                                impactData = it.impact
                             }
 
                             val todayData = userHealthData[getTodayDate()]
