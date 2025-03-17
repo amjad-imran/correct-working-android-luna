@@ -374,6 +374,11 @@ class RecordWorkoutV2ViewModel @Inject constructor(
         }
     }
 
+    fun isWorkoutRunning(): Boolean {
+        return currentWorkoutState == 1 || currentWorkoutState == 3
+
+    }
+
     data class HrZoneData(val minBpm: Int, val maxBpm: Int, val zoneId: Int)
 
 }

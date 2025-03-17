@@ -344,10 +344,20 @@ class RecordWorkoutFragmentV2 :
     }
 
     private fun updateWorkoutData(workoutRealTimeData: WorkoutRealTimeData) {
-        binding.lytOnGoingWorkout.lytZones.tvHrValue.text =
-            if (workoutRealTimeData.hrValue != null) workoutRealTimeData.hrValue.toString() else "-"
+
         binding.lytOnGoingWorkout.tvCalories.text =
             if (workoutRealTimeData.calorieValue != null) workoutRealTimeData.calorieValue.toString() else "-"
+
+        if(viewModel.isWorkoutRunning().not()){
+            binding.lytOnGoingWorkout.lytZones.tvHrValue.text = "-"
+            binding.lytOnGoingWorkout.lytZones.tvZoneName.text = "Zone --"
+            binding.lytOnGoingWorkout.lytZones.heartRateZoneView.zoneId = -1
+
+            updateBackgroundByZone(-1)
+            return
+        }
+        binding.lytOnGoingWorkout.lytZones.tvHrValue.text =
+            if (workoutRealTimeData.hrValue != null) workoutRealTimeData.hrValue.toString() else "-"
 
 
         val zoneId = viewModel.getHeartRateZone(workoutRealTimeData.hrValue)
@@ -529,7 +539,9 @@ class RecordWorkoutFragmentV2 :
 
 
         viewModel.sessionManager.realtimeWorkoutData.observe(this) {
-            updateWorkoutData(it)
+                updateWorkoutData(it)
+
+
         }
 
         viewModel.sessionManager.updateDeviceCallback.observe(this) {
