@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import java.time.LocalTime
@@ -17,6 +18,7 @@ import kotlin.ranges.contains
 
 class AlarmUtil @Inject constructor(
     private val context: Context,
+    private val resourcesProvider: ResourcesProvider,
 ) {
 
     @SuppressLint("ScheduleExactAlarm")
@@ -96,6 +98,7 @@ class AlarmUtil @Inject constructor(
 
         preAlarmNotificationSchedule(
             context,
+            resourcesProvider,
             dayOfWeek * 100,
             reminderMillis,
             bedTime
@@ -117,16 +120,17 @@ class AlarmUtil @Inject constructor(
     @SuppressLint("ScheduleExactAlarm")
     private fun preAlarmNotificationSchedule(
         context: Context,
+        resourcesProvider: ResourcesProvider,
         notificationId: Int,
         millis: Long,
         bedTime: LocalTime,
     ) {
         val beforeMillis = 60 * 60 * 1000L
-        val title = context.getString(R.string.text_bedtime_reminder)
+        val title = resourcesProvider.getString(R.string.text_bedtime_reminder)
 
         val sleepTime = bedTime.format(DateTimeFormatter.ofPattern("hh:mm a")).lowercase()
         val message =
-            context.getString(R.string.text_bed_time_message, sleepTime)
+            resourcesProvider.getString(R.string.text_bed_time_message, sleepTime)
 
         val intent = Intent(context, WindDownNotification::class.java)
 

@@ -48,6 +48,7 @@ private const val SERIAL_NO = "SERIAL_NO"
 private const val AVERAGE_LAST_DAY_HRV = "AVERAGE_LAST_DAY_HRV"
 
 private const val CHARGING_NOTIFICATION = "CHARGING_NOTIFICATION"
+private const val FULLY_CHARGED_TRIGGER = "FULLY_CHARGED_TRIGGER"
 
 private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
@@ -64,6 +65,22 @@ constructor(
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
+
+    override fun setFullyChargedTrigger() {
+        mPrefs.edit()
+            ?.putBoolean(FULLY_CHARGED_TRIGGER, true)
+            ?.commit()
+    }
+
+    override fun getFullyChargedTrigger(): Boolean {
+        return mPrefs.getBoolean(FULLY_CHARGED_TRIGGER, false)
+    }
+
+    override fun resetFullyChargedTrigger() {
+        mPrefs.edit()
+            ?.remove(FULLY_CHARGED_TRIGGER)
+            ?.commit()
+    }
 
     override fun testSaveBodyBatteryData(data: String?) {
         mPrefs.edit()

@@ -19,6 +19,7 @@ import com.noisefit_commans.models.SleepDataGoogleFit.SleepDataBreakup
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.model.OAddSleep
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -162,7 +163,10 @@ constructor(
 
                         if (totalDuration <= (3 * 60 * 60)) {
                             //NAP
-                            val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+                            //val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+
+                            val date = startTime.split(" ")[0]
+
                             jsonObject.addProperty(
                                 "date",
                                 date
@@ -178,7 +182,10 @@ constructor(
                         } else {
                             //Sleep
 
-                            val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+                            //val date = DateFormats.getCurrentDate(DateFormats.dateFormat3())
+
+                            val date = endTime.split(" ")[0]
+
                             jsonObject.addProperty(
                                 "date",
                                 date

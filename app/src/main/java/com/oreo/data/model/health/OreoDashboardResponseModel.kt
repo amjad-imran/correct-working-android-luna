@@ -29,9 +29,10 @@ data class ODashboardReadinessModel(
 
     val totalScoreImpact: Int? = null,
     val status: String? = "",
+    val statusCode: String? = null,
     val nudges: List<Nudges>? = null,
-
-    )
+    val impact: Int? = null
+)
 
 data class ODashboardActivityScoreModel(
     val activityScore: Int? = null,
@@ -56,8 +57,10 @@ data class ODashboardActivityModel(
     var activeCalories: Int? = null,
     val inactiveMinutes: Int? = null,
     val status: String? = "",
+    val statusCode: String? = null,
     val nudges: List<Nudges>? = null,
-    val steps: Int = 0
+    val steps: Int = 0,
+    val impact: Int? = null
 )
 
 data class ODashboardSleepModel(
@@ -67,6 +70,7 @@ data class ODashboardSleepModel(
     val restingHr: Int? = null,
     val sleepStage: List<SleepHourlyBreakup> = ArrayList(),
     val status: String? = "",
+    val statusCode:String?=null,
     @SerializedName("start_time")
     val startTime: String? = "",
     @SerializedName("end_time")

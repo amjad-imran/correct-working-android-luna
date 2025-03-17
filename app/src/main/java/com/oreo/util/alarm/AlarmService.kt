@@ -16,10 +16,12 @@ import android.os.Build
 import android.os.IBinder
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
-import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
+import com.noisefit.session.SessionManager
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,6 +40,9 @@ class AlarmService : Service() {
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
+    @Inject
+    lateinit var sessionManager: SessionManager
+
 
     override fun onCreate() {
         super.onCreate()
@@ -48,7 +53,21 @@ class AlarmService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        if (intent?.action == "STOP_SERVICE") {
+        if (intent?.action == "STOP_SERVICE" || intent?.action == "SERVICE_SWIPED") {
+
+            if (intent.action.equals("SERVICE_SWIPED")) {
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.alarm_notification_close,
+                    HashMap<String, Any>().apply {
+                        this["source"] = "swipe"
+                    })
+            } else {
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.alarm_notification_close,
+                    HashMap<String, Any>().apply {
+                        this["source"] = "stop"
+                    })
+            }
             stopService()
             return START_NOT_STICKY
         }
@@ -76,6 +95,11 @@ class AlarmService : Service() {
         val pattern = longArrayOf(0, 100, 1000)
         vibrator!!.vibrate(pattern, 0)
 
+        sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.alarm_notification,
+            HashMap<String, Any>().apply {
+                this["time"] = "${System.currentTimeMillis()}"
+            })
         return START_STICKY
     }
 
@@ -96,7 +120,7 @@ class AlarmService : Service() {
 
 
         val dismissIntent = Intent(this, AlarmService::class.java).apply {
-            action = "STOP_SERVICE"
+            action = "SERVICE_SWIPED"
         }
         val stopPendingIntent = PendingIntent.getService(
             this,
@@ -105,6 +129,11 @@ class AlarmService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+
+        val deleteIntent =
+            PendingIntent.getService(this, 0, dismissIntent, PendingIntent.FLAG_MUTABLE)
+
+
         val notification: Notification = NotificationCompat.Builder(this, SLEEP_ALARM_CHANNEL)
             .setContentTitle(resourcesProvider.getString(R.string.text_rise_and_shine))
             .setContentText(resourcesProvider.getString(R.string.text_alarm_message))
@@ -112,6 +141,7 @@ class AlarmService : Service() {
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_luna_small)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDeleteIntent(deleteIntent)
             .setFullScreenIntent(pendingIntent, true) // Ensures full-screen intent
             .setContentIntent(pendingIntent)
             //.addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)

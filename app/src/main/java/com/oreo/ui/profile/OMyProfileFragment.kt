@@ -21,6 +21,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +57,10 @@ class OMyProfileFragment :
             navigate(R.id.myReferralsFragment)
         }*/
 
+        binding.llLunaAiCalibration.setOnClickListener {
+            navigate(R.id.audioAiCalibrationFragment,bundleOf("planType" to PlanType.NONE, "text" to null))
+        }
+
         binding.lytUpdateToViewReferral.tvUpdateNow.setOnClickListener {
             ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
         }
@@ -69,6 +74,14 @@ class OMyProfileFragment :
         }
 
         binding.rowReferral.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "refer_and_earn"
+                    this["description"] = "button_clicked"
+                })
+
             if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState ||
                 viewModel.referralRunningState.value is ReferralRunningState.CampaignRunningState ||
                 viewModel.referralRunningState.value is ReferralRunningState.PrizeOnlyState
@@ -88,6 +101,11 @@ class OMyProfileFragment :
         }
 
         binding.rowCycleTracker.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "cycle_tracking"
+                })
             viewModel.getCycleTrackerInfo()
 //            navigate(R.id.cycleTrackerStreakFragment)
         }
@@ -96,16 +114,31 @@ class OMyProfileFragment :
                 showFaqCategoriesAsGrid(false)
             })*/
 
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "live_support"
+                })
+
             Freshchat.showConversations(requireContext())
         }
 
         binding.rowSettings.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "settings"
+                })
             navigate(R.id.settingsFragment)
         }
 
         binding.rowAbout.setUpdateAvailable(viewModel.localDataStore.isNewAppVersionAvailable())
         binding.rowAbout.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "about"
+                })
             navigate(R.id.aboutFragment)
         }
         binding.backBtn.setOnClickListener {
@@ -122,7 +155,6 @@ class OMyProfileFragment :
 //            )
 //        }
         binding.rowFeedBack.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rate_us_click)
             navigate(R.id.rateUsOreo)
         }
 
@@ -132,7 +164,13 @@ class OMyProfileFragment :
 //        }
 
         binding.llMyProfile.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_your_profile_click)
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_ham_clicked,
+                HashMap<String, Any>().apply {
+                    this["property"] = "your_profile"
+                })
+
             goToProfile()
         }
         binding.tvName.setOnClickListener {
@@ -146,12 +184,6 @@ class OMyProfileFragment :
         }
 
         binding.rowHelp.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.luna_help_support_click,
-                HashMap<String, Any>().apply {
-                    this[MoEngageAppEventParams.operating_system] = "Android"
-                    this[MoEngageAppEventParams.mobile_manufacturer] = viewModel.getDeviceName()
-                })
             navigate(R.id.oreoHelpAndSupportFragment)
         }
 
@@ -162,6 +194,11 @@ class OMyProfileFragment :
                 if (isSelected) {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_allow_click)
                     viewModel.logoutUser()
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.user_ham_clicked,
+                        HashMap<String, Any>().apply {
+                            this["property"] = "logout"
+                        })
                 } else {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_cancel_click)
                 }
@@ -211,7 +248,8 @@ class OMyProfileFragment :
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.visible()
                 }
-                ReferralRunningState.UpdateToViewReferral->{
+
+                ReferralRunningState.UpdateToViewReferral -> {
                     binding.lytUpdateToViewReferral.root.visible()
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.gone()

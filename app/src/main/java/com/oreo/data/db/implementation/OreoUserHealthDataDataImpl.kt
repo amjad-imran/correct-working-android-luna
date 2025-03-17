@@ -66,4 +66,9 @@ constructor(
         val date = DateFormats.getTodaysDateString(10)
         return userHealthDao.getTodayTrend(date)
     }
+
+    override fun getTodayImpact(): String? {
+        val date = DateFormats.getTodaysDateString(10)
+        return userHealthDao.getTodayImpact(date)
+    }
 }

@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary.paginate
 
+import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -52,6 +53,7 @@ import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
@@ -75,9 +77,11 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.StressCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -459,7 +463,11 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
 
-    fun parseHealthData(healthData: ServerUserHealthData, trendsData: TrendsData?) {
+    fun parseHealthData(
+        healthData: ServerUserHealthData,
+        trendsData: TrendsData?,
+        impactData: ImpactData?
+    ) {
 
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -555,10 +563,12 @@ class SummaryDataViewModelToday @Inject constructor(
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
+                statusCode = healthData.readiness?.readinessScore?.status,
                 nudges = healthData.readiness?.dashNudges,
                 totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
-                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
+                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0,
+                impact = impactData?.readinessScore
             )
 
             val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
@@ -599,6 +609,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 restingHr = healthData.sleep?.avg_hrv,
                 sleepStage = newSleepArray ?: ArrayList(),
                 status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
+                statusCode = healthData.sleep?.sleep_score?.status,
                 startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
                 endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                 totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
@@ -610,8 +621,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
+                statusCode = healthData.activity?.activityScore?.status,
                 nudges = healthData.activity?.dash_nudges,
-                steps = healthData.activity?.steps ?: 0
+                steps = healthData.activity?.steps ?: 0,
+                impact = impactData?.activityScore
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()
@@ -639,7 +652,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -693,7 +707,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -768,7 +783,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
                                         newSleepArray?.firstOrNull()?.start_time ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time ?: ""
+                                        newSleepArray?.lastOrNull()?.end_time ?: "",
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -879,7 +895,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
-                                        sleepModel, makeSleepArray(newSleepArray)
+                                        sleepModel, makeSleepArray(newSleepArray),
+                                        impact = impactData?.sleepScore
                                     )
                                 )
                                 if (isAfter12.not()) {
@@ -917,7 +934,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                             healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
                                                 ?: "",
                                             healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
-                                                ?: ""
+                                                ?: "",
+                                            impact = impactData?.sleepScore
                                         )
                                     )
                                 }
@@ -1123,13 +1141,28 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    fun getStressStatus(value: Int?): String {
+    /**
+     * Returns value and color
+     */
+    fun getStressStatus(value: Int?): Pair<String, Int> {
         return when (value) {
-            0 -> ""
-            in 1..34 -> resourceProvider.getString(R.string.text_relaxed)
-            in 35..69 -> resourceProvider.getString(R.string.text_focussed)
-            in 70..100 -> resourceProvider.getString(R.string.text_stressed)
-            else -> ""
+            0 -> Pair("", Color.parseColor("#FFFFFF"))
+            in 1..34 -> Pair(
+                resourceProvider.getString(R.string.text_relaxed),
+                Color.parseColor("#3FE8B5")
+            )
+
+            in 35..69 -> Pair(
+                resourceProvider.getString(R.string.text_focussed),
+                Color.parseColor("#FFED91")
+            )
+
+            in 70..100 -> Pair(
+                resourceProvider.getString(R.string.text_stressed),
+                Color.parseColor("#FFAD60")
+            )
+
+            else -> Pair("", Color.parseColor("#FFFFFF"))
         }
     }
 
@@ -2053,7 +2086,83 @@ class SummaryDataViewModelToday @Inject constructor(
             return false
         } catch (e: IllegalArgumentException) {
             return false
+        } catch (e: DateTimeParseException) {
+            return false
         }
+    }
+
+    /**
+     * get last measured value from the list and seconds
+     */
+    fun getLastMeasuredValue(data: List<Int>?): Pair<Int, Int> {
+        if (data.isNullOrEmpty()) return Pair(0, 0)
+
+        val lastIndex = data.indexOfLast { it != 0 && it != 255 }
+        if (lastIndex != -1) {
+            return Pair(data[lastIndex], lastIndex)
+        }
+        return Pair(0, 0)
+    }
+
+    fun getStressTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
+
+        if (listData.isNullOrEmpty()) return null
+
+        if (lastMeasuredIndex > 1) {
+            val lastMeasuredValue = listData[lastMeasuredIndex]
+            val secondLastMeasuredValue = listData[lastMeasuredIndex - 1]
+            //val thirdLastMeasuredValue = listData[lastMeasuredIndex - 2]
+
+            if (lastMeasuredValue == 0 || secondLastMeasuredValue == 0 ||
+                lastMeasuredValue == 255 || secondLastMeasuredValue == 255
+            ) {
+                return null
+            }
+
+            val sum = lastMeasuredValue + secondLastMeasuredValue /*+ thirdLastMeasuredValue*/
+
+            val average = sum.toFloat() / 2
+            val roundedAverage = Math.round(average)
+
+            val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
+            val roundedPercentInc = Math.round(percentInc)
+
+            return roundedPercentInc
+        }
+        return null
+    }
+
+    fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
+
+
+        if (listData.isNullOrEmpty()) return null
+
+        if (lastMeasuredIndex > 5) {
+            val lastMeasuredValue = listData[lastMeasuredIndex]
+            val second = listData[lastMeasuredIndex - 1]
+            val third = listData[lastMeasuredIndex - 2]
+            val fourth = listData[lastMeasuredIndex - 3]
+            val fifth = listData[lastMeasuredIndex - 4]
+            val sixth = listData[lastMeasuredIndex - 5]
+
+            if (second == 0 || third == 0 || fourth == 0 || fifth == 0 || sixth == 0 || lastMeasuredValue == 0) {
+                return null
+            }
+            if (second == 255 || third == 255 || fourth == 255 || fifth == 255 || sixth == 255 || lastMeasuredValue == 255) {
+                return null
+            }
+
+            val sum = lastMeasuredValue + second + third + fourth + fifth + sixth
+
+            val average = sum.toFloat() / 6
+            val roundedAverage = Math.round(average)
+
+            val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
+            val roundedPercentInc = Math.round(percentInc)
+
+            return roundedPercentInc
+        }
+        return null
     }
 }
 

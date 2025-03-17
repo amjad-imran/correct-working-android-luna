@@ -1806,5 +1806,12 @@
     <string name="text_update_the_app_to_see_the_referral">Aktualisiere die App, um die Empfehlung zu sehen</string>
     <string name="text_get_ready">Mach dich bereit</string>
     <string name="text_breathing_message_2">Finde einen bequemen, ruhigen Ort und nimm eine entspannte Haltung ein</string>
+    <string name="text_ring_charged_title">⚡ Mission erfüllt!</string>
+    <string name="text_ring_charged_message">Dein Ring ist jetzt zu 100 % aufgeladen und bereit zum Synchronisieren, Leuchten und um deinen Tag zu starten. Los geht’s!</string>
+    <string name="text_luna_ai_voice_calibration">Luna AI-Sprachkalibrierung</string>
+    <string name="text_please_select_a_time_after_8_pm">Bitte wählen Sie eine Uhrzeit nach 20 Uhr</string>
+    <string name="text_modify_distance">Entfernung ändern</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">Maximalgrenze: 350 km. Bitte geben Sie eine gültige Entfernung ein.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">Maximale Grenze: 217 Meilen. Bitte geben Sie eine gültige Entfernung ein.</string>
 
 </resources>

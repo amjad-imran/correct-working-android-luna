@@ -265,6 +265,9 @@ class SetAlarmViewModel @Inject constructor(
         val wakeTime =
             LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
 
+        /*val wakeTime =
+            LocalTime.now().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm:ss"))*/
+
         val returnData = alarmsRawData?.copy() ?: PlannerAlarmData()
 
         val deleteMode = this.deleteMode.value == true

@@ -72,6 +72,11 @@ object MoEngageLunaAppEvents {
     const val cycle_track = "cycle_track"
 
 
+    const val alarm_notification = "alarm_notification"
+    const val alarm_notification_close = "alarm_notification_close"
+
+
+
 
     /**
      * AI Events start =========================
@@ -83,13 +88,17 @@ object MoEngageLunaAppEvents {
     const val Home_lunaai_suggested_question = "home_lunaai_suggested_question"
     const val Home_lunaai_mic_button = "home_lunaai_mic_button"
 
+
+    const val full_charge_notification = "full_charge_notification"
+
+
     /**
      * AI Events End =========================
      */
 
     const val luna_homepage_visit = "luna_homepage_visit"
     const val luna_activity_sync_manual = "luna_activity_sync_manual"
-    const val luna_hamburger_click = "luna_hamburger_click"
+    const val user_ham_clicked = "user_ham_clicked"
     const val luna_your_profile_click = "luna_your_profile_click"
     const val luna_profile_edit_click = "luna_profile_edit_click"
     const val luna_profile_save_click = "luna_profile_save_click"

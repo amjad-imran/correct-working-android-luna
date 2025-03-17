@@ -25,6 +25,16 @@ object DateTimeUtil {
         }
     }
 
+    fun getTodayMidnightTimestamp(): Long {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        return calendar.timeInMillis
+    }
+
 
     fun getRelativeTime(
         timestamp: Long,

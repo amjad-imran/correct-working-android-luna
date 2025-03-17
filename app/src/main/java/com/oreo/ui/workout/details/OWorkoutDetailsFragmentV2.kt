@@ -1,10 +1,19 @@
 package com.oreo.ui.workout.details
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.PopupWindow
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -53,6 +62,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.max
+
 
 private const val maxLatLngPadding = 180
 
@@ -87,6 +98,7 @@ class OWorkoutDetailsFragmentV2 :
         super.onViewCreated(view, savedInstanceState)
         setDefaultUiValue()
         setRecycler()
+        viewModel.workoutId = args.workoutId
         viewModel.getWorkoutDetails(args.workoutId)
         viewModel.position = args.position
 
@@ -103,6 +115,10 @@ class OWorkoutDetailsFragmentV2 :
 
 
     override fun initListener() {
+
+        binding.lytTop.lytActivityItem.ivEditDistance.setOnClickListener {
+            showEditDistanceDialog(binding.lytTop.lytActivityItem.root)
+        }
 
         binding.lytTop.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -199,11 +215,19 @@ class OWorkoutDetailsFragmentV2 :
         }
 
         if (title.isEmpty()) {
-            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3(),
-                NoiseFitApplicationMain.appLanguage.languageCode))
+            title.append(
+                DateFormats.getOrdinalDate(
+                    it.date, DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
+                )
+            )
         } else {
-            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3(),
-                NoiseFitApplicationMain.appLanguage.languageCode))
+            title.append(
+                DateFormats.getOrdinalDateToday(
+                    it.date, DateFormats.dateFormat3(),
+                    NoiseFitApplicationMain.appLanguage.languageCode
+                )
+            )
         }
 
         binding.lytTop.rvActivityDetails.visible()
@@ -230,6 +254,11 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.tvDistanceTitle.text = topValue.third
         binding.lytTop.lytActivityItem.tvDistanceValue.text = topValue.first
         binding.lytTop.lytActivityItem.tvDistanceUnit.text = topValue.second
+        if (viewModel.isDistanceShown && viewModel.isTodayWorkout()) {
+            binding.lytTop.lytActivityItem.ivEditDistance.visible()
+        } else {
+            binding.lytTop.lytActivityItem.ivEditDistance.gone()
+        }
 
         //binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
 
@@ -509,5 +538,83 @@ class OWorkoutDetailsFragmentV2 :
                 "MapsDemo", "The legacy version of the renderer is used."
             )
         }
+    }
+
+    private fun showEditDistanceDialog(anchorView: View) {
+        val popupView: View = LayoutInflater.from(anchorView.getContext())
+            .inflate(R.layout.dialog_modify_distance, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true // focusable
+        )
+
+        //dimBackground(rootView, 0.5f)
+        //dimBehind(popupWindow)
+        popupWindow.showAsDropDown(anchorView)
+
+        val etDistance = popupView.findViewById<EditText?>(R.id.etDistance)
+        val isMetric = viewModel.sessionManager.isMetric()
+
+        if(isMetric){
+            etDistance.setHint("0.0 km")
+        }else{
+            etDistance.setHint("0.0 mi")
+        }
+
+        val btnUpdate = popupView.findViewById<Button?>(R.id.btnUpdate)
+        val btnCancel = popupView.findViewById<Button?>(R.id.btnCancel)
+
+        etDistance.setText(binding.lytTop.lytActivityItem.tvDistanceValue.text)
+
+
+        btnUpdate.setOnClickListener(View.OnClickListener { v: View? ->
+            val distance = etDistance.text.toString()
+            if (distance.isEmpty()) {
+                return@OnClickListener
+            }
+
+            try {
+                val distanceValue = distance.toFloat()//in km
+                if (distanceValue > 0) {
+
+                    val isMetric = viewModel.sessionManager.isMetric()
+
+                    val maxDistance :Int
+                    val errorMessage :String
+                    if(isMetric){
+                        maxDistance = 350
+                        errorMessage = getString(R.string.text_max_limit_350_km_enter_a_valid_distance)
+                    }else{
+                        maxDistance = 217
+                        errorMessage = getString(R.string.text_max_limit_enter_a_valid_distance_miles)
+                    }
+
+                    if (distanceValue <= maxDistance) {
+                        viewModel.updateDistance(distanceValue)
+                        popupWindow.dismiss()
+                    } else {
+                        viewModel.sendMessage(errorMessage)
+                    }
+                }
+            } catch (e: Exception) {
+                LOGS.e("Error: $e")
+            }
+        })
+        btnCancel.setOnClickListener(View.OnClickListener { v: View? ->
+            popupWindow.dismiss()
+        })
+
+        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+            /* dimBackground(
+                 rootView,
+                 1f
+             )*/
+        })
+    }
+
+    private fun dimBehind(popupWindow: PopupWindow) {
+
     }
 }

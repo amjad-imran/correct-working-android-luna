@@ -32,6 +32,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/lytTrend"
+        layout="@layout/layout_health_trend_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/textView"
+        app:layout_constraintStart_toEndOf="@id/textView"
+        app:layout_constraintTop_toTopOf="@id/textView" />
+
     <ImageView
         android:id="@+id/imageView14"
         android:layout_width="20dp"
@@ -49,7 +61,7 @@
         android:id="@+id/lottieAnimationView"
         android:layout_width="196dp"
         android:layout_height="120dp"
-        android:layout_marginTop="@dimen/dimen_8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -59,6 +71,7 @@
         android:id="@+id/tvValue"
         style="@style/H32"
         android:layout_width="wrap_content"
+        android:textSize="40sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
@@ -71,7 +84,6 @@
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8dp"
         android:textColor="@color/white_80"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"

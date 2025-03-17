@@ -381,6 +381,11 @@ interface NetworkService {
         @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
 
+    @POST
+    suspend fun updateWorkoutDistance(
+        @Url url: String, @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
     @GET
     suspend fun getWorkoutDetails(
         @Url url: String

@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -35,8 +33,6 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.OreoNapData
-import com.noisefit_commans.data.model.SleepCardDashState
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
@@ -56,6 +52,7 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -80,12 +77,12 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
@@ -213,14 +210,18 @@ class SummaryDataFragmentToday :
                 viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
-                setUi(dash.first, dash.second)
+                setUi(dash.first, dash.second, dash.third)
             }
         }
     }
 
-    private fun setUi(data: ServerUserHealthData, trendsData: TrendsData?) {
+    private fun setUi(
+        data: ServerUserHealthData,
+        trendsData: TrendsData?,
+        impactData: ImpactData?
+    ) {
         viewModel.initTodayData()
-        viewModel.parseHealthData(data, trendsData)
+        viewModel.parseHealthData(data, trendsData, impactData)
     }
 
 
@@ -395,13 +396,15 @@ class SummaryDataFragmentToday :
                         bundle = bundleOf("bed_time" to null, "wake_time" to null)
                     )
                 }
+
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked -> {
 
-                        navigate(
-                            R.id.fragmentBreathExercise
-                        )
+                    navigate(
+                        R.id.fragmentBreathExercise
+                    )
                 }
-                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked ->{
+
+                OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked -> {
                     uiController.logAppEvent(
                         MoEngageLunaAppEvents.sleep_planner
                     )
@@ -1533,7 +1536,7 @@ class SummaryDataFragmentToday :
         lytStress.graphStress.updateData(data.data)
 
 
-        lytStress.lottieAnimView.gone()
+        /*lytStress.lottieAnimView.gone()
         lytStress.imvHrMeasure.gone()
         lytStress.tvLastMeasure.gone()
         lytStress.tvHeartValue.gone()
@@ -1624,9 +1627,9 @@ class SummaryDataFragmentToday :
 
             if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
                 context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
-                /*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                *//*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
                     this.measureState = TapMeasureState.ERROR
-                })*/
+                })*//*
                 return@setOnClickListener
             }
 
@@ -1657,41 +1660,83 @@ class SummaryDataFragmentToday :
             }
 
             return@setOnClickListener
-        }
+        }*/
 
 
         /*binding.graphStress.updateData(data.data)
         binding.tvBeta.setVisibilityByCondition(data.isBeta)
-        binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+        binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
 
 
-        if (data.value == 0) {
-            binding.tvStressValue.gone()
-            binding.tvStressStatus.gone()
-            binding.tvLastUpdate.gone()
+        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
+
+
+        if (lastMeasuredValue == 0) {
+            lytStress.tvStressValue.gone()
+            lytStress.tvStressStatus.gone()
+            lytStress.tvLastUpdate.gone()
+            lytStress.lytTrend.root.gone()
         } else {
-            binding.tvStressValue.visible()
-            binding.tvStressStatus.visible()
-            binding.tvLastUpdate.visible()
+            lytStress.tvStressValue.visible()
+            lytStress.tvStressStatus.visible()
+            lytStress.tvLastUpdate.visible()
 
-            binding.tvStressValue.text = "${data.value}"
-            binding.tvStressStatus.text = data.valueStatus
+            lytStress.tvStressValue.text = "$lastMeasuredValue"
+            val (displayValue, displayColor) = viewModel.getStressStatus(lastMeasuredValue)
+            lytStress.tvStressStatus.text = displayValue
+            lytStress.tvStressStatus.setTextColor(displayColor)
 
-            if (data.isToday) {
-                val lastUpdatedTimestamp = data.timeStamp
-                if (lastUpdatedTimestamp == 0L) {
-                    binding.tvLastUpdate.text = ""
+
+            val lastUpdatedTimestamp =
+                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 15 * 60 * 1000
+
+
+            val currentTimeStamp = DateFormats.getTimeStamp()
+            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+            if (timeDiff <= (15 * 60 * 1000)) {
+
+                val trendPercent = viewModel.getStressTrend(data.listData, lastMeasuredIndex)
+
+                if (trendPercent != null && trendPercent != 0) {
+                    if (trendPercent > 0) {
+                        lytStress.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                            tvPercent.text = "$trendPercent%"
+                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                            root.visible()
+                        }
+
+                    } else {
+                        lytStress.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                            tvPercent.text = "${abs(trendPercent)}%"
+                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                            root.visible()
+                        }
+                    }
                 } else {
-                    binding.tvLastUpdate.text =
-                        binding.tvLastUpdate.context.getString(
-                            R.string.text_updated_value,
-                            DateFormats.getRelativeTime(lastUpdatedTimestamp)
-                        )
+                    lytStress.lytTrend.root.gone()
                 }
             } else {
-                binding.tvLastUpdate.text = ""
+                lytStress.lytTrend.root.gone()
             }
-        }*/
+
+
+            if (lastUpdatedTimestamp == 0L) {
+                lytStress.tvLastUpdate.text = ""
+            } else {
+                lytStress.tvLastUpdate.text =
+                    lytStress.tvLastUpdate.context.getString(
+                        R.string.text_updated_value,
+                        DateTimeUtil.getRelativeTime(
+                            lastUpdatedTimestamp,
+                            viewModel.resourceProvider
+                        ).lowercase()
+                    )
+            }
+        }
     }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
@@ -1703,6 +1748,49 @@ class SummaryDataFragmentToday :
                 viewModel.serverUserHealthData, data
             ), 3, data.minValues, data.maxValues
         )
+
+        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.rawData)
+
+        if (lastMeasuredValue == 0) {
+            lytHeartRate.lytTrend.root.gone()
+        } else {
+            val lastUpdatedTimestamp =
+                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
+
+
+            val currentTimeStamp = DateFormats.getTimeStamp()
+            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+            if (timeDiff <= (5 * 60 * 1000)) {
+
+                val trendPercent = viewModel.getHrTrend(data.rawData, lastMeasuredIndex)
+
+                if (trendPercent != null && trendPercent != 0) {
+                    if (trendPercent > 0) {
+                        lytHeartRate.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                            tvPercent.text = "$trendPercent%"
+                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                            root.visible()
+                        }
+                    } else {
+                        lytHeartRate.lytTrend.apply {
+                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                            tvPercent.text = "${abs(trendPercent)}%"
+                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                            root.visible()
+                        }
+                    }
+                } else {
+                    lytHeartRate.lytTrend.root.gone()
+                }
+            } else {
+                lytHeartRate.lytTrend.root.gone()
+            }
+        }
+
+
 
         when (data.measureState) {
             TapMeasureState.NO_DEVICE -> {

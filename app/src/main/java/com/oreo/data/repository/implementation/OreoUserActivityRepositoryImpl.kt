@@ -62,11 +62,13 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.oreo.data.model.ImpactData
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.sleep.SleepDataResponse
+import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -107,6 +109,7 @@ class OreoUserActivityRepositoryImpl(
     private val userHealthDataSource: OreoUserHealthDataDataSource,
     private val lastSyncProvider: LastSyncProvider,
     private val offlineApiStore: IOfflineApiResponseStore,
+    val alarmRepository: AlarmRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
 
@@ -160,6 +163,7 @@ class OreoUserActivityRepositoryImpl(
             var resultData: List<ServerUserHealthData>? = null
             val todayDate = DateFormats.getTodaysDateString(10)
             var resultTrendsData: TrendsData? = null
+            var impactData: ImpactData? = null
             var registerDate: Int? = null
             var firstStress: String? = null
             var stressBeta: Boolean? = null
@@ -219,6 +223,9 @@ class OreoUserActivityRepositoryImpl(
                     userHealthDataSource.getTodayTrend()?.let {
                         resultTrendsData = Gson().fromJson<TrendsData>(it)
                     }
+                    userHealthDataSource.getTodayImpact()?.let {
+                        impactData = Gson().fromJson<ImpactData>(it)
+                    }
                     return@safeCacheCall localData
                 }
             }
@@ -245,6 +252,7 @@ class OreoUserActivityRepositoryImpl(
                             data = ServerUserHealthResponse(
                                 data = resultData!!,
                                 trends = resultTrendsData,
+                                impact = impactData,
                                 registerDate = ringDataStore.getRegisterDay(),
                                 firstStress = ringDataStore.getFirstStressDay(),
                                 stressBeta = ringDataStore.getStressBetaState(),
@@ -283,6 +291,7 @@ class OreoUserActivityRepositoryImpl(
 
                             resultData = response.data
                             resultTrendsData = response.trends
+                            impactData = response.impact
                             registerDate = response.registerDate
                             tempBaseLine = response.tempBaseLine
                             firstStress = response.firstStress
@@ -309,10 +318,17 @@ class OreoUserActivityRepositoryImpl(
                             null
                         }
 
+                        val impactData = if (it.date.equals(todayDate, true)) {
+                            gson.toJson(impactData)
+                        } else {
+                            null
+                        }
+
                         userHealthDataSource.insertData(
                             UserHealthData(
                                 userHealthData = gson.toJson(it),
                                 trendData = trendData,
+                                impact = impactData,
                                 date = it.date
                             )
                         )
@@ -326,6 +342,7 @@ class OreoUserActivityRepositoryImpl(
                                         data = ServerUserHealthResponse(
                                             data = resultData!!,
                                             trends = resultTrendsData,
+                                            impact = impactData,
                                             registerDate = registerDate,
                                             tempBaseLine = tempBaseLine,
                                             firstStress = firstStress,
@@ -1635,6 +1652,16 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun updateWorkoutDistance(
+        workoutId: String,
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/record-workout/$workoutId"
+            remoteDataSource.updateWorkoutDistance(url,request)
+        }
+    }
+
     private fun shouldCallBannerApi(
         serverTime: Long, localTime: Long
     ): Boolean {
@@ -2067,7 +2094,6 @@ class OreoUserActivityRepositoryImpl(
                     }
 
                     is Resource.Success -> {
-
                         resource.data?.data?.let { response ->
                             resultData = response
                         }
@@ -2087,6 +2113,8 @@ class OreoUserActivityRepositoryImpl(
                 }.collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
+                            alarmRepository.rescheduleAlarms()
+
                             emit(
                                 Resource.Success(
                                     BaseApiResponse(

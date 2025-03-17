@@ -105,9 +105,10 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
             } else {
                 uiController.hideSoftKeyboard()
                 viewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.luna_rateus_submit_click,
+                    MoEngageLunaAppEvents.user_ham_clicked,
                     HashMap<String, Any>().apply {
-                        this[MoEngageAppEventParams.star_rating] = viewModel.rating
+                        this["property"] = "rate_us"
+                        this["rating_selected"] = viewModel.rating
                     })
                 viewModel.submitFeedbackNew(
                     viewModel.provideFeedbackNewData(

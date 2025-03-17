@@ -1796,5 +1796,12 @@
     <string name="text_update_the_app_to_see_the_referral">อัปเดตแอปเพื่อดูการแนะนำ</string>
     <string name="text_get_ready">เตรียมตัวให้พร้อม</string>
     <string name="text_breathing_message_2">หาสถานที่ที่เงียบสงบและสบาย แล้วนั่งในท่าที่ผ่อนคลาย</string>
+    <string name="text_ring_charged_title">⚡ ภารกิจเสร็จสมบูรณ์!</string>
+    <string name="text_ring_charged_message">แหวนของคุณชาร์จเต็ม 100% แล้ว พร้อมซิงค์ เปล่งประกาย และเติมพลังให้วันของคุณ ไปกันเลย!</string>
+    <string name="text_luna_ai_voice_calibration">การปรับเทียบเสียง Luna AI</string>
+    <string name="text_please_select_a_time_after_8_pm">โปรดเลือกเวลาหลัง 20.00 น.</string>
+    <string name="text_modify_distance">ปรับระยะทาง</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">ขีดจำกัดสูงสุด: 350 กม. กรุณาใส่ระยะทางที่ถูกต้อง.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">ขีดจำกัดสูงสุด: 217 ไมล์. กรุณากรอกระยะทางที่ถูกต้อง.</string>
 
 </resources>

@@ -45,6 +45,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/lytTrend"
+        layout="@layout/layout_health_trend_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/textView63"
+        app:layout_constraintStart_toEndOf="@id/textView63"
+        app:layout_constraintTop_toTopOf="@id/textView63" />
+
     <TextView
         android:id="@+id/tvScore"
         style="@style/H5"
@@ -59,7 +71,7 @@
 
     <TextView
         android:id="@+id/tvScoreValue"
-        style="@style/Small"
+        style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -88,10 +100,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:lineSpacingExtra="8sp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="#ccffffff"
+        android:textColor="#B8ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

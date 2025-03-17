@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -62,6 +63,7 @@ import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.abs
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -534,9 +536,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val plannerData = data.data.planner!!
 
                 lytBedTime.ivIcon.setImageResource(R.drawable.ic_bedtime_gray)
-                lytBedTime.tvTitle.text = "Bed time"//binding.root.context.getString(R.string.text_bedtime)//"Bed time"
+                lytBedTime.tvTitle.text =
+                    "Bed time"//binding.root.context.getString(R.string.text_bedtime)//"Bed time"
                 lytWakeupTime.ivIcon.setImageResource(R.drawable.ic_wakeup_gray)
-                lytWakeupTime.tvTitle.text = "Wake time"//binding.root.context.getString(R.string.text_wake_time)//"Wake time"
+                lytWakeupTime.tvTitle.text =
+                    "Wake time"//binding.root.context.getString(R.string.text_wake_time)//"Wake time"
 
                 val bedTime = LocalTime.parse(
                     plannerData.planner?.bed_time ?: "22:00:00",
@@ -549,13 +553,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 lytBedTime.tvTime.text = bedTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytBedTime.tvTimeUnit.text =
-                    bedTime.format(DateTimeFormatter.ofPattern("a",
-                        Locale("en")
-                    )).lowercase()
+                    bedTime.format(
+                        DateTimeFormatter.ofPattern(
+                            "a",
+                            Locale("en")
+                        )
+                    ).lowercase()
 
                 lytWakeupTime.tvTime.text = wakeTime.format(DateTimeFormatter.ofPattern("hh:mm"))
                 lytWakeupTime.tvTimeUnit.text =
-                    wakeTime.format(DateTimeFormatter.ofPattern("a",Locale("en"))).lowercase()
+                    wakeTime.format(DateTimeFormatter.ofPattern("a", Locale("en"))).lowercase()
 
                 tvMsg.text = plannerData.planner?.nudge
 
@@ -589,7 +596,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.visible()
                             tvAlarmTime.gone()
-                            tvSetUpAlarm.text =this.root.context.getString(R.string.text_set_up_alarm)
+                            tvSetUpAlarm.text =
+                                this.root.context.getString(R.string.text_set_up_alarm)
                             tvSetUpAlarm.setTextColor(Color.parseColor("#88b0ff"))
                             root.visible()
                         }
@@ -613,7 +621,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         this.lytSetAlarm.apply {
                             ivAlarmMore.gone()
                             tvAlarmTime.visible()
-                            tvSetUpAlarm.text =root.context.getString(R.string.text_alarm_set_for)
+                            tvSetUpAlarm.text = root.context.getString(R.string.text_alarm_set_for)
                             tvSetUpAlarm.setTextColor(Color.parseColor("#FFFFFF"))
                             tvAlarmTime.text = LocalTime.parse(
                                 (data.data.dashState as SleepCardDashState.AlarmSet).data.wake_time,
@@ -807,6 +815,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val scoreValue = data.data.readinessScore ?: 0
 
             binding.tvScore.text = scoreValue.toString()
+            val statusColor = ContextCompat.getColor(
+                binding.root.context,
+                getStatusColors(data.data.statusCode ?: "")
+            )
+
+            binding.tvScoreValue.setTextColor(statusColor)
             binding.tvScoreValue.text = data.data.status
 
             if (data.data.nudges.isNullOrEmpty()) {
@@ -873,6 +887,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -897,6 +929,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             } else {
                 binding.tvValue.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
                 binding.tvStatus.text = data.data.status
 //                binding.tvTodayDesc.visible()
             }
@@ -988,6 +1026,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -1016,6 +1072,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvSleepScore.text = scoreValue.toString()
             binding.tvSleepStatus.text = data.data.status
+            val statusColor = ContextCompat.getColor(
+                binding.root.context,
+                getStatusColors(data.data.statusCode ?: "")
+            )
+
+            binding.tvSleepStatus.setTextColor(statusColor)
 
             val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 data.data.totalSleep ?: 0
@@ -1096,6 +1158,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 data.data.endTime, DateFormats.dateTimeFormat5(), DateFormats.time12Meridian()
             )
 
+            val impact = data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
@@ -1150,6 +1230,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.textMins.visible()
 
                 binding.tvValue.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
+
                 binding.tvStatus.text = data.data.status
                 binding.tvSleepStart.setTextColor(R.color.white.getColor())
                 binding.tvSleepEnd.setTextColor(R.color.white.getColor())
@@ -1234,6 +1321,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+
+            val impact = data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
@@ -1270,6 +1376,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvTotalCalories.text = "${data.caloriesGoal}"
 
+            val impact = data.data.impact
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
             }
@@ -1285,9 +1408,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val scoreValue = data.data.activityScore
 
             if (scoreValue == null) {
-                binding.tvActivityScore.text = "--"
+                //binding.tvActivityScore.text = "--"
+                binding.tvValue.text = "--"
+                binding.tvStatus.text = binding.tvStatus.context.getString(R.string.text_no_data)
+
             } else {
-                binding.tvActivityScore.text = scoreValue.toString()
+                binding.tvValue.text = scoreValue.toString()
+                //binding.tvActivityScore.text = scoreValue.toString()
+                val statusColor = ContextCompat.getColor(
+                    binding.root.context,
+                    getStatusColors(data.data.statusCode ?: "")
+                )
+
+                binding.tvStatus.setTextColor(statusColor)
+                binding.tvStatus.text = data.data.status
             }
 
 
@@ -1298,29 +1432,33 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
-            val caloriesGoalText = "${data.caloriesGoal}"
-            binding.tvTotalCalories.text = caloriesGoalText
+            //binding.tvTotalCalories.text = caloriesGoalText
 
-            binding.tvActiveCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
+            /*binding.tvActiveCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
                 data.data.activeCalories.toString()
             } else {
                 "--"
+            }*/
+
+            val caloriesGoalText = "${data.caloriesGoal}"
+            binding.tvActivityScore.text = if ((data.data.activeCalories ?: 0) > 0) {
+                data.data.activeCalories.toString()+"/$caloriesGoalText"
+            } else {
+                "--/$caloriesGoalText"
             }
 
-            binding.dynamicArcView.deleteAll()
-
-            binding.dynamicArcView.configureAngles(180, 0)
-            binding.dynamicArcView.addSeries(
-                seriesItemWithoutInset(
-                    binding.dynamicArcView.context, 100f, 100f, R.color.activity_track_back, 18f
+            if ((scoreValue ?: 0) >= 0) {
+                binding.dynamicArcView.repeatCount = 0
+                binding.dynamicArcView.setAnimation(R.raw.lottie_meter_activity)
+                binding.dynamicArcView.setMaxProgress(
+                    MiscUtil.scorePercentCalculator(
+                        (scoreValue ?: 0).toFloat()
+                    )
                 )
-            )
+                binding.dynamicArcView.playAnimation()
 
-            val distanceIndex: Int = binding.dynamicArcView.addSeries(
-                seriesItemWithoutInset(
-                    binding.dynamicArcView.context, 0f, 100f, R.color.activity_arc, 18f
-                )
-            )
+            }
+
 
             var caloriesPercent =
                 ((data.data.activeCalories ?: 0).toFloat() / data.caloriesGoal.toFloat()) * 100
@@ -1328,11 +1466,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (caloriesPercent > 100) {
                 caloriesPercent = 100f
             }
-
-            binding.dynamicArcView.addEvent(
-                DecoEvent.Builder(caloriesPercent).setIndex(distanceIndex).setDuration(1000L)
-                    .build()
-            )
 
             binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
 
@@ -1364,6 +1497,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                  binding.tvMin.text = "-"
              }*/
 
+
+            val impact = data.data.impact
+
+            if (impact != null) {
+                binding.lytTrend.apply {
+                    if (impact >= 0) {
+                        ivTrend.setImageResource(R.drawable.ic_trend_up_dash)
+                        tvPercent.setTextColor(Color.parseColor("#0EF377"))
+                    } else {
+                        ivTrend.setImageResource(R.drawable.ic_trend_down_dash)
+                        tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                    }
+                    tvPercent.text = "${abs(impact)}%"
+                    root.visible()
+                }
+            } else {
+                binding.lytTrend.root.gone()
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
@@ -1656,6 +1807,21 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.GotPeriodClicked(false))
             }
         }
+    }
+
+    fun getStatusColors(status: String): Int {
+        val color: Int = if (status.equals("warning", true)) {
+            R.color.sleep_warning
+        } else if (status.equals("good", true)) {
+            R.color.sleep_good
+        } else if (status.equals("optimal", true)) {
+            R.color.sleep_optimal
+        } else if (status.equals("fair", true)) {
+            R.color.color_fair
+        } else {
+            R.color.white_12_72
+        }
+        return color
     }
 
 }

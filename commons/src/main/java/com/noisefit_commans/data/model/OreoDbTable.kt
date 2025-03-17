@@ -145,6 +145,7 @@ data class UserHealthData(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "userHealthData") @SerializedName("userHealthData") var userHealthData: String? = null,
     @ColumnInfo(name = "trendData") @SerializedName("trendData") var trendData: String? = null,
+    @ColumnInfo(name = "impact") @SerializedName("impact") var impact: String? = null,
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 

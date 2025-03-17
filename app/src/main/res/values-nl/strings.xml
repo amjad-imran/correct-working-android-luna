@@ -1811,5 +1811,12 @@
     <string name="text_update_the_app_to_see_the_referral">Werk de app bij om de verwijzing te zien</string>
     <string name="text_get_ready">Maak je klaar</string>
     <string name="text_breathing_message_2">Zoek een comfortabele, rustige plek en neem een ontspannen houding aan</string>
+    <string name="text_ring_charged_title">⚡ Missie volbracht!</string>
+    <string name="text_ring_charged_message">Je ring is nu 100% opgeladen en klaar om te synchroniseren, te gloeien en je dag een boost te geven. Aan de slag!</string>
+    <string name="text_luna_ai_voice_calibration">Luna AI-spraakkalibratie</string>
+    <string name="text_please_select_a_time_after_8_pm">Selecteer een tijd na 20.00 uur</string>
+    <string name="text_modify_distance">Afstand wijzigen</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">Maximale limiet: 350 km. Voer een geldige afstand in.</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">Maximale limiet: 217 mijl. Voer een geldige afstand in.</string>
 
 </resources>

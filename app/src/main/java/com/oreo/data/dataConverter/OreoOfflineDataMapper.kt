@@ -273,7 +273,6 @@ constructor(
     fun convertHeartRateOverviewData(
         data: OreoHeartRate?
     ): OHealthOverview.HeartRateDataModel {
-        //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
         val list = data?.breakUp?.replace("255", "0")
         var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
         if (breakupArray.isNullOrEmpty()) {
@@ -395,6 +394,7 @@ constructor(
 
         return OHealthOverview.HeartRateDataModel(
             listData,
+            rawData = breakupArray,
             average = average,
             lastTime = measureText,
             value = lastHr,

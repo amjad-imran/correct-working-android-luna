@@ -1808,5 +1808,12 @@
     <string name="text_update_the_app_to_see_the_referral">更新应用以查看推荐</string>
     <string name="text_get_ready">准备好</string>
     <string name="text_breathing_message_2">找到一个舒适安静的地方，保持放松的姿势</string>
+    <string name="text_ring_charged_title">⚡ 任务完成！</string>
+    <string name="text_ring_charged_message">你的戒指已充满 100%，准备同步、发光，并为你的一天充能。行动吧！</string>
+    <string name="text_luna_ai_voice_calibration">Luna AI 语音校准</string>
+    <string name="text_please_select_a_time_after_8_pm">请选择在 20:00 之后的时间</string>
+    <string name="text_modify_distance">修改距离</string>
+    <string name="text_max_limit_350_km_enter_a_valid_distance">最大限制：350 公里。请输入有效的距离。</string>
+    <string name="text_max_limit_enter_a_valid_distance_miles">最大限制：217英里。请输入有效的距离。</string>
 
 </resources>

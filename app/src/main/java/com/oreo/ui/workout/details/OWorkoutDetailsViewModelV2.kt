@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataUnitConverter
@@ -21,6 +22,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
@@ -32,6 +34,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.Days
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
@@ -52,6 +55,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
+
+    var workoutId: String? = null
+    var isDistanceShown = false
 
     var avgValue: String = ""
     var workoutDetailsExpanded = false
@@ -240,19 +246,40 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
     }
 
+    fun isTodayWorkout(): Boolean {
+        try {
+            val workoutDate = org.joda.time.LocalDate.parse(_workoutDetailsResponse.value?.date)
+            val todayDate = org.joda.time.LocalDate.now()
+
+            val days = Days.daysBetween(workoutDate, todayDate).days
+            return days==0
+
+        }catch (exp:Exception){
+            return false
+        }
+    }
+
     fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
         if (showDistance(data)) {
+            isDistanceShown = true
             val distanceToUse =
                 if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(
                 distanceToUse?.toInt() ?: 0, sessionManager.unit
             )
-            return Triple(distance, if (sessionManager.isMetric()) resourcesProvider.getString(R.string.text_km)
-                 else resourcesProvider.getString (R.string.text_mi),
-                resourcesProvider.getString(R.string.text_total_distance))
+            return Triple(
+                distance,
+                if (sessionManager.isMetric()) resourcesProvider.getString(R.string.text_km)
+                else resourcesProvider.getString(R.string.text_mi),
+                resourcesProvider.getString(R.string.text_total_distance)
+            )
 
         } else if (data.calories != null && data.calories > 0L) {
-            return Triple(data.calories.toString(), resourcesProvider.getString(R.string.text_kcal), resourcesProvider.getString(R.string.text_calories_burned))
+            return Triple(
+                data.calories.toString(),
+                resourcesProvider.getString(R.string.text_kcal),
+                resourcesProvider.getString(R.string.text_calories_burned)
+            )
         }
 
         return Triple("", "", "")
@@ -303,10 +330,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", startHr, startMin))
+        calendar.time = DateFormats.timeFormat()
+            .parse(String.format(locale = Locale.US, "%02d:%02d", startHr, startMin))
         val endTimeCalendar = Calendar.getInstance()
         endTimeCalendar.time =
-            DateFormats.timeFormat().parse(String.format(locale = Locale.US,"%02d:%02d", endHr, endMin))
+            DateFormats.timeFormat()
+                .parse(String.format(locale = Locale.US, "%02d:%02d", endHr, endMin))
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {
@@ -573,6 +602,60 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             7 -> R.drawable.weather_haze
             8 -> if (isDay) R.drawable.weather_cloudy else R.drawable.weather_cloudy_night
             else -> R.drawable.weather_haze
+        }
+    }
+
+    fun updateDistance(distanceValue: Float) {
+        if (workoutId == null) return
+
+        val distanceInMeters = if(sessionManager.isMetric()){
+            distanceValue * 1000
+        }else{
+            DistanceUtil.milesToMetersDouble(distanceValue.toDouble())
+            //distanceValue * 1609.34
+        }
+        val distanceInMetersInt = distanceInMeters.toDouble().roundToInt()
+
+        val requestObj = JsonObject().apply {
+            this.addProperty("distance", distanceInMetersInt)
+        }
+
+        viewModelScope.launch {
+            userActivityRepository.updateWorkoutDistance(
+                workoutId!!, requestObj
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        updateDistance(distanceValue)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            getWorkoutDetails(workoutId!!)
+                        }
+                    }
+                }
+            }
         }
     }
 }

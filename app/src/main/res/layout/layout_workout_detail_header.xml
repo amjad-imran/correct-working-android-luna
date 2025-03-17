@@ -148,6 +148,15 @@
             app:layout_constraintStart_toEndOf="@id/tvDistanceValue"
             tools:text="km" />
 
+        <ImageView
+            android:id="@+id/ivEditDistance"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_edit_workout_distance"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDistanceUnit"
+            app:layout_constraintStart_toEndOf="@+id/tvDistanceUnit" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
