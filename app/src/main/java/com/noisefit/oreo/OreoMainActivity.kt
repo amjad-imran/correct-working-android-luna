@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -22,13 +21,13 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
 import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
+import com.noisefit.ui.AppLinks
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.util.ApplicationUtils
@@ -42,8 +41,6 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.location.LocationService2
-import com.noisefit_commans.location.LocationUtils2
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
@@ -52,7 +49,6 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
-import com.oreo.data.model.TapMeasureState
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
@@ -63,9 +59,6 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
-import java.time.LocalDate
-import kotlin.text.toFloat
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -83,15 +76,18 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     companion object {
         val NOTIFICATION_TYPE = "NOTIFICATION_TYPE"
+        val APP_LINK = "APP_LINK"
         fun getStartIntent(
             context: Context,
             notificationType: String? = null,
             notificationIndex: String? = null,
-            deeplink: String? = null
+            appLink: AppLinks? = null
         ): Intent {
+            LOGS.d("sdfjhskdfjhsdf ${appLink}")
 
             return Intent(context, OreoMainActivity::class.java).apply {
                 this.putExtra(NOTIFICATION_TYPE, notificationType)
+                this.putExtra(APP_LINK, appLink)
             }
         }
     }
@@ -125,6 +121,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         intent?.let {
             Handler(Looper.getMainLooper()).postDelayed({
+                LOGS.d("sdfjhskdfjhsdf looper called")
+
                 handleIntent(it)
             }, 500)
 
@@ -1112,7 +1110,20 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
     private fun handleIntent(intent: Intent?) {
+        LOGS.d("sdfjhskdfjhsdf $intent")
         intent?.extras?.let { intentExtra ->
+            LOGS.d("sdfjhskdfjhsdf has extras $intentExtra")
+
+            val appLink  = intent.getSerializableExtra(APP_LINK) as? AppLinks
+            if(appLink!=null){
+
+                LOGS.d("sdfjhskdfjhsdf has App link ${appLink}")
+
+                handleAppLinkNavigation(appLink)
+                return
+            }
+
+
             if (intentExtra.containsKey(NOTIFICATION_TYPE)) {
                 LOGS.d("NEW_NOTIFICATION_TYPE  ${intentExtra.getString(NOTIFICATION_TYPE)}")
                 handleNotificationType(
@@ -1121,10 +1132,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     ""
                 )
                 intent.putExtra(NOTIFICATION_TYPE, "")
+            }else if(intentExtra.containsKey(APP_LINK)){
+                val data  = intent.getSerializableExtra(APP_LINK) as AppLinks
+                LOGS.d("sdfjhskdfjhsdf has App link ${data}")
+
+                handleAppLinkNavigation(data)
+            } else {
+
             }
 
         }
 
+    }
+
+    private fun handleAppLinkNavigation(appLink: AppLinks) {
+        when(appLink){
+            AppLinks.REFERRAL -> {
+                viewModel.getReferralInfo{ data->
+                    this@OreoMainActivity.navController?.navigate(R.id.referralFragment, bundleOf("referralInfo" to data))
+                }
+            }
+        }
     }
 
     private fun handleNotificationType(

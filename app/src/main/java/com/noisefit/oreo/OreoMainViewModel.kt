@@ -12,10 +12,13 @@ import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
+import com.noisefit.ui.profile.ReferralRunningState
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
@@ -80,6 +83,7 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
+    val referralRepository: ReferralRepository,
     val alarmRepository: AlarmRepository
 ) : BaseViewModel() {
 
@@ -1079,4 +1083,63 @@ constructor(
     fun rescheduleAlarms() {
         alarmRepository.rescheduleAlarms()
     }
+
+    fun getReferralInfo(showReferral: (data:ReferralInfoResponse) -> Unit) {
+        viewModelScope.launch {
+            referralRepository.getReferralInfo().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getReferralInfo(showReferral)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            if (getReferralRunningState(it)) {
+                                if(it!=null){
+                                    showReferral(it)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getReferralRunningState(referralInfoResponse: ReferralInfoResponse?): Boolean {
+        if (referralInfoResponse == null) return false
+
+        if (referralInfoResponse.showReferral.not()) {
+            return false
+        }
+
+        return if (referralInfoResponse.banner.isNullOrEmpty()) {
+            if (referralInfoResponse.prize != null) {
+                true
+            } else {
+                referralInfoResponse.hasReferral
+            }
+        } else {
+            return true
+        }
+    }
+
 }

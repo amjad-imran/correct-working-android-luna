@@ -155,9 +155,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="lunaringapp.page.link"
-                    android:scheme="https" />
+                <data android:scheme="https" />
+                <data android:host="lunazone.com" />
+                <data android:pathPattern="/links" />
             </intent-filter>
         </activity>
 
