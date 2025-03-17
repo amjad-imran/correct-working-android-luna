@@ -23,7 +23,6 @@ class WorkoutHeartRateZoneView @JvmOverloads constructor(
     var zoneId: Int? = 0
         set(value) {
             field = value
-            updateZoneIndexAndColor()
             invalidate()
         }
 
@@ -52,19 +51,8 @@ class WorkoutHeartRateZoneView @JvmOverloads constructor(
 
     private val gapDegrees = 6f
 
-
-    /*override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        *//*    // Make this view a square, or adapt as needed
-            val desiredSize = 300
-            val width = resolveSize(desiredSize, widthMeasureSpec)
-            val height = resolveSize(desiredSize, heightMeasureSpec)
-            val size = width.coerceAtMost(height)
-            setMeasuredDimension(size, size)*//*
-    }*/
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
         //setMeasuredDimension(widthMeasureSpec,widthMeasureSpec/2)
     }
 
@@ -107,29 +95,5 @@ class WorkoutHeartRateZoneView @JvmOverloads constructor(
             arcStart += arcDegreesPerZone + gapDegrees
         }
 
-    }
-
-    /**
-     * Determine which zone we are in, then animate color if it changed.
-     */
-    private fun updateZoneIndexAndColor() {
-        /*val newZoneIndex = hrZones.indexOfFirst { currentBpm in it.minBpm..it.maxBpm }
-            .takeIf { it != -1 } ?: 0
-
-        if (newZoneIndex != currentZoneIndex) {
-            val oldColor = currentColor
-            val newColor = hrZones[newZoneIndex].color
-
-            // Animate from oldColor to newColor
-            val animator = ValueAnimator.ofObject(ArgbEvaluator(), oldColor, newColor)
-            animator.duration = 600L // 600ms fade
-            animator.addUpdateListener { animation ->
-                currentColor = animation.animatedValue as Int
-                invalidate()
-            }
-            animator.start()
-
-            currentZoneIndex = newZoneIndex
-        }*/
     }
 }

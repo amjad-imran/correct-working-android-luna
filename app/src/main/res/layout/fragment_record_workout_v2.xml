@@ -6,199 +6,262 @@
     tools:context="com.oreo.ui.recordworkout.RecordWorkoutFragment">
 
 
-    <ImageView
-        android:id="@+id/ivZoneBg"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@drawable/back_workout_zone_1"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/imageConnecting"
+
+        <ImageView
+            android:id="@+id/ivZoneBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/back_workout_zone_1" />
+
+        <ImageView
+            android:id="@+id/imageConnecting"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_ring_connecting_workout"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvWorkoutTitle"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Outdoor run" />
+
+        <ImageView
+            android:id="@+id/oreoStatus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/back_modal_new_round"
+            android:src="@drawable/ic_ring_default_silver_new"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/batteryStatus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:indeterminate="false"
+            android:visibility="gone"
+            app:indicatorSize="@dimen/dimen_32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+            app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+            app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+            app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+            app:trackColor="#1effffff"
+            app:trackThickness="1dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivWorkout"
+            android:layout_width="124dp"
+            android:layout_height="124dp"
+            android:background="@drawable/back_workout_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivWorkoutImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivWorkout"
+            app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
+            app:layout_constraintStart_toStartOf="@+id/ivWorkout"
+            app:layout_constraintTop_toTopOf="@+id/ivWorkout"
+            tools:src="@drawable/ic_o_workout" />
+
+        <include
+            android:id="@+id/lytOnGoingWorkout"
+            layout="@layout/layout_ongoing_workout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="54dp"
+            android:layout_marginBottom="100dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupRingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="oreoStatus,batteryStatus" />
+
+        <include
+            android:id="@+id/lytRingConnecting"
+            layout="@layout/layout_record_workout_ring_connecting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/lytCountDown"
+            layout="@layout/layout_starting_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivWorkoutImage"
+            app:layout_constraintVertical_bias="0.4"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btnPause"
+            style="@style/S16"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="22dp"
+            android:background="@drawable/back_button_back"
+            android:gravity="center"
+            android:text="@string/text_pause"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnEnd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/btnEnd"
+            style="@style/S16"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="22dp"
+            android:background="@drawable/back_button_end"
+            android:gravity="center"
+            android:text="@string/text_end"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnPause" />
+
+        <TextView
+            android:id="@+id/btnStartWorkout"
+            style="@style/S16"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="22dp"
+            android:background="@drawable/back_button_start"
+            android:gravity="center"
+            android:text="@string/text_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnBack"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/btnBack"
+            style="@style/S16"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="22dp"
+            android:background="@drawable/back_button_back"
+            android:gravity="center"
+            android:text="@string/text_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnStartWorkout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_ring_connecting_workout"
         android:visibility="gone"
+        android:background="#c0030f1d"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
-    <TextView
-        android:id="@+id/tvWorkoutTitle"
-        style="@style/H4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Outdoor run" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/oreoStatus"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/back_modal_new_round"
-        android:src="@drawable/ic_ring_default_silver_new"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/btnResume"
+                style="@style/S16"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="22dp"
+                android:background="@drawable/back_button_back"
+                android:gravity="center"
+                android:text="@string/resume"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnEndResume"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/batteryStatus"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:indeterminate="false"
-        android:visibility="gone"
-        app:indicatorSize="@dimen/dimen_32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
-        app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
-        app:layout_constraintStart_toStartOf="@+id/oreoStatus"
-        app:layout_constraintTop_toTopOf="@+id/oreoStatus"
-        app:trackColor="#1effffff"
-        app:trackThickness="1dp" />
+            <TextView
+                android:id="@+id/btnEndResume"
+                style="@style/S16"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="22dp"
+                android:background="@drawable/back_button_end"
+                android:gravity="center"
+                android:text="@string/text_end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnResume" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivWorkout"
-        android:layout_width="124dp"
-        android:layout_height="124dp"
-        android:background="@drawable/back_workout_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
-    <ImageView
-        android:id="@+id/ivWorkoutImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivWorkout"
-        app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
-        app:layout_constraintStart_toStartOf="@+id/ivWorkout"
-        app:layout_constraintTop_toTopOf="@+id/ivWorkout"
-        tools:src="@drawable/ic_o_workout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </eightbitlab.com.blurview.BlurView>
 
-    <include
-        android:id="@+id/lytOnGoingWorkout"
-        layout="@layout/layout_ongoing_workout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="54dp"
-        android:layout_marginBottom="100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupRingStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="oreoStatus,batteryStatus" />
-
-    <include
-        android:id="@+id/lytRingConnecting"
-        layout="@layout/layout_record_workout_ring_connecting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
-
-    <include
-        android:id="@+id/lytCountDown"
-        layout="@layout/layout_starting_in"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivWorkoutImage"
-        app:layout_constraintVertical_bias="0.4"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/btnPause"
-        style="@style/S16"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="22dp"
-        android:background="@drawable/back_button_back"
-        android:layout_marginStart="16dp"
-        android:gravity="center"
-        android:text="@string/text_pause"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnEnd"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/btnEnd"
-        style="@style/S16"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="22dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/back_button_end"
-        android:gravity="center"
-        android:text="@string/text_end"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnPause" />
-
-    <TextView
-        android:id="@+id/btnStartWorkout"
-        style="@style/S16"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="22dp"
-        android:background="@drawable/back_button_start"
-        android:gravity="center"
-        android:text="@string/text_start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnBack"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/btnBack"
-        style="@style/S16"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="22dp"
-        android:background="@drawable/back_button_back"
-        android:gravity="center"
-        android:text="@string/text_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnStartWorkout" />
 
     <include
         android:id="@+id/progressBar"

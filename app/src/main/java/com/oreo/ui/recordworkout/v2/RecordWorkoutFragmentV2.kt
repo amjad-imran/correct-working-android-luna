@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.TransitionDrawable
 import android.net.Uri
 import android.os.Build
@@ -49,6 +50,8 @@ import com.oreo.ui.recordworkout.END_WORKOUT_KEY
 import com.oreo.ui.recordworkout.END_WORKOUT_KEY_SHORT
 import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
 class RecordWorkoutFragmentV2 :
@@ -75,6 +78,7 @@ class RecordWorkoutFragmentV2 :
             if (it.sportStatus == 1 || it.sportStatus == 3) {
                 startWorkoutUi()
             } else if (it.sportStatus == 2) {
+                ongoingWorkoutState()
                 pauseWorkout()
                 viewModel.updateTimer()
             }
@@ -83,9 +87,34 @@ class RecordWorkoutFragmentV2 :
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
+        setBlur()
+
+
     }
 
     override fun initListener() {
+
+        binding.btnResume.setOnClickListener {
+            val sportId = viewModel.workout?.ringId ?: -1
+
+            binding.progressBar.root.visible()
+            viewModel.sessionManager.sendUpdateQueryAction(
+                UpdateDeviceAction.UpdateOngoingWorkout(
+                    sportId,
+                    viewModel.getCurrentTimeStamp(),
+                    3
+                )
+            )
+            logActivityEvent("workout_resume")
+        }
+        binding.btnEndResume.setOnClickListener {
+            if (!viewModel.isDeviceConnected()) {
+                return@setOnClickListener
+            }
+
+            onCrossClicked()
+            logActivityEvent("workout_end")
+        }
 
         binding.btnStartWorkout.setOnClickListener {
             if (!viewModel.isDeviceConnected()) {
@@ -348,7 +377,7 @@ class RecordWorkoutFragmentV2 :
         binding.lytOnGoingWorkout.tvCalories.text =
             if (workoutRealTimeData.calorieValue != null) workoutRealTimeData.calorieValue.toString() else "-"
 
-        if(viewModel.isWorkoutRunning().not()){
+        if (viewModel.isWorkoutRunning().not()) {
             binding.lytOnGoingWorkout.lytZones.tvHrValue.text = "-"
             binding.lytOnGoingWorkout.lytZones.tvZoneName.text = "Zone --"
             binding.lytOnGoingWorkout.lytZones.heartRateZoneView.zoneId = -1
@@ -539,7 +568,7 @@ class RecordWorkoutFragmentV2 :
 
 
         viewModel.sessionManager.realtimeWorkoutData.observe(this) {
-                updateWorkoutData(it)
+            updateWorkoutData(it)
 
 
         }
@@ -610,20 +639,23 @@ class RecordWorkoutFragmentV2 :
     }
 
     private fun startWorkoutUi() {
-        binding.lytOnGoingWorkout.root.visible()
-        binding.ivWorkout.gone()
-        binding.ivWorkoutImage.gone()
 
+        ongoingWorkoutState()
         viewModel.currentWorkoutState = 1
-        binding.btnStartWorkout.gone()
-        binding.btnBack.gone()
-
-        binding.btnPause.visible()
-        binding.btnEnd.visible()
-
         viewModel.starTimer()
 
         viewModel.saveOngoingRecordWorkout()
+    }
+
+    private fun ongoingWorkoutState(){
+        binding.lytOnGoingWorkout.root.visible()
+        binding.ivWorkout.gone()
+        binding.ivWorkoutImage.gone()
+        binding.btnStartWorkout.gone()
+        binding.btnBack.gone()
+        binding.btnPause.visible()
+        binding.btnEnd.visible()
+
     }
 
     private fun stopWorkout() {
@@ -640,22 +672,45 @@ class RecordWorkoutFragmentV2 :
     }
 
     private fun pauseWorkout() {
-        /*viewModel.currentWorkoutState = 2
-        binding.btnStartWorkout.gone()
-        binding.btnPauseResume.visible()
-        binding.btnPauseResume.text = getString(R.string.resume)
+
+        viewModel.currentWorkoutState = 2
+
+        binding.btnPause.gone()
+        binding.btnEnd.gone()
         viewModel.pauseTimer()
-        binding.btnEndWorkout.isEnabled = true*/
+
+        binding.blurView.visible()
+    }
+
+    private fun setBlur() {
+        val radius = 5f
+        val decorView = binding.blurView
+        val rootView = binding.lytMain
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(requireContext())
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
     }
 
     private fun resumeWorkout() {
-        /* viewModel.currentWorkoutState = 3
-         binding.btnStartWorkout.gone()
-         binding.btnPauseResume.visible()
-         binding.btnPauseResume.text = getString(R.string.pause)
-         viewModel.resumeTimer()
-         binding.btnEndWorkout.isEnabled = true*/
+        viewModel.currentWorkoutState = 3
+
+
+        binding.btnPause.visible()
+        binding.btnEnd.visible()
+
+        viewModel.resumeTimer()
+
+        binding.blurView.gone()
+
     }
+
 
     private fun sendStartWorkoutCommand() {
         binding.progressBar.root.visible()
