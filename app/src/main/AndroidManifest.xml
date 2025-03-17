@@ -157,7 +157,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/links" />
+                <data android:pathPattern="/linkReferral" />
             </intent-filter>
         </activity>
 

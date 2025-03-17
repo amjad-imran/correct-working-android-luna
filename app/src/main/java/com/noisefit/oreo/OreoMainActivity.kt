@@ -83,7 +83,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             notificationIndex: String? = null,
             appLink: AppLinks? = null
         ): Intent {
-            LOGS.d("sdfjhskdfjhsdf ${appLink}")
 
             return Intent(context, OreoMainActivity::class.java).apply {
                 this.putExtra(NOTIFICATION_TYPE, notificationType)
@@ -121,7 +120,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         intent?.let {
             Handler(Looper.getMainLooper()).postDelayed({
-                LOGS.d("sdfjhskdfjhsdf looper called")
 
                 handleIntent(it)
             }, 500)
@@ -1110,14 +1108,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
     private fun handleIntent(intent: Intent?) {
-        LOGS.d("sdfjhskdfjhsdf $intent")
         intent?.extras?.let { intentExtra ->
-            LOGS.d("sdfjhskdfjhsdf has extras $intentExtra")
 
             val appLink  = intent.getSerializableExtra(APP_LINK) as? AppLinks
             if(appLink!=null){
 
-                LOGS.d("sdfjhskdfjhsdf has App link ${appLink}")
 
                 handleAppLinkNavigation(appLink)
                 return
@@ -1134,8 +1129,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 intent.putExtra(NOTIFICATION_TYPE, "")
             }else if(intentExtra.containsKey(APP_LINK)){
                 val data  = intent.getSerializableExtra(APP_LINK) as AppLinks
-                LOGS.d("sdfjhskdfjhsdf has App link ${data}")
-
                 handleAppLinkNavigation(data)
             } else {
 
