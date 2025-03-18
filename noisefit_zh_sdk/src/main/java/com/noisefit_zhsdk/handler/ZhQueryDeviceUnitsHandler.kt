@@ -352,7 +352,7 @@ constructor(
             if (chargeStatus == 1) {
                 isCharging = true
             }
-            LOGS.w("Realtime Data battery Info : ${p0.batteryInfo} Steps: ${p0.steps} Calories: ${p0.calories}")
+            LOGS.d("Realtime Data battery Info : ${p0.batteryInfo} Steps: ${p0.steps} Calories: ${p0.calories}")
 
             if (p0.steps != null || p0.calories != null || p0.heartRate != null) {
                 testQueryDeviceDataCallback?.onQueryDataReceived(

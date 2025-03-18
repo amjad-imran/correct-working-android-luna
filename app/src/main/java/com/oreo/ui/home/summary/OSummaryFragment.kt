@@ -192,7 +192,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
             if (viewModel.sessionManager.bluetoothStateDash.value != false) {
-                mainViewModel.syncTextState.value = "Syncing recent data…"
+                mainViewModel.syncTextState.value = getString(R.string.text_syncing_recent_data)
             }
             syncData()
         }
