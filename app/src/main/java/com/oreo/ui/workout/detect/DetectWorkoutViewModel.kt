@@ -169,7 +169,7 @@ constructor(
         }
     }
 
-    fun addWorkout(data: OreoAutoSportData, onAddSuccess: (id: String) -> Unit) {
+    fun addWorkout(data: OreoAutoSportData, onAddSuccess: (id: String) -> Unit,onAlreadyAdded: () -> Unit) {
         val addWorkout = OAddWorkout().apply {
             duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
             val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, duration)
@@ -224,7 +224,17 @@ constructor(
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
-                        sendMessage(resource.message)
+
+                        if (resource.errorCode == 422){
+                            addWorkout.date?.let {
+                                userHealthDataDataSource.clearDataByDates(listOf(it))
+                            }
+                            delay(100)
+                            onAlreadyAdded()
+
+                        }else{
+                            sendMessage(resource.message)
+                        }
                     }
 
                     is Resource.Loading -> {
@@ -237,7 +247,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        addWorkout(data, onAddSuccess)
+                                        addWorkout(data, onAddSuccess,onAlreadyAdded)
                                     }
 
                                     override fun no() {
