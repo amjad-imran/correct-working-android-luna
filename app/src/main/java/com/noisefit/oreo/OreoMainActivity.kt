@@ -934,7 +934,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                             Pair(syncDataStatus.progress, syncDataStatus.total)
 
                         viewModel.syncTextState.value = viewModel.getSyncingMessage(
-
                             this@OreoMainActivity,
                             syncDataStatus.progress,
                             syncDataStatus.total,

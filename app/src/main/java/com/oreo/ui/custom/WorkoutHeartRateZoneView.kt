@@ -70,8 +70,6 @@ class WorkoutHeartRateZoneView @JvmOverloads constructor(
 
         var arcStart = startAngleDegrees
 
-        LOGS.d("sdfkljsldkf ${zoneId}")
-
         for (i in 0 until zoneCount) {
 
             arcPaint.color = if (zoneId == null) {

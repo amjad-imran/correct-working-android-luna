@@ -334,7 +334,7 @@ class RecordWorkoutV2ViewModel @Inject constructor(
 
     fun getHeartRateZone(currentBpm: Int?): Int? {
 
-        return (0..4).random()
+        //return (0..4).random()
 
         if (currentBpm == null || currentBpm == 0 || currentBpm == 255) return null
         val newZoneIndex = hrZones.indexOfFirst { currentBpm in it.minBpm..it.maxBpm }
