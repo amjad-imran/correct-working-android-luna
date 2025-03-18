@@ -40,15 +40,26 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:visibility="gone"
-            tools:visibility="visible"
-            tools:progress="40"
             app:indicatorColor="#e6667ced"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:trackColor="#19ffffff"
             app:trackCornerRadius="1dp"
-            app:trackThickness="1dp" />
+            app:trackThickness="1dp"
+            tools:progress="40"
+            tools:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieSync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/layoutRetry"
@@ -174,11 +185,11 @@
             android:layout_height="wrap_content"
             android:textColor="#ff0000"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="314dp"
-            tools:text="Frag name here" />
+            tools:text="Frag name here"
+            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

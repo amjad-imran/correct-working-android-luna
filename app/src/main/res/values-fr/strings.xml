@@ -1815,5 +1815,22 @@
     <string name="text_modify_distance">Modifier la distance</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Limite maximale : 350 km. Veuillez saisir une distance valide.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Limite maximale: 217 miles. Entrez une distance valide.</string>
+    <string name="text_basic">Basique</string>
+    <string name="text_notification_toggle_message">Restez informé grâce aux alertes de batterie, rappels de synchronisation des données et notifications clés pour assurer le bon fonctionnement de votre bague Luna</string>
+    <string name="text_hydration">Hydratation</string>
+    <string name="text_daily_goals">Objectifs Quotidiens</string>
+    <string name="text_hydrate">Hydrater</string>
+    <string name="text_luna_app_update_is_here">La mise à jour de l\'application Luna est arrivée ! 🚀</string>
+    <string name="text_get_the_latest_features">Profitez des dernières fonctionnalités, d\'une performance améliorée et d\'une expérience plus fluide.</string>
+    <string name="text_small_duration">durée</string>
+    <string name="text_starting_in">Commence dans</string>
+    <string name="text_pause">Pause</string>
+    <string name="text_syncing_recent_data">Synchronisation des données récentes…</string>
+    <string name="text_almost_there">Presque fini…</string>
+    <string name="text_all_set">C\'est parti !</string>
+    <string name="text_refining_your_stats">Affinement de vos statistiques…</string>
+    <string name="text_uploading_sleep">Téléchargement des données de sommeil…</string>
+    <string name="text_updating_activity_trends">Mise à jour des tendances d\'activité…</string>
+    <string name="text_calculating_readiness_score">Calcul de l\'indice de préparation…</string>
 
 </resources>

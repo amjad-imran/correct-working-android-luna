@@ -1816,5 +1816,22 @@
     <string name="text_modify_distance">Modifica la distanza</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Limite massimo: 350 km. Inserisci una distanza valida.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Limite massimo: 217 miglia. Inserisci una distanza valida.</string>
+    <string name="text_basic">Basilare</string>
+    <string name="text_notification_toggle_message">Rimani aggiornato con avvisi sulla batteria, promemoria per la sincronizzazione dei dati e notifiche essenziali per far funzionare senza intoppi il tuo anello Luna</string>
+    <string name="text_hydration">Idratazione</string>
+    <string name="text_daily_goals">Obiettivi Giornalieri</string>
+    <string name="text_hydrate">Idrata</string>
+    <string name="text_luna_app_update_is_here">L\'aggiornamento dell\'app Luna è qui! 🚀</string>
+    <string name="text_get_the_latest_features">Scopri le ultime funzionalità, prestazioni migliorate e un\'esperienza più fluida.</string>
+    <string name="text_small_duration">durata</string>
+    <string name="text_starting_in">Inizia tra</string>
+    <string name="text_pause">Pausa</string>
+    <string name="text_syncing_recent_data">Sincronizzazione dei dati recenti…</string>
+    <string name="text_almost_there">Quasi fatto…</string>
+    <string name="text_all_set">Tutto a posto!</string>
+    <string name="text_refining_your_stats">Raffinando le tue statistiche…</string>
+    <string name="text_uploading_sleep">Caricamento dei dati del sonno…</string>
+    <string name="text_updating_activity_trends">Aggiornamento delle tendenze dell\'attività…</string>
+    <string name="text_calculating_readiness_score">Calcolando il punteggio di prontezza…</string>
 
 </resources>

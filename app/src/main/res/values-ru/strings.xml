@@ -1817,5 +1817,22 @@
     <string name="text_modify_distance">Изменить расстояние</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Максимальный предел: 350 км. Введите корректное расстояние.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Максимальный предел: 217 миль. Введите действительное расстояние.</string>
+    <string name="text_basic">Базовый</string>
+    <string name="text_notification_toggle_message">Оставайтесь в курсе с помощью уведомлений о заряде батареи, напоминаний о синхронизации данных и важных уведомлений, чтобы ваш Luna Ring работал без сбоев</string>
+    <string name="text_hydration">Гидратация</string>
+    <string name="text_daily_goals">Ежедневные цели</string>
+    <string name="text_hydrate">Гидратировать</string>
+    <string name="text_luna_app_update_is_here">Обновление приложения Luna уже здесь! 🚀</string>
+    <string name="text_get_the_latest_features">Получите новейшие функции, улучшенную производительность и более плавный опыт.</string>
+    <string name="text_small_duration">длительность</string>
+    <string name="text_starting_in">Начинается через</string>
+    <string name="text_pause">Пауза</string>
+    <string name="text_syncing_recent_data">Синхронизация последних данных…</string>
+    <string name="text_almost_there">Почти готово…</string>
+    <string name="text_all_set">Готово!</string>
+    <string name="text_refining_your_stats">Уточняем ваши данные…</string>
+    <string name="text_uploading_sleep">Загружаются данные сна…</string>
+    <string name="text_updating_activity_trends">Обновление трендов активности…</string>
+    <string name="text_calculating_readiness_score">Вычисление показателя готовности…</string>
 
 </resources>

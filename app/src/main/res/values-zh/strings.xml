@@ -1815,5 +1815,21 @@
     <string name="text_modify_distance">修改距离</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">最大限制：350 公里。请输入有效的距离。</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">最大限制：217英里。请输入有效的距离。</string>
-
+    <string name="text_basic">基础</string>
+    <string name="text_notification_toggle_message">通过电池警报、数据同步提醒以及关键通知保持最新状态，确保您的Luna戒指顺畅运行</string>
+    <string name="text_hydration">补水</string>
+    <string name="text_daily_goals">每日目标</string>
+    <string name="text_hydrate">补水</string>
+    <string name="text_luna_app_update_is_here">Luna 应用更新来了！🚀</string>
+    <string name="text_get_the_latest_features">获取最新功能、提升的性能以及更流畅的体验。</string>
+    <string name="text_small_duration">时长</string>
+    <string name="text_starting_in">即将开始</string>
+    <string name="text_pause">暂停</string>
+    <string name="text_syncing_recent_data">正在同步最近数据…</string>
+    <string name="text_almost_there">快好了…</string>
+    <string name="text_all_set">全部就绪！</string>
+    <string name="text_refining_your_stats">正在完善您的数据…</string>
+    <string name="text_uploading_sleep">正在上传睡眠数据…</string>
+    <string name="text_updating_activity_trends">正在更新活动趋势…</string>
+    <string name="text_calculating_readiness_score">正在计算就绪评分…</string>
 </resources>

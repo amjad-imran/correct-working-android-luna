@@ -1813,5 +1813,22 @@
     <string name="text_modify_distance">Entfernung ändern</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Maximalgrenze: 350 km. Bitte geben Sie eine gültige Entfernung ein.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Maximale Grenze: 217 Meilen. Bitte geben Sie eine gültige Entfernung ein.</string>
+    <string name="text_basic">Basis</string>
+    <string name="text_notification_toggle_message">Bleib informiert über Batteriewarnungen, Daten-Sync-Erinnerungen und wichtige Benachrichtigungen, um den reibungslosen Betrieb deines Luna-Rings zu gewährleisten</string>
+    <string name="text_hydration">Flüssigkeitszufuhr</string>
+    <string name="text_daily_goals">Tägliche Ziele</string>
+    <string name="text_hydrate">Hydratisieren</string>
+    <string name="text_luna_app_update_is_here">Das Luna App-Update ist da! 🚀</string>
+    <string name="text_get_the_latest_features">Erhalte die neuesten Funktionen, verbesserte Leistung und ein reibungsloseres Erlebnis.</string>
+    <string name="text_small_duration">Dauer</string>
+    <string name="text_starting_in">Beginnt in</string>
+    <string name="text_pause">Pause</string>
+    <string name="text_syncing_recent_data">Synchronisiere aktuelle Daten…</string>
+    <string name="text_almost_there">Fast geschafft…</string>
+    <string name="text_all_set">Fertig!</string>
+    <string name="text_refining_your_stats">Verfeinere deine Statistiken…</string>
+    <string name="text_uploading_sleep">Lade Schlafdaten hoch…</string>
+    <string name="text_updating_activity_trends">Aktualisiere Aktivitätstrends…</string>
+    <string name="text_calculating_readiness_score">Berechne den Bereitschaftsindex…</string>
 
 </resources>

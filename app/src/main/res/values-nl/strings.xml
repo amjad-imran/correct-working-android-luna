@@ -1818,5 +1818,22 @@
     <string name="text_modify_distance">Afstand wijzigen</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Maximale limiet: 350 km. Voer een geldige afstand in.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Maximale limiet: 217 mijl. Voer een geldige afstand in.</string>
+    <string name="text_basic">Basis</string>
+    <string name="text_notification_toggle_message">Blijf op de hoogte met batterijwaarschuwingen, synchronisatieherinneringen voor gegevens en belangrijke meldingen om je Luna-ring soepel te laten werken</string>
+    <string name="text_hydration">Hydratatie</string>
+    <string name="text_daily_goals">Dagelijkse Doelen</string>
+    <string name="text_hydrate">Hydrateren</string>
+    <string name="text_luna_app_update_is_here">De Luna-app update is er! 🚀</string>
+    <string name="text_get_the_latest_features">Krijg de nieuwste functies, verbeterde prestaties en een soepelere ervaring.</string>
+    <string name="text_small_duration">duur</string>
+    <string name="text_starting_in">Begint over</string>
+    <string name="text_pause">Pauze</string>
+    <string name="text_syncing_recent_data">Synchroniseer recente gegevens…</string>
+    <string name="text_almost_there">Bijna klaar…</string>
+    <string name="text_all_set">Klaar!</string>
+    <string name="text_refining_your_stats">Bezig met verfijnen van je statistieken…</string>
+    <string name="text_uploading_sleep">Slaapgegevens uploaden…</string>
+    <string name="text_updating_activity_trends">Activiteitstrends bijwerken…</string>
+    <string name="text_calculating_readiness_score">Berekent de paraatheids-score…</string>
 
 </resources>

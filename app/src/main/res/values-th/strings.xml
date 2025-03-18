@@ -1803,5 +1803,22 @@
     <string name="text_modify_distance">ปรับระยะทาง</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">ขีดจำกัดสูงสุด: 350 กม. กรุณาใส่ระยะทางที่ถูกต้อง.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">ขีดจำกัดสูงสุด: 217 ไมล์. กรุณากรอกระยะทางที่ถูกต้อง.</string>
+    <string name="text_basic">พื้นฐาน</string>
+    <string name="text_notification_toggle_message">รับข้อมูลล่าสุดด้วยการแจ้งเตือนแบตเตอรี่, การเตือนซิงค์ข้อมูล และการแจ้งเตือนที่สำคัญเพื่อให้แหวน Luna ของคุณทำงานได้อย่างราบรื่น</string>
+    <string name="text_hydration">การดื่มน้ำ</string>
+    <string name="text_daily_goals">เป้าหมายรายวัน</string>
+    <string name="text_hydrate">ดื่มน้ำ</string>
+    <string name="text_luna_app_update_is_here">อัปเดตแอป Luna มาแล้ว! 🚀</string>
+    <string name="text_get_the_latest_features">รับคุณสมบัติใหม่ล่าสุด, ประสิทธิภาพที่ดีขึ้น และประสบการณ์ที่ลื่นไหลยิ่งขึ้น</string>
+    <string name="text_small_duration">ระยะเวลา</string>
+    <string name="text_starting_in">เริ่มในอีก</string>
+    <string name="text_pause">หยุดชั่วคราว</string>
+    <string name="text_syncing_recent_data">กำลังซิงค์ข้อมูลล่าสุด…</string>
+    <string name="text_almost_there">เกือบแล้ว…</string>
+    <string name="text_all_set">เรียบร้อยแล้ว!</string>
+    <string name="text_refining_your_stats">ปรับปรุงสถิติของคุณ…</string>
+    <string name="text_uploading_sleep">กำลังอัปโหลดข้อมูลการนอน…</string>
+    <string name="text_updating_activity_trends">กำลังปรับปรุงแนวโน้มกิจกรรม…</string>
+    <string name="text_calculating_readiness_score">กำลังคำนวณคะแนนความพร้อม…</string>
 
 </resources>

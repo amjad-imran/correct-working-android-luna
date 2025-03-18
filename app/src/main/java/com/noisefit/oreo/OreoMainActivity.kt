@@ -21,6 +21,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
@@ -105,7 +106,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(viewModel.isBottomNavGifPlaying.not()){
+        if (viewModel.isBottomNavGifPlaying.not()) {
             binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
             viewModel.isBottomNavGifPlaying = true
         }
@@ -931,7 +932,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         LOGS.d("Progress_____________ ${syncDataStatus.progress}")
                         viewModel.syncProgressBarState.value =
                             Pair(syncDataStatus.progress, syncDataStatus.total)
-                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
+
+                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
+
+                            this@OreoMainActivity,
+                            syncDataStatus.progress,
+                            syncDataStatus.total,
+                            syncDataStatus
+                        )
+
+                        //viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
 
                         /*binding.lytHeader.pbSync.max = syncDataStatus.total
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -945,8 +955,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     is SyncEvents.Started -> {
                         viewModel.syncProgressBarState.value =
                             Pair(syncDataStatus.progress, syncDataStatus.total)
-                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
 
+                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                            this@OreoMainActivity,
+                            syncDataStatus.progress,
+                            syncDataStatus.total,
+                            syncDataStatus
+                        )
 
                         /*   binding.lytHeader.pbSync.max = syncDataStatus.total
                            binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -958,8 +973,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     }
 
                     is SyncEvents.Success -> {
-                        viewModel.syncProgressBarState.value = null
-                        viewModel.syncTextState.value = null
+                        //viewModel.syncProgressBarState.value = null
+
+                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                            this@OreoMainActivity,
+                            syncDataStatus.progress,
+                            syncDataStatus.total,
+                            syncDataStatus
+                        )
 
                         /* binding.lytHeader.pbSync.max = syncDataStatus.total
                          binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -970,11 +991,26 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     SyncEvents.ServerSyncStarted -> {
                         binding.progressBar.root.visible()
+                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                            this@OreoMainActivity,
+                            0,
+                            0,
+                            syncDataStatus
+                        )
                     }
 
                     SyncEvents.ServerSyncSuccess -> {
                         viewModel.syncProgressBarState.value = null
-                        viewModel.syncTextState.value = null
+                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                            this@OreoMainActivity,
+                            0,
+                            0,
+                            syncDataStatus
+                        )
+
+                        syncCompletedState()
+
+                        //viewModel.syncTextState.value = null
                         binding.progressBar.root.gone()
 
                         viewModel.reloadTodaysData()
@@ -1013,14 +1049,34 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.syncProgressBarState.observe(this) {
             if (it == null) {
-                binding.pbSync.gone()
+                //binding.pbSync.gone()
+                binding.lottieSync.cancelAnimation()
+                binding.lottieSync.gone()
             } else {
-                val (progress, total) = it
+                binding.lottieSync.visible()
+                animateSyncLottie()
+
+                /*val (progress, total) = it
                 binding.pbSync.visible()
                 binding.pbSync.max = total
-                binding.pbSync.progress = progress
+                binding.pbSync.progress = progress*/
             }
         }
+    }
+
+    private fun syncCompletedState() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.syncTextState.value = null
+        },1500)
+    }
+
+    private fun animateSyncLottie() {
+        if (binding.lottieSync.isAnimating) {
+            return
+        }
+        binding.lottieSync.setAnimation(R.raw.lottie_sync)
+        binding.lottieSync.repeatCount = LottieDrawable.INFINITE
+        binding.lottieSync.playAnimation()
     }
 
     private fun showCustomSuccessToast(message: String) {
@@ -1110,8 +1166,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun handleIntent(intent: Intent?) {
         intent?.extras?.let { intentExtra ->
 
-            val appLink  = intent.getSerializableExtra(APP_LINK) as? AppLinks
-            if(appLink!=null){
+            val appLink = intent.getSerializableExtra(APP_LINK) as? AppLinks
+            if (appLink != null) {
 
 
                 handleAppLinkNavigation(appLink)
@@ -1127,8 +1183,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     ""
                 )
                 intent.putExtra(NOTIFICATION_TYPE, "")
-            }else if(intentExtra.containsKey(APP_LINK)){
-                val data  = intent.getSerializableExtra(APP_LINK) as AppLinks
+            } else if (intentExtra.containsKey(APP_LINK)) {
+                val data = intent.getSerializableExtra(APP_LINK) as AppLinks
                 handleAppLinkNavigation(data)
             } else {
 
@@ -1139,10 +1195,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun handleAppLinkNavigation(appLink: AppLinks) {
-        when(appLink){
+        when (appLink) {
             AppLinks.REFERRAL -> {
-                viewModel.getReferralInfo{ data->
-                    this@OreoMainActivity.navController?.navigate(R.id.referralFragment, bundleOf("referralInfo" to data))
+                viewModel.getReferralInfo { data ->
+                    this@OreoMainActivity.navController?.navigate(
+                        R.id.referralFragment,
+                        bundleOf("referralInfo" to data)
+                    )
                 }
             }
         }
@@ -1201,7 +1260,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if(viewModel.isBottomNavGifPlaying.not()){
+                if (viewModel.isBottomNavGifPlaying.not()) {
                     binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
                     viewModel.isBottomNavGifPlaying = true
                 }
@@ -1231,7 +1290,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if(viewModel.isBottomNavGifPlaying.not()){
+                if (viewModel.isBottomNavGifPlaying.not()) {
                     binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
                     viewModel.isBottomNavGifPlaying = true
                 }
@@ -1259,7 +1318,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if(viewModel.isBottomNavGifPlaying.not()){
+                if (viewModel.isBottomNavGifPlaying.not()) {
                     binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
                     viewModel.isBottomNavGifPlaying = true
                 }
@@ -1284,7 +1343,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
-                if(viewModel.isBottomNavGifPlaying.not()){
+                if (viewModel.isBottomNavGifPlaying.not()) {
                     binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
                     viewModel.isBottomNavGifPlaying = true
                 }
