@@ -2187,6 +2187,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     updatedValue = 0
                 }
                 this.addProperty("hydration_amount", updatedValue)
+                this.addProperty("date", LocalDate.now().toString())
             }
             userRepository.updateHydration(reqObj)
                 .collect { resource ->

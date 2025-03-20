@@ -16,7 +16,7 @@ class StepsProgressBarArch @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var progress: Float = 30f
+    var progress: Float = 0f
         set(value) {
             field = value.coerceIn(0f, 100f)
             invalidate()
