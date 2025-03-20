@@ -570,7 +570,7 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.notificationGoalsCardData.observe(this){
+        viewModel.notificationGoalsCardData.observe(this) {
             if (it == null) {
                 binding.contentMain.lytNotificationCard.root.gone()
             } else {
@@ -1076,14 +1076,41 @@ class SummaryDataFragmentToday :
 
         binding.contentMain.lytNotificationCard.apply {
             root.visible()
-            tvSteps.text = if(notificationGoal.steps==null) "0" else notificationGoal.steps.toString()
-            tvStepsGoal.text = if(notificationGoal.steps_required==null) "3000" else notificationGoal.steps.toString()
+            val stepsGoal = notificationGoal.steps_required ?: 5000
 
-            progressSteps.progress = 50f
+            tvSteps.text =
+                if (notificationGoal.steps == null) "0" else notificationGoal.steps.toString()
+            tvStepsGoal.text = "/$stepsGoal"
+
+            val userSteps = notificationGoal.steps ?: 0
+            val percent = (userSteps.toFloat() / stepsGoal.toFloat()) * 100
+
+            progressSteps.progress = percent
 
 
+            val hydrateGoal = notificationGoal.hydration_required ?: 3000
+            val hydrate = notificationGoal.hydration ?: 0
 
-            progressHydrate.progress = 50f
+            val hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+            progressHydrate.progress = hydratePercent
+
+            val hydrationText = StringBuilder()
+
+            if (viewModel.sessionManager.isMetric()) {
+                hydrationText.append((hydrate.toFloat() / 1000))
+                hydrationText.append("/")
+                hydrationText.append((hydrateGoal.toFloat() / 1000))
+                hydrationText.append("L")
+            } else {
+                val convertedHydrate = hydrate.toFloat() * 0.033814
+
+                hydrationText.append(String.format("%.1f", convertedHydrate))
+                hydrationText.append("/")
+                val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
+                hydrationText.append(String.format("%.1f", convertedHydrateGoal))
+                hydrationText.append("oz")
+            }
+            tvHydration.text = hydrationText
         }
     }
 

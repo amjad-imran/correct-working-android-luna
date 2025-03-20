@@ -2156,4 +2156,11 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getNotificationGoals(url)
         }
     }
+
+    override suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/goals"
+            remoteDataSource.updateHydration(url, request)
+        }
+    }
 }

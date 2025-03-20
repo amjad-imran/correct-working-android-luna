@@ -32,9 +32,6 @@ class NotificationSettingFragment :
 
         binding.toolbar.tvTitle.text = getString(R.string.text_notifications)
 
-        /*binding.switchMaster.isChecked = viewModel.notificationSetting.value == 1
-        binding.lytNotificationMain.switchMain.isChecked = viewModel.notificationSetting.value == 1*/
-
         binding.lytNotificationMain.apply {
             switchMain.isEnabled = false
             switchMain.alpha = 0.5f

@@ -2169,13 +2169,47 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun decreaseHydration() {
+        updateHydration(false)
+    }
+
+    private fun updateHydration(increase: Boolean) {
+        val glassSize = 100
+
+        viewModelScope.launch {
+            val lastValue = notificationGoalsCardData.value?.hydration ?: 0
+            var updatedValue =
+                if (increase) (lastValue + glassSize) else (lastValue - glassSize)
+
+            val reqObj = JsonObject().apply {
 
 
+                if (updatedValue < 0) {
+                    updatedValue = 0
+                }
+                this.addProperty("hydration_amount", updatedValue)
+            }
+            userRepository.updateHydration(reqObj)
+                .collect { resource ->
+                    when (resource) {
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                notificationGoalsCardData.postValue(
+                                    notificationGoalsCardData.value?.copy(
+                                        hydration = updatedValue
+                                    )
+                                )
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+        }
     }
 
     fun increaseHydration() {
-
-
+        updateHydration(true)
     }
 
     fun getNotificationGoals() {

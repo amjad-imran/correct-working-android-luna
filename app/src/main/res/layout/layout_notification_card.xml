@@ -182,6 +182,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView69"
         app:layout_constraintStart_toStartOf="@+id/imageView69" />
 
+    <TextView
+        android:id="@+id/tvHydration"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="center"
+        android:textColor="#9FEEFF"
+        app:layout_constraintBottom_toBottomOf="@+id/ivHydrateMinus"
+        app:layout_constraintEnd_toStartOf="@+id/ivHydratePlus"
+        app:layout_constraintStart_toEndOf="@+id/ivHydrateMinus"
+        app:layout_constraintTop_toTopOf="@+id/ivHydrateMinus"
+        tools:text="1/3L" />
+
     <ImageView
         android:id="@+id/ivHydratePlus"
         android:layout_width="24dp"

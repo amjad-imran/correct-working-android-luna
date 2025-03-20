@@ -574,6 +574,12 @@ interface NetworkService {
         @Url url: String,
     ): BaseApiResponse<NotificationGoals>
 
+    @POST
+    suspend fun updateHydration(
+        @Url url: String,
+        @Body requestObject: JsonObject,
+    ): BaseApiResponse<Any>
+
     /**
      * ===================================
      */
