@@ -652,7 +652,7 @@ class ProfileEditViewModel
                                 it.notificationsEnabledLuna ?: 1
                             )
 
-                            if(removeGoogleFit){
+                            if (removeGoogleFit) {
                                 viewModelScope.launch(Dispatchers.IO) {
                                     googleFitDataSource.markDataSynced(
                                         0,
@@ -700,5 +700,7 @@ class ProfileEditViewModel
     fun isMetric(): Boolean {
         return unit.value != Units.IMPERIAL
     }
+
+
 
 }

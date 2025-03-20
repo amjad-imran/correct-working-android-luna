@@ -1347,4 +1347,8 @@
             android:name="mealName"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/editNotificationGoalFragment"
+        android:name="com.oreo.ui.notification.EditNotificationGoalFragment"
+        android:label="fragment_edit_notification_goal" />
 </navigation>

@@ -32,6 +32,7 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -199,6 +200,8 @@ class SummaryDataFragmentToday :
         viewModel.handleGoogleFitCard()
 
         viewModel.getSleepPlanerDetails()
+
+        viewModel.getNotificationGoals()
     }
 
 
@@ -418,6 +421,18 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
+            viewModel.decreaseHydration()
+        }
+
+        binding.contentMain.lytNotificationCard.ivHydratePlus.setOnClickListener {
+            viewModel.increaseHydration()
+        }
+
+        binding.contentMain.lytNotificationCard.tvEdit.setOnClickListener {
+            navigate(R.id.editNotificationGoalFragment)
+        }
+
         binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
             viewModel.hideFindMyRingPermCard()
         }
@@ -487,7 +502,8 @@ class SummaryDataFragmentToday :
             }
             pairStatus = "paired"
 
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_sync_manual,
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.luna_activity_sync_manual,
                 HashMap<String, Any>().apply {
                     this[MoEngageAppEventParams.operating_system] = "Android"
                     this[MoEngageAppEventParams.device_pairing_status] = pairStatus
@@ -553,6 +569,15 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.notificationGoalsCardData.observe(this){
+            if (it == null) {
+                binding.contentMain.lytNotificationCard.root.gone()
+            } else {
+                binding.contentMain.lytNotificationCard.root.visible()
+                setNotificationGoalsCardData(it)
+            }
+        }
 
         viewModel.sessionManager.googleFitSyncCompleted.observe(this) {
             it.getContent()?.let {
@@ -1045,6 +1070,21 @@ class SummaryDataFragmentToday :
 
         }
 
+    }
+
+    private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
+
+        binding.contentMain.lytNotificationCard.apply {
+            root.visible()
+            tvSteps.text = if(notificationGoal.steps==null) "0" else notificationGoal.steps.toString()
+            tvStepsGoal.text = if(notificationGoal.steps_required==null) "3000" else notificationGoal.steps.toString()
+
+            progressSteps.progress = 50f
+
+
+
+            progressHydrate.progress = 50f
+        }
     }
 
     private fun showBlackListDialog() {

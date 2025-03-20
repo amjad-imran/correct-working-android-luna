@@ -1868,5 +1868,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_uploading_sleep">Uploading sleep…</string>
     <string name="text_updating_activity_trends">Updating activity trends…</string>
     <string name="text_calculating_readiness_score">Calculating readiness score…</string>
+    <string name="text_improves_muscle_recovery_and_reduces_soreness">Improves muscle recovery and reduces soreness</string>
+    <string name="text_enhanced_performance_amp_recovery"><![CDATA[Enhanced performance & recovery]]></string>
 
 </resources>

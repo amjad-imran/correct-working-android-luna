@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
@@ -189,5 +190,7 @@ interface OreoUserActivityRepository {
     suspend fun updateUserSleepGoal(
         request: JsonObject
     ): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getNotificationGoals(): Flow<Resource<BaseApiResponse<NotificationGoals>>>
 
 }

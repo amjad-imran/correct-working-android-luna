@@ -23,6 +23,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.AlarmTimingsData
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.SleepCardDashState
@@ -163,6 +164,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val findMyRingCard = MutableLiveData<Boolean?>()
 
     val healthMonitorCardData = MutableLiveData<HealthTrend?>()
+
+    val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
 
     var user: User? = null
     var gender: String? = null
@@ -2163,6 +2166,35 @@ class SummaryDataViewModelToday @Inject constructor(
             return roundedPercentInc
         }
         return null
+    }
+
+    fun decreaseHydration() {
+
+
+    }
+
+    fun increaseHydration() {
+
+
+    }
+
+    fun getNotificationGoals() {
+        viewModelScope.launch {
+            userRepository.getNotificationGoals()
+                .collect { resource ->
+                    when (resource) {
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                notificationGoalsCardData.postValue(it)
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+        }
+
     }
 }
 

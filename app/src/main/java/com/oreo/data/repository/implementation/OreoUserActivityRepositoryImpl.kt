@@ -22,6 +22,7 @@ import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.KeyValue
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
@@ -2145,6 +2146,14 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/goal/update"
             remoteDataSource.updateSleepGoal(url, request)
+        }
+    }
+
+    override suspend fun getNotificationGoals(): Flow<Resource<BaseApiResponse<NotificationGoals>>> {
+        return safeApiCallFlow(dispatcher) {
+            val todayDate = LocalDate.now()
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/goals?date=$todayDate"
+            remoteDataSource.getNotificationGoals(url)
         }
     }
 }

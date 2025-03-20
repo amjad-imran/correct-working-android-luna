@@ -30,6 +30,7 @@ import com.noisefit_commans.models.UserGoals
 import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.RingLocationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.time.LocalDate
 
 class UserRepositoryImpl(
     private val localDatSource: DataStoredInterface,
@@ -210,4 +212,22 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun getNotificationToggle(): Flow<Resource<BaseApiResponse<NotificationToggleModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val date = LocalDate.now()
+            remoteDataSource.getNotificationToggle(
+                "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date"
+            )
+        }
+    }
+
+    override suspend fun updateNotificationToggle(requestObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val date = LocalDate.now()
+            remoteDataSource.updateNotificationToggle(
+                "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date",
+                requestObject
+            )
+        }
+    }
 }

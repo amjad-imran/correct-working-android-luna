@@ -7,17 +7,18 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/textView161"
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:text="@string/text_daily_goals"
-        app:layout_constraintBottom_toBottomOf="@+id/textView85"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEdit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView85" />
+        app:layout_constraintTop_toTopOf="@+id/tvEdit" />
 
     <TextView
-        android:id="@+id/textView85"
+        android:id="@+id/tvEdit"
         style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,19 +33,35 @@
         android:id="@+id/imageView70"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
         android:adjustViewBounds="true"
         android:src="@drawable/back_steps_goals"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView69"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView85"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView161"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView69"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/back_hydrate_goals"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView70"
+        app:layout_constraintTop_toBottomOf="@+id/textView161"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <TextView
         android:id="@+id/textView89"
@@ -58,6 +75,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageView70"
         app:layout_constraintTop_toTopOf="@+id/ivNotificationSteps" />
 
+
     <com.oreo.ui.custom.StepsProgressBarArch
         android:id="@+id/progressSteps"
         android:layout_width="0dp"
@@ -68,14 +86,15 @@
         app:layout_constraintStart_toStartOf="@+id/imageView70"
         app:layout_constraintTop_toBottomOf="@+id/ivNotificationSteps" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!--<com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/ic_goal_steps_walking"
         app:layout_constraintBottom_toBottomOf="@+id/progressSteps"
         app:layout_constraintEnd_toEndOf="@+id/progressSteps"
         app:layout_constraintStart_toStartOf="@+id/progressSteps"
-        app:layout_constraintTop_toTopOf="@+id/progressSteps" />
+        app:layout_constraintTop_toTopOf="@+id/progressSteps" />-->
 
     <ImageView
         android:id="@+id/ivNotificationSteps"
@@ -113,20 +132,6 @@
         app:layout_constraintStart_toEndOf="@+id/tvSteps"
         tools:text="5000" />
 
-    <ImageView
-        android:id="@+id/imageView69"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="14dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/back_hydrate_goals"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView70"
-        app:layout_constraintTop_toBottomOf="@+id/textView85" />
 
     <ImageView
         android:id="@+id/ivNotificationHydrate"
@@ -141,8 +146,7 @@
         android:id="@+id/progressHydrate"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvSteps"
+        app:layout_constraintBottom_toTopOf="@id/ivHydratePlus"
         app:layout_constraintEnd_toEndOf="@+id/imageView69"
         app:layout_constraintStart_toStartOf="@+id/imageView69"
         app:layout_constraintTop_toBottomOf="@+id/ivNotificationHydrate" />
@@ -172,6 +176,8 @@
         android:id="@+id/ivHydrateMinus"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_hydrate_minus"
         app:layout_constraintBottom_toBottomOf="@+id/imageView69"
         app:layout_constraintStart_toStartOf="@+id/imageView69" />
@@ -180,6 +186,8 @@
         android:id="@+id/ivHydratePlus"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_hydrate_plus"
         app:layout_constraintBottom_toBottomOf="@+id/imageView69"
         app:layout_constraintEnd_toEndOf="@+id/imageView69" />

@@ -12,6 +12,7 @@ import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit_commans.data.model.Interest
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoNapNetworkEntity
 import com.noisefit_commans.data.model.OreoUserDataPost
@@ -52,6 +53,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.ai.ChatHistoryItem
@@ -289,6 +291,17 @@ interface NetworkService {
     @POST
     suspend fun saveAppLanguage(
         @Url url: String
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getNotificationToggle(
+        @Url url: String
+    ): BaseApiResponse<NotificationToggleModel>
+
+    @PUT
+    suspend fun updateNotificationToggle(
+        @Url url: String,
+        @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
 
 
@@ -555,6 +568,11 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: JsonObject,
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getNotificationGoals(
+        @Url url: String,
+    ): BaseApiResponse<NotificationGoals>
 
     /**
      * ===================================
