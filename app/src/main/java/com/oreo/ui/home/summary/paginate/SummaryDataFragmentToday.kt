@@ -1127,6 +1127,23 @@ class SummaryDataFragmentToday :
                 hydrationText.append("oz")
             }
             tvHydration.text = hydrationText
+
+
+            if (viewModel.notificationToggleModel?.hydrate_notification == true &&
+                viewModel.notificationToggleModel?.master_notification == true
+            ) {
+                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_on)
+            } else {
+                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_off)
+            }
+
+            if (viewModel.notificationToggleModel?.steps_notification == true &&
+                viewModel.notificationToggleModel?.steps_notification == true
+            ) {
+                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_on)
+            } else {
+                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
+            }
         }
     }
 

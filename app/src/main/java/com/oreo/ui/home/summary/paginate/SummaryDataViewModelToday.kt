@@ -2177,7 +2177,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun updateHydration(increase: Boolean) {
-        val glassSize = 100
+        val glassSize = 250
 
         viewModelScope.launch {
             val lastValue = notificationGoalsCardData.value?.hydration ?: 0
@@ -2256,8 +2256,13 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun updateNotificationToggle() {
         viewModelScope.launch {
+
+            val master = notificationToggleModel?.hydrate_notification?:false ==true ||
+                notificationToggleModel?.steps_notification?:false ==true ||
+                notificationToggleModel?.sleep_notification?:false ==true
+
             val request = JsonObject().apply {
-                this.addProperty("master_notification", notificationToggleModel?.master_notification?:false)
+                this.addProperty("master_notification", master)
                 this.addProperty("hydrate_notification", notificationToggleModel?.hydrate_notification?:false)
                 this.addProperty("steps_notification", notificationToggleModel?.steps_notification?:false)
                 this.addProperty("sleep_notification", notificationToggleModel?.sleep_notification?:false)
