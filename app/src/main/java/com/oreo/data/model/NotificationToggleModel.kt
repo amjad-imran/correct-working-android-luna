@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NotificationToggleModel(
-    val master_notification: Boolean,
-    val hydrate_notification: Boolean,
-    val steps_notification: Boolean,
-    val sleep_notification: Boolean,
+    var master_notification: Boolean = false,
+    var hydrate_notification: Boolean = false,
+    var steps_notification: Boolean = false,
+    var sleep_notification: Boolean = false,
 ) : Parcelable

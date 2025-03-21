@@ -90,6 +90,9 @@ class NotificationSettingFragment :
                 return@setOnCheckedChangeListener
             }
             viewModel.hydrationToggle = isChecked
+            if(isChecked){
+                binding.lytOther.switchOtherMain.isChecked = true
+            }
 
             checkOtherNotifications()
             viewModel.updateNotificationToggle()
@@ -99,6 +102,9 @@ class NotificationSettingFragment :
                 return@setOnCheckedChangeListener
             }
             viewModel.stepsToggle = isChecked
+            if(isChecked){
+                binding.lytOther.switchOtherMain.isChecked = true
+            }
             checkOtherNotifications()
             viewModel.updateNotificationToggle()
         }
@@ -108,7 +114,9 @@ class NotificationSettingFragment :
             }
 
             viewModel.sleepToggle = isChecked
-
+            if(isChecked){
+                binding.lytOther.switchOtherMain.isChecked = true
+            }
             checkOtherNotifications()
             viewModel.updateNotificationToggle()
         }
@@ -121,9 +129,6 @@ class NotificationSettingFragment :
             binding.lytOther.lytSleep.switchMain.isChecked.not()
         ) {
             binding.lytOther.switchOtherMain.isChecked = false
-            binding.lytOther.lytHydration.switchMain.isEnabled = false
-            binding.lytOther.lytSleep.switchMain.isEnabled = false
-            binding.lytOther.lytSteps.switchMain.isEnabled = false
         }
     }
 

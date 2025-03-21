@@ -11,6 +11,7 @@ import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -55,6 +56,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.ImpactData
+import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
@@ -104,6 +106,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SummaryDataViewModelToday @Inject constructor(
     val userRepository: OreoUserActivityRepository,
+    val userRepositoryOld: UserRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
@@ -147,6 +150,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
+    var notificationToggleModel: NotificationToggleModel? = null
 
 
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -2213,7 +2217,7 @@ class SummaryDataViewModelToday @Inject constructor(
         updateHydration(true)
     }
 
-    fun getNotificationGoals() {
+    private fun getNotificationGoals() {
         viewModelScope.launch {
             userRepository.getNotificationGoals()
                 .collect { resource ->
@@ -2230,6 +2234,69 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
         }
 
+    }
+
+    fun getNotificationToggle() {
+        viewModelScope.launch {
+            userRepositoryOld.getNotificationToggle().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            notificationToggleModel = it
+                            getNotificationGoals()
+                        }
+                    }
+                    else->{}
+                }
+            }
+        }
+
+    }
+
+
+    fun updateNotificationToggle() {
+        viewModelScope.launch {
+            val request = JsonObject().apply {
+                this.addProperty("master_notification", notificationToggleModel?.master_notification?:false)
+                this.addProperty("hydrate_notification", notificationToggleModel?.hydrate_notification?:false)
+                this.addProperty("steps_notification", notificationToggleModel?.steps_notification?:false)
+                this.addProperty("sleep_notification", notificationToggleModel?.sleep_notification?:false)
+            }
+            userRepositoryOld.updateNotificationToggle(request)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateNotificationToggle()
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                if(notificationGoalsCardData.value!=null){
+                                    notificationGoalsCardData.postValue(notificationGoalsCardData.value)
+                                }
+                            }
+                        }
+                    }
+                }
+        }
     }
 }
 

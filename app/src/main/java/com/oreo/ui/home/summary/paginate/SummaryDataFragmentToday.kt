@@ -201,7 +201,7 @@ class SummaryDataFragmentToday :
 
         viewModel.getSleepPlanerDetails()
 
-        viewModel.getNotificationGoals()
+        viewModel.getNotificationToggle()
     }
 
 
@@ -420,6 +420,22 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
+        binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
+            if (viewModel.notificationToggleModel != null) {
+                viewModel.notificationToggleModel!!.steps_notification =
+                    viewModel.notificationToggleModel?.steps_notification!!.not()
+                viewModel.updateNotificationToggle()
+            }
+        }
+
+        binding.contentMain.lytNotificationCard.ivNotificationHydrate.setOnClickListener {
+            if (viewModel.notificationToggleModel != null) {
+                viewModel.notificationToggleModel!!.hydrate_notification =
+                    viewModel.notificationToggleModel?.hydrate_notification!!.not()
+                viewModel.updateNotificationToggle()
+            }
+        }
 
         binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
             viewModel.decreaseHydration()

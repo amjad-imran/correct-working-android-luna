@@ -517,6 +517,7 @@ data class UserLocation(
 
 data class UserGoals(
     @SerializedName("step_goals") var stepGoal: Int = 0,
+    @SerializedName("hydration_goals") var hydrationGoals: Int = 0,
     @SerializedName("calories_goals") var caloriesGoal: Int = 0,
     @SerializedName("distance_goals") var distanceGoal: Int = 0,
     @SerializedName("sleep_goals") var sleepGoal: Int = 0,
