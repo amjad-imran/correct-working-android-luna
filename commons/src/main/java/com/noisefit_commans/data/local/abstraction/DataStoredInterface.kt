@@ -497,4 +497,8 @@ interface DataStoredInterface {
 
     fun clearKey(key: String)
 
+    fun getShouldShowSleepNotification(): Boolean
+    fun setShouldShowSleepNotification(state:Boolean)
+
+
 }

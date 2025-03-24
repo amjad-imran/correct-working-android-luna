@@ -1171,24 +1171,35 @@ class SummaryDataFragmentToday :
             val hydrateGoal = notificationGoal.hydration_required ?: 3000
             val hydrate = notificationGoal.hydration ?: 0
 
-            val hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
-            progressHydrate.progress = hydratePercent
 
             val hydrationText = StringBuilder()
+            var hydratePercent = 0f
 
             if (viewModel.sessionManager.isMetric()) {
                 hydrationText.append((hydrate.toFloat() / 1000))
                 hydrationText.append("/")
                 hydrationText.append((hydrateGoal.toFloat() / 1000))
                 hydrationText.append("L")
-            } else {
-                val convertedHydrate = hydrate.toFloat() * 0.033814
 
+
+                hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+                progressHydrate.progress = hydratePercent
+
+            } else {
+
+                val convertedHydrate = hydrate.toFloat() * 0.033814
                 hydrationText.append(String.format("%.1f", convertedHydrate))
                 hydrationText.append("/")
-                val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
-                hydrationText.append(String.format("%.1f", convertedHydrateGoal))
+
+                //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
+                val convertedHydrateGoal = viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
+
+                hydrationText.append("$convertedHydrateGoal")
                 hydrationText.append("oz")
+
+                hydratePercent = (hydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+                progressHydrate.progress = hydratePercent
+
             }
             tvHydration.text = hydrationText
 

@@ -113,7 +113,7 @@ class EditNotificationGoalFragment :
                     val selectedPositionHyImp =
                         viewModel.getSelectedHydrationImperialPosition(convertedValue)
                     if (selectedPositionHyImp != -1) {
-                        wheelAdapterStepsPicker.selectedItemPosition = selectedPositionHyImp
+                        wheelAdapterHydrationImperial.selectedItemPosition = selectedPositionHyImp
                     }
                 }
             }

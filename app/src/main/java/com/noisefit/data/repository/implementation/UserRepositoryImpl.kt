@@ -145,6 +145,7 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
             localDatSource.saveAppBodyMeasurementsTimeStamp()
             val url = "${BuildConfig.BASE_URL_NEW}/user_detail/profile/update"
             remoteDataSource.updateUserProfile(url, request)

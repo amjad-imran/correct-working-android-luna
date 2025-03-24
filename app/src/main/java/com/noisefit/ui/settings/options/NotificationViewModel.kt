@@ -7,6 +7,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
+    val localDataStore: DataStoredInterface
 ) : BaseViewModel() {
 
     var valueUpdate = MutableLiveData<Event<Boolean>>()
@@ -105,6 +107,7 @@ class NotificationViewModel @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
 
+                                localDataStore.setShouldShowSleepNotification(sleepToggle)
 
                             }
                         }

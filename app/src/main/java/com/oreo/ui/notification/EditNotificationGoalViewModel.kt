@@ -126,13 +126,13 @@ class EditNotificationGoalViewModel @Inject constructor(
             hydrationGoal = value1
         } else {
             value1.toDouble().let {
-                LOGS.d("sdkjfhlsjdfhksdf ${convertOuncesToRoundedLiters(it)}")
-                hydrationGoal = (convertOuncesToRoundedLiters(it) * 1000).toInt()
+                LOGS.d("sdkjfhlsjdfhksdf ${convertOuncesToRoundedMl(it)}")
+                hydrationGoal = (convertOuncesToRoundedMl(it)).toInt()
             }
         }
     }
 
-    private fun convertOuncesToRoundedLiters(ounces: Double): Int {
+    private fun convertOuncesToRoundedMl(ounces: Double): Int {
         val milliliters = ounces * 29.5735
         val roundedML = (milliliters / 100).roundToInt() * 100.0
         return roundedML.roundToInt()
@@ -140,7 +140,8 @@ class EditNotificationGoalViewModel @Inject constructor(
 
     fun convertMlToOuncesRounded(milliliters: Double): Int {
         val ounces = milliliters / 29.5735
-        return (ounces / 10).roundToInt() * 10
+        val roundedOunces = (ounces / 10).roundToInt() * 10
+        return roundedOunces
     }
 
     fun getSelectedHydrationMetricPositionL(hydrationValue: Int): Int {

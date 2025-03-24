@@ -218,6 +218,7 @@ private const val CROSSED_CAMPAIGN_ID = "CROSSED_CAMPAIGN_ID"
 private const val APP_LANGUAGE = "APP_LANGUAGE"
 private const val HAS_SELECTED_LANGUAGE = "HAS_SELECTED_LANGUAGE"
 private const val MAX_AMP = "MAX_AMP"
+private const val SLEEP_NOTIFICATION_TOGGLE = "SLEEP_NOTIFICATION_TOGGLE"
 
 private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 
@@ -232,6 +233,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getShouldShowSleepNotification(): Boolean {
+        return mPrefs.getBoolean(SLEEP_NOTIFICATION_TOGGLE, false)
+    }
+
+    override fun setShouldShowSleepNotification(state: Boolean) {
+        mPrefs.edit().putBoolean(SLEEP_NOTIFICATION_TOGGLE, state).commit()
+    }
 
     override fun isGoogleFitCrossed(): Boolean {
         return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
@@ -1063,7 +1072,8 @@ class DataStoredImpl
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val savedData = mPrefs.getString(APP_OPEN_COUNT_TODAY, null)
         if (savedData != null) {
-            val parsedData: Pair<String,Int> = gson.fromJson(savedData, object : TypeToken<Pair<String,Int>>() {}.type)
+            val parsedData: Pair<String, Int> =
+                gson.fromJson(savedData, object : TypeToken<Pair<String, Int>>() {}.type)
             return if (parsedData.first.equals(dateToday.format(dateFormatter))) {
                 parsedData
             } else {
