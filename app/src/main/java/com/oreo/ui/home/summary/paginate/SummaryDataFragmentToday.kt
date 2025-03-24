@@ -7,9 +7,14 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -30,7 +35,6 @@ import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
@@ -425,7 +429,7 @@ class SummaryDataFragmentToday :
             if (viewModel.notificationToggleModel != null) {
                 viewModel.notificationToggleModel!!.steps_notification =
                     viewModel.notificationToggleModel?.steps_notification!!.not()
-                viewModel.updateNotificationToggle()
+                viewModel.updateNotificationToggle(NotificationGoal.STEPS)
             }
         }
 
@@ -433,7 +437,7 @@ class SummaryDataFragmentToday :
             if (viewModel.notificationToggleModel != null) {
                 viewModel.notificationToggleModel!!.hydrate_notification =
                     viewModel.notificationToggleModel?.hydrate_notification!!.not()
-                viewModel.updateNotificationToggle()
+                viewModel.updateNotificationToggle(NotificationGoal.HYDRATE)
             }
         }
 
@@ -584,7 +588,68 @@ class SummaryDataFragmentToday :
         }
     }
 
+
+    private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+        textView1.visibility = View.VISIBLE
+        textView2.visibility = View.INVISIBLE
+
+        val fadeIn: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_goal)
+        val fadeOut: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_goal)
+
+        textView1.startAnimation(fadeOut)
+        textView1.visibility = View.INVISIBLE
+        textView2.visibility = View.VISIBLE
+        textView2.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            textView2.startAnimation(fadeOut)
+            textView2.visibility = View.INVISIBLE
+            textView1.visibility = View.VISIBLE
+            textView1.startAnimation(fadeIn)
+        }, 1500)
+
+    }
+
+
     override fun subscribeObservers() {
+
+
+        viewModel.notificationUpdatedState.observe(this) {
+            it.getContent()?.let {
+                when(it.first){
+                    NotificationGoal.HYDRATE -> {
+                        if(it.second){
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_active
+                                )
+                        }else{
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_silent
+                                )
+                        }
+                        notificationTextFade(binding.contentMain.lytNotificationCard.textView153,
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage)
+                    }
+                    NotificationGoal.STEPS -> {
+                        if(it.second){
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_active
+                                )
+                        }else{
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_silent
+                                )
+                        }
+                        notificationTextFade(binding.contentMain.lytNotificationCard.textView89,
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage)
+                    }
+                }
+            }
+        }
 
         viewModel.notificationGoalsCardData.observe(this) {
             if (it == null) {
@@ -1103,7 +1168,6 @@ class SummaryDataFragmentToday :
 
             progressSteps.progress = percent
 
-
             val hydrateGoal = notificationGoal.hydration_required ?: 3000
             val hydrate = notificationGoal.hydration ?: 0
 
@@ -1128,6 +1192,7 @@ class SummaryDataFragmentToday :
             }
             tvHydration.text = hydrationText
 
+            ivGlassImage.setImageResource(viewModel.getGlassImage(hydratePercent.toInt()))
 
             if (viewModel.notificationToggleModel?.hydrate_notification == true &&
                 viewModel.notificationToggleModel?.master_notification == true

@@ -128,6 +128,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
     var date: String? = null
 
+    val notificationUpdatedState = MutableLiveData<Event<Pair<NotificationGoal, Boolean>>>()
+
     val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val viewedCardsData = MutableLiveData<ArrayList<OHealthOverview>>()
@@ -2246,7 +2248,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             getNotificationGoals()
                         }
                     }
-                    else->{}
+
+                    else -> {}
                 }
             }
         }
@@ -2254,18 +2257,27 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
 
-    fun updateNotificationToggle() {
+    fun updateNotificationToggle(notificationGoal: NotificationGoal) {
         viewModelScope.launch {
 
-            val master = notificationToggleModel?.hydrate_notification?:false ==true ||
-                notificationToggleModel?.steps_notification?:false ==true ||
-                notificationToggleModel?.sleep_notification?:false ==true
+            val master = notificationToggleModel?.hydrate_notification ?: false == true ||
+                    notificationToggleModel?.steps_notification ?: false == true ||
+                    notificationToggleModel?.sleep_notification ?: false == true
 
             val request = JsonObject().apply {
                 this.addProperty("master_notification", master)
-                this.addProperty("hydrate_notification", notificationToggleModel?.hydrate_notification?:false)
-                this.addProperty("steps_notification", notificationToggleModel?.steps_notification?:false)
-                this.addProperty("sleep_notification", notificationToggleModel?.sleep_notification?:false)
+                this.addProperty(
+                    "hydrate_notification",
+                    notificationToggleModel?.hydrate_notification ?: false
+                )
+                this.addProperty(
+                    "steps_notification",
+                    notificationToggleModel?.steps_notification ?: false
+                )
+                this.addProperty(
+                    "sleep_notification",
+                    notificationToggleModel?.sleep_notification ?: false
+                )
             }
             userRepositoryOld.updateNotificationToggle(request)
                 .collect { resource ->
@@ -2283,7 +2295,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                     object : BinaryActionCallback {
                                         override fun yes() {
-                                            updateNotificationToggle()
+                                            updateNotificationToggle(notificationGoal)
                                         }
 
                                         override fun no() {}
@@ -2294,15 +2306,62 @@ class SummaryDataViewModelToday @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
 
-                                if(notificationGoalsCardData.value!=null){
+                                if (notificationGoalsCardData.value != null) {
                                     notificationGoalsCardData.postValue(notificationGoalsCardData.value)
                                 }
+
+                                when (notificationGoal) {
+                                    NotificationGoal.HYDRATE -> {
+                                        notificationUpdatedState.postValue(
+                                            Event(
+                                                Pair(
+                                                    NotificationGoal.HYDRATE,
+                                                    notificationToggleModel?.hydrate_notification
+                                                        ?: false
+                                                )
+                                            )
+                                        )
+                                    }
+
+                                    NotificationGoal.STEPS -> {
+                                        notificationUpdatedState.postValue(
+                                            Event(
+                                                Pair(
+                                                    NotificationGoal.STEPS,
+                                                    notificationToggleModel?.hydrate_notification
+                                                        ?: false
+                                                )
+                                            )
+                                        )
+                                    }
+                                }
+
                             }
                         }
                     }
                 }
         }
     }
+
+    fun getGlassImage(percent: Int): Int {
+        return when (percent) {
+            in 0..10 -> R.drawable.ic_glass_0
+            in 11..20 -> R.drawable.ic_glass_20
+            in 21..30 -> R.drawable.ic_glass_30
+            in 31..40 -> R.drawable.ic_glass_40
+            in 41..50 -> R.drawable.ic_glass_50
+            in 51..60 -> R.drawable.ic_glass_60
+            in 61..70 -> R.drawable.ic_glass_70
+            in 71..80 -> R.drawable.ic_glass_80
+            in 81..90 -> R.drawable.ic_glass_90
+            in 91..100 -> R.drawable.ic_glass_100
+            else -> R.drawable.ic_glass_0
+        }
+    }
+}
+
+enum class NotificationGoal {
+    HYDRATE, STEPS
 }
 
 data class SleepAlert(

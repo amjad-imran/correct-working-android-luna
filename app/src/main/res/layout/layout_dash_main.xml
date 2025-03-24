@@ -146,6 +146,8 @@
             android:id="@+id/lytNotificationCard"
             layout="@layout/layout_notification_card"
             android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_marginHorizontal="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

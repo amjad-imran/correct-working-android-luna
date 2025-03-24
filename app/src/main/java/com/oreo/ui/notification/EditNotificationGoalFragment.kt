@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,14 +60,26 @@ class EditNotificationGoalFragment :
             val selectedStepsGoal = viewModel.stepsGoal
 
             if (selectedStepsGoal != null && selectedHydrationGoal != null) {
+
+                if (selectedHydrationGoal == 0) {
+                    return@setOnClickListener
+                }
+
                 profileViewModel.hydrationGoal = selectedHydrationGoal
                 profileViewModel.stepsGoal = selectedStepsGoal
+
                 profileViewModel.updateUserProfile()
             }
         }
     }
 
     override fun subscribeObservers() {
+        profileViewModel.userDetailsUpdated.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
+            }
+        }
+
         viewModel.notificationGoalReceived.observe(this) {
             it.getContent()?.let {
                 val selectedPosition = viewModel.getSelectedStepsPosition(it.steps_required ?: 3000)
@@ -79,12 +92,14 @@ class EditNotificationGoalFragment :
 
                     val hydrationValue = (it.hydration_required ?: 3000)
 
-                    val selectedPositionL = viewModel.getSelectedHydrationMetricPositionL(hydrationValue)
+                    val selectedPositionL =
+                        viewModel.getSelectedHydrationMetricPositionL(hydrationValue)
                     if (selectedPositionL != -1) {
                         wheelAdapterHydrationMetricLiter.selectedItemPosition = selectedPositionL
                     }
 
-                    val selectedPositionMl = viewModel.getSelectedHydrationMetricPositionMl(hydrationValue)
+                    val selectedPositionMl =
+                        viewModel.getSelectedHydrationMetricPositionMl(hydrationValue)
                     if (selectedPositionMl != -1) {
                         wheelAdapterHydrationMetricMl.selectedItemPosition = selectedPositionMl
                     }
@@ -92,9 +107,11 @@ class EditNotificationGoalFragment :
                 } else {
                     val hydrationValue = (it.hydration_required ?: 3000)
 
-                    val convertedValue =  viewModel.convertMlToOuncesRounded(hydrationValue.toDouble())
+                    val convertedValue =
+                        viewModel.convertMlToOuncesRounded(hydrationValue.toDouble())
 
-                    val selectedPositionHyImp = viewModel.getSelectedHydrationImperialPosition(convertedValue)
+                    val selectedPositionHyImp =
+                        viewModel.getSelectedHydrationImperialPosition(convertedValue)
                     if (selectedPositionHyImp != -1) {
                         wheelAdapterStepsPicker.selectedItemPosition = selectedPositionHyImp
                     }

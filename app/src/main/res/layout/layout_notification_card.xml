@@ -75,6 +75,22 @@
         app:layout_constraintStart_toStartOf="@+id/imageView70"
         app:layout_constraintTop_toTopOf="@+id/ivNotificationSteps" />
 
+    <TextView
+        android:id="@+id/textStepsReminderMessage"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="#72BDB2"
+        android:singleLine="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/textView89"
+        app:layout_constraintEnd_toStartOf="@+id/ivNotificationSteps"
+        app:layout_constraintStart_toStartOf="@id/textView89"
+        app:layout_constraintTop_toTopOf="@id/textView89"
+        tools:text="Reminder active" />
+
 
     <com.oreo.ui.custom.StepsProgressBarArch
         android:id="@+id/progressSteps"
@@ -86,24 +102,31 @@
         app:layout_constraintStart_toStartOf="@+id/imageView70"
         app:layout_constraintTop_toBottomOf="@+id/ivNotificationSteps" />
 
-    <!--<com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/image"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_goal_steps_walking"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/progressSteps"
         app:layout_constraintEnd_toEndOf="@+id/progressSteps"
         app:layout_constraintStart_toStartOf="@+id/progressSteps"
-        app:layout_constraintTop_toTopOf="@+id/progressSteps" />-->
+        app:layout_constraintTop_toTopOf="@+id/progressSteps">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_goal_steps_walking" />
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/ivNotificationSteps"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:padding="10dp"
-        tools:src="@drawable/ic_notification_on"
         app:layout_constraintEnd_toEndOf="@+id/imageView70"
-        app:layout_constraintTop_toTopOf="@+id/imageView70" />
+        app:layout_constraintTop_toTopOf="@+id/imageView70"
+        tools:src="@drawable/ic_notification_on" />
 
     <TextView
         android:id="@+id/tvSteps"
@@ -138,9 +161,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:padding="10dp"
-        tools:src="@drawable/ic_notification_on"
         app:layout_constraintEnd_toEndOf="@+id/imageView69"
-        app:layout_constraintTop_toTopOf="@+id/imageView69" />
+        app:layout_constraintTop_toTopOf="@+id/imageView69"
+        tools:src="@drawable/ic_notification_on" />
 
     <com.oreo.ui.custom.HydrateProgressBarArch
         android:id="@+id/progressHydrate"
@@ -171,6 +194,22 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivNotificationHydrate"
         app:layout_constraintStart_toStartOf="@+id/imageView69"
         app:layout_constraintTop_toTopOf="@+id/ivNotificationHydrate" />
+
+    <TextView
+        android:id="@+id/textHydrateReminderMessage"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="#86B5FE"
+        android:singleLine="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/textView153"
+        app:layout_constraintEnd_toStartOf="@+id/ivNotificationHydrate"
+        app:layout_constraintStart_toStartOf="@id/textView153"
+        app:layout_constraintTop_toTopOf="@id/textView153"
+        tools:text="Reminder active" />
 
     <ImageView
         android:id="@+id/ivHydrateMinus"
