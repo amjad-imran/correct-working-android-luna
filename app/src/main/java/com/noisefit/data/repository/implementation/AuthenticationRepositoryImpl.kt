@@ -127,6 +127,8 @@ class AuthenticationRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
+            keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_TOGGLE)
+            keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_TOGGLE)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             alarmRepository.cancelAllAlarms()
 
