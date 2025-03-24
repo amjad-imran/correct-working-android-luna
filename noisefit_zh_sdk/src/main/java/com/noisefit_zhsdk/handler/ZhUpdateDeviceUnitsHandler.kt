@@ -69,6 +69,7 @@ import com.noisefit_commans.utils.ImageUtil
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LocationClientClass
 import com.noisefit_commans.location.LocationUtils
+import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.utils.LogEvents
 import com.noisefit_commans.utils.WatchFaceEvents
 import com.noisefit_commans.utils.sizeInKb
@@ -88,6 +89,7 @@ import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
 import com.zhapp.ble.bean.RingAutoActiveSportConfigBean
+import com.zhapp.ble.bean.RingSportDataBean
 import com.zhapp.ble.bean.RingSportStatusBean
 import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
@@ -614,6 +616,24 @@ constructor(
                     )
                 )
             )*/
+        }
+
+        override fun onRingSportData(p0: RingSportDataBean?) {
+            LOGS.d("onRingSportData $p0")
+
+
+            if(p0==null) return
+
+            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                UpdateDeviceDataCallback.WorkoutRealTimeDataObtained(
+                    WorkoutRealTimeData(
+                        hrValue = p0.heartRate,
+                        calorieValue = p0.calories,
+                        steps = p0.steps,
+                        distance = p0.distance.toLong()
+                    )
+                )
+            )
         }
 
     }
@@ -1221,7 +1241,7 @@ constructor(
         val file1 = File(Uri.parse(watchFace.localFilePath).path!!)
         //val md5 = calculateMD5(file1)//"1305828"
 
-        ControlBleTools.getInstance()
+        /*ControlBleTools.getInstance()
             .getDeviceWatchFace(
                 watchFace.id.toString(),
                 file1.sizeInKb.toInt(),
@@ -1331,12 +1351,12 @@ constructor(
                                         comment = statusName
                                     })
                             }
-                            /*"BUSY" -> {
+                            *//*"BUSY" -> {
                             }
                             "DOWNGRADE", "DUPLICATED", "LOW_STORAGE" -> {
                             }
                             "LOW_BATTERY" -> {
-                            }*/
+                            }*//*
                         }
                     }
 
@@ -1354,7 +1374,7 @@ constructor(
                             WatchFaceEvents.TransferTimeout
                         )
                     }
-                })
+                })*/
     }
 
 
@@ -1572,7 +1592,7 @@ constructor(
     }
 
     private fun sendWatchData(data: ByteArray) {
-        ControlBleTools.getInstance().startUploadBigData(
+        /*ControlBleTools.getInstance().startUploadBigData(
             BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,
             data, object : UploadBigDataListener {
                 override fun onSuccess() {
@@ -1609,7 +1629,7 @@ constructor(
                     )
                     AppLogs.sendAppLogs("custom watchface : error")
                 }
-            })
+            })*/
     }
 
 
@@ -1630,6 +1650,7 @@ constructor(
                                 ControlBleTools.getInstance().startUploadBigData(
                                     BleCommonAttributes.UPLOAD_BIG_DATA_OTA,
                                     fileByte,
+                                    true,
                                     object : UploadBigDataListener {
                                         override fun onSuccess() {
                                             WatchInfoGlobals.isWatchDataUpdating = false
@@ -1659,14 +1680,15 @@ constructor(
                                             LOGS.d("firmware_upgrade : $percentage")
                                         }
 
-                                        override fun onTimeout() {
+
+                                        override fun onTimeout(p0: String?) {
                                             WatchInfoGlobals.isWatchDataUpdating = false
                                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                                 UpdateDeviceDataCallback.FirmwareUpgradeProgress(
                                                     WatchUpdateStatus(status = UpdateStatus.ERROR)
                                                 )
                                             )
-                                            AppLogs.sendAppLogs("update firmware : error")
+                                            AppLogs.sendAppLogs("update firmware : timeout error $p0")
                                         }
                                     })
                             }
@@ -2054,6 +2076,7 @@ constructor(
                                 ControlBleTools.getInstance().startUploadBigData(
                                     BleCommonAttributes.UPLOAD_BIG_DATA_LTO,
                                     fileByte,
+                                    true,
                                     object : UploadBigDataListener {
                                         override fun onSuccess() {
                                             WatchInfoGlobals.isWatchDataUpdating = false
@@ -2091,7 +2114,7 @@ constructor(
 
                                         }
 
-                                        override fun onTimeout() {
+                                        override fun onTimeout(p0: String?) {
                                             WatchInfoGlobals.isWatchDataUpdating = false
                                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                                 UpdateDeviceDataCallback.AGPSUpdateProgress(

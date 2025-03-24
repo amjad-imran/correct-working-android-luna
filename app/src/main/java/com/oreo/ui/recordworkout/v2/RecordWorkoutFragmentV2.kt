@@ -567,12 +567,6 @@ class RecordWorkoutFragmentV2 :
         }
 
 
-        viewModel.sessionManager.realtimeWorkoutData.observe(this) {
-            updateWorkoutData(it)
-
-
-        }
-
         viewModel.sessionManager.updateDeviceCallback.observe(this) {
             it.getContent()?.let {
 
@@ -581,6 +575,11 @@ class RecordWorkoutFragmentV2 :
                         AppLogs.sendAppLogs("Workout failed from ring Reason: ${it.errorMessage}")
                         stopWorkout()
                     }*/
+
+                    is UpdateDeviceDataCallback.WorkoutRealTimeDataObtained ->{
+                        updateWorkoutData(it.data)
+
+                    }
 
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {

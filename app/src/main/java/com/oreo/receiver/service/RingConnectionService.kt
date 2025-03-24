@@ -1718,9 +1718,6 @@ constructor() : LifecycleService() {
         override fun onQueryDataReceived(queryCallback: QueryCallback) {
 
             when (queryCallback) {
-                is QueryCallback.WorkoutRealTimeDataObtained -> {
-                    sessionManager.realtimeWorkoutData.postValue(queryCallback.data)
-                }
 
                 is QueryCallback.UpdateFirmwareLogStatus -> {
                     sessionManager.firmwareLogsStatus.postValue(queryCallback.fwLogStatus)
