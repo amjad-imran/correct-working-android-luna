@@ -56,8 +56,23 @@ class EditNotificationGoalFragment :
         }
 
         binding.btnSave.setOnClickListener {
-            val selectedHydrationGoal = viewModel.hydrationGoal
-            val selectedStepsGoal = viewModel.stepsGoal
+            var selectedHydrationGoal = viewModel.hydrationGoal
+            var selectedStepsGoal = viewModel.stepsGoal
+
+
+            if(selectedStepsGoal==null){
+                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.steps_required
+                if(lastSavedGoal!=null){
+                    selectedStepsGoal = lastSavedGoal
+                }
+            }
+
+            if(selectedHydrationGoal==null){
+                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.hydration_required
+                if(lastSavedGoal!=null){
+                    selectedHydrationGoal = lastSavedGoal
+                }
+            }
 
             if (selectedStepsGoal != null && selectedHydrationGoal != null) {
 
@@ -114,6 +129,8 @@ class EditNotificationGoalFragment :
                         viewModel.getSelectedHydrationImperialPosition(convertedValue)
                     if (selectedPositionHyImp != -1) {
                         wheelAdapterHydrationImperial.selectedItemPosition = selectedPositionHyImp
+                    }else{
+                        wheelAdapterHydrationImperial.selectedItemPosition = 0
                     }
                 }
             }
@@ -186,8 +203,6 @@ class EditNotificationGoalFragment :
                 )
                 tryCatch {
 
-
-
                     val selectedLiter = item.split(" ").get(0).toIntOrNull()
                     val selectedMl =
                         selectionList.second[wheelAdapterHydrationMetricMl.selectedItemPosition].split(
@@ -229,6 +244,11 @@ class EditNotificationGoalFragment :
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
 
+                    val (title,message) = viewModel.getHydrationMessage(total)
+
+                    binding.lytHydrationPicker.textView159.text = getString(title)
+                    binding.lytHydrationPicker.textView160.text = getString(message)
+
                     viewModel.updateHydration(total, isMetric)
                 }
             }
@@ -257,6 +277,11 @@ class EditNotificationGoalFragment :
                     val convertedValue = item.split(" ")[0].toIntOrNull()
                     if (convertedValue != null) {
                         viewModel.updateHydration(convertedValue, isMetric)
+
+                        val (title,message) = viewModel.getHydrationMessage(viewModel.convertOuncesToRoundedMl(convertedValue.toDouble()))
+
+                        binding.lytHydrationPicker.textView159.text = getString(title)
+                        binding.lytHydrationPicker.textView160.text = getString(message)
                     }
                 }
             }
@@ -269,8 +294,6 @@ class EditNotificationGoalFragment :
             wheelAdapterHydrationMetricLiter.bind(binding.lytHydrationPicker.wheelPickerMetricLiter)
 
         }
-
-
 
         return
     }

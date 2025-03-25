@@ -133,7 +133,7 @@ class EditNotificationGoalViewModel @Inject constructor(
         }
     }
 
-    private fun convertOuncesToRoundedMl(ounces: Double): Int {
+    fun convertOuncesToRoundedMl(ounces: Double): Int {
         val milliliters = ounces * 29.5735
         val roundedML = (milliliters / 100).roundToInt() * 100.0
         return roundedML.roundToInt()
