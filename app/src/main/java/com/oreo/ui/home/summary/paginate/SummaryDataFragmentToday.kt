@@ -594,7 +594,8 @@ class SummaryDataFragmentToday :
         textView2.visibility = View.INVISIBLE
 
         val fadeIn: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_goal)
-        val fadeOut: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_goal)
+        val fadeOut: Animation =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_goal)
 
         textView1.startAnimation(fadeOut)
         textView1.visibility = View.INVISIBLE
@@ -616,36 +617,41 @@ class SummaryDataFragmentToday :
 
         viewModel.notificationUpdatedState.observe(this) {
             it.getContent()?.let {
-                when(it.first){
+                when (it.first) {
                     NotificationGoal.HYDRATE -> {
-                        if(it.second){
+                        if (it.second) {
                             binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
                                 getString(
                                     R.string.text_reminder_active
                                 )
-                        }else{
+                        } else {
                             binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
                                 getString(
                                     R.string.text_reminder_silent
                                 )
                         }
-                        notificationTextFade(binding.contentMain.lytNotificationCard.textView153,
-                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage)
+                        notificationTextFade(
+                            binding.contentMain.lytNotificationCard.textView153,
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage
+                        )
                     }
+
                     NotificationGoal.STEPS -> {
-                        if(it.second){
+                        if (it.second) {
                             binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
                                 getString(
                                     R.string.text_reminder_active
                                 )
-                        }else{
+                        } else {
                             binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
                                 getString(
                                     R.string.text_reminder_silent
                                 )
                         }
-                        notificationTextFade(binding.contentMain.lytNotificationCard.textView89,
-                            binding.contentMain.lytNotificationCard.textStepsReminderMessage)
+                        notificationTextFade(
+                            binding.contentMain.lytNotificationCard.textView89,
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage
+                        )
                     }
                 }
             }
@@ -1168,6 +1174,12 @@ class SummaryDataFragmentToday :
 
             progressSteps.progress = percent
 
+            if (percent >= 100) {
+                textStepsGoalAchieved.visible()
+            } else {
+                textStepsGoalAchieved.gone()
+            }
+
             val hydrateGoal = notificationGoal.hydration_required ?: 3000
             val hydrate = notificationGoal.hydration ?: 0
 
@@ -1183,7 +1195,6 @@ class SummaryDataFragmentToday :
 
 
                 hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
-                progressHydrate.progress = hydratePercent
 
             } else {
 
@@ -1192,15 +1203,23 @@ class SummaryDataFragmentToday :
                 hydrationText.append("/")
 
                 //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
-                val convertedHydrateGoal = viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
+                val convertedHydrateGoal =
+                    viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
 
                 hydrationText.append("$convertedHydrateGoal")
                 hydrationText.append("oz")
 
-                hydratePercent = (hydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
-                progressHydrate.progress = hydratePercent
+                hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
 
             }
+            progressHydrate.progress = hydratePercent
+
+            if (hydratePercent >= 100) {
+                textHydrateGoalAchieved.visible()
+            } else {
+                textHydrateGoalAchieved.gone()
+            }
+
             tvHydration.text = hydrationText
 
             ivGlassImage.setImageResource(viewModel.getGlassImage(hydratePercent.toInt()))

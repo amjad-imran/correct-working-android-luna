@@ -24,7 +24,7 @@
         style="@style/H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:textColor="@color/carolina_blue"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
