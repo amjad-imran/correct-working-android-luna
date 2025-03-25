@@ -426,6 +426,15 @@ class SummaryDataFragmentToday :
     override fun initListener() {
 
         binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["config"] = "turned_on/turned_off"
+                    this["goal"] = "steps"
+                }
+            )
+
             if (viewModel.notificationToggleModel != null) {
                 viewModel.notificationToggleModel!!.steps_notification =
                     viewModel.notificationToggleModel?.steps_notification!!.not()
@@ -434,6 +443,15 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytNotificationCard.ivNotificationHydrate.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["config"] = "turned_on/turned_off"
+                    this["goal"] = "hydrate"
+                }
+            )
+
             if (viewModel.notificationToggleModel != null) {
                 viewModel.notificationToggleModel!!.hydrate_notification =
                     viewModel.notificationToggleModel?.hydrate_notification!!.not()
@@ -442,14 +460,37 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["goal"] = "hydrate"
+                    this["action"] = "subtracted"
+                }
+            )
+
             viewModel.decreaseHydration()
         }
 
         binding.contentMain.lytNotificationCard.ivHydratePlus.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["goal"] = "hydrate"
+                    this["action"] = "added"
+                }
+            )
+
             viewModel.increaseHydration()
         }
 
         binding.contentMain.lytNotificationCard.tvEdit.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.goalsSetting_clicked
+            )
+
             navigate(R.id.editNotificationGoalFragment)
         }
 

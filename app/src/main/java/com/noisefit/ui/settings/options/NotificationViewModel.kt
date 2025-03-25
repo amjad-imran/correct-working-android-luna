@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
+    var sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var valueUpdate = MutableLiveData<Event<Boolean>>()

@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +55,13 @@ class NotificationSettingFragment :
 
         binding.switchMaster.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "main"
+                }
+            )
+
             if (!buttonView.isPressed) return@setOnCheckedChangeListener
 
             binding.lytNotificationMain.switchMain.isChecked = isChecked
@@ -69,6 +77,14 @@ class NotificationSettingFragment :
         }
 
         binding.lytOther.switchOtherMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "all_reminders"
+                }
+            )
+
             if (buttonView.isPressed.not()) {
                 return@setOnCheckedChangeListener
             }
@@ -86,6 +102,14 @@ class NotificationSettingFragment :
         }
 
         binding.lytOther.lytHydration.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "hydration"
+                }
+            )
+
             if (buttonView.isPressed.not()) {
                 return@setOnCheckedChangeListener
             }
@@ -98,6 +122,14 @@ class NotificationSettingFragment :
             viewModel.updateNotificationToggle()
         }
         binding.lytOther.lytSteps.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "steps"
+                }
+            )
+
             if (buttonView.isPressed.not()) {
                 return@setOnCheckedChangeListener
             }
@@ -109,6 +141,14 @@ class NotificationSettingFragment :
             viewModel.updateNotificationToggle()
         }
         binding.lytOther.lytSleep.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "sleep"
+                }
+            )
+
             if (buttonView.isPressed.not()) {
                 return@setOnCheckedChangeListener
             }

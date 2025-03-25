@@ -96,6 +96,14 @@ object MoEngageLunaAppEvents {
      * AI Events End =========================
      */
 
+    //
+    const val user_menu_option_clicked = "user_menu_option_clicked"
+    const val notification_toggled = "notification_toggled"
+    const val goalsSetting_clicked = "goalsSetting_clicked"
+    const val action_cancelled = "action_cancelled"
+    const val goals_set = "goals_set"
+    //
+
     const val luna_homepage_visit = "luna_homepage_visit"
     const val luna_activity_sync_manual = "luna_activity_sync_manual"
     const val user_ham_clicked = "user_ham_clicked"

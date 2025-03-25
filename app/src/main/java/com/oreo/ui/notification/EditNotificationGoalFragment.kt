@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +56,32 @@ class EditNotificationGoalFragment :
             navigateUpSafe()
         }
 
+        binding.btnCancel.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.action_cancelled,
+                HashMap<String, Any>().apply {
+                    this["source"] = "goals"
+                }
+            )
+
+            navigateUpSafe()
+        }
+
         binding.btnSave.setOnClickListener {
+
+//            viewModel.sessionManager.logMoEngageAppEvent(
+//                MoEngageLunaAppEvents.goals_set,
+//                HashMap<String, Any>().apply {viewModel.sessionManager.logMoEngageAppEvent(
+//                MoEngageLunaAppEvents.goals_set,
+//                HashMap<String, Any>().apply {
+//                    this["goal"] = "goals"
+//                }
+//            )
+//                    this["goal"] = "goals"
+//                }
+//            )
+
             val selectedHydrationGoal = viewModel.hydrationGoal
             val selectedStepsGoal = viewModel.stepsGoal
 
