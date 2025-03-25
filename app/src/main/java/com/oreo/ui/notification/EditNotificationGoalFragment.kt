@@ -186,6 +186,8 @@ class EditNotificationGoalFragment :
                 )
                 tryCatch {
 
+
+
                     val selectedLiter = item.split(" ").get(0).toIntOrNull()
                     val selectedMl =
                         selectionList.second[wheelAdapterHydrationMetricMl.selectedItemPosition].split(
@@ -193,6 +195,11 @@ class EditNotificationGoalFragment :
                         ).get(0).toIntOrNull()
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
+
+                    val (title,message) = viewModel.getHydrationMessage(total)
+
+                    binding.lytHydrationPicker.textView159.text = getString(title)
+                    binding.lytHydrationPicker.textView160.text = getString(message)
 
                     viewModel.updateHydration(total, isMetric)
                 }
@@ -266,33 +273,6 @@ class EditNotificationGoalFragment :
 
 
         return
-
-        /*   val listData = ArrayList<WheelItem<String>>()
-           selectionList.first.forEach {
-               listData.add(WheelItem(it))
-           }
-           binding.lytHydrationPicker.wheelPicker.visibleItemCount = 5//it could not be less then 3
-           wheelAdapterHydrationImperial.data = listData
-           wheelAdapterHydrationImperial.setOnItemSelectedListener { item ->
-               Log.d(
-                   "TAG",
-                   "onItemSelected: ${item.split(" ").get(0)}"
-               )
-               tryCatch {
-                   viewModel.updateHydration(item.split(" ")[0].toIntOrNull(), isMetric)
-               }
-               //mSelectedValue = mSelectionList?.get(wheelAdapterHydrationImperial.currentItemPosition) ?: ""
-               //mSelectedPosition = wheelAdapterHydrationImperial.currentItemPosition
-           }
-           wheelAdapterHydrationImperial.bind(binding.lytHydrationPicker.wheelPicker)*/
-        /*        mSelectedValue = if (selectedValue.isNullOrEmpty()) selectionList[0] else selectedValue
-                mInitialSelectedValue = selectedValue
-                mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
-                    0
-                } else {
-                    getSelectedPosition(selectedValue, selectionList)
-                }*/
-        //wheelAdapterHydrationImperial.selectedItemPosition = mSelectedPosition
     }
 
     private fun initStepsUi(selectionList: List<String>) {
@@ -309,29 +289,15 @@ class EditNotificationGoalFragment :
             )
 
             tryCatch {
-                viewModel.stepsGoal = item.split(" ")[0].toIntOrNull()
+                val steps = item.split(" ")[0].toIntOrNull()
+
+                val (title,message) = viewModel.getStepsMessage(steps?:0)
+
+                binding.lytStepsPicker.textView159.text = getString(title)
+                binding.lytStepsPicker.textView160.text = getString(message)
+                viewModel.stepsGoal = steps
             }
-            //mSelectedValue = mSelectionList?.get(wheelAdapterHydrationImperial.currentItemPosition) ?: ""
-            //mSelectedPosition = wheelAdapterHydrationImperial.currentItemPosition
         }
         wheelAdapterStepsPicker.bind(binding.lytStepsPicker.wheelPicker)
-        /*        mSelectedValue = if (selectedValue.isNullOrEmpty()) selectionList[0] else selectedValue
-                mInitialSelectedValue = selectedValue
-                mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
-                    0
-                } else {
-                    getSelectedPosition(selectedValue, selectionList)
-                }*/
-        //wheelAdapterHydrationImperial.selectedItemPosition = mSelectedPosition
     }
-
-    private fun getSelectedPosition(selectedValue: String, selectionList: Array<String>): Int {
-        for ((index, item) in selectionList.withIndex()) {
-            if (item.equals(selectedValue, true)) {
-                return index
-            }
-        }
-        return 0
-    }
-
 }

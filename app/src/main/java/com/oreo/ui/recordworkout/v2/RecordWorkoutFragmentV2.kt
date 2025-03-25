@@ -39,6 +39,7 @@ import com.noisefit_commans.location.LocationService
 import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
@@ -427,6 +428,9 @@ class RecordWorkoutFragmentV2 :
         binding.lytRingConnecting.root.visible()
         binding.imageConnecting.visible()
         binding.groupRingStatus.gone()
+
+        binding.btnPause.invisible()
+        binding.btnEnd.invisible()
     }
 
     private fun setStateConnected() {
@@ -447,6 +451,14 @@ class RecordWorkoutFragmentV2 :
             binding.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
         }
+
+
+
+        /*if(viewModel.currentWorkoutState==1 || viewModel.currentWorkoutState==3){
+            ongoingWorkoutState()
+        }else if(viewModel.currentWorkoutState==2){
+            pauseWorkout()
+        }*/
     }
 
     override fun subscribeObservers() {

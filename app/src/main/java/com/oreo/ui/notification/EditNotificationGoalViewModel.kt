@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -155,6 +156,67 @@ class EditNotificationGoalViewModel @Inject constructor(
         val mlvalue = hydrationValue%1000
         return hydrationList2.indexOfFirst {
             it.split(" ").get(0).toInt()==mlvalue
+        }
+    }
+
+
+    /**
+     * value in ml
+     */
+    fun getHydrationMessage(ml: Int) :Pair<Int,Int>{
+        return when(ml){
+            in 0..2000 -> {
+                 Pair(R.string.text_hydration_1,R.string.text_hydration_1_message)
+            }
+            in 2001..3000 -> {
+                Pair(R.string.text_hydration_2,R.string.text_hydration_2_message)
+            }
+            in 3001..4000 -> {
+                Pair(R.string.text_hydration_3,R.string.text_hydration_3_message)
+            }
+            in 4001..5000 -> {
+                Pair(R.string.text_hydration_4,R.string.text_hydration_4_message)
+            }
+            in 5001..Int.MAX_VALUE -> {
+                Pair(R.string.text_hydration_5,R.string.text_hydration_5_message)
+            }
+            else -> {
+                Pair(R.string.text_hydration_1,R.string.text_hydration_1_message)
+            }
+        }
+    }
+
+
+    fun getStepsMessage(steps: Int) :Pair<Int,Int>{
+        return when(steps){
+            in 0..3000 -> {
+                 Pair(R.string.text_steps_1,R.string.text_steps_1_message)
+            }
+            in 3001..5000 -> {
+                Pair(R.string.text_steps_3,R.string.text_steps_3_message)
+            }
+            in 5001..7000 -> {
+                Pair(R.string.text_steps_5,R.string.text_steps_5_message)
+            }
+            in 7001..8000 -> {
+                Pair(R.string.text_steps_7,R.string.text_steps_7_message)
+            }
+            in 8001..10000 -> {
+                Pair(R.string.text_steps_8,R.string.text_steps_8_message)
+            }
+            in 10001..12000 -> {
+                Pair(R.string.text_steps_10,R.string.text_steps_10_message)
+            }
+            in 12001..15000 -> {
+                Pair(R.string.text_steps_12,R.string.text_steps_12_message)
+            }
+            in 15001..Int.MAX_VALUE -> {
+                Pair(R.string.text_steps_15,R.string.text_steps_15_message)
+            }
+
+            else -> {
+                Pair(R.string.text_steps_1,R.string.text_steps_1_message)
+            }
         }
     }
 

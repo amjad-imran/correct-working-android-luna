@@ -244,6 +244,7 @@ fun AskQuestion(
             },
             textStyle = FontStyle.SIZE_16.copy(lineHeight = 16.em),
             maxLines = 2,
+            minLines = 1,
             shape = RoundedCornerShape(52.dp),
             keyboardActions = KeyboardActions(
                 onSend = {
