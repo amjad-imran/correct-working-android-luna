@@ -1327,4 +1327,8 @@
             android:name="mealName"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/custom_homecreen"
+        android:name="com.oreo.ui.customHomeScreen.CustomHomeScreenFragment"
+        android:label="CustomHomeScreenFragment" />
 </navigation>

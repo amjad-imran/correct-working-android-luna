@@ -335,7 +335,7 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
-    implementation(libs.tbruyelle.rxpermissions)
+//    implementation(libs.tbruyelle.rxpermissions)
     implementation(project(Modules.commons))
 //    implementation(project(Modules.oreo))
     implementation(project(Modules.mpChartLib))

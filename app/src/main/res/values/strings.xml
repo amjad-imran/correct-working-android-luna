@@ -1851,5 +1851,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_modify_distance">Modify Distance</string>
     <string name="text_max_limit_350_km_enter_a_valid_distance">Max limit: 350 km. Enter a valid distance.</string>
     <string name="text_max_limit_enter_a_valid_distance_miles">Max limit: 217 miles. Enter a valid distance.</string>
+    <string name="text_luna_managed">Luna managed</string>
+    <string name="text_customize_homescreen">Customize homescreen</string>
 
 </resources>
