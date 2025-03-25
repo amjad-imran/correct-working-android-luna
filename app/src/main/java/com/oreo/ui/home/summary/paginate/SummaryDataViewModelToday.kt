@@ -101,6 +101,7 @@ import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 @HiltViewModel
@@ -2245,6 +2246,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             notificationToggleModel = it
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
                             getNotificationGoals()
                         }
                     }
@@ -2357,6 +2359,12 @@ class SummaryDataViewModelToday @Inject constructor(
             in 91..100 -> R.drawable.ic_glass_100
             else -> R.drawable.ic_glass_0
         }
+    }
+
+    fun convertMlToOuncesRounded(milliliters: Double): Int {
+        val ounces = milliliters / 29.5735
+        val roundedOunces = (ounces / 10).roundToInt() * 10
+        return roundedOunces
     }
 }
 

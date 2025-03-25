@@ -575,8 +575,7 @@ data class WorkoutRealTimeData(
     val hrValue: Int? = null,
     val calorieValue: Int? = null,
     val steps: Int? = null,
-    val distance: Long? = null,
-    val timestamp: Long,
+    val distance: Long? = null
 )
 
 

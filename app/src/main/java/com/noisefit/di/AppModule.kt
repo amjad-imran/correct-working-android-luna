@@ -234,6 +234,8 @@ object AppModule {
         lastSyncProvider: LastSyncProvider,
         googleFitDataObservers: GoogleFitDataObservers,
         dataUnitConverter: DataUnitConverter,
+        keyValueDataSource: KeyValueDataSource,
+        gson: Gson,
         offlineDataMapper: OfflineDataMapper
     ): UserRepository =
         UserRepositoryImpl(
@@ -242,7 +244,9 @@ object AppModule {
             lastSyncProvider,
             offlineDataMapper,
             googleFitDataObservers,
-            dataUnitConverter
+            dataUnitConverter,
+            keyValueDataSource,
+            gson,
         )
 
 

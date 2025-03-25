@@ -242,8 +242,9 @@ fun AskQuestion(
                     color = Color.LightGray
                 )
             },
-            textStyle = FontStyle.SIZE_16.copy(lineHeight = 16.em),
+            textStyle = FontStyle.SIZE_16.copy(lineHeight = 20.sp),
             maxLines = 2,
+            minLines = 1,
             shape = RoundedCornerShape(52.dp),
             keyboardActions = KeyboardActions(
                 onSend = {

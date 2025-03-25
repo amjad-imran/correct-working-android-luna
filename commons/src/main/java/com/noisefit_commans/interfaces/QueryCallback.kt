@@ -9,9 +9,6 @@ sealed class QueryCallback {
     class FirmwareVersionObtained(val deviceFirmware: DeviceFirmware) : QueryCallback()
     object ClickCameraImage : QueryCallback()
 
-    class WorkoutRealTimeDataObtained(val data: WorkoutRealTimeData) : QueryCallback()
-
-
     class CloseCameraShutterActivity(val finish: Boolean) : QueryCallback()
     class UpdateCallStatus(val status: Boolean, val forceCallDisconnect: Boolean = false) :
         QueryCallback()

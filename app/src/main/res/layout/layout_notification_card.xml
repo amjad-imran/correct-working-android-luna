@@ -82,8 +82,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/gilroy_medium"
-        android:textColor="#72BDB2"
         android:singleLine="true"
+        android:textColor="#72BDB2"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textView89"
         app:layout_constraintEnd_toStartOf="@+id/ivNotificationSteps"
@@ -133,9 +133,8 @@
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:textColor="#9FFFE5"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView70"
+        app:layout_constraintBottom_toBottomOf="@+id/tvStepsGoal"
         app:layout_constraintEnd_toStartOf="@+id/tvStepsGoal"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -147,13 +146,28 @@
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:textColor="#A39FFFE5"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView70"
+        app:layout_constraintBottom_toTopOf="@id/textStepsGoalAchieved"
         app:layout_constraintEnd_toEndOf="@+id/imageView70"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvSteps"
         tools:text="5000" />
+
+    <TextView
+        android:id="@+id/textStepsGoalAchieved"
+        style="@style/S10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/text_goal_achieved"
+        android:textColor="#809FE2FF"
+        app:layout_constraintBottom_toBottomOf="@id/imageView70"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintStart_toStartOf="@+id/imageView70" />
 
 
     <ImageView
@@ -199,11 +213,11 @@
         android:id="@+id/textHydrateReminderMessage"
         style="@style/S12"
         android:layout_width="0dp"
-        android:fontFamily="@font/gilroy_medium"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="#86B5FE"
+        android:fontFamily="@font/gilroy_medium"
         android:singleLine="true"
+        android:textColor="#86B5FE"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textView153"
         app:layout_constraintEnd_toStartOf="@+id/ivNotificationHydrate"
@@ -216,9 +230,9 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_hydrate_minus"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintBottom_toTopOf="@+id/textHydrateGoalAchieved"
         app:layout_constraintStart_toStartOf="@+id/imageView69" />
 
     <TextView
@@ -241,9 +255,23 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_hydrate_plus"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintBottom_toBottomOf="@+id/ivHydrateMinus"
         app:layout_constraintEnd_toEndOf="@+id/imageView69" />
+
+    <TextView
+        android:id="@+id/textHydrateGoalAchieved"
+        style="@style/S10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/text_goal_achieved"
+        android:textColor="#809FE2FF"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintEnd_toEndOf="@+id/ivHydratePlus"
+        app:layout_constraintStart_toStartOf="@+id/ivHydrateMinus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

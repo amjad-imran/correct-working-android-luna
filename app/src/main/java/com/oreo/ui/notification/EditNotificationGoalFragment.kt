@@ -69,8 +69,7 @@ class EditNotificationGoalFragment :
         }
 
         binding.btnSave.setOnClickListener {
-
-//            viewModel.sessionManager.logMoEngageAppEvent(
+            //            viewModel.sessionManager.logMoEngageAppEvent(
 //                MoEngageLunaAppEvents.goals_set,
 //                HashMap<String, Any>().apply {viewModel.sessionManager.logMoEngageAppEvent(
 //                MoEngageLunaAppEvents.goals_set,
@@ -82,8 +81,23 @@ class EditNotificationGoalFragment :
 //                }
 //            )
 
-            val selectedHydrationGoal = viewModel.hydrationGoal
-            val selectedStepsGoal = viewModel.stepsGoal
+            var selectedHydrationGoal = viewModel.hydrationGoal
+            var selectedStepsGoal = viewModel.stepsGoal
+
+
+            if(selectedStepsGoal==null){
+                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.steps_required
+                if(lastSavedGoal!=null){
+                    selectedStepsGoal = lastSavedGoal
+                }
+            }
+
+            if(selectedHydrationGoal==null){
+                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.hydration_required
+                if(lastSavedGoal!=null){
+                    selectedHydrationGoal = lastSavedGoal
+                }
+            }
 
             if (selectedStepsGoal != null && selectedHydrationGoal != null) {
 
@@ -139,7 +153,9 @@ class EditNotificationGoalFragment :
                     val selectedPositionHyImp =
                         viewModel.getSelectedHydrationImperialPosition(convertedValue)
                     if (selectedPositionHyImp != -1) {
-                        wheelAdapterStepsPicker.selectedItemPosition = selectedPositionHyImp
+                        wheelAdapterHydrationImperial.selectedItemPosition = selectedPositionHyImp
+                    }else{
+                        wheelAdapterHydrationImperial.selectedItemPosition = 0
                     }
                 }
             }
@@ -220,6 +236,11 @@ class EditNotificationGoalFragment :
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
 
+                    val (title,message) = viewModel.getHydrationMessage(total)
+
+                    binding.lytHydrationPicker.textView159.text = getString(title)
+                    binding.lytHydrationPicker.textView160.text = getString(message)
+
                     viewModel.updateHydration(total, isMetric)
                 }
             }
@@ -247,6 +268,11 @@ class EditNotificationGoalFragment :
                     val selectedMl = item.split(" ").get(0).toIntOrNull()
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
+
+                    val (title,message) = viewModel.getHydrationMessage(total)
+
+                    binding.lytHydrationPicker.textView159.text = getString(title)
+                    binding.lytHydrationPicker.textView160.text = getString(message)
 
                     viewModel.updateHydration(total, isMetric)
                 }
@@ -276,6 +302,11 @@ class EditNotificationGoalFragment :
                     val convertedValue = item.split(" ")[0].toIntOrNull()
                     if (convertedValue != null) {
                         viewModel.updateHydration(convertedValue, isMetric)
+
+                        val (title,message) = viewModel.getHydrationMessage(viewModel.convertOuncesToRoundedMl(convertedValue.toDouble()))
+
+                        binding.lytHydrationPicker.textView159.text = getString(title)
+                        binding.lytHydrationPicker.textView160.text = getString(message)
                     }
                 }
             }
@@ -289,36 +320,7 @@ class EditNotificationGoalFragment :
 
         }
 
-
-
         return
-
-        /*   val listData = ArrayList<WheelItem<String>>()
-           selectionList.first.forEach {
-               listData.add(WheelItem(it))
-           }
-           binding.lytHydrationPicker.wheelPicker.visibleItemCount = 5//it could not be less then 3
-           wheelAdapterHydrationImperial.data = listData
-           wheelAdapterHydrationImperial.setOnItemSelectedListener { item ->
-               Log.d(
-                   "TAG",
-                   "onItemSelected: ${item.split(" ").get(0)}"
-               )
-               tryCatch {
-                   viewModel.updateHydration(item.split(" ")[0].toIntOrNull(), isMetric)
-               }
-               //mSelectedValue = mSelectionList?.get(wheelAdapterHydrationImperial.currentItemPosition) ?: ""
-               //mSelectedPosition = wheelAdapterHydrationImperial.currentItemPosition
-           }
-           wheelAdapterHydrationImperial.bind(binding.lytHydrationPicker.wheelPicker)*/
-        /*        mSelectedValue = if (selectedValue.isNullOrEmpty()) selectionList[0] else selectedValue
-                mInitialSelectedValue = selectedValue
-                mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
-                    0
-                } else {
-                    getSelectedPosition(selectedValue, selectionList)
-                }*/
-        //wheelAdapterHydrationImperial.selectedItemPosition = mSelectedPosition
     }
 
     private fun initStepsUi(selectionList: List<String>) {
@@ -335,29 +337,15 @@ class EditNotificationGoalFragment :
             )
 
             tryCatch {
-                viewModel.stepsGoal = item.split(" ")[0].toIntOrNull()
+                val steps = item.split(" ")[0].toIntOrNull()
+
+                val (title,message) = viewModel.getStepsMessage(steps?:0)
+
+                binding.lytStepsPicker.textView159.text = getString(title)
+                binding.lytStepsPicker.textView160.text = getString(message)
+                viewModel.stepsGoal = steps
             }
-            //mSelectedValue = mSelectionList?.get(wheelAdapterHydrationImperial.currentItemPosition) ?: ""
-            //mSelectedPosition = wheelAdapterHydrationImperial.currentItemPosition
         }
         wheelAdapterStepsPicker.bind(binding.lytStepsPicker.wheelPicker)
-        /*        mSelectedValue = if (selectedValue.isNullOrEmpty()) selectionList[0] else selectedValue
-                mInitialSelectedValue = selectedValue
-                mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
-                    0
-                } else {
-                    getSelectedPosition(selectedValue, selectionList)
-                }*/
-        //wheelAdapterHydrationImperial.selectedItemPosition = mSelectedPosition
     }
-
-    private fun getSelectedPosition(selectedValue: String, selectionList: Array<String>): Int {
-        for ((index, item) in selectionList.withIndex()) {
-            if (item.equals(selectedValue, true)) {
-                return index
-            }
-        }
-        return 0
-    }
-
 }

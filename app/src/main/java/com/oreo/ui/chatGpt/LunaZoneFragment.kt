@@ -270,7 +270,8 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
             var state = it
 
-            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()) {
+            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()
+                && mainViewModel.syncTextState.value.equals(context?.getString(R.string.text_all_set)).not()) {
                 state = SummaryStates.GENERATING
             }
             when (state) {

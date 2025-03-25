@@ -117,8 +117,6 @@ class SessionManager
 
     var firmwareLogsStatus = MutableLiveData(-1)
 
-    var realtimeWorkoutData = MutableLiveData<WorkoutRealTimeData>()
-
     var reloadTodayData = MutableLiveData<Event<Boolean>>()
 
 

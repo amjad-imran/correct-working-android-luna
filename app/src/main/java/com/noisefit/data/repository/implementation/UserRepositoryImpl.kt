@@ -1,10 +1,15 @@
 package com.noisefit.data.repository.implementation
 
 import android.net.Uri
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
+import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -14,9 +19,11 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.Interest
+import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.RecentActivities
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.response.BaseApiResponse
@@ -28,13 +35,16 @@ import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserGoals
 import com.noisefit_commans.models.UserInfo
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.NotificationToggleModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingLocationData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -48,6 +58,8 @@ class UserRepositoryImpl(
     private val offlineDataMapper: OfflineDataMapper,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val dataUnitConverter: DataUnitConverter,
+    private val keyValueDataSource: KeyValueDataSource,
+    private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserRepository {
 
@@ -133,6 +145,7 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
             localDatSource.saveAppBodyMeasurementsTimeStamp()
             val url = "${BuildConfig.BASE_URL_NEW}/user_detail/profile/update"
             remoteDataSource.updateUserProfile(url, request)
@@ -213,16 +226,136 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getNotificationToggle(): Flow<Resource<BaseApiResponse<NotificationToggleModel>>> {
-        return safeApiCallFlow(dispatcher) {
-            val date = LocalDate.now()
-            remoteDataSource.getNotificationToggle(
-                "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date"
-            )
+
+        return flow {
+            emit(Resource.Loading(true))
+
+            val type = KeyValueDataType.NOTIFICATION_GOAL_TOGGLE
+            var resultData: NotificationToggleModel? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne()
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", type)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<NotificationToggleModel>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(Resource.Loading(false))
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val date = LocalDate.now()
+                val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date"
+                remoteDataSource.getNotificationToggle(url)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = type.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
     override suspend fun updateNotificationToggle(requestObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_TOGGLE)
             val date = LocalDate.now()
             remoteDataSource.updateNotificationToggle(
                 "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date",

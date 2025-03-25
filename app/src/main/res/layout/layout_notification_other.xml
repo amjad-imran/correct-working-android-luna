@@ -28,7 +28,7 @@
 
     <include
         android:id="@+id/lytHydration"
-        layout="@layout/layout_settings_row_toggle"
+        layout="@layout/layout_settings_row_toggle_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
 
     <include
         android:id="@+id/lytSteps"
-        layout="@layout/layout_settings_row_toggle"
+        layout="@layout/layout_settings_row_toggle_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -48,12 +48,22 @@
 
     <include
         android:id="@+id/lytSleep"
-        layout="@layout/layout_settings_row_toggle"
+        layout="@layout/layout_settings_row_toggle_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lytSteps" />
+
+    <include
+        android:id="@+id/lytFemaleHealth"
+        layout="@layout/layout_settings_row_toggle_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lytSleep" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

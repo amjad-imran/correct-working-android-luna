@@ -44,6 +44,7 @@ import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.noisefit_zhsdk.log.ZhBleLogUtils
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
+import com.zhapp.ble.bean.AgpsInfoBean
 import com.zhapp.ble.bean.BodyTemperatureSettingBean
 import com.zhapp.ble.bean.BreathingLightSettingsBean
 import com.zhapp.ble.bean.ClassicBluetoothStateBean
@@ -205,8 +206,10 @@ constructor(
 
     override fun getAgpsState() {
         CallBackUtils.agpsCallBack = object : AgpsCallBack {
-            override fun onRequestState(p0: Boolean) {
-                testQueryDeviceDataCallback?.onQueryDataReceived(QueryCallback.AgpsRequestState(p0))
+
+
+            override fun onRequestState(p0: AgpsInfoBean?) {
+            //    testQueryDeviceDataCallback?.onQueryDataReceived(QueryCallback.AgpsRequestState(p0))
             }
         }
 
@@ -354,7 +357,7 @@ constructor(
             }
             LOGS.d("Realtime Data battery Info : ${p0.batteryInfo} Steps: ${p0.steps} Calories: ${p0.calories}")
 
-            if (p0.steps != null || p0.calories != null || p0.heartRate != null) {
+            /*if (p0.steps != null || p0.calories != null || p0.heartRate != null) {
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.WorkoutRealTimeDataObtained(
                         WorkoutRealTimeData(
@@ -376,7 +379,7 @@ constructor(
                     )
                 )
 
-            }
+            }*/
 
 
             if (capacity != null) {
@@ -619,6 +622,10 @@ constructor(
          */
         CallBackUtils.settingMenuCallBack = object : SettingMenuCallBack {
             override fun onVibrationResult(model: Int) {
+            }
+
+            override fun onCustomizeLeftClickSettings(p0: Int) {
+
             }
 
             override fun onVibrationDurationResult(p0: Int) {
