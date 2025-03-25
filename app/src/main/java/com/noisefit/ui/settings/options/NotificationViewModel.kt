@@ -9,6 +9,8 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,6 +28,7 @@ class NotificationViewModel @Inject constructor(
     var hydrationToggle = false
     var stepsToggle = false
     var sleepToggle = false
+    var femaleHealthToggle = false
 
     fun getNotificationToggle() {
         viewModelScope.launch {
@@ -60,6 +63,7 @@ class NotificationViewModel @Inject constructor(
                                 hydrationToggle = it.hydrate_notification
                                 stepsToggle = it.steps_notification
                                 sleepToggle = it.sleep_notification
+                                femaleHealthToggle = it.female_health
                             }
                             valueUpdate.postValue(Event(true))
                         }
@@ -79,6 +83,7 @@ class NotificationViewModel @Inject constructor(
                 this.addProperty("hydrate_notification", hydrationToggle)
                 this.addProperty("steps_notification", stepsToggle)
                 this.addProperty("sleep_notification", sleepToggle)
+                this.addProperty("female_health_notification", femaleHealthToggle)
             }
             userRepository.updateNotificationToggle(request)
                 .collect { resource ->
@@ -114,5 +119,10 @@ class NotificationViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun shouldShowFemaleHealth(): Boolean {
+        val user=  localDataStore.getUser()
+        return !user?.userInfo?.gender.equals("male", true)
     }
 }

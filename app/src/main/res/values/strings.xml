@@ -1911,5 +1911,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_steps_15">Elite Mover Status.</string>
     <string name="text_steps_15_message">Equivalent to a mini-marathon every few days!</string>
     <string name="text_goal_achieved">Goal Achieved</string>
+    <string name="text_menstrual_health">Menstrual health</string>
 
 </resources>
