@@ -213,7 +213,6 @@ constructor(
             }
         }
 
-        ControlBleTools.getInstance().requestAgpsState(null)
     }
 
     private fun returnVolume(): Pair<Int, Int> {
@@ -909,6 +908,10 @@ constructor(
             }
 
             override fun onEvRemindType(p0: Int) {
+            }
+
+            override fun onCustomizeLeftClickSettings(p0: Int) {
+
             }
 
 
