@@ -135,6 +135,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.rescheduleAlarms()
         setLunaIcon()
+
     }
 
     private fun setLunaIcon() {
@@ -973,13 +974,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     is SyncEvents.Success -> {
                         //viewModel.syncProgressBarState.value = null
+                        if(viewModel.syncTextState.value!=null){
+                            viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                                this@OreoMainActivity,
+                                syncDataStatus.progress,
+                                syncDataStatus.total,
+                                syncDataStatus
+                            )
+                        }
 
-                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
-                            this@OreoMainActivity,
-                            syncDataStatus.progress,
-                            syncDataStatus.total,
-                            syncDataStatus
-                        )
 
                         /* binding.lytHeader.pbSync.max = syncDataStatus.total
                          binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -1000,14 +1003,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     SyncEvents.ServerSyncSuccess -> {
                         viewModel.syncProgressBarState.value = null
-                        viewModel.syncTextState.value = viewModel.getSyncingMessage(
-                            this@OreoMainActivity,
-                            0,
-                            0,
-                            syncDataStatus
-                        )
+                        if(viewModel.syncTextState.value!=null){
+                            viewModel.syncTextState.value = viewModel.getSyncingMessage(
+                                this@OreoMainActivity,
+                                0,
+                                0,
+                                syncDataStatus
+                            )
 
-                        syncCompletedState()
+                            syncCompletedState()
+                        }
+
 
                         //viewModel.syncTextState.value = null
                         binding.progressBar.root.gone()
@@ -1136,6 +1142,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onResume() {
         super.onResume()
+        LOGS.d("dsflkjhsdkjfhksdfj ${viewModel.sessionManager.syncCompleted.value?.peekContent()}")
+
+        if(viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.ServerSyncSuccess ||viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.Success){
+            viewModel.syncTextState.value = null
+        }
         navController?.addOnDestinationChangedListener(navListener)
         viewModel.ringDataStore.getRingDevice()?.let {
             if (viewModel.sessionManager.connectStateRing.value == null) {

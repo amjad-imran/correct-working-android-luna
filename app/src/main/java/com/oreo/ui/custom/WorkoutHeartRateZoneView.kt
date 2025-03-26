@@ -20,7 +20,7 @@ class WorkoutHeartRateZoneView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var zoneId: Int? = 0
+    var zoneId: Int? = -1
         set(value) {
             field = value
             invalidate()

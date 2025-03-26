@@ -1829,5 +1829,39 @@
     <string name="text_uploading_sleep">Enviando dados de sono…</string>
     <string name="text_updating_activity_trends">Atualizando tendências de atividade…</string>
     <string name="text_calculating_readiness_score">Calculando a pontuação de prontidão…</string>
+    <string name="text_improves_muscle_recovery_and_reduces_soreness">Melhora a recuperação muscular e reduz dores</string>
+    <string name="text_enhanced_performance_amp_recovery">Desempenho e recuperação aprimorados</string>
+    <string name="text_edit_daily_goals">Editar metas diárias</string>
+    <string name="text_reminder_active">Lembrete ativo</string>
+    <string name="text_reminder_silent">Lembrete silencioso</string>
+    <string name="text_hydration_1">Essencial para o funcionamento diário</string>
+    <string name="text_hydration_1_message">Previne fadiga e dores de cabeça causadas por desidratação.</string>
+    <string name="text_hydration_2">Corpo e mente em sintonia</string>
+    <string name="text_hydration_2_message">Mantém as articulações lubrificadas, reduzindo rigidez e cãibras. Otimiza a função renal e a eliminação de toxinas.</string>
+    <string name="text_hydration_3">Desempenho e recuperação aprimorados</string>
+    <string name="text_hydration_3_message">Melhora a recuperação muscular e reduz dores.</string>
+    <string name="text_hydration_4">Hidratação máxima para energia máxima</string>
+    <string name="text_hydration_4_message">Melhora a entrega de oxigênio para energia contínua. Mantém a pele saudável e reduz o inchaço.</string>
+    <string name="text_hydration_5">Domínio total da hidratação</string>
+    <string name="text_hydration_5_message">Maximiza o desempenho atlético e a resistência.</string>
+    <string name="text_steps_1">O primeiro passo importa!</string>
+    <string name="text_steps_1_message">Mesmo 1.000 passos por dia podem melhorar a circulação e reduzir a rigidez.</string>
+    <string name="text_steps_3">Base para o movimento.</string>
+    <string name="text_steps_3_message">Equivale a ~30 minutos de atividade leve, ajudando a combater o sedentarismo.</string>
+    <string name="text_steps_5">Ativando seu corpo.</string>
+    <string name="text_steps_5_message">Caminhar essa quantidade queima ~150–200 calorias para a maioria das pessoas.</string>
+    <string name="text_steps_7">Zona saudável para o coração.</string>
+    <string name="text_steps_7_message">Um ótimo equilíbrio entre condicionamento físico e sustentabilidade.</string>
+    <string name="text_steps_8">Faixa ideal de bem-estar.</string>
+    <string name="text_steps_8_message">Associado a menores riscos de diabetes, obesidade e hipertensão.</string>
+    <string name="text_steps_10">Padrão ouro de atividade.</string>
+    <string name="text_steps_10_message">Equivale a ~8 km (~5 milhas) de caminhada.</string>
+    <string name="text_steps_12">Zona de desempenho máximo.</string>
+    <string name="text_steps_12_message">Fortalece o coração e os pulmões, promovendo resistência atlética.</string>
+    <string name="text_steps_15">Status de Mover Elite.</string>
+    <string name="text_steps_15_message">Equivale a uma mini maratona a cada poucos dias!</string>
+    <string name="text_goal_achieved">Meta alcançada</string>
+    <string name="text_menstrual_health">Saúde menstrual</string>
+
 
 </resources>

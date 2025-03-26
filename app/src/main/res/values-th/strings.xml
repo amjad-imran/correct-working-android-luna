@@ -1820,5 +1820,39 @@
     <string name="text_uploading_sleep">กำลังอัปโหลดข้อมูลการนอน…</string>
     <string name="text_updating_activity_trends">กำลังปรับปรุงแนวโน้มกิจกรรม…</string>
     <string name="text_calculating_readiness_score">กำลังคำนวณคะแนนความพร้อม…</string>
+    <string name="text_improves_muscle_recovery_and_reduces_soreness">ช่วยฟื้นฟูกล้ามเนื้อและลดอาการปวดเมื่อย</string>
+    <string name="text_enhanced_performance_amp_recovery">ประสิทธิภาพและการฟื้นตัวที่ดีขึ้น</string>
+    <string name="text_edit_daily_goals">แก้ไขเป้าหมายรายวัน</string>
+    <string name="text_reminder_active">การแจ้งเตือนเปิดอยู่</string>
+    <string name="text_reminder_silent">การแจ้งเตือนแบบเงียบ</string>
+    <string name="text_hydration_1">จำเป็นต่อการทำงานประจำวัน</string>
+    <string name="text_hydration_1_message">ป้องกันอาการอ่อนเพลียและปวดหัวจากการขาดน้ำ</string>
+    <string name="text_hydration_2">ร่างกายและสมองทำงานสอดคล้องกัน</string>
+    <string name="text_hydration_2_message">ช่วยหล่อลื่นข้อต่อ ลดอาการตึงและตะคริว ปรับปรุงการทำงานของไตและการขับสารพิษ</string>
+    <string name="text_hydration_3">ประสิทธิภาพและการฟื้นตัวที่ดีขึ้น</string>
+    <string name="text_hydration_3_message">ช่วยฟื้นฟูกล้ามเนื้อและลดอาการปวดเมื่อย</string>
+    <string name="text_hydration_4">ความชุ่มชื้นสูงสุดเพื่อพลังงานสูงสุด</string>
+    <string name="text_hydration_4_message">ช่วยเพิ่มการส่งออกซิเจนเพื่อพลังงานต่อเนื่อง ผิวพรรณสดใสและลดอาการบวมน้ำ</string>
+    <string name="text_hydration_5">ความชำนาญด้านการดื่มน้ำขั้นสูงสุด</string>
+    <string name="text_hydration_5_message">เพิ่มสมรรถภาพทางกีฬาและความทนทานสูงสุด</string>
+    <string name="text_steps_1">ก้าวแรกสำคัญ!</string>
+    <string name="text_steps_1_message">เพียง 1,000 ก้าว/วัน ช่วยกระตุ้นการไหลเวียนและลดอาการตึง</string>
+    <string name="text_steps_3">พื้นฐานของการเคลื่อนไหว</string>
+    <string name="text_steps_3_message">เทียบเท่ากับการออกกำลังกายเบาประมาณ 30 นาที ช่วยต่อต้านพฤติกรรมนั่งนิ่ง</string>
+    <string name="text_steps_5">กระตุ้นร่างกายของคุณ</string>
+    <string name="text_steps_5_message">เดินในระดับนี้สามารถเผาผลาญ ~150–200 แคลอรี</string>
+    <string name="text_steps_7">โซนสุขภาพหัวใจ</string>
+    <string name="text_steps_7_message">สมดุลระหว่างการออกกำลังกายและความยั่งยืน</string>
+    <string name="text_steps_8">ช่วงสุขภาพที่เหมาะสม</string>
+    <string name="text_steps_8_message">เกี่ยวข้องกับความเสี่ยงที่ลดลงอย่างมีนัยสำคัญต่อเบาหวาน โรคอ้วน และความดันโลหิตสูง</string>
+    <string name="text_steps_10">มาตรฐานทองคำของกิจกรรม</string>
+    <string name="text_steps_10_message">เทียบเท่ากับการเดิน ~8 กม. (~5 ไมล์)</string>
+    <string name="text_steps_12">โซนประสิทธิภาพสูงสุด</string>
+    <string name="text_steps_12_message">เพิ่มสมรรถภาพของหัวใจและปอด ส่งเสริมความทนทานทางกีฬา</string>
+    <string name="text_steps_15">สถานะนักเคลื่อนไหวระดับสูง</string>
+    <string name="text_steps_15_message">เทียบเท่ากับการวิ่งมินิมาราธอนทุกไม่กี่วัน!</string>
+    <string name="text_goal_achieved">บรรลุเป้าหมาย</string>
+    <string name="text_menstrual_health">สุขภาพประจำเดือน</string>
+
 
 </resources>

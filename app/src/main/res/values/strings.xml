@@ -1873,7 +1873,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_edit_daily_goals">Edit daily goals</string>
     <string name="text_reminder_active">Reminder active</string>
     <string name="text_reminder_silent">Reminder silent</string>
-
     <string name="text_hydration_1">Essential for Daily Function</string>
     <string name="text_hydration_1_message">Prevents dehydration-related fatigue and headaches.</string>
     <string name="text_hydration_2">Body &amp; Brain in Sync</string>
@@ -1884,30 +1883,20 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_hydration_4_message">Enhances oxygen delivery for sustained energy. Keeps skin glowing and reduces bloating.</string>
     <string name="text_hydration_5">Ultimate Hydration Mastery</string>
     <string name="text_hydration_5_message">Maximizes athletic performance and endurance.</string>
-
-
-
     <string name="text_steps_1">The First Step Matters!</string>
     <string name="text_steps_1_message">Even 1,000 steps/day can boost circulation and reduce stiffness.</string>
-
     <string name="text_steps_3">Foundation for Movement.</string>
     <string name="text_steps_3_message">Equivalent to ~30 minutes of light activity, helping combat a sedentary lifestyle.</string>
-
     <string name="text_steps_5">Activating Your Body.</string>
     <string name="text_steps_5_message">Walking this much burns ~150–200 calories for most users.</string>
-
     <string name="text_steps_7">Heart-Healthy Zone.</string>
     <string name="text_steps_7_message">A great balance between fitness and sustainability.</string>
-
     <string name="text_steps_8">Optimal Wellness Range.</string>
     <string name="text_steps_8_message">Associated with significantly lower risks of diabetes, obesity, and hypertension.</string>
-
     <string name="text_steps_10">Gold Standard for Activity.</string>
     <string name="text_steps_10_message">Equivalent to walking ~5 miles (8 km).</string>
-
     <string name="text_steps_12">Peak Performance Zone.</string>
     <string name="text_steps_12_message">Strengthens heart and lung capacity, promoting athletic endurance.</string>
-
     <string name="text_steps_15">Elite Mover Status.</string>
     <string name="text_steps_15_message">Equivalent to a mini-marathon every few days!</string>
     <string name="text_goal_achieved">Goal Achieved</string>

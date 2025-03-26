@@ -360,7 +360,7 @@ class SplashViewModel
     fun parseAppLink(string: String?): AppLinks? {
         if (string.isNullOrEmpty()) return null
 
-        if (string.equals("/linkReferral",true)) {
+        if (string.equals("/referral",true)) {
             return AppLinks.REFERRAL
         } else {
             return null

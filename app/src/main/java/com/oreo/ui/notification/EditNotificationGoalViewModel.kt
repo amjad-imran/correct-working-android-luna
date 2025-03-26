@@ -39,7 +39,7 @@ class EditNotificationGoalViewModel @Inject constructor(
         hydrationList2.clear()
 
         if (isMetric) {
-            val minLiter = 0
+            val minLiter = 1
             val maxLiter = 14
 
             for (i in minLiter..maxLiter) {
@@ -49,7 +49,7 @@ class EditNotificationGoalViewModel @Inject constructor(
                 hydrationList2.add("$i ml")
             }
         } else {
-            val minOz = 40
+            val minOz = 30
             val maxOz = 500
 
             for (i in minOz..maxOz step 10) {

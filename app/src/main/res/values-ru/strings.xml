@@ -1834,5 +1834,39 @@
     <string name="text_uploading_sleep">Загружаются данные сна…</string>
     <string name="text_updating_activity_trends">Обновление трендов активности…</string>
     <string name="text_calculating_readiness_score">Вычисление показателя готовности…</string>
+    <string name="text_improves_muscle_recovery_and_reduces_soreness">Улучшает восстановление мышц и снижает болезненность</string>
+    <string name="text_enhanced_performance_amp_recovery">Повышенная производительность и восстановление</string>
+    <string name="text_edit_daily_goals">Редактировать ежедневные цели</string>
+    <string name="text_reminder_active">Напоминание активно</string>
+    <string name="text_reminder_silent">Напоминание без звука</string>
+    <string name="text_hydration_1">Необходимо для повседневных функций</string>
+    <string name="text_hydration_1_message">Предотвращает усталость и головные боли, вызванные обезвоживанием.</string>
+    <string name="text_hydration_2">Согласие тела и разума</string>
+    <string name="text_hydration_2_message">Смазывает суставы, снижает скованность и судороги. Оптимизирует функцию почек и выведение токсинов.</string>
+    <string name="text_hydration_3">Повышенная производительность и восстановление</string>
+    <string name="text_hydration_3_message">Улучшает восстановление мышц и снижает болезненность.</string>
+    <string name="text_hydration_4">Максимальная гидратация для максимальной энергии</string>
+    <string name="text_hydration_4_message">Улучшает доставку кислорода для устойчивой энергии. Делает кожу сияющей и уменьшает вздутие живота.</string>
+    <string name="text_hydration_5">Совершенное владение гидратацией</string>
+    <string name="text_hydration_5_message">Максимизирует спортивные показатели и выносливость.</string>
+    <string name="text_steps_1">Первый шаг имеет значение!</string>
+    <string name="text_steps_1_message">Даже 1000 шагов в день могут улучшить кровообращение и уменьшить скованность.</string>
+    <string name="text_steps_3">Основа для движения.</string>
+    <string name="text_steps_3_message">Эквивалент ~30 минут легкой активности, помогает бороться с малоподвижным образом жизни.</string>
+    <string name="text_steps_5">Активация тела.</string>
+    <string name="text_steps_5_message">Такое количество шагов сжигает ~150–200 калорий для большинства пользователей.</string>
+    <string name="text_steps_7">Зона здоровья сердца.</string>
+    <string name="text_steps_7_message">Отличный баланс между фитнесом и устойчивостью.</string>
+    <string name="text_steps_8">Оптимальный диапазон здоровья.</string>
+    <string name="text_steps_8_message">Связано со значительно меньшими рисками диабета, ожирения и гипертонии.</string>
+    <string name="text_steps_10">Золотой стандарт активности.</string>
+    <string name="text_steps_10_message">Эквивалент ~8 км (~5 миль) пешком.</string>
+    <string name="text_steps_12">Зона пиковой производительности.</string>
+    <string name="text_steps_12_message">Укрепляет сердце и легкие, способствует спортивной выносливости.</string>
+    <string name="text_steps_15">Статус элитного движителя.</string>
+    <string name="text_steps_15_message">Эквивалент мини-марафона каждые несколько дней!</string>
+    <string name="text_goal_achieved">Цель достигнута</string>
+    <string name="text_menstrual_health">Менструальное здоровье</string>
+
 
 </resources>

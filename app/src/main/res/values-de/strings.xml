@@ -1831,4 +1831,38 @@
     <string name="text_updating_activity_trends">Aktualisiere Aktivitätstrends…</string>
     <string name="text_calculating_readiness_score">Berechne den Bereitschaftsindex…</string>
 
+    <string name="text_improves_muscle_recovery_and_reduces_soreness">Verbessert die Muskelregeneration und reduziert Muskelkater</string>
+    <string name="text_enhanced_performance_amp_recovery">Verbesserte Leistung &amp; Erholung</string>
+    <string name="text_edit_daily_goals">Tägliche Ziele bearbeiten</string>
+    <string name="text_reminder_active">Erinnerung aktiv</string>
+    <string name="text_reminder_silent">Erinnerung stumm</string>
+    <string name="text_hydration_1">Wichtig für die tägliche Funktion</string>
+    <string name="text_hydration_1_message">Verhindert ermüdungsbedingte Dehydration und Kopfschmerzen.</string>
+    <string name="text_hydration_2">Körper &amp; Gehirn im Einklang</string>
+    <string name="text_hydration_2_message">Hält Gelenke geschmeidig und reduziert Steifheit und Krämpfe. Optimiert die Nierenfunktion und den Abtransport von Giftstoffen.</string>
+    <string name="text_hydration_3">Verbesserte Leistung &amp; Erholung</string>
+    <string name="text_hydration_3_message">Verbessert die Muskelregeneration und reduziert Muskelkater.</string>
+    <string name="text_hydration_4">Maximale Hydration für maximale Energie</string>
+    <string name="text_hydration_4_message">Verbessert die Sauerstoffzufuhr für anhaltende Energie. Lässt die Haut strahlen und reduziert Blähungen.</string>
+    <string name="text_hydration_5">Ultimative Hydration-Kompetenz</string>
+    <string name="text_hydration_5_message">Maximiert sportliche Leistung und Ausdauer.</string>
+    <string name="text_steps_1">Der erste Schritt zählt!</string>
+    <string name="text_steps_1_message">Schon 1.000 Schritte/Tag fördern die Durchblutung und reduzieren Steifheit.</string>
+    <string name="text_steps_3">Grundlage für Bewegung.</string>
+    <string name="text_steps_3_message">Entspricht etwa 30 Minuten leichter Aktivität – gut gegen Bewegungsmangel.</string>
+    <string name="text_steps_5">Aktivierung deines Körpers.</string>
+    <string name="text_steps_5_message">So viel zu gehen verbrennt etwa 150–200 Kalorien.</string>
+    <string name="text_steps_7">Herzgesundheits-Zone.</string>
+    <string name="text_steps_7_message">Ein guter Kompromiss zwischen Fitness und Alltagstauglichkeit.</string>
+    <string name="text_steps_8">Optimale Wellness-Zone.</string>
+    <string name="text_steps_8_message">Senkt das Risiko für Diabetes, Fettleibigkeit und Bluthochdruck deutlich.</string>
+    <string name="text_steps_10">Goldstandard der Aktivität.</string>
+    <string name="text_steps_10_message">Entspricht ca. 8 km zu Fuß.</string>
+    <string name="text_steps_12">Spitzenleistungszone.</string>
+    <string name="text_steps_12_message">Stärkt Herz- und Lungenfunktion, unterstützt sportliche Ausdauer.</string>
+    <string name="text_steps_15">Elite-Beweger-Status.</string>
+    <string name="text_steps_15_message">Entspricht einem Mini-Marathon alle paar Tage!</string>
+    <string name="text_goal_achieved">Ziel erreicht</string>
+    <string name="text_menstrual_health">Menstruationsgesundheit</string>
+
 </resources>

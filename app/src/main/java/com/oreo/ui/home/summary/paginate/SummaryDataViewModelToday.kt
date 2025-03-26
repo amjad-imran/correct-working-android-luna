@@ -2184,6 +2184,11 @@ class SummaryDataViewModelToday @Inject constructor(
 
         viewModelScope.launch {
             val lastValue = notificationGoalsCardData.value?.hydration ?: 0
+
+
+            if(lastValue==0 && increase.not()){
+                return@launch
+            }
             var updatedValue =
                 if (increase) (lastValue + glassSize) else (lastValue - glassSize)
 
@@ -2280,6 +2285,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     "sleep_notification",
                     notificationToggleModel?.sleep_notification ?: false
                 )
+                this.addProperty(
+                    "female_health_notification",
+                    notificationToggleModel?.female_health ?: false
+                )
             }
             userRepositoryOld.updateNotificationToggle(request)
                 .collect { resource ->
@@ -2308,6 +2317,12 @@ class SummaryDataViewModelToday @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
 
+                                if(notificationToggleModel?.hydrate_notification ==true ||
+                                    notificationToggleModel?.steps_notification ==true ||
+                                    notificationToggleModel?.sleep_notification ==true){
+                                    notificationToggleModel?.master_notification = true
+                                }
+
                                 if (notificationGoalsCardData.value != null) {
                                     notificationGoalsCardData.postValue(notificationGoalsCardData.value)
                                 }
@@ -2330,7 +2345,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                             Event(
                                                 Pair(
                                                     NotificationGoal.STEPS,
-                                                    notificationToggleModel?.hydrate_notification
+                                                    notificationToggleModel?.steps_notification
                                                         ?: false
                                                 )
                                             )
@@ -2357,6 +2372,7 @@ class SummaryDataViewModelToday @Inject constructor(
             in 71..80 -> R.drawable.ic_glass_80
             in 81..90 -> R.drawable.ic_glass_90
             in 91..100 -> R.drawable.ic_glass_100
+            in 101..Int.MAX_VALUE -> R.drawable.ic_glass_100
             else -> R.drawable.ic_glass_0
         }
     }
