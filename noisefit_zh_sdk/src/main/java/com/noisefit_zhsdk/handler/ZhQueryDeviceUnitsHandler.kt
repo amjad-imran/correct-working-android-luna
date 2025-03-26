@@ -623,10 +623,6 @@ constructor(
             override fun onVibrationResult(model: Int) {
             }
 
-            override fun onCustomizeLeftClickSettings(p0: Int) {
-
-            }
-
             override fun onVibrationDurationResult(p0: Int) {
 
             }
