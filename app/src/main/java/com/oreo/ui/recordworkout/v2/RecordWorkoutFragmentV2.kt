@@ -428,9 +428,6 @@ class RecordWorkoutFragmentV2 :
         binding.lytRingConnecting.root.visible()
         binding.imageConnecting.visible()
         binding.groupRingStatus.gone()
-
-        binding.btnPause.invisible()
-        binding.btnEnd.invisible()
     }
 
     private fun setStateConnected() {
