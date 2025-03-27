@@ -1827,7 +1827,7 @@
     <string name="text_pause">Pause</string>
     <string name="text_syncing_recent_data">Synchronisation des données récentes…</string>
     <string name="text_almost_there">Presque fini…</string>
-    <string name="text_all_set">C\'est parti !</string>
+    <string name="text_all_set">C\'est parti!</string>
     <string name="text_refining_your_stats">Affinement de vos statistiques…</string>
     <string name="text_uploading_sleep">Téléchargement des données de sommeil…</string>
     <string name="text_updating_activity_trends">Mise à jour des tendances d\'activité…</string>

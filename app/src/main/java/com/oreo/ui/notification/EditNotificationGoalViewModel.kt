@@ -27,12 +27,30 @@ class EditNotificationGoalViewModel @Inject constructor(
     var hydrationGoal: Int? = null
     var stepsGoal: Int? = null
 
+    var isGoalChanged = MutableLiveData<Boolean>(false)
     val notificationGoalReceived = MutableLiveData<Event<NotificationGoals>>()
 
     private val stepsGoalList = mutableListOf<String>()
     private val hydrationList1 = mutableListOf<String>()
     private val hydrationList2 = mutableListOf<String>()
 
+
+    fun handleValueChange() {
+        if (isGoalChanged.value == true) return
+        val savedSteps = notificationGoalReceived.value?.peekContent()?.steps_required
+        val savedHydration = notificationGoalReceived.value?.peekContent()?.hydration_required
+        if (stepsGoal != null && savedSteps != null) {
+            if (stepsGoal != savedSteps) {
+                isGoalChanged.postValue(true)
+            }
+        }
+
+        if (hydrationGoal != null && savedHydration != null) {
+            if (hydrationGoal != savedHydration) {
+                isGoalChanged.postValue(true)
+            }
+        }
+    }
 
     fun getHydrationGoalList(isMetric: Boolean): Pair<List<String>, List<String>> {
         hydrationList1.clear()
@@ -101,7 +119,6 @@ class EditNotificationGoalViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
                             notificationGoalReceived.postValue(Event(it))
                         }
                     }
@@ -116,9 +133,9 @@ class EditNotificationGoalViewModel @Inject constructor(
         }
     }
 
-    fun getSelectedHydrationImperialPosition(selectedValue: Int):Int{
+    fun getSelectedHydrationImperialPosition(selectedValue: Int): Int {
         return hydrationList1.indexOfFirst {
-            it.split(" ").get(0).toInt()==selectedValue
+            it.split(" ").get(0).toInt() == selectedValue
         }
     }
 
@@ -127,7 +144,6 @@ class EditNotificationGoalViewModel @Inject constructor(
             hydrationGoal = value1
         } else {
             value1.toDouble().let {
-                LOGS.d("sdkjfhlsjdfhksdf ${convertOuncesToRoundedMl(it)}")
                 hydrationGoal = (convertOuncesToRoundedMl(it)).toInt()
             }
         }
@@ -146,16 +162,16 @@ class EditNotificationGoalViewModel @Inject constructor(
     }
 
     fun getSelectedHydrationMetricPositionL(hydrationValue: Int): Int {
-        val literValue = hydrationValue/1000
+        val literValue = hydrationValue / 1000
         return hydrationList1.indexOfFirst {
-            it.split(" ").get(0).toInt()==literValue
+            it.split(" ").get(0).toInt() == literValue
         }
     }
 
     fun getSelectedHydrationMetricPositionMl(hydrationValue: Int): Int {
-        val mlvalue = hydrationValue%1000
+        val mlvalue = hydrationValue % 1000
         return hydrationList2.indexOfFirst {
-            it.split(" ").get(0).toInt()==mlvalue
+            it.split(" ").get(0).toInt() == mlvalue
         }
     }
 
@@ -163,59 +179,71 @@ class EditNotificationGoalViewModel @Inject constructor(
     /**
      * value in ml
      */
-    fun getHydrationMessage(ml: Int) :Pair<Int,Int>{
-        return when(ml){
+    fun getHydrationMessage(ml: Int): Pair<Int, Int> {
+        return when (ml) {
             in 0..2000 -> {
-                 Pair(R.string.text_hydration_1,R.string.text_hydration_1_message)
+                Pair(R.string.text_hydration_1, R.string.text_hydration_1_message)
             }
+
             in 2001..3000 -> {
-                Pair(R.string.text_hydration_2,R.string.text_hydration_2_message)
+                Pair(R.string.text_hydration_2, R.string.text_hydration_2_message)
             }
+
             in 3001..4000 -> {
-                Pair(R.string.text_hydration_3,R.string.text_hydration_3_message)
+                Pair(R.string.text_hydration_3, R.string.text_hydration_3_message)
             }
+
             in 4001..5000 -> {
-                Pair(R.string.text_hydration_4,R.string.text_hydration_4_message)
+                Pair(R.string.text_hydration_4, R.string.text_hydration_4_message)
             }
+
             in 5001..Int.MAX_VALUE -> {
-                Pair(R.string.text_hydration_5,R.string.text_hydration_5_message)
+                Pair(R.string.text_hydration_5, R.string.text_hydration_5_message)
             }
+
             else -> {
-                Pair(R.string.text_hydration_1,R.string.text_hydration_1_message)
+                Pair(R.string.text_hydration_1, R.string.text_hydration_1_message)
             }
         }
     }
 
 
-    fun getStepsMessage(steps: Int) :Pair<Int,Int>{
-        return when(steps){
+    fun getStepsMessage(steps: Int): Pair<Int, Int> {
+        return when (steps) {
             in 0..3000 -> {
-                 Pair(R.string.text_steps_1,R.string.text_steps_1_message)
+                Pair(R.string.text_steps_1, R.string.text_steps_1_message)
             }
+
             in 3001..5000 -> {
-                Pair(R.string.text_steps_3,R.string.text_steps_3_message)
+                Pair(R.string.text_steps_3, R.string.text_steps_3_message)
             }
+
             in 5001..7000 -> {
-                Pair(R.string.text_steps_5,R.string.text_steps_5_message)
+                Pair(R.string.text_steps_5, R.string.text_steps_5_message)
             }
+
             in 7001..8000 -> {
-                Pair(R.string.text_steps_7,R.string.text_steps_7_message)
+                Pair(R.string.text_steps_7, R.string.text_steps_7_message)
             }
+
             in 8001..10000 -> {
-                Pair(R.string.text_steps_8,R.string.text_steps_8_message)
+                Pair(R.string.text_steps_8, R.string.text_steps_8_message)
             }
+
             in 10001..12000 -> {
-                Pair(R.string.text_steps_10,R.string.text_steps_10_message)
+                Pair(R.string.text_steps_10, R.string.text_steps_10_message)
             }
+
             in 12001..15000 -> {
-                Pair(R.string.text_steps_12,R.string.text_steps_12_message)
+                Pair(R.string.text_steps_12, R.string.text_steps_12_message)
             }
+
             in 15001..Int.MAX_VALUE -> {
-                Pair(R.string.text_steps_15,R.string.text_steps_15_message)
+                Pair(R.string.text_steps_15, R.string.text_steps_15_message)
             }
 
             else -> {
-                Pair(R.string.text_steps_1,R.string.text_steps_1_message)
+                Pair(R.string.text_steps_1, R.string.text_steps_1_message)
             }
         }
     }

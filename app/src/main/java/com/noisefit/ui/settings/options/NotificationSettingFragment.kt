@@ -83,10 +83,8 @@ class NotificationSettingFragment :
 
             viewModel.masterToggle = isChecked
 
-            binding.lytOther.switchOtherMain.isEnabled = isChecked
-            if (isChecked.not()) {
-                disableOtherNotifications()
-            }
+
+            handleOtherNotifications(isChecked)
 
             viewModel.updateNotificationToggle()
         }
@@ -203,18 +201,23 @@ class NotificationSettingFragment :
             binding.lytOther.switchOtherMain.isChecked = false
         }
     }
+    private fun handleOtherNotifications(state: Boolean) {
+        binding.lytOther.switchOtherMain.isEnabled = state
+        binding.lytOther.lytHydration.switchMain.isEnabled = state
+        binding.lytOther.lytSteps.switchMain.isEnabled = state
+        binding.lytOther.lytSleep.switchMain.isEnabled = state
+        binding.lytOther.lytFemaleHealth.switchMain.isEnabled = state
 
-    private fun disableOtherNotifications() {
-        binding.lytOther.switchOtherMain.isChecked = false
-        binding.lytOther.lytHydration.switchMain.isChecked = false
-        binding.lytOther.lytSteps.switchMain.isChecked = false
-        binding.lytOther.lytSleep.switchMain.isChecked = false
-        binding.lytOther.lytFemaleHealth.switchMain.isChecked = false
+        binding.lytOther.switchOtherMain.isChecked = state
+        binding.lytOther.lytHydration.switchMain.isChecked = state
+        binding.lytOther.lytSteps.switchMain.isChecked = state
+        binding.lytOther.lytSleep.switchMain.isChecked = state
+        binding.lytOther.lytFemaleHealth.switchMain.isChecked = state
 
-        viewModel.hydrationToggle = false
-        viewModel.stepsToggle = false
-        viewModel.sleepToggle = false
-        viewModel.femaleHealthToggle = false
+        viewModel.hydrationToggle = state
+        viewModel.stepsToggle = state
+        viewModel.sleepToggle = state
+        viewModel.femaleHealthToggle = state
     }
 
     override fun subscribeObservers() {
@@ -222,6 +225,7 @@ class NotificationSettingFragment :
         viewModel.valueUpdate.observe(this) {
             it.getContent()?.let {
                 binding.switchMaster.isChecked = viewModel.masterToggle
+                binding.lytNotificationMain.switchMain.isChecked = viewModel.masterToggle
 
                 if (viewModel.masterToggle) {
 
@@ -232,6 +236,12 @@ class NotificationSettingFragment :
                     binding.lytOther.lytSteps.switchMain.isChecked = viewModel.stepsToggle
                     binding.lytOther.lytSleep.switchMain.isChecked = viewModel.sleepToggle
                     binding.lytOther.lytFemaleHealth.switchMain.isChecked = viewModel.femaleHealthToggle
+                }else{
+                    binding.lytOther.switchOtherMain.isEnabled = false
+                    binding.lytOther.lytHydration.switchMain.isEnabled = false
+                    binding.lytOther.lytSteps.switchMain.isEnabled = false
+                    binding.lytOther.lytSleep.switchMain.isEnabled = false
+                    binding.lytOther.lytFemaleHealth.switchMain.isEnabled = false
                 }
             }
         }
