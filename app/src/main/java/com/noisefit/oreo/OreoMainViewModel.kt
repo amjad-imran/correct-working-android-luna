@@ -1,5 +1,6 @@
 package com.noisefit.oreo
 
+import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
@@ -7,18 +8,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -80,6 +84,7 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
+    val referralRepository: ReferralRepository,
     val alarmRepository: AlarmRepository
 ) : BaseViewModel() {
 
@@ -1079,4 +1084,93 @@ constructor(
     fun rescheduleAlarms() {
         alarmRepository.rescheduleAlarms()
     }
+
+    fun getReferralInfo(showReferral: (data: ReferralInfoResponse) -> Unit) {
+        viewModelScope.launch {
+            referralRepository.getReferralInfo().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getReferralInfo(showReferral)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            if (getReferralRunningState(it)) {
+                                if (it != null) {
+                                    showReferral(it)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getReferralRunningState(referralInfoResponse: ReferralInfoResponse?): Boolean {
+        if (referralInfoResponse == null) return false
+
+        if (referralInfoResponse.showReferral.not()) {
+            return false
+        }
+
+        return if (referralInfoResponse.banner.isNullOrEmpty()) {
+            if (referralInfoResponse.prize != null) {
+                true
+            } else {
+                referralInfoResponse.hasReferral
+            }
+        } else {
+            return true
+        }
+    }
+
+    fun getSyncingMessage(context: Context, progress: Int, total: Int, syncDataStatus: SyncEvents): String? {
+
+        if (syncDataStatus is SyncEvents.Started) {
+            return context.getString(R.string.text_syncing_recent_data)
+        } else if (syncDataStatus is SyncEvents.Success || syncDataStatus is SyncEvents.ServerSyncStarted) {
+            return context.getString(R.string.text_almost_there)
+        } else if (syncDataStatus is SyncEvents.ServerSyncSuccess) {
+            return context.getString(R.string.text_all_set)
+        }
+
+        if (total <= 0) return null
+
+        if ((progress+1==total) || progress == total) {
+            return context.getString(R.string.text_refining_your_stats)
+        }
+
+        val percentage = (progress * 100).toFloat() / total
+
+        return when {
+            progress < total -> when {
+                percentage <= 40f -> context.getString(R.string.text_syncing_recent_data)
+                percentage in 41f..60f -> context.getString(R.string.text_uploading_sleep)
+                percentage in 61f..80f -> context.getString(R.string.text_updating_activity_trends)
+                percentage in 81f..90f -> context.getString(R.string.text_calculating_readiness_score)
+                else -> context.getString(R.string.text_refining_your_stats)
+            }
+            else -> context.getString(R.string.text_all_set)
+        }
+    }
+
 }

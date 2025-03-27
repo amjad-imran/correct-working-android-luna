@@ -201,6 +201,13 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     private fun handleBackgroundNotifications(intent: Intent?) {
 
+        val appLinkUri = intent?.data
+        if (appLinkUri != null) {
+            val path = appLinkUri.path
+            viewModel.appLink = viewModel.parseAppLink(path)
+            return
+        }
+
 
         intent?.extras?.run {
             if (get(NOTIFICATION_TYPE_EXTRA) == null && get(NOTIFICATION_INDEX_EXTRA) == null) {
@@ -209,7 +216,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             }
             viewModel.notificationType = get(NOTIFICATION_TYPE_EXTRA) as String?
             viewModel.notificationIndex = get(NOTIFICATION_INDEX_EXTRA) as String?
-            viewModel.deeplink = get(NOTIFICATION_LINK) as String?
+
+
+            //viewModel.deeplink = get(NOTIFICATION_LINK) as String?
             intent.data = null
             intent.putExtra(NOTIFICATION_BUNDLE_TYPE, "")
         }
@@ -223,7 +232,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 this,
                 viewModel.notificationType,
                 viewModel.notificationIndex,
-                viewModel.deeplink
+                viewModel.appLink
             )
         )
         finish()
@@ -263,14 +272,23 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     private fun handleNotifications(intent1: Intent?) {
 
+        val appLinkUri = intent1?.data
+        if (appLinkUri != null) {
+            val path = appLinkUri.path
+            viewModel.appLink = viewModel.parseAppLink(path)
+            return
+        }
+
         intent1?.let {
 
             viewModel.notificationType = it.getStringExtra(NOTIFICATION_BUNDLE_TYPE)
             viewModel.notificationIndex = it.getStringExtra(NOTIFICATION_BUNDLE_INDEX)
-            viewModel.deeplink = it.getStringExtra(NOTIFICATION_BUNDLE_LINK)
+            //viewModel.deeplink = it.getStringExtra(NOTIFICATION_BUNDLE_LINK)
+            viewModel.appLink = null
+
             intent1.data = null
             intent1.putExtra(NOTIFICATION_BUNDLE_TYPE, "")
-            LOGS.d("NEW_NOTIFICATION_TYPE ${viewModel.notificationType} ${viewModel.notificationIndex} ${viewModel.deeplink}")
+            LOGS.d("NEW_NOTIFICATION_TYPE ${viewModel.notificationType} ${viewModel.notificationIndex} ${viewModel.appLink}")
 //            openWebPage(it)
         }
     }

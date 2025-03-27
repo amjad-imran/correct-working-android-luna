@@ -39,6 +39,8 @@ class DetectWorkoutFragment :
                         isWorkoutAdded = true
                         navigateToDetailsWorkout(data, workoutId)
                         viewModel.markWorkoutSynced(data.id, position)
+                    }, onAlreadyAdded = {
+                        viewModel.markWorkoutSynced(data.id, position)
                     })
                 }
 

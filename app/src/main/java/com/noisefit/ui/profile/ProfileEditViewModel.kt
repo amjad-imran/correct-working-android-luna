@@ -102,6 +102,9 @@ class ProfileEditViewModel
     var dobValue = MutableLiveData(false)
     var localUser: User? = null
 
+    var hydrationGoal: Int? = null//in ml
+    var stepsGoal: Int? = null//in ml
+
     var tempLocation: UserLocation? = null
 
 
@@ -109,6 +112,11 @@ class ProfileEditViewModel
         unitList.add(METRIC)
         unitList.add(IMPERIAL)
         localUser = localDataStore.getUser()
+
+        hydrationGoal =
+            if (localUser?.userGoals?.hydrationGoals == 0) 3000 else localUser?.userGoals?.hydrationGoals
+
+        stepsGoal = if(localUser?.userGoals?.stepGoal==0) 5000 else localUser?.userGoals?.stepGoal
 
         updateName(localUser?.firstName)
         setGender(localUser?.userInfo?.gender)
@@ -578,20 +586,21 @@ class ProfileEditViewModel
             getGenderForBmr()
 
         )
-        val stepsGoal = stepGoalNew.second.toInt()
+        //val stepsGoal = stepGoalNew.second.toInt()
         val caloriesGoal = caloriesGoalNew
 
 
         val userGoals = JsonObject()
         userGoals.apply {
             addProperty("sleep_goals", DefaultSleepGoal)
-            addProperty("step_goals", stepsGoal)
 //            addProperty("step_goals", localUser?.userGoals?.stepGoal)
             addProperty("calories_goals", caloriesGoal)
 //            addProperty("calories_goals", localUser?.userGoals?.caloriesGoal)
             addProperty("distance_goals", getDistanceInMeter(localUser?.userGoals?.distanceGoal))
             addProperty("unit_system", unit.value?.name)
             addProperty("unit_system_luna", unit.value?.name)
+            addProperty("hydration_goals", hydrationGoal ?: 3000)
+            addProperty("step_goals", stepsGoal?:5000)
         }
         userObject.add("goal", userGoals)
 
@@ -652,7 +661,7 @@ class ProfileEditViewModel
                                 it.notificationsEnabledLuna ?: 1
                             )
 
-                            if(removeGoogleFit){
+                            if (removeGoogleFit) {
                                 viewModelScope.launch(Dispatchers.IO) {
                                     googleFitDataSource.markDataSynced(
                                         0,
@@ -700,5 +709,6 @@ class ProfileEditViewModel
     fun isMetric(): Boolean {
         return unit.value != Units.IMPERIAL
     }
+
 
 }

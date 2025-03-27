@@ -58,6 +58,12 @@ class OMyProfileFragment :
         }*/
 
         binding.llLunaAiCalibration.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["target"] = "Voice_calibration"
+                }
+            )
             navigate(R.id.audioAiCalibrationFragment,bundleOf("planType" to PlanType.NONE, "text" to null))
         }
 
@@ -102,9 +108,9 @@ class OMyProfileFragment :
 
         binding.rowCycleTracker.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
+                MoEngageLunaAppEvents.user_menu_option_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "cycle_tracking"
+                    this["target"] = "cycle_tracking"
                 })
             viewModel.getCycleTrackerInfo()
 //            navigate(R.id.cycleTrackerStreakFragment)

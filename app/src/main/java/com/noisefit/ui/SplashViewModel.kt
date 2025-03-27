@@ -52,7 +52,7 @@ class SplashViewModel
     var connectedDevice: ColorFitDevice? = null
     var notificationType: String? = null
     var notificationIndex: String? = null
-    var deeplink: String? = null
+    var appLink: AppLinks? = null
     private var ignoredVersion = 0
     private val _userOnBoardingFlow = MutableLiveData<UserOnBoardingFlow>()
     var userOnBoardingFlow = _userOnBoardingFlow
@@ -357,8 +357,22 @@ class SplashViewModel
         return true
     }
 
+    fun parseAppLink(string: String?): AppLinks? {
+        if (string.isNullOrEmpty()) return null
+
+        if (string.equals("/referral",true)) {
+            return AppLinks.REFERRAL
+        } else {
+            return null
+        }
+    }
+
 }
 
 enum class UserOnBoardingFlow {
     SHOW_OREO_DASHBOARD, SHOW_DASHBOARD, ASK_FOR_LOGIN, SETUP_PROFILE, ACCEPT_PRIVACY_POLICY, PAIR_DEVICE, DEVICE_SETUP
+}
+
+enum class AppLinks {
+    REFERRAL
 }

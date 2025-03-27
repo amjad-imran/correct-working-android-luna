@@ -10,18 +10,38 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.google.gson.Gson
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.luna.R
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.util.notif.NotificationEventsClass
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.NotificationToggleModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class WindDownNotification : BroadcastReceiver() {
+
+
+    @Inject
+    lateinit var localDataSource: DataStoredInterface
+
     override fun onReceive(context: Context?, intent: Intent?) {
 
         LOGS.d("dsfjhskdjfhkWInd down notification recieved")
 
         if (context == null) {
+            return
+        }
+
+        val showSleepNotification = localDataSource.getShouldShowSleepNotification()
+
+        if(showSleepNotification.not()){
             return
         }
 

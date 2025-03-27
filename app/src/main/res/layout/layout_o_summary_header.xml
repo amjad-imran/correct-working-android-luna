@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-   <!-- <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/pbSync"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:indicatorColor="#e6667ced"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:trackColor="#19ffffff"
-        app:trackCornerRadius="1dp"
-        app:trackThickness="1dp" />-->
+    <!-- <com.google.android.material.progressindicator.LinearProgressIndicator
+         android:id="@+id/pbSync"
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:visibility="gone"
+         tools:visibility="visible"
+         app:indicatorColor="#e6667ced"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:trackColor="#19ffffff"
+         app:trackCornerRadius="1dp"
+         app:trackThickness="1dp" />-->
 
 
     <ImageView
@@ -45,20 +45,27 @@
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
         tools:visibility="visible" />
 
-
-    <TextView
+    <com.app.shimmertextview.ShimmerTextView
         android:id="@+id/tvHeaderStatus"
         style="@style/H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:singleLine="true"
         android:textColor="@color/carolina_blue"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/profileView1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/oreoStatus"
+        app:layout_constraintStart_toEndOf="@+id/profileView1"
         app:layout_constraintTop_toTopOf="@+id/profileView1"
-        tools:text="Connecting.." />
+        app:shimmer_base_color="#7095AF"
+        app:shimmer_colored="true"
+        app:shimmer_duration="1000"
+        app:shimmer_highlight_color="#C2D9E6"
+        app:shimmer_repeat_mode="restart"
+        tools:text="Connecting.."
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/oreoStatus"

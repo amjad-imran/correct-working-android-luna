@@ -253,14 +253,14 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
         mainViewModel.syncTextState.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.imageLogo.visible()
-                binding.tvHeaderStatus.gone()
+                //binding.imageLogo.visible()
+                //binding.tvHeaderStatus.gone()
             } else {
-                binding.imageLogo.gone()
+                /*binding.imageLogo.gone()
                 binding.tvHeaderStatus.apply {
                     text = getString(R.string.text_syncing_dot)
                     visible()
-                }
+                }*/
                 viewModel.summaryStates.postValue(SummaryStates.GENERATING)
             }
         }
@@ -270,7 +270,8 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
             var state = it
 
-            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()) {
+            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()
+                && mainViewModel.syncTextState.value.equals(context?.getString(R.string.text_all_set)).not()) {
                 state = SummaryStates.GENERATING
             }
             when (state) {

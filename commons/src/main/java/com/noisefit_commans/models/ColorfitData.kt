@@ -517,6 +517,7 @@ data class UserLocation(
 
 data class UserGoals(
     @SerializedName("step_goals") var stepGoal: Int = 0,
+    @SerializedName("hydration_goals") var hydrationGoals: Int = 0,
     @SerializedName("calories_goals") var caloriesGoal: Int = 0,
     @SerializedName("distance_goals") var distanceGoal: Int = 0,
     @SerializedName("sleep_goals") var sleepGoal: Int = 0,
@@ -569,6 +570,13 @@ data class BatteryData(
     @SerializedName("is_charging") var isCharging: Boolean = false
 ) :
     ColorfitData()
+
+data class WorkoutRealTimeData(
+    val hrValue: Int? = null,
+    val calorieValue: Int? = null,
+    val steps: Int? = null,
+    val distance: Long? = null
+)
 
 
 data class DoNotDisturb(

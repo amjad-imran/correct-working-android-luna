@@ -191,7 +191,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
             if (viewModel.sessionManager.bluetoothStateDash.value != false) {
-                mainViewModel.syncTextState.value = context?.getString(R.string.text_syncing_dot)
+                mainViewModel.syncTextState.value = getString(R.string.text_syncing_recent_data)
             }
             syncData()
         }
@@ -230,7 +230,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 binding.lytHeader.tvHeaderStatus.gone()
             } else {
                 binding.lytHeader.tvHeaderStatus.apply {
-                    text = getString(R.string.text_syncing_dot)
+                    text = it/*getString(R.string.text_syncing_dot)*/
                     visible()
                 }
             }

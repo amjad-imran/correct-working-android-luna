@@ -1,11 +1,13 @@
 package com.noisefit_commans.interfaces.device_data
 
+import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.models.ColorfitError
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.models.WatchUpdateStatus
+import com.noisefit_commans.models.WorkoutRealTimeData
 
 sealed class UpdateDeviceDataCallback {
 
@@ -41,6 +43,8 @@ sealed class UpdateDeviceDataCallback {
     class MusicSwitchUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class CallSwitchUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class UserInfoUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+
+    class WorkoutRealTimeDataObtained(val data: WorkoutRealTimeData) : UpdateDeviceDataCallback()
 
     class DeviceUnitsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class BrightnessLevelUpdated(val success: Boolean) : UpdateDeviceDataCallback()

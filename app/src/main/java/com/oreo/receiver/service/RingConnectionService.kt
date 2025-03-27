@@ -1718,6 +1718,7 @@ constructor() : LifecycleService() {
         override fun onQueryDataReceived(queryCallback: QueryCallback) {
 
             when (queryCallback) {
+
                 is QueryCallback.UpdateFirmwareLogStatus -> {
                     sessionManager.firmwareLogsStatus.postValue(queryCallback.fwLogStatus)
                 }
@@ -1738,7 +1739,7 @@ constructor() : LifecycleService() {
                     LOGS.d(TAG, "battery Level Ring : $percent")
 
                     batteryNotificationUtils.handleBatteryNotification(
-                        percent,queryCallback.batteryData.isCharging
+                        percent, queryCallback.batteryData.isCharging
                     )
                     /* val lastBatteryLevel = watchDataStore.getBatteryPercentRing()
                      batteryNotificationUtils.handleBatteryNotification(

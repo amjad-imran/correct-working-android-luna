@@ -7,9 +7,14 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -30,8 +35,8 @@ import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -199,6 +204,8 @@ class SummaryDataFragmentToday :
         viewModel.handleGoogleFitCard()
 
         viewModel.getSleepPlanerDetails()
+
+        viewModel.getNotificationToggle()
     }
 
 
@@ -418,6 +425,75 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["config"] = "turned_on/turned_off"
+                    this["goal"] = "steps"
+                }
+            )
+
+            if (viewModel.notificationToggleModel != null) {
+                viewModel.notificationToggleModel!!.steps_notification =
+                    viewModel.notificationToggleModel?.steps_notification!!.not()
+                viewModel.updateNotificationToggle(NotificationGoal.STEPS)
+            }
+        }
+
+        binding.contentMain.lytNotificationCard.ivNotificationHydrate.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["config"] = "turned_on/turned_off"
+                    this["goal"] = "hydrate"
+                }
+            )
+
+            if (viewModel.notificationToggleModel != null) {
+                viewModel.notificationToggleModel!!.hydrate_notification =
+                    viewModel.notificationToggleModel?.hydrate_notification!!.not()
+                viewModel.updateNotificationToggle(NotificationGoal.HYDRATE)
+            }
+        }
+
+        binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["goal"] = "hydrate"
+                    this["action"] = "subtracted"
+                }
+            )
+
+            viewModel.decreaseHydration()
+        }
+
+        binding.contentMain.lytNotificationCard.ivHydratePlus.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["goal"] = "hydrate"
+                    this["action"] = "added"
+                }
+            )
+
+            viewModel.increaseHydration()
+        }
+
+        binding.contentMain.lytNotificationCard.tvEdit.setOnClickListener {
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.goalsSetting_clicked
+            )
+
+            navigate(R.id.editNotificationGoalFragment)
+        }
+
         binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
             viewModel.hideFindMyRingPermCard()
         }
@@ -487,7 +563,8 @@ class SummaryDataFragmentToday :
             }
             pairStatus = "paired"
 
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_sync_manual,
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.luna_activity_sync_manual,
                 HashMap<String, Any>().apply {
                     this[MoEngageAppEventParams.operating_system] = "Android"
                     this[MoEngageAppEventParams.device_pairing_status] = pairStatus
@@ -552,7 +629,83 @@ class SummaryDataFragmentToday :
         }
     }
 
+
+    private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+        textView1.visibility = View.VISIBLE
+        textView2.visibility = View.INVISIBLE
+
+        val fadeIn: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_goal)
+        val fadeOut: Animation =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out_goal)
+
+        textView1.startAnimation(fadeOut)
+        textView1.visibility = View.INVISIBLE
+        textView2.visibility = View.VISIBLE
+        textView2.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            textView2.startAnimation(fadeOut)
+            textView2.visibility = View.INVISIBLE
+            textView1.visibility = View.VISIBLE
+            textView1.startAnimation(fadeIn)
+        }, 1500)
+
+    }
+
+
     override fun subscribeObservers() {
+
+
+        viewModel.notificationUpdatedState.observe(this) {
+            it.getContent()?.let {
+                when (it.first) {
+                    NotificationGoal.HYDRATE -> {
+                        if (it.second) {
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_active
+                                )
+                        } else {
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_silent
+                                )
+                        }
+                        notificationTextFade(
+                            binding.contentMain.lytNotificationCard.textView153,
+                            binding.contentMain.lytNotificationCard.textHydrateReminderMessage
+                        )
+                    }
+
+                    NotificationGoal.STEPS -> {
+                        if (it.second) {
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_active
+                                )
+                        } else {
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage.text =
+                                getString(
+                                    R.string.text_reminder_silent
+                                )
+                        }
+                        notificationTextFade(
+                            binding.contentMain.lytNotificationCard.textView89,
+                            binding.contentMain.lytNotificationCard.textStepsReminderMessage
+                        )
+                    }
+                }
+            }
+        }
+
+        viewModel.notificationGoalsCardData.observe(this) {
+            if (it == null) {
+                binding.contentMain.lytNotificationCard.root.gone()
+            } else {
+                binding.contentMain.lytNotificationCard.root.visible()
+                setNotificationGoalsCardData(it)
+            }
+        }
 
         viewModel.sessionManager.googleFitSyncCompleted.observe(this) {
             it.getContent()?.let {
@@ -1045,6 +1198,89 @@ class SummaryDataFragmentToday :
 
         }
 
+    }
+
+    private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
+
+        binding.contentMain.lytNotificationCard.apply {
+            root.visible()
+            val stepsGoal = notificationGoal.steps_required ?: 5000
+
+            tvSteps.text =
+                if (notificationGoal.steps == null) "0" else notificationGoal.steps.toString()
+            tvStepsGoal.text = "/$stepsGoal"
+
+            val userSteps = notificationGoal.steps ?: 0
+            val percent = (userSteps.toFloat() / stepsGoal.toFloat()) * 100
+
+            progressSteps.progress = percent
+
+            if (percent >= 100) {
+                textStepsGoalAchieved.visible()
+            } else {
+                textStepsGoalAchieved.gone()
+            }
+
+            val hydrateGoal = notificationGoal.hydration_required ?: 3000
+            val hydrate = notificationGoal.hydration ?: 0
+
+
+            val hydrationText = StringBuilder()
+            var hydratePercent = 0f
+
+            if (viewModel.sessionManager.isMetric()) {
+                hydrationText.append((hydrate.toFloat() / 1000))
+                hydrationText.append("/")
+                hydrationText.append((hydrateGoal.toFloat() / 1000))
+                hydrationText.append("L")
+
+
+                hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+
+            } else {
+
+                val convertedHydrate = hydrate.toFloat() * 0.033814
+                hydrationText.append(String.format("%.1f", convertedHydrate))
+                hydrationText.append("/")
+
+                //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
+                val convertedHydrateGoal =
+                    viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
+
+                hydrationText.append("$convertedHydrateGoal")
+                hydrationText.append("oz")
+
+                hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+
+            }
+            progressHydrate.progress = hydratePercent
+
+            if (hydratePercent >= 100) {
+                textHydrateGoalAchieved.visible()
+            } else {
+                textHydrateGoalAchieved.gone()
+            }
+
+            tvHydration.text = hydrationText
+
+            ivGlassImage.setImageResource(viewModel.getGlassImage(hydratePercent.toInt()))
+
+            if (viewModel.notificationToggleModel?.hydrate_notification == true &&
+                viewModel.notificationToggleModel?.master_notification == true
+            ) {
+                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_on)
+            } else {
+                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_off)
+            }
+
+            if (viewModel.notificationToggleModel?.steps_notification == true &&
+                viewModel.notificationToggleModel?.steps_notification == true
+            ) {
+                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_on)
+            } else {
+                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
+            }
+        }
     }
 
     private fun showBlackListDialog() {

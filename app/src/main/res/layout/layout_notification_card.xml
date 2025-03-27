@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ModalStyleTransparentOreo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView161"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:text="@string/text_daily_goals"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvEdit" />
+
+    <TextView
+        android:id="@+id/tvEdit"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:padding="14dp"
+        android:text="@string/text_edit"
+        android:textColor="#8ED3F1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView70"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/back_steps_goals"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView69"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView161"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView69"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/back_hydrate_goals"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView70"
+        app:layout_constraintTop_toBottomOf="@+id/textView161"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+    <TextView
+        android:id="@+id/textView89"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_steps"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNotificationSteps"
+        app:layout_constraintStart_toStartOf="@+id/imageView70"
+        app:layout_constraintTop_toTopOf="@+id/ivNotificationSteps" />
+
+    <TextView
+        android:id="@+id/textStepsReminderMessage"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:singleLine="true"
+        android:textColor="#72BDB2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/textView89"
+        app:layout_constraintEnd_toStartOf="@+id/ivNotificationSteps"
+        app:layout_constraintStart_toStartOf="@id/textView89"
+        app:layout_constraintTop_toTopOf="@id/textView89"
+        tools:text="Reminder active" />
+
+
+    <com.oreo.ui.custom.StepsProgressBarArch
+        android:id="@+id/progressSteps"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvSteps"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintStart_toStartOf="@+id/imageView70"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotificationSteps" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/progressSteps"
+        app:layout_constraintEnd_toEndOf="@+id/progressSteps"
+        app:layout_constraintStart_toStartOf="@+id/progressSteps"
+        app:layout_constraintTop_toTopOf="@+id/progressSteps">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_goal_steps_walking" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/ivNotificationSteps"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintTop_toTopOf="@+id/imageView70"
+        tools:src="@drawable/ic_notification_on" />
+
+    <TextView
+        android:id="@+id/tvSteps"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#9FFFE5"
+        app:layout_constraintBottom_toBottomOf="@+id/tvStepsGoal"
+        app:layout_constraintEnd_toStartOf="@+id/tvStepsGoal"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/imageView70"
+        tools:text="1000 / " />
+
+    <TextView
+        android:id="@+id/tvStepsGoal"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="#A39FFFE5"
+        app:layout_constraintBottom_toTopOf="@id/textStepsGoalAchieved"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvSteps"
+        tools:text="5000" />
+
+    <TextView
+        android:id="@+id/textStepsGoalAchieved"
+        style="@style/S10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/text_goal_achieved"
+        android:textColor="#809FE2FF"
+        app:layout_constraintBottom_toBottomOf="@id/imageView70"
+        app:layout_constraintEnd_toEndOf="@+id/imageView70"
+        app:layout_constraintStart_toStartOf="@+id/imageView70" />
+
+
+    <ImageView
+        android:id="@+id/ivNotificationHydrate"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69"
+        app:layout_constraintTop_toTopOf="@+id/imageView69"
+        tools:src="@drawable/ic_notification_on" />
+
+    <com.oreo.ui.custom.HydrateProgressBarArch
+        android:id="@+id/progressHydrate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ivHydratePlus"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69"
+        app:layout_constraintStart_toStartOf="@+id/imageView69"
+        app:layout_constraintTop_toBottomOf="@+id/ivNotificationHydrate" />
+
+    <ImageView
+        android:id="@+id/ivGlassImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_glass_0"
+        app:layout_constraintBottom_toBottomOf="@+id/progressHydrate"
+        app:layout_constraintEnd_toEndOf="@+id/progressHydrate"
+        app:layout_constraintStart_toStartOf="@+id/progressHydrate"
+        app:layout_constraintTop_toTopOf="@+id/progressHydrate" />
+
+    <TextView
+        android:id="@+id/textView153"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/text_hydrate"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNotificationHydrate"
+        app:layout_constraintStart_toStartOf="@+id/imageView69"
+        app:layout_constraintTop_toTopOf="@+id/ivNotificationHydrate" />
+
+    <TextView
+        android:id="@+id/textHydrateReminderMessage"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:singleLine="true"
+        android:textColor="#86B5FE"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/textView153"
+        app:layout_constraintEnd_toStartOf="@+id/ivNotificationHydrate"
+        app:layout_constraintStart_toStartOf="@id/textView153"
+        app:layout_constraintTop_toTopOf="@id/textView153"
+        tools:text="Reminder active" />
+
+    <ImageView
+        android:id="@+id/ivHydrateMinus"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_hydrate_minus"
+        app:layout_constraintBottom_toTopOf="@+id/textHydrateGoalAchieved"
+        app:layout_constraintStart_toStartOf="@+id/imageView69" />
+
+    <TextView
+        android:id="@+id/tvHydration"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="center"
+        android:textColor="#9FEEFF"
+        app:layout_constraintBottom_toBottomOf="@+id/ivHydrateMinus"
+        app:layout_constraintEnd_toStartOf="@+id/ivHydratePlus"
+        app:layout_constraintStart_toEndOf="@+id/ivHydrateMinus"
+        app:layout_constraintTop_toTopOf="@+id/ivHydrateMinus"
+        tools:text="1/3L" />
+
+    <ImageView
+        android:id="@+id/ivHydratePlus"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_hydrate_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/ivHydrateMinus"
+        app:layout_constraintEnd_toEndOf="@+id/imageView69" />
+
+    <TextView
+        android:id="@+id/textHydrateGoalAchieved"
+        style="@style/S10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/text_goal_achieved"
+        android:textColor="#809FE2FF"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView69"
+        app:layout_constraintEnd_toEndOf="@+id/ivHydratePlus"
+        app:layout_constraintStart_toStartOf="@+id/ivHydrateMinus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

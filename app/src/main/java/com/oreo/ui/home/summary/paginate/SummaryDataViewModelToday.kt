@@ -11,6 +11,7 @@ import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -23,6 +24,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.AlarmTimingsData
+import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.SleepCardDashState
@@ -54,6 +56,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.ImpactData
+import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
@@ -98,11 +101,13 @@ import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 @HiltViewModel
 class SummaryDataViewModelToday @Inject constructor(
     val userRepository: OreoUserActivityRepository,
+    val userRepositoryOld: UserRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
@@ -123,6 +128,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
     var date: String? = null
+
+    val notificationUpdatedState = MutableLiveData<Event<Pair<NotificationGoal, Boolean>>>()
 
     val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
@@ -146,6 +153,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
+    var notificationToggleModel: NotificationToggleModel? = null
 
 
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -163,6 +171,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val findMyRingCard = MutableLiveData<Boolean?>()
 
     val healthMonitorCardData = MutableLiveData<HealthTrend?>()
+
+    val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
 
     var user: User? = null
     var gender: String? = null
@@ -2164,6 +2174,218 @@ class SummaryDataViewModelToday @Inject constructor(
         }
         return null
     }
+
+    fun decreaseHydration() {
+        updateHydration(false)
+    }
+
+    private fun updateHydration(increase: Boolean) {
+        val glassSize = 250
+
+        viewModelScope.launch {
+            val lastValue = notificationGoalsCardData.value?.hydration ?: 0
+
+
+            if(lastValue==0 && increase.not()){
+                return@launch
+            }
+            var updatedValue =
+                if (increase) (lastValue + glassSize) else (lastValue - glassSize)
+
+            val reqObj = JsonObject().apply {
+
+
+                if (updatedValue < 0) {
+                    updatedValue = 0
+                }
+                this.addProperty("hydration_amount", updatedValue)
+                this.addProperty("date", LocalDate.now().toString())
+            }
+            userRepository.updateHydration(reqObj)
+                .collect { resource ->
+                    when (resource) {
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                notificationGoalsCardData.postValue(
+                                    notificationGoalsCardData.value?.copy(
+                                        hydration = updatedValue
+                                    )
+                                )
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    fun increaseHydration() {
+        updateHydration(true)
+    }
+
+    private fun getNotificationGoals() {
+        viewModelScope.launch {
+            userRepository.getNotificationGoals()
+                .collect { resource ->
+                    when (resource) {
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                notificationGoalsCardData.postValue(it)
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+        }
+
+    }
+
+    fun getNotificationToggle() {
+        viewModelScope.launch {
+            userRepositoryOld.getNotificationToggle().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            notificationToggleModel = it
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
+                            getNotificationGoals()
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+    }
+
+
+    fun updateNotificationToggle(notificationGoal: NotificationGoal) {
+        viewModelScope.launch {
+
+            val master = notificationToggleModel?.hydrate_notification ?: false == true ||
+                    notificationToggleModel?.steps_notification ?: false == true ||
+                    notificationToggleModel?.sleep_notification ?: false == true
+
+            val request = JsonObject().apply {
+                this.addProperty("master_notification", master)
+                this.addProperty(
+                    "hydrate_notification",
+                    notificationToggleModel?.hydrate_notification ?: false
+                )
+                this.addProperty(
+                    "steps_notification",
+                    notificationToggleModel?.steps_notification ?: false
+                )
+                this.addProperty(
+                    "sleep_notification",
+                    notificationToggleModel?.sleep_notification ?: false
+                )
+                this.addProperty(
+                    "female_health_notification",
+                    notificationToggleModel?.female_health ?: false
+                )
+            }
+            userRepositoryOld.updateNotificationToggle(request)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateNotificationToggle(notificationGoal)
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                if(notificationToggleModel?.hydrate_notification ==true ||
+                                    notificationToggleModel?.steps_notification ==true ||
+                                    notificationToggleModel?.sleep_notification ==true){
+                                    notificationToggleModel?.master_notification = true
+                                }
+
+                                if (notificationGoalsCardData.value != null) {
+                                    notificationGoalsCardData.postValue(notificationGoalsCardData.value)
+                                }
+
+                                when (notificationGoal) {
+                                    NotificationGoal.HYDRATE -> {
+                                        notificationUpdatedState.postValue(
+                                            Event(
+                                                Pair(
+                                                    NotificationGoal.HYDRATE,
+                                                    notificationToggleModel?.hydrate_notification
+                                                        ?: false
+                                                )
+                                            )
+                                        )
+                                    }
+
+                                    NotificationGoal.STEPS -> {
+                                        notificationUpdatedState.postValue(
+                                            Event(
+                                                Pair(
+                                                    NotificationGoal.STEPS,
+                                                    notificationToggleModel?.steps_notification
+                                                        ?: false
+                                                )
+                                            )
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    fun getGlassImage(percent: Int): Int {
+        return when (percent) {
+            in 0..10 -> R.drawable.ic_glass_0
+            in 11..20 -> R.drawable.ic_glass_20
+            in 21..30 -> R.drawable.ic_glass_30
+            in 31..40 -> R.drawable.ic_glass_40
+            in 41..50 -> R.drawable.ic_glass_50
+            in 51..60 -> R.drawable.ic_glass_60
+            in 61..70 -> R.drawable.ic_glass_70
+            in 71..80 -> R.drawable.ic_glass_80
+            in 81..90 -> R.drawable.ic_glass_90
+            in 91..100 -> R.drawable.ic_glass_100
+            in 101..Int.MAX_VALUE -> R.drawable.ic_glass_100
+            else -> R.drawable.ic_glass_0
+        }
+    }
+
+    fun convertMlToOuncesRounded(milliliters: Double): Int {
+        val ounces = milliliters / 29.5735
+        val roundedOunces = (ounces / 10).roundToInt() * 10
+        return roundedOunces
+    }
+}
+
+enum class NotificationGoal {
+    HYDRATE, STEPS
 }
 
 data class SleepAlert(
