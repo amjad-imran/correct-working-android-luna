@@ -68,14 +68,16 @@ class NotificationSettingFragment :
 
         binding.switchMaster.setOnCheckedChangeListener { buttonView, isChecked ->
 
+
+
+            if (!buttonView.isPressed) return@setOnCheckedChangeListener
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
                     this["target"] = "main"
                 }
             )
-
-            if (!buttonView.isPressed) return@setOnCheckedChangeListener
 
             binding.lytNotificationMain.switchMain.isChecked = isChecked
 
@@ -91,16 +93,16 @@ class NotificationSettingFragment :
 
         binding.lytOther.switchOtherMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
                     this["target"] = "all_reminders"
                 }
             )
-
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
 
             binding.lytOther.lytHydration.switchMain.isChecked = isChecked
             binding.lytOther.lytSteps.switchMain.isChecked = isChecked
@@ -118,6 +120,10 @@ class NotificationSettingFragment :
 
         binding.lytOther.lytHydration.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
@@ -125,9 +131,6 @@ class NotificationSettingFragment :
                 }
             )
 
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
             viewModel.hydrationToggle = isChecked
             if (isChecked) {
                 binding.lytOther.switchOtherMain.isChecked = true
@@ -138,6 +141,10 @@ class NotificationSettingFragment :
         }
         binding.lytOther.lytSteps.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
@@ -145,9 +152,6 @@ class NotificationSettingFragment :
                 }
             )
 
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
             viewModel.stepsToggle = isChecked
             if (isChecked) {
                 binding.lytOther.switchOtherMain.isChecked = true
@@ -157,16 +161,16 @@ class NotificationSettingFragment :
         }
         binding.lytOther.lytSleep.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
                     this["target"] = "sleep"
                 }
             )
-
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
 
             viewModel.sleepToggle = isChecked
             if (isChecked) {

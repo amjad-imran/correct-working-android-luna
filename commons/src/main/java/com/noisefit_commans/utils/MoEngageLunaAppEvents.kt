@@ -82,6 +82,7 @@ object MoEngageLunaAppEvents {
      * AI Events start =========================
      */
     const val home_footer_lunaai = "home_footer_lunaai"
+    const val home_footer_click = "home_footer_click"
     const val home_lunaai_daily_digest_plan = "home_lunaai_daily_digest_plan"
     const val home_lunaai_workout_plan = "home_lunaai_workout_plan"
     const val home_lunaai_nutrition_plan = "home_lunaai_nutrition_plan"
@@ -102,6 +103,8 @@ object MoEngageLunaAppEvents {
     const val goalsSetting_clicked = "goalsSetting_clicked"
     const val action_cancelled = "action_cancelled"
     const val goals_set = "goals_set"
+    const val user_menu_clicked = "user_menu_clicked"
+    const val referral_started = "referral_started"
     //
 
     const val luna_homepage_visit = "luna_homepage_visit"
