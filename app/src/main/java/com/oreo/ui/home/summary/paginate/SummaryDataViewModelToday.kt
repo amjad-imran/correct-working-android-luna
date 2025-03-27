@@ -2294,6 +2294,8 @@ class SummaryDataViewModelToday @Inject constructor(
     fun updateNotificationToggle(notificationGoal: NotificationGoal) {
         viewModelScope.launch {
 
+            vibrationUtils.vibrate(HAPTIC_VIBRATION)
+
             val master = notificationToggleModel?.hydrate_notification ?: false == true ||
                     notificationToggleModel?.steps_notification ?: false == true ||
                     notificationToggleModel?.sleep_notification ?: false == true

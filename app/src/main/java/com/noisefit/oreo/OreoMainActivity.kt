@@ -1212,10 +1212,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         when (appLink) {
             AppLinks.REFERRAL -> {
                 viewModel.getReferralInfo { data ->
-                    this@OreoMainActivity.navController?.navigate(
-                        R.id.referralFragment,
-                        bundleOf("referralInfo" to data)
-                    )
+                    if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.referralFragment){
+                        this@OreoMainActivity.navController?.navigate(
+                            R.id.referralFragment,
+                            bundleOf("referralInfo" to data)
+                        )
+                    }
+
                 }
             }
         }
