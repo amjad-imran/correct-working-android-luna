@@ -85,6 +85,7 @@ import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.StressCombineModel
+import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -803,7 +804,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     }
                                 }
                             }
-                        }
+                  true      }
                     } else {
                         if (enableAi) {
                             userActivities.add(OHealthOverview.LunaAiCard())
@@ -1031,6 +1032,182 @@ class SummaryDataViewModelToday @Inject constructor(
         }
         handleGoogleFitCard()
     }
+
+    private fun getUserManagedHealthData(
+        healthData: ServerUserHealthData,
+        trendsData: TrendsData?,
+        impactData: ImpactData?)
+    {
+        val priorityList = getCardsPriorityFromApi().sortedBy {
+            it.priority
+        }
+        val userActivities = ArrayList<OHealthOverview>()
+
+        //
+        val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
+
+        val newSleepArray = dataConverter.mergeSleepDataV2(
+            healthData.sleep?.sleeps, filteredNaps
+        )
+
+
+        var totalSleep: Int? = null
+        healthData.sleep?.sleeps?.forEach {
+            if (totalSleep == null) {
+                totalSleep = 0
+            }
+            totalSleep = totalSleep!! + (it.totalDuration ?: 0)
+        }
+
+        filteredNaps?.forEach {
+            val start = java.time.LocalDateTime.parse(
+                it.startTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            val end = java.time.LocalDateTime.parse(
+                it.endTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            if (totalSleep == null) {
+                totalSleep = 0
+            }
+            Duration.between(start, end).toSeconds().toInt().let {
+                totalSleep = totalSleep!! + it
+            }
+        }
+
+        val sleepModel = ODashboardSleepModel(
+            sleepScore = healthData.sleep?.sleep_score?.value,
+            totalSleep = totalSleep,
+            restingHr = healthData.sleep?.avg_hrv,
+            sleepStage = newSleepArray ?: ArrayList(),
+            status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
+            statusCode = healthData.sleep?.sleep_score?.status,
+            startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+            endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
+            totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+            noOfNaps = healthData.sleep?.naps?.size ?: 0,
+            noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
+        )
+        //
+
+        priorityList.forEach {
+            when(it.key){
+                "sleep"->{
+                      val sleepData: OHealthOverview? = getSleepDataCard(healthData.sleep)
+                      if (sleepData != null){
+                          userActivities.add(sleepData)
+                      }
+                }
+                "readiness"->{
+                    val readinessData: OHealthOverview? = getSleepDataCard(healthData.sleep)
+                    if (readinessData != null){
+                        userActivities.add(readinessData)
+                    }
+                }
+                "health_monitor"->{
+                    val healthMonitorData: OHealthOverview? = getSleepDataCard(healthData.sleep)
+                    if (healthMonitorData != null){
+                        userActivities.add(healthMonitorData)
+                    }
+                }
+
+            }
+
+
+        }
+
+        healthOverviewData.postValue(userActivities)
+    }
+
+    private fun getSleepDataCard(sleep: OreoSleepModel?): OHealthOverview? =
+         if (true){
+            OHealthOverview.LunaAiCard()
+        }else{
+            null
+        }
+
+
+    private fun getCardsPriorityFromApi() : List<CustomHomeScreenItem> = listOf(
+        CustomHomeScreenItem(
+            R.drawable.icon_sleep,
+            "sleep",
+            resourceProvider.getString(R.string.text_sleep),
+            true,
+            1
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_activity,
+            "activity",
+            resourceProvider.getString(R.string.text_activity_o),
+            true,
+            2
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_readiness,
+            "readiness",
+            resourceProvider.getString(R.string.text_readiness),
+            true,
+            3
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_sleep_planner,
+            "sleep_planner",
+            resourceProvider.getString(R.string.text_sleep_planner),
+            true,
+            4
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_heart_rate,
+            "heart_rate",
+            resourceProvider.getString(R.string.text_heart_rate),
+            false,
+            5
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_heart_monitor,
+            "heart_monitor",
+            resourceProvider.getString(R.string.text_heart_monitor),
+            false,
+            6
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_daily_goals,
+            "daily_goals",
+            resourceProvider.getString(R.string.text_daily_goals),
+            false,
+            7
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_luna_ai,
+            "luna_ai",
+            resourceProvider.getString(R.string.text_luna_ai),
+            false,
+            8
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_cycle_tracker,
+            "cycle_tracker",
+            resourceProvider.getString(R.string.text_cycle_tracker),
+            false,
+            9
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_7_day_trends_card,
+            "7_day_trends_card",
+            resourceProvider.getString(R.string.text_7_day_trends_cards),
+            false,
+            10
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "workout_history",
+            resourceProvider.getString(R.string.text_workout_history),
+            false,
+            11
+        ),
+        // Add more items...
+    )
 
     private fun checkIfIsAfter12(): Boolean {
         return LocalDateTime.now().hour >= 12
