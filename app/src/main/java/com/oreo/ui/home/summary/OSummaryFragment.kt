@@ -229,10 +229,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val allSetText = getString(R.string.text_all_set)
         mainViewModel.syncTextState.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.lytHeader.tvHeaderStatus.gone()
+                //binding.lytHeader.tvHeaderStatus.gone()
                 binding.lytHeader.tvHeaderStatusNonShimmer.gone()
             } else {
-                if (it.equals(allSetText, true)) {
+
+                binding.lytHeader.tvHeaderStatusNonShimmer.text = it
+                binding.lytHeader.tvHeaderStatusNonShimmer.visible()
+
+
+                /*if (it.equals(allSetText, true)) {
                     binding.lytHeader.tvHeaderStatusNonShimmer.visible()
                     binding.lytHeader.tvHeaderStatus.gone()
                     binding.lytHeader.tvHeaderStatusNonShimmer.text = it
@@ -240,7 +245,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     binding.lytHeader.tvHeaderStatusNonShimmer.gone()
                     binding.lytHeader.tvHeaderStatus.visible()
                     binding.lytHeader.tvHeaderStatus.text = it
-                }
+                }*/
             }
         }
 

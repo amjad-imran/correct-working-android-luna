@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.noisefit.ui.settings.options.NotificationSettingFragment">
 
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/layout_toolbar"

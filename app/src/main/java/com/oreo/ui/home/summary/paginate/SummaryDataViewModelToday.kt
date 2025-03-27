@@ -43,9 +43,12 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.db.abstaction.GoogleFitDataSource
@@ -111,6 +114,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val vibrationUtils: VibrationUtils,
     val dataConverter: DataConverter,
     val screenUtils: ScreenUtils,
     val watchDataStore: WatchDataStore,
@@ -2185,10 +2189,11 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch {
             val lastValue = notificationGoalsCardData.value?.hydration ?: 0
 
-
             if(lastValue==0 && increase.not()){
                 return@launch
             }
+
+            vibrationUtils.vibrate(HAPTIC_VIBRATION)
             var updatedValue =
                 if (increase) (lastValue + glassSize) else (lastValue - glassSize)
 
@@ -2205,6 +2210,30 @@ class SummaryDataViewModelToday @Inject constructor(
                 .collect { resource ->
                     when (resource) {
 
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateHydration(increase)
+                                        }
+
+                                        override fun no() {
+
+                                        }
+                                    }
+                            })
+                        }
+
                         is Resource.Success -> {
                             resource.data?.data?.let {
                                 notificationGoalsCardData.postValue(
@@ -2214,8 +2243,6 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
-
-                        else -> {}
                     }
                 }
         }
@@ -2371,7 +2398,8 @@ class SummaryDataViewModelToday @Inject constructor(
             in 61..70 -> R.drawable.ic_glass_70
             in 71..80 -> R.drawable.ic_glass_80
             in 81..90 -> R.drawable.ic_glass_90
-            in 91..100 -> R.drawable.ic_glass_100
+            in 91..99 -> R.drawable.ic_glass_99
+            in 100..100 -> R.drawable.ic_glass_100
             in 101..Int.MAX_VALUE -> R.drawable.ic_glass_100
             else -> R.drawable.ic_glass_0
         }

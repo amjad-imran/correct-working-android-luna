@@ -128,22 +128,26 @@ constructor(
         if (localDataStore.getUserToken() == null) {
             LOGS.d(TAG, "OreoSyncDataWork: user is not logged in!!")
             AppLogs.sendAppLogs("OreoSyncDataWork: user is not logged in!!")
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncFailed))
             return success.invoke()
         }
 
         if (!ApplicationUtils.isInternetConnected()) {
             LOGS.d(TAG, "OreoSyncDataWork: No Internet Access!!")
             AppLogs.sendAppLogs("OreoSyncDataWork: No Internet Access!!, Sync to server failed")
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncFailed))
             return success.invoke()
         }
         if (ringDataStore.getRingDevice() == null) {
             LOGS.d(TAG, "OreoSyncDataWork: No Device paired")
             AppLogs.sendAppLogs("OreoSyncDataWork: No device paired")
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncFailed))
             return success.invoke()
         }
 
         if (ringDataStore.isUpdateUserDeviceDone().not()) {
             AppLogs.sendAppLogs("OreoSyncDataWork: Ring token setup pending")
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncFailed))
             return success.invoke()
         }
 

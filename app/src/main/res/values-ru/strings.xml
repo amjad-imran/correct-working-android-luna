@@ -1829,7 +1829,7 @@
     <string name="text_pause">Пауза</string>
     <string name="text_syncing_recent_data">Синхронизация последних данных…</string>
     <string name="text_almost_there">Почти готово…</string>
-    <string name="text_all_set">Готово! ✅</string>
+    <string name="text_all_set">Готово!</string>
     <string name="text_refining_your_stats">Уточняем ваши данные…</string>
     <string name="text_uploading_sleep">Загружаются данные сна…</string>
     <string name="text_updating_activity_trends">Обновление трендов активности…</string>

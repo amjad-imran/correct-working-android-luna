@@ -30,7 +30,7 @@ class StepsProgressBarArch @JvmOverloads constructor(
 
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
+        strokeCap = Paint.Cap.BUTT
         color = Color.parseColor("#1AFFFFFF")
         strokeWidth = 10f
     }

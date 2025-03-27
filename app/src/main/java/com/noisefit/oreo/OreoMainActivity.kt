@@ -990,6 +990,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                          binding.lytHeader.pbSync.gone()
                          resetSwipeLoadingAnim()*/
                     }
+                    SyncEvents.ServerSyncFailed->{
+                        viewModel.syncTextState.value = null
+                        viewModel.syncProgressBarState.value = null
+                    }
 
                     SyncEvents.ServerSyncStarted -> {
                         binding.progressBar.root.visible()
