@@ -1863,7 +1863,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_pause">Pause</string>
     <string name="text_syncing_recent_data">Syncing recent data…</string>
     <string name="text_almost_there">Almost there…</string>
-    <string name="text_all_set">All set!</string>
+    <string name="text_all_set">All set! ✅</string>
     <string name="text_refining_your_stats">Refining your stats…</string>
     <string name="text_uploading_sleep">Uploading sleep…</string>
     <string name="text_updating_activity_trends">Updating activity trends…</string>

@@ -1827,7 +1827,7 @@
     <string name="text_pause">暂停</string>
     <string name="text_syncing_recent_data">正在同步最近数据…</string>
     <string name="text_almost_there">快好了…</string>
-    <string name="text_all_set">全部就绪！</string>
+    <string name="text_all_set">全部就绪！ ✅</string>
     <string name="text_refining_your_stats">正在完善您的数据…</string>
     <string name="text_uploading_sleep">正在上传睡眠数据…</string>
     <string name="text_updating_activity_trends">正在更新活动趋势…</string>

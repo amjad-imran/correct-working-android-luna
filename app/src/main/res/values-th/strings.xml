@@ -1815,7 +1815,7 @@
     <string name="text_pause">หยุดชั่วคราว</string>
     <string name="text_syncing_recent_data">กำลังซิงค์ข้อมูลล่าสุด…</string>
     <string name="text_almost_there">เกือบแล้ว…</string>
-    <string name="text_all_set">เรียบร้อยแล้ว!</string>
+    <string name="text_all_set">เรียบร้อยแล้ว! ✅</string>
     <string name="text_refining_your_stats">ปรับปรุงสถิติของคุณ…</string>
     <string name="text_uploading_sleep">กำลังอัปโหลดข้อมูลการนอน…</string>
     <string name="text_updating_activity_trends">กำลังปรับปรุงแนวโน้มกิจกรรม…</string>

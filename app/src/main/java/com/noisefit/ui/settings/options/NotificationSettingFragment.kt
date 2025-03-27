@@ -218,6 +218,7 @@ class NotificationSettingFragment :
         viewModel.valueUpdate.observe(this) {
             it.getContent()?.let {
                 binding.switchMaster.isChecked = viewModel.masterToggle
+                binding.lytNotificationMain.switchMain.isChecked = viewModel.masterToggle
 
                 if (viewModel.masterToggle) {
 

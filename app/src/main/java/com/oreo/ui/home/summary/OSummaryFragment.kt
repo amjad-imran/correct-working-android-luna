@@ -226,13 +226,20 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
     override fun subscribeObservers() {
+        val allSetText = getString(R.string.text_all_set)
         mainViewModel.syncTextState.observe(this) {
             if (it.isNullOrEmpty()) {
                 binding.lytHeader.tvHeaderStatus.gone()
+                binding.lytHeader.tvHeaderStatusNonShimmer.gone()
             } else {
-                binding.lytHeader.tvHeaderStatus.apply {
-                    text = it/*getString(R.string.text_syncing_dot)*/
-                    visible()
+                if (it.equals(allSetText, true)) {
+                    binding.lytHeader.tvHeaderStatusNonShimmer.visible()
+                    binding.lytHeader.tvHeaderStatus.gone()
+                    binding.lytHeader.tvHeaderStatusNonShimmer.text = it
+                } else {
+                    binding.lytHeader.tvHeaderStatusNonShimmer.gone()
+                    binding.lytHeader.tvHeaderStatus.visible()
+                    binding.lytHeader.tvHeaderStatus.text = it
                 }
             }
         }

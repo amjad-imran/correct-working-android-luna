@@ -1832,7 +1832,7 @@
     <string name="text_pause">Pausa</string>
     <string name="text_syncing_recent_data">Sincronizando datos recientes…</string>
     <string name="text_almost_there">Casi listo…</string>
-    <string name="text_all_set">¡Listo!</string>
+    <string name="text_all_set">¡Listo! ✅</string>
     <string name="text_refining_your_stats">Refinando tus estadísticas…</string>
     <string name="text_uploading_sleep">Subiendo datos del sueño…</string>
     <string name="text_updating_activity_trends">Actualizando tendencias de actividad…</string>
