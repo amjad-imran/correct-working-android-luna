@@ -69,17 +69,6 @@ class EditNotificationGoalFragment :
         }
 
         binding.btnSave.setOnClickListener {
-            //            viewModel.sessionManager.logMoEngageAppEvent(
-//                MoEngageLunaAppEvents.goals_set,
-//                HashMap<String, Any>().apply {viewModel.sessionManager.logMoEngageAppEvent(
-//                MoEngageLunaAppEvents.goals_set,
-//                HashMap<String, Any>().apply {
-//                    this["goal"] = "goals"
-//                }
-//            )
-//                    this["goal"] = "goals"
-//                }
-//            )
 
             var selectedHydrationGoal = viewModel.hydrationGoal
             var selectedStepsGoal = viewModel.stepsGoal
@@ -109,6 +98,14 @@ class EditNotificationGoalFragment :
 
                 profileViewModel.hydrationGoal = selectedHydrationGoal
                 profileViewModel.stepsGoal = selectedStepsGoal
+
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.goals_set,
+                    HashMap<String, Any>().apply {
+                        this["goal"] = "hydration/steps"
+                        this["value"] = "hydration - $selectedHydrationGoal, steps - $selectedStepsGoal"
+                    }
+                )
 
                 profileViewModel.updateUserProfile()
             }
