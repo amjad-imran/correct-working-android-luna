@@ -996,7 +996,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     }
 
                     SyncEvents.ServerSyncStarted -> {
-                        binding.progressBar.root.visible()
+                        viewModel.showSyncLoader = false
+                        /*if(viewModel.showSyncLoader){
+                            binding.progressBar.root.visible()
+                        }*/
                         viewModel.syncTextState.value = viewModel.getSyncingMessage(
                             this@OreoMainActivity,
                             0,

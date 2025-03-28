@@ -89,6 +89,7 @@ constructor(
 ) : BaseViewModel() {
 
 
+    var showSyncLoader: Boolean = true
     val FAB_ANIM_TIME = 500L
 
     var isBottomNavGifPlaying = false
@@ -276,7 +277,9 @@ constructor(
                     }
 
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        if(showSyncLoader){
+                            setLoading(resource.loading)
+                        }
                     }
 
                     is Resource.NetworkError -> {
@@ -415,7 +418,7 @@ constructor(
             if (newStartDate == null && newEndDate == null) return false
 
             mStartDate = newStartDate
-
+            showSyncLoader = true
             getUserHealthData(newStartDate, newEndDate)
 
             return true
@@ -432,6 +435,7 @@ constructor(
             val (newStartDate, newEndDate) = getNextPaginationDates(mEndDate!!)
             if (newStartDate == null && newEndDate == null) return false
             mEndDate = newEndDate
+            showSyncLoader = true
             getUserHealthData(newStartDate, newEndDate)
             return true
         }

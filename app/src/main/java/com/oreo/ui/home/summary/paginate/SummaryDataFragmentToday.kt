@@ -551,6 +551,7 @@ class SummaryDataFragmentToday :
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
+            mainViewModel.showSyncLoader = false
 
             val pairStatus: String
 
