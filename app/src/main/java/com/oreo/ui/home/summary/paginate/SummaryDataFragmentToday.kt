@@ -228,7 +228,14 @@ class SummaryDataFragmentToday :
         impactData: ImpactData?
     ) {
         viewModel.initTodayData()
-        viewModel.parseHealthData(data, trendsData, impactData)
+
+        //
+        if(viewModel.lunaManagedSwitchState){
+            viewModel.getUserManagedHealthData(data, trendsData, impactData)
+        }else {
+            viewModel.parseHealthData(data, trendsData, impactData)
+        }
+        //
     }
 
 

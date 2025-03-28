@@ -43,7 +43,6 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -77,14 +76,14 @@ import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.data.model.health.OreoActivityModel
+import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
-import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -195,6 +194,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
     var sleepPlannerData: Pair<Boolean, SleepPlannerData?> = Pair(false, null)
     var sleepPlannerDataLoaded = MutableLiveData<Event<Boolean>>()
+
+    //
+    val lunaManagedSwitchState = true
+    //
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -598,11 +601,11 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             filteredNaps?.forEach {
-                val start = java.time.LocalDateTime.parse(
+                val start = LocalDateTime.parse(
                     it.startTime,
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 )
-                val end = java.time.LocalDateTime.parse(
+                val end = LocalDateTime.parse(
                     it.endTime,
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 )
@@ -1033,99 +1036,305 @@ class SummaryDataViewModelToday @Inject constructor(
         handleGoogleFitCard()
     }
 
-    private fun getUserManagedHealthData(
+    fun getUserManagedHealthData(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?)
     {
-        val priorityList = getCardsPriorityFromApi().sortedBy {
-            it.priority
-        }
-        val userActivities = ArrayList<OHealthOverview>()
+        viewModelScope.launch(Dispatchers.IO) {
+            sessionManager.canLogPeriod = false
 
-        //
-        val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
+            val userActivities = ArrayList<OHealthOverview>()
+            val viewedCardsData = ArrayList<OHealthOverview>()
 
-        val newSleepArray = dataConverter.mergeSleepDataV2(
-            healthData.sleep?.sleeps, filteredNaps
-        )
+            val priorityList = getCardsPriorityFromApi().sortedBy { it.priority }
 
-
-        var totalSleep: Int? = null
-        healthData.sleep?.sleeps?.forEach {
-            if (totalSleep == null) {
-                totalSleep = 0
+            // Handle auto-detected workouts
+            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+            if (autoSportCount > 0) {
+                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+                hasDetectedWorkout = true
+            } else {
+                hasDetectedWorkout = false
             }
-            totalSleep = totalSleep!! + (it.totalDuration ?: 0)
-        }
 
-        filteredNaps?.forEach {
-            val start = java.time.LocalDateTime.parse(
-                it.startTime,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            )
-            val end = java.time.LocalDateTime.parse(
-                it.endTime,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            )
-            if (totalSleep == null) {
-                totalSleep = 0
-            }
-            Duration.between(start, end).toSeconds().toInt().let {
-                totalSleep = totalSleep!! + it
-            }
-        }
-
-        val sleepModel = ODashboardSleepModel(
-            sleepScore = healthData.sleep?.sleep_score?.value,
-            totalSleep = totalSleep,
-            restingHr = healthData.sleep?.avg_hrv,
-            sleepStage = newSleepArray ?: ArrayList(),
-            status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
-            statusCode = healthData.sleep?.sleep_score?.status,
-            startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
-            endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
-            totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
-            noOfNaps = healthData.sleep?.naps?.size ?: 0,
-            noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
-        )
-        //
-
-        priorityList.forEach {
-            when(it.key){
-                "sleep"->{
-                      val sleepData: OHealthOverview? = getSleepDataCard(healthData.sleep)
-                      if (sleepData != null){
-                          userActivities.add(sleepData)
-                      }
+            var totalSleep: Int? = null
+            healthData.sleep?.sleeps?.forEach {
+                if (totalSleep == null) {
+                    totalSleep = 0
                 }
-                "readiness"->{
-                    val readinessData: OHealthOverview? = getSleepDataCard(healthData.sleep)
-                    if (readinessData != null){
-                        userActivities.add(readinessData)
+                totalSleep = totalSleep!! + (it.totalDuration ?: 0)
+            }
+
+            val filteredNaps = healthData.sleep?.naps?.filter { !it.isNextDayNap }
+
+            val newSleepArray = dataConverter.mergeSleepDataV2(
+                healthData.sleep?.sleeps, filteredNaps
+            )
+
+            filteredNaps?.forEach {
+                val start = LocalDateTime.parse(
+                    it.startTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                val end = LocalDateTime.parse(
+                    it.endTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                )
+                if (totalSleep == null) {
+                    totalSleep = 0
+                }
+                Duration.between(start, end).toSeconds().toInt().let {
+                    totalSleep = totalSleep!! + it
+                }
+            }
+
+            val sleepModel = ODashboardSleepModel(
+                sleepScore = healthData.sleep?.sleep_score?.value,
+                totalSleep = totalSleep,
+                restingHr = healthData.sleep?.avg_hrv,
+                sleepStage = newSleepArray ?: ArrayList(),
+                status = healthData.sleep?.sleep_score?.text?.capitalizeWords(),
+                statusCode = healthData.sleep?.sleep_score?.status,
+                startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+                endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
+                totalScoreImpact = healthData.sleep?.totalScoreImpact ?: 0,
+                noOfNaps = healthData.sleep?.naps?.size ?: 0,
+                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
+            )
+
+            val hasSleep = sleepModel.sleepScore != null && sleepModel.sleepScore != 0
+
+            priorityList.forEach { item ->
+                when(item.key) {
+                    "sleep" -> {
+                    if (!item.switchState) return@forEach
+                        getSleepDataCard(healthData, impactData, sleepModel)?.let { userActivities.add(it) }
+                    }
+                    "activity" -> {
+                    if (!item.switchState) return@forEach
+                        getActivityDataCard(healthData, impactData)?.let { userActivities.add(it) }
+                    }
+                    "readiness" -> {
+                    if (!item.switchState) return@forEach
+                        getReadinessDataCard(healthData.sleep, healthData.readiness, impactData)?.let { userActivities.add(it) }
+                    }
+                    "sleep_planner" -> {
+                    if (!item.switchState) return@forEach
+                        getSleepPlannerDataCard(hasSleep)?.let { userActivities.add(it) }
+                    }
+                    "heart_rate" -> {
+                    if (!item.switchState) return@forEach
+                        getHeartRateCard()
+                    }
+                    "health_monitor" -> {
+                    if (!item.switchState) return@forEach
+                        getHealthMonitorData(healthData.sleep)?.let {
+                            userActivities.add(it)
+                        }
+                    }
+                    "daily_goals" -> {
+                    if (!item.switchState) return@forEach
+                        getDailyGoalsCard()?.let { userActivities.add(it) }
+                    }
+                    "luna_ai" -> {
+                    if (!item.switchState) return@forEach
+                        getLunaAiCard()?.let { userActivities.add(it) }
+                    }
+                    "cycle_tracker" -> {
+                    if (!item.switchState) return@forEach
+                        getCycleTrackerCard()?.let { userActivities.add(it) }
+                    }
+                    "7_day_trends_card" -> {
+                    if (!item.switchState) return@forEach
+                        getSvnDaysTrendsDataCard(trendsData)
+                    }
+                    "workout_history" -> {
+                    if (!item.switchState) return@forEach
+                        getWorkoutHistoryCard(healthData.activity)
                     }
                 }
-                "health_monitor"->{
-                    val healthMonitorData: OHealthOverview? = getSleepDataCard(healthData.sleep)
-                    if (healthMonitorData != null){
-                        userActivities.add(healthMonitorData)
-                    }
-                }
-
             }
 
+            // Add naps if any (this could also be moved to a separate function)
+            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
+                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
+            }
 
+            // Post the final data
+            healthOverviewData.postValue(userActivities)
+            //viewedCardsData.postValue(viewedCardsData)
+
+            // Handle other operations
+            loadNapsToConfirm()
+            handleSleepAlert(healthData.sleep)
+            handleGoogleFitCard()
         }
-
-        healthOverviewData.postValue(userActivities)
     }
 
-    private fun getSleepDataCard(sleep: OreoSleepModel?): OHealthOverview? =
-         if (true){
+    private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
+        stateWorkouts.postValue(activity?.workout ?: ArrayList())
+        return null
+    }
+
+    private fun getSvnDaysTrendsDataCard(
+        trendsData: TrendsData?
+    ): OHealthOverview? {
+        stateSleepAvgCard.postValue(
+            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
+        )
+        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
+        return null
+    }
+
+    private fun getCycleTrackerCard(): OHealthOverview? {
+        val (hasDataLoaded, femaleData) = femaleHealthData
+
+        if (!hasDataLoaded) return null
+
+        return if (femaleData == null) {
+            if (gender.equals("male", true).not()) {
+                val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
+                if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
+                    OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.TRACK)
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+        } else {
+            if (femaleData.isTrackPregnancy != true) {
+                if (femaleData.currentDay == null) {
+                    OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.LOG)
+                } else {
+                    if (femaleData.isOvulation || femaleData.isPeriod) {
+                        OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
+                    } else {
+                        OHealthOverview.CycleTrackerCardSmall(convertToPeriodSmallCardModel(femaleData))
+                    }
+                }
+            } else {
+                null
+            }
+        }
+    }
+
+    private fun getLunaAiCard(): OHealthOverview? {
+        return if (enableAi) {
             OHealthOverview.LunaAiCard()
-        }else{
+        } else {
             null
         }
+    }
+
+    private fun getDailyGoalsCard(): OHealthOverview? {
+        return null
+    }
+
+    private fun getHealthMonitorData(sleep: OreoSleepModel?): OHealthOverview? {
+        return sleep?.healthTrend?.let {
+            OHealthOverview.HealthMonitorCard(it)
+        }
+    }
+
+    private suspend fun getHeartRateCard(): OHealthOverview? {
+        val device = ringDataStore.getRingDevice()
+        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+            if (device == null) {
+                this?.measureState = TapMeasureState.NO_DEVICE
+            }
+        })
+        return null
+    }
+
+    private fun getSleepPlannerDataCard(hasSleep: Boolean): OHealthOverview? {
+        return sleepPlannerData.second?.let {
+            OHealthOverview.SleepPlannerCard(
+                SleepPlannerDisplayModel(
+                    it,
+                    getPlannerCardState(it, hasSleep)
+                )
+            )
+        }
+    }
+
+    private fun getReadinessDataCard(
+        sleep: OreoSleepModel?,
+        readiness: OreoReadinessModel?,
+        impactData: ImpactData?
+    ): OHealthOverview? {
+        val readinessModel = ODashboardReadinessModel(
+            readinessScore = readiness?.readinessScore?.value,
+            status = readiness?.readinessScore?.text?.capitalizeWords(),
+            statusCode = readiness?.readinessScore?.status,
+            nudges = readiness?.dashNudges,
+            totalScoreImpact = readiness?.totalScoreImpact ?: 0,
+            noOfNaps = sleep?.naps?.size ?: 0,
+            noOfSleeps = sleep?.sleeps?.size ?: 0,
+            impact = impactData?.readinessScore
+        )
+
+        return if ((readinessModel.readinessScore ?: 0) > 0) {
+            OHealthOverview.Readiness(readinessModel)
+        } else {
+            null
+        }
+    }
+
+    private fun getActivityDataCard(
+        healthData: ServerUserHealthData,
+        impactData: ImpactData?
+    ): OHealthOverview? {
+        val activityModal = ODashboardActivityModel(
+            activityScore = healthData.activity?.activityScore?.value,
+            activeCalories = healthData.activity?.activeCalories ?: 0,
+            inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
+            status = healthData.activity?.activityScore?.level?.capitalizeWords(),
+            statusCode = healthData.activity?.activityScore?.status,
+            nudges = healthData.activity?.dash_nudges,
+            steps = healthData.activity?.steps ?: 0,
+            impact = impactData?.activityScore
+        )
+
+        return if ((healthData.activity?.activeCalories ?: 0) > 0) {
+            val activeCalories = healthData.activity?.activeCalories ?: 0
+            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+
+            if (activeCalories in 1..49) {
+                OHealthOverview.ActivityMinimal(activityModal, caloriesGoal)
+            } else {
+                OHealthOverview.Activity(activityModal, caloriesGoal)
+            }
+        } else {
+            null
+        }
+    }
+
+    private fun getSleepDataCard(
+        healthData: ServerUserHealthData,
+        impactData: ImpactData?,
+        sleepModel: ODashboardSleepModel
+    ): OHealthOverview? {
+        val newSleepArray = dataConverter.mergeSleepDataV2(
+            healthData.sleep?.sleeps,
+            healthData.sleep?.naps?.filter { !it.isNextDayNap }
+        )
+
+        return if ((sleepModel.totalSleep ?: 0) > 0) {
+            OHealthOverview.Sleep(
+                sleepModel,
+                makeSleepArray(newSleepArray),
+                newSleepArray?.firstOrNull()?.start_time ?: "",
+                newSleepArray?.lastOrNull()?.end_time ?: "",
+                impact = impactData?.sleepScore
+            )
+        } else if (healthData.sleep?.sleep_score == null) {
+            OHealthOverview.SleepWaiting
+        } else {
+            null
+        }
+    }
 
 
     private fun getCardsPriorityFromApi() : List<CustomHomeScreenItem> = listOf(
@@ -1134,7 +1343,7 @@ class SummaryDataViewModelToday @Inject constructor(
             "sleep",
             resourceProvider.getString(R.string.text_sleep),
             true,
-            1
+            2
         ),
         CustomHomeScreenItem(
             R.drawable.icon_activity,
@@ -1155,14 +1364,14 @@ class SummaryDataViewModelToday @Inject constructor(
             "sleep_planner",
             resourceProvider.getString(R.string.text_sleep_planner),
             true,
-            4
+            1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_heart_rate,
             "heart_rate",
             resourceProvider.getString(R.string.text_heart_rate),
             false,
-            5
+            1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_heart_monitor,
@@ -1183,14 +1392,14 @@ class SummaryDataViewModelToday @Inject constructor(
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
             false,
-            8
+            1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",
             resourceProvider.getString(R.string.text_cycle_tracker),
             false,
-            9
+            -1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
@@ -1203,8 +1412,8 @@ class SummaryDataViewModelToday @Inject constructor(
             R.drawable.icon_flexibility_training,
             "workout_history",
             resourceProvider.getString(R.string.text_workout_history),
-            false,
-            11
+            true,
+            -1
         ),
         // Add more items...
     )
