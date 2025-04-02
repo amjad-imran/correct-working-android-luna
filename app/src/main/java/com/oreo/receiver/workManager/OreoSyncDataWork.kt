@@ -225,6 +225,7 @@ constructor(
                                 }
 
                                 syncDataScope.launch {
+                                    keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 

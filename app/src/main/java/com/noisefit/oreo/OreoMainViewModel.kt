@@ -347,12 +347,9 @@ constructor(
                             dataReload.value = Event(reloadDays)
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
-                                viewModelScope.launch(Dispatchers.IO) {
-                                    keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
-                                    impactData = it.impact
-                                    dashTodayReload.postValue(Event(true))
-                                    lunaZoneReload.postValue(Event(true))
-                                }
+                                impactData = it.impact
+                                dashTodayReload.postValue(Event(true))
+                                lunaZoneReload.postValue(Event(true))
                                 //sleepDashTodayReload.value = Event(true)
                             }
 
