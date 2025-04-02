@@ -12,6 +12,8 @@ import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ReferralRepository
@@ -80,6 +82,7 @@ constructor(
     val syncRepository: OreoSyncRepository,
     val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
+    val keyValueDataSource: KeyValueDataSource,
     val locationDataSource: LocationDataSource,
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
@@ -344,9 +347,12 @@ constructor(
                             dataReload.value = Event(reloadDays)
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
-                                impactData = it.impact
-                                dashTodayReload.value = Event(true)
-                                lunaZoneReload.value = Event(true)
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
+                                    impactData = it.impact
+                                    dashTodayReload.postValue(Event(true))
+                                    lunaZoneReload.postValue(Event(true))
+                                }
                                 //sleepDashTodayReload.value = Event(true)
                             }
 

@@ -916,6 +916,7 @@ class SummaryDataFragmentToday :
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 loadData()
+                viewModel.getNotificationToggle()
             }
         }
 
