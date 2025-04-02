@@ -1328,7 +1328,6 @@
     <string name="text_missing_data">ข้อมูลหายไป</string>
     <string name="text_sleep_algo_detext">อัลกอริทึมของเราตรวจไม่พบการนอนหลับเมื่อคืนนี้ หากคุณนอนหลับ โปรดเพิ่มไว้ที่นี่</string>
     <string name="text_wear_luna_ring">สวมแหวน Luna ของคุณเมื่อคุณเข้านอนเพื่อตรวจจับการนอนหลับของคุณโดยอัตโนมัติ อย่าลืมชาร์จแหวนของคุณเพื่อหลีกเลี่ยงการพลาดข้อมูลเชิงลึกอันมีค่า หากคุณนอนหลับโปรดเพิ่มไว้ที่นี่</string>
-    <string name="text_sleep_charge_ring">เราไม่ได้รับข้อมูลมาระยะหนึ่งแล้ว อย่าลืมชาร์จแหวนและสวมใส่เป็นประจำ เพื่อที่คุณจะได้ไม่พลาดข้อมูลเชิงลึกเฉพาะตัว!</string>
     <string name="text_authorize_bluetooth_connectivity_for_luna">อนุญาตการเชื่อมต่อ Bluetooth สำหรับ Luna</string>
     <string name="text_today_s_your_predicted_day">วันนี้เป็นวันที่ %1$s ที่คุณคาดการณ์ไว้</string>
     <string name="text_period_late_for">ระยะเวลาล่าช้าสำหรับ</string>
@@ -1853,6 +1852,7 @@
     <string name="text_steps_15_message">เทียบเท่ากับการวิ่งมินิมาราธอนทุกไม่กี่วัน!</string>
     <string name="text_goal_achieved">บรรลุเป้าหมาย</string>
     <string name="text_menstrual_health">สุขภาพประจำเดือน</string>
+    <string name="text_sleep_charge_ring_new">เราไม่ได้รับข้อมูลมาสักพักแล้ว อย่าลืมชาร์จแหวนและสวมใส่เป็นประจำเพื่อไม่ให้พลาดข้อมูลเชิงลึกเฉพาะตัวของคุณ!</string>
 
 
 </resources>

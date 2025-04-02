@@ -1340,7 +1340,6 @@
     <string name="text_missing_data">缺失数据</string>
     <string name="text_sleep_algo_detext">我们的算法无法检测昨晚的睡眠情况，如果您确实睡眠，请在此处添加。</string>
     <string name="text_wear_luna_ring">睡觉时佩戴 Luna 戒指即可自动检测您的睡眠情况。请务必为您的戒指充电，以免错过宝贵的见解。如果您确实睡觉，请在此处添加。</string>
-    <string name="text_sleep_charge_ring">我们有一段时间没有收到数据了。请记住为您的戒指充电并定期佩戴，这样您就不会错过您的个性化见解！</string>
     <string name="text_authorize_bluetooth_connectivity_for_luna">授权 Luna 的蓝牙连接</string>
     <string name="text_today_s_your_predicted_day">今天是您预计的 %1$s 天。</string>
     <string name="text_period_late_for">经期迟到为</string>
@@ -1865,5 +1864,7 @@
     <string name="text_steps_15_message">相当于每几天一次迷你马拉松！</string>
     <string name="text_goal_achieved">目标达成</string>
     <string name="text_menstrual_health">经期健康</string>
+    <string name="text_sleep_charge_ring_new">我们已经有一段时间没有收到数据了。记得为戒指充电并定期佩戴，以免错过你的个性化洞察！</string>
+
 
 </resources>

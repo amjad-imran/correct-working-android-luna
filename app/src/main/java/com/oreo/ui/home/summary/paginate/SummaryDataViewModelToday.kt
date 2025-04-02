@@ -316,7 +316,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (isYesterdayHrDataEmpty) {
                         sleepAlertToShow = SleepAlert(
                             title = resourceProvider.getString(R.string.text_missing_data),
-                            message = resourceProvider.getString(R.string.text_sleep_charge_ring),
+                            message = resourceProvider.getString(R.string.text_sleep_charge_ring_new),
                             addSleep = false
                         )
                     } else {

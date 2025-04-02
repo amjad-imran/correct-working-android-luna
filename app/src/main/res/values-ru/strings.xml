@@ -1342,7 +1342,6 @@
     <string name="text_missing_data">Отсутствующие данные</string>
     <string name="text_sleep_algo_detext">Наш алгоритм не смог обнаружить сон прошлой ночью. Если вы спали, добавьте это сюда.</string>
     <string name="text_wear_luna_ring">Надевайте кольцо Luna, когда ложитесь спать, чтобы автоматически определять время сна. Обязательно зарядите кольцо, чтобы не упустить ценную информацию. Если вы спали, пожалуйста, добавьте это сюда.</string>
-    <string name="text_sleep_charge_ring">Давно мы не получали данных. Не забывайте заряжать кольцо и носить его регулярно, чтобы не упустить персональную информацию!</string>
     <string name="text_authorize_bluetooth_connectivity_for_luna">Разрешить подключение Bluetooth для Luna</string>
     <string name="text_today_s_your_predicted_day">Сегодня ваш предсказанный %1$s день.</string>
     <string name="text_period_late_for">Опоздание на период</string>
@@ -1867,6 +1866,7 @@
     <string name="text_steps_15_message">Эквивалент мини-марафона каждые несколько дней!</string>
     <string name="text_goal_achieved">Цель достигнута</string>
     <string name="text_menstrual_health">Менструальное здоровье</string>
+    <string name="text_sleep_charge_ring_new">Мы давно не получали данных. Не забудь зарядить кольцо и носить его регулярно, чтобы не пропустить персонализированные рекомендации!</string>
 
 
 </resources>
