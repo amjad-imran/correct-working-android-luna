@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -11,14 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.LayoutChatCardDashBinding
 import com.noisefit.luna.databinding.LayoutDashHealthMonitorBinding
 import com.noisefit.luna.databinding.LayoutDashSleepPlannerCardBinding
+import com.noisefit.luna.databinding.LayoutNotificationCardBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -26,6 +26,7 @@ import com.noisefit.luna.databinding.ListCycleTrackerOngoingBinding
 import com.noisefit.luna.databinding.ListCycleTrackerPredictionBinding
 import com.noisefit.luna.databinding.ListDashGotPeriodBinding
 import com.noisefit.luna.databinding.ListDashNapBinding
+import com.noisefit.luna.databinding.ListHeartRateCardItemBinding
 import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
@@ -35,10 +36,12 @@ import com.noisefit.luna.databinding.ListSleepMinimalItemBinding
 import com.noisefit.luna.databinding.ListSleepWaitingCardItemBinding
 import com.noisefit.luna.databinding.ListVideoInfoCardBinding
 import com.noisefit.luna.databinding.ListWelcomeCardBinding
+import com.noisefit.luna.databinding.OreoLayoutRecentActivityBinding
 import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
+import com.oreo.data.model.NotificationGoals
 import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
@@ -46,7 +49,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -54,11 +56,12 @@ import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.util.DateTimeUtil
-import com.oreo.util.UtilClass.seriesItemWithoutInset
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -93,6 +96,23 @@ sealed class OSummaryHealthOverviewClickEnum {
     object FemaleHealthHome : OSummaryHealthOverviewClickEnum()
     class GotPeriodClicked(val status: Boolean) : OSummaryHealthOverviewClickEnum()
 
+    //
+    data class OnHeartMeasureImvClicked(val data: OHealthOverview.HeartRateDataModel) : OSummaryHealthOverviewClickEnum()
+
+    object OnViewAddWorkout: OSummaryHealthOverviewClickEnum()
+    object OnWorkoutsHistoryCardClicked: OSummaryHealthOverviewClickEnum()
+    data class OnWorkoutsHistoryCardOworkoutAdapterItemClicked(
+        val data: OActivityListModal,
+        val position: Int
+    ): OSummaryHealthOverviewClickEnum()
+
+    object OnIvNotificationStepsClicked: OSummaryHealthOverviewClickEnum()
+    object OnIvNotificationHydrateClicked: OSummaryHealthOverviewClickEnum()
+    object OnIvHydrateMinusClicked: OSummaryHealthOverviewClickEnum()
+    object OnIvHydratePlusClicked: OSummaryHealthOverviewClickEnum()
+    object OnEditGoalsCardEditClicked : OSummaryHealthOverviewClickEnum()
+    //
+
 }
 
 class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
@@ -101,15 +121,14 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
     var lastPosition = -1
     var refreshPosition: Int? = null
 
-    var items = listOf<OHealthOverview>()
-        set(value) {
-            try {
-                field = value
-                notifyDataSetChanged()
-            } catch (exp: Exception) {
-                exp.printStackTrace()
-            }
-        }
+    private val items = ArrayList<OHealthOverview>()
+
+    fun updateDataSet(dataSet:List<OHealthOverview>){
+        items.clear()
+        items.addAll(dataSet)
+        notifyDataSetChanged()
+
+    }
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
@@ -245,6 +264,32 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 )
             }
 
+            //
+            R.layout.list_heart_rate_card_item -> {
+                HomeRecyclerViewHolder.HeartRateViewHolder(
+                    ListHeartRateCardItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+
+            R.layout.layout_notification_card -> {
+                HomeRecyclerViewHolder.DailyGoalsViewHolder(
+                    LayoutNotificationCardBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+
+            R.layout.oreo_layout_recent_activity -> {
+                HomeRecyclerViewHolder.WorkoutsHistoryViewHolder(
+                    OreoLayoutRecentActivityBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            //
+
 //            R.layout.list_o_w_demo_card_item -> HomeRecyclerViewHolder.DemoViewHolder(
 //                ListOWDemoCardItemBinding.inflate(
 //                    LayoutInflater.from(parent.context),
@@ -274,6 +319,17 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 items[position] as OHealthOverview.InfoVideo,
             )
 
+            //
+            is HomeRecyclerViewHolder.HeartRateViewHolder -> holder.bind(items[position] as OHealthOverview.HeartRateDataModel)
+
+            is HomeRecyclerViewHolder.DailyGoalsViewHolder -> holder.bind(
+                items[position] as OHealthOverview.DailyGoalsCardData,
+                position
+            )
+            is HomeRecyclerViewHolder.WorkoutsHistoryViewHolder -> holder.bind(
+                items[position] as OHealthOverview.WorkoutHistoryCardData
+            )
+            //
 
             is HomeRecyclerViewHolder.ActivityViewHolder -> holder.bind(
                 items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired
@@ -375,7 +431,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 
 
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
-            is OHealthOverview.HeartRateDataModel -> 0
+            is OHealthOverview.HeartRateDataModel -> R.layout.list_heart_rate_card_item
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
             is OHealthOverview.StressGraph -> R.layout.item_stress_graph
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
@@ -388,6 +444,11 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.GotYourPeriod -> R.layout.list_dash_got_period
             is OHealthOverview.HealthMonitorCard -> R.layout.layout_dash_health_monitor
             is OHealthOverview.SleepPlannerCard -> R.layout.layout_dash_sleep_planner_card
+
+            //
+            is OHealthOverview.WorkoutHistoryCardData -> R.layout.oreo_layout_recent_activity
+            is OHealthOverview.DailyGoalsCardData -> R.layout.layout_notification_card
+            //
         }
     }
 
@@ -412,6 +473,14 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
         }
     }
 
+    fun updateData(heathOverViewData: OHealthOverview?) {
+        if(heathOverViewData is OHealthOverview.DailyGoalsCardData){
+            val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        }
+    }
+
 }
 
 
@@ -419,6 +488,334 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
+    //
+    class WorkoutsHistoryViewHolder(private val binding: OreoLayoutRecentActivityBinding) :
+        HomeRecyclerViewHolder(binding)
+    {
+        fun bind(data: OHealthOverview.WorkoutHistoryCardData){
+            Log.d("yashlogii", "setWorkoutUI: BIND ${data.workouts.toString()}")
+            setWorkoutUI(data.workouts)
+        }
+
+        private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
+            Log.d("yashlogii", "setWorkoutUI: ")
+            val lytWorkouts = binding
+            val context = lytWorkouts.root.context
+            lytWorkouts.root.visible()
+
+            if (workouts.isNullOrEmpty()) {
+                lytWorkouts.tvEmptyMsg.visible()
+                lytWorkouts.tvEmptyMsg.text = context.getString(R.string.text_tap_plus_workout)
+
+            } else {
+                lytWorkouts.tvEmptyMsg.gone()
+            }
+            lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
+                lytWorkouts.rvWorkouts.context, LinearLayoutManager.VERTICAL, false
+            )
+            val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
+                override fun onItemClick(data: OActivityListModal, position: Int) {
+                    OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked(
+                        data,
+                        position
+                    )
+                }
+            })
+
+            lytWorkouts.rvWorkouts.apply {
+                adapter = adapter1
+            }
+            adapter1.setData(workouts ?: ArrayList())
+            lytWorkouts.viewAddWorkout.setOnClickListener {
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnViewAddWorkout
+                )
+            }
+
+            lytWorkouts.root.setOnClickListener {
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardClicked
+                )
+            }
+
+        }
+    }
+
+    class DailyGoalsViewHolder(private val binding: LayoutNotificationCardBinding) : HomeRecyclerViewHolder(binding)
+    {
+        fun bind(
+            notificationGoal: OHealthOverview.DailyGoalsCardData,
+            position: Int
+        ){
+            setNotificationGoalsCardData(notificationGoal.notificationGoals)
+            initListener(position)
+        }
+
+        private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
+
+            binding.apply {
+                root.visible()
+                val stepsGoal = notificationGoal.steps_required ?: 5000
+
+                tvSteps.text =
+                    if (notificationGoal.steps == null) "0" else notificationGoal.steps.toString()
+                tvStepsGoal.text = "/$stepsGoal"
+
+                val userSteps = notificationGoal.steps ?: 0
+                val percent = (userSteps.toFloat() / stepsGoal.toFloat()) * 100
+
+                progressSteps.progress = percent
+
+                if (percent >= 100) {
+                    textStepsGoalAchieved.visible()
+                } else {
+                    textStepsGoalAchieved.gone()
+                }
+
+                val hydrateGoal = notificationGoal.hydration_required ?: 3000
+                val hydrate = notificationGoal.hydration ?: 0
+
+
+                val hydrationText = StringBuilder()
+                var hydratePercent = notificationGoal.hydratePercent ?: 0f
+
+                if (notificationGoal.isMetric == true) {
+                    hydrationText.append((hydrate.toFloat() / 1000))
+                    hydrationText.append("/")
+                    hydrationText.append((hydrateGoal.toFloat() / 1000))
+                    hydrationText.append("L")
+
+
+                    hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+
+                } else {
+
+                    val convertedHydrate = hydrate.toFloat() * 0.033814
+                    hydrationText.append(String.format("%.1f", convertedHydrate))
+                    hydrationText.append("/")
+
+                    //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
+                    val convertedHydrateGoal =
+                        notificationGoal.convertedHydrateGoal
+//                        viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
+
+                    hydrationText.append("$convertedHydrateGoal")
+                    hydrationText.append("oz")
+
+                    if (convertedHydrateGoal != null) {
+                        hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+                    }
+
+                }
+                progressHydrate.progress = hydratePercent
+
+                if (hydratePercent >= 100) {
+                    textHydrateGoalAchieved.visible()
+                } else {
+                    textHydrateGoalAchieved.gone()
+                }
+
+                tvHydration.text = hydrationText
+
+                notificationGoal.glassImage?.let { ivGlassImage.setImageResource(it) }
+
+                if (notificationGoal.notificationToggleModel?.hydrate_notification == true &&
+                    notificationGoal.notificationToggleModel?.master_notification == true
+                ) {
+                    ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_on)
+                } else {
+                    ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_off)
+                }
+
+                if (notificationGoal.notificationToggleModel?.steps_notification == true &&
+                    notificationGoal.notificationToggleModel?.steps_notification == true
+                ) {
+                    ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_on)
+                } else {
+                    ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
+                }
+            }
+        }
+
+        fun initListener(position: Int)
+        {
+            binding.apply {
+                ivNotificationSteps.setOnClickListener {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked)
+                }
+
+                ivNotificationHydrate.setOnClickListener {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked)
+                }
+
+                ivHydrateMinus.setOnClickListener {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvHydrateMinusClicked)
+                }
+
+                ivHydratePlus.setOnClickListener {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvHydratePlusClicked)
+                }
+
+                tvEdit.setOnClickListener {
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnEditGoalsCardEditClicked)
+                }
+            }
+        }
+    }
+
+    class HeartRateViewHolder(private val binding: ListHeartRateCardItemBinding) : HomeRecyclerViewHolder(binding)
+    {
+        fun bind(
+            data: OHealthOverview.HeartRateDataModel
+        ){
+            setHearRateCardUi(data)
+        }
+
+        private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
+            val lytHeartRate = binding
+            lytHeartRate.root.visible()
+            lytHeartRate.candleChart.enableInteractiveMode(false)
+            lytHeartRate.candleChart.updateData(
+                data.hrCombineModel,
+                3, data.minValues, data.maxValues
+            )
+
+            val lastMeasuredValue = data.lastMeasuredValue
+            val lastMeasuredIndex = data.lastMeasuredIndex
+
+            if (lastMeasuredValue == 0) {
+                lytHeartRate.lytTrend.root.gone()
+            } else {
+                val lastUpdatedTimestamp =
+                    DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
+
+
+                val currentTimeStamp = DateFormats.getTimeStamp()
+                val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+                if (timeDiff <= (5 * 60 * 1000)) {
+
+                    val trendPercent = data.trendPercent
+
+                    if (trendPercent != null && trendPercent != 0) {
+                        if (trendPercent > 0) {
+                            lytHeartRate.lytTrend.apply {
+                                ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                                backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                                tvPercent.text = "$trendPercent%"
+                                tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                                root.visible()
+                            }
+                        } else {
+                            lytHeartRate.lytTrend.apply {
+                                ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                                backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                                tvPercent.text = "${abs(trendPercent)}%"
+                                tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                                root.visible()
+                            }
+                        }
+                    } else {
+                        lytHeartRate.lytTrend.root.gone()
+                    }
+                } else {
+                    lytHeartRate.lytTrend.root.gone()
+                }
+            }
+
+
+
+            when (data.measureState) {
+                TapMeasureState.NO_DEVICE -> {
+                    lytHeartRate.lottieAnimView.invisible()
+                    lytHeartRate.imvHrMeasure.visible()
+
+                    lytHeartRate.groupValue.gone()
+                    lytHeartRate.tvEmptyConnect.visible()
+                    lytHeartRate.tvEmptyConnect.text =
+                        lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+
+                }
+
+                TapMeasureState.LAST_MEASURED -> {
+                    lytHeartRate.lottieAnimView.invisible()
+                    lytHeartRate.imvHrMeasure.visible()
+
+                    lytHeartRate.groupValue.visible()
+                    lytHeartRate.tvEmptyConnect.gone()
+
+                    lytHeartRate.tvHeartValue.text = data.value
+                    lytHeartRate.tvHeartUnit.text = binding.root.context.getString(R.string.text_bpm_small)
+
+                    lytHeartRate.tvLastMeasure.apply {
+                        setTextColor(Color.parseColor("#a3ffffff"))
+                        text = data.lastTime
+                    }
+
+                }
+
+                TapMeasureState.MEASURING -> {
+                    lytHeartRate.lottieAnimView.visible()
+                    lytHeartRate.imvHrMeasure.invisible()
+
+                    lytHeartRate.groupValue.gone()
+                    lytHeartRate.tvEmptyConnect.visible()
+
+                    lytHeartRate.tvEmptyConnect.apply {
+                        setTextColor(resources.getColor(R.color.white))
+                        text = context.getString(R.string.text_measuring_dots)
+                    }
+                }
+
+                TapMeasureState.DEFAULT -> {
+                    lytHeartRate.lottieAnimView.invisible()
+                    lytHeartRate.imvHrMeasure.visible()
+
+                    lytHeartRate.groupValue.gone()
+                    lytHeartRate.tvEmptyConnect.visible()
+                    lytHeartRate.tvEmptyConnect.apply {
+                        setTextColor(Color.parseColor("#88b0ff"))
+                        text = context.getString(R.string.text_tap_to_measure)
+                    }
+                }
+
+                TapMeasureState.ERROR -> {
+                    lytHeartRate.lottieAnimView.invisible()
+                    lytHeartRate.imvHrMeasure.visible()
+
+                    lytHeartRate.groupValue.visible()
+                    lytHeartRate.tvEmptyConnect.gone()
+                    lytHeartRate.tvHeartValue.gone()
+
+                    lytHeartRate.tvLastMeasure.apply {
+                        setTextColor(Color.parseColor("#88b0ff"))
+                        text = context.getString(R.string.text_try_again)
+                    }
+                    lytHeartRate.tvHeartUnit.text = binding.root.context.getString(R.string.text_unable_to_measure)
+
+                }
+
+                TapMeasureState.HIDE -> {
+                    lytHeartRate.lottieAnimView.invisible()
+                    lytHeartRate.imvHrMeasure.invisible()
+
+                    lytHeartRate.groupValue.invisible()
+                    lytHeartRate.tvEmptyConnect.gone()
+                    lytHeartRate.tvHeartValue.gone()
+                }
+            }
+
+            lytHeartRate.imvHrMeasure.setOnClickListener {
+                binding.root.setOnClickListener {
+                    itemClickListener?.invoke(
+                        OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked(
+                            data
+                        )
+                    )
+                }
+            }
+        }
+    }
+    //
 
     class DashHealthMonitorViewHolder(private val binding: LayoutDashHealthMonitorBinding) :
         HomeRecyclerViewHolder(binding) {

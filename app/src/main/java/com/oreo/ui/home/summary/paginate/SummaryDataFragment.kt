@@ -108,13 +108,18 @@ class SummaryDataFragment :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
+                //
+                is OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {}
+                OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked -> {}
+                //
+
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {}
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {}
 
-                is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                }
-
+                is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {}
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
@@ -164,6 +169,11 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerBreathingClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerCardClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnEditGoalsCardEditClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnIvHydrateMinusClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnIvHydratePlusClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {}
             }
         }
 
@@ -231,7 +241,8 @@ class SummaryDataFragment :
 
 
         viewModel.healthOverviewData.observe(viewLifecycleOwner) {
-            healthOverviewAdapter.items = it
+            healthOverviewAdapter.updateDataSet(it)
+//            healthOverviewAdapter.items = it
             healthOverviewAdapter.refreshPosition = null
         }
 

@@ -1,6 +1,7 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -173,6 +174,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val healthMonitorCardData = MutableLiveData<HealthTrend?>()
 
     val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
+    val hydrationUpdated = MutableLiveData<Event<Boolean>>()
 
     var user: User? = null
     var gender: String? = null
@@ -1039,7 +1041,8 @@ class SummaryDataViewModelToday @Inject constructor(
     fun getUserManagedHealthData(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
-        impactData: ImpactData?)
+        impactData: ImpactData?,
+        userManaged:Boolean)
     {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1047,7 +1050,11 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
-            val priorityList = getCardsPriorityFromApi().sortedBy { it.priority }
+            val priorityList = if(userManaged){
+                getCardsPriorityFromApi().sortedBy { it.priority }
+            }else{
+                getLunaManagedPriority().sortedBy { it.priority }
+            }
 
             // Handle auto-detected workouts
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
@@ -1125,7 +1132,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                     "heart_rate" -> {
                     if (!item.switchState) return@forEach
-                        getHeartRateCard()
+                        getHeartRateCard()?.let {
+                            userActivities.add(it)
+                        }
                     }
                     "health_monitor" -> {
                     if (!item.switchState) return@forEach
@@ -1147,11 +1156,15 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                     "7_day_trends_card" -> {
                     if (!item.switchState) return@forEach
-                        getSvnDaysTrendsDataCard(trendsData)
+                        getSvnDaysTrendsDataCard(trendsData)?.let {
+                            userActivities.add(it)
+                        }
                     }
                     "workout_history" -> {
                     if (!item.switchState) return@forEach
-                        getWorkoutHistoryCard(healthData.activity)
+                        getWorkoutHistoryCard(healthData.activity)?.let {
+                            userActivities.add(it)
+                        }
                     }
                 }
             }
@@ -1173,8 +1186,15 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
-        stateWorkouts.postValue(activity?.workout ?: ArrayList())
-        return null
+        return if(activity != null){
+            OHealthOverview.WorkoutHistoryCardData(
+                activity.workout ?: ArrayList()
+            )
+        }else{
+            null
+        }
+//        stateWorkouts.postValue(activity?.workout ?: ArrayList())
+//        return null
     }
 
     private fun getSvnDaysTrendsDataCard(
@@ -1228,8 +1248,44 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getDailyGoalsCard(): OHealthOverview? {
-        return null
+    fun getDailyGoalsCard(): OHealthOverview? {
+        return if (notificationGoalsCardData.value != null){
+            val prevData = notificationGoalsCardData.value
+
+            val isMetric = sessionManager.isMetric()
+
+            val hydrateGoal = prevData?.hydration_required ?: 3000
+            val hydrate = prevData?.hydration ?: 0
+
+            var hydratePercent = 0f
+            if (isMetric){
+                hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+            }else{
+                val convertedHydrate = hydrate.toFloat() * 0.033814
+                val convertedHydrateGoal =
+                    convertMlToOuncesRounded(hydrateGoal.toDouble())
+
+                hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+            }
+
+            val data = com.oreo.data.model.NotificationGoals(
+                hydration = hydrate,
+                hydration_required = prevData?.hydration_required,
+                steps = prevData?.steps,
+                steps_required = prevData?.steps_required,
+                isMetric = isMetric,
+                convertedHydrateGoal = convertMlToOuncesRounded(hydrateGoal.toDouble()),
+                hydratePercent = hydratePercent,
+                notificationToggleModel = notificationToggleModel,
+                glassImage = getGlassImage(hydratePercent.toInt())
+            )
+
+            OHealthOverview.DailyGoalsCardData(
+                data
+            )
+        }else{
+            null
+        }
     }
 
     private fun getHealthMonitorData(sleep: OreoSleepModel?): OHealthOverview? {
@@ -1240,12 +1296,37 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private suspend fun getHeartRateCard(): OHealthOverview? {
         val device = ringDataStore.getRingDevice()
-        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
-            if (device == null) {
-                this?.measureState = TapMeasureState.NO_DEVICE
+        val data: OHealthOverview.HeartRateDataModel? = userRepository.getSummaryHRHealthOverview()
+        return if (data != null){
+
+            data.apply {
+                this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                    serverUserHealthData,
+                    this
+                )
+
+                val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+                this.lastMeasuredValue = lastMeasuredValue
+                this.lastMeasuredIndex = lastMeasuredIndex
+
+                getHrTrend(this.rawData, lastMeasuredIndex)?.let {
+                    this.trendPercent = it
+                }
+
+                if(device == null){
+                    this.measureState = TapMeasureState.NO_DEVICE
+                }
             }
-        })
-        return null
+        }
+        else{
+            null
+        }
+//        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+//            if (device == null) {
+//                this?.measureState = TapMeasureState.NO_DEVICE
+//            }
+//        })
+//        return null
     }
 
     private fun getSleepPlannerDataCard(hasSleep: Boolean): OHealthOverview? {
@@ -1370,42 +1451,123 @@ class SummaryDataViewModelToday @Inject constructor(
             R.drawable.icon_heart_rate,
             "heart_rate",
             resourceProvider.getString(R.string.text_heart_rate),
-            false,
-            1
+            true,
+            -999
         ),
         CustomHomeScreenItem(
             R.drawable.icon_heart_monitor,
-            "heart_monitor",
+            "health_monitor",
             resourceProvider.getString(R.string.text_heart_monitor),
-            false,
+            true,
             6
         ),
         CustomHomeScreenItem(
             R.drawable.icon_daily_goals,
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
-            false,
+            true,
             7
         ),
         CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
-            false,
+            true,
             1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",
             resourceProvider.getString(R.string.text_cycle_tracker),
-            false,
+            true,
             -1
         ),
         CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
             resourceProvider.getString(R.string.text_7_day_trends_cards),
-            false,
+            true,
+            10
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "workout_history",
+            resourceProvider.getString(R.string.text_workout_history),
+            true,
+            -1
+        ),
+        // Add more items...
+    )
+
+    private fun getLunaManagedPriority() : List<CustomHomeScreenItem> = listOf(
+        CustomHomeScreenItem(
+            R.drawable.icon_sleep,
+            "sleep",
+            resourceProvider.getString(R.string.text_sleep),
+            true,
+            2
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_activity,
+            "activity",
+            resourceProvider.getString(R.string.text_activity_o),
+            true,
+            2
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_readiness,
+            "readiness",
+            resourceProvider.getString(R.string.text_readiness),
+            true,
+            3
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_sleep_planner,
+            "sleep_planner",
+            resourceProvider.getString(R.string.text_sleep_planner),
+            true,
+            1
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_heart_rate,
+            "heart_rate",
+            resourceProvider.getString(R.string.text_heart_rate),
+            true,
+            -999
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_heart_monitor,
+            "health_monitor",
+            resourceProvider.getString(R.string.text_heart_monitor),
+            true,
+            6
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_daily_goals,
+            "daily_goals",
+            resourceProvider.getString(R.string.text_daily_goals),
+            true,
+            7
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_luna_ai,
+            "luna_ai",
+            resourceProvider.getString(R.string.text_luna_ai),
+            true,
+            1
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_cycle_tracker,
+            "cycle_tracker",
+            resourceProvider.getString(R.string.text_cycle_tracker),
+            true,
+            -1
+        ),
+        CustomHomeScreenItem(
+            R.drawable.icon_7_day_trends_card,
+            "7_day_trends_card",
+            resourceProvider.getString(R.string.text_7_day_trends_cards),
+            true,
             10
         ),
         CustomHomeScreenItem(
@@ -2593,11 +2755,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
                         is Resource.Success -> {
                             resource.data?.data?.let {
-                                notificationGoalsCardData.postValue(
+                                notificationGoalsCardData.value = (
                                     notificationGoalsCardData.value?.copy(
                                         hydration = updatedValue
                                     )
                                 )
+                                hydrationUpdated.postValue(Event(true))
                             }
                         }
 

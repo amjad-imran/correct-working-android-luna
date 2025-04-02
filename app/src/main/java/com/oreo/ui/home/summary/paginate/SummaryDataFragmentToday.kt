@@ -228,14 +228,7 @@ class SummaryDataFragmentToday :
         impactData: ImpactData?
     ) {
         viewModel.initTodayData()
-
-        //
-        if(viewModel.lunaManagedSwitchState){
-            viewModel.getUserManagedHealthData(data, trendsData, impactData)
-        }else {
-            viewModel.parseHealthData(data, trendsData, impactData)
-        }
-        //
+        viewModel.getUserManagedHealthData(data, trendsData, impactData,viewModel.lunaManagedSwitchState)
     }
 
 
@@ -424,6 +417,138 @@ class SummaryDataFragmentToday :
                     )
                     navigate(R.id.sleepPlannerFragment)
                 }
+
+                //
+                is OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked -> {
+//                    val data = type.data
+//                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
+//                    if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
+//                        return@setOnClickListener
+//                    }
+//
+//                    if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+//                        return@setOnClickListener
+//                    }
+//
+//                    if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
+//                        return@setOnClickListener
+//                    }
+//
+//                    viewModel.viewModelScope.launch(Dispatchers.IO) {
+//                        context?.let {
+//                            val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+//                            if (isWorkerRunning) {
+//                                viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
+//                                    this.measureState = TapMeasureState.ERROR
+//                                })
+//                                return@launch
+//                            }
+//                            viewModel.measureHr(true)
+//                        }
+//                    }
+//
+//                    return@setOnClickListener
+                }
+
+                OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {
+                    if (viewModel.isDeviceConnected()) {
+                        navigate(R.id.addWorkoutFragment)
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
+                    } else {
+                        requireContext().showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+                    }
+                }
+
+                OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
+                    navigate(R.id.oActivityListFragment)
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked -> {
+                    val data = type.data
+                    val position = type.position
+                    if (data.getDisplayVersionType() == 2) {
+                        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                            putString("workoutId", data.id ?: "")
+                            putInt("position", position)
+                        })
+                    } else {
+                        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                            putString("workoutName", data.getTranslatedActivityName())
+                            putString("workoutId", data.id ?: "")
+                            putInt("position", position)
+                        })
+                    }
+                }
+
+
+                is OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.notification_toggled,
+                        HashMap<String, Any>().apply {
+                            this["config"] = "turned_on/turned_off"
+                            this["goal"] = "steps"
+                        }
+                    )
+
+                    if (viewModel.notificationToggleModel != null) {
+                        viewModel.notificationToggleModel!!.steps_notification =
+                            viewModel.notificationToggleModel?.steps_notification!!.not()
+                        viewModel.updateNotificationToggle(NotificationGoal.STEPS)
+                    }
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.notification_toggled,
+                        HashMap<String, Any>().apply {
+                            this["config"] = "turned_on/turned_off"
+                            this["goal"] = "hydrate"
+                        }
+                    )
+
+                    if (viewModel.notificationToggleModel != null) {
+                        viewModel.notificationToggleModel!!.hydrate_notification =
+                            viewModel.notificationToggleModel?.hydrate_notification!!.not()
+                        viewModel.updateNotificationToggle(NotificationGoal.HYDRATE)
+                    }
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnIvHydrateMinusClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.notification_toggled,
+                        HashMap<String, Any>().apply {
+                            this["goal"] = "hydrate"
+                            this["action"] = "subtracted"
+                        }
+                    )
+
+                    viewModel.decreaseHydration()
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnIvHydratePlusClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.notification_toggled,
+                        HashMap<String, Any>().apply {
+                            this["goal"] = "hydrate"
+                            this["action"] = "added"
+                        }
+                    )
+
+                    viewModel.increaseHydration()
+
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnEditGoalsCardEditClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.goalsSetting_clicked
+                    )
+                    navigate(R.id.editNotificationGoalFragment)
+                }
+
+
+                //
+
             }
         }
 
@@ -662,9 +787,14 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-
         viewModel.notificationUpdatedState.observe(this) {
             it.getContent()?.let {
+
+//                "New card state"
+
+                healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
+
+                return@observe
                 when (it.first) {
                     NotificationGoal.HYDRATE -> {
                         if (it.second) {
@@ -710,7 +840,13 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytNotificationCard.root.gone()
             } else {
                 binding.contentMain.lytNotificationCard.root.visible()
+
                 setNotificationGoalsCardData(it)
+            }
+        }
+        viewModel.hydrationUpdated.observe(this){
+            it.getContent()?.let {
+                healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
             }
         }
 
@@ -1004,14 +1140,16 @@ class SummaryDataFragmentToday :
         }*/
 
         viewModel.healthOverviewData.observe(viewLifecycleOwner) {
-            healthOverviewAdapter.items = it
+            healthOverviewAdapter.updateDataSet(it)
+//            healthOverviewAdapter.items = it
             healthOverviewAdapter.refreshPosition = null
         }
 
         viewModel.viewedCardsData.observe(viewLifecycleOwner) {
             it?.let {
                 viewedCardsAdapter.refreshPosition = null
-                viewedCardsAdapter.items = it
+                viewedCardsAdapter.updateDataSet(it)
+//                viewedCardsAdapter.items = it
             }
         }
 

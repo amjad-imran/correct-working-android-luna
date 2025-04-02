@@ -1392,7 +1392,13 @@ class OreoUserActivityRepositoryImpl(
             lastTime = "0",
             maxValues = 0,
             minValues = 0,
-            measureState = TapMeasureState.DEFAULT
+            measureState = TapMeasureState.DEFAULT,
+            hrCombineModel = null,
+            lastMeasuredValue = 0,
+            lastMeasuredIndex = 0,
+            trendPercent = 0,
+            rawData = null,
+            value = "0"
         )
     }
 

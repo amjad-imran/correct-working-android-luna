@@ -163,14 +163,18 @@ class OHeartRateDataViewModel @Inject constructor(
 
         val measureState = TapMeasureState.HIDE
         return OHealthOverview.HeartRateDataModel(
-            listData,
+            listData = listData,
             rawData = breakupArray,
             average = average,
-            "0",
+            lastTime = "0",
             value = lastHrValue?.first.toString(),
             maxValues = breakupArray.maxWithoutZero(),
             minValues = breakupArray.minWithoutZero(),
-            measureState
+            measureState = measureState,
+            hrCombineModel = null,
+            lastMeasuredValue = 0,
+            lastMeasuredIndex = 0,
+            trendPercent = 0
         )
     }
 

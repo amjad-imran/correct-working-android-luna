@@ -10,6 +10,7 @@ import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 
 
@@ -92,6 +93,10 @@ sealed class OHealthOverview {
 //        var measureState: TapMeasureState = TapMeasureState.DEFAULT
 //    ) : OHealthOverview()
     class HeartRateDataModel(
+        var hrCombineModel: HRCombineModel ?= null,
+        var lastMeasuredValue: Int,
+        var lastMeasuredIndex: Int,
+        var trendPercent: Int,
         val listData: List<HRModel>? = null,
         val rawData:List<Int>?=null,
         val average: Float,
@@ -101,6 +106,16 @@ sealed class OHealthOverview {
         var minValues: Int,
         var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
+
+    //
+    data class WorkoutHistoryCardData(
+        val workouts: List<OActivityListModal>
+    ): OHealthOverview()
+
+    data class DailyGoalsCardData(
+        val notificationGoals: NotificationGoals
+    ): OHealthOverview()
+    //
 
     class StressDashDataModel(
         var data: StressCombineModel? = null,
