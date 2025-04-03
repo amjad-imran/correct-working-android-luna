@@ -222,10 +222,12 @@ constructor(
                                 resource.data?.data?.let {
                                     handleAppVersion(context, it)
                                     datesToRemove = it.dates
+                                    syncDataScope.launch {
+                                        keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
+                                    }
                                 }
 
                                 syncDataScope.launch {
-                                    keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
