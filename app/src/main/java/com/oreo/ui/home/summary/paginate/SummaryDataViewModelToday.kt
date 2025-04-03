@@ -2186,10 +2186,15 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun updateHydration(increase: Boolean) {
         val glassSize = 250
 
+        if(ApplicationUtils.isInternetConnected().not()){
+            sendMessage(resourceProvider.getString(R.string.text_no_internet_connection))
+            return
+        }
+
         viewModelScope.launch {
             val lastValue = notificationGoalsCardData.value?.hydration ?: 0
 
-            if(lastValue==0 && increase.not()){
+            if (lastValue == 0 && increase.not()) {
                 return@launch
             }
 
@@ -2206,19 +2211,26 @@ class SummaryDataViewModelToday @Inject constructor(
                 this.addProperty("hydration_amount", updatedValue)
                 this.addProperty("date", LocalDate.now().toString())
             }
+
+            notificationGoalsCardData.postValue(
+                notificationGoalsCardData.value?.copy(
+                    hydration = updatedValue
+                )
+            )
+
             userRepository.updateHydration(reqObj)
                 .collect { resource ->
                     when (resource) {
 
-                        is Resource.GenericError -> {
+                        /*is Resource.GenericError -> {
                             sendMessage(resource.message)
                         }
 
                         is Resource.Loading -> {
                             setLoading(resource.loading)
-                        }
+                        }*/
 
-                        is Resource.NetworkError -> {
+                        /*is Resource.NetworkError -> {
                             setApiErrors(resource.response.apply {
                                 this.uiComponentType as UIComponentType.RetryApiDialog
                                 (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
@@ -2232,17 +2244,19 @@ class SummaryDataViewModelToday @Inject constructor(
                                         }
                                     }
                             })
-                        }
+                        }*/
 
                         is Resource.Success -> {
                             resource.data?.data?.let {
-                                notificationGoalsCardData.postValue(
+                                /*notificationGoalsCardData.postValue(
                                     notificationGoalsCardData.value?.copy(
                                         hydration = updatedValue
                                     )
-                                )
+                                )*/
                             }
                         }
+
+                        else -> {}
                     }
                 }
         }
@@ -2346,9 +2360,10 @@ class SummaryDataViewModelToday @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
 
-                                if(notificationToggleModel?.hydrate_notification ==true ||
-                                    notificationToggleModel?.steps_notification ==true ||
-                                    notificationToggleModel?.sleep_notification ==true){
+                                if (notificationToggleModel?.hydrate_notification == true ||
+                                    notificationToggleModel?.steps_notification == true ||
+                                    notificationToggleModel?.sleep_notification == true
+                                ) {
                                     notificationToggleModel?.master_notification = true
                                 }
 
