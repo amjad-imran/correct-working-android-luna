@@ -1,6 +1,9 @@
 package com.oreo.ui.customHomeScreen
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCustomHomeScreenBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CustomHomeScreenFragment :
@@ -35,23 +42,84 @@ class CustomHomeScreenFragment :
             navigateUpSafe()
         }
 
-        binding.switchMain.setOnCheckedChangeListener { _, isChecked ->
-            binding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-            binding.tvMessage.setVisibilityByCondition(isChecked) // visibility = if (isChecked) View.VISIBLE else View.GONE
+        binding.switchMain.setOnCheckedChangeListener { button, isChecked ->
 
-            binding.tvOtherMessage.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-            binding.bSaveChanges.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+            if (button.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
+            viewModel.lunaManagedState.postValue(isChecked)
+            viewModel.updateData(isChecked, adapter.getDataSet())
+
         }
 
         binding.bSaveChanges.setOnClickListener {
             val updatedList = adapter.getDataSet()
-            viewModel.updateData(updatedList)
+            viewModel.updateData(binding.switchMain.isChecked, updatedList)
+        }
+
+        viewModel.dataUpdated.observe(this){
+            it.getContent()?.let {
+                binding.bSaveChanges.isEnabled = false
+                binding.blurView.visible()
+                binding.txtSaved.visible()
+                Handler(Looper.myLooper()!!).postDelayed({
+                    try {
+                        navigateUpSafe()
+                    }catch (e: Exception){
+
+                    }
+                }, 2000)
+            }
         }
     }
 
     override fun subscribeObservers() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.updateData(items)
+        }
+
+        viewModel.lunaManagedState.observe(this){
+            it?.let {
+                binding.switchMain.isChecked = it
+
+//                binding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+//                binding.tvMessage.setVisibilityByCondition(isChecked) // visibility = if (isChecked) View.VISIBLE else View.GONE
+//
+//                binding.tvOtherMessage.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+//                binding.bSaveChanges.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+                if(it){
+                    binding.recyclerView.gone()
+                    binding.tvOtherMessage.gone()
+                    binding.bSaveChanges.gone()
+                    binding.tvMessage.visible()
+                }else{
+                    binding.tvMessage.gone()
+                    binding.recyclerView.visible()
+                    binding.tvOtherMessage.visible()
+                    binding.bSaveChanges.visible()
+                }
+            }
+
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
         }
     }
 

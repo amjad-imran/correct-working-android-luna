@@ -22,7 +22,6 @@ import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.NplQuizDataModel
 import com.noisefit_commans.data.model.RecentActivities
 import com.noisefit_commans.data.model.RoundUpResponse
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.matches.Matches
@@ -35,6 +34,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -224,6 +224,8 @@ private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
+
+private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -465,6 +467,21 @@ class DataStoredImpl
     override fun setReadinessNotificationTimeStamp() {
         mPrefs.edit()?.putLong(READINESS_NOTIFICATION, System.currentTimeMillis())?.commit()
     }
+
+    //
+    override fun setCustomHomeScreenItemsPriorityList(priorityList: CustomHomeScreenModel) {
+        mPrefs.edit()?.putString(CUSTOMIZE_HOME_SCREEN, gson.toJson(priorityList))?.apply()
+    }
+
+    override fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel? {
+        val data = mPrefs.getString(CUSTOMIZE_HOME_SCREEN, null)
+        return if(data.isNullOrEmpty()){
+            null
+        }else{
+            gson.fromJson(data, CustomHomeScreenModel::class.java)
+        }
+    }
+    //
 
     override fun getSleepNotificationTimeStamp(): Long {
         return mPrefs.getLong(SLEEP_NOTIFICATION, 0)

@@ -60,6 +60,7 @@ import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.model.ai.ChatMessagesResponse
 import com.oreo.data.model.ai.ThreadIdResponse
 import com.oreo.data.model.ai.TopQuestionsResponse
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.FemaleTempResponse
@@ -683,6 +684,17 @@ interface NetworkService {
         @Body jsonObject: JsonObject
     ): BaseApiResponse<Any>
 
+    //
+    /**
+     * Custom HomeScreen Urls
+     */
+
+    @POST
+    suspend fun submitCustomHomeScreenItemsPriority(
+        @Url url: String,
+        @Body req: CustomHomeScreenModel
+    ): BaseApiResponse<Any>
+    //
 
     /**
      * ---------------------------------------------------------------------------------

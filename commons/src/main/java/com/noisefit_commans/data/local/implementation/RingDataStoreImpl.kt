@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.GoogleFitDataLastSync
 import com.noisefit_commans.models.ManualMeasurement
@@ -48,6 +49,10 @@ private const val LAST_SYNC_STEPS = "LAST_SYNC_STEPS"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
+//
+private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
+//
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -67,6 +72,21 @@ class RingDataStoreImpl
         mPrefs.edit().putString(LAST_SYNC_STEPS, gson.toJson(data)).commit()
 
     }
+
+    //
+    override fun getCustomHomeScreenData(): CustomHomeScreenModel? {
+        val data = mPrefs.getString(CUSTOMIZE_HOME_SCREEN, null)
+        return if(data.isNullOrEmpty()){
+            null
+        }else{
+            gson.fromJson(data, CustomHomeScreenModel::class.java)
+        }
+    }
+
+    override fun setCustomHomeScreenData(data: CustomHomeScreenModel) {
+        mPrefs.edit()?.putString(CUSTOMIZE_HOME_SCREEN, gson.toJson(data))?.apply()
+    }
+    //
 
     override fun saveRingPairedDate() {
         mPrefs.edit()?.putString(RING_PAIR_DATE, LocalDate.now().toString())?.commit()

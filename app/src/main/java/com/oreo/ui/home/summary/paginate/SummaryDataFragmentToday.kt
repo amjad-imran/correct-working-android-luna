@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
@@ -123,10 +124,10 @@ class SummaryDataFragmentToday :
     private val healthOverviewAdapter by lazy {
         OSummaryHealthOverviewAdapter()
     }
+
     private val viewedCardsAdapter by lazy {
         OSummaryHealthOverviewAdapter()
     }
-
 
     private val napsAdapter: NapsConfirmAdapter by lazy {
         NapsConfirmAdapter(object : NapConfirmAction {
@@ -228,7 +229,9 @@ class SummaryDataFragmentToday :
         impactData: ImpactData?
     ) {
         viewModel.initTodayData()
-        viewModel.getUserManagedHealthData(data, trendsData, impactData,viewModel.lunaManagedSwitchState)
+//        val localCustomHomeScreenData = loc
+        Log.d("sbvcsjhvsjsvids",  "${mainViewModel.userManagedState}")
+        viewModel.getUserManagedHealthData(data, trendsData, impactData, mainViewModel.userManagedState)
     }
 
 

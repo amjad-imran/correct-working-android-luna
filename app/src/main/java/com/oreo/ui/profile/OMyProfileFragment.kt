@@ -225,6 +225,12 @@ class OMyProfileFragment :
 //            navigate(R.id.deleteAccountBottomSheet)
 //        }
 
+        //
+        binding.llCustomHomeScreen.setOnClickListener {
+            navigate(R.id.custom_homecreen)
+        }
+        //
+
     }
 
     private fun goToProfile() {

@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemHomeDragBinding
+import com.noisefit_commans.utils.LOGS
 
 class ItemAdapter :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
@@ -46,6 +47,13 @@ class ItemAdapter :
                 }
                 else -> false
             }
+        }
+
+        holder.binding.switchMain.setOnCheckedChangeListener{ button, isChecked ->
+//            if (button.isChecked.not()){
+//                return@setOnCheckedChangeListener
+//            }
+            item.switchState = isChecked
         }
 
     }

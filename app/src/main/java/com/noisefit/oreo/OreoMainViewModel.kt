@@ -3,11 +3,13 @@ package com.noisefit.oreo
 import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
@@ -110,6 +112,9 @@ constructor(
     var stressFirstDate: String? = null
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
+    //
+    var userManagedState: Boolean = false
+    //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
     val sleepDashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -311,6 +316,11 @@ constructor(
                             stressFirstDate = it.firstStress
                             stressBeta = it.stressBeta ?: false
                             enableAi = it.enableAi ?: false
+                            //
+                            userManagedState = it.customScreen?.manage ?: false
+                            Log.d("yashhhhhhhhhhhhhhhhhh" , "${Gson().toJson(it.customScreen)}")
+                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "${Gson().toJson(it.enableAi)}")
+                            //
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->

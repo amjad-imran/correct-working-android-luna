@@ -63,6 +63,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.ImpactData
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
@@ -171,6 +172,9 @@ class OreoUserActivityRepositoryImpl(
             var stressBeta: Boolean? = null
             var enableAi: Boolean? = null
             var tempBaseLine: Float? = null
+            //
+            var customHomeScreenData : CustomHomeScreenModel ?= null
+            //
 
             var apiStartDate: String? = startDate
             var apiEndDate: String? = endDate
@@ -259,7 +263,8 @@ class OreoUserActivityRepositoryImpl(
                                 firstStress = ringDataStore.getFirstStressDay(),
                                 stressBeta = ringDataStore.getStressBetaState(),
                                 enableAi = ringDataStore.getEnableAiState(),
-                                tempBaseLine = ringDataStore.getTempBaseLine()
+                                tempBaseLine = ringDataStore.getTempBaseLine(),
+                                customScreen = ringDataStore.getCustomHomeScreenData()
                             ),
                             message = "",
                         )
@@ -299,12 +304,15 @@ class OreoUserActivityRepositoryImpl(
                             firstStress = response.firstStress
                             stressBeta = response.stressBeta
                             enableAi = response.enableAi
+                            customHomeScreenData = response.customScreen
+
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setEnableAiState(response.enableAi ?: false)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
+                            customHomeScreenData?.let { ringDataStore.setCustomHomeScreenData(it) }
                         }
                     }
                 }
@@ -349,7 +357,8 @@ class OreoUserActivityRepositoryImpl(
                                             tempBaseLine = tempBaseLine,
                                             firstStress = firstStress,
                                             stressBeta = stressBeta,
-                                            enableAi = enableAi
+                                            enableAi = enableAi,
+                                            customScreen = customHomeScreenData
                                         ),
                                         message = "",
                                     )

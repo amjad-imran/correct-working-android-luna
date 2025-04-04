@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
+import com.noisefit.luna.databinding.ItemSevenDayTrendsCardBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.LayoutChatCardDashBinding
 import com.noisefit.luna.databinding.LayoutDashHealthMonitorBinding
 import com.noisefit.luna.databinding.LayoutDashSleepPlannerCardBinding
 import com.noisefit.luna.databinding.LayoutNotificationCardBinding
+import com.noisefit.luna.databinding.LayoutStressDashMeasureBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -54,12 +56,16 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
+import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.ODashboardActivityScoreModel
+import com.oreo.data.model.health.ODashboardReadinessScoreModel
+import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.util.DateTimeUtil
 import java.time.Duration
@@ -288,6 +294,22 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                     )
                 )
             }
+
+            R.layout.item_seven_day_trends_card -> {
+                HomeRecyclerViewHolder.SevenDayTrendsCardViewHolder(
+                    ItemSevenDayTrendsCardBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+
+            R.layout.layout_stress_dash_measure -> {
+                HomeRecyclerViewHolder.StressCardViewHolder(
+                    LayoutStressDashMeasureBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
             //
 
 //            R.layout.list_o_w_demo_card_item -> HomeRecyclerViewHolder.DemoViewHolder(
@@ -328,6 +350,14 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             )
             is HomeRecyclerViewHolder.WorkoutsHistoryViewHolder -> holder.bind(
                 items[position] as OHealthOverview.WorkoutHistoryCardData
+            )
+
+            is HomeRecyclerViewHolder.SevenDayTrendsCardViewHolder -> holder.bind(
+                items[position] as OHealthOverview.SevenDayTrendsCard
+            )
+
+            is HomeRecyclerViewHolder.StressCardViewHolder -> holder.bind(
+                items[position] as OHealthOverview.StressCard
             )
             //
 
@@ -448,12 +478,13 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             //
             is OHealthOverview.WorkoutHistoryCardData -> R.layout.oreo_layout_recent_activity
             is OHealthOverview.DailyGoalsCardData -> R.layout.layout_notification_card
+            is OHealthOverview.SevenDayTrendsCard -> R.layout.item_seven_day_trends_card
+            is OHealthOverview.StressCard -> R.layout.layout_stress_dash_measure
             //
         }
     }
 
     fun removeCycleGetStartedCard() {
-
         val index = (items as ArrayList).indexOfFirst {
             it is OHealthOverview.CardTrackFemaleHealth
         }
@@ -489,6 +520,438 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
+    class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding): 
+        HomeRecyclerViewHolder(binding)
+    {
+        fun bind(allData: OHealthOverview.StressCard){
+            setStressCardUi(allData)
+        }
+
+        private fun setStressCardUi(
+            allData: OHealthOverview.StressCard
+        )
+        {
+            val data = allData.data
+
+            val lytStress = binding
+            lytStress.root.visible()
+            lytStress.graphStress.updateData(data.data)
+
+
+            /*lytStress.lottieAnimView.gone()
+            lytStress.imvHrMeasure.gone()
+            lytStress.tvLastMeasure.gone()
+            lytStress.tvHeartValue.gone()
+            lytStress.tvHeartUnit.gone()
+            lytStress.tvEmptyConnect.gone()
+
+            return
+
+            when (data.measureState) {
+                TapMeasureState.NO_DEVICE -> {
+                    lytStress.lottieAnimView.invisible()
+                    lytStress.imvHrMeasure.visible()
+
+                    lytStress.groupValue.gone()
+                    lytStress.tvEmptyConnect.visible()
+                    lytStress.tvEmptyConnect.text =
+                        lytStress.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+
+                }
+
+                TapMeasureState.LAST_MEASURED -> {
+                    lytStress.lottieAnimView.invisible()
+                    lytStress.imvHrMeasure.visible()
+
+                    lytStress.groupValue.visible()
+                    lytStress.tvEmptyConnect.gone()
+
+                    lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
+                    lytStress.tvHeartUnit.text = viewModel.getStressStatus(data.value)
+
+                    lytStress.tvLastMeasure.apply {
+                        setTextColor(Color.parseColor("#a3ffffff"))
+                        text = data.lastTime
+                    }
+                }
+
+                TapMeasureState.MEASURING -> {
+                    lytStress.lottieAnimView.visible()
+                    lytStress.imvHrMeasure.invisible()
+
+                    lytStress.groupValue.gone()
+                    lytStress.tvEmptyConnect.visible()
+
+                    lytStress.tvEmptyConnect.apply {
+                        setTextColor(resources.getColor(R.color.white))
+                        text = getString(R.string.text_measuring_dots)
+                    }
+                }
+
+                TapMeasureState.DEFAULT -> {
+                    lytStress.lottieAnimView.invisible()
+                    lytStress.imvHrMeasure.visible()
+
+                    lytStress.groupValue.gone()
+                    lytStress.tvEmptyConnect.visible()
+                    lytStress.tvEmptyConnect.apply {
+                        setTextColor(Color.parseColor("#88b0ff"))
+                        text = getString(R.string.text_tap_to_measure)
+                    }
+                }
+
+                TapMeasureState.ERROR -> {
+                    lytStress.lottieAnimView.invisible()
+                    lytStress.imvHrMeasure.visible()
+
+                    lytStress.groupValue.visible()
+                    lytStress.tvEmptyConnect.gone()
+                    lytStress.tvHeartValue.gone()
+
+                    lytStress.tvLastMeasure.apply {
+                        setTextColor(Color.parseColor("#88b0ff"))
+                        text = getString(R.string.text_try_again)
+                    }
+                    lytStress.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
+
+                }
+
+                TapMeasureState.HIDE -> {
+                    lytStress.lottieAnimView.invisible()
+                    lytStress.imvHrMeasure.invisible()
+
+                    lytStress.groupValue.invisible()
+                    lytStress.tvEmptyConnect.gone()
+                    lytStress.tvHeartValue.gone()
+                }
+            }
+            lytStress.imvHrMeasure.setOnClickListener {
+
+                if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
+                    context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
+                    *//*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                    this.measureState = TapMeasureState.ERROR
+                })*//*
+                return@setOnClickListener
+            }
+
+            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
+                return@setOnClickListener
+            }
+
+            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                return@setOnClickListener
+            }
+
+            if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+                return@setOnClickListener
+            }
+
+
+            viewModel.viewModelScope.launch(Dispatchers.IO) {
+                context?.let {
+                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                    if (isWorkerRunning) {
+                        viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                            this.measureState = TapMeasureState.ERROR
+                        })
+                        return@launch
+                    }
+                    viewModel.measureStress(true)
+                }
+            }
+
+            return@setOnClickListener
+        }*/
+
+
+            /*binding.graphStress.updateData(data.data)
+            binding.tvBeta.setVisibilityByCondition(data.isBeta)
+            binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
+
+
+//            val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
+            val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
+
+
+            if (lastMeasuredValue == 0) {
+                lytStress.tvStressValue.gone()
+                lytStress.tvStressStatus.gone()
+                lytStress.tvLastUpdate.gone()
+                lytStress.lytTrend.root.gone()
+            } else {
+                lytStress.tvStressValue.visible()
+                lytStress.tvStressStatus.visible()
+                lytStress.tvLastUpdate.visible()
+
+                lytStress.tvStressValue.text = "$lastMeasuredValue"
+//                val (displayValue, displayColor) = viewModel.getStressStatus(lastMeasuredValue)
+                val (displayValue, displayColor) = allData.stressStatus
+                lytStress.tvStressStatus.text = displayValue
+                lytStress.tvStressStatus.setTextColor(displayColor)
+
+
+                val lastUpdatedTimestamp =
+                    DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 15 * 60 * 1000
+
+
+                val currentTimeStamp = DateFormats.getTimeStamp()
+                val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+                if (timeDiff <= (15 * 60 * 1000)) {
+
+//                    val trendPercent = viewModel.getStressTrend(data.listData, lastMeasuredIndex)
+                    val trendPercent = allData.stressTrend
+
+                    if (trendPercent != null && trendPercent != 0) {
+                        if (trendPercent > 0) {
+                            lytStress.lytTrend.apply {
+                                ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                                backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                                tvPercent.text = "$trendPercent%"
+                                tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                                root.visible()
+                            }
+
+                        } else {
+                            lytStress.lytTrend.apply {
+                                ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                                backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                                tvPercent.text = "${abs(trendPercent)}%"
+                                tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                                root.visible()
+                            }
+                        }
+                    } else {
+                        lytStress.lytTrend.root.gone()
+                    }
+                } else {
+                    lytStress.lytTrend.root.gone()
+                }
+
+
+                if (lastUpdatedTimestamp == 0L) {
+                    lytStress.tvLastUpdate.text = ""
+                } else {
+                    lytStress.tvLastUpdate.text =
+                        lytStress.tvLastUpdate.context.getString(
+                            R.string.text_updated_value,
+                            DateTimeUtil.getRelativeTime(
+                                lastUpdatedTimestamp,
+                                allData.resourcesProvider
+                            ).lowercase()
+                        )
+                }
+            }
+        }
+    }
+    
+    class SevenDayTrendsCardViewHolder(private val binding: ItemSevenDayTrendsCardBinding):
+        HomeRecyclerViewHolder(binding)
+    {
+        fun bind(data: OHealthOverview.SevenDayTrendsCard){
+//            Log.d("yashlogii", "setWorkoutUI: BIND ${data.trendsData?.toString()}")
+            updateSleepAvgUi(
+                Pair(
+                    data.trendsData.sleepScoreAvg, data.trendsData.activityScoreAvg
+                ),
+                data.chartModelSleep,
+                data.chartModelActivity,
+                data.chartModelEmpty
+            )
+            data.trendsData.readinessScoreAvg?.let {
+                updateReadinessAvgUi(
+                    it,
+                    data.chartModelReadiness,
+                    data.chartModelEmpty
+                )
+            }
+        }
+
+        private fun updateSleepAvgUi(
+            data: Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>,
+            chartModelSleep: List<ChartModel>,
+            chartModelActivity: List<ChartModel>,
+            chartModelEmpty: List<ChartModel>
+        ) {
+            val lytSleepAvg = binding.lytSleepAvg
+
+            val sleep = data.first!!
+            val activity = data.second!!
+
+            if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
+                lytSleepAvg.tvSleepScore.visible()
+                lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
+                lytSleepAvg.tvDaysAvg.visible()
+                lytSleepAvg.sleepLineChart.visible()
+                lytSleepAvg.sleepLine.root.visible()
+                val trendValue = "${kotlin.math.abs(sleep.trend ?: 0)}%"
+                if (sleep.trend != null && sleep.trend > 0) {
+                    lytSleepAvg.sleepTrendValue.text = trendValue
+                    lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
+                    lytSleepAvg.sleepTrendImv.loadImage(
+                        lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+                    )
+                    lytSleepAvg.sleepTrendImv.visible()
+                    lytSleepAvg.sleepTrendValue.visible()
+                    lytSleepAvg.tvSleepFromLast.visible()
+                } else if (sleep.trend != null && sleep.trend < 0) {
+                    lytSleepAvg.sleepTrendValue.text = trendValue
+                    lytSleepAvg.sleepTrendImv.loadImage(
+                        lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+                    )
+                    lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+                    lytSleepAvg.sleepTrendImv.visible()
+                    lytSleepAvg.sleepTrendValue.visible()
+                    lytSleepAvg.tvSleepFromLast.visible()
+                } else {
+                    lytSleepAvg.sleepTrendImv.invisible()
+                    lytSleepAvg.sleepTrendValue.invisible()
+                    lytSleepAvg.tvSleepFromLast.invisible()
+                }
+
+
+                lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+                    chartModelSleep, ArrayList(), ArrayList(), 20, true
+                )
+            } else {
+                lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+                    chartModelEmpty,
+                    ArrayList(),
+                    ArrayList(),
+                    20,
+                    true
+                )
+
+                lytSleepAvg.tvSleepScore.text = "--"
+                lytSleepAvg.tvDaysAvg.visible()
+                lytSleepAvg.sleepTrendImv.invisible()
+                lytSleepAvg.sleepTrendValue.invisible()
+                lytSleepAvg.tvSleepFromLast.invisible()
+                lytSleepAvg.sleepLine.root.invisible()
+            }
+
+            if (activity.activityScore != null && activity.activityScore >= 0) {
+
+                lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
+                lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+                    chartModelActivity, ArrayList(), ArrayList(), 20, true
+                )
+                lytSleepAvg.tvDaysAvg1.visible()
+                lytSleepAvg.activityLineChart.visible()
+                lytSleepAvg.activityLine.root.visible()
+                lytSleepAvg.activityTrendImv.visible()
+                lytSleepAvg.activityTrendValue.visible()
+                lytSleepAvg.tvActivityFrom.visible()
+
+                val trendValue = "${kotlin.math.abs(activity.trend ?: 0)}%"
+                if (activity.trend != null && activity.trend > 0) {
+                    lytSleepAvg.activityTrendValue.text = trendValue
+                    lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
+                    lytSleepAvg.activityTrendImv.loadImage(
+                        lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+                    )
+                    lytSleepAvg.activityTrendImv.visible()
+                    lytSleepAvg.activityTrendValue.visible()
+                    lytSleepAvg.tvActivityFrom.visible()
+                } else if (activity.trend != null && activity.trend < 0) {
+                    lytSleepAvg.activityTrendValue.text = trendValue
+                    lytSleepAvg.activityTrendImv.loadImage(
+                        lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+                    )
+                    lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+                    lytSleepAvg.activityTrendImv.visible()
+                    lytSleepAvg.activityTrendValue.visible()
+                    lytSleepAvg.tvActivityFrom.visible()
+                } else {
+                    lytSleepAvg.activityTrendImv.invisible()
+                    lytSleepAvg.activityTrendValue.invisible()
+                    lytSleepAvg.tvActivityFrom.invisible()
+                }
+                //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
+            } else {
+                lytSleepAvg.tvActivityScore.text = "--"
+                lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+                    chartModelEmpty,
+                    ArrayList(),
+                    ArrayList(),
+                    20,
+                    true
+                )
+
+                lytSleepAvg.tvDaysAvg1.visible()
+                //lytSleepAvg.activityLineChart.gone()
+                lytSleepAvg.activityLine.root.invisible()
+                lytSleepAvg.activityTrendImv.invisible()
+                lytSleepAvg.activityTrendValue.invisible()
+                lytSleepAvg.tvActivityFrom.invisible()
+            }
+
+
+            binding.root.setOnClickListener {
+                //   itemClickListener?.invoke(it, data, position)
+            }
+        }
+
+        private fun updateReadinessAvgUi(
+            data: ODashboardReadinessScoreModel,
+            chartModelReadiness: List<ChartModel>,
+            chartModelEmpty: List<ChartModel>
+        ) {
+            val lytReadinessAvg = binding.lytReadinessAvg
+            if (data.readinessScore != null && data.readinessScore >= 0) {
+                lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
+                lytReadinessAvg.tvDaysAvg.visible()
+                lytReadinessAvg.tvSleepScore.visible()
+                lytReadinessAvg.lineChart.visible()
+                val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
+                if (data.trend != null && data.trend > 0) {
+                    lytReadinessAvg.sleepTrendValue.text = trendValue
+                    lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
+                    lytReadinessAvg.sleepTrendImv.loadImage(
+                        lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+                    )
+                    lytReadinessAvg.sleepTrendImv.visible()
+                    lytReadinessAvg.sleepTrendValue.visible()
+                    lytReadinessAvg.tvSleepFromLast.visible()
+                } else if (data.trend != null && data.trend < 0) {
+                    lytReadinessAvg.sleepTrendValue.text = trendValue
+                    lytReadinessAvg.sleepTrendImv.loadImage(
+                        lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+                    )
+                    lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+                    lytReadinessAvg.sleepTrendImv.visible()
+                    lytReadinessAvg.sleepTrendValue.visible()
+                    lytReadinessAvg.tvSleepFromLast.visible()
+                } else {
+                    lytReadinessAvg.sleepTrendImv.invisible()
+                    lytReadinessAvg.sleepTrendValue.invisible()
+                    lytReadinessAvg.tvSleepFromLast.invisible()
+                }
+
+
+
+                lytReadinessAvg.lineChart.updateDataWithMaxMin(
+                    chartModelReadiness, ArrayList(), ArrayList(), 20, true
+                )
+            } else {
+                lytReadinessAvg.lineChart.updateDataWithMaxMin(
+                    chartModelEmpty,
+                    ArrayList(),
+                    ArrayList(),
+                    20,
+                    true
+                )
+
+                lytReadinessAvg.tvSleepScore.text = "--"
+                lytReadinessAvg.tvDaysAvg.visible()
+                lytReadinessAvg.lineChart.visible()
+                lytReadinessAvg.sleepTrendImv.invisible()
+                lytReadinessAvg.sleepTrendValue.invisible()
+                lytReadinessAvg.tvSleepFromLast.invisible()
+            }
+        }
+    }
+
     class WorkoutsHistoryViewHolder(private val binding: OreoLayoutRecentActivityBinding) :
         HomeRecyclerViewHolder(binding)
     {

@@ -12,13 +12,14 @@ import com.noisefit_commans.models.EnabledAppsForNotifications
 import com.noisefit_commans.models.Location
 import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.Units
-import com.noisefit_commans.models.UserGoals
-import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.models.WatchFace
-import java.time.LocalDate
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 
 
 interface DataStoredInterface {
+
+    fun setCustomHomeScreenItemsPriorityList(priorityList: CustomHomeScreenModel)
+    fun getCustomHomeScreenItemsPriorityList():CustomHomeScreenModel?
 
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()

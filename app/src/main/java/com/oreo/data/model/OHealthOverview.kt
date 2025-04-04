@@ -1,5 +1,6 @@
 package com.oreo.data.model
 
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.models.SleepData
@@ -114,6 +115,22 @@ sealed class OHealthOverview {
 
     data class DailyGoalsCardData(
         val notificationGoals: NotificationGoals
+    ): OHealthOverview()
+
+    data class SevenDayTrendsCard(
+        val  trendsData: TrendsData,
+        val chartModelSleep: List<ChartModel>,
+        val chartModelActivity: List<ChartModel>,
+        val chartModelReadiness: List<ChartModel>,
+        val chartModelEmpty: List<ChartModel>
+    ): OHealthOverview()
+
+    data class StressCard(
+        val data: OHealthOverview.StressDashDataModel,
+        val lastMeasuredValue: Pair<Int, Int>,
+        val stressStatus: Pair<String, Int>,
+        val stressTrend: Int,
+        val  resourcesProvider: ResourcesProvider
     ): OHealthOverview()
     //
 

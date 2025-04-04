@@ -39,8 +39,8 @@ import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.NotificationToggleModel
-import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingLocationData
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -360,6 +360,15 @@ class UserRepositoryImpl(
             remoteDataSource.updateNotificationToggle(
                 "${BuildConfig.OREO_BASE_URL}/activity/v2/notification/toggle?date=$date",
                 requestObject
+            )
+        }
+    }
+
+    override suspend fun submitCustomHomeScreenPriority(request: CustomHomeScreenModel): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitCustomHomeScreenItemsPriority(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/custom-screen",
+                request
             )
         }
     }

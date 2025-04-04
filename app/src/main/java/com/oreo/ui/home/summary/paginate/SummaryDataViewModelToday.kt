@@ -32,6 +32,7 @@ import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -89,6 +90,7 @@ import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration
@@ -126,7 +128,6 @@ class SummaryDataViewModelToday @Inject constructor(
     val googleFitDataSource: GoogleFitDataSource,
     val googleFitDataObservers: GoogleFitDataObservers,
 ) : BaseViewModel() {
-
 
     var date: String? = null
 
@@ -198,7 +199,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var sleepPlannerDataLoaded = MutableLiveData<Event<Boolean>>()
 
     //
-    val lunaManagedSwitchState = true
+    var userManagedSwitchState = false
     //
 
     fun getStressWalkthroughShownStatus(): Boolean {
@@ -1042,8 +1043,8 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        userManaged:Boolean)
-    {
+        userManaged:Boolean
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
 
@@ -1166,6 +1167,13 @@ class SummaryDataViewModelToday @Inject constructor(
                             userActivities.add(it)
                         }
                     }
+
+                    "stress" -> {
+                        if (!item.switchState) return@forEach
+                        getStressCard(healthData)?.let {
+                            userActivities.add(it)
+                        }
+                    }
                 }
             }
 
@@ -1200,11 +1208,23 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun getSvnDaysTrendsDataCard(
         trendsData: TrendsData?
     ): OHealthOverview? {
-        stateSleepAvgCard.postValue(
-            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
-        )
-        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
-        return null
+//        stateSleepAvgCard.postValue(
+//            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
+//        )
+//        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
+        return trendsData?.let {
+            val chartModelSleep = convertIntToChartModel(it.sleepScoreAvg?.value)
+            val chartModelActivity = convertIntToChartModel(it.activityScoreAvg?.value)
+            val chartModelReadiness = convertIntToChartModel(it.readinessScoreAvg?.value)
+            val chartModelEmpty = convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0))
+            OHealthOverview.SevenDayTrendsCard(
+                it,
+                chartModelSleep,
+                chartModelActivity,
+                chartModelReadiness,
+                chartModelEmpty
+            )
+        }
     }
 
     private fun getCycleTrackerCard(): OHealthOverview? {
@@ -1417,168 +1437,201 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    private fun getStressCard(
+        healthData: ServerUserHealthData
+    ): OHealthOverview? {
+        var stressCard: OHealthOverview.StressCard? = null
+        viewModelScope.launch {
+            val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
 
-    private fun getCardsPriorityFromApi() : List<CustomHomeScreenItem> = listOf(
-        CustomHomeScreenItem(
+            val device = ringDataStore.getRingDevice()
+
+            val stressData = userRepository.getSummaryStressData().apply {
+                this?.data = combinedData
+                if (device == null) {
+                    this?.measureState = TapMeasureState.NO_DEVICE
+                }
+            }
+
+            val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
+            val stressStatus = getStressStatus(lastMeasuredValue.first)
+            val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
+
+            if(stressData != null && stressTrend != null) {
+                stressCard = OHealthOverview.StressCard(
+                    stressData,
+                    lastMeasuredValue,
+                    stressStatus,
+                    stressTrend,
+                    resourceProvider
+                )
+            }
+        }
+
+        return if(stressCard!= null){
+            stressCard
+        }else{
+            null
+        }
+    }
+
+    private fun getCardsPriorityFromApi() : List<CustomHomeScreenItem>{
+        val list = getItemsMap().values.toList().sortedBy { it.priority }
+        return list
+    }
+
+    private fun getLunaManagedPriority(): List<CustomHomeScreenItem> {
+        val itemsMap = getItemsMap()
+        val priorityList = mutableListOf<CustomHomeScreenItem>()
+        val isAfter12 = checkIfIsAfter12()
+        val daySlot = getDaySlot() // 0=morning, 1=afternoon, 2=evening, else=default
+        val currentTime = DateFormats.getTimeFormat()
+        val isBefore8 = DateFormats.isTimeBefore(currentTime, "20:00")
+
+        when (daySlot) {
+            0 -> { // Morning (focus on sleep and readiness)
+                priorityList.apply {
+                    add(itemsMap["sleep"]!!.copy(priority = 1))
+                    add(itemsMap["readiness"]!!.copy(priority = 2))
+                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 4))
+                    add(itemsMap["activity"]!!.copy(priority = 5))
+                    if (!isAfter12) add(itemsMap["health_monitor"]!!.copy(priority = 6))
+                }
+            }
+            1 -> { // Afternoon (focus on activity)
+                priorityList.apply {
+                    add(itemsMap["sleep"]!!.copy(priority = 1))
+                    add(itemsMap["readiness"]!!.copy(priority = 2))
+                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    add(itemsMap["activity"]!!.copy(priority = 4))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
+                }
+            }
+            2 -> { // Evening (balanced)
+                priorityList.apply {
+                    add(itemsMap["readiness"]!!.copy(priority = 1))
+                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                    add(itemsMap["sleep"]!!.copy(priority = 3))
+                    add(itemsMap["activity"]!!.copy(priority = 4))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
+                }
+            }
+            else -> { // Default/Night
+                priorityList.apply {
+                    if (isBefore8.not()) {
+                        add(itemsMap["sleep_planner"]!!.copy(priority = 1))
+                    }
+                    add(itemsMap["activity"]!!.copy(priority = 2))
+                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    if (isBefore8) {
+                        add(itemsMap["sleep_planner"]!!.copy(priority = 4))
+                    }
+                    add(itemsMap["sleep"]!!.copy(priority = 5))
+                    add(itemsMap["readiness"]!!.copy(priority = 6))
+                    if (!isAfter12) add(itemsMap["health_monitor"]!!.copy(priority = 7))
+                }
+            }
+        }
+
+        // Add remaining items that aren't time-sensitive
+        val remainingItems = itemsMap.values.filterNot { item ->
+            priorityList.any { it.key == item.key }
+        }.sortedBy { it.priority }
+
+        priorityList.addAll(remainingItems)
+
+        return priorityList
+    }
+
+    private fun getItemsMap(): Map<String, CustomHomeScreenItem> = HashMap<String, CustomHomeScreenItem>().apply {
+        this["sleep"] = CustomHomeScreenItem(
             R.drawable.icon_sleep,
             "sleep",
             resourceProvider.getString(R.string.text_sleep),
             true,
-            2
-        ),
-        CustomHomeScreenItem(
+            1
+        )
+
+        this["activity"] = CustomHomeScreenItem(
             R.drawable.icon_activity,
             "activity",
             resourceProvider.getString(R.string.text_activity_o),
             true,
             2
-        ),
-        CustomHomeScreenItem(
+        )
+        this["readiness"] = CustomHomeScreenItem(
             R.drawable.icon_readiness,
             "readiness",
             resourceProvider.getString(R.string.text_readiness),
             true,
             3
-        ),
-        CustomHomeScreenItem(
+        )
+        this["sleep_planner"] = CustomHomeScreenItem(
             R.drawable.icon_sleep_planner,
             "sleep_planner",
             resourceProvider.getString(R.string.text_sleep_planner),
             true,
-            1
-        ),
-        CustomHomeScreenItem(
+            4
+        )
+        this["heart_rate"] = CustomHomeScreenItem(
             R.drawable.icon_heart_rate,
             "heart_rate",
             resourceProvider.getString(R.string.text_heart_rate),
             true,
-            -999
-        ),
-        CustomHomeScreenItem(
+            5
+        )
+        this["health_monitor"] = CustomHomeScreenItem(
             R.drawable.icon_heart_monitor,
             "health_monitor",
             resourceProvider.getString(R.string.text_heart_monitor),
             true,
             6
-        ),
-        CustomHomeScreenItem(
+        )
+        this["daily_goals"] = CustomHomeScreenItem(
             R.drawable.icon_daily_goals,
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
             true,
             7
-        ),
-        CustomHomeScreenItem(
+        )
+        this["luna_ai"] = CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
             true,
-            1
-        ),
-        CustomHomeScreenItem(
+            8
+        )
+        this["cycle_tracker"] = CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",
             resourceProvider.getString(R.string.text_cycle_tracker),
             true,
-            -1
-        ),
-        CustomHomeScreenItem(
+            9
+        )
+        this["7_day_trends_card"] = CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
             resourceProvider.getString(R.string.text_7_day_trends_cards),
             true,
             10
-        ),
-        CustomHomeScreenItem(
+        )
+        this["workout_history"] = CustomHomeScreenItem(
             R.drawable.icon_flexibility_training,
             "workout_history",
             resourceProvider.getString(R.string.text_workout_history),
             true,
-            -1
-        ),
-        // Add more items...
-    )
+            11
+        )
+        this["stress"] = CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "stress",
+            resourceProvider.getString(R.string.text_stress),
+            true,
+            12
+        )
 
-    private fun getLunaManagedPriority() : List<CustomHomeScreenItem> = listOf(
-        CustomHomeScreenItem(
-            R.drawable.icon_sleep,
-            "sleep",
-            resourceProvider.getString(R.string.text_sleep),
-            true,
-            2
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_activity,
-            "activity",
-            resourceProvider.getString(R.string.text_activity_o),
-            true,
-            2
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_readiness,
-            "readiness",
-            resourceProvider.getString(R.string.text_readiness),
-            true,
-            3
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_sleep_planner,
-            "sleep_planner",
-            resourceProvider.getString(R.string.text_sleep_planner),
-            true,
-            1
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_heart_rate,
-            "heart_rate",
-            resourceProvider.getString(R.string.text_heart_rate),
-            true,
-            -999
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_heart_monitor,
-            "health_monitor",
-            resourceProvider.getString(R.string.text_heart_monitor),
-            true,
-            6
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_daily_goals,
-            "daily_goals",
-            resourceProvider.getString(R.string.text_daily_goals),
-            true,
-            7
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_luna_ai,
-            "luna_ai",
-            resourceProvider.getString(R.string.text_luna_ai),
-            true,
-            1
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_cycle_tracker,
-            "cycle_tracker",
-            resourceProvider.getString(R.string.text_cycle_tracker),
-            true,
-            -1
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_7_day_trends_card,
-            "7_day_trends_card",
-            resourceProvider.getString(R.string.text_7_day_trends_cards),
-            true,
-            10
-        ),
-        CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "workout_history",
-            resourceProvider.getString(R.string.text_workout_history),
-            true,
-            -1
-        ),
-        // Add more items...
-    )
+    }
 
     private fun checkIfIsAfter12(): Boolean {
         return LocalDateTime.now().hour >= 12

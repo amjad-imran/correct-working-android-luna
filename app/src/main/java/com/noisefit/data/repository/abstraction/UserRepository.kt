@@ -13,6 +13,7 @@ import com.noisefit_commans.data.response.*
 import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.models.*
 import com.oreo.data.model.NotificationToggleModel
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -58,5 +59,6 @@ interface UserRepository {
 
     suspend fun updateNotificationToggle(requestObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun submitCustomHomeScreenPriority(request: CustomHomeScreenModel): Flow<Resource<BaseApiResponse<Any>>>
 
 }
