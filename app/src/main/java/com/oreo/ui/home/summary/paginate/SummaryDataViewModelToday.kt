@@ -174,6 +174,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val findMyRingCard = MutableLiveData<Boolean?>()
 
     val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
+    val notificationGoalsCardDataInit = MutableLiveData<Event<Boolean>>()
     val notificationGoalsCardDataUpdated = MutableLiveData<Event<Boolean>>()
     val hydrationUpdated = MutableLiveData<Event<Boolean>>()
 
@@ -2911,7 +2912,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
                                 notificationGoalsCardData.postValue(it)
-                                notificationGoalsCardDataUpdated.postValue(Event(true))
+                                notificationGoalsCardDataInit.postValue(Event(true))
                             }
                         }
 

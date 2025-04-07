@@ -519,6 +519,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
     fun updateData(heathOverViewData: OHealthOverview?) {
         if (heathOverViewData is OHealthOverview.DailyGoalsCardData) {
             val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
+            if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
         } else if (heathOverViewData is OHealthOverview.HeartRateDataModel) {
