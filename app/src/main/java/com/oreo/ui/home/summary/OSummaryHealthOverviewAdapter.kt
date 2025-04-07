@@ -3,10 +3,16 @@ package com.oreo.ui.home.summary
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +57,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -67,6 +74,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.ui.home.summary.paginate.NotificationGoal
 import com.oreo.util.DateTimeUtil
 import java.time.Duration
 import java.time.LocalTime
@@ -83,7 +91,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
     object StressGraphClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
-    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String):
+    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
 
 
@@ -103,20 +111,22 @@ sealed class OSummaryHealthOverviewClickEnum {
     class GotPeriodClicked(val status: Boolean) : OSummaryHealthOverviewClickEnum()
 
     //
-    data class OnHeartMeasureImvClicked(val data: OHealthOverview.HeartRateDataModel) : OSummaryHealthOverviewClickEnum()
-    object OnHeartRateCardClicked: OSummaryHealthOverviewClickEnum()
+    data class OnHeartMeasureImvClicked(val data: OHealthOverview.HeartRateDataModel) :
+        OSummaryHealthOverviewClickEnum()
 
-    object OnViewAddWorkout: OSummaryHealthOverviewClickEnum()
-    object OnWorkoutsHistoryCardClicked: OSummaryHealthOverviewClickEnum()
+    object OnHeartRateCardClicked : OSummaryHealthOverviewClickEnum()
+
+    object OnViewAddWorkout : OSummaryHealthOverviewClickEnum()
+    object OnWorkoutsHistoryCardClicked : OSummaryHealthOverviewClickEnum()
     data class OnWorkoutsHistoryCardOworkoutAdapterItemClicked(
         val data: OActivityListModal,
         val position: Int
-    ): OSummaryHealthOverviewClickEnum()
+    ) : OSummaryHealthOverviewClickEnum()
 
-    object OnIvNotificationStepsClicked: OSummaryHealthOverviewClickEnum()
-    object OnIvNotificationHydrateClicked: OSummaryHealthOverviewClickEnum()
-    object OnIvHydrateMinusClicked: OSummaryHealthOverviewClickEnum()
-    object OnIvHydratePlusClicked: OSummaryHealthOverviewClickEnum()
+    data class OnIvNotificationStepsClicked(val position: Int) : OSummaryHealthOverviewClickEnum()
+    data class OnIvNotificationHydrateClicked(val position: Int) : OSummaryHealthOverviewClickEnum()
+    object OnIvHydrateMinusClicked : OSummaryHealthOverviewClickEnum()
+    object OnIvHydratePlusClicked : OSummaryHealthOverviewClickEnum()
     object OnEditGoalsCardEditClicked : OSummaryHealthOverviewClickEnum()
     //
 
@@ -130,7 +140,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 
     private val items = ArrayList<OHealthOverview>()
 
-    fun updateDataSet(dataSet:List<OHealthOverview>){
+    fun updateDataSet(dataSet: List<OHealthOverview>) {
         items.clear()
         items.addAll(dataSet)
         notifyDataSetChanged()
@@ -349,6 +359,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 items[position] as OHealthOverview.DailyGoalsCardData,
                 position
             )
+
             is HomeRecyclerViewHolder.WorkoutsHistoryViewHolder -> holder.bind(
                 items[position] as OHealthOverview.WorkoutHistoryCardData
             )
@@ -506,16 +517,39 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
     }
 
     fun updateData(heathOverViewData: OHealthOverview?) {
-        if(heathOverViewData is OHealthOverview.DailyGoalsCardData){
+        if (heathOverViewData is OHealthOverview.DailyGoalsCardData) {
             val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
             items[index] = heathOverViewData
             notifyItemChanged(index)
-        }else if(heathOverViewData is OHealthOverview.HeartRateDataModel){
+        } else if (heathOverViewData is OHealthOverview.HeartRateDataModel) {
             val index = items.indexOfFirst { it is OHealthOverview.HeartRateDataModel }
-            if (index==-1) return
+            if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
         }
+    }
+
+    fun updateDailyToggle(goal:NotificationGoal) {
+        val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
+        if (index == -1) return
+        val oldData = (items[index] as OHealthOverview.DailyGoalsCardData).notificationGoals.copy()
+        (items[index] as OHealthOverview.DailyGoalsCardData).notificationGoals = oldData.apply {
+            if(goal==NotificationGoal.STEPS){
+                this.notificationToggleModel?.steps_notification = (this.notificationToggleModel?.steps_notification?:false).not()
+                if(this.notificationToggleModel?.steps_notification?:false){
+                    this.notificationToggleModel?.master_notification = true
+                }
+                this.showStepsFade = true
+            }else if(goal== NotificationGoal.HYDRATE){
+                this.notificationToggleModel?.hydrate_notification = (this.notificationToggleModel?.hydrate_notification?:false).not()
+                if(this.notificationToggleModel?.hydrate_notification?:false){
+                    this.notificationToggleModel?.master_notification = true
+                }
+                this.showHydrateFade = true
+            }
+
+        }
+        notifyItemChanged(index)
     }
 
 }
@@ -526,17 +560,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
-    class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding): 
-        HomeRecyclerViewHolder(binding)
-    {
-        fun bind(allData: OHealthOverview.StressCard){
+    class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(allData: OHealthOverview.StressCard) {
             setStressCardUi(allData)
         }
 
         private fun setStressCardUi(
             allData: OHealthOverview.StressCard
-        )
-        {
+        ) {
             val data = allData.data
 
             val lytStress = binding
@@ -750,11 +782,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
         }
     }
-    
-    class SevenDayTrendsCardViewHolder(private val binding: ItemSevenDayTrendsCardBinding):
-        HomeRecyclerViewHolder(binding)
-    {
-        fun bind(data: OHealthOverview.SevenDayTrendsCard){
+
+    class SevenDayTrendsCardViewHolder(private val binding: ItemSevenDayTrendsCardBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.SevenDayTrendsCard) {
 //            Log.d("yashlogii", "setWorkoutUI: BIND ${data.trendsData?.toString()}")
             updateSleepAvgUi(
                 Pair(
@@ -959,9 +990,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     }
 
     class WorkoutsHistoryViewHolder(private val binding: OreoLayoutRecentActivityBinding) :
-        HomeRecyclerViewHolder(binding)
-    {
-        fun bind(data: OHealthOverview.WorkoutHistoryCardData){
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.WorkoutHistoryCardData) {
             Log.d("yashlogii", "setWorkoutUI: BIND ${data.workouts.toString()}")
             setWorkoutUI(data.workouts)
         }
@@ -1010,14 +1040,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class DailyGoalsViewHolder(private val binding: LayoutNotificationCardBinding) : HomeRecyclerViewHolder(binding)
-    {
+    class DailyGoalsViewHolder(private val binding: LayoutNotificationCardBinding) :
+        HomeRecyclerViewHolder(binding) {
         fun bind(
             notificationGoal: OHealthOverview.DailyGoalsCardData,
             position: Int
-        ){
+        ) {
             setNotificationGoalsCardData(notificationGoal.notificationGoals)
-            initListener(position)
+            initListener(position, binding,notificationGoal)
         }
 
         private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
@@ -1072,7 +1102,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     hydrationText.append("oz")
 
                     if (convertedHydrateGoal != null) {
-                        hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+                        hydratePercent =
+                            (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
                     }
 
                 }
@@ -1088,6 +1119,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 notificationGoal.glassImage?.let { ivGlassImage.setImageResource(it) }
 
+
+                LOGS.d("sdfkljsdfklhjsdfkj  received value ${notificationGoal.notificationToggleModel?.hydrate_notification}")
                 if (notificationGoal.notificationToggleModel?.hydrate_notification == true &&
                     notificationGoal.notificationToggleModel?.master_notification == true
                 ) {
@@ -1103,18 +1136,49 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 } else {
                     ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
                 }
+
+                if(notificationGoal.showHydrateFade){
+                    notificationGoal.showHydrateFade = false
+                    handleMessageFade(
+                        binding.textView153, binding.textHydrateReminderMessage,
+                        binding.textView89, binding.textStepsReminderMessage,
+                        Pair(NotificationGoal.HYDRATE, notificationGoal.notificationToggleModel?.hydrate_notification?:false)
+                    )
+                }
+                if(notificationGoal.showStepsFade){
+                    notificationGoal.showStepsFade = false
+                    handleMessageFade(
+                        binding.textView153, binding.textHydrateReminderMessage,
+                        binding.textView89, binding.textStepsReminderMessage,
+                        Pair(NotificationGoal.STEPS, notificationGoal.notificationToggleModel?.steps_notification?:false)
+                    )
+                }
             }
         }
 
-        fun initListener(position: Int)
-        {
+        fun initListener(
+            position: Int,
+            binding: LayoutNotificationCardBinding,
+            notificationGoal: OHealthOverview.DailyGoalsCardData
+        ) {
             binding.apply {
                 ivNotificationSteps.setOnClickListener {
-                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked)
+                    if(ApplicationUtils.isInternetConnected().not()){
+                        binding.root.context.showShortToast(binding.root.context.getString(R.string.text_no_internet_connection))
+                        return@setOnClickListener
+                    }
+
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked(position))
+
                 }
 
                 ivNotificationHydrate.setOnClickListener {
-                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked)
+                    if(ApplicationUtils.isInternetConnected().not()){
+                        binding.root.context.showShortToast(binding.root.context.getString(R.string.text_no_internet_connection))
+                        return@setOnClickListener
+                    }
+
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked(position))
                 }
 
                 ivHydrateMinus.setOnClickListener {
@@ -1130,13 +1194,82 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             }
         }
+
+        fun handleMessageFade(
+            hydrateTextViewMain: TextView,
+            hydrateTextViewMessage: TextView,
+            stepsTextViewMain: TextView,
+            stepsTextViewMessage: TextView,
+            pair: Pair<NotificationGoal, Boolean>
+        ) {
+            when (pair.first) {
+                NotificationGoal.HYDRATE -> {
+                    if (pair.second) {
+                        hydrateTextViewMessage.text =
+                            binding.root.context.getString(
+                                R.string.text_reminder_active
+                            )
+                    } else {
+                        hydrateTextViewMessage.text =
+                            binding.root.context.getString(
+                                R.string.text_reminder_silent
+                            )
+                    }
+                    notificationTextFade(
+                        hydrateTextViewMain,
+                        hydrateTextViewMessage
+                    )
+                }
+
+                NotificationGoal.STEPS -> {
+                    if (pair.second) {
+                        stepsTextViewMessage.text =
+                            binding.root.context.getString(
+                                R.string.text_reminder_active
+                            )
+                    } else {
+                        stepsTextViewMessage.text =
+                            binding.root.context.getString(
+                                R.string.text_reminder_silent
+                            )
+                    }
+                    notificationTextFade(
+                        stepsTextViewMain,
+                        stepsTextViewMessage
+                    )
+                }
+            }
+        }
+
+        private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+            textView1.visibility = View.VISIBLE
+            textView2.visibility = View.INVISIBLE
+
+            val fadeIn: Animation =
+                AnimationUtils.loadAnimation(textView1.context, R.anim.fade_in_goal)
+            val fadeOut: Animation =
+                AnimationUtils.loadAnimation(textView1.context, R.anim.fade_out_goal)
+
+            textView1.startAnimation(fadeOut)
+            textView1.visibility = View.INVISIBLE
+            textView2.visibility = View.VISIBLE
+            textView2.startAnimation(fadeIn)
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                textView2.startAnimation(fadeOut)
+                textView2.visibility = View.INVISIBLE
+                textView1.visibility = View.VISIBLE
+                textView1.startAnimation(fadeIn)
+            }, 1500)
+
+        }
     }
 
-    class HeartRateViewHolder(private val binding: ListHeartRateCardItemBinding) : HomeRecyclerViewHolder(binding)
-    {
+    class HeartRateViewHolder(private val binding: ListHeartRateCardItemBinding) :
+        HomeRecyclerViewHolder(binding) {
         fun bind(
             data: OHealthOverview.HeartRateDataModel
-        ){
+        ) {
             setHearRateCardUi(data)
         }
 
@@ -1213,7 +1346,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytHeartRate.tvEmptyConnect.gone()
 
                     lytHeartRate.tvHeartValue.text = data.value
-                    lytHeartRate.tvHeartUnit.text = binding.root.context.getString(R.string.text_bpm_small)
+                    lytHeartRate.tvHeartUnit.text =
+                        binding.root.context.getString(R.string.text_bpm_small)
 
                     lytHeartRate.tvLastMeasure.apply {
                         setTextColor(Color.parseColor("#a3ffffff"))
@@ -1259,7 +1393,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor(Color.parseColor("#88b0ff"))
                         text = context.getString(R.string.text_try_again)
                     }
-                    lytHeartRate.tvHeartUnit.text = binding.root.context.getString(R.string.text_unable_to_measure)
+                    lytHeartRate.tvHeartUnit.text =
+                        binding.root.context.getString(R.string.text_unable_to_measure)
 
                 }
 
@@ -2312,7 +2447,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val caloriesGoalText = "${data.caloriesGoal}"
             binding.tvActivityScore.text = if ((data.data.activeCalories ?: 0) > 0) {
-                data.data.activeCalories.toString()+"/$caloriesGoalText"
+                data.data.activeCalories.toString() + "/$caloriesGoalText"
             } else {
                 "--/$caloriesGoalText"
             }

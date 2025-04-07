@@ -468,11 +468,14 @@ class SummaryDataFragmentToday :
                         }
                     )
 
+
                     if (viewModel.notificationToggleModel != null) {
                         viewModel.notificationToggleModel!!.steps_notification =
                             viewModel.notificationToggleModel?.steps_notification!!.not()
                         viewModel.updateNotificationToggle(NotificationGoal.STEPS)
                     }
+                    healthOverviewAdapter.updateDailyToggle(NotificationGoal.STEPS)
+
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {
@@ -484,11 +487,15 @@ class SummaryDataFragmentToday :
                         }
                     )
 
+
+
                     if (viewModel.notificationToggleModel != null) {
                         viewModel.notificationToggleModel!!.hydrate_notification =
                             viewModel.notificationToggleModel?.hydrate_notification!!.not()
                         viewModel.updateNotificationToggle(NotificationGoal.HYDRATE)
                     }
+                    healthOverviewAdapter.updateDailyToggle(NotificationGoal.HYDRATE)
+
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnIvHydrateMinusClicked -> {

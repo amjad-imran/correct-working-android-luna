@@ -174,8 +174,8 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.OnEditGoalsCardEditClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnIvHydrateMinusClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnIvHydratePlusClicked -> {}
-                OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {}
-                OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {}
             }
         }
 

@@ -15,6 +15,8 @@ data class NotificationGoals(
     var hydratePercent: Float ?= 0f,
     var notificationToggleModel: NotificationToggleModel ?= null,
     var glassImage: Int ?= 0,
-    var key: String ?= "0"
+    var key: String ?= "0",
+    var showHydrateFade: Boolean = false,
+    var showStepsFade: Boolean = false,
     //
 ) : Parcelable
