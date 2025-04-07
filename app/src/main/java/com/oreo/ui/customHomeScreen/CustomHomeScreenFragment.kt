@@ -48,8 +48,11 @@ class CustomHomeScreenFragment :
                 return@setOnCheckedChangeListener
             }
 
-            viewModel.lunaManagedState.postValue(isChecked)
-            viewModel.updateData(isChecked, adapter.getDataSet())
+            if(isChecked){
+                viewModel.updateData(isChecked, adapter.getDataSet())
+            }else{
+                viewModel.lunaManagedState.postValue(isChecked)
+            }
 
         }
 
@@ -82,12 +85,6 @@ class CustomHomeScreenFragment :
         viewModel.lunaManagedState.observe(this){
             it?.let {
                 binding.switchMain.isChecked = it
-
-//                binding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-//                binding.tvMessage.setVisibilityByCondition(isChecked) // visibility = if (isChecked) View.VISIBLE else View.GONE
-//
-//                binding.tvOtherMessage.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-//                binding.bSaveChanges.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
                 if(it){
                     binding.recyclerView.gone()
                     binding.tvOtherMessage.gone()

@@ -96,6 +96,22 @@
 
         </androidx.core.widget.NestedScrollView>
 
+
+
+        <View
+            android:id="@+id/blurView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#DA0D0D18"
+            android:clickable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bSaveChanges"
             style="@style/PrimaryButtonStyle"
@@ -110,20 +126,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <View
-            android:id="@+id/blurView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:background="#DA0D0D18"
-            android:clickable="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/txtSaved"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtSaved"
@@ -140,6 +142,7 @@
             android:paddingVertical="12dp"
             android:text="@string/changes_have_been_saved"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/bSaveChanges"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
