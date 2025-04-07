@@ -117,7 +117,7 @@ constructor(
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
     //
-    var lunaManagedState: Boolean = false
+    var lunaManagedState: Boolean = true
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()

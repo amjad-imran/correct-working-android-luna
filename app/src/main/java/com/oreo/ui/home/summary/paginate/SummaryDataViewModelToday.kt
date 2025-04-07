@@ -45,6 +45,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.noisefit_commans.utils.VibrationUtils
@@ -1044,7 +1045,7 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        lunaManaged:Boolean?
+        lunaManaged: Boolean
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1052,16 +1053,18 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
-            val priorityList = if(lunaManaged != null && !lunaManaged){
+            val priorityList = if (lunaManaged.not()) {
                 val list = localDataStore.getCustomHomeScreenItemsPriorityList()
-                if(list != null){
+                if (list != null) {
                     getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
-                }else{
+                } else {
                     getLunaManagedPriority().sortedBy { it.priority }
                 }
-            }else{
+            } else {
                 getLunaManagedPriority().sortedBy { it.priority }
             }
+
+            LOGS.d("sdfkmhsdkfjh $priorityList")
 
             // Handle auto-detected workouts
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
@@ -1120,45 +1123,63 @@ class SummaryDataViewModelToday @Inject constructor(
             val hasSleep = sleepModel.sleepScore != null && sleepModel.sleepScore != 0
 
             priorityList.forEach { item ->
-                if(item.switchState.not()) return@forEach
+                if (item.switchState.not()) return@forEach
 
-                when(item.key) {
+                when (item.key) {
                     "sleep" -> {
-                        getSleepDataCard(healthData, impactData, sleepModel)?.let { userActivities.add(it) }
+                        getSleepDataCard(
+                            healthData,
+                            impactData,
+                            sleepModel
+                        )?.let { userActivities.add(it) }
                     }
+
                     "activity" -> {
                         getActivityDataCard(healthData, impactData)?.let { userActivities.add(it) }
                     }
+
                     "readiness" -> {
-                        getReadinessDataCard(healthData.sleep, healthData.readiness, impactData)?.let { userActivities.add(it) }
+                        getReadinessDataCard(
+                            healthData.sleep,
+                            healthData.readiness,
+                            impactData
+                        )?.let { userActivities.add(it) }
                     }
+
                     "sleep_planner" -> {
                         getSleepPlannerDataCard(hasSleep)?.let { userActivities.add(it) }
                     }
+
                     "heart_rate" -> {
                         getHeartRateCard()?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "health_monitor" -> {
                         getHealthMonitorData(healthData.sleep)?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "daily_goals" -> {
                         getDailyGoalsCard()?.let { userActivities.add(it) }
                     }
+
                     "luna_ai" -> {
                         getLunaAiCard()?.let { userActivities.add(it) }
                     }
+
                     "cycle_tracker" -> {
                         getCycleTrackerCard()?.let { userActivities.add(it) }
                     }
+
                     "7_day_trends_card" -> {
                         getSvnDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "workout_history" -> {
                         getWorkoutHistoryCard(healthData.activity)?.let {
                             userActivities.add(it)
@@ -1166,7 +1187,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "stress" -> {
+                        LOGS.d("sdfkmhsdkfjh  add stress")
                         getStressCard(healthData)?.let {
+                            LOGS.d("sdfkmhsdkfjh  add stress card")
                             userActivities.add(it)
                         }
                     }
@@ -1190,11 +1213,11 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
-        return if(activity != null){
+        return if (activity != null) {
             OHealthOverview.WorkoutHistoryCardData(
                 activity.workout ?: ArrayList()
             )
-        }else{
+        } else {
             null
         }
 //        stateWorkouts.postValue(activity?.workout ?: ArrayList())
@@ -1247,7 +1270,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (femaleData.isOvulation || femaleData.isPeriod) {
                         OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
                     } else {
-                        OHealthOverview.CycleTrackerCardSmall(convertToPeriodSmallCardModel(femaleData))
+                        OHealthOverview.CycleTrackerCardSmall(
+                            convertToPeriodSmallCardModel(
+                                femaleData
+                            )
+                        )
                     }
                 }
             } else {
@@ -1265,7 +1292,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getDailyGoalsCard(): OHealthOverview? {
-        return if (notificationGoalsCardData.value != null){
+        return if (notificationGoalsCardData.value != null) {
             val prevData = notificationGoalsCardData.value
 
             val isMetric = sessionManager.isMetric()
@@ -1274,9 +1301,9 @@ class SummaryDataViewModelToday @Inject constructor(
             val hydrate = prevData?.hydration ?: 0
 
             var hydratePercent = 0f
-            if (isMetric){
+            if (isMetric) {
                 hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
-            }else{
+            } else {
                 val convertedHydrate = hydrate.toFloat() * 0.033814
                 val convertedHydrateGoal =
                     convertMlToOuncesRounded(hydrateGoal.toDouble())
@@ -1299,7 +1326,7 @@ class SummaryDataViewModelToday @Inject constructor(
             OHealthOverview.DailyGoalsCardData(
                 data
             )
-        }else{
+        } else {
             null
         }
     }
@@ -1320,7 +1347,7 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         })
 
-        return if (data != null){
+        return if (data != null) {
 
             data.apply {
                 this.hrCombineModel = hrDataConvertor.getHrCombinedData(
@@ -1336,12 +1363,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     this.trendPercent = it
                 }
 
-                if(device == null){
+                if (device == null) {
                     this.measureState = TapMeasureState.NO_DEVICE
                 }
             }
-        }
-        else{
+        } else {
             null
         }
 //        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
@@ -1468,48 +1494,42 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getStressCard(
+    private suspend fun getStressCard(
         healthData: ServerUserHealthData
     ): OHealthOverview? {
         var stressCard: OHealthOverview.StressCard? = null
-        viewModelScope.launch(Dispatchers.IO) {
-            val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+        val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
 
-            val device = ringDataStore.getRingDevice()
+        val device = ringDataStore.getRingDevice()
 
-            val stressData = userRepository.getSummaryStressData().apply {
-                this?.data = combinedData
-                if (device == null) {
-                    this?.measureState = TapMeasureState.NO_DEVICE
-                }
-            }
-
-            val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
-            val stressStatus = getStressStatus(lastMeasuredValue.first)
-            val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
-
-            if(stressData != null && stressTrend != null) {
-                stressCard = OHealthOverview.StressCard(
-                    stressData,
-                    lastMeasuredValue,
-                    stressStatus,
-                    stressTrend,
-                    resourceProvider
-                )
+        val stressData = userRepository.getSummaryStressData().apply {
+            this?.data = combinedData
+            if (device == null) {
+                this?.measureState = TapMeasureState.NO_DEVICE
             }
         }
 
-        return if(stressCard!= null){
-            stressCard
-        }else{
-            null
-        }
+        val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
+        val stressStatus = getStressStatus(lastMeasuredValue.first)
+        val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
+
+        /*if (stressData != null && stressTrend != null) {*/
+            stressCard = OHealthOverview.StressCard(
+                stressData,
+                lastMeasuredValue,
+                stressStatus,
+                stressTrend,
+                resourceProvider
+            )
+        /*}*/
+
+        return stressCard
     }
 
-    private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem>{
+    private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem> {
         val list = ArrayList<CustomHomeScreenItem>()
         val map = getItemsMap()
-        for (item in cards){
+        for (item in cards) {
             val mainItem = map[item.type]
             if (mainItem != null) {
                 mainItem.priority = item.priority
@@ -1539,6 +1559,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (!isAfter12) add(itemsMap["health_monitor"]!!.copy(priority = 6))
                 }
             }
+
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
                     add(itemsMap["sleep"]!!.copy(priority = 1))
@@ -1548,6 +1569,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
+
             2 -> { // Evening (balanced)
                 priorityList.apply {
                     add(itemsMap["readiness"]!!.copy(priority = 1))
@@ -1557,6 +1579,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
+
             else -> { // Default/Night
                 priorityList.apply {
                     if (isBefore8.not()) {
@@ -1584,94 +1607,95 @@ class SummaryDataViewModelToday @Inject constructor(
         return priorityList
     }
 
-    private fun getItemsMap(): Map<String, CustomHomeScreenItem> = HashMap<String, CustomHomeScreenItem>().apply {
-        this["sleep"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep,
-            "sleep",
-            resourceProvider.getString(R.string.text_sleep),
-            true,
-            1
-        )
+    private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
+        HashMap<String, CustomHomeScreenItem>().apply {
+            this["sleep"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep,
+                "sleep",
+                resourceProvider.getString(R.string.text_sleep),
+                true,
+                1
+            )
 
-        this["activity"] = CustomHomeScreenItem(
-            R.drawable.icon_activity,
-            "activity",
-            resourceProvider.getString(R.string.text_activity_o),
-            true,
-            2
-        )
-        this["readiness"] = CustomHomeScreenItem(
-            R.drawable.icon_readiness,
-            "readiness",
-            resourceProvider.getString(R.string.text_readiness),
-            true,
-            3
-        )
-        this["sleep_planner"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep_planner,
-            "sleep_planner",
-            resourceProvider.getString(R.string.text_sleep_planner),
-            true,
-            4
-        )
-        this["heart_rate"] = CustomHomeScreenItem(
-            R.drawable.icon_heart_rate,
-            "heart_rate",
-            resourceProvider.getString(R.string.text_heart_rate),
-            true,
-            5
-        )
-        this["health_monitor"] = CustomHomeScreenItem(
-            R.drawable.icon_heart_monitor,
-            "health_monitor",
-            resourceProvider.getString(R.string.text_heart_monitor),
-            true,
-            6
-        )
-        this["daily_goals"] = CustomHomeScreenItem(
-            R.drawable.icon_daily_goals,
-            "daily_goals",
-            resourceProvider.getString(R.string.text_daily_goals),
-            true,
-            7
-        )
-        this["luna_ai"] = CustomHomeScreenItem(
-            R.drawable.icon_luna_ai,
-            "luna_ai",
-            resourceProvider.getString(R.string.text_luna_ai),
-            true,
-            8
-        )
-        this["cycle_tracker"] = CustomHomeScreenItem(
-            R.drawable.icon_cycle_tracker,
-            "cycle_tracker",
-            resourceProvider.getString(R.string.text_cycle_tracker),
-            true,
-            9
-        )
-        this["7_day_trends_card"] = CustomHomeScreenItem(
-            R.drawable.icon_7_day_trends_card,
-            "7_day_trends_card",
-            resourceProvider.getString(R.string.text_7_day_trends_cards),
-            true,
-            10
-        )
-        this["workout_history"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "workout_history",
-            resourceProvider.getString(R.string.text_workout_history),
-            true,
-            11
-        )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
-            12
-        )
+            this["activity"] = CustomHomeScreenItem(
+                R.drawable.icon_activity,
+                "activity",
+                resourceProvider.getString(R.string.text_activity_o),
+                true,
+                2
+            )
+            this["readiness"] = CustomHomeScreenItem(
+                R.drawable.icon_readiness,
+                "readiness",
+                resourceProvider.getString(R.string.text_readiness),
+                true,
+                3
+            )
+            this["sleep_planner"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep_planner,
+                "sleep_planner",
+                resourceProvider.getString(R.string.text_sleep_planner),
+                true,
+                4
+            )
+            this["heart_rate"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_rate,
+                "heart_rate",
+                resourceProvider.getString(R.string.text_heart_rate),
+                true,
+                5
+            )
+            this["health_monitor"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_monitor,
+                "health_monitor",
+                resourceProvider.getString(R.string.text_heart_monitor),
+                true,
+                6
+            )
+            this["daily_goals"] = CustomHomeScreenItem(
+                R.drawable.icon_daily_goals,
+                "daily_goals",
+                resourceProvider.getString(R.string.text_daily_goals),
+                true,
+                7
+            )
+            this["luna_ai"] = CustomHomeScreenItem(
+                R.drawable.icon_luna_ai,
+                "luna_ai",
+                resourceProvider.getString(R.string.text_luna_ai),
+                true,
+                8
+            )
+            this["cycle_tracker"] = CustomHomeScreenItem(
+                R.drawable.icon_cycle_tracker,
+                "cycle_tracker",
+                resourceProvider.getString(R.string.text_cycle_tracker),
+                true,
+                9
+            )
+            this["7_day_trends_card"] = CustomHomeScreenItem(
+                R.drawable.icon_7_day_trends_card,
+                "7_day_trends_card",
+                resourceProvider.getString(R.string.text_7_day_trends_cards),
+                true,
+                10
+            )
+            this["workout_history"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "workout_history",
+                resourceProvider.getString(R.string.text_workout_history),
+                true,
+                11
+            )
+            this["stress"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "stress",
+                resourceProvider.getString(R.string.text_stress),
+                true,
+                12
+            )
 
-    }
+        }
 
     private fun checkIfIsAfter12(): Boolean {
         return LocalDateTime.now().hour >= 12
@@ -2822,7 +2846,7 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun updateHydration(increase: Boolean) {
         val glassSize = 250
 
-        if(ApplicationUtils.isInternetConnected().not()){
+        if (ApplicationUtils.isInternetConnected().not()) {
             sendMessage(resourceProvider.getString(R.string.text_no_internet_connection))
             return
         }

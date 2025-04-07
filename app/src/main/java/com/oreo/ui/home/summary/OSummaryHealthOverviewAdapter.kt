@@ -574,7 +574,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val lytStress = binding
             lytStress.root.visible()
-            lytStress.graphStress.updateData(data.data)
+            lytStress.graphStress.updateData(data?.data)
 
 
             /*lytStress.lottieAnimView.gone()

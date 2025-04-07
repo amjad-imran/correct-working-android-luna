@@ -239,7 +239,7 @@ class SummaryDataFragmentToday :
     private fun setAdapter() {
         binding.contentMain.rvHealthData.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            itemAnimator =null
+            itemAnimator = null
             adapter = healthOverviewAdapter
         }
 
