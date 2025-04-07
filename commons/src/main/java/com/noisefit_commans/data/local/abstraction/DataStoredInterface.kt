@@ -501,5 +501,7 @@ interface DataStoredInterface {
     fun getShouldShowSleepNotification(): Boolean
     fun setShouldShowSleepNotification(state:Boolean)
 
+    fun getDisplayEditHomeScreenCard(): Boolean
+    fun setDisplayEditHomeScreenCard(isDisplayed: Boolean)
 
 }

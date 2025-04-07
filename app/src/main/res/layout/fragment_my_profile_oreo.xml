@@ -116,7 +116,9 @@
                     android:id="@+id/llCustomHomeScreen"
                     style="@style/SettingsRow"
                     android:layout_width="match_parent"
-                    android:layout_height="72dp">
+                    android:layout_height="72dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <include
                         android:id="@+id/topLine"

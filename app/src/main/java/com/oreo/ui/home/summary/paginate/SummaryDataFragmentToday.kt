@@ -231,7 +231,17 @@ class SummaryDataFragmentToday :
     ) {
         viewModel.initTodayData()
 //        val localCustomHomeScreenData = loc
-        Log.d("sbvcsjhvsjsvids",  "${mainViewModel.lunaManagedState}")
+        val lunaManagedData = mainViewModel.lunaManagedData
+        if(
+            lunaManagedData == null &&
+            viewModel.registerDate > 6 &&
+            viewModel.localDataStore.getDisplayEditHomeScreenCard()
+        ){
+            binding.contentMain.lytCustomHomeScreen.root.visible()
+        }else{
+            binding.contentMain.lytCustomHomeScreen.root.gone()
+        }
+
         viewModel.getUserManagedHealthData(data, trendsData, impactData, mainViewModel.lunaManagedState)
     }
 
@@ -580,7 +590,7 @@ class SummaryDataFragmentToday :
         }
 
         lytCustomHomeScreen.btnCancel.setOnClickListener {
-
+            viewModel.localDataStore.setDisplayEditHomeScreenCard(false)
         }
 
         /*binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {

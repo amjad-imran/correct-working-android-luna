@@ -3,12 +3,14 @@ package com.oreo.ui.profile
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.freshchat.consumer.sdk.FaqOptions
 import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.ui.profile.ProfileViewModel
@@ -29,6 +31,7 @@ class OMyProfileFragment :
     BaseFragment<FragmentMyProfileOreoBinding>(FragmentMyProfileOreoBinding::inflate) {
 
     private val viewModel: ProfileViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onResume() {
         super.onResume()
@@ -47,6 +50,16 @@ class OMyProfileFragment :
             binding.rowCycleTracker.gone()
         } else {
             binding.rowCycleTracker.visible()
+        }
+
+        if(
+            mainViewModel.lunaManagedData == null &&
+            mainViewModel.registerDate > 6 &&
+            viewModel.localDataStore.getDisplayEditHomeScreenCard()
+        ){
+            binding.llCustomHomeScreen.visible()
+        }else{
+            binding.llCustomHomeScreen.gone()
         }
 
     }
@@ -293,6 +306,13 @@ class OMyProfileFragment :
                     binding.lytReferralAvailable.root.gone()
                     binding.rowReferral.gone()
                 }
+
+                is ReferralRunningState.CampaignRunningState -> TODO()
+                ReferralRunningState.Default -> TODO()
+                ReferralRunningState.PrizeOnlyState -> TODO()
+                ReferralRunningState.ReferralAndCampaignState -> TODO()
+                ReferralRunningState.ReferralOnlyState -> TODO()
+                ReferralRunningState.UpdateToViewReferral -> TODO()
             }
         }
 

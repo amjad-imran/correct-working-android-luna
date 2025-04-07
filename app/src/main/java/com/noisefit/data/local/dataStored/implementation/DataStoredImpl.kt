@@ -226,6 +226,7 @@ private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
+private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -242,6 +243,14 @@ class DataStoredImpl
 
     override fun setShouldShowSleepNotification(state: Boolean) {
         mPrefs.edit().putBoolean(SLEEP_NOTIFICATION_TOGGLE, state).commit()
+    }
+
+    override fun getDisplayEditHomeScreenCard(): Boolean {
+        return mPrefs.getBoolean(DISPLAY_HOME_SCREEN_CARD, true)
+    }
+
+    override fun setDisplayEditHomeScreenCard(isDisplayed: Boolean) {
+        mPrefs.edit().putBoolean(DISPLAY_HOME_SCREEN_CARD, isDisplayed).commit()
     }
 
     override fun isGoogleFitCrossed(): Boolean {

@@ -132,7 +132,7 @@
             android:id="@+id/lytCustomHomeScreen"
             layout="@layout/layout_custom_homescreen_card"
             android:layout_marginTop="24dp"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="visible"
             android:layout_marginHorizontal="@dimen/side_margin"
             android:layout_width="match_parent"

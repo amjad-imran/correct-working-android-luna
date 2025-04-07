@@ -1498,11 +1498,7 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
-        return if(stressCard!= null){
-            stressCard
-        }else{
-            null
-        }
+        return stressCard
     }
 
     private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem>{
