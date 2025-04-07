@@ -117,7 +117,7 @@ constructor(
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
     //
-    var userManagedState: Boolean = false
+    var lunaManagedState: Boolean = false
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -323,9 +323,10 @@ constructor(
                             stressBeta = it.stressBeta ?: false
                             enableAi = it.enableAi ?: false
                             //
-                            userManagedState = it.customScreen?.manage ?: false
+                            lunaManagedState = it.customScreen?.manage ?: false
                             Log.d("yashhhhhhhhhhhhhhhhhh" , "${Gson().toJson(it.customScreen)}")
-                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "${Gson().toJson(it.enableAi)}")
+//                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "${Gson().toJson(it.enableAi)}")
+                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "$lunaManagedState")
                             //
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 

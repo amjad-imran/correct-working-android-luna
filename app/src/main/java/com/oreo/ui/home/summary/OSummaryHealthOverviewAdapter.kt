@@ -1604,7 +1604,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvTitle.text = data.data.title
             binding.tvMessage.text = data.data.content
 
-
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked)
             }

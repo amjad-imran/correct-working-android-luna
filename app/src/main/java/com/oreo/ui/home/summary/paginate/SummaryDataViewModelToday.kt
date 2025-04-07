@@ -31,6 +31,7 @@ import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -44,8 +45,6 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.noisefit_commans.utils.VibrationUtils
@@ -1045,7 +1044,7 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        userManaged:Boolean
+        lunaManaged:Boolean?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1053,8 +1052,13 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
-            val priorityList = if(userManaged){
-                getCardsPriorityFromApi().sortedBy { it.priority }
+            val priorityList = if(lunaManaged != null && !lunaManaged){
+                val list = ringDataStore.getCustomHomeScreenData()
+                if(list != null){
+                    getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
+                }else{
+                    getLunaManagedPriority().sortedBy { it.priority }
+                }
             }else{
                 getLunaManagedPriority().sortedBy { it.priority }
             }
@@ -1505,8 +1509,13 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getCardsPriorityFromApi() : List<CustomHomeScreenItem>{
-        val list = getItemsMap().values.toList().sortedBy { it.priority }
+    private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem>{
+        cards.sortedBy { it.priority }
+        val list = ArrayList<CustomHomeScreenItem>()
+        val map = getItemsMap()
+        for (item in cards){
+            map[item.type]?.let { list.add(it) }
+        }
         return list
     }
 

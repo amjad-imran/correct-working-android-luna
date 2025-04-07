@@ -231,8 +231,8 @@ class SummaryDataFragmentToday :
     ) {
         viewModel.initTodayData()
 //        val localCustomHomeScreenData = loc
-        Log.d("sbvcsjhvsjsvids",  "${mainViewModel.userManagedState}")
-        viewModel.getUserManagedHealthData(data, trendsData, impactData, mainViewModel.userManagedState)
+        Log.d("sbvcsjhvsjsvids",  "${mainViewModel.lunaManagedState}")
+        viewModel.getUserManagedHealthData(data, trendsData, impactData, mainViewModel.lunaManagedState)
     }
 
 

@@ -111,17 +111,99 @@
                     app:layout_constraintTop_toBottomOf="@+id/include14"
                     app:text="@string/text_your_profile" />
 
-                <com.noisefit_commans.ui.custom.SettingsRow
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/llCustomHomeScreen"
+                    style="@style/SettingsRow"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:visibility="visible"
-                    app:image="@drawable/ic_user_duotone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/include14"
-                    app:text="@string/edit_home_screen" />
+                    android:layout_height="72dp">
+
+                    <include
+                        android:id="@+id/topLine"
+                        layout="@layout/layout_divider_modal_color"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivBackGround"
+                        android:background="@drawable/back_modal_new_round"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="16dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/topLine"
+                        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivAppUpdate"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:background="#ff6782"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
+                        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+                        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+                    <ImageView
+                        android:id="@+id/ivSettingsImage"
+                        android:layout_width="@dimen/dimen_20dp"
+                        android:layout_height="@dimen/dimen_20dp"
+                        android:src="@drawable/ic_custom_homescreen_card"
+                        android:adjustViewBounds="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
+                        app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
+                        app:layout_constraintStart_toStartOf="@+id/ivBackGround"
+                        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvSettingsTitle"
+                        style="@style/H6"
+                        app:text="@string/edit_home_screen"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginEnd="@dimen/dimen_8dp"
+                        android:drawableEnd="@drawable/icon_feature_new"
+                        android:gravity="center_vertical"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
+                        app:layout_constraintEnd_toStartOf="@+id/tvStatus"
+                        app:layout_constraintStart_toEndOf="@+id/ivBackGround"
+                        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+                        tools:text="Settings" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        style="@style/H6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/side_margin"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivSettingsArrow"
+                        app:layout_constraintEnd_toStartOf="@+id/ivSettingsArrow"
+                        app:layout_constraintTop_toTopOf="@+id/ivSettingsArrow" />
+
+                    <ImageView
+                        android:id="@+id/ivSettingsArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dimen_16dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_arrow_right_duotone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/llLunaAiCalibration"
