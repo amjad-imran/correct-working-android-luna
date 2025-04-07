@@ -807,6 +807,12 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.notificationGoalsCardDataUpdated.observe(this){
+            it.getContent()?.let {
+                loadData()
+            }
+        }
+
         viewModel.notificationUpdatedState.observe(this) {
             it.getContent()?.let {
 
@@ -1215,7 +1221,6 @@ class SummaryDataFragmentToday :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
-                setHearRateCardUi(it)
                 viewModel.viewModelScope.launch {
                     healthOverviewAdapter.updateData(viewModel.updateHeartRateCard())
                 }
@@ -2129,171 +2134,6 @@ class SummaryDataFragmentToday :
                     )
             }
         }*/
-    }
-
-    private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
-//        val lytHeartRate = binding.contentMain.lytHeartRate
-//        lytHeartRate.root.visible()
-//        lytHeartRate.candleChart.enableInteractiveMode(false)
-//        lytHeartRate.candleChart.updateData(
-//            viewModel.hrDataConvertor.getHrCombinedData(
-//                viewModel.serverUserHealthData, data
-//            ), 3, data.minValues, data.maxValues
-//        )
-//
-//        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.rawData)
-//
-//        if (lastMeasuredValue == 0) {
-//            lytHeartRate.lytTrend.root.gone()
-//        } else {
-//            val lastUpdatedTimestamp =
-//                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
-//
-//
-//            val currentTimeStamp = DateFormats.getTimeStamp()
-//            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
-//            if (timeDiff <= (5 * 60 * 1000)) {
-//
-//                val trendPercent = viewModel.getHrTrend(data.rawData, lastMeasuredIndex)
-//
-//                if (trendPercent != null && trendPercent != 0) {
-//                    if (trendPercent > 0) {
-//                        lytHeartRate.lytTrend.apply {
-//                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
-//                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
-//                            tvPercent.text = "$trendPercent%"
-//                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
-//                            root.visible()
-//                        }
-//                    } else {
-//                        lytHeartRate.lytTrend.apply {
-//                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
-//                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
-//                            tvPercent.text = "${abs(trendPercent)}%"
-//                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
-//                            root.visible()
-//                        }
-//                    }
-//                } else {
-//                    lytHeartRate.lytTrend.root.gone()
-//                }
-//            } else {
-//                lytHeartRate.lytTrend.root.gone()
-//            }
-//        }
-//
-//
-//
-//        when (data.measureState) {
-//            TapMeasureState.NO_DEVICE -> {
-//                lytHeartRate.lottieAnimView.invisible()
-//                lytHeartRate.imvHrMeasure.visible()
-//
-//                lytHeartRate.groupValue.gone()
-//                lytHeartRate.tvEmptyConnect.visible()
-//                lytHeartRate.tvEmptyConnect.text =
-//                    lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
-//
-//            }
-//
-//            TapMeasureState.LAST_MEASURED -> {
-//                lytHeartRate.lottieAnimView.invisible()
-//                lytHeartRate.imvHrMeasure.visible()
-//
-//                lytHeartRate.groupValue.visible()
-//                lytHeartRate.tvEmptyConnect.gone()
-//
-//                lytHeartRate.tvHeartValue.text = data.value
-//                lytHeartRate.tvHeartUnit.text = getString(R.string.text_bpm_small)
-//
-//                lytHeartRate.tvLastMeasure.apply {
-//                    setTextColor(Color.parseColor("#a3ffffff"))
-//                    text = data.lastTime
-//                }
-//
-//            }
-//
-//            TapMeasureState.MEASURING -> {
-//                lytHeartRate.lottieAnimView.visible()
-//                lytHeartRate.imvHrMeasure.invisible()
-//
-//                lytHeartRate.groupValue.gone()
-//                lytHeartRate.tvEmptyConnect.visible()
-//
-//                lytHeartRate.tvEmptyConnect.apply {
-//                    setTextColor(resources.getColor(R.color.white))
-//                    text = getString(R.string.text_measuring_dots)
-//                }
-//            }
-//
-//            TapMeasureState.DEFAULT -> {
-//                lytHeartRate.lottieAnimView.invisible()
-//                lytHeartRate.imvHrMeasure.visible()
-//
-//                lytHeartRate.groupValue.gone()
-//                lytHeartRate.tvEmptyConnect.visible()
-//                lytHeartRate.tvEmptyConnect.apply {
-//                    setTextColor(Color.parseColor("#88b0ff"))
-//                    text = getString(R.string.text_tap_to_measure)
-//                }
-//            }
-//
-//            TapMeasureState.ERROR -> {
-//                lytHeartRate.lottieAnimView.invisible()
-//                lytHeartRate.imvHrMeasure.visible()
-//
-//                lytHeartRate.groupValue.visible()
-//                lytHeartRate.tvEmptyConnect.gone()
-//                lytHeartRate.tvHeartValue.gone()
-//
-//                lytHeartRate.tvLastMeasure.apply {
-//                    setTextColor(Color.parseColor("#88b0ff"))
-//                    text = getString(R.string.text_try_again)
-//                }
-//                lytHeartRate.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
-//
-//            }
-//
-//            TapMeasureState.HIDE -> {
-//                lytHeartRate.lottieAnimView.invisible()
-//                lytHeartRate.imvHrMeasure.invisible()
-//
-//                lytHeartRate.groupValue.invisible()
-//                lytHeartRate.tvEmptyConnect.gone()
-//                lytHeartRate.tvHeartValue.gone()
-//            }
-//        }
-//
-//        lytHeartRate.imvHrMeasure.setOnClickListener {
-//
-//            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
-//            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
-//                return@setOnClickListener
-//            }
-//
-//            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-//                return@setOnClickListener
-//            }
-//
-//            if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
-//                return@setOnClickListener
-//            }
-//
-//            viewModel.viewModelScope.launch(Dispatchers.IO) {
-//                context?.let {
-//                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-//                    if (isWorkerRunning) {
-//                        viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
-//                            this.measureState = TapMeasureState.ERROR
-//                        })
-//                        return@launch
-//                    }
-//                    viewModel.measureHr(true)
-//                }
-//            }
-//
-//            return@setOnClickListener
-//        }
     }
 
     private fun showRemoveNapBottomSheet(nap: OreoNapData) {
