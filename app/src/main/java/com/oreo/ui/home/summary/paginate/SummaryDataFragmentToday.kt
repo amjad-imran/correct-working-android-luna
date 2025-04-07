@@ -576,7 +576,7 @@ class SummaryDataFragmentToday :
 
         }
 
-        binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
+        /*binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
@@ -591,9 +591,9 @@ class SummaryDataFragmentToday :
                     viewModel.notificationToggleModel?.steps_notification!!.not()
                 viewModel.updateNotificationToggle(NotificationGoal.STEPS)
             }
-        }
+        }*/
 
-        binding.contentMain.lytNotificationCard.ivNotificationHydrate.setOnClickListener {
+        /*binding.contentMain.lytNotificationCard.ivNotificationHydrate.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
@@ -608,9 +608,9 @@ class SummaryDataFragmentToday :
                     viewModel.notificationToggleModel?.hydrate_notification!!.not()
                 viewModel.updateNotificationToggle(NotificationGoal.HYDRATE)
             }
-        }
+        }*/
 
-        binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
+        /*binding.contentMain.lytNotificationCard.ivHydrateMinus.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
@@ -621,9 +621,9 @@ class SummaryDataFragmentToday :
             )
 
             viewModel.decreaseHydration()
-        }
+        }*/
 
-        binding.contentMain.lytNotificationCard.ivHydratePlus.setOnClickListener {
+        /*binding.contentMain.lytNotificationCard.ivHydratePlus.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
@@ -634,16 +634,16 @@ class SummaryDataFragmentToday :
             )
 
             viewModel.increaseHydration()
-        }
+        }*/
 
-        binding.contentMain.lytNotificationCard.tvEdit.setOnClickListener {
+        /*binding.contentMain.lytNotificationCard.tvEdit.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.goalsSetting_clicked
             )
 
             navigate(R.id.editNotificationGoalFragment)
-        }
+        }*/
 
         binding.contentMain.lytFindMyRingAlert.ivCross.setOnClickListener {
             viewModel.hideFindMyRingPermCard()
@@ -656,14 +656,14 @@ class SummaryDataFragmentToday :
 //            navigate(R.id.fragmentHeartRateDetails)
 //        }
 
-        binding.contentMain.lytStressGraph.root.setOnClickListener {
+        /*binding.contentMain.lytStressGraph.root.setOnClickListener {
             if (viewModel.getStressWalkthroughShownStatus()) {
                 navigate(R.id.fragmentOStressDetails)
             } else {
                 navigate(R.id.stressSplashFragment)
             }
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
-        }
+        }*/
 
         binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
@@ -810,9 +810,7 @@ class SummaryDataFragmentToday :
         viewModel.notificationUpdatedState.observe(this) {
             it.getContent()?.let {
 
-//                "New card state"
-
-                healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
+                /*healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
 
                 return@observe
                 when (it.first) {
@@ -851,11 +849,11 @@ class SummaryDataFragmentToday :
                             binding.contentMain.lytNotificationCard.textStepsReminderMessage
                         )
                     }
-                }
+                }*/
             }
         }
 
-        viewModel.notificationGoalsCardData.observe(this) {
+        /*viewModel.notificationGoalsCardData.observe(this) {
             if (it == null) {
                 binding.contentMain.lytNotificationCard.root.gone()
             } else {
@@ -863,7 +861,7 @@ class SummaryDataFragmentToday :
 
                 setNotificationGoalsCardData(it)
             }
-        }
+        }*/
         viewModel.hydrationUpdated.observe(this){
             it.getContent()?.let {
                 healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
@@ -1237,7 +1235,7 @@ class SummaryDataFragmentToday :
 
         viewModel.stateStressCard.observe(viewLifecycleOwner) {
             if (it != null) {
-                setStressCardUi(it)
+                //setStressCardUi(it)
             }
         }
 
@@ -1371,7 +1369,7 @@ class SummaryDataFragmentToday :
 
     private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
 
-        binding.contentMain.lytNotificationCard.apply {
+       /* binding.contentMain.lytNotificationCard.apply {
             root.visible()
             val stepsGoal = notificationGoal.steps_required ?: 5000
 
@@ -1449,7 +1447,7 @@ class SummaryDataFragmentToday :
             } else {
                 ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
             }
-        }
+        }*/
     }
 
     private fun showBlackListDialog() {
@@ -1936,9 +1934,9 @@ class SummaryDataFragmentToday :
     }
 
     private fun setStressCardUi(data: OHealthOverview.StressDashDataModel) {
-        val lytStress = binding.contentMain.lytStressGraph
+        /*val lytStress = binding.contentMain.lytStressGraph
         lytStress.root.visible()
-        lytStress.graphStress.updateData(data.data)
+        lytStress.graphStress.updateData(data.data)*/
 
 
         /*lytStress.lottieAnimView.gone()
@@ -2073,7 +2071,7 @@ class SummaryDataFragmentToday :
         binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
 
 
-        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
+        /*val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
 
 
         if (lastMeasuredValue == 0) {
@@ -2141,7 +2139,7 @@ class SummaryDataFragmentToday :
                         ).lowercase()
                     )
             }
-        }
+        }*/
     }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
