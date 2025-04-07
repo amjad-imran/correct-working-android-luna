@@ -20,6 +20,7 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchOtherMain"
         style="@style/CustomSwitch3"
+        android:layout_marginEnd="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

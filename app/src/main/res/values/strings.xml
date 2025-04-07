@@ -1368,7 +1368,6 @@
     <string name="text_missing_data">Missing data</string>
     <string name="text_sleep_algo_detext">Our algorithm\'s couldn\'t detect sleep last night, if you did sleep, please add it here.</string>
     <string name="text_wear_luna_ring">Wear your Luna ring when you go to bed to automatically detect your sleep. Make sure to charge your ring to avoid missing out on valuable insights. If you did sleep, please add it here.</string>
-    <string name="text_sleep_charge_ring">We haven’t received data from a while. Remember to charge your ring and wear it regularly so you don’t miss out on your personalised insights!</string>
     <string name="text_authorize_bluetooth_connectivity_for_luna">Authorize Bluetooth connectivity for Luna</string>
     <string name="text_today_s_your_predicted_day">Today\'s your predicted %1$s day.</string>
     <string name="text_period_late_for">Period late for</string>
@@ -1900,6 +1899,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_steps_15_message">Equivalent to a mini-marathon every few days!</string>
     <string name="text_goal_achieved">Goal Achieved</string>
     <string name="text_menstrual_health">Menstrual health</string>
+    <string name="text_sleep_charge_ring_new">We haven’t received data for a while. Remember to charge your ring and wear it regularly so you don\’t miss out on your personalised insights!</string>
     <string name="text_luna_managed">Luna managed</string>
     <string name="text_customize_homescreen">Customize homescreen</string>
     <string name="text_heart_monitor">Heart monitor</string>

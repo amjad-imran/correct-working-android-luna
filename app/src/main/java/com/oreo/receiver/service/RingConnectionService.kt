@@ -537,7 +537,7 @@ constructor() : LifecycleService() {
             connectionHandler.getConnectionActions(colorFitDevice)?.let { connectionDataActions ->
                 connectionDataActions.removeCallbacks()
             }
-            deleteDB()
+            //deleteDB()
             vibrationUtils.vibrate(LOW_VIBRATION)
             ApplicationUtils.clearJobs(this)
             timer?.cancel()

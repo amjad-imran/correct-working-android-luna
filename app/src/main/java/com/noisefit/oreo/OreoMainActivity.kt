@@ -990,9 +990,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                          binding.lytHeader.pbSync.gone()
                          resetSwipeLoadingAnim()*/
                     }
+                    SyncEvents.ServerSyncFailed->{
+                        viewModel.syncTextState.value = null
+                        viewModel.syncProgressBarState.value = null
+                    }
 
                     SyncEvents.ServerSyncStarted -> {
-                        binding.progressBar.root.visible()
+                        viewModel.showSyncLoader = false
+                        /*if(viewModel.showSyncLoader){
+                            binding.progressBar.root.visible()
+                        }*/
                         viewModel.syncTextState.value = viewModel.getSyncingMessage(
                             this@OreoMainActivity,
                             0,
@@ -1208,10 +1215,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         when (appLink) {
             AppLinks.REFERRAL -> {
                 viewModel.getReferralInfo { data ->
-                    this@OreoMainActivity.navController?.navigate(
-                        R.id.referralFragment,
-                        bundleOf("referralInfo" to data)
-                    )
+                    if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.referralFragment){
+                        this@OreoMainActivity.navController?.navigate(
+                            R.id.referralFragment,
+                            bundleOf("referralInfo" to data)
+                        )
+                    }
+
                 }
             }
         }

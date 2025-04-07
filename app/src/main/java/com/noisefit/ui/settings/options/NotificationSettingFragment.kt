@@ -68,6 +68,10 @@ class NotificationSettingFragment :
 
         binding.switchMaster.setOnCheckedChangeListener { buttonView, isChecked ->
 
+
+
+            if (!buttonView.isPressed) return@setOnCheckedChangeListener
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
@@ -75,21 +79,21 @@ class NotificationSettingFragment :
                 }
             )
 
-            if (!buttonView.isPressed) return@setOnCheckedChangeListener
-
             binding.lytNotificationMain.switchMain.isChecked = isChecked
 
             viewModel.masterToggle = isChecked
 
-            binding.lytOther.switchOtherMain.isEnabled = isChecked
-            if (isChecked.not()) {
-                disableOtherNotifications()
-            }
+
+            handleOtherNotifications(isChecked)
 
             viewModel.updateNotificationToggle()
         }
 
         binding.lytOther.switchOtherMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
@@ -97,10 +101,6 @@ class NotificationSettingFragment :
                     this["target"] = "all_reminders"
                 }
             )
-
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
 
             binding.lytOther.lytHydration.switchMain.isChecked = isChecked
             binding.lytOther.lytSteps.switchMain.isChecked = isChecked
@@ -118,6 +118,10 @@ class NotificationSettingFragment :
 
         binding.lytOther.lytHydration.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
@@ -125,9 +129,6 @@ class NotificationSettingFragment :
                 }
             )
 
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
             viewModel.hydrationToggle = isChecked
             if (isChecked) {
                 binding.lytOther.switchOtherMain.isChecked = true
@@ -138,6 +139,10 @@ class NotificationSettingFragment :
         }
         binding.lytOther.lytSteps.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
@@ -145,9 +150,6 @@ class NotificationSettingFragment :
                 }
             )
 
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
             viewModel.stepsToggle = isChecked
             if (isChecked) {
                 binding.lytOther.switchOtherMain.isChecked = true
@@ -157,16 +159,16 @@ class NotificationSettingFragment :
         }
         binding.lytOther.lytSleep.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
 
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.notification_toggled,
                 HashMap<String, Any>().apply {
                     this["target"] = "sleep"
                 }
             )
-
-            if (buttonView.isPressed.not()) {
-                return@setOnCheckedChangeListener
-            }
 
             viewModel.sleepToggle = isChecked
             if (isChecked) {
@@ -199,18 +201,23 @@ class NotificationSettingFragment :
             binding.lytOther.switchOtherMain.isChecked = false
         }
     }
+    private fun handleOtherNotifications(state: Boolean) {
+        binding.lytOther.switchOtherMain.isEnabled = state
+        binding.lytOther.lytHydration.switchMain.isEnabled = state
+        binding.lytOther.lytSteps.switchMain.isEnabled = state
+        binding.lytOther.lytSleep.switchMain.isEnabled = state
+        binding.lytOther.lytFemaleHealth.switchMain.isEnabled = state
 
-    private fun disableOtherNotifications() {
-        binding.lytOther.switchOtherMain.isChecked = false
-        binding.lytOther.lytHydration.switchMain.isChecked = false
-        binding.lytOther.lytSteps.switchMain.isChecked = false
-        binding.lytOther.lytSleep.switchMain.isChecked = false
-        binding.lytOther.lytFemaleHealth.switchMain.isChecked = false
+        binding.lytOther.switchOtherMain.isChecked = state
+        binding.lytOther.lytHydration.switchMain.isChecked = state
+        binding.lytOther.lytSteps.switchMain.isChecked = state
+        binding.lytOther.lytSleep.switchMain.isChecked = state
+        binding.lytOther.lytFemaleHealth.switchMain.isChecked = state
 
-        viewModel.hydrationToggle = false
-        viewModel.stepsToggle = false
-        viewModel.sleepToggle = false
-        viewModel.femaleHealthToggle = false
+        viewModel.hydrationToggle = state
+        viewModel.stepsToggle = state
+        viewModel.sleepToggle = state
+        viewModel.femaleHealthToggle = state
     }
 
     override fun subscribeObservers() {
@@ -218,6 +225,7 @@ class NotificationSettingFragment :
         viewModel.valueUpdate.observe(this) {
             it.getContent()?.let {
                 binding.switchMaster.isChecked = viewModel.masterToggle
+                binding.lytNotificationMain.switchMain.isChecked = viewModel.masterToggle
 
                 if (viewModel.masterToggle) {
 
@@ -228,6 +236,12 @@ class NotificationSettingFragment :
                     binding.lytOther.lytSteps.switchMain.isChecked = viewModel.stepsToggle
                     binding.lytOther.lytSleep.switchMain.isChecked = viewModel.sleepToggle
                     binding.lytOther.lytFemaleHealth.switchMain.isChecked = viewModel.femaleHealthToggle
+                }else{
+                    binding.lytOther.switchOtherMain.isEnabled = false
+                    binding.lytOther.lytHydration.switchMain.isEnabled = false
+                    binding.lytOther.lytSteps.switchMain.isEnabled = false
+                    binding.lytOther.lytSleep.switchMain.isEnabled = false
+                    binding.lytOther.lytFemaleHealth.switchMain.isEnabled = false
                 }
             }
         }

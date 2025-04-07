@@ -111,10 +111,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
-                HashMap<String, Any>().apply {
-                    this["property"] = "just_clicked"
-                })
+                MoEngageLunaAppEvents.user_menu_clicked
+            )
             navigate(R.id.OMyProfileFragment)
         }
 
@@ -190,6 +188,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
+            mainViewModel.showSyncLoader = false
             if (viewModel.sessionManager.bluetoothStateDash.value != false) {
                 mainViewModel.syncTextState.value = getString(R.string.text_syncing_recent_data)
             }
@@ -225,14 +224,26 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
     override fun subscribeObservers() {
+        val allSetText = getString(R.string.text_all_set)
         mainViewModel.syncTextState.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.lytHeader.tvHeaderStatus.gone()
+                //binding.lytHeader.tvHeaderStatus.gone()
+                binding.lytHeader.tvHeaderStatusNonShimmer.gone()
             } else {
-                binding.lytHeader.tvHeaderStatus.apply {
-                    text = it/*getString(R.string.text_syncing_dot)*/
-                    visible()
-                }
+
+                binding.lytHeader.tvHeaderStatusNonShimmer.text = it
+                binding.lytHeader.tvHeaderStatusNonShimmer.visible()
+
+
+                /*if (it.equals(allSetText, true)) {
+                    binding.lytHeader.tvHeaderStatusNonShimmer.visible()
+                    binding.lytHeader.tvHeaderStatus.gone()
+                    binding.lytHeader.tvHeaderStatusNonShimmer.text = it
+                } else {
+                    binding.lytHeader.tvHeaderStatusNonShimmer.gone()
+                    binding.lytHeader.tvHeaderStatus.visible()
+                    binding.lytHeader.tvHeaderStatus.text = it
+                }*/
             }
         }
 

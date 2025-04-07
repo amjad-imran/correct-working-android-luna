@@ -189,6 +189,16 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginEnd="@dimen/side_margin" />
 
+        <include
+            android:id="@+id/lytNotificationCard"
+            layout="@layout/layout_notification_card"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
         <include
             android:id="@+id/lytStressGraph"

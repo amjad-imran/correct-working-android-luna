@@ -1339,7 +1339,6 @@
     <string name="text_missing_data">Fehlende Daten</string>
     <string name="text_sleep_algo_detext">Unser Algorithmus konnte den Schlaf letzte Nacht nicht erkennen. Wenn Sie geschlafen haben, fügen Sie ihn bitte hier hinzu.</string>
     <string name="text_wear_luna_ring">Tragen Sie Ihren Luna-Ring, wenn Sie zu Bett gehen, um Ihren Schlaf automatisch zu erkennen. Stellen Sie sicher, dass Sie Ihren Ring aufladen, um keine wertvollen Erkenntnisse zu verpassen. Wenn Sie geschlafen haben, fügen Sie es bitte hier hinzu.</string>
-    <string name="text_sleep_charge_ring">Wir haben seit einiger Zeit keine Daten mehr erhalten. Denken Sie daran, Ihren Ring aufzuladen und regelmäßig zu tragen, damit Ihnen Ihre persönlichen Erkenntnisse nicht entgehen!</string>
     <string name="text_authorize_bluetooth_connectivity_for_luna">Autorisieren Sie die Bluetooth-Verbindung für Luna</string>
     <string name="text_today_s_your_predicted_day">Heute ist Ihr voraussichtlicher %1$s-Tag.</string>
     <string name="text_period_late_for">Periode zu spät für</string>
@@ -1864,5 +1863,6 @@
     <string name="text_steps_15_message">Entspricht einem Mini-Marathon alle paar Tage!</string>
     <string name="text_goal_achieved">Ziel erreicht</string>
     <string name="text_menstrual_health">Menstruationsgesundheit</string>
+    <string name="text_sleep_charge_ring_new">Wir haben seit einiger Zeit keine Daten erhalten. Denk daran, deinen Ring aufzuladen und regelmäßig zu tragen, damit du keine personalisierten Einblicke verpasst!</string>
 
 </resources>

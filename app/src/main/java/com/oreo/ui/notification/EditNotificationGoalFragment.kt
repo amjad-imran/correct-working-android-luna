@@ -69,32 +69,23 @@ class EditNotificationGoalFragment :
         }
 
         binding.btnSave.setOnClickListener {
-            //            viewModel.sessionManager.logMoEngageAppEvent(
-//                MoEngageLunaAppEvents.goals_set,
-//                HashMap<String, Any>().apply {viewModel.sessionManager.logMoEngageAppEvent(
-//                MoEngageLunaAppEvents.goals_set,
-//                HashMap<String, Any>().apply {
-//                    this["goal"] = "goals"
-//                }
-//            )
-//                    this["goal"] = "goals"
-//                }
-//            )
 
             var selectedHydrationGoal = viewModel.hydrationGoal
             var selectedStepsGoal = viewModel.stepsGoal
 
 
-            if(selectedStepsGoal==null){
-                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.steps_required
-                if(lastSavedGoal!=null){
+            if (selectedStepsGoal == null) {
+                val lastSavedGoal =
+                    viewModel.notificationGoalReceived.value?.peekContent()?.steps_required
+                if (lastSavedGoal != null) {
                     selectedStepsGoal = lastSavedGoal
                 }
             }
 
-            if(selectedHydrationGoal==null){
-                val lastSavedGoal = viewModel.notificationGoalReceived.value?.peekContent()?.hydration_required
-                if(lastSavedGoal!=null){
+            if (selectedHydrationGoal == null) {
+                val lastSavedGoal =
+                    viewModel.notificationGoalReceived.value?.peekContent()?.hydration_required
+                if (lastSavedGoal != null) {
                     selectedHydrationGoal = lastSavedGoal
                 }
             }
@@ -108,12 +99,24 @@ class EditNotificationGoalFragment :
                 profileViewModel.hydrationGoal = selectedHydrationGoal
                 profileViewModel.stepsGoal = selectedStepsGoal
 
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.goals_set,
+                    HashMap<String, Any>().apply {
+                        this["goal"] = "hydration/steps"
+                        this["value"] = "hydration - $selectedHydrationGoal, steps - $selectedStepsGoal"
+                    }
+                )
+
                 profileViewModel.updateUserProfile()
             }
         }
     }
 
     override fun subscribeObservers() {
+        viewModel.isGoalChanged.observe(this) {
+            binding.btnSave.isEnabled = it
+        }
+
         profileViewModel.userDetailsUpdated.observe(this) {
             it.getContent()?.let {
                 navigateUpSafe()
@@ -154,7 +157,7 @@ class EditNotificationGoalFragment :
                         viewModel.getSelectedHydrationImperialPosition(convertedValue)
                     if (selectedPositionHyImp != -1) {
                         wheelAdapterHydrationImperial.selectedItemPosition = selectedPositionHyImp
-                    }else{
+                    } else {
                         wheelAdapterHydrationImperial.selectedItemPosition = 0
                     }
                 }
@@ -236,12 +239,15 @@ class EditNotificationGoalFragment :
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
 
-                    val (title,message) = viewModel.getHydrationMessage(total)
+                    val (title, message) = viewModel.getHydrationMessage(total)
 
                     binding.lytHydrationPicker.textView159.text = getString(title)
                     binding.lytHydrationPicker.textView160.text = getString(message)
 
                     viewModel.updateHydration(total, isMetric)
+
+                    viewModel.handleValueChange()
+
                 }
             }
             wheelAdapterHydrationMetricLiter.bind(binding.lytHydrationPicker.wheelPickerMetricLiter)
@@ -269,12 +275,15 @@ class EditNotificationGoalFragment :
 
                     val total = ((selectedLiter ?: 0) * 1000) + (selectedMl ?: 0)
 
-                    val (title,message) = viewModel.getHydrationMessage(total)
+                    val (title, message) = viewModel.getHydrationMessage(total)
 
                     binding.lytHydrationPicker.textView159.text = getString(title)
                     binding.lytHydrationPicker.textView160.text = getString(message)
 
                     viewModel.updateHydration(total, isMetric)
+
+                    viewModel.handleValueChange()
+
                 }
             }
             wheelAdapterHydrationMetricMl.bind(binding.lytHydrationPicker.wheelPickerMetricMl)
@@ -303,10 +312,17 @@ class EditNotificationGoalFragment :
                     if (convertedValue != null) {
                         viewModel.updateHydration(convertedValue, isMetric)
 
-                        val (title,message) = viewModel.getHydrationMessage(viewModel.convertOuncesToRoundedMl(convertedValue.toDouble()))
+                        val (title, message) = viewModel.getHydrationMessage(
+                            viewModel.convertOuncesToRoundedMl(
+                                convertedValue.toDouble()
+                            )
+                        )
 
                         binding.lytHydrationPicker.textView159.text = getString(title)
                         binding.lytHydrationPicker.textView160.text = getString(message)
+
+                        viewModel.handleValueChange()
+
                     }
                 }
             }
@@ -319,8 +335,6 @@ class EditNotificationGoalFragment :
             wheelAdapterHydrationMetricLiter.bind(binding.lytHydrationPicker.wheelPickerMetricLiter)
 
         }
-
-        return
     }
 
     private fun initStepsUi(selectionList: List<String>) {
@@ -339,11 +353,13 @@ class EditNotificationGoalFragment :
             tryCatch {
                 val steps = item.split(" ")[0].toIntOrNull()
 
-                val (title,message) = viewModel.getStepsMessage(steps?:0)
+                val (title, message) = viewModel.getStepsMessage(steps ?: 0)
 
                 binding.lytStepsPicker.textView159.text = getString(title)
                 binding.lytStepsPicker.textView160.text = getString(message)
                 viewModel.stepsGoal = steps
+
+                viewModel.handleValueChange()
             }
         }
         wheelAdapterStepsPicker.bind(binding.lytStepsPicker.wheelPicker)

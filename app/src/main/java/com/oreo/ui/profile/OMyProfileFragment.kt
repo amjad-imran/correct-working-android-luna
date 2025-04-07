@@ -72,6 +72,12 @@ class OMyProfileFragment :
         }
 
         binding.rowSelectLanguage.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["target"] = "app_language"
+                }
+            )
             navigate(R.id.languageFragment, bundleOf("hideContinue" to true))
         }
 
@@ -84,8 +90,8 @@ class OMyProfileFragment :
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.user_ham_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "refer_and_earn"
-                    this["description"] = "button_clicked"
+                    this["target"] = "refer_and_earn"
+                    this["source"] = "menu_option/promo_card"
                 })
 
             if (viewModel.referralRunningState.value == ReferralRunningState.ReferralAndCampaignState ||
@@ -121,9 +127,9 @@ class OMyProfileFragment :
             })*/
 
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
+                MoEngageLunaAppEvents.user_menu_option_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "live_support"
+                    this["target"] = "live_support"
                 })
 
             Freshchat.showConversations(requireContext())
@@ -131,9 +137,9 @@ class OMyProfileFragment :
 
         binding.rowSettings.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
+                MoEngageLunaAppEvents.user_menu_option_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "settings"
+                    this["target"] = "settings"
                 })
             navigate(R.id.settingsFragment)
         }
@@ -141,9 +147,9 @@ class OMyProfileFragment :
         binding.rowAbout.setUpdateAvailable(viewModel.localDataStore.isNewAppVersionAvailable())
         binding.rowAbout.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
+                MoEngageLunaAppEvents.user_menu_option_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "about"
+                    this["target"] = "about"
                 })
             navigate(R.id.aboutFragment)
         }
@@ -161,6 +167,11 @@ class OMyProfileFragment :
 //            )
 //        }
         binding.rowFeedBack.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["target"] = "Rate us"
+                })
             navigate(R.id.rateUsOreo)
         }
 
@@ -172,9 +183,9 @@ class OMyProfileFragment :
         binding.llMyProfile.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
+                MoEngageLunaAppEvents.user_menu_option_clicked,
                 HashMap<String, Any>().apply {
-                    this["property"] = "your_profile"
+                    this["target"] = "your_profile"
                 })
 
             goToProfile()
@@ -185,11 +196,21 @@ class OMyProfileFragment :
         }
 
         binding.rowLearn.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_learnmore_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["target"] = "learn_more"
+                }
+            )
             navigate(R.id.learnFragment)
         }
 
         binding.rowHelp.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["target"] = "FAQ"
+                })
             navigate(R.id.oreoHelpAndSupportFragment)
         }
 
@@ -201,9 +222,9 @@ class OMyProfileFragment :
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_allow_click)
                     viewModel.logoutUser()
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.user_ham_clicked,
+                        MoEngageLunaAppEvents.user_menu_option_clicked,
                         HashMap<String, Any>().apply {
-                            this["property"] = "logout"
+                            this["target"] = "logout"
                         })
                 } else {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_cancel_click)

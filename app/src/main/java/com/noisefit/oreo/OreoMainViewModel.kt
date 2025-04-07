@@ -14,6 +14,8 @@ import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ReferralRepository
@@ -82,6 +84,7 @@ constructor(
     val syncRepository: OreoSyncRepository,
     val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
+    val keyValueDataSource: KeyValueDataSource,
     val locationDataSource: LocationDataSource,
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
@@ -91,6 +94,7 @@ constructor(
 ) : BaseViewModel() {
 
 
+    var showSyncLoader: Boolean = true
     val FAB_ANIM_TIME = 500L
 
     var isBottomNavGifPlaying = false
@@ -281,7 +285,9 @@ constructor(
                     }
 
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        if(showSyncLoader){
+                            setLoading(resource.loading)
+                        }
                     }
 
                     is Resource.NetworkError -> {
@@ -352,8 +358,8 @@ constructor(
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
                                 impactData = it.impact
-                                dashTodayReload.value = Event(true)
-                                lunaZoneReload.value = Event(true)
+                                dashTodayReload.postValue(Event(true))
+                                lunaZoneReload.postValue(Event(true))
                                 //sleepDashTodayReload.value = Event(true)
                             }
 
@@ -425,7 +431,7 @@ constructor(
             if (newStartDate == null && newEndDate == null) return false
 
             mStartDate = newStartDate
-
+            showSyncLoader = true
             getUserHealthData(newStartDate, newEndDate)
 
             return true
@@ -442,6 +448,7 @@ constructor(
             val (newStartDate, newEndDate) = getNextPaginationDates(mEndDate!!)
             if (newStartDate == null && newEndDate == null) return false
             mEndDate = newEndDate
+            showSyncLoader = true
             getUserHealthData(newStartDate, newEndDate)
             return true
         }
