@@ -217,13 +217,3 @@ class CustomHomescreenViewModel  @Inject constructor(
     }
 
 }
-
-    // Swap items for drag-and-drop
-//    fun moveItem(fromPosition: Int, toPosition: Int) {
-//        _items.value?.let {
-//            val temp = it[fromPosition]
-//            it.removeAt(fromPosition)
-//            it.add(toPosition, temp)
-//            _items.value = it
-//        }
-//    }

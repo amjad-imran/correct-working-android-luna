@@ -167,7 +167,7 @@
                     <TextView
                         android:id="@+id/tvSettingsTitle"
                         style="@style/H6"
-                        app:text="@string/edit_home_screen"
+                        android:text="@string/edit_home_screen"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
@@ -179,8 +179,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
                         app:layout_constraintEnd_toStartOf="@+id/tvStatus"
                         app:layout_constraintStart_toEndOf="@+id/ivBackGround"
-                        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
-                        tools:text="Settings" />
+                        app:layout_constraintTop_toTopOf="@+id/ivBackGround" />
 
                     <TextView
                         android:id="@+id/tvStatus"

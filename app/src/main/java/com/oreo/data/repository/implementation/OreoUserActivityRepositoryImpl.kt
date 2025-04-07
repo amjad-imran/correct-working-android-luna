@@ -264,7 +264,7 @@ class OreoUserActivityRepositoryImpl(
                                 stressBeta = ringDataStore.getStressBetaState(),
                                 enableAi = ringDataStore.getEnableAiState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine(),
-                                customScreen = ringDataStore.getCustomHomeScreenData()
+                                customScreen = localDataStore.getCustomHomeScreenItemsPriorityList()
                             ),
                             message = "",
                         )

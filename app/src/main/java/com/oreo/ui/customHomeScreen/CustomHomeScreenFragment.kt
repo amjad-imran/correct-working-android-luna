@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class CustomHomeScreenFragment :
     BaseFragment<FragmentCustomHomeScreenBinding>(FragmentCustomHomeScreenBinding::inflate) {
 
-        private val viewModel: CustomHomescreenViewModel by viewModels()
+    private val viewModel: CustomHomescreenViewModel by viewModels()
     private val adapter by lazy {
         ItemAdapter()
     }
@@ -49,13 +49,31 @@ class CustomHomeScreenFragment :
             }
 
             viewModel.lunaManagedState.postValue(isChecked)
-            viewModel.updateData(isChecked, adapter.getDataSet())
+
+            if(isChecked){
+                binding.recyclerView.gone()
+                binding.tvOtherMessage.gone()
+                binding.bSaveChanges.gone()
+                binding.tvMessage.visible()
+                viewModel.updateData(isChecked, adapter.getDataSet())
+            }else{
+                binding.tvMessage.gone()
+                binding.recyclerView.visible()
+                binding.tvOtherMessage.visible()
+                binding.bSaveChanges.visible()
+            }
 
         }
 
         binding.bSaveChanges.setOnClickListener {
             val updatedList = adapter.getDataSet()
             viewModel.updateData(binding.switchMain.isChecked, updatedList)
+        }
+    }
+
+    override fun subscribeObservers() {
+        viewModel.items.observe(viewLifecycleOwner) { items ->
+            adapter.updateData(items)
         }
 
         viewModel.dataUpdated.observe(this){
@@ -72,36 +90,30 @@ class CustomHomeScreenFragment :
                 }, 2000)
             }
         }
-    }
 
-    override fun subscribeObservers() {
-        viewModel.items.observe(viewLifecycleOwner) { items ->
-            adapter.updateData(items)
-        }
-
-        viewModel.lunaManagedState.observe(this){
-            it?.let {
-                binding.switchMain.isChecked = it
-
-//                binding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-//                binding.tvMessage.setVisibilityByCondition(isChecked) // visibility = if (isChecked) View.VISIBLE else View.GONE
+//        viewModel.lunaManagedState.observe(this){
+//            it?.let {
+//                binding.switchMain.isChecked = it
 //
-//                binding.tvOtherMessage.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-//                binding.bSaveChanges.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
-                if(it){
-                    binding.recyclerView.gone()
-                    binding.tvOtherMessage.gone()
-                    binding.bSaveChanges.gone()
-                    binding.tvMessage.visible()
-                }else{
-                    binding.tvMessage.gone()
-                    binding.recyclerView.visible()
-                    binding.tvOtherMessage.visible()
-                    binding.bSaveChanges.visible()
-                }
-            }
-
-        }
+////                binding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+////                binding.tvMessage.setVisibilityByCondition(isChecked) // visibility = if (isChecked) View.VISIBLE else View.GONE
+////
+////                binding.tvOtherMessage.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+////                binding.bSaveChanges.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!isChecked) // = if (isChecked) View.GONE else View.VISIBLE
+//                if(it){
+//                    binding.recyclerView.gone()
+//                    binding.tvOtherMessage.gone()
+//                    binding.bSaveChanges.gone()
+//                    binding.tvMessage.visible()
+//                }else{
+//                    binding.tvMessage.gone()
+//                    binding.recyclerView.visible()
+//                    binding.tvOtherMessage.visible()
+//                    binding.bSaveChanges.visible()
+//                }
+//            }
+//
+//        }
 
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->

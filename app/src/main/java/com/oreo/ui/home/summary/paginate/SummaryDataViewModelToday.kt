@@ -1052,7 +1052,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val viewedCardsData = ArrayList<OHealthOverview>()
 
             val priorityList = if(lunaManaged != null && !lunaManaged){
-                val list = ringDataStore.getCustomHomeScreenData()
+                val list = localDataStore.getCustomHomeScreenItemsPriorityList()
                 if(list != null){
                     getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
                 }else{
@@ -1506,11 +1506,15 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem>{
-        cards.sortedBy { it.priority }
         val list = ArrayList<CustomHomeScreenItem>()
         val map = getItemsMap()
         for (item in cards){
-            map[item.type]?.let { list.add(it) }
+            val mainItem = map[item.type]
+            if (mainItem != null) {
+                mainItem.priority = item.priority
+                mainItem.switchState = item.switchState
+                list.add(mainItem)
+            }
         }
         return list
     }
