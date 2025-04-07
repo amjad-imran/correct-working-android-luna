@@ -230,8 +230,7 @@ class SummaryDataFragmentToday :
         impactData: ImpactData?
     ) {
         viewModel.initTodayData()
-//        val localCustomHomeScreenData = loc
-        Log.d("sbvcsjhvsjsvids",  "${mainViewModel.userManagedState}")
+
         viewModel.getUserManagedHealthData(data, trendsData, impactData, mainViewModel.userManagedState)
     }
 
@@ -424,8 +423,7 @@ class SummaryDataFragmentToday :
 
                 //
                 is OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked -> {
-                    val data = type.data
-                    perfromOnHeartMeasureImvClicked(data)
+                    performOnHeartMeasureImvClicked(type.data)
                 }
 
                 OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {
@@ -533,8 +531,9 @@ class SummaryDataFragmentToday :
 
     }
 
-    private fun perfromOnHeartMeasureImvClicked(data: OHealthOverview.HeartRateDataModel) {
+    private fun performOnHeartMeasureImvClicked(data: OHealthOverview.HeartRateDataModel) {
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
+
         if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
             return
         }
@@ -557,6 +556,7 @@ class SummaryDataFragmentToday :
                     return@launch
                 }
                 viewModel.measureHr(true)
+
             }
         }
 
@@ -895,17 +895,6 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytSleepAlert.root.visible()
                 setSleepAlertUi(it)
             }
-        }
-
-        viewModel.healthMonitorCardData.observe(this) { data ->
-//            if (data == null) {
-//                binding.contentMain.lytHealthMonitor.root.gone()
-//            } else {
-//                binding.contentMain.lytHealthMonitor.root.visible()
-//                setHealthMonitorCardData(data)
-//            }
-
-
         }
 
         viewModel.gotYourPeriodData.observe(this) { data ->

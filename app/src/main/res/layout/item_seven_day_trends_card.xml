@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include
-        android:id="@+id/lytSleepAvg"
-        layout="@layout/list_sleep_activity_card_item"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/side_margin"
-        android:layout_marginTop="@dimen/dimen_24dp"
-        android:layout_marginEnd="@dimen/side_margin"/>
+        android:orientation="vertical">
 
-    <include
-        android:id="@+id/lytReadinessAvg"
-        layout="@layout/list_readiness_score_card_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/side_margin"
-        android:layout_marginTop="@dimen/dimen_24dp"
-        android:layout_marginEnd="@dimen/side_margin" />
+        <include
+            android:id="@+id/lytSleepAvg"
+            layout="@layout/list_sleep_activity_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
 
-</LinearLayout>
+        <include
+            android:id="@+id/lytReadinessAvg"
+            layout="@layout/list_readiness_score_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp"/>
+
+    </LinearLayout>
 </layout>

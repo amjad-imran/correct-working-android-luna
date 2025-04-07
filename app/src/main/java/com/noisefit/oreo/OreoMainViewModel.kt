@@ -324,8 +324,6 @@ constructor(
                             enableAi = it.enableAi ?: false
                             //
                             userManagedState = it.customScreen?.manage ?: false
-                            Log.d("yashhhhhhhhhhhhhhhhhh" , "${Gson().toJson(it.customScreen)}")
-                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "${Gson().toJson(it.enableAi)}")
                             //
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 

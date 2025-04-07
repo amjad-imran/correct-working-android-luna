@@ -510,12 +510,9 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
             items[index] = heathOverViewData
             notifyItemChanged(index)
-        }
-
-        if(heathOverViewData is OHealthOverview.HeartRateDataModel){
+        }else if(heathOverViewData is OHealthOverview.HeartRateDataModel){
             val index = items.indexOfFirst { it is OHealthOverview.HeartRateDataModel }
             if (index==-1) return
-            LOGS.d("yahsdba = $index")
             items[index] = heathOverViewData
             notifyItemChanged(index)
         }
