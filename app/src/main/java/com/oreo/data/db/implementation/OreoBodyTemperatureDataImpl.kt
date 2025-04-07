@@ -4,6 +4,7 @@ import androidx.room.Transaction
 import com.google.gson.Gson
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
+import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
@@ -30,14 +31,36 @@ constructor(
         if (prevData == null) {
             bodyTemperatureDao.insert(data)
         } else {
-            val newBreakup = Gson().fromJson<List<Float>>(data.breakUp ?: "")
+            val mergedData = getMergedData(prevData,data)
+
+            //val newBreakup = Gson().fromJson<List<Float>>(data.breakUp ?: "")
             val prevBreakup = Gson().fromJson<List<Float>>(prevData.breakUp ?: "")
-            if (newBreakup.sum() != prevBreakup.sum()) {
+            if (mergedData.sum() != prevBreakup.sum()) {
                 bodyTemperatureDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
             }
         }
 
         return true
+    }
+
+    private fun getMergedData(prevData: OreoBodyTemperatureBreakup, newData: OreoBodyTemperatureBreakup) : List<Float>{
+        val prevBreakup = Gson().fromJson<List<Float>>(prevData.breakUp ?: "")
+        val newBreakup = Gson().fromJson<List<Float>>(newData.breakUp ?: "")
+
+        val mergedData = ArrayList<Float>()
+
+        newBreakup.forEachIndexed { index, value->
+            try {
+                if(value == 0f){
+                    mergedData.add(prevBreakup[index])
+                }else{
+                    mergedData.add(value)
+                }
+            }catch (exp: Exception){
+                mergedData.add(0f)
+            }
+        }
+        return mergedData
     }
 
     override suspend fun getTodayData(date: String): OreoBodyTemperatureBreakup? {

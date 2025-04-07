@@ -30,14 +30,35 @@ constructor(
         if (prevData == null) {
             heartRateDao.insert(data)
         } else {
-            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val mergedData = getMergedData(prevData,data)
+            //val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
             val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
-            if (newBreakup.sum() != prevBreakup.sum()) {
+            if (mergedData.sum() != prevBreakup.sum()) {
                 heartRateDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
             }
         }
 
         return true
+    }
+
+    private fun getMergedData(prevData: OreoHeartRate, newData: OreoHeartRate) : List<Int>{
+        val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+        val newBreakup = Gson().fromJson<List<Int>>(newData.breakUp ?: "")
+
+        val mergedData = ArrayList<Int>()
+
+        newBreakup.forEachIndexed { index, value->
+            try {
+                if(value == 0){
+                    mergedData.add(prevBreakup[index])
+                }else{
+                    mergedData.add(value)
+                }
+            }catch (exp: Exception){
+                mergedData.add(0)
+            }
+        }
+        return mergedData
     }
 
 

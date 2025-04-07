@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyStressData
+import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.models.BloodOxygenBreakup
@@ -37,13 +38,35 @@ constructor(
         if (prevData == null) {
             bodyStressDao.insert(data)
         } else {
-            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val mergedData = getMergedData(prevData,data)
+
+            //val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
             val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
-            if (newBreakup.sum() != prevBreakup.sum()) {
+            if (mergedData.sum() != prevBreakup.sum()) {
                 bodyStressDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
             }
         }
         return true
+    }
+
+    private fun getMergedData(prevData: OreoBodyStressData, newData: OreoBodyStressData) : List<Int>{
+        val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+        val newBreakup = Gson().fromJson<List<Int>>(newData.breakUp ?: "")
+
+        val mergedData = ArrayList<Int>()
+
+        newBreakup.forEachIndexed { index, value->
+            try {
+                if(value == 0){
+                    mergedData.add(prevBreakup[index])
+                }else{
+                    mergedData.add(value)
+                }
+            }catch (exp: Exception){
+                mergedData.add(0)
+            }
+        }
+        return mergedData
     }
 
 
