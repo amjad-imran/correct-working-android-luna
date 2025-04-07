@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -147,16 +146,6 @@
             layout="@layout/layout_custom_homescreen_card"
             android:layout_marginTop="24dp"
             android:visibility="visible"
-            tools:visibility="visible"
-            android:layout_marginHorizontal="@dimen/side_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/lytNotificationCard"
-            layout="@layout/layout_notification_card"
-            android:layout_marginTop="24dp"
-            android:visibility="gone"
             tools:visibility="visible"
             android:layout_marginHorizontal="@dimen/side_margin"
             android:layout_width="match_parent"
