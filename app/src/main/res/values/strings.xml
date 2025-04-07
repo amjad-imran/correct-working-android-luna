@@ -1908,5 +1908,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_workout_history">Workout history</string>
     <string name="edit_home_screen">Edit Home screen</string>
     <string name="changes_have_been_saved">changes have been saved</string>
+    <string name="text_custom_home_screen">Custom home screen</string>
+    <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Change your app layout with ease. Move or remove the cards as per your requirements.</string>
+    <string name="text_edit_home_screen">Edit home screen</string>
 
 </resources>

@@ -110,6 +110,8 @@ class SummaryDataFragment :
 
                 //
                 is OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {}
+
                 OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {}
                 OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked -> {}

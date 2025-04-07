@@ -83,7 +83,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
     object StressGraphClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
-    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
+    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String):
         OSummaryHealthOverviewClickEnum()
 
 
@@ -104,6 +104,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     //
     data class OnHeartMeasureImvClicked(val data: OHealthOverview.HeartRateDataModel) : OSummaryHealthOverviewClickEnum()
+    object OnHeartRateCardClicked: OSummaryHealthOverviewClickEnum()
 
     object OnViewAddWorkout: OSummaryHealthOverviewClickEnum()
     object OnWorkoutsHistoryCardClicked: OSummaryHealthOverviewClickEnum()
@@ -507,6 +508,14 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
     fun updateData(heathOverViewData: OHealthOverview?) {
         if(heathOverViewData is OHealthOverview.DailyGoalsCardData){
             val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        }
+
+        if(heathOverViewData is OHealthOverview.HeartRateDataModel){
+            val index = items.indexOfFirst { it is OHealthOverview.HeartRateDataModel }
+            if (index==-1) return
+            LOGS.d("yahsdba = $index")
             items[index] = heathOverViewData
             notifyItemChanged(index)
         }
@@ -1267,14 +1276,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             }
 
+            //
+            lytHeartRate.root.setOnClickListener {
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked
+                )
+            }
+
             lytHeartRate.imvHrMeasure.setOnClickListener {
-                binding.root.setOnClickListener {
-                    itemClickListener?.invoke(
-                        OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked(
-                            data
-                        )
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked(
+                        data
                     )
-                }
+                )
             }
         }
     }

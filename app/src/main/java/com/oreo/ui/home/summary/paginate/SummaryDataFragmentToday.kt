@@ -423,34 +423,8 @@ class SummaryDataFragmentToday :
 
                 //
                 is OSummaryHealthOverviewClickEnum.OnHeartMeasureImvClicked -> {
-//                    val data = type.data
-//                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
-//                    if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
-//                        return@setOnClickListener
-//                    }
-//
-//                    if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-//                        return@setOnClickListener
-//                    }
-//
-//                    if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
-//                        return@setOnClickListener
-//                    }
-//
-//                    viewModel.viewModelScope.launch(Dispatchers.IO) {
-//                        context?.let {
-//                            val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-//                            if (isWorkerRunning) {
-//                                viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
-//                                    this.measureState = TapMeasureState.ERROR
-//                                })
-//                                return@launch
-//                            }
-//                            viewModel.measureHr(true)
-//                        }
-//                    }
-//
-//                    return@setOnClickListener
+                    val data = type.data
+                    perfromOnHeartMeasureImvClicked(data)
                 }
 
                 OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {
@@ -549,16 +523,57 @@ class SummaryDataFragmentToday :
                     navigate(R.id.editNotificationGoalFragment)
                 }
 
-
+                OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {
+                    navigate(R.id.fragmentHeartRateDetails)
+                }
                 //
-
             }
         }
 
     }
 
+    private fun perfromOnHeartMeasureImvClicked(data: OHealthOverview.HeartRateDataModel) {
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
+        if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
+            return
+        }
+
+        if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            return
+        }
+
+        if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
+            return
+        }
+
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            context?.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
+                        this.measureState = TapMeasureState.ERROR
+                    })
+                    return@launch
+                }
+                viewModel.measureHr(true)
+            }
+        }
+
+        return
+    }
+
 
     override fun initListener() {
+
+        val lytCustomHomeScreen = binding.contentMain.lytCustomHomeScreen
+
+        lytCustomHomeScreen.root.setOnClickListener {
+            navigate(R.id.custom_homecreen)
+        }
+
+        lytCustomHomeScreen.btnCancel.setOnClickListener {
+
+        }
 
         binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
 
@@ -636,9 +651,9 @@ class SummaryDataFragmentToday :
             showPermDetailsDialog()
         }
 
-        binding.contentMain.lytHeartRate.root.setOnClickListener {
-            navigate(R.id.fragmentHeartRateDetails)
-        }
+//        binding.contentMain.lytHeartRate.root.setOnClickListener {
+//            navigate(R.id.fragmentHeartRateDetails)
+//        }
 
         binding.contentMain.lytStressGraph.root.setOnClickListener {
             if (viewModel.getStressWalkthroughShownStatus()) {
@@ -883,12 +898,12 @@ class SummaryDataFragmentToday :
         }
 
         viewModel.healthMonitorCardData.observe(this) { data ->
-            if (data == null) {
-                binding.contentMain.lytHealthMonitor.root.gone()
-            } else {
-                binding.contentMain.lytHealthMonitor.root.visible()
-                setHealthMonitorCardData(data)
-            }
+//            if (data == null) {
+//                binding.contentMain.lytHealthMonitor.root.gone()
+//            } else {
+//                binding.contentMain.lytHealthMonitor.root.visible()
+//                setHealthMonitorCardData(data)
+//            }
 
 
         }
@@ -1179,38 +1194,41 @@ class SummaryDataFragmentToday :
 
         viewModel.stateReadinessAvgCard.observe(viewLifecycleOwner) {
 
-            if (it == null) {
-                binding.contentMain.lytReadinessAvg.root.gone()
-                return@observe
-            }
-
-            binding.contentMain.lytReadinessAvg.root.visible()
-
-
-            updateReadinessAvgUi(it)
+//            if (it == null) {
+//                binding.contentMain.lytReadinessAvg.root.gone()
+//                return@observe
+//            }
+//
+//            binding.contentMain.lytReadinessAvg.root.visible()
+//
+//
+//            updateReadinessAvgUi(it)
 
         }
 
         viewModel.stateSleepAvgCard.observe(viewLifecycleOwner) {
 
-            if (it == null) {
-                binding.contentMain.lytSleepAvg.root.gone()
-                return@observe
-            }
-
-            if (it.first != null || it.second != null) {
-                binding.contentMain.lytSleepAvg.root.visible()
-
-                updateSleepAvgUi(it)
-
-            } else {
-                binding.contentMain.lytSleepAvg.root.gone()
-            }
+//            if (it == null) {
+//                binding.contentMain.lytSleepAvg.root.gone()
+//                return@observe
+//            }
+//
+//            if (it.first != null || it.second != null) {
+//                binding.contentMain.lytSleepAvg.root.visible()
+//
+//                updateSleepAvgUi(it)
+//
+//            } else {
+//                binding.contentMain.lytSleepAvg.root.gone()
+//            }
         }
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
                 setHearRateCardUi(it)
+                viewModel.viewModelScope.launch {
+                    healthOverviewAdapter.updateData(viewModel.updateHeartRateCard())
+                }
             }
         }
 
@@ -1463,81 +1481,81 @@ class SummaryDataFragmentToday :
     }
 
     private fun setHealthMonitorCardData(data: HealthTrend?) {
-        val hasHealthData = viewModel.hasHealthData(data)
-        data?.apply {
-            binding.contentMain.lytHealthMonitor.tvNudge.visible()
-            binding.contentMain.lytHealthMonitor.tvNudge.text = nudge
-
-            if (!bloodOxy?.status.isNullOrEmpty()) {
-                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(
-                    viewModel.getHealthTrendIcon(
-                        bloodOxy?.status
-                    )
-                )
-            } else {
-                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
-            }
-
-            if (!hrv?.status.isNullOrEmpty()) {
-                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(
-                    viewModel.getHealthTrendIcon(
-                        hrv?.status
-                    )
-                )
-            } else {
-                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
-            }
-
-            if (!rhr?.status.isNullOrEmpty()) {
-                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(
-                    viewModel.getHealthTrendIcon(
-                        rhr?.status
-                    )
-                )
-            } else {
-                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
-            }
-
-            if (!skinTemp?.status.isNullOrEmpty()) {
-                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(
-                    viewModel.getHealthTrendIcon(
-                        skinTemp?.status
-                    )
-                )
-            } else {
-                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
-            }
-
-            if (!resp?.status.isNullOrEmpty()) {
-                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(
-                    viewModel.getHealthTrendIcon(
-                        resp?.status
-                    )
-                )
-            } else {
-                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
-            }
-        }
-
-        if (hasHealthData.not()) {
-            binding.contentMain.lytHealthMonitor.apply {
-                imvResp.setImageResource(R.drawable.ic_hm_check_default)
-                imvRHR.setImageResource(R.drawable.ic_hm_check_default)
-                imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
-                imvHrv.setImageResource(R.drawable.ic_hm_check_default)
-                imvSkin.setImageResource(R.drawable.ic_hm_check_default)
-                tvNudge.visible()
-                tvNudge.text = getString(R.string.text_no_data_so_far)
-            }
-        }
-
-        binding.contentMain.lytHealthMonitor.root.setOnClickListener {
-            navigate(R.id.healthMonitorInternal, Bundle().apply {
-                this.putParcelable("healthTrend", data)
-                this.putString("selectedDate", LocalDate.now().toString())
-                this.putString("source", "homepage")
-            })
-        }
+//        val hasHealthData = viewModel.hasHealthData(data)
+//        data?.apply {
+//            binding.contentMain.lytHealthMonitor.tvNudge.visible()
+//            binding.contentMain.lytHealthMonitor.tvNudge.text = nudge
+//
+//            if (!bloodOxy?.status.isNullOrEmpty()) {
+//                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(
+//                    viewModel.getHealthTrendIcon(
+//                        bloodOxy?.status
+//                    )
+//                )
+//            } else {
+//                binding.contentMain.lytHealthMonitor.imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+//            }
+//
+//            if (!hrv?.status.isNullOrEmpty()) {
+//                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(
+//                    viewModel.getHealthTrendIcon(
+//                        hrv?.status
+//                    )
+//                )
+//            } else {
+//                binding.contentMain.lytHealthMonitor.imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+//            }
+//
+//            if (!rhr?.status.isNullOrEmpty()) {
+//                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(
+//                    viewModel.getHealthTrendIcon(
+//                        rhr?.status
+//                    )
+//                )
+//            } else {
+//                binding.contentMain.lytHealthMonitor.imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+//            }
+//
+//            if (!skinTemp?.status.isNullOrEmpty()) {
+//                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(
+//                    viewModel.getHealthTrendIcon(
+//                        skinTemp?.status
+//                    )
+//                )
+//            } else {
+//                binding.contentMain.lytHealthMonitor.imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+//            }
+//
+//            if (!resp?.status.isNullOrEmpty()) {
+//                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(
+//                    viewModel.getHealthTrendIcon(
+//                        resp?.status
+//                    )
+//                )
+//            } else {
+//                binding.contentMain.lytHealthMonitor.imvResp.setImageResource(R.drawable.ic_hm_check_default)
+//            }
+//        }
+//
+//        if (hasHealthData.not()) {
+//            binding.contentMain.lytHealthMonitor.apply {
+//                imvResp.setImageResource(R.drawable.ic_hm_check_default)
+//                imvRHR.setImageResource(R.drawable.ic_hm_check_default)
+//                imvSpo2.setImageResource(R.drawable.ic_hm_check_default)
+//                imvHrv.setImageResource(R.drawable.ic_hm_check_default)
+//                imvSkin.setImageResource(R.drawable.ic_hm_check_default)
+//                tvNudge.visible()
+//                tvNudge.text = getString(R.string.text_no_data_so_far)
+//            }
+//        }
+//
+//        binding.contentMain.lytHealthMonitor.root.setOnClickListener {
+//            navigate(R.id.healthMonitorInternal, Bundle().apply {
+//                this.putParcelable("healthTrend", data)
+//                this.putString("selectedDate", LocalDate.now().toString())
+//                this.putString("source", "homepage")
+//            })
+//        }
 
     }
 
@@ -1675,173 +1693,173 @@ class SummaryDataFragmentToday :
     }
 
     private fun updateReadinessAvgUi(data: ODashboardReadinessScoreModel) {
-        val lytReadinessAvg = binding.contentMain.lytReadinessAvg
-        if (data.readinessScore != null && data.readinessScore >= 0) {
-            lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
-            lytReadinessAvg.tvDaysAvg.visible()
-            lytReadinessAvg.tvSleepScore.visible()
-            lytReadinessAvg.lineChart.visible()
-            val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
-            if (data.trend != null && data.trend > 0) {
-                lytReadinessAvg.sleepTrendValue.text = trendValue
-                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytReadinessAvg.sleepTrendImv.loadImage(
-                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytReadinessAvg.sleepTrendImv.visible()
-                lytReadinessAvg.sleepTrendValue.visible()
-                lytReadinessAvg.tvSleepFromLast.visible()
-            } else if (data.trend != null && data.trend < 0) {
-                lytReadinessAvg.sleepTrendValue.text = trendValue
-                lytReadinessAvg.sleepTrendImv.loadImage(
-                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytReadinessAvg.sleepTrendImv.visible()
-                lytReadinessAvg.sleepTrendValue.visible()
-                lytReadinessAvg.tvSleepFromLast.visible()
-            } else {
-                lytReadinessAvg.sleepTrendImv.invisible()
-                lytReadinessAvg.sleepTrendValue.invisible()
-                lytReadinessAvg.tvSleepFromLast.invisible()
-            }
-
-
-
-            lytReadinessAvg.lineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(data.value), ArrayList(), ArrayList(), 20, true
-            )
-        } else {
-            lytReadinessAvg.lineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
-                ArrayList(),
-                ArrayList(),
-                20,
-                true
-            )
-
-            lytReadinessAvg.tvSleepScore.text = "--"
-            lytReadinessAvg.tvDaysAvg.visible()
-            lytReadinessAvg.lineChart.visible()
-            lytReadinessAvg.sleepTrendImv.invisible()
-            lytReadinessAvg.sleepTrendValue.invisible()
-            lytReadinessAvg.tvSleepFromLast.invisible()
-        }
+//        val lytReadinessAvg = binding.contentMain.lytReadinessAvg
+//        if (data.readinessScore != null && data.readinessScore >= 0) {
+//            lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
+//            lytReadinessAvg.tvDaysAvg.visible()
+//            lytReadinessAvg.tvSleepScore.visible()
+//            lytReadinessAvg.lineChart.visible()
+//            val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
+//            if (data.trend != null && data.trend > 0) {
+//                lytReadinessAvg.sleepTrendValue.text = trendValue
+//                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
+//                lytReadinessAvg.sleepTrendImv.loadImage(
+//                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+//                )
+//                lytReadinessAvg.sleepTrendImv.visible()
+//                lytReadinessAvg.sleepTrendValue.visible()
+//                lytReadinessAvg.tvSleepFromLast.visible()
+//            } else if (data.trend != null && data.trend < 0) {
+//                lytReadinessAvg.sleepTrendValue.text = trendValue
+//                lytReadinessAvg.sleepTrendImv.loadImage(
+//                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+//                )
+//                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+//                lytReadinessAvg.sleepTrendImv.visible()
+//                lytReadinessAvg.sleepTrendValue.visible()
+//                lytReadinessAvg.tvSleepFromLast.visible()
+//            } else {
+//                lytReadinessAvg.sleepTrendImv.invisible()
+//                lytReadinessAvg.sleepTrendValue.invisible()
+//                lytReadinessAvg.tvSleepFromLast.invisible()
+//            }
+//
+//
+//
+//            lytReadinessAvg.lineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(data.value), ArrayList(), ArrayList(), 20, true
+//            )
+//        } else {
+//            lytReadinessAvg.lineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+//                ArrayList(),
+//                ArrayList(),
+//                20,
+//                true
+//            )
+//
+//            lytReadinessAvg.tvSleepScore.text = "--"
+//            lytReadinessAvg.tvDaysAvg.visible()
+//            lytReadinessAvg.lineChart.visible()
+//            lytReadinessAvg.sleepTrendImv.invisible()
+//            lytReadinessAvg.sleepTrendValue.invisible()
+//            lytReadinessAvg.tvSleepFromLast.invisible()
+//        }
     }
 
     private fun updateSleepAvgUi(data: Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>) {
-        val lytSleepAvg = binding.contentMain.lytSleepAvg
-
-        val sleep = data.first!!
-        val activity = data.second!!
-
-        if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
-            lytSleepAvg.tvSleepScore.visible()
-            lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
-            lytSleepAvg.tvDaysAvg.visible()
-            lytSleepAvg.sleepLineChart.visible()
-            lytSleepAvg.sleepLine.root.visible()
-            val trendValue = "${kotlin.math.abs(sleep.trend ?: 0)}%"
-            if (sleep.trend != null && sleep.trend > 0) {
-                lytSleepAvg.sleepTrendValue.text = trendValue
-                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytSleepAvg.sleepTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytSleepAvg.sleepTrendImv.visible()
-                lytSleepAvg.sleepTrendValue.visible()
-                lytSleepAvg.tvSleepFromLast.visible()
-            } else if (sleep.trend != null && sleep.trend < 0) {
-                lytSleepAvg.sleepTrendValue.text = trendValue
-                lytSleepAvg.sleepTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytSleepAvg.sleepTrendImv.visible()
-                lytSleepAvg.sleepTrendValue.visible()
-                lytSleepAvg.tvSleepFromLast.visible()
-            } else {
-                lytSleepAvg.sleepTrendImv.invisible()
-                lytSleepAvg.sleepTrendValue.invisible()
-                lytSleepAvg.tvSleepFromLast.invisible()
-            }
-
-
-            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(sleep.value), ArrayList(), ArrayList(), 20, true
-            )
-        } else {
-            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
-                ArrayList(),
-                ArrayList(),
-                20,
-                true
-            )
-
-            lytSleepAvg.tvSleepScore.text = "--"
-            lytSleepAvg.tvDaysAvg.visible()
-            lytSleepAvg.sleepTrendImv.invisible()
-            lytSleepAvg.sleepTrendValue.invisible()
-            lytSleepAvg.tvSleepFromLast.invisible()
-            lytSleepAvg.sleepLine.root.invisible()
-        }
-
-        if (activity.activityScore != null && activity.activityScore >= 0) {
-
-            lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
-            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(activity.value), ArrayList(), ArrayList(), 20, true
-            )
-            lytSleepAvg.tvDaysAvg1.visible()
-            lytSleepAvg.activityLineChart.visible()
-            lytSleepAvg.activityLine.root.visible()
-            lytSleepAvg.activityTrendImv.visible()
-            lytSleepAvg.activityTrendValue.visible()
-            lytSleepAvg.tvActivityFrom.visible()
-
-            val trendValue = "${kotlin.math.abs(activity.trend ?: 0)}%"
-            if (activity.trend != null && activity.trend > 0) {
-                lytSleepAvg.activityTrendValue.text = trendValue
-                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytSleepAvg.activityTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytSleepAvg.activityTrendImv.visible()
-                lytSleepAvg.activityTrendValue.visible()
-                lytSleepAvg.tvActivityFrom.visible()
-            } else if (activity.trend != null && activity.trend < 0) {
-                lytSleepAvg.activityTrendValue.text = trendValue
-                lytSleepAvg.activityTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytSleepAvg.activityTrendImv.visible()
-                lytSleepAvg.activityTrendValue.visible()
-                lytSleepAvg.tvActivityFrom.visible()
-            } else {
-                lytSleepAvg.activityTrendImv.invisible()
-                lytSleepAvg.activityTrendValue.invisible()
-                lytSleepAvg.tvActivityFrom.invisible()
-            }
-            //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
-        } else {
-            lytSleepAvg.tvActivityScore.text = "--"
-            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
-                ArrayList(),
-                ArrayList(),
-                20,
-                true
-            )
-
-            lytSleepAvg.tvDaysAvg1.visible()
-            //lytSleepAvg.activityLineChart.gone()
-            lytSleepAvg.activityLine.root.invisible()
-            lytSleepAvg.activityTrendImv.invisible()
-            lytSleepAvg.activityTrendValue.invisible()
-            lytSleepAvg.tvActivityFrom.invisible()
-        }
+//        val lytSleepAvg = binding.contentMain.lytSleepAvg
+//
+//        val sleep = data.first!!
+//        val activity = data.second!!
+//
+//        if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
+//            lytSleepAvg.tvSleepScore.visible()
+//            lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
+//            lytSleepAvg.tvDaysAvg.visible()
+//            lytSleepAvg.sleepLineChart.visible()
+//            lytSleepAvg.sleepLine.root.visible()
+//            val trendValue = "${kotlin.math.abs(sleep.trend ?: 0)}%"
+//            if (sleep.trend != null && sleep.trend > 0) {
+//                lytSleepAvg.sleepTrendValue.text = trendValue
+//                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
+//                lytSleepAvg.sleepTrendImv.loadImage(
+//                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+//                )
+//                lytSleepAvg.sleepTrendImv.visible()
+//                lytSleepAvg.sleepTrendValue.visible()
+//                lytSleepAvg.tvSleepFromLast.visible()
+//            } else if (sleep.trend != null && sleep.trend < 0) {
+//                lytSleepAvg.sleepTrendValue.text = trendValue
+//                lytSleepAvg.sleepTrendImv.loadImage(
+//                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+//                )
+//                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+//                lytSleepAvg.sleepTrendImv.visible()
+//                lytSleepAvg.sleepTrendValue.visible()
+//                lytSleepAvg.tvSleepFromLast.visible()
+//            } else {
+//                lytSleepAvg.sleepTrendImv.invisible()
+//                lytSleepAvg.sleepTrendValue.invisible()
+//                lytSleepAvg.tvSleepFromLast.invisible()
+//            }
+//
+//
+//            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(sleep.value), ArrayList(), ArrayList(), 20, true
+//            )
+//        } else {
+//            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+//                ArrayList(),
+//                ArrayList(),
+//                20,
+//                true
+//            )
+//
+//            lytSleepAvg.tvSleepScore.text = "--"
+//            lytSleepAvg.tvDaysAvg.visible()
+//            lytSleepAvg.sleepTrendImv.invisible()
+//            lytSleepAvg.sleepTrendValue.invisible()
+//            lytSleepAvg.tvSleepFromLast.invisible()
+//            lytSleepAvg.sleepLine.root.invisible()
+//        }
+//
+//        if (activity.activityScore != null && activity.activityScore >= 0) {
+//
+//            lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
+//            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(activity.value), ArrayList(), ArrayList(), 20, true
+//            )
+//            lytSleepAvg.tvDaysAvg1.visible()
+//            lytSleepAvg.activityLineChart.visible()
+//            lytSleepAvg.activityLine.root.visible()
+//            lytSleepAvg.activityTrendImv.visible()
+//            lytSleepAvg.activityTrendValue.visible()
+//            lytSleepAvg.tvActivityFrom.visible()
+//
+//            val trendValue = "${kotlin.math.abs(activity.trend ?: 0)}%"
+//            if (activity.trend != null && activity.trend > 0) {
+//                lytSleepAvg.activityTrendValue.text = trendValue
+//                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
+//                lytSleepAvg.activityTrendImv.loadImage(
+//                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
+//                )
+//                lytSleepAvg.activityTrendImv.visible()
+//                lytSleepAvg.activityTrendValue.visible()
+//                lytSleepAvg.tvActivityFrom.visible()
+//            } else if (activity.trend != null && activity.trend < 0) {
+//                lytSleepAvg.activityTrendValue.text = trendValue
+//                lytSleepAvg.activityTrendImv.loadImage(
+//                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
+//                )
+//                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#ff5b79"))
+//                lytSleepAvg.activityTrendImv.visible()
+//                lytSleepAvg.activityTrendValue.visible()
+//                lytSleepAvg.tvActivityFrom.visible()
+//            } else {
+//                lytSleepAvg.activityTrendImv.invisible()
+//                lytSleepAvg.activityTrendValue.invisible()
+//                lytSleepAvg.tvActivityFrom.invisible()
+//            }
+//            //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
+//        } else {
+//            lytSleepAvg.tvActivityScore.text = "--"
+//            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+//                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+//                ArrayList(),
+//                ArrayList(),
+//                20,
+//                true
+//            )
+//
+//            lytSleepAvg.tvDaysAvg1.visible()
+//            //lytSleepAvg.activityLineChart.gone()
+//            lytSleepAvg.activityLine.root.invisible()
+//            lytSleepAvg.activityTrendImv.invisible()
+//            lytSleepAvg.activityTrendValue.invisible()
+//            lytSleepAvg.tvActivityFrom.invisible()
+//        }
 
 
         binding.root.setOnClickListener {
@@ -1850,67 +1868,67 @@ class SummaryDataFragmentToday :
     }
 
     private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
-        val lytWorkouts = binding.contentMain.lytWorkouts
-        lytWorkouts.root.visible()
-
-        if (workouts.isNullOrEmpty()) {
-            lytWorkouts.tvEmptyMsg.visible()
-            lytWorkouts.tvEmptyMsg.text = getString(R.string.text_tap_plus_workout)
-
-        } else {
-            lytWorkouts.tvEmptyMsg.gone()
-        }
-        lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
-            lytWorkouts.rvWorkouts.context, LinearLayoutManager.VERTICAL, false
-        )
-        val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
-            override fun onItemClick(data: OActivityListModal, position: Int) {
-                if (data.getDisplayVersionType() == 2) {
-                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
-                        putString("workoutId", data.id ?: "")
-                        putInt("position", position)
-                    })
-                } else {
-                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                        putString("workoutName", data.getTranslatedActivityName())
-                        putString("workoutId", data.id ?: "")
-                        putInt("position", position)
-                    })
-                }
-            }
-        })
-
-
-        //        if (viewModel.ringDataStore.getRingDevice() != null) {
-        //            lytWorkouts.viewAddWorkout.visible()
-        //            lytWorkouts.root.visible()
-        //        } else {
-        //            lytWorkouts.viewAddWorkout.gone()
-        //            if (workouts.isNullOrEmpty()) {
-        //                lytWorkouts.root.gone()
-        //            } else {
-        //                lytWorkouts.root.visible()
-        //            }
-        //        }
-
-
-        lytWorkouts.rvWorkouts.apply {
-            adapter = adapter1
-        }
-        adapter1.setData(workouts ?: ArrayList())
-        lytWorkouts.viewAddWorkout.setOnClickListener {
-            if (viewModel.isDeviceConnected()) {
-                navigate(R.id.addWorkoutFragment)
-                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
-            } else {
-                requireContext().showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
-            }
-        }
-
-        lytWorkouts.root.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
-            navigate(R.id.oActivityListFragment)
-        }
+//        val lytWorkouts = binding.contentMain.lytWorkouts
+//        lytWorkouts.root.visible()
+//
+//        if (workouts.isNullOrEmpty()) {
+//            lytWorkouts.tvEmptyMsg.visible()
+//            lytWorkouts.tvEmptyMsg.text = getString(R.string.text_tap_plus_workout)
+//
+//        } else {
+//            lytWorkouts.tvEmptyMsg.gone()
+//        }
+//        lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
+//            lytWorkouts.rvWorkouts.context, LinearLayoutManager.VERTICAL, false
+//        )
+//        val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
+//            override fun onItemClick(data: OActivityListModal, position: Int) {
+//                if (data.getDisplayVersionType() == 2) {
+//                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+//                        putString("workoutId", data.id ?: "")
+//                        putInt("position", position)
+//                    })
+//                } else {
+//                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+//                        putString("workoutName", data.getTranslatedActivityName())
+//                        putString("workoutId", data.id ?: "")
+//                        putInt("position", position)
+//                    })
+//                }
+//            }
+//        })
+//
+//
+//        //        if (viewModel.ringDataStore.getRingDevice() != null) {
+//        //            lytWorkouts.viewAddWorkout.visible()
+//        //            lytWorkouts.root.visible()
+//        //        } else {
+//        //            lytWorkouts.viewAddWorkout.gone()
+//        //            if (workouts.isNullOrEmpty()) {
+//        //                lytWorkouts.root.gone()
+//        //            } else {
+//        //                lytWorkouts.root.visible()
+//        //            }
+//        //        }
+//
+//
+//        lytWorkouts.rvWorkouts.apply {
+//            adapter = adapter1
+//        }
+//        adapter1.setData(workouts ?: ArrayList())
+//        lytWorkouts.viewAddWorkout.setOnClickListener {
+//            if (viewModel.isDeviceConnected()) {
+//                navigate(R.id.addWorkoutFragment)
+//                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
+//            } else {
+//                requireContext().showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+//            }
+//        }
+//
+//        lytWorkouts.root.setOnClickListener {
+//            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
+//            navigate(R.id.oActivityListFragment)
+//        }
 
     }
 
@@ -2124,168 +2142,168 @@ class SummaryDataFragmentToday :
     }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
-        val lytHeartRate = binding.contentMain.lytHeartRate
-        lytHeartRate.root.visible()
-        lytHeartRate.candleChart.enableInteractiveMode(false)
-        lytHeartRate.candleChart.updateData(
-            viewModel.hrDataConvertor.getHrCombinedData(
-                viewModel.serverUserHealthData, data
-            ), 3, data.minValues, data.maxValues
-        )
-
-        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.rawData)
-
-        if (lastMeasuredValue == 0) {
-            lytHeartRate.lytTrend.root.gone()
-        } else {
-            val lastUpdatedTimestamp =
-                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
-
-
-            val currentTimeStamp = DateFormats.getTimeStamp()
-            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
-            if (timeDiff <= (5 * 60 * 1000)) {
-
-                val trendPercent = viewModel.getHrTrend(data.rawData, lastMeasuredIndex)
-
-                if (trendPercent != null && trendPercent != 0) {
-                    if (trendPercent > 0) {
-                        lytHeartRate.lytTrend.apply {
-                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
-                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
-                            tvPercent.text = "$trendPercent%"
-                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
-                            root.visible()
-                        }
-                    } else {
-                        lytHeartRate.lytTrend.apply {
-                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
-                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
-                            tvPercent.text = "${abs(trendPercent)}%"
-                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
-                            root.visible()
-                        }
-                    }
-                } else {
-                    lytHeartRate.lytTrend.root.gone()
-                }
-            } else {
-                lytHeartRate.lytTrend.root.gone()
-            }
-        }
-
-
-
-        when (data.measureState) {
-            TapMeasureState.NO_DEVICE -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-                lytHeartRate.tvEmptyConnect.text =
-                    lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
-
-            }
-
-            TapMeasureState.LAST_MEASURED -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
-
-                lytHeartRate.tvHeartValue.text = data.value
-                lytHeartRate.tvHeartUnit.text = getString(R.string.text_bpm_small)
-
-                lytHeartRate.tvLastMeasure.apply {
-                    setTextColor(Color.parseColor("#a3ffffff"))
-                    text = data.lastTime
-                }
-
-            }
-
-            TapMeasureState.MEASURING -> {
-                lytHeartRate.lottieAnimView.visible()
-                lytHeartRate.imvHrMeasure.invisible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-
-                lytHeartRate.tvEmptyConnect.apply {
-                    setTextColor(resources.getColor(R.color.white))
-                    text = getString(R.string.text_measuring_dots)
-                }
-            }
-
-            TapMeasureState.DEFAULT -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-                lytHeartRate.tvEmptyConnect.apply {
-                    setTextColor(Color.parseColor("#88b0ff"))
-                    text = getString(R.string.text_tap_to_measure)
-                }
-            }
-
-            TapMeasureState.ERROR -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
-                lytHeartRate.tvHeartValue.gone()
-
-                lytHeartRate.tvLastMeasure.apply {
-                    setTextColor(Color.parseColor("#88b0ff"))
-                    text = getString(R.string.text_try_again)
-                }
-                lytHeartRate.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
-
-            }
-
-            TapMeasureState.HIDE -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.invisible()
-
-                lytHeartRate.groupValue.invisible()
-                lytHeartRate.tvEmptyConnect.gone()
-                lytHeartRate.tvHeartValue.gone()
-            }
-        }
-
-        lytHeartRate.imvHrMeasure.setOnClickListener {
-
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
-            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
-                return@setOnClickListener
-            }
-
-            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                return@setOnClickListener
-            }
-
-            if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
-                return@setOnClickListener
-            }
-
-            viewModel.viewModelScope.launch(Dispatchers.IO) {
-                context?.let {
-                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-                    if (isWorkerRunning) {
-                        viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
-                            this.measureState = TapMeasureState.ERROR
-                        })
-                        return@launch
-                    }
-                    viewModel.measureHr(true)
-                }
-            }
-
-            return@setOnClickListener
-        }
+//        val lytHeartRate = binding.contentMain.lytHeartRate
+//        lytHeartRate.root.visible()
+//        lytHeartRate.candleChart.enableInteractiveMode(false)
+//        lytHeartRate.candleChart.updateData(
+//            viewModel.hrDataConvertor.getHrCombinedData(
+//                viewModel.serverUserHealthData, data
+//            ), 3, data.minValues, data.maxValues
+//        )
+//
+//        val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.rawData)
+//
+//        if (lastMeasuredValue == 0) {
+//            lytHeartRate.lytTrend.root.gone()
+//        } else {
+//            val lastUpdatedTimestamp =
+//                DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
+//
+//
+//            val currentTimeStamp = DateFormats.getTimeStamp()
+//            val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+//            if (timeDiff <= (5 * 60 * 1000)) {
+//
+//                val trendPercent = viewModel.getHrTrend(data.rawData, lastMeasuredIndex)
+//
+//                if (trendPercent != null && trendPercent != 0) {
+//                    if (trendPercent > 0) {
+//                        lytHeartRate.lytTrend.apply {
+//                            ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+//                            backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+//                            tvPercent.text = "$trendPercent%"
+//                            tvPercent.setTextColor(Color.parseColor("#FF426F"))
+//                            root.visible()
+//                        }
+//                    } else {
+//                        lytHeartRate.lytTrend.apply {
+//                            ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+//                            backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+//                            tvPercent.text = "${abs(trendPercent)}%"
+//                            tvPercent.setTextColor(Color.parseColor("#00FF66"))
+//                            root.visible()
+//                        }
+//                    }
+//                } else {
+//                    lytHeartRate.lytTrend.root.gone()
+//                }
+//            } else {
+//                lytHeartRate.lytTrend.root.gone()
+//            }
+//        }
+//
+//
+//
+//        when (data.measureState) {
+//            TapMeasureState.NO_DEVICE -> {
+//                lytHeartRate.lottieAnimView.invisible()
+//                lytHeartRate.imvHrMeasure.visible()
+//
+//                lytHeartRate.groupValue.gone()
+//                lytHeartRate.tvEmptyConnect.visible()
+//                lytHeartRate.tvEmptyConnect.text =
+//                    lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+//
+//            }
+//
+//            TapMeasureState.LAST_MEASURED -> {
+//                lytHeartRate.lottieAnimView.invisible()
+//                lytHeartRate.imvHrMeasure.visible()
+//
+//                lytHeartRate.groupValue.visible()
+//                lytHeartRate.tvEmptyConnect.gone()
+//
+//                lytHeartRate.tvHeartValue.text = data.value
+//                lytHeartRate.tvHeartUnit.text = getString(R.string.text_bpm_small)
+//
+//                lytHeartRate.tvLastMeasure.apply {
+//                    setTextColor(Color.parseColor("#a3ffffff"))
+//                    text = data.lastTime
+//                }
+//
+//            }
+//
+//            TapMeasureState.MEASURING -> {
+//                lytHeartRate.lottieAnimView.visible()
+//                lytHeartRate.imvHrMeasure.invisible()
+//
+//                lytHeartRate.groupValue.gone()
+//                lytHeartRate.tvEmptyConnect.visible()
+//
+//                lytHeartRate.tvEmptyConnect.apply {
+//                    setTextColor(resources.getColor(R.color.white))
+//                    text = getString(R.string.text_measuring_dots)
+//                }
+//            }
+//
+//            TapMeasureState.DEFAULT -> {
+//                lytHeartRate.lottieAnimView.invisible()
+//                lytHeartRate.imvHrMeasure.visible()
+//
+//                lytHeartRate.groupValue.gone()
+//                lytHeartRate.tvEmptyConnect.visible()
+//                lytHeartRate.tvEmptyConnect.apply {
+//                    setTextColor(Color.parseColor("#88b0ff"))
+//                    text = getString(R.string.text_tap_to_measure)
+//                }
+//            }
+//
+//            TapMeasureState.ERROR -> {
+//                lytHeartRate.lottieAnimView.invisible()
+//                lytHeartRate.imvHrMeasure.visible()
+//
+//                lytHeartRate.groupValue.visible()
+//                lytHeartRate.tvEmptyConnect.gone()
+//                lytHeartRate.tvHeartValue.gone()
+//
+//                lytHeartRate.tvLastMeasure.apply {
+//                    setTextColor(Color.parseColor("#88b0ff"))
+//                    text = getString(R.string.text_try_again)
+//                }
+//                lytHeartRate.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
+//
+//            }
+//
+//            TapMeasureState.HIDE -> {
+//                lytHeartRate.lottieAnimView.invisible()
+//                lytHeartRate.imvHrMeasure.invisible()
+//
+//                lytHeartRate.groupValue.invisible()
+//                lytHeartRate.tvEmptyConnect.gone()
+//                lytHeartRate.tvHeartValue.gone()
+//            }
+//        }
+//
+//        lytHeartRate.imvHrMeasure.setOnClickListener {
+//
+//            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
+//            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
+//                return@setOnClickListener
+//            }
+//
+//            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+//                return@setOnClickListener
+//            }
+//
+//            if (viewModel.stateStressCard.value?.measureState == TapMeasureState.MEASURING) {
+//                return@setOnClickListener
+//            }
+//
+//            viewModel.viewModelScope.launch(Dispatchers.IO) {
+//                context?.let {
+//                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+//                    if (isWorkerRunning) {
+//                        viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
+//                            this.measureState = TapMeasureState.ERROR
+//                        })
+//                        return@launch
+//                    }
+//                    viewModel.measureHr(true)
+//                }
+//            }
+//
+//            return@setOnClickListener
+//        }
     }
 
     private fun showRemoveNapBottomSheet(nap: OreoNapData) {

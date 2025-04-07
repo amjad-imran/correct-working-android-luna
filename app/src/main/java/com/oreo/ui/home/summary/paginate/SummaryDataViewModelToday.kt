@@ -1,7 +1,6 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -32,7 +31,6 @@ import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -90,7 +88,6 @@ import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration
@@ -1314,7 +1311,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private suspend fun getHeartRateCard(): OHealthOverview? {
+    suspend fun getHeartRateCard(): OHealthOverview? {
         val device = ringDataStore.getRingDevice()
         val data: OHealthOverview.HeartRateDataModel? = userRepository.getSummaryHRHealthOverview()
         return if (data != null){
@@ -1340,6 +1337,34 @@ class SummaryDataViewModelToday @Inject constructor(
         }
         else{
             null
+        }
+//        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+//            if (device == null) {
+//                this?.measureState = TapMeasureState.NO_DEVICE
+//            }
+//        })
+//        return null
+    }
+
+    suspend fun updateHeartRateCard(): OHealthOverview? {
+        val device = ringDataStore.getRingDevice()
+        return stateHeartRateCard.value?.apply {
+            this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                serverUserHealthData,
+                this
+            )
+
+            val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+            this.lastMeasuredValue = lastMeasuredValue
+            this.lastMeasuredIndex = lastMeasuredIndex
+
+            getHrTrend(this.rawData, lastMeasuredIndex)?.let {
+                this.trendPercent = it
+            }
+
+            if (device == null) {
+                this.measureState = TapMeasureState.NO_DEVICE
+            }
         }
 //        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
 //            if (device == null) {
