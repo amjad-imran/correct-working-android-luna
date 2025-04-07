@@ -126,10 +126,10 @@ sealed class OHealthOverview {
     ): OHealthOverview()
 
     data class StressCard(
-        val data: OHealthOverview.StressDashDataModel,
+        val data: OHealthOverview.StressDashDataModel?,
         val lastMeasuredValue: Pair<Int, Int>,
         val stressStatus: Pair<String, Int>,
-        val stressTrend: Int,
+        val stressTrend: Int?,
         val  resourcesProvider: ResourcesProvider
     ): OHealthOverview()
     //

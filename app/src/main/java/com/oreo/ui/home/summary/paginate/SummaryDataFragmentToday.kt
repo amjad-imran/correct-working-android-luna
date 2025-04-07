@@ -249,6 +249,7 @@ class SummaryDataFragmentToday :
     private fun setAdapter() {
         binding.contentMain.rvHealthData.apply {
             layoutManager = LinearLayoutManager(requireContext())
+            itemAnimator = null
             adapter = healthOverviewAdapter
         }
 
@@ -824,9 +825,15 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.notificationGoalsCardDataUpdated.observe(this){
+        viewModel.notificationGoalsCardDataInit.observe(this){
             it.getContent()?.let {
                 loadData()
+            }
+        }
+
+        viewModel.notificationGoalsCardDataUpdated.observe(this){
+            it.getContent()?.let {
+                healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
             }
         }
 

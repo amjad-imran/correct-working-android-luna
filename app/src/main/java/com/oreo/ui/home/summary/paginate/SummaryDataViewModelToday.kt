@@ -45,6 +45,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.noisefit_commans.utils.VibrationUtils
@@ -174,6 +175,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val findMyRingCard = MutableLiveData<Boolean?>()
 
     val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
+    val notificationGoalsCardDataInit = MutableLiveData<Event<Boolean>>()
     val notificationGoalsCardDataUpdated = MutableLiveData<Event<Boolean>>()
     val hydrationUpdated = MutableLiveData<Event<Boolean>>()
 
@@ -1043,7 +1045,7 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        lunaManaged:Boolean?
+        lunaManaged: Boolean
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1051,16 +1053,18 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
-            val priorityList = if(lunaManaged != null && !lunaManaged){
+            val priorityList = if (lunaManaged.not()) {
                 val list = localDataStore.getCustomHomeScreenItemsPriorityList()
-                if(list != null){
+                if (list != null) {
                     getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
-                }else{
+                } else {
                     getLunaManagedPriority().sortedBy { it.priority }
                 }
-            }else{
+            } else {
                 getLunaManagedPriority().sortedBy { it.priority }
             }
+
+            LOGS.d("sdfkmhsdkfjh $priorityList")
 
             // Handle auto-detected workouts
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
@@ -1121,43 +1125,61 @@ class SummaryDataViewModelToday @Inject constructor(
             priorityList.forEach { item ->
                 if(item.switchState.not()) return@forEach
 
-                when(item.key) {
+                when (item.key) {
                     "sleep" -> {
-                        getSleepDataCard(healthData, impactData, sleepModel)?.let { userActivities.add(it) }
+                        getSleepDataCard(
+                            healthData,
+                            impactData,
+                            sleepModel
+                        )?.let { userActivities.add(it) }
                     }
+
                     "activity" -> {
                         getActivityDataCard(healthData, impactData)?.let { userActivities.add(it) }
                     }
+
                     "readiness" -> {
-                        getReadinessDataCard(healthData.sleep, healthData.readiness, impactData)?.let { userActivities.add(it) }
+                        getReadinessDataCard(
+                            healthData.sleep,
+                            healthData.readiness,
+                            impactData
+                        )?.let { userActivities.add(it) }
                     }
+
                     "sleep_planner" -> {
                         getSleepPlannerDataCard(hasSleep)?.let { userActivities.add(it) }
                     }
+
                     "heart_rate" -> {
                         getHeartRateCard()?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "health_monitor" -> {
                         getHealthMonitorData(healthData.sleep)?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "daily_goals" -> {
                         getDailyGoalsCard()?.let { userActivities.add(it) }
                     }
+
                     "luna_ai" -> {
                         getLunaAiCard()?.let { userActivities.add(it) }
                     }
+
                     "cycle_tracker" -> {
                         getCycleTrackerCard()?.let { userActivities.add(it) }
                     }
+
                     "7_day_trends_card" -> {
                         getSvnDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
                         }
                     }
+
                     "workout_history" -> {
                         getWorkoutHistoryCard(healthData.activity)?.let {
                             userActivities.add(it)
@@ -1165,7 +1187,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "stress" -> {
+                        LOGS.d("sdfkmhsdkfjh  add stress")
                         getStressCard(healthData)?.let {
+                            LOGS.d("sdfkmhsdkfjh  add stress card")
                             userActivities.add(it)
                         }
                     }
@@ -1189,11 +1213,11 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
-        return if(activity != null){
+        return if (activity != null) {
             OHealthOverview.WorkoutHistoryCardData(
                 activity.workout ?: ArrayList()
             )
-        }else{
+        } else {
             null
         }
 //        stateWorkouts.postValue(activity?.workout ?: ArrayList())
@@ -1246,7 +1270,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (femaleData.isOvulation || femaleData.isPeriod) {
                         OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
                     } else {
-                        OHealthOverview.CycleTrackerCardSmall(convertToPeriodSmallCardModel(femaleData))
+                        OHealthOverview.CycleTrackerCardSmall(
+                            convertToPeriodSmallCardModel(
+                                femaleData
+                            )
+                        )
                     }
                 }
             } else {
@@ -1264,7 +1292,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getDailyGoalsCard(): OHealthOverview? {
-        return if (notificationGoalsCardData.value != null){
+        return if (notificationGoalsCardData.value != null) {
             val prevData = notificationGoalsCardData.value
 
             val isMetric = sessionManager.isMetric()
@@ -1273,9 +1301,9 @@ class SummaryDataViewModelToday @Inject constructor(
             val hydrate = prevData?.hydration ?: 0
 
             var hydratePercent = 0f
-            if (isMetric){
+            if (isMetric) {
                 hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
-            }else{
+            } else {
                 val convertedHydrate = hydrate.toFloat() * 0.033814
                 val convertedHydrateGoal =
                     convertMlToOuncesRounded(hydrateGoal.toDouble())
@@ -1298,7 +1326,7 @@ class SummaryDataViewModelToday @Inject constructor(
             OHealthOverview.DailyGoalsCardData(
                 data
             )
-        }else{
+        } else {
             null
         }
     }
@@ -1319,7 +1347,7 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         })
 
-        return if (data != null){
+        return if (data != null) {
 
             data.apply {
                 this.hrCombineModel = hrDataConvertor.getHrCombinedData(
@@ -1335,12 +1363,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     this.trendPercent = it
                 }
 
-                if(device == null){
+                if (device == null) {
                     this.measureState = TapMeasureState.NO_DEVICE
                 }
             }
-        }
-        else{
+        } else {
             null
         }
 //        stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
@@ -1467,44 +1494,42 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getStressCard(
+    private suspend fun getStressCard(
         healthData: ServerUserHealthData
     ): OHealthOverview? {
         var stressCard: OHealthOverview.StressCard? = null
-        viewModelScope.launch(Dispatchers.IO) {
-            val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+        val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
 
-            val device = ringDataStore.getRingDevice()
+        val device = ringDataStore.getRingDevice()
 
-            val stressData = userRepository.getSummaryStressData().apply {
-                this?.data = combinedData
-                if (device == null) {
-                    this?.measureState = TapMeasureState.NO_DEVICE
-                }
-            }
-
-            val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
-            val stressStatus = getStressStatus(lastMeasuredValue.first)
-            val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
-
-            if(stressData != null && stressTrend != null) {
-                stressCard = OHealthOverview.StressCard(
-                    stressData,
-                    lastMeasuredValue,
-                    stressStatus,
-                    stressTrend,
-                    resourceProvider
-                )
+        val stressData = userRepository.getSummaryStressData().apply {
+            this?.data = combinedData
+            if (device == null) {
+                this?.measureState = TapMeasureState.NO_DEVICE
             }
         }
+
+        val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
+        val stressStatus = getStressStatus(lastMeasuredValue.first)
+        val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
+
+        /*if (stressData != null && stressTrend != null) {*/
+            stressCard = OHealthOverview.StressCard(
+                stressData,
+                lastMeasuredValue,
+                stressStatus,
+                stressTrend,
+                resourceProvider
+            )
+        /*}*/
 
         return stressCard
     }
 
-    private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem>{
+    private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem> {
         val list = ArrayList<CustomHomeScreenItem>()
         val map = getItemsMap()
-        for (item in cards){
+        for (item in cards) {
             val mainItem = map[item.type]
             if (mainItem != null) {
                 mainItem.priority = item.priority
@@ -2907,7 +2932,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         is Resource.Success -> {
                             resource.data?.data?.let {
                                 notificationGoalsCardData.postValue(it)
-                                notificationGoalsCardDataUpdated.postValue(Event(true))
+                                notificationGoalsCardDataInit.postValue(Event(true))
                             }
                         }
 
