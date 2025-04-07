@@ -173,8 +173,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     val findMyRingCard = MutableLiveData<Boolean?>()
 
-    val healthMonitorCardData = MutableLiveData<HealthTrend?>()
-
     val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
     val hydrationUpdated = MutableLiveData<Event<Boolean>>()
 
@@ -225,13 +223,13 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )*/
-            val device = getDeviceConnected()
+            /*val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
-            })
+            })*/
 
 
             //handleGoogleFitCard()
@@ -1120,62 +1118,52 @@ class SummaryDataViewModelToday @Inject constructor(
             val hasSleep = sleepModel.sleepScore != null && sleepModel.sleepScore != 0
 
             priorityList.forEach { item ->
+                if(item.switchState.not()) return@forEach
+
                 when(item.key) {
                     "sleep" -> {
-                    if (!item.switchState) return@forEach
                         getSleepDataCard(healthData, impactData, sleepModel)?.let { userActivities.add(it) }
                     }
                     "activity" -> {
-                    if (!item.switchState) return@forEach
                         getActivityDataCard(healthData, impactData)?.let { userActivities.add(it) }
                     }
                     "readiness" -> {
-                    if (!item.switchState) return@forEach
                         getReadinessDataCard(healthData.sleep, healthData.readiness, impactData)?.let { userActivities.add(it) }
                     }
                     "sleep_planner" -> {
-                    if (!item.switchState) return@forEach
                         getSleepPlannerDataCard(hasSleep)?.let { userActivities.add(it) }
                     }
                     "heart_rate" -> {
-                    if (!item.switchState) return@forEach
                         getHeartRateCard()?.let {
                             userActivities.add(it)
                         }
                     }
                     "health_monitor" -> {
-                    if (!item.switchState) return@forEach
                         getHealthMonitorData(healthData.sleep)?.let {
                             userActivities.add(it)
                         }
                     }
                     "daily_goals" -> {
-                    if (!item.switchState) return@forEach
                         getDailyGoalsCard()?.let { userActivities.add(it) }
                     }
                     "luna_ai" -> {
-                    if (!item.switchState) return@forEach
                         getLunaAiCard()?.let { userActivities.add(it) }
                     }
                     "cycle_tracker" -> {
-                    if (!item.switchState) return@forEach
                         getCycleTrackerCard()?.let { userActivities.add(it) }
                     }
                     "7_day_trends_card" -> {
-                    if (!item.switchState) return@forEach
                         getSvnDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
                         }
                     }
                     "workout_history" -> {
-                    if (!item.switchState) return@forEach
                         getWorkoutHistoryCard(healthData.activity)?.let {
                             userActivities.add(it)
                         }
                     }
 
                     "stress" -> {
-                        if (!item.switchState) return@forEach
                         getStressCard(healthData)?.let {
                             userActivities.add(it)
                         }
@@ -1323,6 +1311,13 @@ class SummaryDataViewModelToday @Inject constructor(
     suspend fun getHeartRateCard(): OHealthOverview? {
         val device = ringDataStore.getRingDevice()
         val data: OHealthOverview.HeartRateDataModel? = userRepository.getSummaryHRHealthOverview()
+
+        stateHeartRateCard.postValue(data.apply {
+            if (device == null) {
+                this?.measureState = TapMeasureState.NO_DEVICE
+            }
+        })
+
         return if (data != null){
 
             data.apply {
@@ -1475,7 +1470,7 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData
     ): OHealthOverview? {
         var stressCard: OHealthOverview.StressCard? = null
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
 
             val device = ringDataStore.getRingDevice()
@@ -2007,7 +2002,6 @@ class SummaryDataViewModelToday @Inject constructor(
     fun measureHr(status: Boolean) {
         stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
         stateHeartRateCard.postValue(stateHeartRateCard.value)
-
 
         sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.SetManualMeasurement(
