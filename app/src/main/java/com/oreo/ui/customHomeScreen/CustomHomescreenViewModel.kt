@@ -26,7 +26,7 @@ class CustomHomescreenViewModel  @Inject constructor(
 ): BaseViewModel() {
 
     // Switch state
-    val lunaManagedState = MutableLiveData<Boolean>(false)
+    val lunaManagedState = MutableLiveData<Boolean?>(false)
 
     // List of items
     //
@@ -204,6 +204,14 @@ class CustomHomescreenViewModel  @Inject constructor(
                 resourcesProvider.getString(R.string.text_workout_history),
                 true,
                 11
+            )
+
+            this["stress"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "stress",
+                resourcesProvider.getString(R.string.text_stress),
+                true,
+                12
             )
 
     }
