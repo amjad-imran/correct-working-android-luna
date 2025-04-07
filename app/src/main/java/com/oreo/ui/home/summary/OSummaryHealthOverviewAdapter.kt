@@ -1014,9 +1014,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             )
             val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
                 override fun onItemClick(data: OActivityListModal, position: Int) {
-                    OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked(
-                        data,
-                        position
+                    itemClickListener?.invoke(
+                        OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked(
+                            data,
+                            position
+                        )
                     )
                 }
             })
