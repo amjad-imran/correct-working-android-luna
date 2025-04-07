@@ -1291,7 +1291,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 isMetric = isMetric,
                 convertedHydrateGoal = convertMlToOuncesRounded(hydrateGoal.toDouble()),
                 hydratePercent = hydratePercent,
-                notificationToggleModel = notificationToggleModel,
+                notificationToggleModel = notificationToggleModel?.copy(),
                 glassImage = getGlassImage(hydratePercent.toInt())
             )
 
@@ -2970,15 +2970,15 @@ class SummaryDataViewModelToday @Inject constructor(
                 .collect { resource ->
                     when (resource) {
                         is Resource.GenericError -> {
-                            sendMessage(resource.message)
+                            //sendMessage(resource.message)
                         }
 
                         is Resource.Loading -> {
-                            setLoading(resource.loading)
+                            //setLoading(resource.loading)
                         }
 
                         is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
+                            /*setApiErrors(resource.response.apply {
                                 (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                     object : BinaryActionCallback {
                                         override fun yes() {
@@ -2987,7 +2987,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                                         override fun no() {}
                                     }
-                            })
+                            })*/
                         }
 
                         is Resource.Success -> {

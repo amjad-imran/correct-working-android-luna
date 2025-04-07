@@ -114,7 +114,7 @@ sealed class OHealthOverview {
     ): OHealthOverview()
 
     data class DailyGoalsCardData(
-        val notificationGoals: NotificationGoals
+        var notificationGoals: NotificationGoals
     ): OHealthOverview()
 
     data class SevenDayTrendsCard(
