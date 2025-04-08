@@ -71,9 +71,9 @@ class CustomHomeScreenFragment :
         binding.bSaveChanges.setOnClickListener {
             val updatedList = adapter.getDataSet()
             if(viewModel.updateData(binding.switchMain.isChecked, updatedList)){
-                viewModel.lunaManagedState.postValue(false)
+//                viewModel.lunaManagedState.postValue(false)
             }else{
-                viewModel.lunaManagedState.postValue(true)
+//                viewModel.lunaManagedState.postValue(true)
             }
         }
 

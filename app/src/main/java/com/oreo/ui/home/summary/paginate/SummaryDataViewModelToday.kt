@@ -483,10 +483,6 @@ class SummaryDataViewModelToday @Inject constructor(
         stateDashAlerts.postValue(dashAlert)
     }
 
-    fun getLunaManagedDataFromLocalDataStore(): CustomHomeScreenModel? {
-        return localDataStore.getCustomHomeScreenItemsPriorityList()
-    }
-
     fun parseHealthData(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
@@ -1669,55 +1665,56 @@ class SummaryDataViewModelToday @Inject constructor(
             true,
             5
         )
+        this["stress"] = CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "stress",
+            resourceProvider.getString(R.string.text_stress),
+            true,
+            6
+        )
         this["health_monitor"] = CustomHomeScreenItem(
             R.drawable.icon_heart_monitor,
             "health_monitor",
             resourceProvider.getString(R.string.text_heart_monitor),
             true,
-            6
+            7
         )
         this["daily_goals"] = CustomHomeScreenItem(
             R.drawable.icon_daily_goals,
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
             true,
-            7
+            8
         )
         this["luna_ai"] = CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
             true,
-            8
+            9
         )
         this["cycle_tracker"] = CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",
             resourceProvider.getString(R.string.text_cycle_tracker),
             true,
-            9
+            10
         )
         this["7_day_trends_card"] = CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
             resourceProvider.getString(R.string.text_7_day_trends_cards),
             true,
-            10
+            11
         )
         this["workout_history"] = CustomHomeScreenItem(
             R.drawable.icon_flexibility_training,
             "workout_history",
             resourceProvider.getString(R.string.text_workout_history),
             true,
-            11
-        )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
             12
         )
+
 
     }
 
