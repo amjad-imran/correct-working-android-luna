@@ -404,8 +404,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
 
-
-                            cannyFeedbackUrl.postValue(Event("https://www.google.com"))
+                            cannyFeedbackUrl.postValue(Event(it))
 
                         }
                     }
