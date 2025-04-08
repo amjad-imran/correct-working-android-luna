@@ -4,8 +4,10 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -14,8 +16,11 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
+import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
@@ -24,6 +29,7 @@ import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
 import com.oreo.ui.custom.TempPeriodCombineModel
+import com.oreo.ui.home.summary.paginate.NotificationGoal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -38,11 +44,14 @@ import kotlin.math.abs
 class CycleTrackerViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
     val femaleHealthDataConvertor: FemaleHealthDataConvertor,
+    val userRepositoryOld: UserRepository,
     val localDataStore: DataStoredInterface,
     val resourcesProvider: ResourcesProvider,
+    val vibrationUtils: VibrationUtils,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
+    var notificationToggleModel= MutableLiveData<NotificationToggleModel>()
     var isCalendarSetupDone: Boolean = false
     var todayDate = LocalDate.now()
     var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
@@ -561,6 +570,99 @@ class CycleTrackerViewModel @Inject constructor(
             cycleHistoryData.value?.userDefault?.firstPeriodDate ?: "2024-03-01"
         }
         return LocalDate.parse(periodDate)
+    }
+
+    fun toggleNotification() {
+
+    }
+
+    fun getNotificationToggle() {
+        viewModelScope.launch {
+            userRepositoryOld.getNotificationToggle().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            notificationToggleModel.postValue(it)
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+    }
+
+    fun updateNotificationToggle() {
+        viewModelScope.launch {
+
+            vibrationUtils.vibrate(HAPTIC_VIBRATION)
+
+            val master = notificationToggleModel.value?.hydrate_notification ?: false == true ||
+                    notificationToggleModel?.value?.steps_notification ?: false == true ||
+                    notificationToggleModel?.value?.female_health ?: false == true ||
+                    notificationToggleModel?.value?.sleep_notification ?: false == true
+
+            val request = JsonObject().apply {
+                this.addProperty("master_notification", master)
+                this.addProperty(
+                    "hydrate_notification",
+                    notificationToggleModel.value?.hydrate_notification ?: false
+                )
+                this.addProperty(
+                    "steps_notification",
+                    notificationToggleModel.value?.steps_notification ?: false
+                )
+                this.addProperty(
+                    "sleep_notification",
+                    notificationToggleModel.value?.sleep_notification ?: false
+                )
+                this.addProperty(
+                    "female_health_notification",
+                    notificationToggleModel.value?.female_health ?: false
+                )
+            }
+            userRepositoryOld.updateNotificationToggle(request)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateNotificationToggle()
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                if (notificationToggleModel.value?.hydrate_notification == true ||
+                                    notificationToggleModel.value?.steps_notification == true ||
+                                    notificationToggleModel.value?.sleep_notification == true
+                                ) {
+                                    notificationToggleModel.value?.master_notification = true
+                                }
+
+                                notificationToggleModel.postValue(notificationToggleModel.value?.copy())
+                            }
+                        }
+                    }
+                }
+        }
     }
 
 }
