@@ -1870,6 +1870,17 @@
     <string name="text_goal_achieved">Objetivo alcanzado</string>
     <string name="text_menstrual_health">Salud menstrual</string>
     <string name="text_sleep_charge_ring_new">No hemos recibido datos desde hace un tiempo. Recuerda cargar tu anillo y usarlo regularmente para no perderte tus insights personalizados.</string>
+    <string name="text_luna_managed">Luna administrado</string>
+    <string name="text_customize_homescreen">Personalizar pantalla de inicio</string>
+    <string name="text_heart_monitor">Monitor de ritmo cardíaco</string>
+    <string name="text_7_day_trends_cards">Tarjetas de tendencias de 7 días</string>
+    <string name="text_workout_history">Historial de entrenamientos</string>
+    <string name="edit_home_screen">Editar pantalla de inicio</string>
+    <string name="changes_have_been_saved">Los cambios se han guardado</string>
+    <string name="text_custom_home_screen">Pantalla de inicio personalizada</string>
+    <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Cambia el diseño de tu aplicación fácilmente. Mueve o elimina las tarjetas según tus necesidades.</string>
+    <string name="text_edit_home_screen">Editar pantalla de inicio</string>
+    <string name="text_suggest_a_feature">Sugerir una función</string>
 
 
 </resources>

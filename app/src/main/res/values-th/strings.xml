@@ -1853,6 +1853,17 @@
     <string name="text_goal_achieved">บรรลุเป้าหมาย</string>
     <string name="text_menstrual_health">สุขภาพประจำเดือน</string>
     <string name="text_sleep_charge_ring_new">เราไม่ได้รับข้อมูลมาสักพักแล้ว อย่าลืมชาร์จแหวนและสวมใส่เป็นประจำเพื่อไม่ให้พลาดข้อมูลเชิงลึกเฉพาะตัวของคุณ!</string>
+    <string name="text_luna_managed">Luna จัดการแล้ว</string>
+    <string name="text_customize_homescreen">ปรับแต่งหน้าจอหลัก</string>
+    <string name="text_heart_monitor">เครื่องวัดอัตราการเต้นของหัวใจ</string>
+    <string name="text_7_day_trends_cards">การ์ดแนวโน้ม 7 วัน</string>
+    <string name="text_workout_history">ประวัติการออกกำลังกาย</string>
+    <string name="edit_home_screen">แก้ไขหน้าจอหลัก</string>
+    <string name="changes_have_been_saved">การเปลี่ยนแปลงถูกบันทึกแล้ว</string>
+    <string name="text_custom_home_screen">หน้าจอหลักที่กำหนดเอง</string>
+    <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">เปลี่ยนเลย์เอาท์แอปของคุณได้อย่างง่ายดาย ย้ายหรือเอาการ์ดออกตามต้องการ</string>
+    <string name="text_edit_home_screen">แก้ไขหน้าจอหลัก</string>
+    <string name="text_suggest_a_feature">แนะนำฟีเจอร์</string>
 
 
 </resources>
