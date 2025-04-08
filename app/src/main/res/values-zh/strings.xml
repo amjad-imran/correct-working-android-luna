@@ -1865,6 +1865,17 @@
     <string name="text_goal_achieved">目标达成</string>
     <string name="text_menstrual_health">经期健康</string>
     <string name="text_sleep_charge_ring_new">我们已经有一段时间没有收到数据了。记得为戒指充电并定期佩戴，以免错过你的个性化洞察！</string>
+    <string name="text_luna_managed">Luna 管理</string>
+    <string name="text_customize_homescreen">自定义主屏幕</string>
+    <string name="text_heart_monitor">心率监测</string>
+    <string name="text_7_day_trends_cards">7日趋势卡片</string>
+    <string name="text_workout_history">锻炼历史</string>
+    <string name="edit_home_screen">编辑主屏幕</string>
+    <string name="changes_have_been_saved">更改已保存</string>
+    <string name="text_custom_home_screen">自定义主屏幕</string>
+    <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">轻松更改应用布局。根据需要移动或移除卡片。</string>
+    <string name="text_edit_home_screen">编辑主屏幕</string>
+    <string name="text_suggest_a_feature">建议功能</string>
 
 
 </resources>
