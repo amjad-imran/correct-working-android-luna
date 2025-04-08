@@ -307,6 +307,7 @@ class OreoUserActivityRepositoryImpl(
                             customHomeScreenData = response.customScreen
 
                             ringDataStore.setFirstStressDay(response.firstStress)
+                            ringDataStore.setCannyState(response.enableCanny?:false)
                             ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setEnableAiState(response.enableAi ?: false)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)

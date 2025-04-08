@@ -231,6 +231,18 @@
                     app:text="@string/text_select_language" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowCannyFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_suggest_feature"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
+                    app:text="@string/text_suggest_a_feature" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowHelp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

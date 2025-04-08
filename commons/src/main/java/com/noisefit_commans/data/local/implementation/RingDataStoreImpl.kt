@@ -51,6 +51,7 @@ private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
 //
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
+private const val CANNY_STATE = "CANNY_STATE"
 //
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -61,6 +62,16 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun setCannyState(enableCanny: Boolean) {
+        mPrefs.edit().putBoolean(CANNY_STATE, enableCanny).commit()
+
+    }
+
+    override fun getCannyState(): Boolean {
+        return mPrefs.getBoolean(CANNY_STATE, false)
+    }
+
     override fun getLastSyncedStepsData(): GoogleFitDataLastSync? {
         val lastSyncData = Gson().fromJson<GoogleFitDataLastSync>(
             mPrefs.getString(LAST_SYNC_STEPS, "") ?: ""

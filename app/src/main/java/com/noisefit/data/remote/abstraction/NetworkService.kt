@@ -694,6 +694,11 @@ interface NetworkService {
         @Url url: String,
         @Body req: CustomHomeScreenModel
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getCannyFeedbackUrl(
+        @Url url: String,
+    ): BaseApiResponse<String>
     //
 
     /**

@@ -2973,6 +2973,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val master = notificationToggleModel?.hydrate_notification ?: false == true ||
                     notificationToggleModel?.steps_notification ?: false == true ||
+                    notificationToggleModel?.female_health ?: false == true ||
                     notificationToggleModel?.sleep_notification ?: false == true
 
             val request = JsonObject().apply {
@@ -3023,6 +3024,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                                 if (notificationToggleModel?.hydrate_notification == true ||
                                     notificationToggleModel?.steps_notification == true ||
+                                    notificationToggleModel?.female_health == true ||
                                     notificationToggleModel?.sleep_notification == true
                                 ) {
                                     notificationToggleModel?.master_notification = true

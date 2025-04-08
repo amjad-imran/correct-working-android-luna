@@ -104,10 +104,10 @@
             tools:text="Low chance of pregnancy" />
 
         <ImageView
-            android:id="@+id/ivInfo"
+            android:id="@+id/ivNotificationStatus"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_info_gray"
+            tools:src="@drawable/ic_female_health_notification_off"
             app:layout_constraintBottom_toBottomOf="@+id/tvPhase"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -120,8 +120,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/ivInfo"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/ivNotificationStatus"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -180,7 +180,7 @@
             android:id="@+id/groupPeriodData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tvCurrentDay,tvTotalDays,tvCurrentState,tvStateDay,view34,tvPregnancyChances,ivInfo,tvPhase,btnLog" />
+            app:constraint_referenced_ids="tvCurrentDay,tvTotalDays,tvCurrentState,tvStateDay,view34,tvPregnancyChances,ivNotificationStatus,tvPhase,btnLog" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

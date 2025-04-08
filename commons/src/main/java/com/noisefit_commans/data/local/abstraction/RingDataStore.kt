@@ -101,6 +101,8 @@ interface RingDataStore {
     //
     fun getCustomHomeScreenData(): CustomHomeScreenModel?
     fun setCustomHomeScreenData(data: CustomHomeScreenModel)
+    fun setCannyState(enableCanny: Boolean)
+    fun getCannyState(): Boolean
     //
 
 }

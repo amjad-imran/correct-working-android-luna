@@ -28,6 +28,8 @@ data class ServerUserHealthResponse(
     val stressBeta: Boolean? = null,
     @SerializedName("enable_ai2")
     val enableAi: Boolean? = null,
+    @SerializedName("enable_canny")
+    val enableCanny: Boolean? = null,
 
     @SerializedName("temp_base")
     val tempBaseLine: Float? = null,

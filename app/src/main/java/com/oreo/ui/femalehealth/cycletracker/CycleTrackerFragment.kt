@@ -1,5 +1,6 @@
 package com.oreo.ui.femalehealth.cycletracker
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -25,7 +26,6 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
@@ -67,6 +67,9 @@ class CycleTrackerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_page_visit)
+
+        binding.lytTrackerTop.tvPhase.setPaintFlags(binding.lytTrackerTop.tvPhase.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
+        viewModel.getNotificationToggle()
         setRecycler()
     }
 
@@ -190,6 +193,12 @@ class CycleTrackerFragment :
 
     override fun initListener() {
 
+        binding.lytTrackerTop.ivNotificationStatus.setOnClickListener {
+            val lastValue = viewModel.notificationToggleModel.value?.female_health ?: false
+            viewModel.notificationToggleModel.value?.female_health = lastValue.not()
+            viewModel.updateNotificationToggle()
+        }
+
         binding.lytPrediction.vCard.ivInfo.setOnClickListener {
             navigate(
                 R.id.dialogCtOvulationInfo, Bundle().apply {
@@ -234,7 +243,7 @@ class CycleTrackerFragment :
                 )
             }
         }
-        binding.lytTrackerTop.ivInfo.setOnClickListener {
+        binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
                 launchMode = "Luteal"
@@ -322,6 +331,15 @@ class CycleTrackerFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.notificationToggleModel.observe(this) {
+            binding.lytTrackerTop.ivNotificationStatus.setImageResource(
+                if (it.female_health) {
+                    R.drawable.ic_female_health_notification_on
+                } else {
+                    R.drawable.ic_female_health_notification_off
+                }
+            )
+        }
         viewModel.navigateToBack.observe(this) {
             it.getContent()?.let {
                 navigateUpSafe()
