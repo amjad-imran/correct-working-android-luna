@@ -364,7 +364,6 @@ dependencies {
     //moengage
     implementation(moengage.core)
     implementation(moengage.inapp)
-    implementation(moengage.pushAmpPlus)
     implementation(moengage.pushKit)
     implementation(moengage.pushAmp)
     implementation(moengage.geofence)

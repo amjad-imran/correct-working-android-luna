@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.airbnb.lottie.LottieDrawable
+import com.moengage.inapp.MoEInAppHelper
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
@@ -762,6 +763,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+        viewModel.sessionManager.moengageClicks.observe(this){
+            it.getContent()?.let {
+                handleAppLinkNavigation(it)
+            }
+
+        }
+
+
         viewModel.lunaZoneReload.observe(this) {
             it.getContent()?.let {
                 if (navController?.currentDestination?.id == R.id.navigation_lunaZoneFragment) {
@@ -974,7 +983,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     is SyncEvents.Success -> {
                         //viewModel.syncProgressBarState.value = null
-                        if(viewModel.syncTextState.value!=null){
+                        if (viewModel.syncTextState.value != null) {
                             viewModel.syncTextState.value = viewModel.getSyncingMessage(
                                 this@OreoMainActivity,
                                 syncDataStatus.progress,
@@ -990,7 +999,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                          binding.lytHeader.pbSync.gone()
                          resetSwipeLoadingAnim()*/
                     }
-                    SyncEvents.ServerSyncFailed->{
+
+                    SyncEvents.ServerSyncFailed -> {
                         viewModel.syncTextState.value = null
                         viewModel.syncProgressBarState.value = null
                     }
@@ -1010,7 +1020,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     SyncEvents.ServerSyncSuccess -> {
                         viewModel.syncProgressBarState.value = null
-                        if(viewModel.syncTextState.value!=null){
+                        if (viewModel.syncTextState.value != null) {
                             viewModel.syncTextState.value = viewModel.getSyncingMessage(
                                 this@OreoMainActivity,
                                 0,
@@ -1079,7 +1089,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun syncCompletedState() {
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.syncTextState.value = null
-        },1500)
+        }, 1500)
     }
 
     private fun animateSyncLottie() {
@@ -1149,9 +1159,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-        LOGS.d("dsflkjhsdkjfhksdfj ${viewModel.sessionManager.syncCompleted.value?.peekContent()}")
-
-        if(viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.ServerSyncSuccess ||viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.Success){
+        if (viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.ServerSyncSuccess || viewModel.sessionManager.syncCompleted.value?.peekContent() is SyncEvents.Success) {
             viewModel.syncTextState.value = null
         }
         navController?.addOnDestinationChangedListener(navListener)
@@ -1177,6 +1185,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.loginFreshChatUser()
 
         viewModel.incrementOpenCount()
+
+        //For in app popup
+        MoEInAppHelper.getInstance().showInApp(this)
     }
 
 
@@ -1215,7 +1226,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         when (appLink) {
             AppLinks.REFERRAL -> {
                 viewModel.getReferralInfo { data ->
-                    if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.referralFragment){
+                    if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.referralFragment) {
                         this@OreoMainActivity.navController?.navigate(
                             R.id.referralFragment,
                             bundleOf("referralInfo" to data)

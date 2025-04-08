@@ -12,6 +12,7 @@ import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.model.UserGender
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.ui.AppLinks
 import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
@@ -240,6 +241,16 @@ class SessionManager
         GlobalScope.launch(Main) {
             _agpsStatus.value = Event(state)
         }
+    }
+
+    var moengageClicks = MutableLiveData<Event<AppLinks>>()
+
+    fun moengageNavigateTo(action: String) {
+        val actionParsed = when(action.lowercase()){
+            "referral"->AppLinks.REFERRAL
+            else -> null
+        }
+        moengageClicks.postValue(Event(actionParsed))
     }
 
     fun clearSessionManager() {

@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -14,13 +15,15 @@ import com.github.anrwatchdog.ANRWatchDog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.moengage.core.DataCenter
 import com.moengage.core.LogLevel
+import com.moengage.core.MoECoreHelper
 import com.moengage.core.MoEngage
 import com.moengage.core.config.FcmConfig
-import com.moengage.core.config.GeofenceConfig
 import com.moengage.core.config.LogConfig
 import com.moengage.core.config.NotificationConfig
 import com.moengage.core.config.PushKitConfig
 import com.moengage.core.ktx.MoEngageBuilderKtx
+import com.moengage.firebase.MoEFireBaseHelper
+import com.moengage.inapp.MoEInAppHelper
 import com.moengage.pushbase.MoEPushHelper
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.language.AppLanguage
@@ -35,6 +38,12 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.oreo.util.MyActivityLifecycleCallbacks
 import com.oreo.util.language.LocaleHelper
+import com.oreo.util.moengage.callbacks.ApplicationBackgroundListener
+import com.oreo.util.moengage.callbacks.LogoutCompleteListener
+import com.oreo.util.moengage.inapp.ClickActionCallback
+import com.oreo.util.moengage.inapp.InAppLifecycleCallbacks
+import com.oreo.util.moengage.inapp.SelfHandledCallback
+import com.oreo.util.moengage.push.CustomPushMessageListener
 
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -112,10 +121,18 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
     }
 
     private fun initMoEngage() {
-        MoEngage.initialiseDefaultInstance(
+
+        val moEngage = MoEngage.Builder(this,
+            "VWZYK0ZFPRQZM6G2WG9YBV47", DataCenter.DATA_CENTER_3)
+            .configureNotificationMetaData(NotificationConfig(R.drawable.icon_transparent, R.drawable.icon_transparent))
+            .build()
+        MoEngage.initialiseDefaultInstance(moEngage)
+
+
+        /*MoEngage.initialiseDefaultInstance(
             MoEngageBuilderKtx(
                 application = this,
-                appId = "VWZYK0ZFPRQZM6G2WG9YBV47",
+                appId = "VWZYK0ZFPRQZM6G2WG9YBV47_DEBUG",
                 dataCenter = DataCenter.DATA_CENTER_3,
                 notificationConfig = NotificationConfig(
                     smallIcon = R.drawable.icon_transparent,
@@ -131,16 +148,35 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
                 geofenceConfig = GeofenceConfig(true),
                 logConfig = LogConfig(LogLevel.DEBUG, true)
             ).build()
-        )
+        )*/
 
         MoEPushHelper.getInstance().pushPermissionResponse(applicationContext, true)
         MoEPushHelper.getInstance().setUpNotificationChannels(applicationContext)
-//        // register for application background listener
-//        MoECoreHelper.addAppBackgroundListener(ApplicationBackgroundListener())
-//        // register for logout complete listener
-//        MoECoreHelper.addLogoutCompleteListener(LogoutCompleteListener())
-//        setupPushCallbacks()
-//        setupInAppCallbacks()
+        // register for application background listener
+        MoECoreHelper.addAppBackgroundListener(ApplicationBackgroundListener())
+        // register for logout complete listener
+        MoECoreHelper.addLogoutCompleteListener(LogoutCompleteListener())
+        setupPushCallbacks()
+        setupInAppCallbacks()
+    }
+
+    private fun setupPushCallbacks() {
+        // callback for notification events and notification customisation point.
+        MoEPushHelper.getInstance().registerMessageListener(CustomPushMessageListener())
+        // Callback for Firebase Token
+        MoEFireBaseHelper.getInstance().addTokenListener { token ->
+            Log.d(" fcm token:", "${token.pushToken}")
+            MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token.pushToken)
+        }
+    }
+
+    private fun setupInAppCallbacks() {
+        // callback for in-app campaign click
+        MoEInAppHelper.getInstance().setClickActionListener(ClickActionCallback(sessionManager))
+        // callback for in-app lifecycle - campaign shown/dismissed.
+        MoEInAppHelper.getInstance().addInAppLifeCycleListener(InAppLifecycleCallbacks())
+        // callback for self handled campaigns that are triggered based on events.
+        MoEInAppHelper.getInstance().setSelfHandledListener(SelfHandledCallback())
     }
 
     override val workManagerConfiguration: Configuration
