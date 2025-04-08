@@ -20,6 +20,7 @@ interface DataStoredInterface {
 
     fun setCustomHomeScreenItemsPriorityList(priorityList: CustomHomeScreenModel)
     fun getCustomHomeScreenItemsPriorityList():CustomHomeScreenModel?
+    fun clearCustomHomeScreenItemsPriorityList()
 
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
@@ -503,8 +504,10 @@ interface DataStoredInterface {
 
     fun getDisplayEditHomeScreenCard(): Boolean
     fun setDisplayEditHomeScreenCard(isDisplayed: Boolean)
+    fun clearDisplayEditHomeScreenCard()
 
     fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>)
     fun getCustomHomeScreenApiCallTimeStamps(): String?
+    fun clearCustomHomeScreenApiCallTimeStamps()
 
 }

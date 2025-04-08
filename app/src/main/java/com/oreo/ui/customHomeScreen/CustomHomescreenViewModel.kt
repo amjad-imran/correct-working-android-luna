@@ -39,7 +39,6 @@ class CustomHomescreenViewModel  @Inject constructor(
     // Rate limiting variables
     private val maxRequests = 5
     private val timeWindowMs = 60 * 60 * 1000 // 1 hour
-    private val apiCallTimestampsKey = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
 
     init {
         loadInitialItems()
@@ -86,8 +85,16 @@ class CustomHomescreenViewModel  @Inject constructor(
                  return@launch
              }
 
+             var count = 0
+             var sleepItemIndex = -1
              updatedList.forEachIndexed{ index, cItem ->
                  cItem.priority = index+1
+                 if(cItem.switchState.not()) count++
+                 if(cItem.key == "sleep") sleepItemIndex = index
+             }
+
+             if(count == updatedList.size){
+                 updatedList.get(sleepItemIndex).switchState = true
              }
 
              val customHomeScreendata = CustomHomeScreenModel(

@@ -254,12 +254,20 @@ class DataStoredImpl
         mPrefs.edit().putBoolean(DISPLAY_HOME_SCREEN_CARD, isDisplayed).commit()
     }
 
+    override fun clearDisplayEditHomeScreenCard() {
+        mPrefs.edit()?.remove(DISPLAY_HOME_SCREEN_CARD)?.commit()
+    }
+
     override fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>) {
         mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(",")).commit()
     }
 
     override fun getCustomHomeScreenApiCallTimeStamps(): String? {
         return mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
+    }
+
+    override fun clearCustomHomeScreenApiCallTimeStamps() {
+        mPrefs.edit()?.remove(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP)?.commit()
     }
 
     override fun isGoogleFitCrossed(): Boolean {
@@ -498,6 +506,10 @@ class DataStoredImpl
         }else{
             gson.fromJson(data, CustomHomeScreenModel::class.java)
         }
+    }
+
+    override fun clearCustomHomeScreenItemsPriorityList() {
+        mPrefs.edit()?.remove(CUSTOMIZE_HOME_SCREEN)?.commit()
     }
     //
 

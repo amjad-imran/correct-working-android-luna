@@ -90,6 +90,11 @@ class NetworkConnectionInterceptor(
         localDataStore.setWarrantyStatus(-1)
         localDataStore.setCrossedCampaign(-1)
         localDataStore.saveAudioMaxAmp(0)
+        //
+        localDataStore.clearDisplayEditHomeScreenCard()
+        localDataStore.clearCustomHomeScreenApiCallTimeStamps()
+        localDataStore.clearCustomHomeScreenItemsPriorityList()
+        //
 
         GlobalScope.launch(Dispatchers.IO) {
             alarmRepository.cancelAllAlarms()

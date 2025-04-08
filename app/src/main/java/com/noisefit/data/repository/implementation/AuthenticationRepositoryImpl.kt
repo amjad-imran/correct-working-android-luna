@@ -108,6 +108,11 @@ class AuthenticationRepositoryImpl(
             localDataSource.setLastWinsCount(-1)
             localDataSource.setCrossedCampaign(-1)
             localDataSource.saveAudioMaxAmp(0)
+            //
+            localDataSource.clearDisplayEditHomeScreenCard()
+            localDataSource.clearCustomHomeScreenApiCallTimeStamps()
+            localDataSource.clearCustomHomeScreenItemsPriorityList()
+            //
             emit(true)
         }
     }
