@@ -1556,26 +1556,40 @@ class SummaryDataViewModelToday @Inject constructor(
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
                     add(itemsMap["sleep"]!!.copy(priority = 1))
-                    add(itemsMap["readiness"]!!.copy(priority = 2))
-                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    if (registerDate != 0) {
+                        add(itemsMap["readiness"]!!.copy(priority = 2))
+                    }
+                    if (enableAi) {
+                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    }
                     add(itemsMap["sleep_planner"]!!.copy(priority = 4))
                     add(itemsMap["activity"]!!.copy(priority = 5))
-                    if (!isAfter12) add(itemsMap["health_monitor"]!!.copy(priority = 6))
+                    if (!isAfter12) {
+                        add(itemsMap["health_monitor"]!!.copy(priority = 6))
+                    }
                 }
             }
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
                     add(itemsMap["sleep"]!!.copy(priority = 1))
-                    add(itemsMap["readiness"]!!.copy(priority = 2))
-                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    if (registerDate != 0) {
+                        add(itemsMap["readiness"]!!.copy(priority = 2))
+                    }
+                    if (enableAi) {
+                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    }
                     add(itemsMap["activity"]!!.copy(priority = 4))
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
             2 -> { // Evening (balanced)
                 priorityList.apply {
-                    add(itemsMap["readiness"]!!.copy(priority = 1))
-                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                    if (registerDate != 0) {
+                        add(itemsMap["readiness"]!!.copy(priority = 1))
+                    }
+                    if (enableAi) {
+                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                    }
                     add(itemsMap["sleep"]!!.copy(priority = 3))
                     add(itemsMap["activity"]!!.copy(priority = 4))
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
@@ -1587,13 +1601,19 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["sleep_planner"]!!.copy(priority = 1))
                     }
                     add(itemsMap["activity"]!!.copy(priority = 2))
-                    if (enableAi) add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    if (enableAi) {
+                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                    }
                     if (isBefore8) {
                         add(itemsMap["sleep_planner"]!!.copy(priority = 4))
                     }
-                    add(itemsMap["sleep"]!!.copy(priority = 5))
-                    add(itemsMap["readiness"]!!.copy(priority = 6))
-                    if (!isAfter12) add(itemsMap["health_monitor"]!!.copy(priority = 7))
+                    if (registerDate != 0) {
+                        add(itemsMap["sleep"]!!.copy(priority = 5))
+                        add(itemsMap["readiness"]!!.copy(priority = 6))
+                    }
+                    if (!isAfter12) {
+                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
+                    }
                 }
             }
         }
@@ -1699,7 +1719,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun checkIfIsAfter12(): Boolean {
         return LocalDateTime.now().hour >= 12
-
     }
 
     private fun calculateDaysLeft(dateString: String): Long {
