@@ -372,4 +372,12 @@ class UserRepositoryImpl(
             )
         }
     }
+
+    override suspend fun getCannyFeedbackUrl(): Flow<Resource<BaseApiResponse<String>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getCannyFeedbackUrl(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/custom-screen",//todo change url
+            )
+        }
+    }
 }

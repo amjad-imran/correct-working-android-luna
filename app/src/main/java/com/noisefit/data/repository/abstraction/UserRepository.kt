@@ -61,4 +61,6 @@ interface UserRepository {
 
     suspend fun submitCustomHomeScreenPriority(request: CustomHomeScreenModel): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun getCannyFeedbackUrl(): Flow<Resource<BaseApiResponse<String>>>
+
 }

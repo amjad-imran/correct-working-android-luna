@@ -57,6 +57,8 @@ constructor(
     val referralRunningState = MutableLiveData<ReferralRunningState>(ReferralRunningState.Default)
     var referralResponse: ReferralInfoResponse? = null
 
+    val cannyFeedbackUrl = MutableLiveData<Event<String>>()
+
 
     fun getUser(): LiveData<User> = _user
     fun getFormattedGender(): LiveData<String> = _userGender
@@ -364,6 +366,53 @@ constructor(
         referralResponse?.let {
             referralRunningState.postValue(getReferralRunningState(it))
         }
+    }
+
+    fun getCannyFeedbackUrl() {
+        viewModelScope.launch {
+
+            val lastValue = cannyFeedbackUrl.value?.peekContent()
+            if (lastValue.isNullOrEmpty().not()) {
+                cannyFeedbackUrl.postValue(Event(lastValue))
+                return@launch
+            }
+
+            userRepository.getCannyFeedbackUrl().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getCannyFeedbackUrl()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+
+
+                            cannyFeedbackUrl.postValue(Event("https://www.google.com"))
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 
