@@ -228,6 +228,7 @@ private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
+private const val CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -251,6 +252,14 @@ class DataStoredImpl
 
     override fun setDisplayEditHomeScreenCard(isDisplayed: Boolean) {
         mPrefs.edit().putBoolean(DISPLAY_HOME_SCREEN_CARD, isDisplayed).commit()
+    }
+
+    override fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>) {
+        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(",")).commit()
+    }
+
+    override fun getCustomHomeScreenApiCallTimeStamps(): String? {
+        return mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
     }
 
     override fun isGoogleFitCrossed(): Boolean {

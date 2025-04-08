@@ -49,16 +49,32 @@ class CustomHomeScreenFragment :
             }
 
             if(isChecked){
-                viewModel.updateData(isChecked, adapter.getDataSet())
+                binding.recyclerView.gone()
+                binding.tvOtherMessage.gone()
+                binding.bSaveChanges.gone()
+                binding.tvMessage.visible()
+                if(viewModel.updateData(isChecked, adapter.getDataSet())){
+                    viewModel.lunaManagedState.postValue(true)
+                }else{
+                    viewModel.lunaManagedState.postValue(false)
+                }
+
             }else{
-                viewModel.lunaManagedState.postValue(isChecked)
+                binding.tvMessage.gone()
+                binding.recyclerView.visible()
+                binding.tvOtherMessage.visible()
+                binding.bSaveChanges.visible()
             }
 
         }
 
         binding.bSaveChanges.setOnClickListener {
             val updatedList = adapter.getDataSet()
-            viewModel.updateData(binding.switchMain.isChecked, updatedList)
+            if(viewModel.updateData(binding.switchMain.isChecked, updatedList)){
+                viewModel.lunaManagedState.postValue(false)
+            }else{
+                viewModel.lunaManagedState.postValue(true)
+            }
         }
 
         viewModel.dataUpdated.observe(this){

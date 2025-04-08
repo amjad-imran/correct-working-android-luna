@@ -504,4 +504,7 @@ interface DataStoredInterface {
     fun getDisplayEditHomeScreenCard(): Boolean
     fun setDisplayEditHomeScreenCard(isDisplayed: Boolean)
 
+    fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>)
+    fun getCustomHomeScreenApiCallTimeStamps(): String?
+
 }

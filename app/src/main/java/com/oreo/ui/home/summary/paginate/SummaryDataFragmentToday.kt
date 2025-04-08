@@ -355,7 +355,7 @@ class SummaryDataFragmentToday :
                     navigate(R.id.ringWelcomeFragment)
                 }
 
-                OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
+                OSummaryHealthOverviewClickEnum.StressCardClicked -> {
                     if (viewModel.getStressWalkthroughShownStatus()) {
                         navigate(R.id.fragmentOStressDetails)
                     } else {

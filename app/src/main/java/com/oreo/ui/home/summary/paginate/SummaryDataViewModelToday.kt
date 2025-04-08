@@ -1,6 +1,7 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -1052,7 +1053,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
-
             val priorityList = if (lunaManaged.not()) {
                 val list = localDataStore.getCustomHomeScreenItemsPriorityList()
                 if (list != null) {
@@ -1061,6 +1061,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     getLunaManagedPriority().sortedBy { it.priority }
                 }
             } else {
+                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
                 getLunaManagedPriority().sortedBy { it.priority }
             }
 
@@ -1074,6 +1075,8 @@ class SummaryDataViewModelToday @Inject constructor(
             } else {
                 hasDetectedWorkout = false
             }
+
+            handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
             var totalSleep: Int? = null
             healthData.sleep?.sleeps?.forEach {
@@ -1204,6 +1207,7 @@ class SummaryDataViewModelToday @Inject constructor(
             // Post the final data
             healthOverviewData.postValue(userActivities)
             //viewedCardsData.postValue(viewedCardsData)
+            this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
 
             // Handle other operations
             loadNapsToConfirm()
@@ -1903,7 +1907,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
                 }
             }
-
 
         }
     }

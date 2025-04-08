@@ -23,7 +23,7 @@ import javax.inject.Inject
 class CustomHomescreenViewModel  @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
     private val userRepository: UserRepository,
-    private val localDatSource: DataStoredInterface
+    private val localDataSource: DataStoredInterface
 ): BaseViewModel() {
 
     // Switch state
@@ -36,6 +36,10 @@ class CustomHomescreenViewModel  @Inject constructor(
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
+    // Rate limiting variables
+    private val maxRequests = 5
+    private val timeWindowMs = 60 * 60 * 1000 // 1 hour
+    private val apiCallTimestampsKey = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
 
     init {
         loadInitialItems()
@@ -43,8 +47,9 @@ class CustomHomescreenViewModel  @Inject constructor(
 
     private fun loadInitialItems() {
         viewModelScope.launch {
+
             val itemsMap = getItemsMap()
-            val localData = localDatSource.getCustomHomeScreenItemsPriorityList()
+            val localData = localDataSource.getCustomHomeScreenItemsPriorityList()
             if (localData != null){
                 lunaManagedState.postValue(localData.manage)
             }else{
@@ -71,8 +76,16 @@ class CustomHomescreenViewModel  @Inject constructor(
         }
     }
 
-     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>) {
+     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>): Boolean {
+         var ans = true
          viewModelScope.launch {
+
+             if (!canMakeApiCall()) {
+                 sendMessage("Rate limit exceeded")
+                 ans = false
+                 return@launch
+             }
+
              updatedList.forEachIndexed{ index, cItem ->
                  cItem.priority = index+1
              }
@@ -87,6 +100,9 @@ class CustomHomescreenViewModel  @Inject constructor(
                  when (resource) {
                      is Resource.GenericError -> {
                          sendMessage(resource.message)
+                         // Remove the last timestamp if the call failed
+                         removeLastApiCallTimestamp()
+                         ans = false
                      }
 
                      is Resource.Loading -> {
@@ -104,17 +120,59 @@ class CustomHomescreenViewModel  @Inject constructor(
                                      override fun no() {}
                                  }
                          })
+                         // Remove the last timestamp if the call failed
+                         removeLastApiCallTimestamp()
+                         ans = false
                      }
 
                      is Resource.Success -> {
                          resource.data?.data?.let {
-                             localDatSource.setCustomHomeScreenItemsPriorityList(customHomeScreendata)
+                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreendata)
                              dataUpdated.postValue(Event(true))
                          }
                      }
                  }
              }
          }
+         return ans
+    }
+
+    private fun canMakeApiCall(): Boolean {
+        val now = System.currentTimeMillis()
+        val timestamps = getStoredTimestamps()
+
+        // Remove timestamps older than 1 hour
+        val recentTimestamps = timestamps.filter { now - it <= timeWindowMs } as ArrayList
+
+        // If we have less than max requests, allow the call
+        if (recentTimestamps.size < maxRequests) {
+            recentTimestamps.add(now)
+            saveTimestamps(recentTimestamps)
+            return true
+        }
+
+        return false
+    }
+
+    private fun getStoredTimestamps(): MutableList<Long> {
+        val serialized = localDataSource.getCustomHomeScreenApiCallTimeStamps()
+        return if (serialized != null) {
+            serialized.split(",").mapNotNull { it.toLongOrNull() }.toMutableList()
+        } else {
+            mutableListOf()
+        }
+    }
+
+    private fun saveTimestamps(timestamps: List<Long>) {
+        localDataSource.setCustomHomeScreenApiCallTimeStamps(timestamps)
+    }
+
+    private fun removeLastApiCallTimestamp() {
+        val timestamps = getStoredTimestamps()
+        if (timestamps.isNotEmpty()) {
+            timestamps.removeAt(timestamps.size - 1)
+            saveTimestamps(timestamps)
+        }
     }
 
     private fun getNetworkList(updatedList: List<CustomHomeScreenItem>): List<CustomHomeScreenNetworkItem> {

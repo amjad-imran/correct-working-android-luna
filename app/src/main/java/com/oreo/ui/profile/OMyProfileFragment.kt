@@ -53,9 +53,7 @@ class OMyProfileFragment :
         }
 
         if(
-            mainViewModel.lunaManagedData == null &&
-            mainViewModel.registerDate > 6 &&
-            viewModel.localDataStore.getDisplayEditHomeScreenCard()
+            mainViewModel.registerDate > 6
         ){
             binding.llCustomHomeScreen.visible()
         }else{

@@ -89,7 +89,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
     data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
-    object StressGraphClicked : OSummaryHealthOverviewClickEnum()
+    object StressCardClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
@@ -321,6 +321,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                     )
                 )
             }
+
+            R.layout.item_stress_graph -> HomeRecyclerViewHolder.StressGraphViewHolder(
+                ItemStressGraphBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
             //
 
 //            R.layout.list_o_w_demo_card_item -> HomeRecyclerViewHolder.DemoViewHolder(
@@ -780,6 +786,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             ).lowercase()
                         )
                 }
+            }
+
+            //
+            binding.root.setOnClickListener {
+                Log.d("hjcacajc","Stress Clicked: In Adapter")
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressCardClicked)
             }
         }
     }
@@ -1793,7 +1805,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }*/
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressGraphClicked)
+                Log.d("hjcacajc","Stress Clicked: In Adapter")
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressCardClicked)
             }
 
         }
