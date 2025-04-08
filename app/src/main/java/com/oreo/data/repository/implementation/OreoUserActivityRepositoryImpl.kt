@@ -312,7 +312,7 @@ class OreoUserActivityRepositoryImpl(
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
-                            customHomeScreenData?.let { ringDataStore.setCustomHomeScreenData(it) }
+                            customHomeScreenData?.let { localDataStore.setCustomHomeScreenItemsPriorityList(it) }
                         }
                     }
                 }

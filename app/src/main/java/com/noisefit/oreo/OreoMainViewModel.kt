@@ -36,6 +36,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
@@ -117,7 +118,8 @@ constructor(
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
     //
-    var lunaManagedState: Boolean = true
+    var lunaManagedState: Boolean = false
+    var lunaManagedData: CustomHomeScreenModel? = null
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -324,9 +326,10 @@ constructor(
                             enableAi = it.enableAi ?: false
                             //
                             lunaManagedState = it.customScreen?.manage ?: false
+                            lunaManagedData = it.customScreen
                             Log.d("yashhhhhhhhhhhhhhhhhh" , "${Gson().toJson(it.customScreen)}")
 //                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "${Gson().toJson(it.enableAi)}")
-                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "$lunaManagedState")
+                            Log.d("yashhhhhhhhhhhhhhhhhh 2" , "$lunaManagedData")
                             //
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
