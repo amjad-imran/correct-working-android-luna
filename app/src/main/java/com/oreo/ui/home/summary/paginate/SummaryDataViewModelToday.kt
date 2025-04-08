@@ -32,6 +32,7 @@ import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -482,6 +483,9 @@ class SummaryDataViewModelToday @Inject constructor(
         stateDashAlerts.postValue(dashAlert)
     }
 
+    fun getLunaManagedDataFromLocalDataStore(): CustomHomeScreenModel? {
+        return localDataStore.getCustomHomeScreenItemsPriorityList()
+    }
 
     fun parseHealthData(
         healthData: ServerUserHealthData,

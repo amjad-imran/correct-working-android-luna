@@ -823,6 +823,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             chartModelActivity: List<ChartModel>,
             chartModelEmpty: List<ChartModel>
         ) {
+            if(data.first == null || data.second == null){
+                return
+            }
             val lytSleepAvg = binding.lytSleepAvg
 
             val sleep = data.first!!
