@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentProfileBinding
 import com.noisefit.ui.onboarding.OnBoardActivity
+import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
@@ -36,6 +37,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     }
 
     override fun initListener() {
+        binding.ivCopyEmail.setOnClickListener {
+            viewModel.getUser().value?.email?.copyToClipBoard()
+
+        }
+
+        binding.ivCopyMobile.setOnClickListener {
+            viewModel.getUser().value?.mobile?.copyToClipBoard()
+        }
+
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }

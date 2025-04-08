@@ -271,13 +271,10 @@ fun Double.roundToNearestDecimalFloor(upTo: Int): Double {
 fun String.copyToClipBoard() {
     val clipboardManager =
         NoisefitApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    // When setting the clipboard text.
     clipboardManager.setPrimaryClip(ClipData.newPlainText("", this))
-    // Only show a toast for Android 12 and lower.
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
         Toast.makeText(NoisefitApplication.context!!, "Copied", Toast.LENGTH_SHORT).show()
     }
-
 }
 
 //no change in values

@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_begin="113dp" />
+                        app:layout_constraintGuide_begin="100dp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNameLabel"
@@ -553,12 +553,13 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/container1">
+
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_begin="113dp" />
+                        app:layout_constraintGuide_begin="100dp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNumberLabel"
@@ -582,15 +583,26 @@
                         style="@style/H6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/side_margin"
-                        android:text="@{viewModel.user.getMobileNumber()}"
+                        android:gravity="end"
                         android:layout_marginStart="@dimen/side_margin"
+                        android:text="@{viewModel.user.getMobileNumber()}"
                         android:visibility="@{viewModel.numberAvailable ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="@+id/tvNumberLabel"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivCopyMobile"
                         app:layout_constraintStart_toStartOf="@+id/guideline4"
                         app:layout_constraintTop_toTopOf="@id/tvNumberLabel"
                         tools:text="1001891991" />
+
+                    <ImageView
+                        android:id="@+id/ivCopyMobile"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="8dp"
+                        android:visibility="@{viewModel.numberAvailable ? View.VISIBLE : View.GONE}"
+                        android:src="@drawable/ic_copy_mac"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvNumberLabel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tvNumberLabel" />
 
                     <include
                         android:id="@+id/include44"
@@ -625,18 +637,28 @@
                         style="@style/H6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/side_margin"
+                        android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginBottom="1dp"
                         android:ellipsize="end"
+                        android:gravity="end"
                         android:singleLine="true"
                         android:text="@{viewModel.user.email}"
                         android:textColor="@color/white"
-                        android:layout_marginStart="@dimen/side_margin"
                         app:layout_constraintBottom_toBottomOf="@+id/tvEmailLabel"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivCopyEmail"
                         app:layout_constraintStart_toStartOf="@+id/guideline4"
                         app:layout_constraintTop_toTopOf="@+id/tvEmailLabel"
                         tools:text="abc@gmail.com" />
+
+                    <ImageView
+                        android:id="@+id/ivCopyEmail"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_copy_mac"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvEmailLabel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tvEmailLabel" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
