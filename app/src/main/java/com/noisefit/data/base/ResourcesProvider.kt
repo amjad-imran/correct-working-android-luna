@@ -33,6 +33,16 @@ constructor(
         return localizedString
     }
 
+    fun getString(@StringRes stringResId: Int, formatArgs: Any,formatArg2: Any): String {
+        val res = getResourcesBasedOnLanguage()
+        val localizedString = String.format(
+            res.getString(stringResId),
+            formatArgs,
+            formatArg2
+        )
+        return localizedString
+    }
+
     //think of some other way
     fun getString(@StringRes stringResId: Int, args1: Any, args2: Any, args3: Any): String {
         val res = getResourcesBasedOnLanguage()
