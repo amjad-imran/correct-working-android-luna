@@ -246,10 +246,7 @@ class SessionManager
     var moengageClicks = MutableLiveData<Event<AppLinks>>()
 
     fun moengageNavigateTo(action: String) {
-        val actionParsed = when(action.lowercase()){
-            "referral"->AppLinks.REFERRAL
-            else -> null
-        }
+        val actionParsed = ApplicationUtils.parseAppLink(action)
         moengageClicks.postValue(Event(actionParsed))
     }
 

@@ -204,7 +204,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         val appLinkUri = intent?.data
         if (appLinkUri != null) {
             val path = appLinkUri.path
-            viewModel.appLink = viewModel.parseAppLink(path)
+            viewModel.appLink = ApplicationUtils.parseAppLink(path)
             return
         }
 
@@ -275,7 +275,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         val appLinkUri = intent1?.data
         if (appLinkUri != null) {
             val path = appLinkUri.path
-            viewModel.appLink = viewModel.parseAppLink(path)
+            viewModel.appLink = ApplicationUtils.parseAppLink(path)
             return
         }
 

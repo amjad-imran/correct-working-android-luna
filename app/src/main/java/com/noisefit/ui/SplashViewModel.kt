@@ -357,16 +357,6 @@ class SplashViewModel
         return true
     }
 
-    fun parseAppLink(string: String?): AppLinks? {
-        if (string.isNullOrEmpty()) return null
-
-        if (string.equals("/referral",true)) {
-            return AppLinks.REFERRAL
-        } else {
-            return null
-        }
-    }
-
 }
 
 enum class UserOnBoardingFlow {
@@ -374,5 +364,5 @@ enum class UserOnBoardingFlow {
 }
 
 enum class AppLinks {
-    REFERRAL
+    REFERRAL, NOTIFICATION_CONTROL, PROFILE, SLEEP_PLANNER, DASHBOARD, LUNA_AI, FEATURE_REQUEST
 }

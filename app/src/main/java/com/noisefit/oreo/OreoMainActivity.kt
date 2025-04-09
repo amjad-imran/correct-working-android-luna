@@ -32,6 +32,7 @@ import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.AppLinks
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
+import com.noisefit.ui.web.WebViewActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
@@ -45,6 +46,7 @@ import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
@@ -763,7 +765,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
-        viewModel.sessionManager.moengageClicks.observe(this){
+
+        viewModel.cannyFeedbackUrl.observe(this){
+            it.getContent()?.let {
+                startActivity(WebViewActivity.getStartIntent(this,getString(R.string.text_suggest_a_feature),it))
+            }
+        }
+
+        viewModel.sessionManager.moengageClicks.observe(this) {
             it.getContent()?.let {
                 handleAppLinkNavigation(it)
             }
@@ -1233,6 +1242,40 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         )
                     }
 
+                }
+            }
+
+            AppLinks.NOTIFICATION_CONTROL -> {
+                if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.notificationSettingFragment) {
+                    this@OreoMainActivity.navController?.navigate(R.id.notificationSettingFragment)
+                }
+            }
+
+            AppLinks.PROFILE -> {
+                if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.profileFragmentOreo) {
+                    this@OreoMainActivity.navController?.navigate(R.id.profileFragmentOreo)
+                }
+            }
+
+            AppLinks.SLEEP_PLANNER -> {
+                if (this@OreoMainActivity.navController?.currentDestination?.id != R.id.sleepPlannerFragment) {
+                    this@OreoMainActivity.navController?.navigate(R.id.sleepPlannerFragment)
+                }
+            }
+
+            AppLinks.DASHBOARD -> {
+                viewModel.navigateTo(BottomNavOption.HOME)
+            }
+
+            AppLinks.LUNA_AI -> {
+                viewModel.navigateTo(BottomNavOption.LUNA_AI)
+            }
+            AppLinks.FEATURE_REQUEST -> {
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
+                    val cannyState = viewModel.ringDataStore.getCannyState()
+                    if(cannyState){
+                        viewModel.getCannyFeedbackUrl()
+                    }
                 }
             }
         }

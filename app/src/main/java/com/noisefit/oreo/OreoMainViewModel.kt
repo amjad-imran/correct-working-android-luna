@@ -145,6 +145,7 @@ constructor(
     var selectedDate: String? = null
     var dateSetOn: String? = null
 
+    val cannyFeedbackUrl = MutableLiveData<Event<String>>()
 
     val pushNotificationSleep = MutableLiveData<Event<PushLocalNotification>>()
     val pushNotificationReadiness = MutableLiveData<Event<PushLocalNotification>>()
@@ -1188,6 +1189,45 @@ constructor(
             }
             else -> context.getString(R.string.text_all_set)
         }
+    }
+
+    fun getCannyFeedbackUrl() {
+        viewModelScope.launch {
+            userRepository.getCannyFeedbackUrl().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getCannyFeedbackUrl()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+
+                            cannyFeedbackUrl.postValue(Event(it))
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 }
