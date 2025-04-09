@@ -1,12 +1,17 @@
 package com.oreo.data.repository
 
+import android.app.AlarmManager
+import android.content.Context
+import android.os.Build
 import com.google.gson.Gson
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.PlannerAlarmData
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.utils.AppLogs
 import com.oreo.util.alarm.AlarmUtil
 import com.oreo.util.alarm.AlarmUtil.Companion.getAlarmToneByKey
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +88,11 @@ class AlarmRepository @Inject constructor(
     private fun scheduleAlarms(alarmsData: PlannerAlarmData?) {
         cancelAllAlarms()
 
+        if (hasExactAlarmPermission().not()) {
+            AppLogs.sendAppLogs("Alarm permission not granted. cannot schedule alarms")
+            return
+        }
+
         alarmsData?.getNonNullAlarms()?.forEach {
             val wakeTime =
                 LocalTime.parse(it.second.wake_time, DateTimeFormatter.ofPattern("HH:mm:ss"))
@@ -91,8 +101,20 @@ class AlarmRepository @Inject constructor(
 
             alarmUtil.scheduleWeeklyAlarm(
                 it.first, wakeTime.hour, wakeTime.minute,
-                getAlarmToneByKey(it.second.audio ?: 1),wakeTime,bedTime
+                getAlarmToneByKey(it.second.audio ?: 1), wakeTime, bedTime
             )
+        }
+    }
+
+    private fun hasExactAlarmPermission(): Boolean {
+        val notificationManager =
+            NoiseFitApplicationMain.context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+
+        if (notificationManager == null) return false
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            notificationManager.canScheduleExactAlarms()
+        } else {
+            true
         }
     }
 
