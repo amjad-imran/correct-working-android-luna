@@ -23,6 +23,7 @@ import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.receiver.workManager.*
+import com.noisefit.ui.AppLinks
 import com.noisefit.watch.WatchForm
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
 import com.noisefit_commans.data.response.NplLeague
@@ -58,6 +59,29 @@ object ApplicationUtils {
 
 
     fun getDefaultLanguage() = AppLanguage("English", "en")
+
+
+    fun parseAppLink(string: String?): AppLinks?{
+        if (string.isNullOrEmpty()) return null
+
+        return if (string.equals("/referral", true)) {
+            AppLinks.REFERRAL
+        }else if(string.equals("/notificationControl", true)){
+            AppLinks.NOTIFICATION_CONTROL
+        }else if(string.equals("/profile", true)){
+            AppLinks.PROFILE
+        }else if(string.equals("/sleepPlanner", true)){
+            AppLinks.SLEEP_PLANNER
+        }else if(string.equals("/lunaAi", true)){
+            AppLinks.LUNA_AI
+        }else if(string.equals("/featureRequest", true)){
+            AppLinks.FEATURE_REQUEST
+        }else if(string.equals("/dashboard", true)){
+            AppLinks.DASHBOARD
+        } else {
+            null
+        }
+    }
 
     fun getSupportedLanguages(): List<AppLanguage> {
         return arrayListOf(

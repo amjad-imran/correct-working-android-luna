@@ -175,7 +175,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     val findMyRingCard = MutableLiveData<Boolean?>()
 
-    val notificationGoalsCardData = MutableLiveData<NotificationGoals?>()
+    var notificationGoalsCardData: NotificationGoals? = null
     val notificationGoalsCardDataInit = MutableLiveData<Event<Boolean>>()
     val notificationGoalsCardDataUpdated = MutableLiveData<Event<Boolean>>()
     val hydrationUpdated = MutableLiveData<Event<Boolean>>()
@@ -1131,7 +1131,7 @@ class SummaryDataViewModelToday @Inject constructor(
             LOGS.d("sdfkmhsdkfjh $priorityList")
 
             priorityList.forEach { item ->
-                if(item.switchState.not()) return@forEach
+                if (item.switchState.not()) return@forEach
 
                 when (item.key) {
                     "sleep" -> {
@@ -1323,8 +1323,8 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getDailyGoalsCard(): OHealthOverview? {
-        return if (notificationGoalsCardData.value != null) {
-            val prevData = notificationGoalsCardData.value
+        return if (notificationGoalsCardData != null) {
+            val prevData = notificationGoalsCardData
 
             val isMetric = sessionManager.isMetric()
 
@@ -1467,7 +1467,7 @@ class SummaryDataViewModelToday @Inject constructor(
             impact = impactData?.readinessScore
         )
 
-        when(daySlot){
+        when (daySlot) {
             0, 1 -> {
                 if (healthData.sleep?.sleep_score != null) {
                     if (registerDate != 0) {
@@ -1537,7 +1537,7 @@ class SummaryDataViewModelToday @Inject constructor(
             impact = impactData?.activityScore
         )
 
-        when(daySlot){
+        when (daySlot) {
             0 -> {
 
             }
@@ -1564,9 +1564,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     val activeCalories = healthData.activity?.activeCalories ?: 0
                     if (activeCalories in 0..49) {
                         val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                       return OHealthOverview.ActivityMinimal(
-                           activityModal, caloriesGoal
-                       )
+                        return OHealthOverview.ActivityMinimal(
+                            activityModal, caloriesGoal
+                        )
                     } else {
                         val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                         return OHealthOverview.Activity(
@@ -1623,11 +1623,11 @@ class SummaryDataViewModelToday @Inject constructor(
             healthData.sleep?.naps?.filter { !it.isNextDayNap }
         )
 
-        when(daySlot){
+        when (daySlot) {
             0, 1 -> {
                 if (healthData.sleep?.sleep_score != null) {
                     if (registerDate != 0) {
-                        if((sleepModel.totalSleep ?: 0) > 0){
+                        if ((sleepModel.totalSleep ?: 0) > 0) {
                             return OHealthOverview.Sleep(
                                 sleepModel,
                                 makeSleepArray(newSleepArray),
@@ -1637,7 +1637,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             )
                         }
                     }
-                }else{
+                } else {
                     return OHealthOverview.SleepWaiting
                 }
             }
@@ -1726,13 +1726,13 @@ class SummaryDataViewModelToday @Inject constructor(
         val stressTrend = getStressTrend(stateStressCard.value?.listData, lastMeasuredValue.second)
 
         /*if (stressData != null && stressTrend != null) {*/
-            stressCard = OHealthOverview.StressCard(
-                stressData,
-                lastMeasuredValue,
-                stressStatus,
-                stressTrend,
-                resourceProvider
-            )
+        stressCard = OHealthOverview.StressCard(
+            stressData,
+            lastMeasuredValue,
+            stressStatus,
+            stressTrend,
+            resourceProvider
+        )
         /*}*/
 
         return stressCard
@@ -1782,6 +1782,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                 }
             }
+
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
                     add(itemsMap["sleep"]!!.copy(priority = 1))
@@ -1795,6 +1796,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
+
             2 -> { // Evening (balanced)
                 priorityList.apply {
                     if (registerDate != 0) {
@@ -1808,6 +1810,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
+
             else -> { // Default/Night
                 priorityList.apply {
                     if (isBefore8.not()) {
@@ -1841,50 +1844,51 @@ class SummaryDataViewModelToday @Inject constructor(
         return priorityList
     }
 
-    private fun getItemsMap(): Map<String, CustomHomeScreenItem> = HashMap<String, CustomHomeScreenItem>().apply {
-        this["sleep"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep,
-            "sleep",
-            resourceProvider.getString(R.string.text_sleep),
-            true,
-            1
-        )
+    private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
+        HashMap<String, CustomHomeScreenItem>().apply {
+            this["sleep"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep,
+                "sleep",
+                resourceProvider.getString(R.string.text_sleep),
+                true,
+                1
+            )
 
-        this["activity"] = CustomHomeScreenItem(
-            R.drawable.icon_activity,
-            "activity",
-            resourceProvider.getString(R.string.text_activity_o),
-            true,
-            2
-        )
-        this["readiness"] = CustomHomeScreenItem(
-            R.drawable.icon_readiness,
-            "readiness",
-            resourceProvider.getString(R.string.text_readiness),
-            true,
-            3
-        )
-        this["sleep_planner"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep_planner,
-            "sleep_planner",
-            resourceProvider.getString(R.string.text_sleep_planner),
-            true,
-            4
-        )
-        this["heart_rate"] = CustomHomeScreenItem(
-            R.drawable.icon_heart_rate,
-            "heart_rate",
-            resourceProvider.getString(R.string.text_heart_rate),
-            true,
-            5
-        )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
-            6
-        )
+            this["activity"] = CustomHomeScreenItem(
+                R.drawable.icon_activity,
+                "activity",
+                resourceProvider.getString(R.string.text_activity_o),
+                true,
+                2
+            )
+            this["readiness"] = CustomHomeScreenItem(
+                R.drawable.icon_readiness,
+                "readiness",
+                resourceProvider.getString(R.string.text_readiness),
+                true,
+                3
+            )
+            this["sleep_planner"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep_planner,
+                "sleep_planner",
+                resourceProvider.getString(R.string.text_sleep_planner),
+                true,
+                4
+            )
+            this["heart_rate"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_rate,
+                "heart_rate",
+                resourceProvider.getString(R.string.text_heart_rate),
+                true,
+                5
+            )
+            this["stress"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "stress",
+                resourceProvider.getString(R.string.text_stress),
+                true,
+                6
+            )
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
 //            "health_monitor",
@@ -1892,44 +1896,44 @@ class SummaryDataViewModelToday @Inject constructor(
 //            true,
 //            7
 //        )
-        this["daily_goals"] = CustomHomeScreenItem(
-            R.drawable.icon_daily_goals,
-            "daily_goals",
-            resourceProvider.getString(R.string.text_daily_goals),
-            true,
-            7
-        )
-        this["luna_ai"] = CustomHomeScreenItem(
-            R.drawable.icon_luna_ai,
-            "luna_ai",
-            resourceProvider.getString(R.string.text_luna_ai),
-            true,
-            8
-        )
-        this["cycle_tracker"] = CustomHomeScreenItem(
-            R.drawable.icon_cycle_tracker,
-            "cycle_tracker",
-            resourceProvider.getString(R.string.text_cycle_tracker),
-            true,
-            9
-        )
-        this["7_day_trends_card"] = CustomHomeScreenItem(
-            R.drawable.icon_7_day_trends_card,
-            "7_day_trends_card",
-            resourceProvider.getString(R.string.text_7_day_trends_cards),
-            true,
-            10
-        )
-        this["workout_history"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "workout_history",
-            resourceProvider.getString(R.string.text_workout_history),
-            true,
-            11
-        )
+            this["daily_goals"] = CustomHomeScreenItem(
+                R.drawable.icon_daily_goals,
+                "daily_goals",
+                resourceProvider.getString(R.string.text_daily_goals),
+                true,
+                7
+            )
+            this["luna_ai"] = CustomHomeScreenItem(
+                R.drawable.icon_luna_ai,
+                "luna_ai",
+                resourceProvider.getString(R.string.text_luna_ai),
+                true,
+                8
+            )
+            this["cycle_tracker"] = CustomHomeScreenItem(
+                R.drawable.icon_cycle_tracker,
+                "cycle_tracker",
+                resourceProvider.getString(R.string.text_cycle_tracker),
+                true,
+                9
+            )
+            this["7_day_trends_card"] = CustomHomeScreenItem(
+                R.drawable.icon_7_day_trends_card,
+                "7_day_trends_card",
+                resourceProvider.getString(R.string.text_7_day_trends_cards),
+                true,
+                10
+            )
+            this["workout_history"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "workout_history",
+                resourceProvider.getString(R.string.text_workout_history),
+                true,
+                11
+            )
 
 
-    }
+        }
 
     private fun checkIfIsAfter12(): Boolean {
         return LocalDateTime.now().hour >= 12
@@ -3078,13 +3082,13 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun updateHydration(increase: Boolean) {
         val glassSize = 250
 
-        if(ApplicationUtils.isInternetConnected().not()){
+        if (ApplicationUtils.isInternetConnected().not()) {
             sendMessage(resourceProvider.getString(R.string.text_no_internet_connection))
             return
         }
 
         viewModelScope.launch {
-            val lastValue = notificationGoalsCardData.value?.hydration ?: 0
+            val lastValue = notificationGoalsCardData?.hydration ?: 0
 
             if (lastValue == 0 && increase.not()) {
                 return@launch
@@ -3104,11 +3108,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 this.addProperty("date", LocalDate.now().toString())
             }
 
-            notificationGoalsCardData.postValue(
-                notificationGoalsCardData.value?.copy(
-                    hydration = updatedValue
-                )
-            )
+            notificationGoalsCardData?.hydration = updatedValue
+
             notificationGoalsCardDataUpdated.postValue(Event(true))
 
             userRepository.updateHydration(reqObj)
@@ -3167,7 +3168,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                         is Resource.Success -> {
                             resource.data?.data?.let {
-                                notificationGoalsCardData.postValue(it)
+                                notificationGoalsCardData = (it)
                                 notificationGoalsCardDataInit.postValue(Event(true))
                             }
                         }
@@ -3263,9 +3264,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                     notificationToggleModel?.master_notification = true
                                 }
 
-                                if (notificationGoalsCardData.value != null) {
+                                /*if (notificationGoalsCardData != null) {
                                     notificationGoalsCardData.postValue(notificationGoalsCardData.value)
-                                }
+                                }*/
 
                                 when (notificationGoal) {
                                     NotificationGoal.HYDRATE -> {

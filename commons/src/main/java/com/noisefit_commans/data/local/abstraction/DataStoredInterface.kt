@@ -19,7 +19,7 @@ import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 interface DataStoredInterface {
 
     fun setCustomHomeScreenItemsPriorityList(priorityList: CustomHomeScreenModel)
-    fun getCustomHomeScreenItemsPriorityList():CustomHomeScreenModel?
+    fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel?
     fun clearCustomHomeScreenItemsPriorityList()
 
     fun getSleepNotificationTimeStamp(): Long
@@ -158,7 +158,7 @@ interface DataStoredInterface {
     fun clearLocation()
 
     fun incrementAppOpenCount()
-    fun getAppOpenCount(): Pair<String,Int>
+    fun getAppOpenCount(): Pair<String, Int>
 
     fun get80NotificationTimeStamp(): Long
     fun getNotificationCompleteTimeStamp(): Long
@@ -500,7 +500,7 @@ interface DataStoredInterface {
     fun clearKey(key: String)
 
     fun getShouldShowSleepNotification(): Boolean
-    fun setShouldShowSleepNotification(state:Boolean)
+    fun setShouldShowSleepNotification(state: Boolean)
 
     fun getDisplayEditHomeScreenCard(): Boolean
     fun setDisplayEditHomeScreenCard(isDisplayed: Boolean)
@@ -509,5 +509,11 @@ interface DataStoredInterface {
     fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>)
     fun getCustomHomeScreenApiCallTimeStamps(): String?
     fun clearCustomHomeScreenApiCallTimeStamps()
+    fun saveAppTrackEvent(eventName: AppTrackEvent, isStart: Boolean)
+    fun clearAppTrackEvent(eventName: AppTrackEvent)
+    fun getAppTrackEventTime(eventName: AppTrackEvent): Long?
+}
 
+enum class AppTrackEvent {
+    SYNC, APP_START
 }

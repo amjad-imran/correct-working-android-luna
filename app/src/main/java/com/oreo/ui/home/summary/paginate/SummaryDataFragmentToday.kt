@@ -37,6 +37,7 @@ import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
@@ -89,6 +90,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.http2.Http2Reader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -207,7 +209,11 @@ class SummaryDataFragmentToday :
 
         viewModel.getSleepPlanerDetails()
 
-        viewModel.getNotificationToggle()
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.getNotificationToggle()
+        },500)
+
+
     }
 
 
@@ -231,13 +237,13 @@ class SummaryDataFragmentToday :
     ) {
         viewModel.initTodayData()
         val lunaManagedData = viewModel.localDataStore.getCustomHomeScreenItemsPriorityList()
-        if(
+        if (
 //            lunaManagedData == null &&
             viewModel.registerDate > 6 &&
             viewModel.localDataStore.getDisplayEditHomeScreenCard()
-        ){
+        ) {
             binding.contentMain.lytCustomHomeScreen.root.visible()
-        }else{
+        } else {
             binding.contentMain.lytCustomHomeScreen.root.gone()
         }
 
@@ -788,6 +794,7 @@ class SummaryDataFragmentToday :
 
     private fun syncData() {
         viewModel.sessionManager.forceSyncDataWithServer = true
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.SYNC,true)
         scope.launch {
             val status = ApplicationUtils.startOreoSyncScheduler(requireContext())
             withContext(Dispatchers.Main) {
@@ -827,13 +834,13 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.notificationGoalsCardDataInit.observe(this){
+        viewModel.notificationGoalsCardDataInit.observe(this) {
             it.getContent()?.let {
                 loadData()
             }
         }
 
-        viewModel.notificationGoalsCardDataUpdated.observe(this){
+        viewModel.notificationGoalsCardDataUpdated.observe(this) {
             it.getContent()?.let {
                 healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
             }
@@ -894,7 +901,7 @@ class SummaryDataFragmentToday :
                 setNotificationGoalsCardData(it)
             }
         }*/
-        viewModel.hydrationUpdated.observe(this){
+        viewModel.hydrationUpdated.observe(this) {
             it.getContent()?.let {
                 healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
             }
@@ -1389,85 +1396,85 @@ class SummaryDataFragmentToday :
 
     private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
 
-       /* binding.contentMain.lytNotificationCard.apply {
-            root.visible()
-            val stepsGoal = notificationGoal.steps_required ?: 5000
+        /* binding.contentMain.lytNotificationCard.apply {
+             root.visible()
+             val stepsGoal = notificationGoal.steps_required ?: 5000
 
-            tvSteps.text =
-                if (notificationGoal.steps == null) "0" else notificationGoal.steps.toString()
-            tvStepsGoal.text = "/$stepsGoal"
+             tvSteps.text =
+                 if (notificationGoal.steps == null) "0" else notificationGoal.steps.toString()
+             tvStepsGoal.text = "/$stepsGoal"
 
-            val userSteps = notificationGoal.steps ?: 0
-            val percent = (userSteps.toFloat() / stepsGoal.toFloat()) * 100
+             val userSteps = notificationGoal.steps ?: 0
+             val percent = (userSteps.toFloat() / stepsGoal.toFloat()) * 100
 
-            progressSteps.progress = percent
+             progressSteps.progress = percent
 
-            if (percent >= 100) {
-                textStepsGoalAchieved.visible()
-            } else {
-                textStepsGoalAchieved.gone()
-            }
+             if (percent >= 100) {
+                 textStepsGoalAchieved.visible()
+             } else {
+                 textStepsGoalAchieved.gone()
+             }
 
-            val hydrateGoal = notificationGoal.hydration_required ?: 3000
-            val hydrate = notificationGoal.hydration ?: 0
-
-
-            val hydrationText = StringBuilder()
-            var hydratePercent = 0f
-
-            if (viewModel.sessionManager.isMetric()) {
-                hydrationText.append((hydrate.toFloat() / 1000))
-                hydrationText.append("/")
-                hydrationText.append((hydrateGoal.toFloat() / 1000))
-                hydrationText.append("L")
+             val hydrateGoal = notificationGoal.hydration_required ?: 3000
+             val hydrate = notificationGoal.hydration ?: 0
 
 
-                hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
+             val hydrationText = StringBuilder()
+             var hydratePercent = 0f
 
-            } else {
+             if (viewModel.sessionManager.isMetric()) {
+                 hydrationText.append((hydrate.toFloat() / 1000))
+                 hydrationText.append("/")
+                 hydrationText.append((hydrateGoal.toFloat() / 1000))
+                 hydrationText.append("L")
 
-                val convertedHydrate = hydrate.toFloat() * 0.033814
-                hydrationText.append(String.format("%.1f", convertedHydrate))
-                hydrationText.append("/")
 
-                //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
-                val convertedHydrateGoal =
-                    viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
+                 hydratePercent = (hydrate.toFloat() / hydrateGoal.toFloat()) * 100
 
-                hydrationText.append("$convertedHydrateGoal")
-                hydrationText.append("oz")
+             } else {
 
-                hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
+                 val convertedHydrate = hydrate.toFloat() * 0.033814
+                 hydrationText.append(String.format("%.1f", convertedHydrate))
+                 hydrationText.append("/")
 
-            }
-            progressHydrate.progress = hydratePercent
+                 //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
+                 val convertedHydrateGoal =
+                     viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
 
-            if (hydratePercent >= 100) {
-                textHydrateGoalAchieved.visible()
-            } else {
-                textHydrateGoalAchieved.gone()
-            }
+                 hydrationText.append("$convertedHydrateGoal")
+                 hydrationText.append("oz")
 
-            tvHydration.text = hydrationText
+                 hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
 
-            ivGlassImage.setImageResource(viewModel.getGlassImage(hydratePercent.toInt()))
+             }
+             progressHydrate.progress = hydratePercent
 
-            if (viewModel.notificationToggleModel?.hydrate_notification == true &&
-                viewModel.notificationToggleModel?.master_notification == true
-            ) {
-                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_on)
-            } else {
-                ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_off)
-            }
+             if (hydratePercent >= 100) {
+                 textHydrateGoalAchieved.visible()
+             } else {
+                 textHydrateGoalAchieved.gone()
+             }
 
-            if (viewModel.notificationToggleModel?.steps_notification == true &&
-                viewModel.notificationToggleModel?.steps_notification == true
-            ) {
-                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_on)
-            } else {
-                ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
-            }
-        }*/
+             tvHydration.text = hydrationText
+
+             ivGlassImage.setImageResource(viewModel.getGlassImage(hydratePercent.toInt()))
+
+             if (viewModel.notificationToggleModel?.hydrate_notification == true &&
+                 viewModel.notificationToggleModel?.master_notification == true
+             ) {
+                 ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_on)
+             } else {
+                 ivNotificationHydrate.setImageResource(R.drawable.ic_hydrate_notify_off)
+             }
+
+             if (viewModel.notificationToggleModel?.steps_notification == true &&
+                 viewModel.notificationToggleModel?.steps_notification == true
+             ) {
+                 ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_on)
+             } else {
+                 ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
+             }
+         }*/
     }
 
     private fun showBlackListDialog() {

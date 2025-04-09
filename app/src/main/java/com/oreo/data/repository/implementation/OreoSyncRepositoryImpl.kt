@@ -1,7 +1,6 @@
 package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.local.db.CacheResult
@@ -300,10 +299,14 @@ class OreoSyncRepositoryImpl(
         }
     }
 
-    override suspend fun postDataToServer(data: OreoUserSyncActivities): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>? {
+    override suspend fun postDataToServer(
+        data: OreoUserSyncActivities,
+        syncTime: Long?,
+        appOpenTime: Long?
+    ): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>? {
         return safeApiCallFlow(dispatcher) {
 
-            onlineDataMapper.convertDataToPost(data)?.let {
+            onlineDataMapper.convertDataToPost(data, syncTime, appOpenTime)?.let {
                 val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync"
                 AppLogs.sendAppLogs("POST Multisync DATA SERVER $url -> ${Gson().toJson(it)}")
 
