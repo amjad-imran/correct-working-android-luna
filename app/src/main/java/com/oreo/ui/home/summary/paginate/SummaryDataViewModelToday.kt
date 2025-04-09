@@ -32,7 +32,6 @@ import com.noisefit_commans.data.model.SleepCardDashState
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -1053,19 +1052,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
-            val priorityList = if (lunaManaged.not()) {
-                val list = localDataStore.getCustomHomeScreenItemsPriorityList()
-                if (list != null) {
-                    getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
-                } else {
-                    getLunaManagedPriority().sortedBy { it.priority }
-                }
-            } else {
-                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
-                getLunaManagedPriority().sortedBy { it.priority }
-            }
-
-            LOGS.d("sdfkmhsdkfjh $priorityList")
 
             // Handle auto-detected workouts
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
@@ -1125,6 +1111,25 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val hasSleep = sleepModel.sleepScore != null && sleepModel.sleepScore != 0
 
+            val nap = healthData.sleep?.naps ?: ArrayList()
+
+            val daySlot = getDaySlot()
+            val isAfter12 = checkIfIsAfter12()
+
+            val priorityList = if (lunaManaged.not()) {
+                val list = localDataStore.getCustomHomeScreenItemsPriorityList()
+                if (list != null) {
+                    getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
+                } else {
+                    getLunaManagedPriority(hasSleep).sortedBy { it.priority }
+                }
+            } else {
+                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
+                getLunaManagedPriority(hasSleep).sortedBy { it.priority }
+            }
+
+            LOGS.d("sdfkmhsdkfjh $priorityList")
+
             priorityList.forEach { item ->
                 if(item.switchState.not()) return@forEach
 
@@ -1133,19 +1138,41 @@ class SummaryDataViewModelToday @Inject constructor(
                         getSleepDataCard(
                             healthData,
                             impactData,
-                            sleepModel
+                            sleepModel,
+                            daySlot,
+                            isAfter12
                         )?.let { userActivities.add(it) }
+                        LOGS.d("isAfter12:  ${isAfter12.not()}")
+                        if (isAfter12.not()) {
+                            getHealthMonitorData(healthData.sleep)?.let {
+                                userActivities.add(it)
+                            }
+                        }
+
+                        if (nap.isNotEmpty()) {
+                            userActivities.add(
+                                OHealthOverview.NapDashCard(
+                                    nap, healthData.date
+                                )
+                            )
+                        }
+
                     }
 
                     "activity" -> {
-                        getActivityDataCard(healthData, impactData)?.let { userActivities.add(it) }
+                        getActivityDataCard(
+                            healthData,
+                            impactData,
+                            daySlot
+                        )?.let { userActivities.add(it) }
                     }
 
                     "readiness" -> {
                         getReadinessDataCard(
-                            healthData.sleep,
+                            healthData,
                             healthData.readiness,
-                            impactData
+                            impactData,
+                            daySlot
                         )?.let { userActivities.add(it) }
                     }
 
@@ -1159,11 +1186,11 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
 
-                    "health_monitor" -> {
-                        getHealthMonitorData(healthData.sleep)?.let {
-                            userActivities.add(it)
-                        }
-                    }
+//                    "health_monitor" -> {
+//                        getHealthMonitorData(healthData.sleep)?.let {
+//                            userActivities.add(it)
+//                        }
+//                    }
 
                     "daily_goals" -> {
                         getDailyGoalsCard()?.let { userActivities.add(it) }
@@ -1422,10 +1449,13 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getReadinessDataCard(
-        sleep: OreoSleepModel?,
+        healthData: ServerUserHealthData,
         readiness: OreoReadinessModel?,
-        impactData: ImpactData?
+        impactData: ImpactData?,
+        daySlot: Int
     ): OHealthOverview? {
+        val sleep = healthData.sleep
+
         val readinessModel = ODashboardReadinessModel(
             readinessScore = readiness?.readinessScore?.value,
             status = readiness?.readinessScore?.text?.capitalizeWords(),
@@ -1437,16 +1467,64 @@ class SummaryDataViewModelToday @Inject constructor(
             impact = impactData?.readinessScore
         )
 
-        return if ((readinessModel.readinessScore ?: 0) > 0) {
-            OHealthOverview.Readiness(readinessModel)
-        } else {
-            null
+        when(daySlot){
+            0, 1 -> {
+                if (healthData.sleep?.sleep_score != null) {
+                    if (registerDate != 0) {
+                        healthData.readiness?.let {
+                            if ((readinessModel.readinessScore ?: 0) > 0) {
+                                return OHealthOverview.Readiness(readinessModel)
+                            }
+                        }
+                    }
+                }
+            }
+
+            2 -> {
+                if (registerDate != 0) {
+                    healthData.readiness?.let {
+                        if ((readinessModel.readinessScore ?: 0) > 0) {
+                            return OHealthOverview.Readiness(readinessModel)
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                if (registerDate != 0) {
+                    if (healthData.sleep?.sleep_score != null) {
+                        if ((readinessModel.readinessScore ?: 0) > 0) {
+
+                            healthData.readiness?.let {
+                                return OHealthOverview.ReadinessMinimal(
+                                    readinessModel
+                                )
+                            }
+                        }
+                    } else {
+                        if ((readinessModel.readinessScore ?: 0) > 0) {
+                            healthData.readiness?.let {
+                                return OHealthOverview.Readiness(readinessModel)
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        return null
+
+//        return if ((readinessModel.readinessScore ?: 0) > 0) {
+//            OHealthOverview.Readiness(readinessModel)
+//        } else {
+//            null
+//        }
     }
 
     private fun getActivityDataCard(
         healthData: ServerUserHealthData,
-        impactData: ImpactData?
+        impactData: ImpactData?,
+        daySlot: Int
     ): OHealthOverview? {
         val activityModal = ODashboardActivityModel(
             activityScore = healthData.activity?.activityScore?.value,
@@ -1459,43 +1537,173 @@ class SummaryDataViewModelToday @Inject constructor(
             impact = impactData?.activityScore
         )
 
-        return if ((healthData.activity?.activeCalories ?: 0) > 0) {
-            val activeCalories = healthData.activity?.activeCalories ?: 0
-            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+        when(daySlot){
+            0 -> {
 
-            if (activeCalories in 1..49) {
-                OHealthOverview.ActivityMinimal(activityModal, caloriesGoal)
-            } else {
-                OHealthOverview.Activity(activityModal, caloriesGoal)
             }
-        } else {
-            null
+
+            1 -> {
+                if ((healthData.activity?.activeCalories ?: 0) > 0) {
+                    val activeCalories = healthData.activity?.activeCalories ?: 0
+                    if (activeCalories in 1..49) {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                        return OHealthOverview.ActivityMinimal(
+                            activityModal, caloriesGoal
+                        )
+                    } else if (activeCalories >= 50) {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                        return OHealthOverview.Activity(
+                            activityModal, caloriesGoal
+                        )
+                    }
+                }
+            }
+
+            2 -> {
+                if ((healthData.activity?.activeCalories ?: 0) > 0) {
+                    val activeCalories = healthData.activity?.activeCalories ?: 0
+                    if (activeCalories in 0..49) {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                       return OHealthOverview.ActivityMinimal(
+                           activityModal, caloriesGoal
+                       )
+                    } else {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                        return OHealthOverview.Activity(
+                            activityModal, caloriesGoal
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                if ((healthData.activity?.activeCalories ?: 0) > 0) {
+
+                    val activeCalories = healthData.activity?.activeCalories ?: 0
+                    if (activeCalories in 0..49) {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                        return OHealthOverview.ActivityMinimal(
+                            activityModal, caloriesGoal
+                        )
+                    } else {
+                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                        return OHealthOverview.Activity(
+                            activityModal, caloriesGoal
+                        )
+                    }
+                }
+            }
         }
+
+        return null
+
+//        return if ((healthData.activity?.activeCalories ?: 0) > 0) {
+//            val activeCalories = healthData.activity?.activeCalories ?: 0
+//            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+//
+//            if (activeCalories in 1..49) {
+//                OHealthOverview.ActivityMinimal(activityModal, caloriesGoal)
+//            } else {
+//                OHealthOverview.Activity(activityModal, caloriesGoal)
+//            }
+//        } else {
+//            null
+//        }
     }
 
     private fun getSleepDataCard(
         healthData: ServerUserHealthData,
         impactData: ImpactData?,
-        sleepModel: ODashboardSleepModel
+        sleepModel: ODashboardSleepModel,
+        daySlot: Int,
+        isAfter12: Boolean
     ): OHealthOverview? {
         val newSleepArray = dataConverter.mergeSleepDataV2(
             healthData.sleep?.sleeps,
             healthData.sleep?.naps?.filter { !it.isNextDayNap }
         )
 
-        return if ((sleepModel.totalSleep ?: 0) > 0) {
-            OHealthOverview.Sleep(
-                sleepModel,
-                makeSleepArray(newSleepArray),
-                newSleepArray?.firstOrNull()?.start_time ?: "",
-                newSleepArray?.lastOrNull()?.end_time ?: "",
-                impact = impactData?.sleepScore
-            )
-        } else if (healthData.sleep?.sleep_score == null) {
-            OHealthOverview.SleepWaiting
-        } else {
-            null
+        when(daySlot){
+            0, 1 -> {
+                if (healthData.sleep?.sleep_score != null) {
+                    if (registerDate != 0) {
+                        if((sleepModel.totalSleep ?: 0) > 0){
+                            return OHealthOverview.Sleep(
+                                sleepModel,
+                                makeSleepArray(newSleepArray),
+                                newSleepArray?.firstOrNull()?.start_time ?: "",
+                                newSleepArray?.lastOrNull()?.end_time ?: "",
+                                impact = impactData?.sleepScore
+                            )
+                        }
+                    }
+                }else{
+                    return OHealthOverview.SleepWaiting
+                }
+            }
+
+            2 -> {
+                if (registerDate != 0) {
+                    healthData.sleep?.let {
+                        if ((sleepModel.totalSleep ?: 0) > 0) {
+                            return OHealthOverview.Sleep(
+                                sleepModel,
+                                makeSleepArray(newSleepArray),
+                                newSleepArray?.firstOrNull()?.start_time ?: "",
+                                newSleepArray?.lastOrNull()?.end_time ?: "",
+                                impact = impactData?.sleepScore
+                            )
+//                            if (isAfter12.not()) {
+//                                getHealthMonitorData(healthData.sleep)
+//                            }
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                if (registerDate != 0) {
+                    if (healthData.sleep?.sleep_score != null) {
+                        if ((sleepModel.totalSleep ?: 0) > 0) {
+                            return OHealthOverview.SleepMinimal(
+                                sleepModel, makeSleepArray(newSleepArray),
+                                impact = impactData?.sleepScore
+                            )
+                        }
+                    } else {
+                        if ((sleepModel.totalSleep ?: 0) > 0) {
+                            healthData.sleep?.let {
+                                return OHealthOverview.Sleep(
+                                    sleepModel,
+                                    makeSleepArray(healthData.sleep?.hourly_breakup),
+                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        ?: "",
+                                    healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        ?: "",
+                                    impact = impactData?.sleepScore
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        return null
+
+//        return if ((sleepModel.totalSleep ?: 0) > 0) {
+//            OHealthOverview.Sleep(
+//                sleepModel,
+//                makeSleepArray(newSleepArray),
+//                newSleepArray?.firstOrNull()?.start_time ?: "",
+//                newSleepArray?.lastOrNull()?.end_time ?: "",
+//                impact = impactData?.sleepScore
+//            )
+//        } else if (healthData.sleep?.sleep_score == null) {
+//            OHealthOverview.SleepWaiting
+//        } else {
+//            null
+//        }
     }
 
     private suspend fun getStressCard(
@@ -1544,7 +1752,7 @@ class SummaryDataViewModelToday @Inject constructor(
         return list
     }
 
-    private fun getLunaManagedPriority(): List<CustomHomeScreenItem> {
+    private fun getLunaManagedPriority(hasSleep: Boolean): List<CustomHomeScreenItem> {
         val itemsMap = getItemsMap()
         val priorityList = mutableListOf<CustomHomeScreenItem>()
         val isAfter12 = checkIfIsAfter12()
@@ -1555,6 +1763,11 @@ class SummaryDataViewModelToday @Inject constructor(
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
+//                    if(){
+//
+//                    }else{
+//
+//                    }
                     add(itemsMap["sleep"]!!.copy(priority = 1))
                     if (registerDate != 0) {
                         add(itemsMap["readiness"]!!.copy(priority = 2))
@@ -1611,9 +1824,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["sleep"]!!.copy(priority = 5))
                         add(itemsMap["readiness"]!!.copy(priority = 6))
                     }
-                    if (!isAfter12) {
-                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
-                    }
+//                    if (!isAfter12) {
+//                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
+//                    }
                 }
             }
         }
@@ -1672,47 +1885,47 @@ class SummaryDataViewModelToday @Inject constructor(
             true,
             6
         )
-        this["health_monitor"] = CustomHomeScreenItem(
-            R.drawable.icon_heart_monitor,
-            "health_monitor",
-            resourceProvider.getString(R.string.text_heart_monitor),
-            true,
-            7
-        )
+//        this["health_monitor"] = CustomHomeScreenItem(
+//            R.drawable.icon_heart_monitor,
+//            "health_monitor",
+//            resourceProvider.getString(R.string.text_heart_monitor),
+//            true,
+//            7
+//        )
         this["daily_goals"] = CustomHomeScreenItem(
             R.drawable.icon_daily_goals,
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
             true,
-            8
+            7
         )
         this["luna_ai"] = CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
             true,
-            9
+            8
         )
         this["cycle_tracker"] = CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",
             resourceProvider.getString(R.string.text_cycle_tracker),
             true,
-            10
+            9
         )
         this["7_day_trends_card"] = CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
             resourceProvider.getString(R.string.text_7_day_trends_cards),
             true,
-            11
+            10
         )
         this["workout_history"] = CustomHomeScreenItem(
             R.drawable.icon_flexibility_training,
             "workout_history",
             resourceProvider.getString(R.string.text_workout_history),
             true,
-            12
+            11
         )
 
 
