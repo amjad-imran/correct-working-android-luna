@@ -238,7 +238,7 @@ class CustomHomescreenViewModel  @Inject constructor(
             5
         )
         this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
+            R.drawable.icon_stress,
             "stress",
             resourceProvider.getString(R.string.text_stress),
             true,

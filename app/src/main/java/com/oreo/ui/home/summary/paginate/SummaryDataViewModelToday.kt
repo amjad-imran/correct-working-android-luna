@@ -1121,11 +1121,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (list != null) {
                     getCardsPriorityFromApi(list.cards).sortedBy { it.priority }
                 } else {
-                    getLunaManagedPriority(hasSleep).sortedBy { it.priority }
+                    getLunaManagedPriority(hasSleep)
                 }
             } else {
                 Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
-                getLunaManagedPriority(hasSleep).sortedBy { it.priority }
+                getLunaManagedPriority(hasSleep)
             }
 
             LOGS.d("sdfkmhsdkfjh $priorityList")
@@ -1142,10 +1142,13 @@ class SummaryDataViewModelToday @Inject constructor(
                             daySlot,
                             isAfter12
                         )?.let { userActivities.add(it) }
-                        LOGS.d("isAfter12:  ${isAfter12.not()}")
-                        if (isAfter12.not()) {
-                            getHealthMonitorData(healthData.sleep)?.let {
-                                userActivities.add(it)
+
+                        if(!lunaManaged){
+                            LOGS.d("isAfter12:  ${isAfter12.not()}")
+                            if (isAfter12.not()) {
+                                getHealthMonitorData(healthData.sleep)?.let {
+                                    userActivities.add(it)
+                                }
                             }
                         }
 
@@ -1217,9 +1220,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "stress" -> {
-                        LOGS.d("sdfkmhsdkfjh  add stress")
                         getStressCard(healthData)?.let {
-                            LOGS.d("sdfkmhsdkfjh  add stress card")
                             userActivities.add(it)
                         }
                     }
@@ -1227,9 +1228,9 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             // Add naps if any (this could also be moved to a separate function)
-            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
-                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
-            }
+//            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
+//                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
+//            }
 
             // Post the final data
             healthOverviewData.postValue(userActivities)
@@ -1763,51 +1764,50 @@ class SummaryDataViewModelToday @Inject constructor(
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
-//                    if(){
-//
-//                    }else{
-//
-//                    }
-                    add(itemsMap["sleep"]!!.copy(priority = 1))
-                    if (registerDate != 0) {
-                        add(itemsMap["readiness"]!!.copy(priority = 2))
+                    if(hasSleep){
+                        add(itemsMap["readiness"]!!.copy(priority = 1))
+                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                    }else{
+                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
+                        add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
-                    if (enableAi) {
-                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
-                    }
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 4))
-                    add(itemsMap["activity"]!!.copy(priority = 5))
-                    if (!isAfter12) {
-                        add(itemsMap["health_monitor"]!!.copy(priority = 6))
-                    }
+
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
                 }
             }
 
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
-                    add(itemsMap["sleep"]!!.copy(priority = 1))
-                    if (registerDate != 0) {
-                        add(itemsMap["readiness"]!!.copy(priority = 2))
+                    if(hasSleep){
+                        add(itemsMap["readiness"]!!.copy(priority = 1))
+                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                    }else{
+                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
+                        add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
-                    if (enableAi) {
-                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
-                    }
-                    add(itemsMap["activity"]!!.copy(priority = 4))
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
+
+                    add(itemsMap["activity"]!!.copy(priority = 5))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 6))
                 }
             }
 
             2 -> { // Evening (balanced)
                 priorityList.apply {
-                    if (registerDate != 0) {
+                    if(hasSleep){
                         add(itemsMap["readiness"]!!.copy(priority = 1))
-                    }
-                    if (enableAi) {
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
+                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                    }else{
+                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
                     }
-                    add(itemsMap["sleep"]!!.copy(priority = 3))
-                    add(itemsMap["activity"]!!.copy(priority = 4))
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
+
+                    add(itemsMap["activity"]!!.copy(priority = 5))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = 6))
                 }
             }
 
@@ -1827,6 +1827,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["sleep"]!!.copy(priority = 5))
                         add(itemsMap["readiness"]!!.copy(priority = 6))
                     }
+                    add(itemsMap["health_monitor"]!!.copy(priority = 7))
 //                    if (!isAfter12) {
 //                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
 //                    }
@@ -1834,12 +1835,21 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
+        priorityList.apply {
+            add(itemsMap["daily_goals"]!!.copy(priority = 8))
+            add(itemsMap["heart_rate"]!!.copy(priority = 9))
+            add(itemsMap["stress"]!!.copy(priority = 10))
+            add(itemsMap["cycle_tracker"]!!.copy(priority = 11))
+            add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
+            add(itemsMap["workout_history"]!!.copy(priority = 13))
+        }
+
         // Add remaining items that aren't time-sensitive
-        val remainingItems = itemsMap.values.filterNot { item ->
+        /*val remainingItems = itemsMap.values.filterNot { item ->
             priorityList.any { it.key == item.key }
         }.sortedBy { it.priority }
 
-        priorityList.addAll(remainingItems)
+        priorityList.addAll(remainingItems)*/
 
         return priorityList
     }
@@ -1889,13 +1899,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 true,
                 6
             )
-//        this["health_monitor"] = CustomHomeScreenItem(
-//            R.drawable.icon_heart_monitor,
-//            "health_monitor",
-//            resourceProvider.getString(R.string.text_heart_monitor),
-//            true,
-//            7
-//        )
+
             this["daily_goals"] = CustomHomeScreenItem(
                 R.drawable.icon_daily_goals,
                 "daily_goals",
@@ -1932,6 +1936,13 @@ class SummaryDataViewModelToday @Inject constructor(
                 11
             )
 
+            this["health_monitor"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_monitor,
+                "health_monitor",
+                resourceProvider.getString(R.string.text_heart_monitor),
+                true,
+                12
+            )
 
         }
 

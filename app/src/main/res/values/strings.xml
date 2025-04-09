@@ -1912,6 +1912,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Change your app layout with ease. Move or remove the cards as per your requirements.</string>
     <string name="text_edit_home_screen">Edit home screen</string>
     <string name="text_suggest_a_feature">Suggest a feature</string>
+    <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">You can control what you want to see on the Luna homepage by turning this toggle OFF.</string>
     <string name="text_please_try_again_after_mins_seconds">Please try again after %1$dmins %2$dseconds</string>
 
 </resources>
