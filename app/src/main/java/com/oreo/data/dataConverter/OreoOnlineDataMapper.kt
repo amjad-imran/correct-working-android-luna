@@ -72,8 +72,8 @@ class OreoOnlineDataMapper
         combinedData.respiratory = respiratory
         combinedData.sleeps = sleeps
 
-        combinedData.appOpenTime = appOpenTime
-        combinedData.syncTime = syncTime
+        //combinedData.appOpenTime = appOpenTime
+        //combinedData.syncTime = syncTime
 
         if (steps == null && stress == null && heartRateHistory == null
             && bloodOxygen == null && bodyTemperature == null && respiratory == null && bodyStress == null
