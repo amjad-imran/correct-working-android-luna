@@ -40,6 +40,7 @@ import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,7 +60,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     @SuppressLint("LogNotTimber")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START,true)
 //
         viewModel.setIgnoreVersion(viewModel.localDataStore.getIgnoreVersion())
         handleBackgroundNotifications(intent)
@@ -304,6 +305,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     override fun observeSubscriber() {
         viewModel.userOnBoardingFlow.observe(this) { userOnBoardingFlow ->
+
+            if(userOnBoardingFlow==null || (userOnBoardingFlow != UserOnBoardingFlow.SHOW_OREO_DASHBOARD)){
+                viewModel.localDataStore.clearAppTrackEvent(AppTrackEvent.APP_START)
+            }
             if (userOnBoardingFlow != null) {
 //                startActivity(OreoMainActivity.getStartIntent(this))
                 when (userOnBoardingFlow) {
@@ -313,10 +318,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
                     UserOnBoardingFlow.ASK_FOR_LOGIN -> {
                         goToOnBoardScreens()
-                    }
-
-                    UserOnBoardingFlow.SHOW_DASHBOARD -> {
-                        goToOreoDashboard()
                     }
 
                     UserOnBoardingFlow.SETUP_PROFILE -> {

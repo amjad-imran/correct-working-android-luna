@@ -37,6 +37,7 @@ import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.model.NotificationGoals
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.QueryAction
@@ -793,6 +794,7 @@ class SummaryDataFragmentToday :
 
     private fun syncData() {
         viewModel.sessionManager.forceSyncDataWithServer = true
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.SYNC,true)
         scope.launch {
             val status = ApplicationUtils.startOreoSyncScheduler(requireContext())
             withContext(Dispatchers.Main) {

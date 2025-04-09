@@ -33,10 +33,8 @@ import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.NapOverlayData
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.SleepOverlayData
-import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 class OreoOnlineDataMapper
 @Inject constructor(
@@ -47,7 +45,11 @@ class OreoOnlineDataMapper
     private val oreoHeartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
-    suspend fun convertDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost? {
+    suspend fun convertDataToPost(
+        userSyncActivities: OreoUserSyncActivities,
+        syncTime: Long?,
+        appOpenTime: Long?
+    ): OreoUserDataPost? {
         val combinedData = OreoUserDataPost()
 
         val steps =
@@ -69,6 +71,9 @@ class OreoOnlineDataMapper
         combinedData.bodyTemperature = bodyTemperature
         combinedData.respiratory = respiratory
         combinedData.sleeps = sleeps
+
+        combinedData.appOpenTime = appOpenTime
+        combinedData.syncTime = syncTime
 
         if (steps == null && stress == null && heartRateHistory == null
             && bloodOxygen == null && bodyTemperature == null && respiratory == null && bodyStress == null

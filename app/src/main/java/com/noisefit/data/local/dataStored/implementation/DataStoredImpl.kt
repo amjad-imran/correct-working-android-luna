@@ -2,6 +2,7 @@ package com.noisefit.data.local.dataStored.implementation
 
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
@@ -9,6 +10,7 @@ import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DashboardBanner
 import com.noisefit_commans.data.model.DashboardBannerData
@@ -230,6 +232,12 @@ private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
 private const val CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
 
+private const val EVENT_SYNC_TIME_START = "EVENT_SYNC_TIME_START"
+private const val EVENT_SYNC_TIME_END = "EVENT_SYNC_TIME_END"
+
+private const val EVENT_APP_TIME_START = "EVENT_APP_TIME_START"
+private const val EVENT_APP_TIME_END = "EVENT_APP_TIME_END"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -237,6 +245,36 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+
+    override fun saveAppTrackEvent(eventName: AppTrackEvent, isStart: Boolean) {
+        val key = getEventKey(eventName, isStart)
+        mPrefs.edit().putLong(key, System.currentTimeMillis()).commit()
+    }
+
+    override fun clearAppTrackEvent(eventName: AppTrackEvent) {
+        val keys = listOf(
+            getEventKey(eventName, true),
+            getEventKey(eventName, false)
+        )
+        keys.forEach { key ->
+            mPrefs.edit().remove(key).apply()
+        }
+    }
+
+    override fun getAppTrackEventTime(eventName: AppTrackEvent): Long? {
+        val start = mPrefs.getLong(getEventKey(eventName, true), 0)
+        val end = mPrefs.getLong(getEventKey(eventName, false), 0)
+
+        return if (start != 0L && end != 0L) end - start else null
+    }
+
+    private fun getEventKey(eventName: AppTrackEvent, isStart: Boolean): String {
+        return when (eventName) {
+            AppTrackEvent.SYNC -> if (isStart) EVENT_SYNC_TIME_START else EVENT_SYNC_TIME_END
+            AppTrackEvent.APP_START -> if (isStart) EVENT_APP_TIME_START else EVENT_APP_TIME_END
+        }
+    }
 
     override fun getShouldShowSleepNotification(): Boolean {
         return mPrefs.getBoolean(SLEEP_NOTIFICATION_TOGGLE, false)
@@ -259,7 +297,8 @@ class DataStoredImpl
     }
 
     override fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>) {
-        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(",")).commit()
+        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(","))
+            .commit()
     }
 
     override fun getCustomHomeScreenApiCallTimeStamps(): String? {
@@ -501,9 +540,9 @@ class DataStoredImpl
 
     override fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel? {
         val data = mPrefs.getString(CUSTOMIZE_HOME_SCREEN, null)
-        return if(data.isNullOrEmpty()){
+        return if (data.isNullOrEmpty()) {
             null
-        }else{
+        } else {
             gson.fromJson(data, CustomHomeScreenModel::class.java)
         }
     }

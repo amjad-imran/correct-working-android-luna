@@ -86,7 +86,7 @@ interface OreoSyncRepository {
 
     suspend fun logErrorServer(error: String, data: String): Flow<Resource<BaseApiResponse<Any>>>
 
-    suspend fun postDataToServer(data: OreoUserSyncActivities): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>?
+    suspend fun postDataToServer(data: OreoUserSyncActivities, syncTime: Long?, appOpenTime: Long?): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>?
 
     suspend fun postSleepHistoryData(data: OreoUserSyncActivities): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>?
 

@@ -28,6 +28,7 @@ import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -178,8 +179,12 @@ constructor(
                     }
                 }*/
 
+
                 val call1 = async {
-                    syncRepository.postDataToServer(userActivities.first)?.collect { resource ->
+                    val syncTime = localDataStore.getAppTrackEventTime(AppTrackEvent.SYNC)
+                    val appOpenTime = localDataStore.getAppTrackEventTime(AppTrackEvent.APP_START)
+
+                    syncRepository.postDataToServer(userActivities.first,syncTime,appOpenTime)?.collect { resource ->
                         when (resource) {
                             is Resource.GenericError -> {
 
@@ -223,6 +228,8 @@ constructor(
                                     handleAppVersion(context, it)
                                     datesToRemove = it.dates
                                     syncDataScope.launch {
+                                        localDataStore.clearAppTrackEvent(AppTrackEvent.APP_START)
+                                        localDataStore.clearAppTrackEvent(AppTrackEvent.SYNC)
                                         keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
                                     }
                                 }
@@ -720,6 +727,7 @@ constructor(
                                 timer?.cancel()
 
                                 AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
+                                localDataStore.saveAppTrackEvent(AppTrackEvent.SYNC,false)
                                 android.os.Handler(Looper.getMainLooper()).postDelayed({
                                     sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
                                     returnSuccess(success)

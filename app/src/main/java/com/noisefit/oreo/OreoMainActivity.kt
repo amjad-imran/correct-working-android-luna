@@ -40,6 +40,7 @@ import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
@@ -108,6 +109,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START,false)
 
         if (viewModel.isBottomNavGifPlaying.not()) {
             binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
