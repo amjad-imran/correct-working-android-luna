@@ -80,7 +80,14 @@ class CustomHomescreenViewModel  @Inject constructor(
          viewModelScope.launch {
 
              if (!canMakeApiCall()) {
-                 sendMessage("Rate limit exceeded")
+                 val minute = 10
+                 val seconds = 10//TODO @YASH
+                 sendMessage(
+                     resourceProvider.getString(
+                         R.string.text_please_try_again_after_mins_seconds,
+                         minute,
+                         seconds
+                     ))
                  ans = false
                  return@launch
              }
@@ -144,6 +151,7 @@ class CustomHomescreenViewModel  @Inject constructor(
          return ans
     }
 
+    //TODO @Yash wrong logic
     private fun canMakeApiCall(): Boolean {
         val now = System.currentTimeMillis()
         val timestamps = getStoredTimestamps()
