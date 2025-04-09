@@ -238,7 +238,7 @@ class SummaryDataFragmentToday :
         viewModel.initTodayData()
         val lunaManagedData = viewModel.localDataStore.getCustomHomeScreenItemsPriorityList()
         if (
-//            lunaManagedData == null &&
+            lunaManagedData == null &&
             viewModel.registerDate > 6 &&
             viewModel.localDataStore.getDisplayEditHomeScreenCard()
         ) {
