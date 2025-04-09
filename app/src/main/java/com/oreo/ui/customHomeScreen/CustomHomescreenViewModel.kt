@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CustomHomescreenViewModel  @Inject constructor(
-    private val resourcesProvider: ResourcesProvider,
+    private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
     private val localDataSource: DataStoredInterface
 ): BaseViewModel() {
@@ -193,92 +193,92 @@ class CustomHomescreenViewModel  @Inject constructor(
     }
 
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> = HashMap<String, CustomHomeScreenItem>().apply {
-            this["sleep"] = CustomHomeScreenItem(
-                R.drawable.icon_sleep,
-                "sleep",
-                resourcesProvider.getString(R.string.text_sleep),
-                true,
-                1
-            )
+        this["sleep"] = CustomHomeScreenItem(
+            R.drawable.icon_sleep,
+            "sleep",
+            resourceProvider.getString(R.string.text_sleep),
+            true,
+            1
+        )
 
-            this["activity"] = CustomHomeScreenItem(
-                R.drawable.icon_activity,
-                "activity",
-                resourcesProvider.getString(R.string.text_activity_o),
-                true,
-                2
-            )
-            this["readiness"] = CustomHomeScreenItem(
-                R.drawable.icon_readiness,
-                "readiness",
-                resourcesProvider.getString(R.string.text_readiness),
-                true,
-                3
-            )
-            this["sleep_planner"] = CustomHomeScreenItem(
-                R.drawable.icon_sleep_planner,
-                "sleep_planner",
-                resourcesProvider.getString(R.string.text_sleep_planner),
-                true,
-                4
-            )
-            this["heart_rate"] = CustomHomeScreenItem(
-                R.drawable.icon_heart_rate,
-                "heart_rate",
-                resourcesProvider.getString(R.string.text_heart_rate),
-                true,
-                5
-            )
-            this["health_monitor"] = CustomHomeScreenItem(
-                R.drawable.icon_heart_monitor,
-                "health_monitor",
-                resourcesProvider.getString(R.string.text_heart_monitor),
-                true,
-                6
-            )
-            this["daily_goals"] = CustomHomeScreenItem(
-                R.drawable.icon_daily_goals,
-                "daily_goals",
-                resourcesProvider.getString(R.string.text_daily_goals),
-                true,
-                7
-            )
-            this["luna_ai"] = CustomHomeScreenItem(
-                R.drawable.icon_luna_ai,
-                "luna_ai",
-                resourcesProvider.getString(R.string.text_luna_ai),
-                true,
-                8
-            )
-            this["cycle_tracker"] = CustomHomeScreenItem(
-                R.drawable.icon_cycle_tracker,
-                "cycle_tracker",
-                resourcesProvider.getString(R.string.text_cycle_tracker),
-                true,
-                9
-            )
-            this["7_day_trends_card"] = CustomHomeScreenItem(
-                R.drawable.icon_7_day_trends_card,
-                "7_day_trends_card",
-                resourcesProvider.getString(R.string.text_7_day_trends_cards),
-                true,
-                10
-            )
-            this["workout_history"] = CustomHomeScreenItem(
-                R.drawable.icon_flexibility_training,
-                "workout_history",
-                resourcesProvider.getString(R.string.text_workout_history),
-                true,
-                11
-            )
+        this["activity"] = CustomHomeScreenItem(
+            R.drawable.icon_activity,
+            "activity",
+            resourceProvider.getString(R.string.text_activity_o),
+            true,
+            2
+        )
+        this["readiness"] = CustomHomeScreenItem(
+            R.drawable.icon_readiness,
+            "readiness",
+            resourceProvider.getString(R.string.text_readiness),
+            true,
+            3
+        )
+        this["sleep_planner"] = CustomHomeScreenItem(
+            R.drawable.icon_sleep_planner,
+            "sleep_planner",
+            resourceProvider.getString(R.string.text_sleep_planner),
+            true,
+            4
+        )
+        this["heart_rate"] = CustomHomeScreenItem(
+            R.drawable.icon_heart_rate,
+            "heart_rate",
+            resourceProvider.getString(R.string.text_heart_rate),
+            true,
+            5
+        )
+        this["stress"] = CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "stress",
+            resourceProvider.getString(R.string.text_stress),
+            true,
+            6
+        )
+//        this["health_monitor"] = CustomHomeScreenItem(
+//            R.drawable.icon_heart_monitor,
+//            "health_monitor",
+//            resourceProvider.getString(R.string.text_heart_monitor),
+//            true,
+//            7
+//        )
+        this["daily_goals"] = CustomHomeScreenItem(
+            R.drawable.icon_daily_goals,
+            "daily_goals",
+            resourceProvider.getString(R.string.text_daily_goals),
+            true,
+            7
+        )
+        this["luna_ai"] = CustomHomeScreenItem(
+            R.drawable.icon_luna_ai,
+            "luna_ai",
+            resourceProvider.getString(R.string.text_luna_ai),
+            true,
+            8
+        )
+        this["cycle_tracker"] = CustomHomeScreenItem(
+            R.drawable.icon_cycle_tracker,
+            "cycle_tracker",
+            resourceProvider.getString(R.string.text_cycle_tracker),
+            true,
+            9
+        )
+        this["7_day_trends_card"] = CustomHomeScreenItem(
+            R.drawable.icon_7_day_trends_card,
+            "7_day_trends_card",
+            resourceProvider.getString(R.string.text_7_day_trends_cards),
+            true,
+            10
+        )
+        this["workout_history"] = CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "workout_history",
+            resourceProvider.getString(R.string.text_workout_history),
+            true,
+            11
+        )
 
-            this["stress"] = CustomHomeScreenItem(
-                R.drawable.icon_flexibility_training,
-                "stress",
-                resourcesProvider.getString(R.string.text_stress),
-                true,
-                12
-            )
 
     }
 
