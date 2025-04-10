@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -17,7 +18,9 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class CustomHomescreenViewModel  @Inject constructor(
@@ -30,7 +33,6 @@ class CustomHomescreenViewModel  @Inject constructor(
     val lunaManagedState = MutableLiveData<Boolean?>(false)
 
     // List of items
-    //
     private val _items = MutableLiveData<List<CustomHomeScreenItem>>()
     val items: LiveData<List<CustomHomeScreenItem>> get() = _items
 
@@ -75,20 +77,10 @@ class CustomHomescreenViewModel  @Inject constructor(
         }
     }
 
-     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>): Boolean {
-         var ans = true
+     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>) {
          viewModelScope.launch {
 
              if (!canMakeApiCall()) {
-                 val minute = 10
-                 val seconds = 10//TODO @YASH
-                 sendMessage(
-                     resourceProvider.getString(
-                         R.string.text_please_try_again_after_mins_seconds,
-                         minute,
-                         seconds
-                     ))
-                 ans = false
                  return@launch
              }
 
@@ -104,19 +96,16 @@ class CustomHomescreenViewModel  @Inject constructor(
                  updatedList.get(sleepItemIndex).switchState = true
              }
 
-             val customHomeScreendata = CustomHomeScreenModel(
+             val customHomeScreenData = CustomHomeScreenModel(
                  manage = isToggleOn,
                  type = "home-dash",
                  cards = getNetworkList(updatedList)
              )
 
-             userRepository.submitCustomHomeScreenPriority(customHomeScreendata).collect { resource ->
+             userRepository.submitCustomHomeScreenPriority(customHomeScreenData).collect { resource ->
                  when (resource) {
                      is Resource.GenericError -> {
                          sendMessage(resource.message)
-                         // Remove the last timestamp if the call failed
-                         removeLastApiCallTimestamp()
-                         ans = false
                      }
 
                      is Resource.Loading -> {
@@ -134,59 +123,45 @@ class CustomHomescreenViewModel  @Inject constructor(
                                      override fun no() {}
                                  }
                          })
-                         // Remove the last timestamp if the call failed
-                         removeLastApiCallTimestamp()
-                         ans = false
                      }
 
                      is Resource.Success -> {
                          resource.data?.data?.let {
-                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreendata)
+                             localDataSource.setCustomHomeScreenApiCallTimeStamps()
+
+                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreenData)
                              dataUpdated.postValue(Event(true))
                          }
                      }
                  }
              }
          }
-         return ans
     }
 
-    //TODO @Yash wrong logic
     private fun canMakeApiCall(): Boolean {
-        val now = System.currentTimeMillis()
-        val timestamps = getStoredTimestamps()
+        val (lastCallTime, callCount) = localDataSource.getCustomHomeScreenApiCallTimeStamps() ?: return true
 
-        // Remove timestamps older than 1 hour
-        val recentTimestamps = timestamps.filter { now - it <= timeWindowMs } as ArrayList
+        if (callCount < 5) return true
 
-        // If we have less than max requests, allow the call
-        if (recentTimestamps.size < maxRequests) {
-            recentTimestamps.add(now)
-            saveTimestamps(recentTimestamps)
-            return true
-        }
+        val now = ZonedDateTime.now().toEpochSecond()
+        val elapsed = now - lastCallTime
 
-        return false
-    }
-
-    private fun getStoredTimestamps(): MutableList<Long> {
-        val serialized = localDataSource.getCustomHomeScreenApiCallTimeStamps()
-        return if (serialized != null) {
-            serialized.split(",").mapNotNull { it.toLongOrNull() }.toMutableList()
+        return if (elapsed > 3600) {
+            localDataSource.clearCustomHomeScreenApiCallTimeStamps()
+            true
         } else {
-            mutableListOf()
-        }
-    }
+            val remaining = 3600 - elapsed
+            val minutes = (remaining % 3600) / 60
+            val seconds = remaining % 60
 
-    private fun saveTimestamps(timestamps: List<Long>) {
-        localDataSource.setCustomHomeScreenApiCallTimeStamps(timestamps)
-    }
-
-    private fun removeLastApiCallTimestamp() {
-        val timestamps = getStoredTimestamps()
-        if (timestamps.isNotEmpty()) {
-            timestamps.removeAt(timestamps.size - 1)
-            saveTimestamps(timestamps)
+            sendMessage(
+                resourceProvider.getString(
+                    R.string.text_please_try_again_after_mins_seconds,
+                    minutes,
+                    seconds
+                )
+            )
+            false
         }
     }
 
@@ -265,13 +240,16 @@ class CustomHomescreenViewModel  @Inject constructor(
             true,
             8
         )
-        this["cycle_tracker"] = CustomHomeScreenItem(
-            R.drawable.icon_cycle_tracker,
-            "cycle_tracker",
-            resourceProvider.getString(R.string.text_cycle_tracker),
-            true,
-            9
-        )
+
+        if(shouldShowFemaleHealth()){
+            this["cycle_tracker"] = CustomHomeScreenItem(
+                R.drawable.icon_cycle_tracker,
+                "cycle_tracker",
+                resourceProvider.getString(R.string.text_cycle_tracker),
+                true,
+                9
+            )
+        }
         this["7_day_trends_card"] = CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
@@ -288,6 +266,11 @@ class CustomHomescreenViewModel  @Inject constructor(
         )
 
 
+    }
+
+    fun shouldShowFemaleHealth(): Boolean {
+        val user=  localDataSource.getUser()
+        return !user?.userInfo?.gender.equals("male", true)
     }
 
 }

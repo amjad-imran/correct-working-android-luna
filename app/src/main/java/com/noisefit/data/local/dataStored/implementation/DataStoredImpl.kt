@@ -296,13 +296,24 @@ class DataStoredImpl
         mPrefs.edit()?.remove(DISPLAY_HOME_SCREEN_CARD)?.commit()
     }
 
-    override fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>) {
-        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(","))
-            .commit()
+    override fun setCustomHomeScreenApiCallTimeStamps() {
+        val lastData = getCustomHomeScreenApiCallTimeStamps()
+        if (lastData == null) {
+            val timestamps = Pair(ZonedDateTime.now().toEpochSecond(), 1)
+            mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, gson.toJson(timestamps))
+                .commit()
+        } else {
+            val count = if (lastData.second >= 5) 1 else lastData.second + 1
+            val timestamps = Pair(ZonedDateTime.now().toEpochSecond(), count)
+            mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, gson.toJson(timestamps))
+                .commit()
+        }
     }
 
-    override fun getCustomHomeScreenApiCallTimeStamps(): String? {
-        return mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
+    override fun getCustomHomeScreenApiCallTimeStamps(): Pair<Long, Int>? {
+        val data = mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
+        if (data == null) return null
+        return Gson().fromJson<Pair<Long, Int>>(data)
     }
 
     override fun clearCustomHomeScreenApiCallTimeStamps() {
