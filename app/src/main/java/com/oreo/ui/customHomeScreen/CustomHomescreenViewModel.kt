@@ -212,13 +212,7 @@ class CustomHomescreenViewModel  @Inject constructor(
             true,
             5
         )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_stress,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
-            6
-        )
+
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
 //            "health_monitor",
@@ -231,12 +225,19 @@ class CustomHomescreenViewModel  @Inject constructor(
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
             true,
-            7
+            6
         )
         this["luna_ai"] = CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
+            true,
+            7
+        )
+        this["stress"] = CustomHomeScreenItem(
+            R.drawable.icon_stress,
+            "stress",
+            resourceProvider.getString(R.string.text_stress),
             true,
             8
         )

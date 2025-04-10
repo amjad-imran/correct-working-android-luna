@@ -1385,7 +1385,7 @@
     <string name="text_active_calories_lc">active calories</string>
     <string name="text_last_measured_value">Last measured %1$s</string>
     <string name="text_tap_to_learn_more_about_your_sleep">Tap to learn more about your sleep</string>
-    <string name="text_luna_ai">Luna AI</string>
+    <string name="text_luna_ai">Luna ai</string>
     <string name="text_resp">Resp.</string>
     <string name="text_rhr">RHR</string>
     <string name="text_temp_dot">Temp.</string>
@@ -1901,9 +1901,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_menstrual_health">Menstrual health</string>
     <string name="text_sleep_charge_ring_new">We haven’t received data for a while. Remember to charge your ring and wear it regularly so you don\’t miss out on your personalised insights!</string>
     <string name="text_luna_managed">Luna managed</string>
-    <string name="text_customize_homescreen">Customize homescreen</string>
+    <string name="text_customise_homescreen">Customise homescreen</string>
     <string name="text_heart_monitor">Heart monitor</string>
-    <string name="text_daily_goals">Daily Goals</string>
+    <string name="text_daily_goals">Daily goals</string>
     <string name="text_7_day_trends_cards">7 day trends cards</string>
     <string name="text_workout_history">Workout history</string>
     <string name="edit_home_screen">Edit Home screen</string>

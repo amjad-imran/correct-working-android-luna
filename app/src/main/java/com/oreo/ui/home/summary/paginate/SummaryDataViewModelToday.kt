@@ -1189,11 +1189,11 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
 
-//                    "health_monitor" -> {
-//                        getHealthMonitorData(healthData.sleep)?.let {
-//                            userActivities.add(it)
-//                        }
-//                    }
+                    "health_monitor" -> {
+                        getHealthMonitorData(healthData.sleep)?.let {
+                            userActivities.add(it)
+                        }
+                    }
 
                     "daily_goals" -> {
                         getDailyGoalsCard()?.let { userActivities.add(it) }
@@ -1208,7 +1208,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "7_day_trends_card" -> {
-                        getSvnDaysTrendsDataCard(trendsData)?.let {
+                        getSevenDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
                         }
                     }
@@ -1252,11 +1252,9 @@ class SummaryDataViewModelToday @Inject constructor(
         } else {
             null
         }
-//        stateWorkouts.postValue(activity?.workout ?: ArrayList())
-//        return null
     }
 
-    private fun getSvnDaysTrendsDataCard(
+    private fun getSevenDaysTrendsDataCard(
         trendsData: TrendsData?
     ): OHealthOverview? {
 //        stateSleepAvgCard.postValue(
@@ -1804,6 +1802,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["health_monitor"]!!.copy(priority = 4))
                     }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
+                        add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
 
                     add(itemsMap["activity"]!!.copy(priority = 5))
@@ -1837,8 +1836,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
         priorityList.apply {
             add(itemsMap["daily_goals"]!!.copy(priority = 8))
-            add(itemsMap["heart_rate"]!!.copy(priority = 9))
-            add(itemsMap["stress"]!!.copy(priority = 10))
+            add(itemsMap["stress"]!!.copy(priority = 9))
+            add(itemsMap["heart_rate"]!!.copy(priority = 10))
             add(itemsMap["cycle_tracker"]!!.copy(priority = 11))
             add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
             add(itemsMap["workout_history"]!!.copy(priority = 13))
