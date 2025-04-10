@@ -40,6 +40,8 @@ class CustomHomescreenViewModel  @Inject constructor(
     private val maxRequests = 5
     private val timeWindowMs = 60 * 60 * 1000 // 1 hour
 
+    private val gender = localDataSource.getUser()?.userInfo?.gender
+
     init {
         loadInitialItems()
     }
@@ -61,7 +63,11 @@ class CustomHomescreenViewModel  @Inject constructor(
                 sortedList.forEach { item ->
 
                     val card = itemsMap[item.type]
+
                     card?.let {
+                        if(card.key == "cycle_tracker"){
+                            if (gender.equals("male", true)) return@forEach
+                        }
                         it.priority = item.priority
                         it.switchState = item.switchState
                         tempList.add(card)
@@ -70,6 +76,9 @@ class CustomHomescreenViewModel  @Inject constructor(
                 }
             }else{
                 val initialItems = itemsMap.values.toList().sortedBy { it.priority }
+//                if(card.key == "cycle_tracker"){
+//                    if (gender.equals("male", true)) return@forEach
+//                }
                 _items.postValue(initialItems)
             }
         }
@@ -229,13 +238,7 @@ class CustomHomescreenViewModel  @Inject constructor(
             true,
             5
         )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_stress,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
-            6
-        )
+
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
 //            "health_monitor",
@@ -248,15 +251,23 @@ class CustomHomescreenViewModel  @Inject constructor(
             "daily_goals",
             resourceProvider.getString(R.string.text_daily_goals),
             true,
-            7
+            6
         )
         this["luna_ai"] = CustomHomeScreenItem(
             R.drawable.icon_luna_ai,
             "luna_ai",
             resourceProvider.getString(R.string.text_luna_ai),
             true,
+            7
+        )
+        this["stress"] = CustomHomeScreenItem(
+            R.drawable.icon_stress,
+            "stress",
+            resourceProvider.getString(R.string.text_stress),
+            true,
             8
         )
+
         this["cycle_tracker"] = CustomHomeScreenItem(
             R.drawable.icon_cycle_tracker,
             "cycle_tracker",

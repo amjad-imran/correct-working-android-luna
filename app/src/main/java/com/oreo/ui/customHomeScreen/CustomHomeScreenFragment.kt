@@ -139,7 +139,7 @@ class CustomHomeScreenFragment :
     private fun initUi(){
 
         binding.recyclerView.setVisibilityByCondition(!(binding.switchMain.isChecked)) //= if (binding.switchMain.isChecked) View.GONE else View.VISIBLE
-        binding.layoutToolbar.tvTitle.text = getString(R.string.text_customize_homescreen)
+        binding.layoutToolbar.tvTitle.text = getString(R.string.text_customise_homescreen)
         binding.tvMessage.setVisibilityByCondition(binding.switchMain.isChecked) // if (binding.switchMain.isChecked) View.VISIBLE else View.GONE
 
         binding.tvOtherMessage.setVisibilityByCondition(!(binding.switchMain.isChecked)) //= if (binding.switchMain.isChecked) View.GONE else View.VISIBLEbinding.recyclerView.setVisibilityByCondition(!(binding.switchMain.isChecked)) //= if (binding.switchMain.isChecked) View.GONE else View.VISIBLE
