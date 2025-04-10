@@ -1512,12 +1512,6 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return null
-
-//        return if ((readinessModel.readinessScore ?: 0) > 0) {
-//            OHealthOverview.Readiness(readinessModel)
-//        } else {
-//            null
-//        }
     }
 
     private fun getActivityDataCard(
@@ -1537,9 +1531,7 @@ class SummaryDataViewModelToday @Inject constructor(
         )
 
         when (daySlot) {
-            0 -> {
-
-            }
+            0 -> {}
 
             1 -> {
                 if ((healthData.activity?.activeCalories ?: 0) > 0) {
@@ -1766,7 +1758,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        if(isAfter12.not()){
+                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        }
                     }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
@@ -1782,7 +1776,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        if(isAfter12.not()){
+                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        }
                     }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
@@ -1799,7 +1795,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        if (isAfter12.not()) {
+                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                        }
                     }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
@@ -1826,10 +1824,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["sleep"]!!.copy(priority = 5))
                         add(itemsMap["readiness"]!!.copy(priority = 6))
                     }
-                    add(itemsMap["health_monitor"]!!.copy(priority = 7))
-//                    if (!isAfter12) {
-//                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
-//                    }
+                    if (!isAfter12) {
+                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
+                    }
                 }
             }
         }
@@ -1841,14 +1838,10 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["cycle_tracker"]!!.copy(priority = 11))
             add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
             add(itemsMap["workout_history"]!!.copy(priority = 13))
+            if (isAfter12) {
+                add(itemsMap["health_monitor"]!!.copy(priority = 14))
+            }
         }
-
-        // Add remaining items that aren't time-sensitive
-        /*val remainingItems = itemsMap.values.filterNot { item ->
-            priorityList.any { it.key == item.key }
-        }.sortedBy { it.priority }
-
-        priorityList.addAll(remainingItems)*/
 
         return priorityList
     }
