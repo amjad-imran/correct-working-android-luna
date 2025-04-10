@@ -699,6 +699,12 @@ interface NetworkService {
     suspend fun getCannyFeedbackUrl(
         @Url url: String,
     ): BaseApiResponse<String>
+
+    @POST
+    suspend fun sendAppTrackingEvent(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     //
 
     /**

@@ -301,12 +301,10 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun postDataToServer(
         data: OreoUserSyncActivities,
-        syncTime: Long?,
-        appOpenTime: Long?
     ): Flow<Resource<BaseApiResponse<VersionCheckResponse>>>? {
         return safeApiCallFlow(dispatcher) {
 
-            onlineDataMapper.convertDataToPost(data, syncTime, appOpenTime)?.let {
+            onlineDataMapper.convertDataToPost(data, )?.let {
                 val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync"
                 AppLogs.sendAppLogs("POST Multisync DATA SERVER $url -> ${Gson().toJson(it)}")
 

@@ -181,10 +181,7 @@ constructor(
 
 
                 val call1 = async {
-                    val syncTime = localDataStore.getAppTrackEventTime(AppTrackEvent.SYNC)
-                    val appOpenTime = localDataStore.getAppTrackEventTime(AppTrackEvent.APP_START)
-
-                    syncRepository.postDataToServer(userActivities.first,syncTime,appOpenTime)?.collect { resource ->
+                    syncRepository.postDataToServer(userActivities.first)?.collect { resource ->
                         when (resource) {
                             is Resource.GenericError -> {
 
@@ -228,8 +225,7 @@ constructor(
                                     handleAppVersion(context, it)
                                     datesToRemove = it.dates
                                     syncDataScope.launch {
-                                        localDataStore.clearAppTrackEvent(AppTrackEvent.APP_START)
-                                        localDataStore.clearAppTrackEvent(AppTrackEvent.SYNC)
+
                                         keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
                                     }
                                 }

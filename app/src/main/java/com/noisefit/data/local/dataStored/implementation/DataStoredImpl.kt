@@ -262,11 +262,11 @@ class DataStoredImpl
         }
     }
 
-    override fun getAppTrackEventTime(eventName: AppTrackEvent): Long? {
+    override fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long,Long>? {
         val start = mPrefs.getLong(getEventKey(eventName, true), 0)
         val end = mPrefs.getLong(getEventKey(eventName, false), 0)
 
-        return if (start != 0L && end != 0L) end - start else null
+        return if (start != 0L && end != 0L) Pair(start,end) else null
     }
 
     private fun getEventKey(eventName: AppTrackEvent, isStart: Boolean): String {
