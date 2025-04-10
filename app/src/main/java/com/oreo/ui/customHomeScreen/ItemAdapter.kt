@@ -10,7 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemHomeDragBinding
 import com.noisefit_commans.utils.LOGS
 
-class ItemAdapter :
+class ItemAdapter(private val listener:ItemClickListener) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     private val mDataSet = ArrayList<CustomHomeScreenItem>()
@@ -54,6 +54,9 @@ class ItemAdapter :
 //                return@setOnCheckedChangeListener
 //            }
             item.switchState = isChecked
+            if(isChecked.not()){
+                listener.onItemStateChanged(position)
+            }
         }
 
     }
@@ -75,5 +78,16 @@ class ItemAdapter :
     }
 
     fun getDataSet(): List<CustomHomeScreenItem> = mDataSet
+    fun enableSleepToggle() {
+        val index = mDataSet.indexOfFirst { it.key.equals("sleep",true) }
 
+        if(index!=-1){
+            mDataSet[index].switchState = true
+            notifyItemChanged(index)
+        }
+    }
+
+}
+interface ItemClickListener{
+    fun onItemStateChanged(position: Int)
 }

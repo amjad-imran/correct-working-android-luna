@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -14,10 +15,12 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.utils.Event
-import java.util.concurrent.TimeUnit
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class CustomHomescreenViewModel  @Inject constructor(
@@ -30,16 +33,14 @@ class CustomHomescreenViewModel  @Inject constructor(
     val lunaManagedState = MutableLiveData<Boolean?>(false)
 
     // List of items
-    //
     private val _items = MutableLiveData<List<CustomHomeScreenItem>>()
     val items: LiveData<List<CustomHomeScreenItem>> get() = _items
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
-    var minutes = 0
-    var seconds = 0
-
-    private val gender = localDataSource.getUser()?.userInfo?.gender
+    // Rate limiting variables
+    private val maxRequests = 5
+    private val timeWindowMs = 60 * 60 * 1000 // 1 hour
 
     init {
         loadInitialItems()
@@ -62,11 +63,7 @@ class CustomHomescreenViewModel  @Inject constructor(
                 sortedList.forEach { item ->
 
                     val card = itemsMap[item.type]
-
                     card?.let {
-                        if(card.key == "cycle_tracker"){
-                            if (gender.equals("male", true)) return@forEach
-                        }
                         it.priority = item.priority
                         it.switchState = item.switchState
                         tempList.add(card)
@@ -75,27 +72,15 @@ class CustomHomescreenViewModel  @Inject constructor(
                 }
             }else{
                 val initialItems = itemsMap.values.toList().sortedBy { it.priority }
-//                if(card.key == "cycle_tracker"){
-//                    if (gender.equals("male", true)) return@forEach
-//                }
                 _items.postValue(initialItems)
             }
         }
     }
 
-     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>): Boolean {
-         var ans = true
+     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>) {
          viewModelScope.launch {
 
              if (!canMakeApiCall()) {
-
-                 sendMessage(
-                     resourceProvider.getString(
-                         R.string.text_please_try_again_after_mins_seconds,
-                         minutes,
-                         seconds
-                     ))
-                 ans = false
                  return@launch
              }
 
@@ -111,17 +96,16 @@ class CustomHomescreenViewModel  @Inject constructor(
                  updatedList.get(sleepItemIndex).switchState = true
              }
 
-             val customHomeScreendata = CustomHomeScreenModel(
+             val customHomeScreenData = CustomHomeScreenModel(
                  manage = isToggleOn,
                  type = "home-dash",
                  cards = getNetworkList(updatedList)
              )
 
-             userRepository.submitCustomHomeScreenPriority(customHomeScreendata).collect { resource ->
+             userRepository.submitCustomHomeScreenPriority(customHomeScreenData).collect { resource ->
                  when (resource) {
                      is Resource.GenericError -> {
                          sendMessage(resource.message)
-                         ans = false
                      }
 
                      is Resource.Loading -> {
@@ -139,52 +123,46 @@ class CustomHomescreenViewModel  @Inject constructor(
                                      override fun no() {}
                                  }
                          })
-                         ans = false
                      }
 
                      is Resource.Success -> {
                          resource.data?.data?.let {
-                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreendata)
+                             localDataSource.setCustomHomeScreenApiCallTimeStamps()
+
+                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreenData)
                              dataUpdated.postValue(Event(true))
                          }
                      }
                  }
              }
          }
-         return ans
     }
-
 
     private fun canMakeApiCall(): Boolean {
-        val storedTimestampObj = getStoredTimestampsObj() ?: return true
+        val (lastCallTime, callCount) = localDataSource.getCustomHomeScreenApiCallTimeStamps() ?: return true
 
-        val now = System.currentTimeMillis()
-        val differenceMs = now - storedTimestampObj.first.toInt() // Difference in milliseconds
+        if (callCount < 5) return true
 
-        val oneHourInMs = 60 * 60 * 1000 // 3,600,000 milliseconds
-        val isLessThanOneHour = differenceMs < oneHourInMs
+        val now = ZonedDateTime.now().toEpochSecond()
+        val elapsed = now - lastCallTime
 
-        if (isLessThanOneHour) {
-            val noOfApiCalls = storedTimestampObj.second
-            if (noOfApiCalls < 5){
-                localDataSource.setCustomHomeScreenApiCallTimeStamps(Pair(now.toString(), noOfApiCalls+1))
-                return true
-            }else{
-                val remainingMs = oneHourInMs - differenceMs
+        return if (elapsed > 3600) {
+            localDataSource.clearCustomHomeScreenApiCallTimeStamps()
+            true
+        } else {
+            val remaining = 3600 - elapsed
+            val minutes = (remaining % 3600) / 60
+            val seconds = remaining % 60
 
-                // Convert to minutes and seconds
-                minutes = TimeUnit.MILLISECONDS.toMinutes(remainingMs).toInt()
-                seconds = (TimeUnit.MILLISECONDS.toSeconds(remainingMs) % 60).toInt()
-                return false
-            }
-        }else{
-            localDataSource.setCustomHomeScreenApiCallTimeStamps(Pair(now.toString(), 1))
-            return true
+            sendMessage(
+                resourceProvider.getString(
+                    R.string.text_please_try_again_after_mins_seconds,
+                    minutes,
+                    seconds
+                )
+            )
+            false
         }
-    }
-
-    private fun getStoredTimestampsObj(): Pair<String, Int>? {
-        return localDataSource.getCustomHomeScreenApiCallTimeStamps()
     }
 
     private fun getNetworkList(updatedList: List<CustomHomeScreenItem>): List<CustomHomeScreenNetworkItem> {
@@ -264,13 +242,15 @@ class CustomHomescreenViewModel  @Inject constructor(
             8
         )
 
-        this["cycle_tracker"] = CustomHomeScreenItem(
-            R.drawable.icon_cycle_tracker,
-            "cycle_tracker",
-            resourceProvider.getString(R.string.text_cycle_tracker),
-            true,
-            9
-        )
+        if(shouldShowFemaleHealth()){
+            this["cycle_tracker"] = CustomHomeScreenItem(
+                R.drawable.icon_cycle_tracker,
+                "cycle_tracker",
+                resourceProvider.getString(R.string.text_cycle_tracker),
+                true,
+                9
+            )
+        }
         this["7_day_trends_card"] = CustomHomeScreenItem(
             R.drawable.icon_7_day_trends_card,
             "7_day_trends_card",
@@ -287,6 +267,11 @@ class CustomHomescreenViewModel  @Inject constructor(
         )
 
 
+    }
+
+    fun shouldShowFemaleHealth(): Boolean {
+        val user=  localDataSource.getUser()
+        return !user?.userInfo?.gender.equals("male", true)
     }
 
 }

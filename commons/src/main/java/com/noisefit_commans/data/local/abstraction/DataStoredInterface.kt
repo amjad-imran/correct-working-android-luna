@@ -506,8 +506,8 @@ interface DataStoredInterface {
     fun setDisplayEditHomeScreenCard(isDisplayed: Boolean)
     fun clearDisplayEditHomeScreenCard()
 
-    fun setCustomHomeScreenApiCallTimeStamps(pair: Pair<String, Int>)
-    fun getCustomHomeScreenApiCallTimeStamps(): Pair<String, Int>?
+    fun setCustomHomeScreenApiCallTimeStamps()
+    fun getCustomHomeScreenApiCallTimeStamps():  Pair<Long, Int>?
     fun clearCustomHomeScreenApiCallTimeStamps()
     fun saveAppTrackEvent(eventName: AppTrackEvent, isStart: Boolean)
     fun clearAppTrackEvent(eventName: AppTrackEvent)

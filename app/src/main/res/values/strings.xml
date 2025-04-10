@@ -1901,7 +1901,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_menstrual_health">Menstrual health</string>
     <string name="text_sleep_charge_ring_new">We haven’t received data for a while. Remember to charge your ring and wear it regularly so you don\’t miss out on your personalised insights!</string>
     <string name="text_luna_managed">Luna managed</string>
-    <string name="text_customise_homescreen">Customise homescreen</string>
     <string name="text_heart_monitor">Heart monitor</string>
     <string name="text_daily_goals">Daily goals</string>
     <string name="text_7_day_trends_cards">7 day trends cards</string>
@@ -1912,8 +1911,11 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Change your app layout with ease. Move or remove the cards as per your requirements.</string>
     <string name="text_edit_home_screen">Edit home screen</string>
     <string name="text_suggest_a_feature">Suggest a feature</string>
+    <string name="text_customise_homescreen">Customise homescreen</string>
     <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">You can control what you want to see on the Luna homepage by turning this toggle OFF.</string>
     <string name="text_please_try_again_after_mins_seconds">Please try again after %1$dmins %2$dseconds</string>
+    <string name="text_custom_homescreen_message_2">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
+    <string name="text_dashboard_cannot_be_empty">Dashboard cannot be empty.</string>
     <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
 
 </resources>

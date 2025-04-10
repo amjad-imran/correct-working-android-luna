@@ -29,7 +29,11 @@ class CustomHomeScreenFragment :
 
     private val viewModel: CustomHomescreenViewModel by viewModels()
     private val adapter by lazy {
-        ItemAdapter()
+        ItemAdapter(object: ItemClickListener{
+            override fun onItemStateChanged(position: Int) {
+                handleDefaultSleepToggle()
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,18 +52,16 @@ class CustomHomeScreenFragment :
                 return@setOnCheckedChangeListener
             }
 
-            if(isChecked){
+            if (isChecked) {
+                viewModel.updateData(isChecked, adapter.getDataSet())
+            }
+
+            if (isChecked) {
                 binding.recyclerView.gone()
                 binding.tvOtherMessage.gone()
                 binding.bSaveChanges.gone()
                 binding.tvMessage.visible()
-                if(viewModel.updateData(isChecked, adapter.getDataSet())){
-                    viewModel.lunaManagedState.postValue(true)
-                }else{
-                    viewModel.lunaManagedState.postValue(false)
-                }
-
-            }else{
+            } else {
                 binding.tvMessage.gone()
                 binding.recyclerView.visible()
                 binding.tvOtherMessage.visible()
@@ -70,14 +72,10 @@ class CustomHomeScreenFragment :
 
         binding.bSaveChanges.setOnClickListener {
             val updatedList = adapter.getDataSet()
-            if(viewModel.updateData(binding.switchMain.isChecked, updatedList)){
-//                viewModel.lunaManagedState.postValue(false)
-            }else{
-//                viewModel.lunaManagedState.postValue(true)
-            }
+            viewModel.updateData(binding.switchMain.isChecked, updatedList)
         }
 
-        viewModel.dataUpdated.observe(this){
+        viewModel.dataUpdated.observe(this) {
             it.getContent()?.let {
                 binding.bSaveChanges.isEnabled = false
                 binding.blurView.visible()
@@ -85,7 +83,7 @@ class CustomHomeScreenFragment :
                 Handler(Looper.myLooper()!!).postDelayed({
                     try {
                         navigateUpSafe()
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
 
                     }
                 }, 2000)
@@ -98,15 +96,15 @@ class CustomHomeScreenFragment :
             adapter.updateData(items)
         }
 
-        viewModel.lunaManagedState.observe(this){
+        viewModel.lunaManagedState.observe(this) {
             it?.let {
                 binding.switchMain.isChecked = it
-                if(it){
+                if (it) {
                     binding.recyclerView.gone()
                     binding.tvOtherMessage.gone()
                     binding.bSaveChanges.gone()
                     binding.tvMessage.visible()
-                }else{
+                } else {
                     binding.tvMessage.gone()
                     binding.recyclerView.visible()
                     binding.tvOtherMessage.visible()
@@ -136,7 +134,7 @@ class CustomHomeScreenFragment :
         }
     }
 
-    private fun initUi(){
+    private fun initUi() {
 
         binding.recyclerView.setVisibilityByCondition(!(binding.switchMain.isChecked)) //= if (binding.switchMain.isChecked) View.GONE else View.VISIBLE
         binding.layoutToolbar.tvTitle.text = getString(R.string.text_customise_homescreen)
@@ -157,4 +155,21 @@ class CustomHomeScreenFragment :
 
     }
 
+    fun handleDefaultSleepToggle() {
+        if (binding.switchMain.isChecked) return
+
+        val data = adapter.getDataSet()
+
+        data.forEach {
+            if (it.switchState) {
+                return
+            }
+        }
+        adapter.enableSleepToggle()
+        context.showShortToast(getString(R.string.text_dashboard_cannot_be_empty))
+
+    }
+
+
 }
+

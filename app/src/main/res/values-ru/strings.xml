@@ -1868,7 +1868,6 @@
     <string name="text_menstrual_health">Менструальное здоровье</string>
     <string name="text_sleep_charge_ring_new">Мы давно не получали данных. Не забудь зарядить кольцо и носить его регулярно, чтобы не пропустить персонализированные рекомендации!</string>
     <string name="text_luna_managed">Управляется Luna</string>
-    <string name="text_customize_homescreen">Настроить главный экран</string>
     <string name="text_heart_monitor">Пульсометр</string>
     <string name="text_7_day_trends_cards">Карты тенденций за 7 дней</string>
     <string name="text_workout_history">История тренировок</string>
@@ -1878,6 +1877,11 @@
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Изменяйте макет приложения с лёгкостью. Перемещайте или удаляйте карточки по мере необходимости.</string>
     <string name="text_edit_home_screen">Редактировать главный экран</string>
     <string name="text_suggest_a_feature">Предложить функцию</string>
+    <string name="text_customise_homescreen">Настроить главный экран</string>
+    <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">Вы можете контролировать, что отображается на главной странице Luna, отключив этот переключатель.</string>
+    <string name="text_please_try_again_after_mins_seconds">Пожалуйста, повторите попытку через %1$dмин %2$dсек</string>
+    <string name="text_custom_homescreen_message_2">Будьте в курсе уведомлений о батарее, напоминаний о синхронизации данных и важных уведомлений, чтобы ваше кольцо Luna работало бесперебойно</string>
+    <string name="text_dashboard_cannot_be_empty">Панель не может быть пустой.</string>
 
 
 </resources>

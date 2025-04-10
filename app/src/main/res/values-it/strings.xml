@@ -1867,7 +1867,6 @@
     <string name="text_menstrual_health">Salute mestruale</string>
     <string name="text_sleep_charge_ring_new">Non riceviamo dati da un po\'. Ricorda di caricare l\’anello e di indossarlo regolarmente per non perdere i tuoi approfondimenti personalizzati!</string>
     <string name="text_luna_managed">Gestito da Luna</string>
-    <string name="text_customize_homescreen">Personalizza schermata principale</string>
     <string name="text_heart_monitor">Cardiofrequenzimetro</string>
     <string name="text_7_day_trends_cards">Carte delle tendenze di 7 giorni</string>
     <string name="text_workout_history">Cronologia allenamenti</string>
@@ -1877,5 +1876,10 @@
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Modifica facilmente il layout dell\'app. Sposta o rimuovi le carte secondo le tue esigenze.</string>
     <string name="text_edit_home_screen">Modifica schermata principale</string>
     <string name="text_suggest_a_feature">Suggerisci una funzionalità</string>
+    <string name="text_customise_homescreen">Personalizza schermata iniziale</string>
+    <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">Puoi controllare cosa vedere nella homepage di Luna disattivando questo interruttore.</string>
+    <string name="text_please_try_again_after_mins_seconds">Riprova tra %1$dmin %2$dsec</string>
+    <string name="text_custom_homescreen_message_2">Rimani aggiornato con avvisi della batteria, promemoria di sincronizzazione dei dati e notifiche essenziali per mantenere il tuo anello Luna funzionante senza problemi</string>
+    <string name="text_dashboard_cannot_be_empty">Il cruscotto non può essere vuoto.</string>
 
 </resources>
