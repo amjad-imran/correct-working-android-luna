@@ -86,7 +86,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
                     android:lineSpacingExtra="4sp"
-                    android:text="Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly"
+                    android:text="@string/text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly"
                     android:textColor="#80ffffff"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

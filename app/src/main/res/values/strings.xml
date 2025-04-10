@@ -1914,5 +1914,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_suggest_a_feature">Suggest a feature</string>
     <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">You can control what you want to see on the Luna homepage by turning this toggle OFF.</string>
     <string name="text_please_try_again_after_mins_seconds">Please try again after %1$dmins %2$dseconds</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
 
 </resources>

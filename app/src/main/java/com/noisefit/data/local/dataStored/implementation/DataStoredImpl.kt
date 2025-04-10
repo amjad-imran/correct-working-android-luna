@@ -296,13 +296,19 @@ class DataStoredImpl
         mPrefs.edit()?.remove(DISPLAY_HOME_SCREEN_CARD)?.commit()
     }
 
-    override fun setCustomHomeScreenApiCallTimeStamps(timestamps: List<Long>) {
-        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, timestamps.joinToString(","))
-            .commit()
+    override fun setCustomHomeScreenApiCallTimeStamps(pair: Pair<String, Int>) {
+        mPrefs.edit().putString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, "${pair.first}|${pair.second}" ).commit()
     }
 
-    override fun getCustomHomeScreenApiCallTimeStamps(): String? {
-        return mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
+    override fun getCustomHomeScreenApiCallTimeStamps(): Pair<String, Int>? {
+        val pairString = mPrefs.getString(CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP, null)
+        if (pairString != null){
+            val parts = pairString.split("|")
+            if (parts.size == 2) {
+                return Pair(parts[0], parts[1].toInt())
+            }
+        }
+        return null
     }
 
     override fun clearCustomHomeScreenApiCallTimeStamps() {
