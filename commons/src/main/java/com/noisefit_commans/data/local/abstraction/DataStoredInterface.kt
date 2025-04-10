@@ -511,7 +511,11 @@ interface DataStoredInterface {
     fun clearCustomHomeScreenApiCallTimeStamps()
     fun saveAppTrackEvent(eventName: AppTrackEvent, isStart: Boolean)
     fun clearAppTrackEvent(eventName: AppTrackEvent)
-    fun getAppTrackEventTime(eventName: AppTrackEvent): Long?
+
+    /**
+     * Returns start and end timestamp
+     */
+    fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long,Long>?
 }
 
 enum class AppTrackEvent {

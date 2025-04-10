@@ -47,8 +47,6 @@ class OreoOnlineDataMapper
 
     suspend fun convertDataToPost(
         userSyncActivities: OreoUserSyncActivities,
-        syncTime: Long?,
-        appOpenTime: Long?
     ): OreoUserDataPost? {
         val combinedData = OreoUserDataPost()
 
@@ -71,9 +69,6 @@ class OreoOnlineDataMapper
         combinedData.bodyTemperature = bodyTemperature
         combinedData.respiratory = respiratory
         combinedData.sleeps = sleeps
-
-        //combinedData.appOpenTime = appOpenTime
-        //combinedData.syncTime = syncTime
 
         if (steps == null && stress == null && heartRateHistory == null
             && bloodOxygen == null && bodyTemperature == null && respiratory == null && bodyStress == null

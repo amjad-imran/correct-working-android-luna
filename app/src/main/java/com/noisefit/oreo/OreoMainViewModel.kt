@@ -31,6 +31,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
+import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -69,6 +70,10 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -1228,6 +1233,46 @@ constructor(
             }
         }
 
+    }
+
+    fun updateAppTrackingEvent(event: AppTrackEvent) {
+        viewModelScope.launch {
+
+            val syncTime = localDataStore.getAppTrackEventTime(event)
+            if(syncTime==null) return@launch
+
+
+            val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.first/1000), ZoneId.systemDefault())
+            val end = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.second/1000), ZoneId.systemDefault())
+
+            val startFormatted = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val endFormatted = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
+            val requestObject = JsonObject().apply {
+                this.addProperty("key", when(event){
+                    AppTrackEvent.SYNC -> "sync_time"
+                    AppTrackEvent.APP_START -> "app_open_time"
+                })
+
+
+                this.addProperty("startTime", startFormatted)
+                this.addProperty("endTime", endFormatted)
+                this.addProperty("duration", syncTime.second-syncTime.first)
+            }
+
+
+            userRepository.sendAppTrackingEvent(requestObject).collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            localDataStore.clearAppTrackEvent(event)
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
     }
 
 }

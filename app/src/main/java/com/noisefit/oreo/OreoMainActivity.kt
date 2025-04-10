@@ -111,6 +111,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         super.onCreate(savedInstanceState)
 
         viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START,false)
+        viewModel.updateAppTrackingEvent(AppTrackEvent.APP_START)
 
         if (viewModel.isBottomNavGifPlaying.not()) {
             binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
@@ -1042,6 +1043,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                             syncCompletedState()
                         }
+
+                        viewModel.updateAppTrackingEvent(AppTrackEvent.SYNC)
 
 
                         //viewModel.syncTextState.value = null

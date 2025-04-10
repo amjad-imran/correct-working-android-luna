@@ -380,4 +380,13 @@ class UserRepositoryImpl(
             )
         }
     }
+
+    override suspend fun sendAppTrackingEvent(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.sendAppTrackingEvent(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-log",
+                request
+            )
+        }
+    }
 }

@@ -16,8 +16,6 @@ data class OreoUserDataPost(
     @SerializedName("heart_rate") var heartRateHistory: List<OreoHeartNetworkEntity>? = null,
     @SerializedName("temperature") var bodyTemperature: List<OreoBodyTempNetworkEntity>? = null,
     @SerializedName("respiration") var respiratory: List<OreoCommonNetworkEntity>? = null,
-    @SerializedName("app_open_time") var appOpenTime: Long? = null,
-    @SerializedName("sync_time") var syncTime: Long? = null,
 ) : OreoUserActivitiesPost()
 
 

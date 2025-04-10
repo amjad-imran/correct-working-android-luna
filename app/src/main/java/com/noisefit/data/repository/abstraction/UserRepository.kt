@@ -63,4 +63,6 @@ interface UserRepository {
 
     suspend fun getCannyFeedbackUrl(): Flow<Resource<BaseApiResponse<String>>>
 
+    suspend fun sendAppTrackingEvent(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
 }
