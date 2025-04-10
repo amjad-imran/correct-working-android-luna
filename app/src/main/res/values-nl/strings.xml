@@ -1869,7 +1869,6 @@
     <string name="text_menstrual_health">Menstruele gezondheid</string>
     <string name="text_sleep_charge_ring_new">We hebben al een tijdje geen gegevens ontvangen. Vergeet niet je ring op te laden en regelmatig te dragen zodat je geen persoonlijke inzichten mist!</string>
     <string name="text_luna_managed">Luna beheerd</string>
-    <string name="text_customize_homescreen">Startscherm aanpassen</string>
     <string name="text_heart_monitor">Hartslagmeter</string>
     <string name="text_7_day_trends_cards">7-daagse trendkaarten</string>
     <string name="text_workout_history">Trainingsgeschiedenis</string>
@@ -1879,6 +1878,11 @@
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">Pas eenvoudig de indeling van je app aan. Verplaats of verwijder kaarten naar wens.</string>
     <string name="text_edit_home_screen">Startscherm bewerken</string>
     <string name="text_suggest_a_feature">Stel een functie voor</string>
+    <string name="text_customise_homescreen">Startscherm aanpassen</string>
+    <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">Je kunt bepalen wat je op de Luna-startpagina ziet door deze schakelaar uit te zetten.</string>
+    <string name="text_please_try_again_after_mins_seconds">Probeer het opnieuw over %1$dmin %2$dsec</string>
+    <string name="text_custom_homescreen_message_2">Blijf op de hoogte met batterijwaarschuwingen, gegevenssynchronisatieherinneringen en essentiële meldingen om je Luna-ring soepel te laten werken</string>
+    <string name="text_dashboard_cannot_be_empty">Dashboard mag niet leeg zijn.</string>
 
 
 </resources>

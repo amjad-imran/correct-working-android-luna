@@ -1866,7 +1866,6 @@
     <string name="text_menstrual_health">经期健康</string>
     <string name="text_sleep_charge_ring_new">我们已经有一段时间没有收到数据了。记得为戒指充电并定期佩戴，以免错过你的个性化洞察！</string>
     <string name="text_luna_managed">Luna 管理</string>
-    <string name="text_customize_homescreen">自定义主屏幕</string>
     <string name="text_heart_monitor">心率监测</string>
     <string name="text_7_day_trends_cards">7日趋势卡片</string>
     <string name="text_workout_history">锻炼历史</string>
@@ -1876,6 +1875,11 @@
     <string name="text_change_your_app_layout_with_ease_move_or_remove_the_cards_as_per_your_requirements">轻松更改应用布局。根据需要移动或移除卡片。</string>
     <string name="text_edit_home_screen">编辑主屏幕</string>
     <string name="text_suggest_a_feature">建议功能</string>
+    <string name="text_customise_homescreen">自定义主屏幕</string>
+    <string name="text_you_can_control_what_you_want_to_see_on_the_luna_homepage_by_turning_this_toggle_off">通过关闭此开关，您可以控制在 Luna 首页上显示的内容。</string>
+    <string name="text_please_try_again_after_mins_seconds">请在 %1$d 分钟 %2$d 秒后重试</string>
+    <string name="text_custom_homescreen_message_2">随时了解电池警报、数据同步提醒和关键通知，以确保您的 Luna 指环正常运行</string>
+    <string name="text_dashboard_cannot_be_empty">仪表板不能为空。</string>
 
 
 </resources>
