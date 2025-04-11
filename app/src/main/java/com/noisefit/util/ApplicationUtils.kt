@@ -64,19 +64,19 @@ object ApplicationUtils {
     fun parseAppLink(string: String?): AppLinks?{
         if (string.isNullOrEmpty()) return null
 
-        return if (string.equals("/referral", true)) {
+        return if (string.equals("/applinks/referral", true)) {
             AppLinks.REFERRAL
-        }else if(string.equals("/notificationControl", true)){
+        }else if(string.equals("/applinks/notification-control", true)){
             AppLinks.NOTIFICATION_CONTROL
-        }else if(string.equals("/profile", true)){
+        }else if(string.equals("/applinks/profile", true)){
             AppLinks.PROFILE
-        }else if(string.equals("/sleepPlanner", true)){
+        }else if(string.equals("/applinks/sleep-planner", true)){
             AppLinks.SLEEP_PLANNER
-        }else if(string.equals("/lunaAi", true)){
+        }else if(string.equals("/applinks/luna-ai", true)){
             AppLinks.LUNA_AI
-        }else if(string.equals("/featureRequest", true)){
+        }else if(string.equals("/applinks/feature-request", true)){
             AppLinks.FEATURE_REQUEST
-        }else if(string.equals("/dashboard", true)){
+        }else if(string.equals("/applinks/dashboard", true)){
             AppLinks.DASHBOARD
         } else {
             null
