@@ -1355,4 +1355,9 @@
         android:id="@+id/custom_homecreen"
         android:name="com.oreo.ui.customHomeScreen.CustomHomeScreenFragment"
         android:label="CustomHomeScreenFragment" />
+    <fragment
+        android:id="@+id/caffeineWindowScreenFragment"
+        android:name="com.oreo.ui.caffeineWindowScreen.CaffeineWindowScreenFragment"
+        android:label="fragment_caffeine_window_screen"
+        tools:layout="@layout/fragment_caffeine_window_screen" />
 </navigation>

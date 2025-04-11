@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemCaffeineFoodBinding
-import com.oreo.ui.customHomeScreen.ItemClickListener
 import androidx.core.graphics.toColorInt
 
 class ItemAdapter(
@@ -51,4 +50,8 @@ class ItemAdapter(
         mDataSet.addAll(newItems)
         notifyDataSetChanged()
     }
+}
+
+interface ItemClickListener{
+    fun onItemStateChanged(position: Int)
 }

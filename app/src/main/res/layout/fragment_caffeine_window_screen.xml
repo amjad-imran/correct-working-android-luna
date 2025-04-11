@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context="com.oreo.ui.caffeineWindowScreen.CaffeineWindowScreenFragment">
 
+    <View
+        android:id="@+id/bg_view"
+        android:layout_width="0dp"
+        android:layout_height="330dp"
+        android:background="@drawable/bg_caffeine_window_screen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         android:id="@+id/layoutToolbar"
         layout="@layout/layout_toolbar"
@@ -123,8 +133,8 @@
 
                 <ImageView
                     android:id="@+id/ivToggleRv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
             </LinearLayout>
 
