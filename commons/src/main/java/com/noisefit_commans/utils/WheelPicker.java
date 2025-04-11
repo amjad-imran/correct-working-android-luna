@@ -155,9 +155,9 @@ public class WheelPicker extends View implements Runnable {
 	}
 
 	private void updateVisibleItemCount() {
-		if (visibleItemCount < 2) {
+		/*if (visibleItemCount < 2) {
 			throw new ArithmeticException("Wheel's visible item count can not be less than 2!");
-		}
+		}*/
 
 		// Be sure count of visible item is odd number
 		if (visibleItemCount % 2 == 0) {
