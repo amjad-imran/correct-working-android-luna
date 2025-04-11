@@ -159,7 +159,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/referral" />
+                <data android:pathPattern="/applinks/referral" />
             </intent-filter>
 
             <!--Notifications control page - notificationControl-->
@@ -171,7 +171,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/notificationControl" />
+                <data android:pathPattern="/applinks/notification-control" />
             </intent-filter>
 
             <!-- User Profile page - profile-->
@@ -183,7 +183,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/profile" />
+                <data android:pathPattern="/applinks/profile" />
             </intent-filter>
 
             <!--  Sleep Planner page - sleepPlanner-->
@@ -195,7 +195,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/sleepPlanner" />
+                <data android:pathPattern="/applinks/sleep-planner" />
             </intent-filter>
 
             <!--  Dashboard Tab -dashboard -->
@@ -207,7 +207,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/dashboard" />
+                <data android:pathPattern="/applinks/dashboard" />
             </intent-filter>
 
             <!--AI Tab - lunaAi-->
@@ -219,7 +219,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/lunaAi" />
+                <data android:pathPattern="/applinks/luna-ai" />
             </intent-filter>
 
             <!--Recommend a feature (canny) - featureRequest-->
@@ -231,7 +231,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="lunazone.com" />
-                <data android:pathPattern="/featureRequest" />
+                <data android:pathPattern="/applinks/feature-request" />
             </intent-filter>
         </activity>
 
