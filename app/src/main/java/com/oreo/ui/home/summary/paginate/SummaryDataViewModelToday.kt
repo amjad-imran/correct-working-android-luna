@@ -56,6 +56,7 @@ import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
@@ -1124,7 +1125,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     getLunaManagedPriority(hasSleep)
                 }
             } else {
-                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
                 getLunaManagedPriority(hasSleep)
             }
 
@@ -1143,7 +1143,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             isAfter12
                         )?.let { userActivities.add(it) }
 
-                        if(!lunaManaged){
+                        if (!lunaManaged) {
                             LOGS.d("isAfter12:  ${isAfter12.not()}")
                             if (isAfter12.not()) {
                                 getHealthMonitorData(healthData.sleep)?.let {
@@ -1224,6 +1224,12 @@ class SummaryDataViewModelToday @Inject constructor(
                             userActivities.add(it)
                         }
                     }
+
+                    "caffeine_window" -> {
+                        getCaffeineCardData()?.let {
+                            userActivities.add(it)
+                        }
+                    }
                 }
             }
 
@@ -1242,6 +1248,20 @@ class SummaryDataViewModelToday @Inject constructor(
             handleSleepAlert(healthData.sleep)
             handleGoogleFitCard()
         }
+    }
+
+    private fun getCaffeineCardData(): OHealthOverview? {
+        return OHealthOverview.CaffeineWindow(
+            CaffeineWindowData(
+                wakeUpTime = "07:00:00",
+                bedTime = "23:00:00",
+                caffeineStartTime = "09:00:00",
+                caffeineEndTime = "18:00:00",
+                caffeineValues = listOf(
+                    50, 45, 40, 35, 30, 25, 20, 15
+                )
+            )
+        )
     }
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
@@ -1754,14 +1774,14 @@ class SummaryDataViewModelToday @Inject constructor(
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        if(isAfter12.not()){
+                        if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
-                    }else{
+                    } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
@@ -1772,14 +1792,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        if(isAfter12.not()){
+                        if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
-                    }else{
+                    } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
@@ -1791,14 +1811,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             2 -> { // Evening (balanced)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
                         if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
-                    }else{
+                    } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
@@ -1841,6 +1861,7 @@ class SummaryDataViewModelToday @Inject constructor(
             if (isAfter12) {
                 add(itemsMap["health_monitor"]!!.copy(priority = 14))
             }
+            add(itemsMap["caffeine_window"]!!.copy(priority = 15))
         }
 
         return priorityList
@@ -1931,6 +1952,14 @@ class SummaryDataViewModelToday @Inject constructor(
             this["health_monitor"] = CustomHomeScreenItem(
                 R.drawable.icon_heart_monitor,
                 "health_monitor",
+                resourceProvider.getString(R.string.text_heart_monitor),
+                true,
+                12
+            )
+
+            this["caffeine_window"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_monitor,
+                "caffeine_window",
                 resourceProvider.getString(R.string.text_heart_monitor),
                 true,
                 12

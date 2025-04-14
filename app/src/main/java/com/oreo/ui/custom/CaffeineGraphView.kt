@@ -8,23 +8,26 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
+import android.widget.TextView
 import com.noisefit_commans.ui.dpToPixel
 import java.time.Duration
 import java.time.LocalTime
 import com.noisefit.luna.R
+import com.oreo.data.model.CaffeineWindowData
+import java.time.format.DateTimeFormatter
 
 
 class CaffeineGraphView : View {
 
 
-
     private var highlightState: HighlightState = HighlightState.START
-    private val graphStart = LocalTime.of(7, 0)
-    private val graphEnd = LocalTime.of(23, 0)
+    private var graphStart: LocalTime? = null
+    private var graphEnd: LocalTime? = null
 
-    private val caffeineStart = LocalTime.of(9, 0)
-    private val caffeineEnd = LocalTime.of(18, 0)
+    private var caffeineStart: LocalTime? = null
+    private var caffeineEnd: LocalTime? = null
+
+    private var caffeineDataList = ArrayList<Int>()
 
 
     private val barPaintDefault = Paint().apply {
@@ -78,26 +81,37 @@ class CaffeineGraphView : View {
         super.onDraw(canvas)
 
 
+        if (graphStart == null || graphEnd == null || caffeineStart == null || caffeineEnd == null) {
+            return
+        }
 
         drawBottomBar(canvas)
     }
 
+    fun updateData(data: CaffeineWindowData) {
+
+        graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        caffeineStart =
+            LocalTime.parse(data.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        caffeineEnd = LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        caffeineDataList.clear()
+        caffeineDataList.addAll(data.caffeineValues)
+
+        invalidate()
+
+    }
 
 
     fun drawBottomBar(canvas: Canvas) {
 
-
         val barCenterYPos = height - 12f.dpToPixel()
 
-        /*val startBarWidth  = width/3f
-        val caffeineBarWidth  = width/3f
-        val endBarWidth  = width/3f*/
-
         val (startBarWidth, caffeineBarWidth, endBarWidth) = calculateBarWidths(
-            graphStart,
-            graphEnd,
-            caffeineStart,
-            caffeineEnd,
+            graphStart!!,
+            graphEnd!!,
+            caffeineStart!!,
+            caffeineEnd!!,
             width.toFloat()
         )
 
@@ -105,21 +119,27 @@ class CaffeineGraphView : View {
         val barHeightEnabled = 6f.dpToPixel()
         val radius = 2f.dpToPixel()
 
-
         val segment1Start = 0f
         val segment1End = startBarWidth
         val isStartHighlighted = highlightState == HighlightState.START
 
-        drawNoCaffeineZoneLabel(canvas, segment1Start + startBarWidth / 2, barCenterYPos-8f.dpToPixel())
+        if (isStartHighlighted) {
+            drawNoCaffeineZoneLabel(
+                canvas,
+                segment1Start + startBarWidth / 2,
+                barCenterYPos - 8f.dpToPixel()
+            )
+        }
+
 
         canvas.drawRoundRect(
             segment1Start,
-            barCenterYPos - (if(isStartHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos - (if (isStartHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             segment1End,
-            barCenterYPos + (if(isStartHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos + (if (isStartHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             radius,
             radius,
-            if(isStartHighlighted) redPaintEnabled else redPaintDisabled
+            if (isStartHighlighted) redPaintEnabled else redPaintDisabled
         )
 
         val segment2Start = segment1End
@@ -127,29 +147,35 @@ class CaffeineGraphView : View {
         val isCaffeineHighlighted = highlightState == HighlightState.CAFFEINE
         canvas.drawRoundRect(
             segment2Start,
-            barCenterYPos - (if(isCaffeineHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos - (if (isCaffeineHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             segment2End,
-            barCenterYPos + (if(isCaffeineHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos + (if (isCaffeineHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             radius,
             radius,
-            if(isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
+            if (isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
         )
 
         val segment3Start = segment2End
         val segment3End = segment2End + endBarWidth
         val isEndHighlighted = highlightState == HighlightState.END
+
+
+        if (isEndHighlighted) {
+            drawNoCaffeineZoneLabel(
+                canvas,
+                segment3Start + endBarWidth / 2,
+                barCenterYPos - 8f.dpToPixel()
+            )
+        }
         canvas.drawRoundRect(
             segment3Start,
-            barCenterYPos - (if(isEndHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos - (if (isEndHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             segment3End,
-            barCenterYPos + (if(isEndHighlighted) barHeightEnabled else  barHeightDisabled) / 2,
+            barCenterYPos + (if (isEndHighlighted) barHeightEnabled else barHeightDisabled) / 2,
             radius,
             radius,
-            if(highlightState==HighlightState.END) redPaintEnabled else redPaintDisabled
+            if (highlightState == HighlightState.END) redPaintEnabled else redPaintDisabled
         )
-
-
-        //draw Bars
 
 
         drawBars(
@@ -179,11 +205,29 @@ class CaffeineGraphView : View {
         canvas.restore()
     }
 
+    fun drawTooltip(canvas: Canvas, centerX: Float, bottom: Float, text: String) {
+
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.tooltip_caffene_amount, null)
+
+        view.findViewById<TextView>(R.id.tvAmount).text = text
+
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        view.measure(widthSpec, heightSpec)
+        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+
+        canvas.save()
+        val drawX = centerX// - view.measuredWidth / 2f
+        val drawY = bottom - view.measuredHeight
+        canvas.translate(drawX, drawY)
+
+        view.draw(canvas)
+        canvas.restore()
+    }
 
 
     fun drawBars(startX: Float, endX: Float, barBottomY: Float, canvas: Canvas) {
-        val caffeineDataList = listOf(50, 40, 30, 20, 15, 10, 10)
-
         val maxVal = caffeineDataList.maxOrNull() ?: return
         val availableWidth = endX - startX
         val barCount = caffeineDataList.size
@@ -195,6 +239,18 @@ class CaffeineGraphView : View {
 
         val cornerRadius = 3f.dpToPixel()
 
+        val currentTime = LocalTime.now()
+
+        caffeineStart
+
+        var selectedBarStart = 0
+        val highlightedIndex = getTimeIndex(
+            caffeineStart!!,
+            caffeineEnd!!,
+            currentTime,
+            caffeineDataList.size
+        )
+        var highlightedBarTop = barTopY
         caffeineDataList.forEachIndexed { index, value ->
             val heightRatio = value / maxVal.toFloat()
             val barHeight = heightRatio * (barBottomY - barTopY)
@@ -204,17 +260,42 @@ class CaffeineGraphView : View {
             val right = left + barWidth
             val bottom = barBottomY
 
+            if(highlightedIndex==index){
+                highlightedBarTop = top
+            }
+
             val rect = RectF(left, top, right, bottom)
-            canvas.drawRoundRect(rect, cornerRadius, cornerRadius, barPaintDefault)
+            canvas.drawRoundRect(
+                rect,
+                cornerRadius,
+                cornerRadius,
+                if (highlightedIndex == index) barPaintHighlighted else barPaintDefault
+            )
         }
 
+
+        if (highlightedIndex != -1) {
+            val left = startX + highlightedIndex * (barWidth + spacing)
+            drawTooltip(canvas, left, highlightedBarTop, "Upto 30 mg")
+        }
     }
 
+    fun getTimeIndex(
+        startTime: LocalTime,
+        endTime: LocalTime,
+        currentTime: LocalTime,
+        parts: Int
+    ): Int {
+        if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) return -1
 
-    fun updateData() {
+        val totalDuration = Duration.between(startTime, endTime).toMinutes()
+        val interval = totalDuration / parts
 
+        val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
 
+        return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
     }
+
 
     fun calculateBarWidths(
         graphStart: LocalTime,
@@ -224,7 +305,7 @@ class CaffeineGraphView : View {
         totalWidth: Float
     ): Triple<Float, Float, Float> {
 
-        val now = LocalTime.of(9, 0)//LocalTime.now()
+        val now = LocalTime.now() //LocalTime.of(9, 0)
 
         val startDuration = Duration.between(graphStart, caffeineStart).toMinutes().toFloat()
         val caffeineDuration = Duration.between(caffeineStart, caffeineEnd).toMinutes().toFloat()
