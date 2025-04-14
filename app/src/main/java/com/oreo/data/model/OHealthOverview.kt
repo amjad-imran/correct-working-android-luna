@@ -172,6 +172,11 @@ sealed class OHealthOverview {
         val currentDay: Int
     ) : OHealthOverview()
 
+
+    class CaffeineWindow(
+        val data: CaffeineWindowData
+    ) : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()
@@ -192,6 +197,14 @@ data class PeriodCard1(
     val bottomText: String,
     val predictionDate: String,
     val background: Int
+)
+
+data class CaffeineWindowData(
+    val wakeUpTime: String,//HH:mm:ss
+    val bedTime: String,//HH:mm:ss
+    val caffeineStartTime: String,//HH:mm:ss
+    val caffeineEndTime: String,//HH:mm:ss
+    val caffeineValues: List<Int>,//HH:mm:ss
 )
 
 data class PeriodCard2(

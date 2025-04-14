@@ -22,6 +22,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemSevenDayTrendsCardBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
+import com.noisefit.luna.databinding.LayoutCardCaffeineDashBinding
 import com.noisefit.luna.databinding.LayoutChatCardDashBinding
 import com.noisefit.luna.databinding.LayoutDashHealthMonitorBinding
 import com.noisefit.luna.databinding.LayoutDashSleepPlannerCardBinding
@@ -273,6 +274,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 )
             )
 
+            R.layout.layout_card_caffeine_dash -> HomeRecyclerViewHolder.CaffeineViewHolder(
+                LayoutCardCaffeineDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_dash_sleep_planner_card -> {
                 HomeRecyclerViewHolder.SleepPlannerViewHolder(
                     LayoutDashSleepPlannerCardBinding.inflate(
@@ -444,6 +451,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 position,
             )
 
+            is HomeRecyclerViewHolder.CaffeineViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CaffeineWindow,
+            )
+
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
@@ -490,6 +501,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.CycleTrackerCardBig -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
             is OHealthOverview.GotYourPeriod -> R.layout.list_dash_got_period
+            is OHealthOverview.CaffeineWindow -> R.layout.layout_card_caffeine_dash
             is OHealthOverview.HealthMonitorCard -> R.layout.layout_dash_health_monitor
             is OHealthOverview.SleepPlannerCard -> R.layout.layout_dash_sleep_planner_card
 
@@ -2813,6 +2825,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.ivCross.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater)
             }
+        }
+    }
+
+    class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
+        fun bind(data: OHealthOverview.CaffeineWindow){
+
+
+            binding.caffeineGraphView.updateData(data.data)
         }
     }
 
