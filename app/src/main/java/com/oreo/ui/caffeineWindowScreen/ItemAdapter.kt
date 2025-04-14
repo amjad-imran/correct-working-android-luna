@@ -13,7 +13,6 @@ sealed class CaffeineWindowScreenClickEnum {
 }
 
 class ItemAdapter(
-//    private val listener: ItemClickListener
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     var itemClickListener: ((type: CaffeineWindowScreenClickEnum) -> Unit) ?= null
@@ -23,9 +22,6 @@ class ItemAdapter(
     private val maxQuantity = 40
 
     inner class ViewHolder(val binding: ItemCaffeineFoodBinding) : RecyclerView.ViewHolder(binding.root)
-//    {
-//        var itemClickListener: ((type: CaffeineWindowScreenClickEnum) -> Unit) ?= null
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemCaffeineFoodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,9 +29,8 @@ class ItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.itemClickListener = itemClickListener
+        val item = mDataSet.get(position)
 
-        val item = mDataSet[position]
         holder.binding.tvTitle.text = item.name
 
         holder.binding.tvQuantity.apply {
@@ -51,8 +46,7 @@ class ItemAdapter(
         )
 
         holder.binding.ivFav.setOnClickListener {
-            val curItem = mDataSet[position]
-            if (curItem.is_favourite){
+            if (item.is_favourite){
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onFavIconClicked(position))
             }else{
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onNotFavIconClicked(position))
@@ -68,9 +62,16 @@ class ItemAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateSingleItem(item: CaffeineFoodItem?, idx: Int){
+        if (item == null){
+            mDataSet.removeAt(idx)
+            notifyItemRemoved(idx)
+            notifyItemRangeChanged(idx, mDataSet.size - idx)
+        }else{
+            mDataSet.add(item)
+            notifyItemInserted(mDataSet.size-1)
+        }
+    }
+
     fun getItemsList(): ArrayList<CaffeineFoodItem> = mDataSet
 }
-
-//interface ItemClickListener{
-//    fun onFavIconClicked(position: Int)
-//}

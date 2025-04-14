@@ -65,16 +65,18 @@ class CaffeineWindowScreenFragment :
         myItemsAdapter.itemClickListener = { type ->
             when(type){
                 is CaffeineWindowScreenClickEnum.onFavIconClicked -> {
-                    val myItemsList = ArrayList<CaffeineFoodItem>(myItemsAdapter.getItemsList())
-                    val curIdx = type.position
-                    val curItem = myItemsList.get(curIdx)
-                    curItem.is_favourite = false
-                    myItemsList.removeAt(curIdx)
-                    myItemsAdapter.updateItems(myItemsList)
+                    val myItemsList = viewModel._myItemsList.value
+                    if (!myItemsList.isNullOrEmpty()){
+                        val curIdx = type.position
+                        val curItem = myItemsList.get(curIdx)
+                        curItem.is_favourite = false
+                        myItemsList.removeAt(curIdx)
+                        myItemsAdapter.updateSingleItem(null, curIdx)
 
-                    val allItemsList = ArrayList<CaffeineFoodItem>(allItemsAdapter.getItemsList())
-                    allItemsList.add(curItem)
-                    allItemsAdapter.updateItems(allItemsList)
+                        viewModel._allItemsList.value?.add(curItem)
+                        allItemsAdapter.updateSingleItem(curItem, -1)
+
+                    }
                 }
                 is CaffeineWindowScreenClickEnum.onNotFavIconClicked -> {}
             }
@@ -84,16 +86,17 @@ class CaffeineWindowScreenFragment :
             when(type){
                 is CaffeineWindowScreenClickEnum.onFavIconClicked -> {}
                 is CaffeineWindowScreenClickEnum.onNotFavIconClicked -> {
-                    val allItemsList = ArrayList<CaffeineFoodItem>(allItemsAdapter.getItemsList())
-                    val curIdx = type.position
-                    val curItem = allItemsList.get(curIdx)
-                    curItem.is_favourite = true
-                    allItemsList.removeAt(curIdx)
-                    allItemsAdapter.updateItems(allItemsList)
+                    val allItemsList = viewModel._allItemsList.value
+                    if (!allItemsList.isNullOrEmpty()){
+                        val curIdx = type.position
+                        val curItem = allItemsList.get(curIdx)
+                        curItem.is_favourite = true
+                        allItemsList.removeAt(curIdx)
+                        allItemsAdapter.updateSingleItem(null, curIdx)
 
-                    val myItemsList = ArrayList<CaffeineFoodItem>(myItemsAdapter.getItemsList())
-                    myItemsList.add(curItem)
-                    myItemsAdapter.updateItems(myItemsList)
+                        viewModel._myItemsList.value?.add(curItem)
+                        myItemsAdapter.updateSingleItem(curItem, -1)
+                    }
                 }
             }
         }
@@ -135,11 +138,11 @@ class CaffeineWindowScreenFragment :
             binding.rvAllItems.setVisibilityByCondition(it)
         }
 
-        viewModel.myItemsList.observe(viewLifecycleOwner) { items ->
+        viewModel._myItemsList.observe(viewLifecycleOwner) { items ->
             myItemsAdapter.updateItems(items)
         }
 
-        viewModel.allItemsList.observe(viewLifecycleOwner) { items ->
+        viewModel._allItemsList.observe(viewLifecycleOwner) { items ->
             allItemsAdapter.updateItems(items)
         }
     }

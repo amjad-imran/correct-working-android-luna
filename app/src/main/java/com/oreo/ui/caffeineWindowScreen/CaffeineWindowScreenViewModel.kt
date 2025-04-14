@@ -24,11 +24,11 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
     val rvDisplayAllItemsToggleState: MutableLiveData<Boolean> = MutableLiveData(true)
 
-    private val _myItemsList = MutableLiveData<List<CaffeineFoodItem>>()
-    val myItemsList: LiveData<List<CaffeineFoodItem>> get() = _myItemsList
+    val _myItemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
 
-    private val _allItemsList = MutableLiveData<List<CaffeineFoodItem>>()
-    val allItemsList: LiveData<List<CaffeineFoodItem>> get() = _allItemsList
+    val _allItemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
+
+    private var itemsList = ArrayList<CaffeineFoodItem>()
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
@@ -82,7 +82,7 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            itemsList = it as ArrayList
                             dataUpdated.postValue(Event(true))
                         }
                     }
