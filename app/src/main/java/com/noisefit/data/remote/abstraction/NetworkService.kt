@@ -67,6 +67,7 @@ import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.referral.ReferralsMain
 import com.oreo.data.model.sleep.SleepDataResponse
+import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -694,6 +695,11 @@ interface NetworkService {
         @Url url: String,
         @Body req: CustomHomeScreenModel
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getCaffeineWindowItemsList(
+        @Url url: String,
+    ): BaseApiResponse<List<CaffeineFoodItem>>
 
     @GET
     suspend fun getCannyFeedbackUrl(

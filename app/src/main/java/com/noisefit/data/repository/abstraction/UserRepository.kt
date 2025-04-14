@@ -14,12 +14,12 @@ import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.models.*
 import com.oreo.data.model.NotificationToggleModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
     suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?)
-
 
     suspend fun saveUserDevice(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UpdateDeviceResponse>>>
 
@@ -60,6 +60,8 @@ interface UserRepository {
     suspend fun updateNotificationToggle(requestObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun submitCustomHomeScreenPriority(request: CustomHomeScreenModel): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getCaffeineWindowItemsList(): Flow<Resource<BaseApiResponse<List<CaffeineFoodItem>>>>
 
     suspend fun getCannyFeedbackUrl(): Flow<Resource<BaseApiResponse<String>>>
 

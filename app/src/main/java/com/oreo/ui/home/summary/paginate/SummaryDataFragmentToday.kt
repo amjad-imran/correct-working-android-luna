@@ -377,6 +377,13 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.aichat_initiated_clicked,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "activity"
+                            this["value"] = "homepage"
+                        }
+                    )
 
                     if (viewModel.isChatSplashShown()) {
                         navigate(
@@ -479,7 +486,7 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.notification_toggled,
+                        MoEngageLunaAppEvents.notification_toggle,
                         HashMap<String, Any>().apply {
                             this["config"] = "turned_on/turned_off"
                             this["goal"] = "steps"
@@ -498,7 +505,7 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.notification_toggled,
+                        MoEngageLunaAppEvents.notification_toggle,
                         HashMap<String, Any>().apply {
                             this["config"] = "turned_on/turned_off"
                             this["goal"] = "hydrate"
@@ -676,6 +683,10 @@ class SummaryDataFragmentToday :
         }
         binding.contentMain.lytFindMyRingAlert.tvTurnOn.setOnClickListener {
             showPermDetailsDialog()
+        }
+
+        binding.contentMain.caffeineDashCard.root.setOnClickListener {
+            navigate(R.id.caffeineWindowScreenFragment)
         }
 
 //        binding.contentMain.lytHeartRate.root.setOnClickListener {
