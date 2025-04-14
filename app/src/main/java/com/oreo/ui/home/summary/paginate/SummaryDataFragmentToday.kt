@@ -287,6 +287,10 @@ class SummaryDataFragmentToday :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
+                OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {
+                    navigate(R.id.caffeineWindowScreenFragment)
+                }
+
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
 
                     navigate(R.id.aboutAutoWorkoutBottomSheet)
@@ -683,10 +687,6 @@ class SummaryDataFragmentToday :
         }
         binding.contentMain.lytFindMyRingAlert.tvTurnOn.setOnClickListener {
             showPermDetailsDialog()
-        }
-
-        binding.contentMain.caffeineDashCard.root.setOnClickListener {
-            navigate(R.id.caffeineWindowScreenFragment)
         }
 
 //        binding.contentMain.lytHeartRate.root.setOnClickListener {

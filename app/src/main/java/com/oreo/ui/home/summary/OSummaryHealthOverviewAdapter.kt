@@ -129,6 +129,8 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnIvHydrateMinusClicked : OSummaryHealthOverviewClickEnum()
     object OnIvHydratePlusClicked : OSummaryHealthOverviewClickEnum()
     object OnEditGoalsCardEditClicked : OSummaryHealthOverviewClickEnum()
+
+    object OnCaffeineDashCardClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -2830,9 +2832,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
         fun bind(data: OHealthOverview.CaffeineWindow){
-
-
+            initListener()
             binding.caffeineGraphView.updateData(data.data)
+        }
+
+        private fun initListener() {
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked)
+            }
         }
     }
 
