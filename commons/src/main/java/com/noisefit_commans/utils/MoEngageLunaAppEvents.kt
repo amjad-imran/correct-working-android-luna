@@ -100,6 +100,7 @@ object MoEngageLunaAppEvents {
     //
     const val user_menu_option_clicked = "user_menu_option_clicked"
     const val notification_toggled = "notification_toggled"
+    const val notification_toggle = "notification_toggle"
     const val goalsSetting_clicked = "goalsSetting_clicked"
     const val action_cancelled = "action_cancelled"
     const val goals_set = "goals_set"
