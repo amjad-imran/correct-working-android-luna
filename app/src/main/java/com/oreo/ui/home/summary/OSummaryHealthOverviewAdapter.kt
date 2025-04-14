@@ -536,20 +536,22 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
         }
     }
 
-    fun updateDailyToggle(goal:NotificationGoal) {
+    fun updateDailyToggle(goal: NotificationGoal) {
         val index = items.indexOfFirst { it is OHealthOverview.DailyGoalsCardData }
         if (index == -1) return
         val oldData = (items[index] as OHealthOverview.DailyGoalsCardData).notificationGoals.copy()
         (items[index] as OHealthOverview.DailyGoalsCardData).notificationGoals = oldData.apply {
-            if(goal==NotificationGoal.STEPS){
-                this.notificationToggleModel?.steps_notification = (this.notificationToggleModel?.steps_notification?:false).not()
-                if(this.notificationToggleModel?.steps_notification?:false){
+            if (goal == NotificationGoal.STEPS) {
+                this.notificationToggleModel?.steps_notification =
+                    (this.notificationToggleModel?.steps_notification ?: false).not()
+                if (this.notificationToggleModel?.steps_notification ?: false) {
                     this.notificationToggleModel?.master_notification = true
                 }
                 this.showStepsFade = true
-            }else if(goal== NotificationGoal.HYDRATE){
-                this.notificationToggleModel?.hydrate_notification = (this.notificationToggleModel?.hydrate_notification?:false).not()
-                if(this.notificationToggleModel?.hydrate_notification?:false){
+            } else if (goal == NotificationGoal.HYDRATE) {
+                this.notificationToggleModel?.hydrate_notification =
+                    (this.notificationToggleModel?.hydrate_notification ?: false).not()
+                if (this.notificationToggleModel?.hydrate_notification ?: false) {
                     this.notificationToggleModel?.master_notification = true
                 }
                 this.showHydrateFade = true
@@ -790,7 +792,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             //
             binding.root.setOnClickListener {
-                Log.d("hjcacajc","Stress Clicked: In Adapter")
+                Log.d("hjcacajc", "Stress Clicked: In Adapter")
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressCardClicked)
             }
         }
@@ -802,19 +804,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //            Log.d("yashlogii", "setWorkoutUI: BIND ${data.trendsData?.toString()}")
             updateSleepAvgUi(
                 Pair(
-                    data.trendsData.sleepScoreAvg, data.trendsData.activityScoreAvg
+                    data.trendsData?.sleepScoreAvg, data.trendsData?.activityScoreAvg
                 ),
                 data.chartModelSleep,
                 data.chartModelActivity,
                 data.chartModelEmpty
             )
-            data.trendsData.readinessScoreAvg?.let {
-                updateReadinessAvgUi(
-                    it,
-                    data.chartModelReadiness,
-                    data.chartModelEmpty
-                )
-            }
+            updateReadinessAvgUi(
+                data.trendsData?.readinessScoreAvg,
+                data.chartModelReadiness,
+                data.chartModelEmpty
+            )
         }
 
         private fun updateSleepAvgUi(
@@ -823,9 +823,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             chartModelActivity: List<ChartModel>,
             chartModelEmpty: List<ChartModel>
         ) {
-            if(data.first == null || data.second == null){
+            /*if(data.first == null || data.second == null){
                 return
-            }
+            }*/
             val lytSleepAvg = binding.lytSleepAvg
 
             val sleep = data.first!!
@@ -946,12 +946,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
 
         private fun updateReadinessAvgUi(
-            data: ODashboardReadinessScoreModel,
+            data: ODashboardReadinessScoreModel?,
             chartModelReadiness: List<ChartModel>,
             chartModelEmpty: List<ChartModel>
         ) {
             val lytReadinessAvg = binding.lytReadinessAvg
-            if (data.readinessScore != null && data.readinessScore >= 0) {
+            if (data?.readinessScore != null && data.readinessScore >= 0) {
                 lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
                 lytReadinessAvg.tvDaysAvg.visible()
                 lytReadinessAvg.tvSleepScore.visible()
@@ -1065,7 +1065,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             position: Int
         ) {
             setNotificationGoalsCardData(notificationGoal.notificationGoals)
-            initListener(position, binding,notificationGoal)
+            initListener(position, binding, notificationGoal)
         }
 
         private fun setNotificationGoalsCardData(notificationGoal: NotificationGoals) {
@@ -1155,20 +1155,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     ivNotificationSteps.setImageResource(R.drawable.ic_steps_notify_off)
                 }
 
-                if(notificationGoal.showHydrateFade){
+                if (notificationGoal.showHydrateFade) {
                     notificationGoal.showHydrateFade = false
                     handleMessageFade(
                         binding.textView153, binding.textHydrateReminderMessage,
                         binding.textView89, binding.textStepsReminderMessage,
-                        Pair(NotificationGoal.HYDRATE, notificationGoal.notificationToggleModel?.hydrate_notification?:false)
+                        Pair(
+                            NotificationGoal.HYDRATE,
+                            notificationGoal.notificationToggleModel?.hydrate_notification ?: false
+                        )
                     )
                 }
-                if(notificationGoal.showStepsFade){
+                if (notificationGoal.showStepsFade) {
                     notificationGoal.showStepsFade = false
                     handleMessageFade(
                         binding.textView153, binding.textHydrateReminderMessage,
                         binding.textView89, binding.textStepsReminderMessage,
-                        Pair(NotificationGoal.STEPS, notificationGoal.notificationToggleModel?.steps_notification?:false)
+                        Pair(
+                            NotificationGoal.STEPS,
+                            notificationGoal.notificationToggleModel?.steps_notification ?: false
+                        )
                     )
                 }
             }
@@ -1181,22 +1187,30 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.apply {
                 ivNotificationSteps.setOnClickListener {
-                    if(ApplicationUtils.isInternetConnected().not()){
+                    if (ApplicationUtils.isInternetConnected().not()) {
                         binding.root.context.showShortToast(binding.root.context.getString(R.string.text_no_internet_connection))
                         return@setOnClickListener
                     }
 
-                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked(position))
+                    itemClickListener?.invoke(
+                        OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked(
+                            position
+                        )
+                    )
 
                 }
 
                 ivNotificationHydrate.setOnClickListener {
-                    if(ApplicationUtils.isInternetConnected().not()){
+                    if (ApplicationUtils.isInternetConnected().not()) {
                         binding.root.context.showShortToast(binding.root.context.getString(R.string.text_no_internet_connection))
                         return@setOnClickListener
                     }
 
-                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked(position))
+                    itemClickListener?.invoke(
+                        OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked(
+                            position
+                        )
+                    )
                 }
 
                 ivHydrateMinus.setOnClickListener {
@@ -1808,7 +1822,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }*/
 
             binding.root.setOnClickListener {
-                Log.d("hjcacajc","Stress Clicked: In Adapter")
+                Log.d("hjcacajc", "Stress Clicked: In Adapter")
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressCardClicked)
             }
 

@@ -1881,5 +1881,7 @@
     <string name="text_please_try_again_after_mins_seconds">Riprova tra %1$dmin %2$dsec</string>
     <string name="text_custom_homescreen_message_2">Rimani aggiornato con avvisi della batteria, promemoria di sincronizzazione dei dati e notifiche essenziali per mantenere il tuo anello Luna funzionante senza problemi</string>
     <string name="text_dashboard_cannot_be_empty">Il cruscotto non può essere vuoto.</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Rimani aggiornato con avvisi sulla batteria, promemoria per la sincronizzazione dei dati e informazioni chiave: notifiche essenziali per mantenere il tuo anello Luna funzionante senza problemi</string>
+    <string name="text_copied">Copiato</string>
 
 </resources>

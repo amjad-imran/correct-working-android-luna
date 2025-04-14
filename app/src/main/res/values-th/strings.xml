@@ -1868,6 +1868,8 @@
     <string name="text_please_try_again_after_mins_seconds">กรุณาลองใหม่อีกครั้งใน %1$dนาที %2$dวินาที</string>
     <string name="text_custom_homescreen_message_2">รับการแจ้งเตือนแบตเตอรี่ เตือนความจำการซิงค์ข้อมูล และการแจ้งเตือนที่สำคัญเพื่อให้แหวน Luna ของคุณทำงานได้อย่างราบรื่น</string>
     <string name="text_dashboard_cannot_be_empty">แดชบอร์ดต้องไม่ว่างเปล่า</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">อัปเดตอยู่เสมอด้วยการแจ้งเตือนแบตเตอรี่ การเตือนให้ซิงค์ข้อมูล และข้อมูลเชิงลึกที่สำคัญ – การแจ้งเตือนที่จำเป็นเพื่อให้แหวน Luna ของคุณทำงานได้อย่างราบรื่น</string>
+    <string name="text_copied">คัดลอกแล้ว</string>
 
 
 </resources>

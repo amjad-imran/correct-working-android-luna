@@ -1261,19 +1261,17 @@ class SummaryDataViewModelToday @Inject constructor(
 //            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
 //        )
 //        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
-        return trendsData?.let {
-            val chartModelSleep = convertIntToChartModel(it.sleepScoreAvg?.value)
-            val chartModelActivity = convertIntToChartModel(it.activityScoreAvg?.value)
-            val chartModelReadiness = convertIntToChartModel(it.readinessScoreAvg?.value)
+            val chartModelSleep = convertIntToChartModel(trendsData?.sleepScoreAvg?.value)
+            val chartModelActivity = convertIntToChartModel(trendsData?.activityScoreAvg?.value)
+            val chartModelReadiness = convertIntToChartModel(trendsData?.readinessScoreAvg?.value)
             val chartModelEmpty = convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0))
-            OHealthOverview.SevenDayTrendsCard(
-                it,
+        return OHealthOverview.SevenDayTrendsCard(
+                trendsData,
                 chartModelSleep,
                 chartModelActivity,
                 chartModelReadiness,
                 chartModelEmpty
             )
-        }
     }
 
     private fun getCycleTrackerCard(): OHealthOverview? {

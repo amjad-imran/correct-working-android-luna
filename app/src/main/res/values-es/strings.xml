@@ -1885,6 +1885,8 @@
     <string name="text_please_try_again_after_mins_seconds">Por favor, inténtalo de nuevo después de %1$dmin %2$dseg</string>
     <string name="text_custom_homescreen_message_2">Mantente actualizado con alertas de batería, recordatorios de sincronización de datos y notificaciones clave esenciales para mantener tu anillo Luna funcionando sin problemas</string>
     <string name="text_dashboard_cannot_be_empty">El panel no puede estar vacío.</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Mantente informado con alertas de batería, recordatorios de sincronización de datos y conocimientos clave: notificaciones esenciales para que tu anillo Luna funcione sin problemas</string>
+    <string name="text_copied">Copiado</string>
 
 
 </resources>
