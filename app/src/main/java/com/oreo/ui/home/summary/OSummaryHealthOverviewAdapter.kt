@@ -828,17 +828,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }*/
             val lytSleepAvg = binding.lytSleepAvg
 
-            val sleep = data.first!!
-            val activity = data.second!!
+            val sleep = data.first
+            val activity = data.second
 
-            if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
+            if (sleep?.sleepScore != null && sleep.sleepScore >= 0) {
                 lytSleepAvg.tvSleepScore.visible()
                 lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
                 lytSleepAvg.tvDaysAvg.visible()
                 lytSleepAvg.sleepLineChart.visible()
                 lytSleepAvg.sleepLine.root.visible()
-                val trendValue = "${kotlin.math.abs(sleep.trend ?: 0)}%"
-                if (sleep.trend != null && sleep.trend > 0) {
+                val trendValue = "${kotlin.math.abs(sleep?.trend ?: 0)}%"
+                if (sleep?.trend != null && sleep.trend > 0) {
                     lytSleepAvg.sleepTrendValue.text = trendValue
                     lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
                     lytSleepAvg.sleepTrendImv.loadImage(
@@ -883,7 +883,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 lytSleepAvg.sleepLine.root.invisible()
             }
 
-            if (activity.activityScore != null && activity.activityScore >= 0) {
+            if (activity?.activityScore != null && activity.activityScore >= 0) {
 
                 lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
                 lytSleepAvg.activityLineChart.updateDataWithMaxMin(
