@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +30,8 @@ class CaffeineWindowScreenViewModel @Inject constructor(
     private val _allItemsList = MutableLiveData<List<CaffeineFoodItem>>()
     val allItemsList: LiveData<List<CaffeineFoodItem>> get() = _allItemsList
 
+    val dataUpdated= MutableLiveData<Event<Boolean>>()
+
     fun loadItems() {
         viewModelScope.launch {
             val allItems = ArrayList<CaffeineFoodItem>()
@@ -44,6 +50,43 @@ class CaffeineWindowScreenViewModel @Inject constructor(
             }
             if (allItems.isNotEmpty()){
                 _allItemsList.postValue(allItems)
+            }
+        }
+    }
+
+    fun aisehi(){
+        viewModelScope.launch {
+            userRepository.getCaffeineWindowItemsList().collect{
+                    resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            dataUpdated.postValue(Event(true))
+                        }
+                    }
+                }
             }
         }
     }
