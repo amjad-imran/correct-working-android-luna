@@ -678,6 +678,10 @@ class SummaryDataFragmentToday :
             showPermDetailsDialog()
         }
 
+        binding.contentMain.caffeineDashCard.root.setOnClickListener {
+            navigate(R.id.caffeineWindowScreenFragment)
+        }
+
 //        binding.contentMain.lytHeartRate.root.setOnClickListener {
 //            navigate(R.id.fragmentHeartRateDetails)
 //        }
