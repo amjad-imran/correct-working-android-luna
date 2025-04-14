@@ -227,16 +227,16 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )*/
-            /*val device = getDeviceConnected()
+            val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
-            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+            /*stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })*/
 
 
-            //handleGoogleFitCard()
+            handleGoogleFitCard()
 
         }
 
@@ -1234,6 +1234,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
             // Post the final data
             healthOverviewData.postValue(userActivities)
+
             //viewedCardsData.postValue(viewedCardsData)
             this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
 
@@ -1275,11 +1276,12 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCycleTrackerCard(): OHealthOverview? {
+        var gotYourPeriodCard: OHealthOverview.GotYourPeriod? = null
         val (hasDataLoaded, femaleData) = femaleHealthData
 
         if (!hasDataLoaded) return null
 
-        return if (femaleData == null) {
+        val data =  if (femaleData == null) {
             if (gender.equals("male", true).not()) {
                 val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
                 if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
@@ -1295,6 +1297,29 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (femaleData.currentDay == null) {
                     OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.LOG)
                 } else {
+                    val isCardShownForToday =
+                        femaleHealthRepository.getGotPeriodClickedStatus()
+                    if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
+
+                        val periodCurrentDay = femaleData.currentDay
+                        val dayMessage = if (periodCurrentDay == null) {
+                            null
+                        } else {
+                            resourceProvider.getString(
+                                R.string.text_today_s_your_predicted_day,
+                                ApplicationUtils.getOrdinalWord(
+                                    periodCurrentDay, resourceProvider
+                                )
+                            )
+                        }
+
+                        gotYourPeriodCard = OHealthOverview.GotYourPeriod(
+                            dayMessage,
+                            femaleData.currentDay
+                        )
+                    }
+
+
                     if (femaleData.isOvulation || femaleData.isPeriod) {
                         OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
                     } else {
@@ -1309,6 +1334,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 null
             }
         }
+        gotYourPeriodData.postValue(gotYourPeriodCard)
+        return data
     }
 
     private fun getLunaAiCard(): OHealthOverview? {
