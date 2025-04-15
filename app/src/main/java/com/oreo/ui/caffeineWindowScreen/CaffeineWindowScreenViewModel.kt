@@ -11,6 +11,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,66 +29,70 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
     val _allItemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
 
-    private var itemsList = ArrayList<CaffeineFoodItem>()
+    val itemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
     fun loadItems() {
         viewModelScope.launch {
-            val allItems = ArrayList<CaffeineFoodItem>()
-            val myItems = ArrayList<CaffeineFoodItem>()
-            val itemsList = getItemsFromAPI()
-            for (item in  itemsList){
-                if(item.is_favourite){
-                    myItems.add(item)
-                }else{
-                    allItems.add(item)
+            aisehi()
+//            val itemsList = getItemsFromAPI()
+        }
+    }
+
+    suspend fun aisehi(){
+        userRepository.getCaffeineWindowItemsList().collect{
+                resource ->
+            when (resource) {
+                is Resource.GenericError -> {
+                    sendMessage(resource.message)
                 }
-            }
-            
-            if (myItems.isNotEmpty()){
-                _myItemsList.postValue(myItems)
-            }
-            if (allItems.isNotEmpty()){
-                _allItemsList.postValue(allItems)
+
+                is Resource.Loading -> {
+                    setLoading(resource.loading)
+                }
+
+                is Resource.NetworkError -> {
+                    setApiErrors(resource.response.apply {
+                        (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                            object : BinaryActionCallback {
+                                override fun yes() {
+
+                                }
+
+                                override fun no() {}
+                            }
+                    })
+                }
+
+                is Resource.Success -> {
+                    resource.data?.data?.let {
+                        val apiResponse = it as ArrayList<CaffeineFoodItem>
+                        itemsList.postValue(apiResponse)
+                        dataUpdated.postValue(Event(true))
+                    }
+                }
             }
         }
     }
 
-    fun aisehi(){
-        viewModelScope.launch {
-            userRepository.getCaffeineWindowItemsList().collect{
-                    resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            itemsList = it as ArrayList
-                            dataUpdated.postValue(Event(true))
-                        }
-                    }
-                }
+    fun updateItems(mainList: ArrayList<CaffeineFoodItem>){
+        val allItems = ArrayList<CaffeineFoodItem>()
+        val myItems = ArrayList<CaffeineFoodItem>()
+        LOGS.d("caffeineData: $mainList")
+        for (item in mainList){
+            if(item.is_favorite!!){
+                myItems.add(item)
+            }else{
+                allItems.add(item)
             }
+        }
+
+        if (myItems.isNotEmpty()){
+            _myItemsList.postValue(myItems)
+        }
+        if (allItems.isNotEmpty()){
+            _allItemsList.postValue(allItems)
         }
     }
 
@@ -96,30 +101,30 @@ class CaffeineWindowScreenViewModel @Inject constructor(
             CaffeineFoodItem(
                 id = "askcc",
                 name = "Diet coke can",
-                quantity = 30,
+                quantity = 30.0,
                 unit = "mg",
-                is_favourite = false
+                is_favorite = false
             ),
             CaffeineFoodItem(
                 id = "askcc",
                 name = "Diet coke can",
-                quantity = 32,
+                quantity = 32.0,
                 unit = "mg",
-                is_favourite = false
+                is_favorite = false
             ),
             CaffeineFoodItem(
                 id = "askcc",
                 name = "Diet coke can",
-                quantity = 34,
+                quantity = 34.0,
                 unit = "mg",
-                is_favourite = true
+                is_favorite = true
             ),
             CaffeineFoodItem(
                 id = "askcc",
                 name = "Diet coke can",
-                quantity = 50,
+                quantity = 50.0,
                 unit = "mg",
-                is_favourite = true
+                is_favorite = true
             ),
 
         )

@@ -14,7 +14,6 @@ import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.models.*
 import com.oreo.data.model.NotificationToggleModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
-import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -61,7 +60,7 @@ interface UserRepository {
 
     suspend fun submitCustomHomeScreenPriority(request: CustomHomeScreenModel): Flow<Resource<BaseApiResponse<Any>>>
 
-    suspend fun getCaffeineWindowItemsList(): Flow<Resource<BaseApiResponse<List<CaffeineFoodItem>>>>
+    suspend fun getCaffeineWindowItemsList(): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getCannyFeedbackUrl(): Flow<Resource<BaseApiResponse<String>>>
 

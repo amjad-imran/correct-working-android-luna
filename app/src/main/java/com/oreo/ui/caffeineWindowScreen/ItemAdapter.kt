@@ -41,12 +41,12 @@ class ItemAdapter(
         }
 
         holder.binding.ivFav.setImageResource(
-            if (item.is_favourite) R.drawable.ic_star_rating
+            if (item.is_favorite!!) R.drawable.ic_star_rating
             else R.drawable.icon_unfilled_star_fav_caffeine_food
         )
 
         holder.binding.ivFav.setOnClickListener {
-            if (item.is_favourite){
+            if (item.is_favorite!!){
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onFavIconClicked(position))
             }else{
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onNotFavIconClicked(position))

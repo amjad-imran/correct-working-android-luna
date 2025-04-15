@@ -69,7 +69,7 @@ class CaffeineWindowScreenFragment :
                     if (!myItemsList.isNullOrEmpty()){
                         val curIdx = type.position
                         val curItem = myItemsList.get(curIdx)
-                        curItem.is_favourite = false
+                        curItem.is_favorite = false
                         myItemsList.removeAt(curIdx)
                         myItemsAdapter.updateSingleItem(null, curIdx)
 
@@ -90,7 +90,7 @@ class CaffeineWindowScreenFragment :
                     if (!allItemsList.isNullOrEmpty()){
                         val curIdx = type.position
                         val curItem = allItemsList.get(curIdx)
-                        curItem.is_favourite = true
+                        curItem.is_favorite = true
                         allItemsList.removeAt(curIdx)
                         allItemsAdapter.updateSingleItem(null, curIdx)
 
@@ -144,6 +144,10 @@ class CaffeineWindowScreenFragment :
 
         viewModel._allItemsList.observe(viewLifecycleOwner) { items ->
             allItemsAdapter.updateItems(items)
+        }
+
+        viewModel.itemsList.observe(this){
+            viewModel.updateItems(it)
         }
     }
 
