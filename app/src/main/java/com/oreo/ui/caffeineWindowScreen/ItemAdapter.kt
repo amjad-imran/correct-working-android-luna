@@ -35,7 +35,7 @@ class ItemAdapter(
 
         holder.binding.tvQuantity.apply {
             text = "${item.quantity} ${item.unit}"
-            if (item.quantity.toInt() >= maxQuantity){
+            if (item.quantity >= maxQuantity){
                 setTextColor("#7b8085".toColorInt())
             }
         }
@@ -46,7 +46,7 @@ class ItemAdapter(
         )
 
         holder.binding.ivFav.setOnClickListener {
-            if (item.is_favorite!!){
+            if (item.is_favorite == true){
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onFavIconClicked(position))
             }else{
                 itemClickListener?.invoke(CaffeineWindowScreenClickEnum.onNotFavIconClicked(position))

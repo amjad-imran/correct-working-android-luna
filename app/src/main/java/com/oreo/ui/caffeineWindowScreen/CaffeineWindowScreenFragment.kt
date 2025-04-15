@@ -70,6 +70,15 @@ class CaffeineWindowScreenFragment :
                         val curIdx = type.position
                         val curItem = myItemsList.get(curIdx)
                         curItem.is_favorite = false
+
+                        //
+                        viewModel.hitPostApiToUpdateItems(
+                            CaffeinePostApiModel(
+                                remove_item_id = curItem.id
+                            )
+                        )
+                        //
+
                         myItemsList.removeAt(curIdx)
                         myItemsAdapter.updateSingleItem(null, curIdx)
 
@@ -91,6 +100,15 @@ class CaffeineWindowScreenFragment :
                         val curIdx = type.position
                         val curItem = allItemsList.get(curIdx)
                         curItem.is_favorite = true
+
+                        //
+                        viewModel.hitPostApiToUpdateItems(
+                            CaffeinePostApiModel(
+                                favorite_item_id = curItem.id
+                            )
+                        )
+                        //
+
                         allItemsList.removeAt(curIdx)
                         allItemsAdapter.updateSingleItem(null, curIdx)
 

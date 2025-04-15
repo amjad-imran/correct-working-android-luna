@@ -1,9 +1,9 @@
 package com.oreo.ui.caffeineWindowScreen
 
 data class CaffeineFoodItem(
-    val id: Double,
+    val id: Int,
     val name: String,
-    val quantity: Double,
+    val quantity: Int,
     val unit: String,
     val portion_size: Double ?,
     val portion_unit: String ?,
