@@ -1190,8 +1190,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "health_monitor" -> {
-                        getHealthMonitorData(healthData.sleep)?.let {
-                            userActivities.add(it)
+                        if (lunaManaged) {
+                            getHealthMonitorData(healthData.sleep)?.let {
+                                userActivities.add(it)
+                            }
                         }
                     }
 
