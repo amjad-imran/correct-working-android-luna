@@ -41,6 +41,8 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.RingLocationData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
+import com.oreo.ui.caffeineWindowScreen.CaffeinePostApiModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -373,10 +375,19 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getCaffeineWindowItemsList(): Flow<Resource<BaseApiResponse<Any>>> {
+    override suspend fun getCaffeineWindowItemsList(): Flow<Resource<BaseApiResponse<List<CaffeineFoodItem>>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getCaffeineWindowItemsList(
                 "${BuildConfig.OREO_BASE_URL}/sleep/v3/caffeine_items",
+            )
+        }
+    }
+
+    override suspend fun updateCaffeineItemsList(req: CaffeinePostApiModel): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher){
+            remoteDataSource.updateCaffeineItemsList(
+                "${BuildConfig.OREO_BASE_URL}/sleep/v3/favorite_caffeine_item",
+                req
             )
         }
     }

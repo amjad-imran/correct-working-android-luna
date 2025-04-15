@@ -67,6 +67,8 @@ import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.referral.ReferralsMain
 import com.oreo.data.model.sleep.SleepDataResponse
+import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
+import com.oreo.ui.caffeineWindowScreen.CaffeinePostApiModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -698,6 +700,12 @@ interface NetworkService {
     @GET
     suspend fun getCaffeineWindowItemsList(
         @Url url: String,
+    ): BaseApiResponse<List<CaffeineFoodItem>>
+
+    @POST
+    suspend fun updateCaffeineItemsList(
+        @Url url: String,
+        @Body req: CaffeinePostApiModel
     ): BaseApiResponse<Any>
 
     @GET

@@ -29,74 +29,103 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
     val _allItemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
 
-    val itemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
-
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
     fun loadItems() {
         viewModelScope.launch {
-            aisehi()
-//            val itemsList = getItemsFromAPI()
-        }
-    }
 
-    suspend fun aisehi(){
-        userRepository.getCaffeineWindowItemsList().collect{
-                resource ->
-            when (resource) {
-                is Resource.GenericError -> {
-                    sendMessage(resource.message)
-                }
+            userRepository.getCaffeineWindowItemsList().collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                is Resource.Loading -> {
-                    setLoading(resource.loading)
-                }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                is Resource.NetworkError -> {
-                    setApiErrors(resource.response.apply {
-                        (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                            object : BinaryActionCallback {
-                                override fun yes() {
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
 
+                                    }
+
+                                    override fun no() {}
                                 }
+                        })
+                    }
 
-                                override fun no() {}
-                            }
-                    })
-                }
-
-                is Resource.Success -> {
-                    resource.data?.data?.let {
-                        val apiResponse = it as ArrayList<CaffeineFoodItem>
-                        itemsList.postValue(apiResponse)
-                        dataUpdated.postValue(Event(true))
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            justLoadIt(it)
+                            dataUpdated.postValue(Event(true))
+                        }
                     }
                 }
             }
+
         }
     }
 
-    fun updateItems(mainList: ArrayList<CaffeineFoodItem>){
+    fun justLoadIt(mainList: List<CaffeineFoodItem>){
         val allItems = ArrayList<CaffeineFoodItem>()
         val myItems = ArrayList<CaffeineFoodItem>()
         LOGS.d("caffeineData: $mainList")
-        for (item in mainList){
-            if(item.is_favorite!!){
-                myItems.add(item)
+        mainList.forEach {
+            if(it.is_favorite == true){
+                myItems.add(it)
             }else{
-                allItems.add(item)
+                allItems.add(it)
             }
         }
 
-        if (myItems.isNotEmpty()){
-            _myItemsList.postValue(myItems)
-        }
-        if (allItems.isNotEmpty()){
-            _allItemsList.postValue(allItems)
+        _myItemsList.postValue(myItems)
+        _allItemsList.postValue(allItems)
+    }
+
+    fun hitPostApiToUpdateItems(postData: CaffeinePostApiModel){
+        viewModelScope.launch {
+            userRepository.updateCaffeineItemsList(postData).collect{ resource ->
+
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            /*localDataSource.setCustomHomeScreenApiCallTimeStamps()
+
+                            localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreenData)
+                            dataUpdated.postValue(Event(true))*/
+                        }
+                    }
+                }
+
+            }
         }
     }
 
-    private fun getItemsFromAPI(): List<CaffeineFoodItem> {
+/*    private fun getItemsFromAPI(): List<CaffeineFoodItem> {
         return listOf(
             CaffeineFoodItem(
                 id = "askcc",
@@ -128,6 +157,6 @@ class CaffeineWindowScreenViewModel @Inject constructor(
             ),
 
         )
-    }
+    }*/
 
 }

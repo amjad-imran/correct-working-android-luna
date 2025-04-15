@@ -106,6 +106,10 @@ object MoEngageLunaAppEvents {
     const val goals_set = "goals_set"
     const val user_menu_clicked = "user_menu_clicked"
     const val referral_started = "referral_started"
+    const val user_profile_update_started = "user_profile_update_started"
+    const val user_profile_updated = "user_profile_updated"
+    const val insight_clicked = "insight_clicked"
+    const val tab_click = "tab_click"
     //
 
     const val luna_homepage_visit = "luna_homepage_visit"

@@ -139,16 +139,17 @@ class CaffeineWindowScreenFragment :
         }
 
         viewModel._myItemsList.observe(viewLifecycleOwner) { items ->
-            myItemsAdapter.updateItems(items)
+            if (!items.isNullOrEmpty()) {
+                myItemsAdapter.updateItems(items)
+            }
         }
 
         viewModel._allItemsList.observe(viewLifecycleOwner) { items ->
-            allItemsAdapter.updateItems(items)
+            if (!items.isNullOrEmpty()) {
+                allItemsAdapter.updateItems(items)
+            }
         }
 
-        viewModel.itemsList.observe(this){
-            viewModel.updateItems(it)
-        }
     }
 
 }

@@ -35,7 +35,7 @@ class ItemAdapter(
 
         holder.binding.tvQuantity.apply {
             text = "${item.quantity} ${item.unit}"
-            if (item.quantity >= maxQuantity){
+            if (item.quantity.toInt() >= maxQuantity){
                 setTextColor("#7b8085".toColorInt())
             }
         }
