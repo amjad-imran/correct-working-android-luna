@@ -325,17 +325,32 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
-                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_click)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.tab_click,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "activity"
+                        }
+                    )
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.READINESS)
-                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_click)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.tab_click,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "readiness"
+                        }
+                    )
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
-                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_click)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.tab_click,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "sleep"
+                        }
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -372,7 +387,12 @@ class SummaryDataFragmentToday :
                     } else {
                         navigate(R.id.stressSplashFragment)
                     }
-                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "stress"
+                        }
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
@@ -411,6 +431,12 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "cycle"
+                        }
+                    )
                     navigate(R.id.fragmentCycleTracker)
                 }
 
@@ -424,6 +450,12 @@ class SummaryDataFragmentToday :
                         this.putString("selectedDate", LocalDate.now().toString())
                         this.putString("source", "homepage")
                     })
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.tab_click,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "health_monitor"
+                        }
+                    )
                 }
 
                 OSummaryHealthOverviewClickEnum.OnSleepPlannerAlarmClicked -> {
@@ -468,6 +500,12 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
                     navigate(R.id.oActivityListFragment)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.tab_click,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "workout"
+                        }
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnWorkoutsHistoryCardOworkoutAdapterItemClicked -> {
@@ -560,6 +598,12 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "heart_rate"
+                        }
+                    )
                     navigate(R.id.fragmentHeartRateDetails)
                 }
                 //

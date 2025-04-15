@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
@@ -42,18 +43,46 @@ class OHeartRateDataFragment :
             override fun onItemClick(item: LearnMoreDataModel) {
                 when (item.type) {
                     1 -> {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.article_clicked,
+                            HashMap<String, Any>().apply {
+                                this["source"] = getString(R.string.text_heart_rate)
+                                this["article_name"] = getString(R.string.text_general_heart_rate_terms)
+                            }
+                        )
                         navigate(R.id.hrArticle1Fragment)
                     }
 
                     2 -> {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.article_clicked,
+                            HashMap<String, Any>().apply {
+                                this["source"] = getString(R.string.text_heart_rate)
+                                this["article_name"] = getString(R.string.text_normal_heart_rate_for_my_age)
+                            }
+                        )
                         navigate(R.id.hrArticle2Fragment)
                     }
 
                     3 -> {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.article_clicked,
+                            HashMap<String, Any>().apply {
+                                this["source"] = getString(R.string.text_heart_rate)
+                                this["article_name"] = getString(R.string.text_what_are_heart_rate_zones)
+                            }
+                        )
                         navigate(R.id.hrArticle3Fragment)
                     }
 
                     4 -> {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.article_clicked,
+                            HashMap<String, Any>().apply {
+                                this["source"] = getString(R.string.text_heart_rate)
+                                this["article_name"] = getString(R.string.text_heart_rate_during_sleep)
+                            }
+                        )
                         navigate(R.id.hrArticle4Fragment)
                     }
                 }

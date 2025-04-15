@@ -277,6 +277,13 @@ class OMyProfileFragment :
 
         //
         binding.llCustomHomeScreen.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.user_menu_option_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "hamburger"
+                    this["target"] = "Customize_homescreen"
+                }
+            )
             navigate(R.id.custom_homecreen)
         }
         //

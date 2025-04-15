@@ -52,11 +52,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.tvEdit.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_ham_clicked,
-                HashMap<String, Any>().apply {
-                    this["property"] = "your_profile"
-                    this["property_description"] = "edit"
-                })
+                MoEngageLunaAppEvents.user_profile_update_started
+            )
 
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_edit_click)
             navigate(R.id.navigation_profile_edit)

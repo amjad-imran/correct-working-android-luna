@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.custom.ScrollListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +44,13 @@ class OHeartRateDetailsFragment :
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
         binding.lytHeader.view1.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "heart_rate"
+                }
+            )
             navigate(R.id.fragmentHrInfo)
         }
 
