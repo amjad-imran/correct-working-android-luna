@@ -6,7 +6,6 @@ import com.noisefit.data.remote.abstraction.WeatherService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.models.weather.WeatherInfo
-import com.noisefit_commans.models.weather.WeatherInfoNew
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
@@ -26,14 +25,14 @@ class WeatherRepositoryImpl(
         lat: Double,
         long: Double,
         units: String,
-    ): Flow<Resource<WeatherInfoNew?>> {
+    ): Flow<Resource<WeatherInfo?>> {
         return safeApiCallFlowWeather(dispatcher) {
             weatherDataSource.getWeatherData(
-                lat,
-                long,
-                "5985eee1b043d8f48edee1f4d83e076b",
-                "minutely,hourly,daily",
-                units
+                "$lat,$long",
+                1,
+                "no",
+                "no",
+                "13fe5f535ff8446f89f71919240310"
             )
         }
     }

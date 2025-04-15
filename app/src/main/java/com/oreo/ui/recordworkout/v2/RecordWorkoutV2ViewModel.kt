@@ -196,12 +196,12 @@ class RecordWorkoutV2ViewModel @Inject constructor(
                         resource.data?.let { weather ->
                             if (sportStartTime != 0L && workout != null) {
                                 val weatherStatus =
-                                    getWeatherStatus(weather.weather?.firstOrNull()?.id)
-                                if (weather.main?.temp != null) {
+                                    getWeatherStatus(weatherIdConverter(weather.current?.condition?.code))
+                                if (weather.current?.tempC != null) {
                                     locationDataSource.updateWeatherInfoForLatLong(
                                         lat,
                                         lng,
-                                        weather.main?.temp!!,
+                                        weather.current?.tempC!!,
                                         weatherStatus
                                     )
                                 }
@@ -251,6 +251,208 @@ class RecordWorkoutV2ViewModel @Inject constructor(
             else -> null
         }
     }
+
+    private fun weatherIdConverter(id: Int?): Int {
+        if(id==null) return 800
+        var updatedWId: Int = 200
+        when (id) {
+            1000 -> {
+                updatedWId = 800
+            }
+
+            1003 -> {
+                updatedWId = 801
+            }
+
+            1006 -> {
+                updatedWId = 802
+            }
+
+            1009 -> {
+                updatedWId = 804
+            }
+
+            1030 -> {
+                updatedWId = 701
+            }
+
+            1063 -> {
+                updatedWId = 500
+            }
+
+            1066 -> {
+                updatedWId = 600
+            }
+
+            1069 -> {
+                updatedWId = 611
+            }
+
+            1072 -> {
+                updatedWId = 511
+            }
+
+            1087 -> {
+                updatedWId = 200
+            }
+
+            1114 -> {
+                updatedWId = 621
+            }
+
+            1135 -> {
+                updatedWId = 741
+            }
+
+            1147 -> {
+                updatedWId = 741
+            }
+
+            1150 -> {
+                updatedWId = 300
+            }
+
+            1153 -> {
+                updatedWId = 301
+            }
+
+            1168 -> {
+                updatedWId = 511
+            }
+
+            1180 -> {
+                updatedWId = 500
+            }
+
+            1183 -> {
+                updatedWId = 500
+            }
+
+            1192 -> {
+                updatedWId = 502
+            }
+
+            1195 -> {
+                updatedWId = 502
+            }
+
+            1210 -> {
+                updatedWId = 600
+            }
+
+            1213 -> {
+                updatedWId = 600
+            }
+
+            1225 -> {
+                updatedWId = 602
+            }
+
+            1240 -> {
+                updatedWId = 520
+            }
+
+            1243 -> {
+                updatedWId = 522
+            }
+
+            1255 -> {
+                updatedWId = 620
+            }
+
+            1258 -> {
+                updatedWId = 622
+            }
+
+            1273 -> {
+                updatedWId = 200
+            }
+
+            1276 -> {
+                updatedWId = 201
+            }
+
+            1279 -> {
+                updatedWId = 202
+            }
+
+            1282 -> {
+                updatedWId = 212
+            }
+
+            1171 -> {
+                updatedWId = 312
+            }
+
+            1186 -> {
+                updatedWId = 501
+            }
+
+            1189 -> {
+                updatedWId = 501
+            }
+
+            1198 -> {
+                updatedWId = 511
+            }
+
+            1201 -> {
+                updatedWId = 511
+            }
+
+            1204 -> {
+                updatedWId = 611
+            }
+
+            1207 -> {
+                updatedWId = 613
+            }
+
+            1216 -> {
+                updatedWId = 601
+            }
+
+            1219 -> {
+                updatedWId = 601
+            }
+
+            1222 -> {
+                updatedWId = 602
+            }
+
+            1237 -> {
+                updatedWId = 616
+            }
+
+            1246 -> {
+                updatedWId = 531
+            }
+
+            1249 -> {
+                updatedWId = 612
+            }
+
+            1252 -> {
+                updatedWId = 613
+            }
+
+            1261 -> {
+                updatedWId = 620
+            }
+
+            1264 -> {
+                updatedWId = 622
+            }
+
+            1117 -> {
+                updatedWId = 771
+            }
+
+            else -> 721
+        }
+        return updatedWId
+    }
+
 
     fun shouldCheckWeather(): Boolean {
         if (sportStartTime == 0L || workout == null) return false
