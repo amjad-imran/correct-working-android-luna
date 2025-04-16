@@ -1859,15 +1859,15 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         priorityList.apply {
-            add(itemsMap["daily_goals"]!!.copy(priority = 8))
-            add(itemsMap["stress"]!!.copy(priority = 9))
-            add(itemsMap["heart_rate"]!!.copy(priority = 10))
-            add(itemsMap["cycle_tracker"]!!.copy(priority = 11))
-            add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
-            add(itemsMap["workout_history"]!!.copy(priority = 13))
             if (isAfter12) {
-                add(itemsMap["health_monitor"]!!.copy(priority = 14))
+                add(itemsMap["health_monitor"]!!.copy(priority = 8))
             }
+            add(itemsMap["daily_goals"]!!.copy(priority = 9))
+            add(itemsMap["stress"]!!.copy(priority = 10))
+            add(itemsMap["heart_rate"]!!.copy(priority = 11))
+            add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
+            add(itemsMap["cycle_tracker"]!!.copy(priority = 13))
+            add(itemsMap["workout_history"]!!.copy(priority = 14))
         }
 
         return priorityList
