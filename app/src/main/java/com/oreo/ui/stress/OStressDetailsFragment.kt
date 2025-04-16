@@ -147,7 +147,12 @@ class OStressDetailsFragment :
         }
 
         binding.lytHeader.view1.setOnClickListener {
-            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_i_button_click)
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "stress"
+                }
+            )
             navigate(R.id.stressUnderstandingFragment)
         }
 

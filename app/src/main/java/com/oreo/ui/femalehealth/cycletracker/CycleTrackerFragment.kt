@@ -200,6 +200,13 @@ class CycleTrackerFragment :
         }
 
         binding.lytPrediction.vCard.ivInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_prediction"
+                }
+            )
             navigate(
                 R.id.dialogCtOvulationInfo, Bundle().apply {
                     this.putString("launchMode", "Ovulation Graph")
@@ -218,11 +225,24 @@ class CycleTrackerFragment :
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_calendar_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(null)
             navigate(frag, bundle)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.calen_change,
+                HashMap<String, Any>().apply {
+                    this["source"] = "cycle_tracker"
+                }
+            )
         }
 
         binding.toolbar.icInfo.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_page_visit)
             navigate(R.id.cycleTrackStressInfoFragment)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_tracking"
+                }
+            )
         }
 
         binding.lytTrackerTop.tvPhase.setOnClickListener {
@@ -269,27 +289,61 @@ class CycleTrackerFragment :
             navigateUpSafe()
         }
         binding.lytPrediction.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_prediction"
+                }
+            )
             navigate(R.id.cycleSkinTemperature, Bundle().apply {
                 this.putString("selectedDate", viewModel.selectedDate.value.toString())
             })
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_cycle_length_page_visit)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_length"
+                }
+            )
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.CYCLE_LENGTH)
             })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_period_duration_page_visit)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_duration"
+                }
+            )
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.PERIOD_DURATION)
             })
         }
         binding.lytCycleHistory.ivMore.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_history"
+                }
+            )
             navigate(R.id.cycleTrackerHistory)
         }
         binding.lytTrackerTop.btnLog.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_button_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "cycle"
+                }
+            )
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
@@ -689,6 +743,12 @@ class CycleTrackerFragment :
                     object :
                         NudgeBannerListener {
                         override fun onAiClicked() {
+                            viewModel.sessionManager.logMoEngageAppEvent(
+                                MoEngageLunaAppEvents.ai_widget_clicked,
+                                HashMap<String, Any>().apply {
+                                    this["source"] = "cycle"
+                                }
+                            )
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)

@@ -110,6 +110,13 @@ object MoEngageLunaAppEvents {
     const val user_profile_updated = "user_profile_updated"
     const val insight_clicked = "insight_clicked"
     const val tab_click = "tab_click"
+    const val insight_scrolled = "insight_scrolled"
+    const val ai_widget_clicked = "ai_widget_clicked"
+    const val deep_insights_clicked = "deep_insights_clicked"
+    const val deep_analysis_interval_changed = "deep_analysis_interval_changed"
+    const val calen_change = "calen_change"
+    const val insight_log = "insight_log"
+    const val cycle_information_clicked = "cycle_information_clicked"
     //
 
     const val luna_homepage_visit = "luna_homepage_visit"

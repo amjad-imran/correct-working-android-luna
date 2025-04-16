@@ -6,8 +6,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentStressSplashBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.StressSplashModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,6 +18,9 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class StressSplashFragment :
     BaseFragment<FragmentStressSplashBinding>(FragmentStressSplashBinding::inflate) {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     private val stressSplashDescriptionAdapter by lazy {
         StressSplashDescriptionAdapter()
@@ -104,6 +109,12 @@ class StressSplashFragment :
             onBackPress()
         }
         binding.bNext.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_scrolled,
+                HashMap<String, Any>().apply {
+                    this["source"] = "stress"
+                }
+            )
             onNextPress()
         }
     }
