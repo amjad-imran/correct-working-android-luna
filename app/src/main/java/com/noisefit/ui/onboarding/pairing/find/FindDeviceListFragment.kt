@@ -386,7 +386,7 @@ class FindDeviceListFragment :
             }
 
         }
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG || viewModel.localDataStore.isInDemoMode()) {
             binding.bPairLater.visible()
         } else
             binding.bPairLater.gone()

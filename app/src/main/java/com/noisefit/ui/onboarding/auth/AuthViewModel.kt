@@ -197,6 +197,8 @@ class AuthViewModel @Inject constructor(
                             )
 
                             localDataStore.updateUserToken(it.token)
+                            localDataStore.setIsInDemoMode(it.token?.multiLogin?:false)
+
                             authSuccess.postValue(Event(true))
                             loginSuccessEvent()
 

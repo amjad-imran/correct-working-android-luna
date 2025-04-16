@@ -93,6 +93,8 @@ class AuthenticationRepositoryImpl(
 
             Freshchat.resetUser(NoiseFitApplicationMain.context)
 
+
+            localDataSource.setIsInDemoMode(false)
             localDataSource.setVerifyMobileNumberStatus(false)
             localDataSource.setUserDataSynced(false)
             localDataSource.deleteUserInfo()
