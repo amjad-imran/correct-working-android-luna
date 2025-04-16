@@ -26,6 +26,7 @@ class OStressInternalParentFragment :
     @Inject
     lateinit var sessionManager: SessionManager
 
+    private var toolBarTitle: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,10 +39,12 @@ class OStressInternalParentFragment :
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_week)))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText(getString(R.string.text_month)))
         if (args.cameFrom == "active") {
+            toolBarTitle = getString(R.string.text_overall_stress)
             binding.lytToolbar.tvTitle.text = getString(R.string.text_overall_stress)
             sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_overall_stress_page_visit)
 
         } else {
+            toolBarTitle = getString(R.string.text_non_active_stress)
             binding.lytToolbar.tvTitle.text = getString(R.string.text_non_active_stress)
             sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_non_active_stress_page_visit)
         }
@@ -64,6 +67,13 @@ class OStressInternalParentFragment :
                                 args.cameFrom
                             )
                         )
+                        sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.deep_analysis_interval_changed,
+                            HashMap<String, Any>().apply {
+                                this["source"] = toolBarTitle
+                                this["interval"] = "day"
+                            }
+                        )
                     }
 
                     1 -> {
@@ -74,6 +84,13 @@ class OStressInternalParentFragment :
                                 args.cameFrom
                             )
                         )
+                        sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.deep_analysis_interval_changed,
+                            HashMap<String, Any>().apply {
+                                this["source"] = toolBarTitle
+                                this["interval"] = "Week"
+                            }
+                        )
                     }
 
                     else -> {
@@ -83,6 +100,13 @@ class OStressInternalParentFragment :
                                 args.date,
                                 args.cameFrom
                             )
+                        )
+                        sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.deep_analysis_interval_changed,
+                            HashMap<String, Any>().apply {
+                                this["source"] = toolBarTitle
+                                this["interval"] = "Month"
+                            }
                         )
                     }
                 }
@@ -118,6 +142,13 @@ class OStressInternalParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = toolBarTitle
+                }
+            )
             navigate(R.id.stressUnderstandingFragment)
         }
 
