@@ -245,7 +245,7 @@ class CycleTrackerFragment :
             )
         }
 
-        binding.lytTrackerTop.tvPhase.setOnClickListener {
+        /*binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
                 launchMode = "Luteal"
@@ -262,7 +262,7 @@ class CycleTrackerFragment :
                     }
                 )
             }
-        }
+        }*/
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
@@ -387,11 +387,7 @@ class CycleTrackerFragment :
     override fun subscribeObservers() {
         viewModel.notificationToggleModel.observe(this) {
             binding.lytTrackerTop.ivNotificationStatus.setImageResource(
-                if (it.female_health) {
-                    R.drawable.ic_female_health_notification_on
-                } else {
-                    R.drawable.ic_female_health_notification_off
-                }
+                viewModel.getBellResource(it.female_health)
             )
         }
         viewModel.navigateToBack.observe(this) {
@@ -503,6 +499,7 @@ class CycleTrackerFragment :
                 }
 
             }
+            viewModel.notificationToggleModel.postValue(viewModel.notificationToggleModel.value)
         }
 
         viewModel.getMessages().observe(this) {
@@ -600,11 +597,17 @@ class CycleTrackerFragment :
                     data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
+                viewModel.currentSelectedPhase = null
                 if (this == null) {
                     tvPhase.text = "-"
                 } else {
                     tvPhase.text = this.first
                     tvPhase.setTextColor(tvPhase.context.getColor(this.second))
+                    if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.LUTEAL
+                    } else if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_follicular_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.FOLLECULAR
+                    }
                 }
             }
 
