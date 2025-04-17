@@ -422,7 +422,7 @@ class CycleTrackerFragment :
     override fun subscribeObservers() {
         viewModel.notificationToggleModel.observe(this) {
             binding.lytTrackerTop.ivNotificationStatus.setImageResource(
-                viewModel.getBellResource(it.female_health)
+                viewModel.getBellResource(it.female_health?:false)
             )
         }
         viewModel.navigateToBack.observe(this) {
@@ -534,7 +534,9 @@ class CycleTrackerFragment :
                 }
 
             }
-            viewModel.notificationToggleModel.postValue(viewModel.notificationToggleModel.value)
+            viewModel.notificationToggleModel.value?.let {
+                viewModel.notificationToggleModel.postValue(it)
+            }
         }
 
         viewModel.getMessages().observe(this) {

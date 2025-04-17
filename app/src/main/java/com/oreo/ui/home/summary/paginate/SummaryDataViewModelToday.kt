@@ -3217,7 +3217,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             notificationToggleModel = it
-                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification?:false)
                             getNotificationGoals()
                         }
                     }
