@@ -64,6 +64,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
+import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.FemaleHealthCardState
@@ -130,7 +131,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnIvHydratePlusClicked : OSummaryHealthOverviewClickEnum()
     object OnEditGoalsCardEditClicked : OSummaryHealthOverviewClickEnum()
 
-    object OnCaffeineDashCardClicked: OSummaryHealthOverviewClickEnum()
+    data class OnCaffeineDashCardClicked(val data: CaffeineWindowData): OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -2832,13 +2833,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
         fun bind(data: OHealthOverview.CaffeineWindow){
-            initListener()
+            initListener(data.data)
             binding.caffeineGraphView.updateData(data.data)
         }
 
-        private fun initListener() {
+        private fun initListener(data: CaffeineWindowData) {
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked(data))
             }
         }
     }

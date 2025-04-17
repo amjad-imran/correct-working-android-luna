@@ -3,6 +3,7 @@ package com.oreo.ui.caffeineWindowScreen
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCaffeineWindowScreenBinding
@@ -11,6 +12,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.CaffeineWindowData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +20,8 @@ class CaffeineWindowScreenFragment :
     BaseFragment<FragmentCaffeineWindowScreenBinding>(FragmentCaffeineWindowScreenBinding::inflate) {
 
     private val viewModel: CaffeineWindowScreenViewModel by viewModels()
+
+    private val args: CaffeineWindowScreenFragmentArgs by navArgs()
 
     private val myItemsAdapter by lazy {
         ItemAdapter()
@@ -29,6 +33,11 @@ class CaffeineWindowScreenFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            args.caffeineGraphData?.let {
+                binding.caffeineGraphView.updateData(it)
+            }
+        }
         viewModel.loadItems()
         initUi()
     }

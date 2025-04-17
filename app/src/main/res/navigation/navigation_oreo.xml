@@ -1359,5 +1359,10 @@
         android:id="@+id/caffeineWindowScreenFragment"
         android:name="com.oreo.ui.caffeineWindowScreen.CaffeineWindowScreenFragment"
         android:label="fragment_caffeine_window_screen"
-        tools:layout="@layout/fragment_caffeine_window_screen" />
+        tools:layout="@layout/fragment_caffeine_window_screen" >
+        <argument
+            android:name="caffeineGraphData"
+            app:argType="com.oreo.data.model.CaffeineWindowData"
+            app:nullable="true" />
+    </fragment>
 </navigation>

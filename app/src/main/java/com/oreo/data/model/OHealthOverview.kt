@@ -1,5 +1,6 @@
 package com.oreo.data.model
 
+import android.os.Parcelable
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
@@ -13,6 +14,7 @@ import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
+import kotlinx.parcelize.Parcelize
 
 
 sealed class OHealthOverview {
@@ -199,13 +201,14 @@ data class PeriodCard1(
     val background: Int
 )
 
+@Parcelize
 data class CaffeineWindowData(
     val wakeUpTime: String,//HH:mm:ss
     val bedTime: String,//HH:mm:ss
     val caffeineStartTime: String,//HH:mm:ss
     val caffeineEndTime: String,//HH:mm:ss
     val caffeineValues: List<Int>,//HH:mm:ss
-)
+) : Parcelable
 
 data class PeriodCard2(
     val title: String,

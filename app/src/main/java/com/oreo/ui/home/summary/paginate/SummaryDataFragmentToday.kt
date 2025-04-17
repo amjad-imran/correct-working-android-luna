@@ -288,8 +288,13 @@ class SummaryDataFragmentToday :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
-                OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {
-                    navigate(R.id.caffeineWindowScreenFragment)
+                is OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {
+                    navigate(
+                        R.id.caffeineWindowScreenFragment,
+                        Bundle().apply {
+                            this.putParcelable("caffeineGraphData", type.data)
+                        }
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
