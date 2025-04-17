@@ -1469,7 +1469,7 @@
     <string name="text_low_chance_of_pregnancy">Faible chance de grossesse</string>
     <string name="text_your_body_is_at_it_s_most_fertile_today">Votre corps est à son niveau le plus fertile aujourd\'hui</string>
     <string name="text_increasing_chance_of_pregnancy">Augmentation des chances de grossesse</string>
-    <string name="text_decreasing_chance_of_pregnancy">diminution des chances de grossesse</string>
+    <string name="text_decreasing_chance_of_pregnancy">Diminution des chances de grossesse</string>
     <string name="text_normal">Normale</string>
     <string name="text_no_data_available">Aucune donnée disponible</string>
     <string name="text_deviation_on_value">Déviation sur %1$s</string>
