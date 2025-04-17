@@ -1253,33 +1253,34 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {
-        return caffeineGraphData?.let {
-            val caffeineValues = ArrayList<Int>()
-            caffeineGraphData!!.caffeine_window.forEach {
-                caffeineValues.add(it.time.toInt())
-            }
-
-            OHealthOverview.CaffeineWindow(
-                CaffeineWindowData(
-                    wakeUpTime = it.wakeUpTime,
-                    bedTime = it.bedTime,
-                    caffeineStartTime = it.caffeineStartTime,
-                    caffeineEndTime = it.caffeineEndTime,
-                    caffeineValues = caffeineValues
-                )
-            )
-        }
-//        OHealthOverview.CaffeineWindow(
-//            CaffeineWindowData(
-//                wakeUpTime = "07:00:00",
-//                bedTime = "23:00:00",
-//                caffeineStartTime = "09:00:00",
-//                caffeineEndTime = "18:00:00",
-//                caffeineValues = listOf(
-//                    50, 45, 40, 35, 30, 25, 20, 15
+//        return caffeineGraphData?.let {
+//            val caffeineValues = ArrayList<Int>()
+//            caffeineGraphData!!.caffeine_window.forEach {
+//                caffeineValues.add(it.time.toInt())
+//            }
+//
+//            OHealthOverview.CaffeineWindow(
+//                CaffeineWindowData(
+//                    wakeUpTime = it.wakeUpTime,
+//                    bedTime = it.bedTime,
+//                    caffeineStartTime = it.caffeineStartTime,
+//                    caffeineEndTime = it.caffeineEndTime,
+//                    caffeineValues = caffeineValues
 //                )
 //            )
-//        )
+//        }
+
+        return OHealthOverview.CaffeineWindow(
+            CaffeineWindowData(
+                wakeUpTime = "07:00:00",
+                bedTime = "23:00:00",
+                caffeineStartTime = "09:00:00",
+                caffeineEndTime = "18:00:00",
+                caffeineValues = listOf(
+                    50, 45, 40, 35, 30, 25, 20, 15
+                )
+            )
+        )
     }
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
