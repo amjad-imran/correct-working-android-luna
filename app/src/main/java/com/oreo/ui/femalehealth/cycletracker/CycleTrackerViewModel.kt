@@ -316,7 +316,7 @@ class CycleTrackerViewModel @Inject constructor(
         val localCurrentDate = LocalDate.parse(currentDate)
         val ovDateLocal = LocalDate.parse(ovulationDate)
 
-        return if (localCurrentDate.isBefore(ovDateLocal)) {
+        return if (localCurrentDate.isBefore(ovDateLocal) || localCurrentDate == ovDateLocal) {
             Pair(
                 resourcesProvider.getString(R.string.text_follicular_phase),
                 R.color.color_follicular
