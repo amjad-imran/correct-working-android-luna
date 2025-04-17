@@ -63,6 +63,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.ImpactData
 import com.oreo.data.model.NotificationToggleModel
@@ -174,6 +175,7 @@ class OreoUserActivityRepositoryImpl(
             var tempBaseLine: Float? = null
             //
             var customHomeScreenData : CustomHomeScreenModel ?= null
+            var caffeineGraphData : CaffeineGraphDataModel?= null
             //
 
             var apiStartDate: String? = startDate
@@ -264,7 +266,8 @@ class OreoUserActivityRepositoryImpl(
                                 stressBeta = ringDataStore.getStressBetaState(),
                                 enableAi = ringDataStore.getEnableAiState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine(),
-                                customScreen = localDataStore.getCustomHomeScreenItemsPriorityList()
+                                customScreen = localDataStore.getCustomHomeScreenItemsPriorityList(),
+                                caffeine = localDataStore.getCaffeineGraphData()
                             ),
                             message = "",
                         )
@@ -305,6 +308,7 @@ class OreoUserActivityRepositoryImpl(
                             stressBeta = response.stressBeta
                             enableAi = response.enableAi
                             customHomeScreenData = response.customScreen
+                            caffeineGraphData = response.caffeine
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny?:false)
@@ -314,6 +318,7 @@ class OreoUserActivityRepositoryImpl(
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
                             customHomeScreenData?.let { localDataStore.setCustomHomeScreenItemsPriorityList(it) }
+                            caffeineGraphData?.let { localDataStore.setCaffeineGraphData(it) }
                         }
                     }
                 }

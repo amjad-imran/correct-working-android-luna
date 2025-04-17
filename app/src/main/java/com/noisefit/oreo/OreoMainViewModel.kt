@@ -37,6 +37,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -124,6 +125,7 @@ constructor(
     var enableAi: Boolean = false
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
+    var caffeineGraphData: CaffeineGraphDataModel ?= null
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -332,6 +334,8 @@ constructor(
                             //
 //                            lunaManagedData = it.customScreen
 //                            Log.d("yashhhhhhhhhhhhhh" , "$lunaManagedData")
+                            caffeineGraphData = it.caffeine ?: null
+                            //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 

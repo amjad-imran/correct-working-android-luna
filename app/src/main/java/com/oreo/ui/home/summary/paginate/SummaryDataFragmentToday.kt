@@ -225,6 +225,7 @@ class SummaryDataFragmentToday :
                 viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
+                viewModel.caffeineGraphData = mainViewModel.caffeineGraphData
                 setUi(dash.first, dash.second, dash.third)
             }
         }

@@ -2,7 +2,6 @@ package com.noisefit.data.local.dataStored.implementation
 
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
@@ -37,6 +36,7 @@ import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -228,6 +228,7 @@ private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
+private const val CAFFEINE_GRAPH_DATA = "CAFFEINE_GRAPH_DATA"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
 private const val CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
@@ -560,6 +561,23 @@ class DataStoredImpl
 
     override fun clearCustomHomeScreenItemsPriorityList() {
         mPrefs.edit()?.remove(CUSTOMIZE_HOME_SCREEN)?.commit()
+    }
+
+    override fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel) {
+        mPrefs.edit()?.putString(CAFFEINE_GRAPH_DATA, gson.toJson(caffeineGraphData))?.apply()
+    }
+
+    override fun getCaffeineGraphData(): CaffeineGraphDataModel? {
+        val data = mPrefs.getString(CAFFEINE_GRAPH_DATA, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            gson.fromJson(data, CaffeineGraphDataModel::class.java)
+        }
+    }
+
+    override fun clearCaffeineGraphData() {
+        mPrefs.edit()?.remove(CAFFEINE_GRAPH_DATA)?.commit()
     }
     //
 

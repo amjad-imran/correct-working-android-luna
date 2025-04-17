@@ -2,6 +2,7 @@ package com.oreo.data.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.models.ColorfitData
 import com.oreo.data.model.health.ODashboardActivityScoreModel
@@ -35,7 +36,10 @@ data class ServerUserHealthResponse(
     val tempBaseLine: Float? = null,
 
     @SerializedName("customScreen")
-    val customScreen: CustomHomeScreenModel ?= null
+    val customScreen: CustomHomeScreenModel ?= null,
+
+    @SerializedName("caffeine")
+    val caffeine: CaffeineGraphDataModel ?= null
     //
 ) : ColorfitData()
 

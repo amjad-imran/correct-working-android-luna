@@ -6,6 +6,7 @@ import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
 import com.noisefit_commans.models.EnabledAppsForNotifications
@@ -21,6 +22,10 @@ interface DataStoredInterface {
     fun setCustomHomeScreenItemsPriorityList(priorityList: CustomHomeScreenModel)
     fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel?
     fun clearCustomHomeScreenItemsPriorityList()
+
+    fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel)
+    fun getCaffeineGraphData(): CaffeineGraphDataModel?
+    fun clearCaffeineGraphData()
 
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
