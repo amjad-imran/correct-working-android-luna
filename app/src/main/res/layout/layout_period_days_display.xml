@@ -107,12 +107,12 @@
             android:id="@+id/ivNotificationStatus"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            tools:src="@drawable/ic_female_health_notification_off"
             app:layout_constraintBottom_toBottomOf="@+id/tvPhase"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvPhase"
-            app:layout_constraintTop_toTopOf="@+id/tvPhase" />
+            app:layout_constraintTop_toTopOf="@+id/tvPhase"
+            tools:src="@drawable/ic_female_health_notification_off" />
 
         <TextView
             android:id="@+id/tvPhase"
@@ -128,6 +128,25 @@
             app:layout_constraintTop_toBottomOf="@+id/tvPregnancyChances"
             tools:text="Luteal phase"
             tools:textColor="#83e7cf" />
+
+        <TextView
+            android:id="@+id/tvReminderMessage"
+            style="@style/S12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:visibility="invisible"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:singleLine="true"
+            android:textColor="#72BDB2"
+            app:layout_constraintBottom_toBottomOf="@+id/ivNotificationStatus"
+            app:layout_constraintEnd_toStartOf="@+id/ivNotificationStatus"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivNotificationStatus"
+            tools:text="Reminder active" />
 
         <Button
             android:id="@+id/btnLog"
