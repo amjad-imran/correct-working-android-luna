@@ -35,6 +35,7 @@ import kotlin.collections.HashMap
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
 const val SETUP_DEVICE = "SETUP_DEVICE"
+
 @Deprecated("")
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
@@ -99,7 +100,8 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 showShortToast(getString(R.string.text_no_device_connected))
-                sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_failed,
+                sessionManager.logInsiderAppEvent(
+                    InsiderAppEvents.PairingEvents.wn_pair_device_setup_failed,
                     HashMap<String, Any>().apply {
                         this["status"] = "failed"
                     })
@@ -226,7 +228,8 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
             setUnit()
         }, 3000)
 
-        sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_complete,
+        sessionManager.logInsiderAppEvent(
+            InsiderAppEvents.PairingEvents.wn_pair_device_setup_complete,
             HashMap<String, Any>().apply {
                 this["status"] = "complete"
             })
@@ -368,7 +371,14 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
         val sleepGoal = 8
 
-        return UserGoals(stepGoal, caloriesGoal, distanceGoal, sleepGoal, unitSystem = unitSystem)
+        return UserGoals(
+            stepGoal = stepGoal,
+            caloriesGoal = caloriesGoal,
+            hydrationGoals = user?.userGoals?.hydrationGoals ?: 3000,
+            distanceGoal = distanceGoal,
+            sleepGoal = sleepGoal,
+            unitSystem = unitSystem
+        )
     }
 
     override fun getViewBinding() = ActivityDeviceSetupBinding.inflate(layoutInflater)
