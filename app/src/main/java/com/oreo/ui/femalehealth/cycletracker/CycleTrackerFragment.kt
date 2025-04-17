@@ -2,7 +2,12 @@ package com.oreo.ui.femalehealth.cycletracker
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -197,6 +202,13 @@ class CycleTrackerFragment :
             val lastValue = viewModel.notificationToggleModel.value?.female_health ?: false
             viewModel.notificationToggleModel.value?.female_health = lastValue.not()
             viewModel.updateNotificationToggle()
+
+            if (lastValue){
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_silent)
+            }else{
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_active)
+            }
+            notificationTextFade(binding.lytTrackerTop.tvPhase, binding.lytTrackerTop.tvReminderMessage)
         }
 
         binding.lytPrediction.vCard.ivInfo.setOnClickListener {
@@ -351,6 +363,29 @@ class CycleTrackerFragment :
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
+    }
+
+    private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+        textView1.visibility = View.VISIBLE
+        textView2.visibility = View.INVISIBLE
+
+        val fadeIn: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_in_goal)
+        val fadeOut: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_out_goal)
+
+        textView1.startAnimation(fadeOut)
+        textView1.visibility = View.INVISIBLE
+        textView2.visibility = View.VISIBLE
+        textView2.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            textView2.startAnimation(fadeOut)
+            textView2.visibility = View.INVISIBLE
+            textView1.visibility = View.VISIBLE
+            textView1.startAnimation(fadeIn)
+        }, 1500)
+
     }
 
     private fun initInsightUI(cycleLength: Int, periodLength: Int) {

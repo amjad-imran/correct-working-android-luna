@@ -1865,8 +1865,8 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["daily_goals"]!!.copy(priority = 9))
             add(itemsMap["stress"]!!.copy(priority = 10))
             add(itemsMap["heart_rate"]!!.copy(priority = 11))
-            add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
-            add(itemsMap["cycle_tracker"]!!.copy(priority = 13))
+            add(itemsMap["cycle_tracker"]!!.copy(priority = 12))
+            add(itemsMap["7_day_trends_card"]!!.copy(priority = 13))
             add(itemsMap["workout_history"]!!.copy(priority = 14))
         }
 
