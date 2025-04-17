@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -15,6 +16,7 @@ import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class CustomHomescreenViewModel @Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
-    private val localDataSource: DataStoredInterface
+    private val localDataSource: DataStoredInterface,
+    private val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     // Switch state
@@ -178,6 +181,9 @@ class CustomHomescreenViewModel @Inject constructor(
                     seconds
                 )
             )
+
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.customize_homescreen_warning)
+
             false
         }
     }
