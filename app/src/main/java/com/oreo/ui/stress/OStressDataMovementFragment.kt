@@ -222,6 +222,12 @@ class OStressDataMovementFragment :
         }
 
         binding.lytStressHeader.root.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.deep_insights_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "overall_stress"
+                }
+            )
             navigate(R.id.stressInternalParentOreo, Bundle().apply {
                 putString("date", mainViewModel.selectedDate)
                 putString("cameFrom", "active")
@@ -229,6 +235,12 @@ class OStressDataMovementFragment :
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_overall_stress_click)
         }
         binding.lytInactiveStressHeader.root.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.deep_insights_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "non_active_stress"
+                }
+            )
             navigate(R.id.stressInternalParentOreo, Bundle().apply {
                 putString("date", mainViewModel.selectedDate)
                 putString("cameFrom", "inactive")
@@ -620,6 +632,12 @@ class OStressDataMovementFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
+                            mainViewModel.sessionManager.logMoEngageAppEvent(
+                                MoEngageLunaAppEvents.ai_widget_clicked,
+                                HashMap<String, Any>().apply {
+                                    this["source"] = "stress"
+                                }
+                            )
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.STRESS)

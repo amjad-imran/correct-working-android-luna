@@ -2,7 +2,12 @@ package com.oreo.ui.femalehealth.cycletracker
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -197,9 +202,23 @@ class CycleTrackerFragment :
             val lastValue = viewModel.notificationToggleModel.value?.female_health ?: false
             viewModel.notificationToggleModel.value?.female_health = lastValue.not()
             viewModel.updateNotificationToggle()
+
+            if (lastValue){
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_silent)
+            }else{
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_active)
+            }
+            notificationTextFade(binding.lytTrackerTop.tvPhase, binding.lytTrackerTop.tvReminderMessage)
         }
 
         binding.lytPrediction.vCard.ivInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_prediction"
+                }
+            )
             navigate(
                 R.id.dialogCtOvulationInfo, Bundle().apply {
                     this.putString("launchMode", "Ovulation Graph")
@@ -218,14 +237,27 @@ class CycleTrackerFragment :
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_tracking_calendar_button_click)
             val (frag, bundle) = CycleLogFragment.getStartData(null)
             navigate(frag, bundle)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.calen_change,
+                HashMap<String, Any>().apply {
+                    this["source"] = "cycle_tracker"
+                }
+            )
         }
 
         binding.toolbar.icInfo.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_i_page_visit)
             navigate(R.id.cycleTrackStressInfoFragment)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.info_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_tracking"
+                }
+            )
         }
 
-        binding.lytTrackerTop.tvPhase.setOnClickListener {
+        /*binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
                 launchMode = "Luteal"
@@ -242,7 +274,7 @@ class CycleTrackerFragment :
                     }
                 )
             }
-        }
+        }*/
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
@@ -269,27 +301,61 @@ class CycleTrackerFragment :
             navigateUpSafe()
         }
         binding.lytPrediction.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_prediction"
+                }
+            )
             navigate(R.id.cycleSkinTemperature, Bundle().apply {
                 this.putString("selectedDate", viewModel.selectedDate.value.toString())
             })
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_cycle_length_page_visit)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_length"
+                }
+            )
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.CYCLE_LENGTH)
             })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_period_duration_page_visit)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_duration"
+                }
+            )
             navigate(R.id.cycleInsightDetails, Bundle().apply {
                 this.putSerializable("launchMode", CycleInsightLaunchMode.PERIOD_DURATION)
             })
         }
         binding.lytCycleHistory.ivMore.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.cycle_information_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage"
+                    this["section"] = "cycle_history"
+                }
+            )
             navigate(R.id.cycleTrackerHistory)
         }
         binding.lytTrackerTop.btnLog.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_button_click)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "cycle"
+                }
+            )
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
@@ -297,6 +363,29 @@ class CycleTrackerFragment :
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
+    }
+
+    private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+        textView1.visibility = View.VISIBLE
+        textView2.visibility = View.INVISIBLE
+
+        val fadeIn: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_in_goal)
+        val fadeOut: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_out_goal)
+
+        textView1.startAnimation(fadeOut)
+        textView1.visibility = View.INVISIBLE
+        textView2.visibility = View.VISIBLE
+        textView2.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            textView2.startAnimation(fadeOut)
+            textView2.visibility = View.INVISIBLE
+            textView1.visibility = View.VISIBLE
+            textView1.startAnimation(fadeIn)
+        }, 1500)
+
     }
 
     private fun initInsightUI(cycleLength: Int, periodLength: Int) {
@@ -333,11 +422,7 @@ class CycleTrackerFragment :
     override fun subscribeObservers() {
         viewModel.notificationToggleModel.observe(this) {
             binding.lytTrackerTop.ivNotificationStatus.setImageResource(
-                if (it.female_health) {
-                    R.drawable.ic_female_health_notification_on
-                } else {
-                    R.drawable.ic_female_health_notification_off
-                }
+                viewModel.getBellResource(it.female_health?:false)
             )
         }
         viewModel.navigateToBack.observe(this) {
@@ -449,6 +534,9 @@ class CycleTrackerFragment :
                 }
 
             }
+            viewModel.notificationToggleModel.value?.let {
+                viewModel.notificationToggleModel.postValue(it)
+            }
         }
 
         viewModel.getMessages().observe(this) {
@@ -546,11 +634,17 @@ class CycleTrackerFragment :
                     data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
+                viewModel.currentSelectedPhase = null
                 if (this == null) {
                     tvPhase.text = "-"
                 } else {
                     tvPhase.text = this.first
                     tvPhase.setTextColor(tvPhase.context.getColor(this.second))
+                    if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.LUTEAL
+                    } else if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_follicular_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.FOLLECULAR
+                    }
                 }
             }
 
@@ -689,6 +783,12 @@ class CycleTrackerFragment :
                     object :
                         NudgeBannerListener {
                         override fun onAiClicked() {
+                            viewModel.sessionManager.logMoEngageAppEvent(
+                                MoEngageLunaAppEvents.ai_widget_clicked,
+                                HashMap<String, Any>().apply {
+                                    this["source"] = "cycle"
+                                }
+                            )
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)

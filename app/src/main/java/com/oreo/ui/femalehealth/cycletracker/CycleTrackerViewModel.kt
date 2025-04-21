@@ -51,7 +51,7 @@ class CycleTrackerViewModel @Inject constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    var notificationToggleModel= MutableLiveData<NotificationToggleModel>()
+    var notificationToggleModel = MutableLiveData<NotificationToggleModel>()
     var isCalendarSetupDone: Boolean = false
     var todayDate = LocalDate.now()
     var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
@@ -78,6 +78,7 @@ class CycleTrackerViewModel @Inject constructor(
     private val _navigateToBack = MutableLiveData<Event<Boolean>>()
     val navigateToBack: LiveData<Event<Boolean>> get() = _navigateToBack
 
+    var currentSelectedPhase: CyclePhase? = null
 
     var healthDataDateList = HashMap<LocalDate, DayState>()
 
@@ -306,14 +307,20 @@ class CycleTrackerViewModel @Inject constructor(
     fun getCurrentPhaseText(
         ovulationDate: String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
-        if (ovulationDate == null) return Pair(resourcesProvider.getString(R.string.text_follicular_phase), R.color.color_follicular)
+        if (ovulationDate == null) return Pair(
+            resourcesProvider.getString(R.string.text_follicular_phase),
+            R.color.color_follicular
+        )
         if (periodDate.isNullOrEmpty()) return null
 
         val localCurrentDate = LocalDate.parse(currentDate)
         val ovDateLocal = LocalDate.parse(ovulationDate)
 
-        return if (localCurrentDate.isBefore(ovDateLocal)) {
-            Pair(resourcesProvider.getString(R.string.text_follicular_phase), R.color.color_follicular)
+        return if (localCurrentDate.isBefore(ovDateLocal) || localCurrentDate == ovDateLocal) {
+            Pair(
+                resourcesProvider.getString(R.string.text_follicular_phase),
+                R.color.color_follicular
+            )
         } else {
             Pair(resourcesProvider.getString(R.string.text_luteal_phase), R.color.color_luteal)
         }
@@ -583,7 +590,7 @@ class CycleTrackerViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             notificationToggleModel.postValue(it)
-                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification?:false)
                         }
                     }
 
@@ -662,6 +669,34 @@ class CycleTrackerViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun getBellResource(femaleHealth: Boolean): Int {
+        return when (currentSelectedPhase) {
+            CyclePhase.FOLLECULAR -> {
+                if (femaleHealth) {
+                    R.drawable.ic_fh_notification_f_on
+                } else {
+                    R.drawable.ic_fh_notification_f_off
+                }
+            }
+
+            CyclePhase.LUTEAL -> {
+                if (femaleHealth) {
+                    R.drawable.ic_fh_notification_l_on
+                } else {
+                    R.drawable.ic_fh_notification_l_off
+                }
+            }
+
+            null -> {
+                if (femaleHealth) {
+                    R.drawable.ic_female_health_notification_on
+                } else {
+                    R.drawable.ic_female_health_notification_off
+                }
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
-import com.noisefit.util.ApplicationUtils
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -16,18 +16,19 @@ import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
-class CustomHomescreenViewModel  @Inject constructor(
+class CustomHomescreenViewModel @Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
-    private val localDataSource: DataStoredInterface
-): BaseViewModel() {
+    private val localDataSource: DataStoredInterface,
+    private val sessionManager: SessionManager
+) : BaseViewModel() {
 
     // Switch state
     val lunaManagedState = MutableLiveData<Boolean?>(false)
@@ -36,11 +37,7 @@ class CustomHomescreenViewModel  @Inject constructor(
     private val _items = MutableLiveData<List<CustomHomeScreenItem>>()
     val items: LiveData<List<CustomHomeScreenItem>> get() = _items
 
-    val dataUpdated= MutableLiveData<Event<Boolean>>()
-
-    // Rate limiting variables
-    private val maxRequests = 5
-    private val timeWindowMs = 60 * 60 * 1000 // 1 hour
+    val dataUpdated = MutableLiveData<Event<Boolean>>()
 
     init {
         loadInitialItems()
@@ -51,15 +48,15 @@ class CustomHomescreenViewModel  @Inject constructor(
 
             val itemsMap = getItemsMap()
             val localData = localDataSource.getCustomHomeScreenItemsPriorityList()
-            if (localData != null){
+            if (localData != null) {
                 lunaManagedState.postValue(localData.manage)
-            }else{
+            } else {
                 lunaManagedState.postValue(true)
             }
             val sortedList = localData?.cards
-            if (sortedList != null){
+            if (sortedList != null) {
                 sortedList.sortedBy { it.priority }
-                val tempList= ArrayList<CustomHomeScreenItem>()
+                val tempList = ArrayList<CustomHomeScreenItem>()
                 sortedList.forEach { item ->
 
                     val card = itemsMap[item.type]
@@ -68,78 +65,101 @@ class CustomHomescreenViewModel  @Inject constructor(
                         it.switchState = item.switchState
                         tempList.add(card)
                     }
-                    _items.postValue(tempList)
+
+
                 }
-            }else{
+                val newList = addOtherCards(tempList)
+                _items.postValue(newList)
+            } else {
                 val initialItems = itemsMap.values.toList().sortedBy { it.priority }
                 _items.postValue(initialItems)
             }
         }
     }
 
-     fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>) {
-         viewModelScope.launch {
+    fun addOtherCards(card: List<CustomHomeScreenItem>): List<CustomHomeScreenItem> {
+        val itemsMap = getItemsMap()
+        val existingIds = card.map { it.key }.toSet()
 
-             if (!canMakeApiCall()) {
-                 return@launch
-             }
+        val remainingCards = itemsMap.values.filter { it.key !in existingIds }
 
-             var count = 0
-             var sleepItemIndex = -1
-             updatedList.forEachIndexed{ index, cItem ->
-                 cItem.priority = index+1
-                 if(cItem.switchState.not()) count++
-                 if(cItem.key == "sleep") sleepItemIndex = index
-             }
+        val cardsToAdd = ArrayList<CustomHomeScreenItem>()
+        cardsToAdd.addAll(card)
+        remainingCards.forEachIndexed { index,item ->
+            cardsToAdd.add(item.apply {
+                this.priority = card.size + (index + 1)
+            })
+        }
+        return cardsToAdd
+    }
 
-             if(count == updatedList.size){
-                 updatedList.get(sleepItemIndex).switchState = true
-             }
+    fun updateData(isToggleOn: Boolean, updatedList: List<CustomHomeScreenItem>) {
+        viewModelScope.launch {
 
-             val customHomeScreenData = CustomHomeScreenModel(
-                 manage = isToggleOn,
-                 type = "home-dash",
-                 cards = getNetworkList(updatedList)
-             )
+            if (!canMakeApiCall()) {
+                return@launch
+            }
 
-             userRepository.submitCustomHomeScreenPriority(customHomeScreenData).collect { resource ->
-                 when (resource) {
-                     is Resource.GenericError -> {
-                         sendMessage(resource.message)
-                     }
+            var count = 0
+            var sleepItemIndex = -1
+            updatedList.forEachIndexed { index, cItem ->
+                cItem.priority = index + 1
+                if (cItem.switchState.not()) count++
+                if (cItem.key == "sleep") sleepItemIndex = index
+            }
 
-                     is Resource.Loading -> {
-                         setLoading(resource.loading)
-                     }
+            if (count == updatedList.size) {
+                updatedList.get(sleepItemIndex).switchState = true
+            }
 
-                     is Resource.NetworkError -> {
-                         setApiErrors(resource.response.apply {
-                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                 object : BinaryActionCallback {
-                                     override fun yes() {
-                                         updateData(isToggleOn, updatedList)
-                                     }
+            val customHomeScreenData = CustomHomeScreenModel(
+                manage = isToggleOn,
+                type = "home-dash",
+                cards = getNetworkList(updatedList)
+            )
 
-                                     override fun no() {}
-                                 }
-                         })
-                     }
+            userRepository.submitCustomHomeScreenPriority(customHomeScreenData)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
 
-                     is Resource.Success -> {
-                         resource.data?.data?.let {
-                             localDataSource.setCustomHomeScreenApiCallTimeStamps()
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                             localDataSource.setCustomHomeScreenItemsPriorityList(customHomeScreenData)
-                             dataUpdated.postValue(Event(true))
-                         }
-                     }
-                 }
-             }
-         }
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateData(isToggleOn, updatedList)
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                localDataSource.setCustomHomeScreenApiCallTimeStamps()
+
+                                localDataSource.setCustomHomeScreenItemsPriorityList(
+                                    customHomeScreenData
+                                )
+                                dataUpdated.postValue(Event(true))
+                            }
+                        }
+                    }
+                }
+        }
     }
 
     private fun canMakeApiCall(): Boolean {
-        val (lastCallTime, callCount) = localDataSource.getCustomHomeScreenApiCallTimeStamps() ?: return true
+        val (lastCallTime, callCount) = localDataSource.getCustomHomeScreenApiCallTimeStamps()
+            ?: return true
 
         if (callCount < 5) return true
 
@@ -161,6 +181,9 @@ class CustomHomescreenViewModel  @Inject constructor(
                     seconds
                 )
             )
+
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.customize_homescreen_warning)
+
             false
         }
     }
@@ -175,43 +198,44 @@ class CustomHomescreenViewModel  @Inject constructor(
         }
     }
 
-    private fun getItemsMap(): Map<String, CustomHomeScreenItem> = HashMap<String, CustomHomeScreenItem>().apply {
-        this["sleep"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep,
-            "sleep",
-            resourceProvider.getString(R.string.text_sleep),
-            true,
-            1
-        )
+    private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
+        HashMap<String, CustomHomeScreenItem>().apply {
+            this["sleep"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep,
+                "sleep",
+                resourceProvider.getString(R.string.text_sleep),
+                true,
+                1
+            )
 
-        this["activity"] = CustomHomeScreenItem(
-            R.drawable.icon_activity,
-            "activity",
-            resourceProvider.getString(R.string.text_activity_o),
-            true,
-            2
-        )
-        this["readiness"] = CustomHomeScreenItem(
-            R.drawable.icon_readiness,
-            "readiness",
-            resourceProvider.getString(R.string.text_readiness),
-            true,
-            3
-        )
-        this["sleep_planner"] = CustomHomeScreenItem(
-            R.drawable.icon_sleep_planner,
-            "sleep_planner",
-            resourceProvider.getString(R.string.text_sleep_planner),
-            true,
-            4
-        )
-        this["heart_rate"] = CustomHomeScreenItem(
-            R.drawable.icon_heart_rate,
-            "heart_rate",
-            resourceProvider.getString(R.string.text_heart_rate),
-            true,
-            5
-        )
+            this["activity"] = CustomHomeScreenItem(
+                R.drawable.icon_activity,
+                "activity",
+                resourceProvider.getString(R.string.text_activity_o),
+                true,
+                2
+            )
+            this["readiness"] = CustomHomeScreenItem(
+                R.drawable.icon_readiness,
+                "readiness",
+                resourceProvider.getString(R.string.text_readiness),
+                true,
+                3
+            )
+            this["sleep_planner"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep_planner,
+                "sleep_planner",
+                resourceProvider.getString(R.string.text_sleep_planner),
+                true,
+                4
+            )
+            this["heart_rate"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_rate,
+                "heart_rate",
+                resourceProvider.getString(R.string.text_heart_rate),
+                true,
+                5
+            )
 
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
@@ -220,57 +244,57 @@ class CustomHomescreenViewModel  @Inject constructor(
 //            true,
 //            7
 //        )
-        this["daily_goals"] = CustomHomeScreenItem(
-            R.drawable.icon_daily_goals,
-            "daily_goals",
-            resourceProvider.getString(R.string.text_daily_goals),
-            true,
-            6
-        )
-        this["luna_ai"] = CustomHomeScreenItem(
-            R.drawable.icon_luna_ai,
-            "luna_ai",
-            resourceProvider.getString(R.string.text_luna_ai),
-            true,
-            7
-        )
-        this["stress"] = CustomHomeScreenItem(
-            R.drawable.icon_stress,
-            "stress",
-            resourceProvider.getString(R.string.text_stress),
-            true,
-            8
-        )
-
-        if(shouldShowFemaleHealth()){
-            this["cycle_tracker"] = CustomHomeScreenItem(
-                R.drawable.icon_cycle_tracker,
-                "cycle_tracker",
-                resourceProvider.getString(R.string.text_cycle_tracker),
+            this["daily_goals"] = CustomHomeScreenItem(
+                R.drawable.icon_daily_goals,
+                "daily_goals",
+                resourceProvider.getString(R.string.text_daily_goals),
                 true,
-                9
+                6
             )
+            this["luna_ai"] = CustomHomeScreenItem(
+                R.drawable.icon_luna_ai,
+                "luna_ai",
+                resourceProvider.getString(R.string.text_luna_ai),
+                true,
+                7
+            )
+            this["stress"] = CustomHomeScreenItem(
+                R.drawable.icon_stress,
+                "stress",
+                resourceProvider.getString(R.string.text_stress),
+                true,
+                8
+            )
+
+            if (shouldShowFemaleHealth()) {
+                this["cycle_tracker"] = CustomHomeScreenItem(
+                    R.drawable.icon_cycle_tracker,
+                    "cycle_tracker",
+                    resourceProvider.getString(R.string.text_cycle_tracker),
+                    true,
+                    9
+                )
+            }
+            this["7_day_trends_card"] = CustomHomeScreenItem(
+                R.drawable.icon_7_day_trends_card,
+                "7_day_trends_card",
+                resourceProvider.getString(R.string.text_7_day_trends_cards),
+                true,
+                10
+            )
+            this["workout_history"] = CustomHomeScreenItem(
+                R.drawable.icon_flexibility_training,
+                "workout_history",
+                resourceProvider.getString(R.string.text_workout_history),
+                true,
+                11
+            )
+
+
         }
-        this["7_day_trends_card"] = CustomHomeScreenItem(
-            R.drawable.icon_7_day_trends_card,
-            "7_day_trends_card",
-            resourceProvider.getString(R.string.text_7_day_trends_cards),
-            true,
-            10
-        )
-        this["workout_history"] = CustomHomeScreenItem(
-            R.drawable.icon_flexibility_training,
-            "workout_history",
-            resourceProvider.getString(R.string.text_workout_history),
-            true,
-            11
-        )
-
-
-    }
 
     fun shouldShowFemaleHealth(): Boolean {
-        val user=  localDataSource.getUser()
+        val user = localDataSource.getUser()
         return !user?.userInfo?.gender.equals("male", true)
     }
 

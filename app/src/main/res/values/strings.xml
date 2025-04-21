@@ -1474,7 +1474,7 @@
     <string name="text_low_chance_of_pregnancy">Low chance of pregnancy</string>
     <string name="text_your_body_is_at_it_s_most_fertile_today">Your body is at it’s most fertile today</string>
     <string name="text_increasing_chance_of_pregnancy">Increasing chance of pregnancy</string>
-    <string name="text_decreasing_chance_of_pregnancy">decreasing chance of pregnancy</string>
+    <string name="text_decreasing_chance_of_pregnancy">Decreasing chance of pregnancy</string>
     <string name="text_normal">Normal</string>
     <string name="text_no_data_available">No data available</string>
     <string name="text_deviation_on_value">Deviation on %1$s</string>

@@ -20,6 +20,7 @@ import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.toMakeTwoDecimal
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -157,7 +158,12 @@ class DeviceSetupViewModel @Inject constructor(
 
         val sleepGoal = 8
 
-        return UserGoals(stepGoal, caloriesGoal, distanceGoal, sleepGoal, unitSystemLuna = unitSystem)
+        return UserGoals(stepGoal = stepGoal,
+            caloriesGoal = caloriesGoal,
+            hydrationGoals = user?.userGoals?.hydrationGoals?:3000,
+            distanceGoal = distanceGoal,
+            sleepGoal = sleepGoal,
+            unitSystemLuna = unitSystem)
     }
 
     private fun getDefaultWeightInKg(): Int {
