@@ -4,6 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_caffeine_window_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
     <TextView
         android:id="@+id/textView165"
         style="@style/S16"
@@ -28,6 +42,19 @@
         app:layout_constraintStart_toEndOf="@+id/textView165"
         app:layout_constraintTop_toTopOf="@+id/textView165"
         tools:text="Open" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.6"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_right_white"
+        app:layout_constraintBottom_toBottomOf="@+id/textView165"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView165" />
 
     <com.oreo.ui.custom.CaffeineGraphView
         android:id="@+id/caffeineGraphView"
