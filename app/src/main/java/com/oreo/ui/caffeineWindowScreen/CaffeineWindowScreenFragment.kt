@@ -1,6 +1,10 @@
 package com.oreo.ui.caffeineWindowScreen
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -45,6 +49,24 @@ class CaffeineWindowScreenFragment :
     private fun initUi() {
         binding.apply {
             layoutToolbar.tvTitle.text = getString(R.string.text_caffeine_window)
+
+            val fullText = binding.root.context.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance)
+            val splitIndex = fullText.indexOf(':')
+
+            if (splitIndex != -1) {
+                val startingWords = "${fullText.substring(0, splitIndex)}:"
+
+                val spannableString = SpannableString(fullText)
+
+                spannableString.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    startingWords.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                description.text = spannableString
+            }
         }
         setAdapter()
     }

@@ -3,8 +3,13 @@ package com.oreo.ui.home.summary
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +81,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.home.summary.paginate.NotificationGoal
 import com.oreo.util.DateTimeUtil
 import java.time.Duration
@@ -83,6 +89,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
+import androidx.core.graphics.toColorInt
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -2834,7 +2841,67 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
         fun bind(data: OHealthOverview.CaffeineWindow){
             initListener(data.data)
-            binding.caffeineGraphView.updateData(data.data)
+
+            val context = binding.root.context
+
+            val fullText = context.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance)
+            val splitIndex = fullText.indexOf(':')
+
+            if (splitIndex != -1) {
+                val startingWords = "${fullText.substring(0, splitIndex)}:"
+                val remainingText = fullText.substring(splitIndex+1)
+
+                val spannableString = SpannableString(fullText)
+
+                spannableString.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    startingWords.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+//                spannableString.setSpan(
+//                    ForegroundColorSpan(Color.WHITE),
+//                    0,
+//                    firstTwoWords.length,
+//                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+//                )
+
+                binding.tvMessage.text = spannableString
+            }
+
+            val dataa = data.data
+
+            val graphStart = LocalTime.parse(dataa.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val graphEnd = LocalTime.parse(dataa.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val caffeineStart =
+                LocalTime.parse(dataa.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val caffeineEnd = LocalTime.parse(dataa.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+            val now = LocalTime.now()
+            when {
+                now in graphStart..caffeineStart -> {
+                    binding.tvState.apply {
+                        text = context.getString(R.string.text_open)
+                        setTextColor("#FF6389".toColorInt())
+                    }
+                }
+
+                now in caffeineStart..caffeineEnd -> {
+                    binding.tvState.apply {
+                        text = context.getString(R.string.text_open)
+                        setTextColor("#0EF377".toColorInt())
+                    }
+                }
+
+                now in caffeineEnd..graphEnd -> {
+                    binding.tvState.apply {
+                        text = context.getString(R.string.text_open)
+                        setTextColor("#FF6389".toColorInt())
+                    }
+                }
+            }
+
+            binding.caffeineGraphView.updateData(dataa)
         }
 
         private fun initListener(data: CaffeineWindowData) {

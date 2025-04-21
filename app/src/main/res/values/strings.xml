@@ -1924,5 +1924,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_my_items">My Items</string>
     <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">This guidance is based on circadian and metabolic patterns, but individual responses to caffeine can vary. Tune into how your body feels, and consult a healthcare professional if you have specific sensitivities or health conditions.</string>
     <string name="text_caffeine_window">Caffeine window</string>
+    <string name="text_restricted">Restricted</string>
+    <string name="text_open">Open</string>
 
 </resources>

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imv"
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:background="@drawable/back_caffeine_status"
-        android:padding="6dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView165"
         app:layout_constraintStart_toEndOf="@+id/textView165"
         app:layout_constraintTop_toTopOf="@+id/textView165"
@@ -66,7 +67,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView165" />
+        app:layout_constraintTop_toBottomOf="@+id/tvState" />
 
     <TextView
         android:id="@+id/tvMessage"
@@ -82,6 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caffeineGraphView"
-        tools:text="Boost focus and alertness: This is your optimal window to enjoy caffeine for peak performance." />
+        tools:text="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
