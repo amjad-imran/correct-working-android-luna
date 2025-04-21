@@ -1,6 +1,8 @@
 package com.oreo.ui.custom
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -9,11 +11,13 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.dpToPixel
+import com.oreo.data.model.CaffeineWindowData
 import java.time.Duration
 import java.time.LocalTime
-import com.noisefit.luna.R
-import com.oreo.data.model.CaffeineWindowData
 import java.time.format.DateTimeFormatter
 
 
@@ -28,6 +32,11 @@ class CaffeineGraphView : View {
     private var caffeineEnd: LocalTime? = null
 
     private var caffeineDataList = ArrayList<Int>()
+
+    lateinit var sunRiseBitmap: Bitmap
+    lateinit var moonRiseBitmap: Bitmap
+
+    lateinit var textPaint: Paint
 
 
     private val barPaintDefault = Paint().apply {
@@ -74,7 +83,28 @@ class CaffeineGraphView : View {
     }
 
     private fun init() {
+        val bitmap =
+            BitmapFactory.decodeResource(resources, R.drawable.ic_sun_rise)
+        sunRiseBitmap = Bitmap.createScaledBitmap(
+            bitmap, dip2px(12f),
+            dip2px(12f), true
+        )
 
+        val bitmapMoon =
+            BitmapFactory.decodeResource(resources, R.drawable.ic_moon_rise)
+        moonRiseBitmap = Bitmap.createScaledBitmap(
+            bitmapMoon, dip2px(12f),
+            dip2px(12f), true
+        )
+
+        val fontGilroy =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+
+        textPaint = Paint().apply {
+            this.color = Color.parseColor("#CDA390")
+            this.typeface = fontGilroy
+            this.textSize = dip2px(10f).toFloat()
+        }
     }
 
     protected override fun onDraw(canvas: Canvas) {
@@ -85,7 +115,7 @@ class CaffeineGraphView : View {
             return
         }
 
-        drawBottomBar(canvas)
+        drawContent(canvas)
     }
 
     fun updateData(data: CaffeineWindowData) {
@@ -103,9 +133,9 @@ class CaffeineGraphView : View {
     }
 
 
-    fun drawBottomBar(canvas: Canvas) {
+    fun drawContent(canvas: Canvas) {
 
-        val barCenterYPos = height - 12f.dpToPixel()
+        val barCenterYPos = height - 24f.dpToPixel()
 
         val (startBarWidth, caffeineBarWidth, endBarWidth) = calculateBarWidths(
             graphStart!!,
@@ -155,6 +185,16 @@ class CaffeineGraphView : View {
             if (isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
         )
 
+        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+        val textHeight = textPaint.descent() - textPaint.ascent()
+        canvas.drawText(
+            caffeineTextStart,
+            segment2Start,
+            barCenterYPos + textHeight + 8f.dpToPixel(),
+            textPaint
+        )
+
+
         val segment3Start = segment2End
         val segment3End = segment2End + endBarWidth
         val isEndHighlighted = highlightState == HighlightState.END
@@ -165,6 +205,13 @@ class CaffeineGraphView : View {
                 canvas,
                 segment3Start + endBarWidth / 2,
                 barCenterYPos - 8f.dpToPixel()
+            )
+        }else{
+            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+            val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
+            canvas.drawText(
+                caffeineTextEnd, segment3Start - textWidth / 2,
+                barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
             )
         }
         canvas.drawRoundRect(
@@ -178,12 +225,32 @@ class CaffeineGraphView : View {
         )
 
 
+
+        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+        val textWidthEnd = textPaint.measureText(endText, 0, endText.length)
+        canvas.drawText(
+            endText, segment3End - textWidthEnd,
+            barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
+        )
+
+        canvas.drawBitmap(moonRiseBitmap, segment3End-textWidthEnd - 14f.dpToPixel(), barCenterYPos + 8f.dpToPixel(), barPaintDefault)
+
         drawBars(
             startBarWidth,
             startBarWidth + caffeineBarWidth,
             barCenterYPos - 8f.dpToPixel(),
             canvas
         )
+
+        canvas.drawBitmap(sunRiseBitmap, 0f, barCenterYPos + 8f.dpToPixel(), barPaintDefault)
+    }
+
+    private fun drawXAxis(canvas: Canvas, yAxis: Float) {
+
+        val width = (sunRiseBitmap.getWidth() / 2).toFloat()
+        val height = (sunRiseBitmap.getHeight() / 2).toFloat()
+
+
     }
 
     fun drawNoCaffeineZoneLabel(canvas: Canvas, centerX: Float, bottom: Float) {
@@ -260,7 +327,7 @@ class CaffeineGraphView : View {
             val right = left + barWidth
             val bottom = barBottomY
 
-            if(highlightedIndex==index){
+            if (highlightedIndex == index) {
                 highlightedBarTop = top
             }
 
@@ -351,6 +418,11 @@ class CaffeineGraphView : View {
         val endBarWidth = endWeight * totalWidth
 
         return Triple(startBarWidth, caffeineBarWidth, endBarWidth)
+    }
+
+    private fun dip2px(dpValue: Float): Int {
+        val scale = getContext().getResources().getDisplayMetrics().density
+        return (dpValue * scale + 0.5f).toInt()
     }
 
 
