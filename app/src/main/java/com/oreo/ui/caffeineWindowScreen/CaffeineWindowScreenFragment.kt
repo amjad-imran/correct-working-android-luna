@@ -190,15 +190,22 @@ class CaffeineWindowScreenFragment :
         viewModel._myItemsList.observe(viewLifecycleOwner) { items ->
             if (!items.isNullOrEmpty()) {
                 myItemsAdapter.updateItems(items)
+//                binding.rvMyItems.setVisibilityByCondition(true)
             }
         }
 
         viewModel._allItemsList.observe(viewLifecycleOwner) { items ->
             if (!items.isNullOrEmpty()) {
                 allItemsAdapter.updateItems(items)
+//                binding.rvAllItems.setVisibilityByCondition(true)
             }
         }
 
     }
+
+//    private fun setRvVisibility(){
+//        binding.rvMyItems.setVisibilityByCondition(myItemsAdapter.getItemsListSize() > 0)
+//        binding.rvAllItems.setVisibilityByCondition(allItemsAdapter.getItemsListSize() > 0)
+//    }
 
 }

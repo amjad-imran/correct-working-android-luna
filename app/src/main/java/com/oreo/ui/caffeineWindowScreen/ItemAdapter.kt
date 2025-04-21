@@ -81,4 +81,5 @@ class ItemAdapter(
     }
 
     fun getItemsList(): ArrayList<CaffeineFoodItem> = mDataSet
+    fun getItemsListSize(): Int = mDataSet.size
 }
