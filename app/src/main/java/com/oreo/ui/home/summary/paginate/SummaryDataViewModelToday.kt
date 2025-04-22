@@ -1228,7 +1228,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
 
-                    "caffeine_window" -> {
+                    "caffeine_intake" -> {
                         getCaffeineCardData()?.let {
                             userActivities.add(it)
                         }
@@ -1906,7 +1906,7 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["cycle_tracker"]!!.copy(priority = 12))
             add(itemsMap["7_day_trends_card"]!!.copy(priority = 13))
             add(itemsMap["workout_history"]!!.copy(priority = 14))
-            add(itemsMap["caffeine_window"]!!.copy(priority = 15))
+            add(itemsMap["caffeine_intake"]!!.copy(priority = 15))
         }
 
         return priorityList
@@ -2002,12 +2002,12 @@ class SummaryDataViewModelToday @Inject constructor(
                 12
             )
 
-            this["caffeine_window"] = CustomHomeScreenItem(
+            this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_heart_monitor,
-                "caffeine_window",
+                "caffeine_intake",
                 resourceProvider.getString(R.string.text_heart_monitor),
                 true,
-                12
+                13
             )
 
         }
@@ -3264,7 +3264,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             notificationToggleModel = it
-                            localDataStore.setShouldShowSleepNotification(it.sleep_notification)
+                            localDataStore.setShouldShowSleepNotification(it.sleep_notification?:false)
                             getNotificationGoals()
                         }
                     }
