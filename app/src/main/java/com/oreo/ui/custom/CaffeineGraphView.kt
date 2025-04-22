@@ -343,7 +343,7 @@ class CaffeineGraphView : View {
 
         if (highlightedIndex != -1) {
             val left = startX + highlightedIndex * (barWidth + spacing)
-            drawTooltip(canvas, left, highlightedBarTop, "Upto 30 mg")
+            drawTooltip(canvas, left, highlightedBarTop, "Upto ${caffeineDataList[highlightedIndex]} mg")
         }
     }
 
