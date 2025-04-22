@@ -30,7 +30,7 @@
                     style="@style/ToolbarBackButton"
                     android:layout_margin="@dimen/side_margin"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -102,16 +102,34 @@
                         android:contentDescription="Ring charge" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivRefresh"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginEnd="16dp"-->
+                <!--                    android:src="@drawable/ic_refresh_ring"-->
+                <!--                    android:visibility="gone"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/tvDevicesFound"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="@+id/tvDevicesFound" />-->
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivRefresh"
+                    style="@style/SecondaryButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_refresh_ring"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:drawableStart="@drawable/ic_refresh_ring"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/text_retry"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
                     android:visibility="gone"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="@+id/tvDevicesFound"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tvDevicesFound" />
+                    app:layout_constraintTop_toTopOf="@+id/tvDevicesFound"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tvDevicesFound"
@@ -193,19 +211,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">-->
 
-                    <TextView
-                        android:id="@+id/tvTroubleShoot"
-                        style="@style/Small"
-                        android:layout_width="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_height="36dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:gravity="center"
-                        android:text="@string/text_ring_not_connecting"
-                        android:textColor="#6b9cfd" />
-               <!-- </com.facebook.shimmer.ShimmerFrameLayout>-->
+                <TextView
+                    android:id="@+id/tvTroubleShoot"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="@string/text_ring_not_connecting"
+                    android:textColor="#6b9cfd"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <!-- </com.facebook.shimmer.ShimmerFrameLayout>-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
