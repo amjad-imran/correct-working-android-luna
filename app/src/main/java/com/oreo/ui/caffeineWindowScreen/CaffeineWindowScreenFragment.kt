@@ -16,7 +16,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.oreo.data.model.CaffeineWindowData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +39,11 @@ class CaffeineWindowScreenFragment :
         arguments?.let {
             args.caffeineGraphData?.let {
                 binding.caffeineGraphView.updateData(it)
+
+                val maxQuantity = viewModel.getMaxQuantity(it)
+
+                myItemsAdapter.setMaxQuantity(maxQuantity?:100)
+                allItemsAdapter.setMaxQuantity(maxQuantity?:100)
             }
         }
         viewModel.loadItems()

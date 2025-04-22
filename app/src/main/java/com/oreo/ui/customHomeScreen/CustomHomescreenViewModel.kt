@@ -266,6 +266,13 @@ class CustomHomescreenViewModel  @Inject constructor(
             11
         )
 
+        this["caffeine"] = CustomHomeScreenItem(
+            R.drawable.icon_flexibility_training,
+            "caffeine",
+            "caffeine_window",
+            true,
+            12
+        )
 
     }
 

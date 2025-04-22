@@ -19,7 +19,7 @@ class ItemAdapter(
 
     private val mDataSet = ArrayList<CaffeineFoodItem>()
 
-    private val maxQuantity = 40
+    private var maxQuantity = 0
 
     inner class ViewHolder(val binding: ItemCaffeineFoodBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -82,4 +82,8 @@ class ItemAdapter(
 
     fun getItemsList(): ArrayList<CaffeineFoodItem> = mDataSet
     fun getItemsListSize(): Int = mDataSet.size
+
+    fun setMaxQuantity(num: Int){
+        maxQuantity = num
+    }
 }
