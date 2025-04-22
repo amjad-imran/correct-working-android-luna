@@ -120,7 +120,7 @@ sealed class OHealthOverview {
     ): OHealthOverview()
 
     data class SevenDayTrendsCard(
-        val  trendsData: TrendsData,
+        val  trendsData: TrendsData?,
         val chartModelSleep: List<ChartModel>,
         val chartModelActivity: List<ChartModel>,
         val chartModelReadiness: List<ChartModel>,

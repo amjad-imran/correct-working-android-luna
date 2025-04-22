@@ -2,7 +2,12 @@ package com.oreo.ui.femalehealth.cycletracker
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -197,6 +202,13 @@ class CycleTrackerFragment :
             val lastValue = viewModel.notificationToggleModel.value?.female_health ?: false
             viewModel.notificationToggleModel.value?.female_health = lastValue.not()
             viewModel.updateNotificationToggle()
+
+            if (lastValue){
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_silent)
+            }else{
+                binding.lytTrackerTop.tvReminderMessage.text = getString(R.string.text_reminder_active)
+            }
+            notificationTextFade(binding.lytTrackerTop.tvPhase, binding.lytTrackerTop.tvReminderMessage)
         }
 
         binding.lytPrediction.vCard.ivInfo.setOnClickListener {
@@ -245,7 +257,7 @@ class CycleTrackerFragment :
             )
         }
 
-        binding.lytTrackerTop.tvPhase.setOnClickListener {
+        /*binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
                 launchMode = "Luteal"
@@ -262,7 +274,7 @@ class CycleTrackerFragment :
                     }
                 )
             }
-        }
+        }*/
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
@@ -353,6 +365,29 @@ class CycleTrackerFragment :
         }
     }
 
+    private fun notificationTextFade(textView1: TextView, textView2: TextView) {
+        textView1.visibility = View.VISIBLE
+        textView2.visibility = View.INVISIBLE
+
+        val fadeIn: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_in_goal)
+        val fadeOut: Animation =
+            AnimationUtils.loadAnimation(textView1.context, R.anim.fade_out_goal)
+
+        textView1.startAnimation(fadeOut)
+        textView1.visibility = View.INVISIBLE
+        textView2.visibility = View.VISIBLE
+        textView2.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            textView2.startAnimation(fadeOut)
+            textView2.visibility = View.INVISIBLE
+            textView1.visibility = View.VISIBLE
+            textView1.startAnimation(fadeIn)
+        }, 1500)
+
+    }
+
     private fun initInsightUI(cycleLength: Int, periodLength: Int) {
         binding.dividerInsight.root.visible()
         binding.lytInsight.root.visible()
@@ -387,11 +422,7 @@ class CycleTrackerFragment :
     override fun subscribeObservers() {
         viewModel.notificationToggleModel.observe(this) {
             binding.lytTrackerTop.ivNotificationStatus.setImageResource(
-                if (it.female_health) {
-                    R.drawable.ic_female_health_notification_on
-                } else {
-                    R.drawable.ic_female_health_notification_off
-                }
+                viewModel.getBellResource(it.female_health?:false)
             )
         }
         viewModel.navigateToBack.observe(this) {
@@ -503,6 +534,9 @@ class CycleTrackerFragment :
                 }
 
             }
+            viewModel.notificationToggleModel.value?.let {
+                viewModel.notificationToggleModel.postValue(it)
+            }
         }
 
         viewModel.getMessages().observe(this) {
@@ -600,11 +634,17 @@ class CycleTrackerFragment :
                     data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
+                viewModel.currentSelectedPhase = null
                 if (this == null) {
                     tvPhase.text = "-"
                 } else {
                     tvPhase.text = this.first
                     tvPhase.setTextColor(tvPhase.context.getColor(this.second))
+                    if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_luteal_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.LUTEAL
+                    } else if (binding.lytTrackerTop.tvPhase.text.equals(getString(R.string.text_follicular_phase))) {
+                        viewModel.currentSelectedPhase = CyclePhase.FOLLECULAR
+                    }
                 }
             }
 

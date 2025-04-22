@@ -1127,6 +1127,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     getLunaManagedPriority(hasSleep)
                 }
             } else {
+                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
                 getLunaManagedPriority(hasSleep)
             }
 
@@ -1145,7 +1146,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             isAfter12
                         )?.let { userActivities.add(it) }
 
-                        if (!lunaManaged) {
+                        if(!lunaManaged){
                             LOGS.d("isAfter12:  ${isAfter12.not()}")
                             if (isAfter12.not()) {
                                 getHealthMonitorData(healthData.sleep)?.let {
@@ -1242,6 +1243,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
             // Post the final data
             healthOverviewData.postValue(userActivities)
+
             //viewedCardsData.postValue(viewedCardsData)
             this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
 
@@ -1300,27 +1302,26 @@ class SummaryDataViewModelToday @Inject constructor(
 //            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
 //        )
 //        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
-        return trendsData?.let {
-            val chartModelSleep = convertIntToChartModel(it.sleepScoreAvg?.value)
-            val chartModelActivity = convertIntToChartModel(it.activityScoreAvg?.value)
-            val chartModelReadiness = convertIntToChartModel(it.readinessScoreAvg?.value)
+            val chartModelSleep = convertIntToChartModel(trendsData?.sleepScoreAvg?.value)
+            val chartModelActivity = convertIntToChartModel(trendsData?.activityScoreAvg?.value)
+            val chartModelReadiness = convertIntToChartModel(trendsData?.readinessScoreAvg?.value)
             val chartModelEmpty = convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0))
-            OHealthOverview.SevenDayTrendsCard(
-                it,
+        return OHealthOverview.SevenDayTrendsCard(
+                trendsData,
                 chartModelSleep,
                 chartModelActivity,
                 chartModelReadiness,
                 chartModelEmpty
             )
-        }
     }
 
     private fun getCycleTrackerCard(): OHealthOverview? {
+        var gotYourPeriodCard: OHealthOverview.GotYourPeriod? = null
         val (hasDataLoaded, femaleData) = femaleHealthData
 
         if (!hasDataLoaded) return null
 
-        return if (femaleData == null) {
+        val data =  if (femaleData == null) {
             if (gender.equals("male", true).not()) {
                 val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
                 if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
@@ -1336,6 +1337,29 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (femaleData.currentDay == null) {
                     OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.LOG)
                 } else {
+                    val isCardShownForToday =
+                        femaleHealthRepository.getGotPeriodClickedStatus()
+                    if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
+
+                        val periodCurrentDay = femaleData.currentDay
+                        val dayMessage = if (periodCurrentDay == null) {
+                            null
+                        } else {
+                            resourceProvider.getString(
+                                R.string.text_today_s_your_predicted_day,
+                                ApplicationUtils.getOrdinalWord(
+                                    periodCurrentDay, resourceProvider
+                                )
+                            )
+                        }
+
+                        gotYourPeriodCard = OHealthOverview.GotYourPeriod(
+                            dayMessage,
+                            femaleData.currentDay
+                        )
+                    }
+
+
                     if (femaleData.isOvulation || femaleData.isPeriod) {
                         OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
                     } else {
@@ -1350,6 +1374,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 null
             }
         }
+        gotYourPeriodData.postValue(gotYourPeriodCard)
+        return data
     }
 
     private fun getLunaAiCard(): OHealthOverview? {
@@ -1793,11 +1819,11 @@ class SummaryDataViewModelToday @Inject constructor(
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
-                    if (hasSleep) {
+                    if(hasSleep){
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        if (isAfter12.not()) {
+                        if(isAfter12.not()){
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
                     } else {
@@ -1811,14 +1837,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
-                    if (hasSleep) {
+                    if(hasSleep){
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
-                        if (isAfter12.not()) {
+                        if(isAfter12.not()){
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
-                    } else {
+                    }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
@@ -1830,14 +1856,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             2 -> { // Evening (balanced)
                 priorityList.apply {
-                    if (hasSleep) {
+                    if(hasSleep){
                         add(itemsMap["readiness"]!!.copy(priority = 1))
                         add(itemsMap["luna_ai"]!!.copy(priority = 2))
                         add(itemsMap["sleep"]!!.copy(priority = 3))
                         if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = 4))
                         }
-                    } else {
+                    }else{
                         add(itemsMap["luna_ai"]!!.copy(priority = 1))
                         add(itemsMap["sleep"]!!.copy(priority = 2))
                     }
@@ -1871,15 +1897,15 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         priorityList.apply {
-            add(itemsMap["daily_goals"]!!.copy(priority = 8))
-            add(itemsMap["stress"]!!.copy(priority = 9))
-            add(itemsMap["heart_rate"]!!.copy(priority = 10))
-            add(itemsMap["cycle_tracker"]!!.copy(priority = 11))
-            add(itemsMap["7_day_trends_card"]!!.copy(priority = 12))
-            add(itemsMap["workout_history"]!!.copy(priority = 13))
             if (isAfter12) {
-                add(itemsMap["health_monitor"]!!.copy(priority = 14))
+                add(itemsMap["health_monitor"]!!.copy(priority = 8))
             }
+            add(itemsMap["daily_goals"]!!.copy(priority = 9))
+            add(itemsMap["stress"]!!.copy(priority = 10))
+            add(itemsMap["heart_rate"]!!.copy(priority = 11))
+            add(itemsMap["cycle_tracker"]!!.copy(priority = 12))
+            add(itemsMap["7_day_trends_card"]!!.copy(priority = 13))
+            add(itemsMap["workout_history"]!!.copy(priority = 14))
             add(itemsMap["caffeine_window"]!!.copy(priority = 15))
         }
 

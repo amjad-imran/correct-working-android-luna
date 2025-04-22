@@ -38,12 +38,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     override fun initListener() {
         binding.ivCopyEmail.setOnClickListener {
-            viewModel.getUser().value?.email?.copyToClipBoard()
+            viewModel.getUser().value?.email?.copyToClipBoard(resources.getString(R.string.text_copied))
 
         }
 
         binding.ivCopyMobile.setOnClickListener {
-            viewModel.getUser().value?.mobile?.copyToClipBoard()
+            viewModel.getUser().value?.mobile?.copyToClipBoard(resources.getString(R.string.text_copied))
         }
 
         binding.backBtn.setOnClickListener {

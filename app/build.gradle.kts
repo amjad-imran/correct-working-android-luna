@@ -132,7 +132,7 @@ android {
         create("uat") {
             buildConfigField("String", "BASE_URL", "\"https://app-micro-uat.gonoise.com\"")
             buildConfigField("String", "BASE_URL_NEW", "\"https://uat-app.gonoise.com\"")
-            buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
+            buildConfigField("String", "API_URL_WEATHER", "\"http://api.weatherapi.com\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://uat-app.gonoise.com/luna\"")
@@ -143,7 +143,7 @@ android {
         create("staging") {
             buildConfigField("String", "BASE_URL", "\"https://app-micro-staging.gonoise.com\"")
             buildConfigField("String", "BASE_URL_NEW", "\"https://stage-app.gonoise.com\"")
-            buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
+            buildConfigField("String", "API_URL_WEATHER", "\"http://api.weatherapi.com\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://stage-app.gonoise.com/luna\"")
@@ -155,7 +155,7 @@ android {
         create("live") {
             buildConfigField("String", "BASE_URL", "\"https://backend.gonoise.com\"")
             buildConfigField("String", "BASE_URL_NEW", "\"https://app.gonoise.com\"")
-            buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
+            buildConfigField("String", "API_URL_WEATHER", "\"http://api.weatherapi.com\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://app.gonoise.com/luna\"")

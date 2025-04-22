@@ -59,13 +59,13 @@ class NotificationViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            masterToggle = it.master_notification
+                            masterToggle = it.master_notification?:false
 
                             if (masterToggle) {
-                                hydrationToggle = it.hydrate_notification
-                                stepsToggle = it.steps_notification
-                                sleepToggle = it.sleep_notification
-                                femaleHealthToggle = it.female_health
+                                hydrationToggle = it.hydrate_notification?:false
+                                stepsToggle = it.steps_notification?:false
+                                sleepToggle = it.sleep_notification?:false
+                                femaleHealthToggle = it.female_health?:false
                             }
                             valueUpdate.postValue(Event(true))
                         }

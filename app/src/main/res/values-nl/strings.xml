@@ -1446,7 +1446,7 @@
     <string name="text_low_chance_of_pregnancy">Lage kans op zwangerschap</string>
     <string name="text_your_body_is_at_it_s_most_fertile_today">Je lichaam is vandaag het meest vruchtbaar</string>
     <string name="text_increasing_chance_of_pregnancy">Grotere kans op zwangerschap</string>
-    <string name="text_decreasing_chance_of_pregnancy">afnemende kans op zwangerschap</string>
+    <string name="text_decreasing_chance_of_pregnancy">Afnemende kans op zwangerschap</string>
     <string name="text_normal">Normaal</string>
     <string name="text_no_data_available">Geen gegevens beschikbaar</string>
     <string name="text_deviation_on_value">Afwijking op %1$s</string>
@@ -1883,6 +1883,8 @@
     <string name="text_please_try_again_after_mins_seconds">Probeer het opnieuw over %1$dmin %2$dsec</string>
     <string name="text_custom_homescreen_message_2">Blijf op de hoogte met batterijwaarschuwingen, gegevenssynchronisatieherinneringen en essentiële meldingen om je Luna-ring soepel te laten werken</string>
     <string name="text_dashboard_cannot_be_empty">Dashboard mag niet leeg zijn.</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Blijf op de hoogte met batterijwaarschuwingen, gegevenssynchronisatieherinneringen en belangrijke inzichten – essentiële meldingen om je Luna-ring soepel te laten werken</string>
+    <string name="text_copied">Gekopieerd</string>
 
 
 </resources>

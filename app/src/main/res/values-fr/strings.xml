@@ -1469,7 +1469,7 @@
     <string name="text_low_chance_of_pregnancy">Faible chance de grossesse</string>
     <string name="text_your_body_is_at_it_s_most_fertile_today">Votre corps est à son niveau le plus fertile aujourd\'hui</string>
     <string name="text_increasing_chance_of_pregnancy">Augmentation des chances de grossesse</string>
-    <string name="text_decreasing_chance_of_pregnancy">diminution des chances de grossesse</string>
+    <string name="text_decreasing_chance_of_pregnancy">Diminution des chances de grossesse</string>
     <string name="text_normal">Normale</string>
     <string name="text_no_data_available">Aucune donnée disponible</string>
     <string name="text_deviation_on_value">Déviation sur %1$s</string>
@@ -1881,5 +1881,7 @@
     <string name="text_please_try_again_after_mins_seconds">Veuillez réessayer après %1$dmin %2$dsec</string>
     <string name="text_custom_homescreen_message_2">Restez informé avec des alertes de batterie, des rappels de synchronisation de données et des notifications essentielles pour faire fonctionner votre anneau Luna en douceur</string>
     <string name="text_dashboard_cannot_be_empty">Le tableau de bord ne peut pas être vide.</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Restez informé grâce aux alertes de batterie, rappels de synchronisation des données et informations clés – des notifications essentielles pour assurer le bon fonctionnement de votre bague Luna</string>
+    <string name="text_copied">Copié</string>
 
 </resources>

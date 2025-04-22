@@ -117,6 +117,7 @@ object MoEngageLunaAppEvents {
     const val calen_change = "calen_change"
     const val insight_log = "insight_log"
     const val cycle_information_clicked = "cycle_information_clicked"
+    const val customize_homescreen_warning = "customize_homescreen_warning"
     //
 
     const val luna_homepage_visit = "luna_homepage_visit"

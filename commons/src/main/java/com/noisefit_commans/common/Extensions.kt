@@ -38,8 +38,6 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 
-
-
 fun Context.hasLocationPermission(): Boolean {
     return ContextCompat.checkSelfPermission(
         this,
@@ -111,6 +109,7 @@ fun List<Int>.averageWithoutZero(): Int {
         0
     }
 }
+
 fun List<Int>.averageWithoutZeroGeneric(): Int {
     val newList = this.filter { it != 0 }
     return if (newList.isNotEmpty()) {
@@ -119,6 +118,7 @@ fun List<Int>.averageWithoutZeroGeneric(): Int {
         0
     }
 }
+
 fun List<Float>.averageWithoutZeroGenericFloat(): Float {
     val newList = this.filter { it != 0.0f }
     return if (newList.isNotEmpty()) {
@@ -216,11 +216,11 @@ fun Bitmap.convertCorner(radius: Float): Bitmap {
 }
 
 fun Float.upToNDecimal(upTo: Int): String {
-    return String.format(locale = Locale.US,"%.${upTo}f", this)
+    return String.format(locale = Locale.US, "%.${upTo}f", this)
 }
 
 fun Double.upToNDecimal(upTo: Int): String {
-    return String.format(locale = Locale.US,"%.${upTo}f", this)
+    return String.format(locale = Locale.US, "%.${upTo}f", this)
 }
 
 fun Double.roundDownDecimal(): String {
@@ -230,24 +230,25 @@ fun Double.roundDownDecimal(): String {
 }
 
 fun Double.ceilRound(): Int {
-    return DecimalFormat("#",DecimalFormatSymbols(Locale.US)).apply {
+    return DecimalFormat("#", DecimalFormatSymbols(Locale.US)).apply {
         roundingMode = RoundingMode.CEILING
     }.format(this).toInt()
 }
 
 fun Double.roundUpDecimal(): String {
-    val df = DecimalFormat("0.00",DecimalFormatSymbols(Locale.US))
+    val df = DecimalFormat("0.00", DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.UP
     return df.format(this)
 }
 
 fun Double.roundToNearestDecimal(): String {
-    val df = DecimalFormat("0.00",DecimalFormatSymbols(Locale.US))
+    val df = DecimalFormat("0.00", DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }
+
 fun Double.roundToNearestSingleDecimal(): String {
-    val df = DecimalFormat("0.0",DecimalFormatSymbols(Locale.US))
+    val df = DecimalFormat("0.0", DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }
@@ -268,24 +269,24 @@ fun Double.roundToNearestDecimalFloor(upTo: Int): Double {
     return BigDecimal(this.toString()).setScale(upTo, BigDecimal.ROUND_FLOOR).toDouble()
 }
 
-fun String.copyToClipBoard() {
+fun String.copyToClipBoard(text: String = "Copied") {
     val clipboardManager =
         NoisefitApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboardManager.setPrimaryClip(ClipData.newPlainText("", this))
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-        Toast.makeText(NoisefitApplication.context!!, "Copied", Toast.LENGTH_SHORT).show()
+        Toast.makeText(NoisefitApplication.context!!, text, Toast.LENGTH_SHORT).show()
     }
 }
 
 //no change in values
 fun Float.roundToNearestDecimalFloor(): String {
-    val df = DecimalFormat("0.0",DecimalFormatSymbols(Locale.US))
+    val df = DecimalFormat("0.0", DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.FLOOR
     return df.format(this)
 }
 
 fun Float.roundToNearestDecimalFlooor(uptoValue: Float): String {
-    val df = DecimalFormat("#.##",DecimalFormatSymbols(Locale.US))
+    val df = DecimalFormat("#.##", DecimalFormatSymbols(Locale.US))
     df.roundingMode = RoundingMode.HALF_UP
     return df.format(uptoValue)
 }
@@ -398,6 +399,7 @@ fun TextView.setCompoundDrawable(
 ) {
     this.setCompoundDrawablesWithIntrinsicBounds(drawable1, drawable2, drawable3, drawable4)
 }
+
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
@@ -406,8 +408,8 @@ val YearMonth.nextMonth: YearMonth
 
 val YearMonth.previousMonth: YearMonth
     get() = this.minusMonths(1)
-fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 
+fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 
 
 fun TextView.setTextGradient(

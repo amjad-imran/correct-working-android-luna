@@ -1882,6 +1882,8 @@
     <string name="text_please_try_again_after_mins_seconds">Пожалуйста, повторите попытку через %1$dмин %2$dсек</string>
     <string name="text_custom_homescreen_message_2">Будьте в курсе уведомлений о батарее, напоминаний о синхронизации данных и важных уведомлений, чтобы ваше кольцо Luna работало бесперебойно</string>
     <string name="text_dashboard_cannot_be_empty">Панель не может быть пустой.</string>
+    <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Оставайтесь в курсе с уведомлениями о батарее, напоминаниями о синхронизации данных и ключевыми аналитическими данными – важные уведомления для бесперебойной работы вашего кольца Luna</string>
+    <string name="text_copied">Скопировано</string>
 
 
 </resources>
