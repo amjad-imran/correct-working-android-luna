@@ -46,15 +46,15 @@ class ConnectRingFragment :
         binding.btnSearchNow.setOnClickListener {
             navigate(ConnectRingFragmentDirections.actionConnectRingFragmentToFindDeviceListFragment())
         }
-        binding.tvNoLunaRing.setOnClickListener {
-            startActivity(
-                WebViewActivity.getStartIntent(
-                    requireActivity(),
-                    getString(R.string.text_shop),
-                    AppConstants.NO_LUNA_RING
-                )
-            )
-        }
+//        binding.tvNoLunaRing.setOnClickListener {
+//            startActivity(
+//                WebViewActivity.getStartIntent(
+//                    requireActivity(),
+//                    getString(R.string.text_shop),
+//                    AppConstants.NO_LUNA_RING
+//                )
+//            )
+//        }
     }
 
     override fun subscribeObservers() {
