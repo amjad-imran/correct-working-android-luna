@@ -68,6 +68,7 @@ constructor(
     var isBLEScanning = false
 //    var troubleShootData: String? = null
 
+    var troubleshootScrPos = 0
 
     fun deviceScanQrCodeBean(data: String?): String? {
         //http:...?radio=d855eb6b43c8384e010209000000&random=016260&name=E15_43C8";

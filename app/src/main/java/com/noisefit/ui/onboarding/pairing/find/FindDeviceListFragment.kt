@@ -27,6 +27,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
+import com.freshchat.consumer.sdk.Freshchat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -43,7 +44,6 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesAdapter
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesClickListener
 import com.noisefit.util.ApplicationUtils
-
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -92,12 +92,17 @@ class FindDeviceListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.troubleshootScrPos = 0
+
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_look_for_device_page_visit)
         binding.lScanning.repeatCount = 0
         binding.lScanning.setAnimation(R.raw.anim_device_default)
         binding.lScanning.playAnimation()
 
-        setVideo()
+        setVideo(
+            "android.resource://" + requireContext().packageName + "/" +
+                    R.raw.video_find_ring
+        )
 
 
         viewModel.clearScannedDeviceList()
@@ -115,12 +120,11 @@ class FindDeviceListFragment :
         }*/
     }
 
-    private fun setVideo() {
+    private fun setVideo(uriString: String) {
         binding.videoOnboard.apply {
             setVideoURI(
                 Uri.parse(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
+                    uriString
                 )
             )
             setOnPreparedListener { mp -> mp.isLooping = true }
@@ -365,7 +369,14 @@ class FindDeviceListFragment :
     override fun initListener() {
 
         binding.tvTroubleShoot.setOnClickListener {
-            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to false))
+            if(viewModel.troubleshootScrPos==5){
+                Freshchat.showConversations(requireContext())
+            }
+            if (viewModel.troubleshootScrPos<5){
+                viewModel.troubleshootScrPos++
+                performTroubleshootBtnFunc()
+            }
+//            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to false))
         }
 
         binding.ivRefresh.setOnClickListener {
@@ -400,6 +411,66 @@ class FindDeviceListFragment :
         }*/
 
 
+    }
+
+    private fun performTroubleshootBtnFunc(){
+        when(viewModel.troubleshootScrPos){
+            1 -> {
+                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+            }
+
+            2 -> {
+                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+            }
+
+            3 -> {
+                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+            }
+
+            4 -> {
+                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+            }
+
+            5 -> {
+                binding.textView.text = getString(R.string.text_here_is_a_final_step)
+                binding.textView2.text =
+                    getString(R.string.text_try_the_step_below_to_pair_your_ring)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_contact_support)
+            }
+
+            else -> {
+                binding.textView.text = getString(R.string.text_looking_for_your_device)
+                setVideo(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+            }
+        }
     }
 
     fun showLocationTurnOnDialogCamera() {

@@ -1928,5 +1928,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_open">Open</string>
     <string name="text_copied">Copied</string>
     <string name="text_caffeine_intake">Caffeine intake</string>
+    <string name="text_let_s_find_your_ring">Let’s find your ring</string>
+    <string name="text_here_is_a_final_step">Here is a final step</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Try the step below to pair your ring</string>
+    <string name="text_contact_support">Contact support</string>
 
 </resources>

@@ -37,6 +37,7 @@
                     style="@style/H2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:layout_marginStart="@dimen/side_margin"
                     android:layout_marginTop="90dp"
                     android:layout_marginEnd="@dimen/side_margin"
@@ -51,6 +52,7 @@
                     style="@style/H6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:layout_marginTop="@dimen/dimen_24dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     android:lineSpacingExtra="6sp"
@@ -118,7 +120,7 @@
                     style="@style/SecondaryButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_marginEnd="@dimen/side_margin"
-                    android:drawableStart="@drawable/ic_refresh_ring"
+                    app:icon="@drawable/icon_refresh_device_list_frag"
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:text="@string/text_retry"
@@ -223,6 +225,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView75"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvTroubleShoot"
+                    app:layout_constraintStart_toEndOf="@+id/tvTroubleShoot"
+                    app:layout_constraintTop_toTopOf="@+id/tvTroubleShoot"
+                    app:srcCompat="@drawable/ic_right_arrow_troubleshoot" />
                 <!-- </com.facebook.shimmer.ShimmerFrameLayout>-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
