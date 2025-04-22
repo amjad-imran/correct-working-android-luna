@@ -41,12 +41,11 @@ class ItemAdapter(
         }
 
         holder.binding.ivFav.setImageResource(
-            if (item.is_favorite!!){
+            if (item.is_favorite == true){
                 if (item.quantity >= maxQuantity) {
-                    R.drawable.ic_star_rating
-                    R.drawable.ic_star_border
+                    R.drawable.ic_star_filled_lite_caffeine
                 }else{
-                    R.drawable.ic_star_rating
+                    R.drawable.ic_star_filled_caffeine
                 }
             }
             else R.drawable.icon_unfilled_star_fav_caffeine_food
