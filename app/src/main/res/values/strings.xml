@@ -1932,5 +1932,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_here_is_a_final_step">Here is a final step</string>
     <string name="text_try_the_step_below_to_pair_your_ring">Try the step below to pair your ring</string>
     <string name="text_contact_support">Contact support</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Maximize energy and mental clarity: This is your ideal time for a caffeine boost that works.</string>
+    <string name="text_avoid_caffeine_now_message3">Avoid caffeine now: Consuming it in this window may disrupt your sleep and reduce recovery quality.</string>
+    <string name="text_avoid_caffeine_now_message4">Caffeine now can interfere with rest: Avoid it to support deep sleep and overnight recovery.</string>
+    <string name="text_avoid_caffeine_now_message5">Caffeine too early can spike cortisol: Delay intake to support natural energy and better focus later.</string>
+    <string name="text_avoid_caffeine_now_message6">Hold off on caffeine: Your body’s natural cortisol boost is waking you up—let it work first.</string>
 
 </resources>

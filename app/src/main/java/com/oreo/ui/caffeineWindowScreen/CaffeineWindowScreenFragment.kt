@@ -40,21 +40,20 @@ class CaffeineWindowScreenFragment :
             args.caffeineGraphData?.let {
                 binding.caffeineGraphView.updateData(it)
 
-                val maxQuantity = viewModel.getMaxQuantity(it)
+                myItemsAdapter.setMaxQuantity(it.maxQuantity?:0)
+                allItemsAdapter.setMaxQuantity(it.maxQuantity?:0)
 
-                myItemsAdapter.setMaxQuantity(maxQuantity?:100)
-                allItemsAdapter.setMaxQuantity(maxQuantity?:100)
+                viewModel.loadItems()
+                initUi(it.message?:"")
             }
         }
-        viewModel.loadItems()
-        initUi()
     }
 
-    private fun initUi() {
+    private fun initUi(message: String) {
         binding.apply {
             layoutToolbar.tvTitle.text = getString(R.string.text_caffeine_window)
 
-            val fullText = binding.root.context.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance)
+            val fullText = message
             val splitIndex = fullText.indexOf(':')
 
             if (splitIndex != -1) {

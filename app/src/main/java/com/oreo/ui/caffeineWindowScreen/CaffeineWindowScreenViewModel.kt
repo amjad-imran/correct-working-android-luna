@@ -11,13 +11,8 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.CaffeineWindowData
-import com.oreo.ui.custom.HighlightState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -127,75 +122,6 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
             }
         }
-    }
-
-    fun getMaxQuantity(data: CaffeineWindowData): Int? {
-
-        val now = LocalTime.now()
-
-        val graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val  graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val caffeineStart =
-            LocalTime.parse(data.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val caffeineEnd = LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-
-
-        var highlightState:HighlightState = HighlightState.START
-        when {
-            now in graphStart..caffeineStart -> {
-
-                highlightState = HighlightState.START
-            }
-
-            now in caffeineStart..caffeineEnd -> {
-
-                highlightState = HighlightState.CAFFEINE
-            }
-
-            now in caffeineEnd..graphEnd -> {
-
-                highlightState = HighlightState.END
-            }
-        }
-        //todo check highlight state
-
-
-        //caffine start - caffine end - local time  //10/
-        data.caffeineValues
-
-        if(highlightState == HighlightState.START || highlightState == HighlightState.END){
-            return null
-        }
-
-        val highlightedIndex = getTimeIndex(
-            caffeineStart!!,
-            caffeineEnd!!,
-            now,
-            data.caffeineValues.size
-        )
-
-        return if (highlightedIndex != -1){
-            data.caffeineValues[highlightedIndex]
-        }else{
-            null
-        }
-
-    }
-
-    fun getTimeIndex(
-        startTime: LocalTime,
-        endTime: LocalTime,
-        currentTime: LocalTime,
-        parts: Int
-    ): Int {
-        if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) return -1
-
-        val totalDuration = Duration.between(startTime, endTime).toMinutes()
-        val interval = totalDuration / parts
-
-        val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
-
-        return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
     }
 
     /*    private fun getItemsFromAPI(): List<CaffeineFoodItem> {

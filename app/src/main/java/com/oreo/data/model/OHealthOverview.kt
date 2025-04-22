@@ -208,6 +208,8 @@ data class CaffeineWindowData(
     val caffeineStartTime: String,//HH:mm:ss
     val caffeineEndTime: String,//HH:mm:ss
     val caffeineValues: List<Int>,//HH:mm:ss
+    var message: String?=null,//"sasacas"
+    var maxQuantity: Int?=null//mg
 ) : Parcelable
 
 data class PeriodCard2(

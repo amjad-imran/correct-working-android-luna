@@ -2854,11 +2854,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
         fun bind(data: OHealthOverview.CaffeineWindow){
-            initListener(data.data)
+
+            val dataa = data.data
+
+            initListener(dataa)
 
             val context = binding.root.context
 
-            val fullText = context.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance)
+            val fullText = dataa.message?:""
             val splitIndex = fullText.indexOf(':')
 
             if (splitIndex != -1) {
@@ -2882,8 +2885,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 binding.tvMessage.text = spannableString
             }
-
-            val dataa = data.data
 
             val graphStart = LocalTime.parse(dataa.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
             val graphEnd = LocalTime.parse(dataa.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))

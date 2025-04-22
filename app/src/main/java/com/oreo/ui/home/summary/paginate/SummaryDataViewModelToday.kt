@@ -91,6 +91,7 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -109,6 +110,7 @@ import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 @HiltViewModel
@@ -1255,35 +1257,124 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {
-//        return caffeineGraphData?.let {
-//            val caffeineValues = ArrayList<Int>()
-//            caffeineGraphData!!.caffeine_window.forEach {
-//                caffeineValues.add(it.time.toInt())
-//            }
-//
-//            OHealthOverview.CaffeineWindow(
-//                CaffeineWindowData(
-//                    wakeUpTime = it.wakeUpTime,
-//                    bedTime = it.bedTime,
-//                    caffeineStartTime = it.caffeineStartTime,
-//                    caffeineEndTime = it.caffeineEndTime,
-//                    caffeineValues = caffeineValues
-//                )
-//            )
-//        }
+        if(caffeineGraphData==null){
+            return null
+        }
+        val data = caffeineGraphData?.let {
+            val caffeineValues = ArrayList<Int>()
+            caffeineGraphData!!.caffeine_window.forEach {
+                caffeineValues.add(it.time.toInt())
+            }
 
-        return OHealthOverview.CaffeineWindow(
-            CaffeineWindowData(
-                wakeUpTime = "07:00:00",
-                bedTime = "23:00:00",
-                caffeineStartTime = "09:00:00",
-                caffeineEndTime = "18:00:00",
-                caffeineValues = listOf(
-                    50, 45, 40, 35, 30, 25, 20, 15
+            OHealthOverview.CaffeineWindow(
+                CaffeineWindowData(
+                    wakeUpTime = it.wakeUpTime,
+                    bedTime = it.bedTime,
+                    caffeineStartTime = it.caffeineStartTime,
+                    caffeineEndTime = it.caffeineEndTime,
+                    caffeineValues = caffeineValues
                 )
             )
-        )
+        }
+
+//        val data = CaffeineWindowData(
+//            wakeUpTime = "07:00:00",
+//            bedTime = "23:00:00",
+//            caffeineStartTime = "09:00:00",
+//            caffeineEndTime = "18:00:00",
+//            caffeineValues = listOf(
+//                50, 45, 40, 35, 30, 25, 20, 15
+//            ),
+//            message = null
+//        )
+        val (message,maxQuantity) = getMaxQuantityAndMessage(data!!.data)
+
+        data.data.apply {
+            this.message = message
+            this.maxQuantity = maxQuantity
+        }
+
+        return data
     }
+
+    fun getMaxQuantityAndMessage(data: CaffeineWindowData): Pair<String, Int?> {
+
+        val now = LocalTime.now()
+
+        val graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val  graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val caffeineStart =
+            LocalTime.parse(data.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val caffeineEnd = LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+        val messageList = listOf(
+            listOf(
+                resourceProvider.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance),
+                resourceProvider.getString(R.string.text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works)
+            ),
+            listOf(
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message3),
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message4)
+            ),
+            listOf(
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message5),
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message6)
+            )
+        )
+
+        var highlightState: HighlightState? = null
+        var message: String? = null
+        when {
+            now in graphStart..caffeineStart -> {
+                message = messageList[0][Random.nextInt(0, 2)]
+                highlightState = HighlightState.START
+            }
+
+            now in caffeineStart..caffeineEnd -> {
+                message = messageList[1][Random.nextInt(0, 2)]
+                highlightState = HighlightState.CAFFEINE
+            }
+
+            now in caffeineEnd..graphEnd -> {
+                message = messageList[2][Random.nextInt(0, 2)]
+                highlightState = HighlightState.END
+            }
+        }
+
+        if(highlightState == HighlightState.START || highlightState == HighlightState.END){
+            return Pair(message?:"", null)
+        }
+
+        val highlightedIndex = getTimeIndex(
+            caffeineStart!!,
+            caffeineEnd!!,
+            now,
+            data.caffeineValues.size
+        )
+
+        return if (highlightedIndex != -1){
+            Pair(message?:"", data.caffeineValues[highlightedIndex])
+        }else{
+            Pair(message?:"", null)
+        }
+
+    }
+    fun getTimeIndex(
+        startTime: LocalTime,
+        endTime: LocalTime,
+        currentTime: LocalTime,
+        parts: Int
+    ): Int {
+        if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) return -1
+
+        val totalDuration = Duration.between(startTime, endTime).toMinutes()
+        val interval = totalDuration / parts
+
+        val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
+
+        return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
+    }
+
 
     private fun getWorkoutHistoryCard(activity: OreoActivityModel?): OHealthOverview? {
         return if (activity != null) {
