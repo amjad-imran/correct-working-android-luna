@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Luna Ring</string>
     <string name="app_version">Version %s</string>
+
     <string name="text_watch_pair_fail">Your %s was unable to pair</string>
     <string name="text_watch_pair_success">Your %s is successfully paired.</string>
     <string name="text_email">Email</string>
@@ -14,6 +15,7 @@
     <string name="text_watchfaces">Watchfaces</string>
     <string name="text_settings">Settings</string>
     <string name="text_faqs">FAQs</string>
+
     <string name="text_health_fitness">Fitness and health</string>
     <string name="text_today">Today</string>
     <string name="text_warranty_registration">Warranty registration</string>
@@ -43,6 +45,7 @@
     <string name="text_add_stocks">Add Stocks</string>
     <string name="text_edit">Edit</string>
     <string name="text_unpair">Unpair</string>
+
     <string name="text_forgot_pass">Forgot Password</string>
     <string name="text_continue">Continue</string>
     <string name="text_ok">Ok</string>
@@ -95,6 +98,7 @@
     <string name="text_update_watchface">Update watch face</string>
     <string name="text_similar_watchfaces">Similar watch faces</string>
     <string name="text_lets_go">Create now</string>
+
     <string name="text_design_own_watchface">Show your creativity and design your own watch faces</string>
     <string name="text_customise_watchface">Customise Watchface</string>
     <string name="text_custom_watchface">Custom watch face</string>
@@ -121,8 +125,8 @@
     <string name="text_more_exp">more</string>
     <string name="text_less_exp">less</string>
     <string name="text_choose_from">Choose from</string>
-    <string name="character_name">qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM</string>
-    <string name="character_warranty">qwertyuiopasdfghjklzxcvbnm 1234567890 QWERTYUIOPASDFGHJKLZXCVBNM</string>
+    <string name="character_name" translatable="false">qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM</string>
+    <string name="character_warranty" translatable="false">qwertyuiopasdfghjklzxcvbnm 1234567890 QWERTYUIOPASDFGHJKLZXCVBNM</string>
     <string name="text_find_my_phone">Find My Phone</string>
     <string name="text_wrist_sense">Wrist Sense</string>
     <string name="text_walk_reminder">Walk Reminder</string>
@@ -144,6 +148,7 @@
     <string name="text_high_hr_limit">High HR limit</string>
     <string name="text_end_time">End time</string>
     <string name="text_reset">Reset</string>
+
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
     <string name="resume">Resume</string>
@@ -243,6 +248,7 @@
     <string name="text_selected_apps">Selected Apps</string>
     <string name="text_select_sports">Select Sports</string>
     <string name="text_select_widget">Select Widgets</string>
+
     <string name="text_app_list_sorting">App list sorting</string>
     <string name="text_add_contacts">Add Contacts</string>
     <string name="text_disconnect_calling_watch">Note: Unpair your watch\'s bluetooth (%s) from your phone\'s Bluetooth settings.</string>
@@ -293,6 +299,7 @@
     <string name="text_daily_steps_goal">What’s your target step goal?</string>
     <string name="text_daily_steps_sub_heading">Set your daily step goal and begin your fitness journey with Luna Ring app.</string>
     <string name="text_pair_later">Pair later</string>
+
     <string name="text_4">04</string>
     <string name="text_1">01</string>
     <string name="text_2">02</string>
@@ -334,13 +341,14 @@
     <string name="text_goal">Goal</string>
     <string name="text_steps">Steps</string>
     <string name="text_distance">Distance</string>
-    <string name="text_kcal">kcal</string>
+    <string name="text_kcal" translatable="false">kcal</string>
     <string name="text_mins" translatable="false">min</string>
     <string name="text_no_data_recorded">No data recorded</string>
     <string name="text_health_overview">Health overview</string>
     <string name="text_average">Average</string>
-    <string name="text_bpm">BPM</string>
+    <string name="text_bpm" translatable="false">BPM</string>
     <string name="text_bpm_small" translatable="false">bpm</string>
+
     <string name="text_resting_hr">Average HR</string>
     <string name="text_resting_hrv">Average HRV</string>
     <string name="route">Route</string>
@@ -411,6 +419,7 @@
     <string name="badges">Badges</string>
     <string name="logout_ques">Logout?</string>
     <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Are you sure to logout from your\nLuna Ring Account?</string>
+
     <string name="delete_account_ques">Delete Account?</string>
     <string name="are_you_sure_want_to_delete_your_noisefit_account_all_your_data_will_be_lost_if_you_delete_your_account">Are you sure want to delete your Luna Ring account? All your data will be lost if you delete your account</string>
     <string name="text_sos">SOS</string>
@@ -456,7 +465,7 @@
     <string name="help">Help</string>
     <string name="problem_type">Problem type</string>
     <string name="add_image">Add Image</string>
-    <string name="upload_image_extension_msg">(png, jpeg, jpg. Max size 5mb)</string>
+    <string name="upload_image_extension_msg" translatable="false">(png, jpeg, jpg. Max size 5mb)</string>
     <string name="to_help_us_solve_your_problems_faster">to help us solve your problems faster</string>
     <string name="unit">Unit</string>
     <string name="the_device_will_use_the_unit_system_based_on_your_preference">The device will use the unit system based on your preference.</string>
@@ -478,6 +487,7 @@
     <string name="text_no_requests_sent">No requests sent</string>
     <string name="text_calories">Calories</string>
     <string name="text_app_permission">App Permission</string>
+
 
     <string name="text_when_turned_on_sound_and_vibration_of_your_device_will_be_turned_off">When turned ON sound and vibration of your device will be turned off.</string>
     <string name="text_select_your_preferred_language_for_your_device">Select your preferred language for your device</string>
@@ -540,6 +550,7 @@
     <string name="text_user_currently_using">User currently using</string>
     <string name="text_total_downloads">Total downloads</string>
 
+
     <string name="text_finding_your_device">Finding your device..</string>
     <string name="text_order_no">Order Number</string>
     <string name="text_install">Install</string>
@@ -590,6 +601,7 @@
     <string name="text_the_google_fit_app_tracks_your_movements_lets_you_set_goals_and_keeps_track_of_your_progress_to_coach_you_towards_a_healthier_life">The Google Fit app tracks your movements, lets you set goals and keeps track of your progress to coach you towards a healthier life.</string>
     <string name="text_how_satisfied_are_you_with_the_noisefit">How satisfied are you with the Luna Ring?</string>
     <string name="text_raise_complaint">Raise a Complaint</string>
+
     <string name="text_complete_your_watch_setup">Complete your ring setup</string>
     <string name="text_how_we_handle_data_privacy">How we handle data privacy?</string>
     <string name="text_download">Download</string>
@@ -647,6 +659,7 @@
     <string name="text_loved_noise_fit">Loved Luna Ring!</string>
     <string name="text_rate_now">Rate now</string>
     <string name="text_instagram">Instagram</string>
+
     <string name="text_qr_at_your_wrist">QR codes, right at your wrist</string>
     <string name="text_receive_faster_payments">Receive faster payments,\nmake real-time connections</string>
     <string name="text_upload_qr_code">Upload QR Code</string>
@@ -703,6 +716,7 @@
     <string name="text_status_placeholder">What’s on your mind?</string>
     <string name="text_posts">Posts</string>
     <string name="text_edit_image">Edit image</string>
+
 
     <string name="text_what_s_on_your_mind">What’s on your mind ?</string>
     <string name="text_comments">Comments</string>
@@ -764,6 +778,7 @@
     <string name="text_readiness">Readiness</string>
     <string name="text_activity_o">Activity</string>
     <string name="text_goal_progress">Goal progress</string>
+
     <string name="text_sleep_score_o">Sleep score</string>
     <string name="text_readiness_score_o">Readiness score</string>
     <string name="text_from_last_week">from last week</string>
@@ -808,6 +823,7 @@
     <string name="text_start_quiz">Start quiz</string>
     <string name="text_participants_won_total">participants won total</string>
     <string name="text_quit">Quit</string>
+
     <string name="text_are_you_sure_you_want_to_quit_the_quiz_your_progress_will_be_deleted">Are you sure you want to quit the quiz? Your progress will be deleted.</string>
     <string name="text_close_quiz">Close quiz</string>
     <string name="text_next_quiz_in">Next quiz in</string>
@@ -819,8 +835,8 @@
     <string name="text_uv_index">UV Index</string>
     <string name="text_avg">Avg</string>
     <string name="text_distance_split">Distance split</string>
-    <string name="text_time_km">Time/km</string>
-    <string name="text_km">km</string>
+    <string name="text_time_km" translatable="false">Time/km</string>
+    <string name="text_km" translatable="false">km</string>
     <string name="text_hr" translatable="false">hr</string>
     <string name="text_pace">Pace</string>
     <string name="text_set_your_target_calorie_goal">Set your target calorie goal</string>
@@ -915,6 +931,7 @@
     <string name="text_all_done">All done!</string>
     <string name="text_for_the_most_accurate_readings_wear_the_ring_on_your_index_finger_with_its_sensors_facing_the_palm_side">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
     <string name="text_let_s_go">Let\'s go</string>
+
     <string name="text_the_sleep_tab_is_where_where_you_can_explore_your_sleep_quality_in_detail">The sleep tab is where you can explore your sleep quality in detail.</string>
     <string name="text_luna_measures_your_sleep_automatically_all_you_have_to_do_is_wear_it_to_bed">Luna measures your sleep automatically, all you have to do is wear it to bed.</string>
     <string name="text_you_ll_see_your_first_sleep_metrics_after_your_first_night_wearing_the_ring">You’ll see your first sleep metrics after your first night wearing the ring.</string>
@@ -953,6 +970,7 @@
     <string name="text_ring_care_message">Treating your Luna the best you can</string>
     <string name="text_welcome_to_luna">Welcome to Luna</string>
     <string name="text_understanding_your_body_starts_here">Understanding your body starts here</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_soft_reset">Soft reset</string>
@@ -1004,6 +1022,7 @@
     <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
     <string name="text_0">0</string>
     <string name="text_100">100</string>
+
     <string name="text_select_to_compare">Select to compare:</string>
     <string name="text_no_movement">No movement</string>
     <string name="text_header">Header</string>
@@ -1050,6 +1069,7 @@
     <string name="text_setting_up_your_device">Setting up your device</string>
     <string name="text_setting_up_device">Keep your Luna ring close to your phone, until the update is complete</string>
     <string name="text_all_done_">All done!</string>
+
     <string name="text_all_done_message">Get ready to embark on a journey of self-discovery and wellness</string>
     <string name="text_update_available_message">Update to the latest firmware version for new and improved features</string>
     <string name="text_low_battery_alert">Low battery alert</string>
@@ -1117,6 +1137,7 @@
     <string name="text_fmh_w_content_5">You are all set to get personalised insights for your reproductive journey, from predicting your next period to tracking ovulation, so you can plan ahead.</string>
     <string name="text_fmh_w_content_3">Menstruation cools, follicular phase warms. Pre-ovulation dips, post-ovulation spikes. Luteal phase stays hot. App predicts fertile days, aids planning. Track temp for personalized periods.</string>
     <string name="text_log">Log</string>
+
     <string name="text_what_is_your_goal">What is your goal?</string>
     <string name="text_tracking_my_cycle">Tracking my cycle</string>
     <string name="text_trying_to_conceive">Trying to conceive</string>
