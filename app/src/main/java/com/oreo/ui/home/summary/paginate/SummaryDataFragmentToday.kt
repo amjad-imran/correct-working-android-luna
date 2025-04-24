@@ -746,7 +746,7 @@ class SummaryDataFragmentToday :
             if (!viewModel.isDeviceConnected()) {
                 pairStatus = "unpaired"
 
-                val isInDemoMode = true
+                val isInDemoMode = viewModel.localDataStore.isInDemoMode()
                 if(isInDemoMode){
                     mainViewModel.demoModeClearAndReloadData()
                 }
