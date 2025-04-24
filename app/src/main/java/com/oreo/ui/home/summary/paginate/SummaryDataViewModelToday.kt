@@ -1282,12 +1282,18 @@ class SummaryDataViewModelToday @Inject constructor(
         val (hasDataLoaded, femaleData) = femaleHealthData
 
         if (!hasDataLoaded) return null
+         var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
+
 
         val data =  if (femaleData == null) {
             if (gender.equals("male", true).not()) {
                 val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
                 if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
-                    OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.TRACK)
+                    //OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.TRACK)
+                    trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                        FemaleHealthCardState.TRACK
+                    )
+                    null
                 } else {
                     null
                 }
@@ -1297,7 +1303,11 @@ class SummaryDataViewModelToday @Inject constructor(
         } else {
             if (femaleData.isTrackPregnancy != true) {
                 if (femaleData.currentDay == null) {
-                    OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.LOG)
+                    trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                        FemaleHealthCardState.LOG
+                    )
+                    null
+                    //OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.LOG)
                 } else {
                     val isCardShownForToday =
                         femaleHealthRepository.getGotPeriodClickedStatus()
@@ -1337,6 +1347,8 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
         gotYourPeriodData.postValue(gotYourPeriodCard)
+        trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
+
         return data
     }
 
