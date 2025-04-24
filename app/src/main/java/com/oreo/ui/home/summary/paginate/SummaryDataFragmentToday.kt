@@ -736,10 +736,21 @@ class SummaryDataFragmentToday :
             binding.swipeRefreshLayout.isRefreshing = false
             mainViewModel.showSyncLoader = false
 
+
+
+
+
+
             val pairStatus: String
 
             if (!viewModel.isDeviceConnected()) {
                 pairStatus = "unpaired"
+
+                val isInDemoMode = true
+                if(isInDemoMode){
+                    mainViewModel.demoModeClearAndReloadData()
+                }
+
                 return@setOnRefreshListener
             }
 
