@@ -387,7 +387,8 @@ class RecordWorkoutFragmentV2 :
             return
         }
         binding.lytOnGoingWorkout.lytZones.tvHrValue.text =
-            if (workoutRealTimeData.hrValue != null) workoutRealTimeData.hrValue.toString() else "-"
+            if (workoutRealTimeData.hrValue != null && workoutRealTimeData.hrValue != 0
+                && workoutRealTimeData.hrValue != 255) workoutRealTimeData.hrValue.toString() else "-"
 
 
         val zoneId = viewModel.getHeartRateZone(workoutRealTimeData.hrValue)
