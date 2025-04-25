@@ -4,8 +4,11 @@ import android.location.Geocoder
 import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.data.repository.implementation.WeatherRepository
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -39,6 +42,7 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     val watchDataStore: WatchDataStore,
     val locationDataSource: LocationDataSource,
     val weatherRepository: WeatherRepository,
+    val userRepository: UserRepository,
     val ringDataStore: RingDataStore,
     val geoCoder: Geocoder,
     private val localDataStore: DataStoredInterface,
@@ -253,7 +257,7 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     }
 
     private fun weatherIdConverter(id: Int?): Int {
-        if(id==null) return 800
+        if (id == null) return 800
         var updatedWId: Int = 200
         when (id) {
             1000 -> {
@@ -568,18 +572,31 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     }
 
     fun getBgDrawableByZoneId(zoneId: Int?): Int {
-        return when(zoneId){
-            0 ->  R.drawable.back_workout_zone_1
-            1 ->  R.drawable.back_workout_zone_2
-            2 ->  R.drawable.back_workout_zone_3
-            3 ->  R.drawable.back_workout_zone_4
-            4 ->  R.drawable.back_workout_zone_5
-            else ->  R.drawable.back_zone_transparent
+        return when (zoneId) {
+            0 -> R.drawable.back_workout_zone_1
+            1 -> R.drawable.back_workout_zone_2
+            2 -> R.drawable.back_workout_zone_3
+            3 -> R.drawable.back_workout_zone_4
+            4 -> R.drawable.back_workout_zone_5
+            else -> R.drawable.back_zone_transparent
         }
     }
 
     fun isWorkoutRunning(): Boolean {
         return currentWorkoutState == 1 || currentWorkoutState == 3
+
+    }
+
+    fun sendWorkoutEvent(status: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val request = JsonObject().apply {
+                this.addProperty("status", status)
+            }
+            userRepository.updateWorkoutStatus(request)
+                .collect { resource ->
+
+                }
+        }
 
     }
 
