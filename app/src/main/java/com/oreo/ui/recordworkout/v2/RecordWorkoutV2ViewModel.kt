@@ -522,7 +522,9 @@ class RecordWorkoutV2ViewModel @Inject constructor(
 
     fun startStartCountDown() {
 
-        viewModelScope.launch(Dispatchers.IO) {
+        countDownTimer.postValue("start")
+
+        /*viewModelScope.launch(Dispatchers.IO) {
             var count = 3
             while (count > 0) {
                 count -= 1
@@ -530,7 +532,7 @@ class RecordWorkoutV2ViewModel @Inject constructor(
                 delay(1000)
             }
             countDownTimer.postValue("start")
-        }
+        }*/
     }
 
 
