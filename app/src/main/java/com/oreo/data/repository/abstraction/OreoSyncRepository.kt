@@ -130,5 +130,5 @@ interface OreoSyncRepository {
 }
 
 enum class ErrorServerCases {
-    SYNC_TIMEOUT
+    SYNC_TIMEOUT,LUNA_AI_ERROR
 }

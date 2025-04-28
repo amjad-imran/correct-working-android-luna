@@ -20,9 +20,13 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
+import com.oreo.data.repository.abstraction.ErrorServerCases
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Request
 import okhttp3.Response
@@ -36,6 +40,7 @@ class ChatGptViewModel
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository,
+    private val syncRepository: OreoSyncRepository,
     val resourceProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
@@ -298,6 +303,15 @@ class ChatGptViewModel
                                 userName ?: ""
                             )
                         )
+
+                        stopResponseGeneration()
+
+                        GlobalScope.launch(Dispatchers.IO) {
+                            syncRepository.logErrorServer(
+                                ErrorServerCases.LUNA_AI_ERROR.name,
+                                "Error log : ${throwable?.message}"
+                            ).collect()
+                        }
                     }
                     return false; // True to retry, false otherwise
                 }

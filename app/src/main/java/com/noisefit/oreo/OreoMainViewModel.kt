@@ -3,19 +3,16 @@ package com.noisefit.oreo
 import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ReferralRepository
@@ -37,7 +34,6 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
@@ -122,6 +118,7 @@ constructor(
     var stressFirstDate: String? = null
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
+
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
     //
@@ -292,7 +289,7 @@ constructor(
                     }
 
                     is Resource.Loading -> {
-                        if(showSyncLoader){
+                        if (showSyncLoader) {
                             setLoading(resource.loading)
                         }
                     }
@@ -1073,6 +1070,21 @@ constructor(
             val userMeta: MutableMap<String, String> = HashMap()
             userMeta["cf_username"] = user?.firstName ?: ""
             if (pairedDevice != null) {
+
+                val serialNo: String? = if (pairedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
+                    watchDataStore.getSerialNo()
+                } else {
+                    pairedDevice.ringInfo?.serialNoRaw
+                }
+
+                val generation = getRingGeneration(serialNo)
+
+                if (generation != null) {
+                    sendMessage("Gen$generation")
+                    //userMeta["cf_ringgeneration"] = "Gen$generation"
+                    //todo change key - to be shared by product
+                }
+
                 userMeta["cf_ringsno"] = pairedDevice.ringInfo?.serialNoRaw ?: ""
                 userMeta["cf_ringcolor"] = pairedDevice.ringInfo?.color ?: ""
                 userMeta["cf_ringsize"] = "${pairedDevice.ringInfo?.size}"
@@ -1089,6 +1101,7 @@ constructor(
             userMeta["cf_phonemodel"] = Build.MODEL
             userMeta["cf_profileimage"] = user?.imageUrl ?: ""
 
+
             Freshchat.getInstance(it).setUserProperties(userMeta)
 
             val token = localDataStore.getFcmToken()
@@ -1097,6 +1110,15 @@ constructor(
                     .setPushRegistrationToken(token)
                 LOGS.d("RNFMessagingService", "freshchat token sent - $it")
             }
+        }
+    }
+
+    private fun getRingGeneration(serialNo: String?): Int? {
+        try {
+            if (serialNo.isNullOrEmpty()) return null
+            return serialNo.toCharArray()[1].digitToInt()
+        } catch (exp: Exception) {
+            return null
         }
     }
 
@@ -1166,7 +1188,12 @@ constructor(
         }
     }
 
-    fun getSyncingMessage(context: Context, progress: Int, total: Int, syncDataStatus: SyncEvents): String? {
+    fun getSyncingMessage(
+        context: Context,
+        progress: Int,
+        total: Int,
+        syncDataStatus: SyncEvents
+    ): String? {
 
         if (syncDataStatus is SyncEvents.Started) {
             return context.getString(R.string.text_syncing_recent_data)
@@ -1178,7 +1205,7 @@ constructor(
 
         if (total <= 0) return null
 
-        if ((progress+1==total) || progress == total) {
+        if ((progress + 1 == total) || progress == total) {
             return context.getString(R.string.text_refining_your_stats)
         }
 
@@ -1192,6 +1219,7 @@ constructor(
                 percentage in 81f..90f -> context.getString(R.string.text_calculating_readiness_score)
                 else -> context.getString(R.string.text_refining_your_stats)
             }
+
             else -> context.getString(R.string.text_all_set)
         }
     }
@@ -1239,25 +1267,33 @@ constructor(
         viewModelScope.launch {
 
             val syncTime = localDataStore.getAppTrackEventTime(event)
-            if(syncTime==null) return@launch
+            if (syncTime == null) return@launch
 
 
-            val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.first/1000), ZoneId.systemDefault())
-            val end = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.second/1000), ZoneId.systemDefault())
+            val start = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(syncTime.first / 1000),
+                ZoneId.systemDefault()
+            )
+            val end = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(syncTime.second / 1000),
+                ZoneId.systemDefault()
+            )
 
             val startFormatted = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             val endFormatted = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
             val requestObject = JsonObject().apply {
-                this.addProperty("key", when(event){
-                    AppTrackEvent.SYNC -> "sync_time"
-                    AppTrackEvent.APP_START -> "app_open_time"
-                })
+                this.addProperty(
+                    "key", when (event) {
+                        AppTrackEvent.SYNC -> "sync_time"
+                        AppTrackEvent.APP_START -> "app_open_time"
+                    }
+                )
 
 
                 this.addProperty("startTime", startFormatted)
                 this.addProperty("endTime", endFormatted)
-                this.addProperty("duration", syncTime.second-syncTime.first)
+                this.addProperty("duration", syncTime.second - syncTime.first)
             }
 
 
