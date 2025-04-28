@@ -1080,7 +1080,6 @@ constructor(
                 val generation = getRingGeneration(serialNo)
 
                 if (generation != null) {
-                    sendMessage("Gen$generation")
                     //userMeta["cf_ringgeneration"] = "Gen$generation"
                     //todo change key - to be shared by product
                 }
