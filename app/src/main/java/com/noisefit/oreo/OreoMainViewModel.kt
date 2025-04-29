@@ -66,6 +66,7 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -1177,6 +1178,22 @@ constructor(
                 else -> context.getString(R.string.text_refining_your_stats)
             }
             else -> context.getString(R.string.text_all_set)
+        }
+    }
+
+    fun demoModeClearAndReloadData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dates = ArrayList<String>()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val todayDate = java.time.LocalDate.now()
+            dates.add(todayDate.format(formatter))
+            (6 downTo 1).forEach {
+                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
+                dates.add(newDate)
+            }
+            userHealthDataDataSource.clearDataByDates(dates)
+            delay(200)
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
         }
     }
 

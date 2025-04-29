@@ -20,6 +20,9 @@ import java.time.LocalDate
 
 interface DataStoredInterface {
 
+
+    fun setIsInDemoMode(multiLogin: Boolean)
+    fun isInDemoMode(): Boolean
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
 

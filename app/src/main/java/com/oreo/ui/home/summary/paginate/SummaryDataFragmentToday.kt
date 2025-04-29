@@ -554,9 +554,12 @@ class SummaryDataFragmentToday :
             mainViewModel.showSyncLoader = false
 
             val pairStatus: String
-
             if (!viewModel.isDeviceConnected()) {
                 pairStatus = "unpaired"
+                val isInDemoMode = viewModel.localDataStore.isInDemoMode()
+                if (isInDemoMode) {
+                    mainViewModel.demoModeClearAndReloadData()
+                }
                 return@setOnRefreshListener
             }
 

@@ -33,6 +33,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         } else {
             binding.include44.root.gone()
         }
+
+
+        val isInDemoMode = viewModel.localDataStore.isInDemoMode()
+        if(isInDemoMode){
+            binding.tvDeleteAccount.gone()
+        }
     }
 
     override fun initListener() {
