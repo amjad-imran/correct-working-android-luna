@@ -226,8 +226,6 @@ private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
-private const val APP_DEMO_MODE = "APP_DEMO_MODE"
-
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
@@ -247,14 +245,6 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
-
-    override fun setIsInDemoMode(demoModeState: Boolean) {
-        mPrefs.edit().putBoolean(APP_DEMO_MODE, demoModeState).commit()
-    }
-
-    override fun isInDemoMode(): Boolean {
-        return mPrefs.getBoolean(APP_DEMO_MODE, false)
-    }
 
     override fun setIsInDemoMode(demoModeState: Boolean) {
         mPrefs.edit().putBoolean(APP_DEMO_MODE, demoModeState).commit()

@@ -1238,6 +1238,7 @@ constructor(
         }
     }
 
+
     fun getCannyFeedbackUrl() {
         viewModelScope.launch {
             userRepository.getCannyFeedbackUrl().collect { resource ->
@@ -1325,26 +1326,6 @@ constructor(
         }
     }
 
-    fun demoModeClearAndReloadData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val dates = ArrayList<String>()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-            val todayDate = java.time.LocalDate.now()
-
-            dates.add(todayDate.format(formatter))
-
-            (6 downTo 1).forEach {
-                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
-                dates.add(newDate)
-            }
-            userHealthDataDataSource.clearDataByDates(dates)
-
-            delay(200)
-
-            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
-        }
-
-    }
 
 }
