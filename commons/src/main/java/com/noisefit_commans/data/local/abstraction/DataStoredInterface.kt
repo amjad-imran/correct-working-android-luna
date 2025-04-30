@@ -519,6 +519,8 @@ interface DataStoredInterface {
      * Returns start and end timestamp
      */
     fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long,Long>?
+    fun setIsInDemoMode(multiLogin: Boolean)
+    fun isInDemoMode(): Boolean
 }
 
 enum class AppTrackEvent {

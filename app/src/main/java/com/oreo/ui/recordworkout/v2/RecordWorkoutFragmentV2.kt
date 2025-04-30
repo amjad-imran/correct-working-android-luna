@@ -406,7 +406,8 @@ class RecordWorkoutFragmentV2 :
             return
         }
         binding.lytOnGoingWorkout.lytZones.tvHrValue.text =
-            if (workoutRealTimeData.hrValue != null) workoutRealTimeData.hrValue.toString() else "-"
+            if (workoutRealTimeData.hrValue != null && workoutRealTimeData.hrValue != 0
+                && workoutRealTimeData.hrValue != 255) workoutRealTimeData.hrValue.toString() else "--"
 
 
         val zoneId = viewModel.getHeartRateZone(workoutRealTimeData.hrValue)
@@ -612,6 +613,7 @@ class RecordWorkoutFragmentV2 :
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {
                             startWorkoutUi()
+                            viewModel.sendWorkoutEvent(true)
                         } else {
                             //context.showShortToast("Workout started : ${it.success}")
                         }
@@ -686,6 +688,7 @@ class RecordWorkoutFragmentV2 :
     }
 
     private fun stopWorkout() {
+        viewModel.sendWorkoutEvent(false)
         viewModel.deleteOngoingRecordWorkout()
         viewModel.currentWorkoutState = 4
         viewModel.stopTimer()

@@ -389,4 +389,13 @@ class UserRepositoryImpl(
             )
         }
     }
+
+    override suspend fun updateWorkoutStatus(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.updateWorkoutStatus(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/workout-init",
+                request
+            )
+        }
+    }
 }

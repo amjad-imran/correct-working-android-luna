@@ -66,6 +66,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.internal.format
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
@@ -1322,6 +1323,28 @@ constructor(
                 }
             }
         }
+    }
+
+    fun demoModeClearAndReloadData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dates = ArrayList<String>()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            val todayDate = java.time.LocalDate.now()
+
+            dates.add(todayDate.format(formatter))
+
+            (6 downTo 1).forEach {
+                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
+                dates.add(newDate)
+            }
+            userHealthDataDataSource.clearDataByDates(dates)
+
+            delay(200)
+
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
+        }
+
     }
 
 }
