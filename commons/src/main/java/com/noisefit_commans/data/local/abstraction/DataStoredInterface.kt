@@ -22,6 +22,9 @@ interface DataStoredInterface {
     fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel?
     fun clearCustomHomeScreenItemsPriorityList()
 
+
+    fun setIsInDemoMode(multiLogin: Boolean)
+    fun isInDemoMode(): Boolean
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
 

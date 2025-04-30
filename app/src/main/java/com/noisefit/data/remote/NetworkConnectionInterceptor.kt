@@ -95,6 +95,7 @@ class NetworkConnectionInterceptor(
         localDataStore.clearCustomHomeScreenApiCallTimeStamps()
         localDataStore.clearCustomHomeScreenItemsPriorityList()
         //
+        localDataStore.setIsInDemoMode(false)
 
         GlobalScope.launch(Dispatchers.IO) {
             alarmRepository.cancelAllAlarms()

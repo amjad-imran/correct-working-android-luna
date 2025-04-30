@@ -105,6 +105,12 @@ constructor(
 
     fun logoutUser() {
         viewModelScope.launch {
+
+            if (localDataStore.isInDemoMode()) {
+                removeLocalData()
+                return@launch
+            }
+
             repository.logoutUser().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -130,17 +136,23 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.let {
-                            repository.logoutUserLocally().collect {
-                                if (it) {
-                                    localDataStore.setEndGameValue("")
-                                    localDataStore.deleteYearlyGoal()
-                                    localDataStore.setGoogleFitStatus(false)
-                                    localDataStore.setGoogleFitCrossed(false)
-                                    _logoutSuccess.value = true
-                                }
-                            }
+                            removeLocalData()
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun removeLocalData() {
+        viewModelScope.launch {
+            repository.logoutUserLocally().collect {
+                if (it) {
+                    localDataStore.setEndGameValue("")
+                    localDataStore.deleteYearlyGoal()
+                    localDataStore.setGoogleFitStatus(false)
+                    localDataStore.setGoogleFitCrossed(false)
+                    _logoutSuccess.value = true
                 }
             }
         }

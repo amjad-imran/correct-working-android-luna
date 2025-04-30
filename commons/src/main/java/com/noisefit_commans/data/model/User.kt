@@ -103,5 +103,6 @@ data class User(
 
 data class Token(
     val access_token: String? = null,
-    val refresh_token: String? = null
-)
+    val refresh_token: String? = null,
+    val multiLogin: Boolean? = null,
+    )
