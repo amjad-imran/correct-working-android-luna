@@ -203,7 +203,7 @@ class CustomHomescreenViewModel @Inject constructor(
             this["sleep"] = CustomHomeScreenItem(
                 R.drawable.icon_sleep,
                 "sleep",
-                resourceProvider.getString(R.string.text_sleep),
+                resourceProvider.getString(R.string.text_sleep_health_monitor),
                 true,
                 1
             )
