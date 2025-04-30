@@ -204,11 +204,14 @@
     <TextView
         android:id="@+id/textView153"
         style="@style/S14"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/text_hydrate"
+        android:ellipsize="end"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@+id/ivNotificationHydrate"
+        app:layout_constraintEnd_toStartOf="@+id/ivNotificationHydrate"
         app:layout_constraintStart_toStartOf="@+id/imageView69"
         app:layout_constraintTop_toTopOf="@+id/ivNotificationHydrate" />
 
