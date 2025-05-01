@@ -1952,4 +1952,6 @@
 
     <string name="text_sleep_health_monitor">Schlaf- &amp; Gesundheitsmonitor</string>
     <string name="text_google_fit_message">Diese Datenschutzeinstellungen ermöglichen das LESEN und SCHREIBEN von Daten in Google Fit.</string>
+    <string name="text_data_sharing">Datenfreigabe</string>
+
 </resources>

@@ -1922,4 +1922,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
 
     <string name="text_sleep_health_monitor">Monitor de sueño y salud</string>
     <string name="text_google_fit_message">Estas configuraciones de datos permiten LEER y ESCRIBIR datos en Google Fit.</string>
+    <string name="text_data_sharing">Compartir datos</string>
+
 </resources>

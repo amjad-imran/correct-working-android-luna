@@ -1975,4 +1975,6 @@
 
     <string name="text_sleep_health_monitor">Монитор сна и здоровья</string>
     <string name="text_google_fit_message">Эти настройки управления данными позволяют ЧИТАТЬ и ЗАПИСЫВАТЬ данные в Google Fit.</string>
+    <string name="text_data_sharing">Совместное использование данных</string>
+
 </resources>

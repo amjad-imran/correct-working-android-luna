@@ -1953,4 +1953,6 @@
 
     <string name="text_sleep_health_monitor">Slaap- en gezondheidsmonitor</string>
     <string name="text_google_fit_message">Met deze gegevensinstellingen kun je GEGEVENS LEZEN en SCHRIJVEN op Google Fit.</string>
+    <string name="text_data_sharing">Gegevensdeling</string>
+
 </resources>

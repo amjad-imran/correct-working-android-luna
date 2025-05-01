@@ -1959,4 +1959,6 @@
 
     <string name="text_sleep_health_monitor">ตัวติดตามการนอนหลับและสุขภาพ</string>
     <string name="text_google_fit_message">การตั้งค่าข้อมูลเหล่านี้อนุญาตให้ อ่าน และ เขียน ข้อมูลบน Google Fit</string>
+    <string name="text_data_sharing">การแบ่งปันข้อมูล</string>
+
 </resources>

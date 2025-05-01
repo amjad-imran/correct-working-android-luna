@@ -2071,5 +2071,6 @@ onjour, Luna"</string>
 
     <string name="text_sleep_health_monitor">Moniteur de sommeil et de santé</string>
     <string name="text_google_fit_message">Ces paramètres de données permettent de LIRE et d\'ÉCRIRE des données sur Google Fit.</string>
+    <string name="text_data_sharing">Partage de données</string>
 
 </resources>

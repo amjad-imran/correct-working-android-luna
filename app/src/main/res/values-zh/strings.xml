@@ -1947,5 +1947,6 @@
 
     <string name="text_sleep_health_monitor">睡眠与健康监测</string>
     <string name="text_google_fit_message">这些数据控制设置允许您读取和写入 Google Fit 上的数据。</string>
+    <string name="text_data_sharing">数据共享</string>
 
 </resources>

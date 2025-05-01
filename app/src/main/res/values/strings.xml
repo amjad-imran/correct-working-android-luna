@@ -1174,7 +1174,7 @@
     <string name="text_cycle_log">Cycle Log</string>
     <string name="text_log_period">Log Period</string>
     <string name="text_calender">Calender</string>
-    <string name="text_period_last_sub_message">Period length is measured from the first to the last day of bleeding. If you’re irregular or not sure, tab ‘Not sure’</string>
+    <string name="text_period_last_sub_message">Period length is measured from the first to the last day of bleeding. If you’re irregular or not sure, tap ‘Not sure’</string>
     <string name="text_cycle_last_sub_message">Your cycle starts on the first day of your period and ends the day before your next period. If you’re irregular or not sure, tap ‘Not sure’</string>
     <string name="text_days">days</string>
     <string name="text_abnormal_length">Abnormal length</string>
@@ -1962,6 +1962,7 @@ These insights help you understand how your heart rate changes during different 
 
     <string name="text_sleep_health_monitor">Sleep &amp; Health Monitor</string>
     <string name="text_google_fit_message">These data control settings allow you to READ and WRITE the data on Google Fit.</string>
+    <string name="text_data_sharing">Data sharing</string>
 
 
 </resources>

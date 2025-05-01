@@ -1954,5 +1954,6 @@
 
     <string name="text_sleep_health_monitor">Monitoraggio del sonno e della salute</string>
     <string name="text_google_fit_message">Queste impostazioni di dati consentono di LEGGERE e SCRIVERE i dati su Google Fit.</string>
+    <string name="text_data_sharing">Condivisione dei dati</string>
 
 </resources>
