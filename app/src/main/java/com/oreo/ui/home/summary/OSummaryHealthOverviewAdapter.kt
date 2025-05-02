@@ -1008,12 +1008,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class WorkoutsHistoryViewHolder(private val binding: OreoLayoutRecentActivityBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(data: OHealthOverview.WorkoutHistoryCardData) {
-            Log.d("yashlogii", "setWorkoutUI: BIND ${data.workouts.toString()}")
             setWorkoutUI(data.workouts)
         }
 
         private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
-            Log.d("yashlogii", "setWorkoutUI: ")
             val lytWorkouts = binding
             val context = lytWorkouts.root.context
             lytWorkouts.root.visible()
