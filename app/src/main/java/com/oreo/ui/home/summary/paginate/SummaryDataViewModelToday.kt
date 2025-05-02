@@ -1206,7 +1206,13 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "cycle_tracker" -> {
-                        getCycleTrackerCard()?.let { userActivities.add(it) }
+                        val cycleTrackerCard = getCycleTrackerCard()
+                        if (cycleTrackerCard != null){
+                            userActivities.add(cycleTrackerCard)
+                            sessionManager.canLogPeriod = true
+                        } else {
+                            sessionManager.canLogPeriod = false
+                        }
                     }
 
                     "7_day_trends_card" -> {
