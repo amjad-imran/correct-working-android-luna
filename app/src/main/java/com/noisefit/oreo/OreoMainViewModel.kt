@@ -67,6 +67,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.internal.format
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
@@ -123,6 +124,7 @@ constructor(
     var stressFirstDate: String? = null
     var stressBeta: Boolean = false
     var enableAi: Boolean = false
+
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
     var caffeineGraphData: CaffeineGraphDataModel ?= null
@@ -294,7 +296,7 @@ constructor(
                     }
 
                     is Resource.Loading -> {
-                        if(showSyncLoader){
+                        if (showSyncLoader) {
                             setLoading(resource.loading)
                         }
                     }
@@ -1086,6 +1088,11 @@ constructor(
                     } else {
                         WatchInfoGlobals.firmwareVersionRing
                     } ?: ""
+
+                val generation = getGeneration(pairedDevice)
+                if(generation!=null){
+                    userMeta["cf_generation"] = "Gen$generation"
+                }
             }
             userMeta["cf_currentappversion"] = BuildConfig.VERSION_NAME
             userMeta["cf_os"] = "Android"
@@ -1101,6 +1108,19 @@ constructor(
                     .setPushRegistrationToken(token)
                 LOGS.d("RNFMessagingService", "freshchat token sent - $it")
             }
+        }
+    }
+
+    private fun getGeneration(connectedDevice: ColorFitDevice): Int? {
+        val serialNoRaw = connectedDevice.ringInfo?.serialNoRaw
+
+        if (serialNoRaw.isNullOrEmpty()) return null
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
         }
     }
 
@@ -1170,7 +1190,12 @@ constructor(
         }
     }
 
-    fun getSyncingMessage(context: Context, progress: Int, total: Int, syncDataStatus: SyncEvents): String? {
+    fun getSyncingMessage(
+        context: Context,
+        progress: Int,
+        total: Int,
+        syncDataStatus: SyncEvents
+    ): String? {
 
         if (syncDataStatus is SyncEvents.Started) {
             return context.getString(R.string.text_syncing_recent_data)
@@ -1182,7 +1207,7 @@ constructor(
 
         if (total <= 0) return null
 
-        if ((progress+1==total) || progress == total) {
+        if ((progress + 1 == total) || progress == total) {
             return context.getString(R.string.text_refining_your_stats)
         }
 
@@ -1196,9 +1221,27 @@ constructor(
                 percentage in 81f..90f -> context.getString(R.string.text_calculating_readiness_score)
                 else -> context.getString(R.string.text_refining_your_stats)
             }
+
             else -> context.getString(R.string.text_all_set)
         }
     }
+
+    fun demoModeClearAndReloadData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dates = ArrayList<String>()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val todayDate = java.time.LocalDate.now()
+            dates.add(todayDate.format(formatter))
+            (6 downTo 1).forEach {
+                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
+                dates.add(newDate)
+            }
+            userHealthDataDataSource.clearDataByDates(dates)
+            delay(200)
+            sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
+        }
+    }
+
 
     fun getCannyFeedbackUrl() {
         viewModelScope.launch {
@@ -1243,25 +1286,33 @@ constructor(
         viewModelScope.launch {
 
             val syncTime = localDataStore.getAppTrackEventTime(event)
-            if(syncTime==null) return@launch
+            if (syncTime == null) return@launch
 
 
-            val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.first/1000), ZoneId.systemDefault())
-            val end = ZonedDateTime.ofInstant(Instant.ofEpochSecond(syncTime.second/1000), ZoneId.systemDefault())
+            val start = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(syncTime.first / 1000),
+                ZoneId.systemDefault()
+            )
+            val end = ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(syncTime.second / 1000),
+                ZoneId.systemDefault()
+            )
 
             val startFormatted = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             val endFormatted = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
             val requestObject = JsonObject().apply {
-                this.addProperty("key", when(event){
-                    AppTrackEvent.SYNC -> "sync_time"
-                    AppTrackEvent.APP_START -> "app_open_time"
-                })
+                this.addProperty(
+                    "key", when (event) {
+                        AppTrackEvent.SYNC -> "sync_time"
+                        AppTrackEvent.APP_START -> "app_open_time"
+                    }
+                )
 
 
                 this.addProperty("startTime", startFormatted)
                 this.addProperty("endTime", endFormatted)
-                this.addProperty("duration", syncTime.second-syncTime.first)
+                this.addProperty("duration", syncTime.second - syncTime.first)
             }
 
 
@@ -1278,5 +1329,7 @@ constructor(
             }
         }
     }
+
+
 
 }

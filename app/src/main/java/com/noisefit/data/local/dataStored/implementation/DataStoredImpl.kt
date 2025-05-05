@@ -226,7 +226,6 @@ private const val APP_MEASUREMENT_TIMESTAMP = "APP_MEASUREMENT_TIMESTAMP"
 
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
-
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CAFFEINE_GRAPH_DATA = "CAFFEINE_GRAPH_DATA"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
@@ -238,6 +237,7 @@ private const val EVENT_SYNC_TIME_END = "EVENT_SYNC_TIME_END"
 
 private const val EVENT_APP_TIME_START = "EVENT_APP_TIME_START"
 private const val EVENT_APP_TIME_END = "EVENT_APP_TIME_END"
+private const val APP_DEMO_MODE = "APP_DEMO_MODE"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -246,6 +246,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun setIsInDemoMode(demoModeState: Boolean) {
+        mPrefs.edit().putBoolean(APP_DEMO_MODE, demoModeState).commit()
+    }
+
+    override fun isInDemoMode(): Boolean {
+        return mPrefs.getBoolean(APP_DEMO_MODE, false)
+    }
 
 
     override fun saveAppTrackEvent(eventName: AppTrackEvent, isStart: Boolean) {

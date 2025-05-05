@@ -27,6 +27,9 @@ interface DataStoredInterface {
     fun getCaffeineGraphData(): CaffeineGraphDataModel?
     fun clearCaffeineGraphData()
 
+
+    fun setIsInDemoMode(multiLogin: Boolean)
+    fun isInDemoMode(): Boolean
     fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
 

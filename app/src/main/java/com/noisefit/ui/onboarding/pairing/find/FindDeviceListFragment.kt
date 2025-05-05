@@ -85,8 +85,6 @@ class FindDeviceListFragment :
     private var bluetoothLeScanner: BluetoothLeScanner? = null
 
 
-
-
     private var scanCount = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,7 +110,6 @@ class FindDeviceListFragment :
         viewModel.fetchDeviceList()
 
 
-
         /*if (PairDeviceActivity.showBack) {
             binding.backBtn.visible()
         } else {
@@ -133,7 +130,7 @@ class FindDeviceListFragment :
     }
 
     private fun checkPermissionAndScan() {
-        if(hasGpsPermission().not()){
+        if (hasGpsPermission().not()) {
             showPermDetailsDialog()
             return
         }
@@ -141,7 +138,7 @@ class FindDeviceListFragment :
         askPermAndScan()
     }
 
-    private fun askPermAndScan(){
+    private fun askPermAndScan() {
         checkLocationPermission(permissionGranted = {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -269,9 +266,9 @@ class FindDeviceListFragment :
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-        ){
+        ) {
             return true
-        }else{
+        } else {
             return false
         }
     }
@@ -399,7 +396,7 @@ class FindDeviceListFragment :
             }
 
         }
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG || viewModel.localDataStore.isInDemoMode()) {
             binding.bPairLater.visible()
         } else
             binding.bPairLater.gone()
@@ -610,13 +607,13 @@ class FindDeviceListFragment :
         viewModel.tempColorFitDevice = colorFitDevice
         colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
 
-       /* if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
-            navigate(
-                FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
-                    colorFitDevice
-                )
-            )
-        }*/
+        /* if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
+             navigate(
+                 FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
+                     colorFitDevice
+                 )
+             )
+         }*/
 
     }
 

@@ -65,8 +65,11 @@ class RecordWorkoutFragmentV2 :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        LOGS.d("RECORD_WORKOUT  on view created ${viewModel.currentWorkoutState}")
+
 
         navArgs.workout.let {
+            LOGS.d("RECORD_WORKOUT  workout data - ${viewModel.currentWorkoutState} - $it")
             viewModel.workout = it
             binding.tvWorkoutTitle.text = it.getTranslatedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
@@ -74,17 +77,27 @@ class RecordWorkoutFragmentV2 :
                 viewModel.ringDataStore.getOngoingRecordWorkout()?.first ?: 0L
         }
 
-        navArgs.onGoingWorkout?.let {
-            viewModel.workoutDuration = it.duration.toLong()
-            if (it.sportStatus == 1 || it.sportStatus == 3) {
+        val workout = viewModel.ringDataStore.getOngoingRecordWorkout()
+
+        LOGS.d("RECORD_WORKOUT  ongoing workout $workout")
+
+        val ongoingWorkoutArgs  = navArgs.onGoingWorkout
+
+        if(ongoingWorkoutArgs!=null ){
+            LOGS.d("RECORD_WORKOUT  ongoing - $ongoingWorkoutArgs")
+
+            viewModel.workoutDuration = ongoingWorkoutArgs.duration.toLong()
+            if (ongoingWorkoutArgs.sportStatus == 1 || ongoingWorkoutArgs.sportStatus == 3) {
                 startWorkoutUi()
-            } else if (it.sportStatus == 2) {
+            } else if (ongoingWorkoutArgs.sportStatus == 2) {
                 ongoingWorkoutState()
                 pauseWorkout()
                 viewModel.updateTimer()
             }
+        }else if(workout!=null){
+            LOGS.d("RECORD_WORKOUT  navigating back")
+            navigateUpSafe()
         }
-
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
@@ -288,6 +301,12 @@ class RecordWorkoutFragmentV2 :
         return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        LOGS.d("RECORD_WORKOUT  on Destroy called")
+    }
+
     private fun showPermDetailsDialog() {
         setFragmentResultListener(LOCATION_PERM_REQUEST) { _, bundle ->
             val allow = bundle.getBoolean("allow")
@@ -387,7 +406,8 @@ class RecordWorkoutFragmentV2 :
             return
         }
         binding.lytOnGoingWorkout.lytZones.tvHrValue.text =
-            if (workoutRealTimeData.hrValue != null) workoutRealTimeData.hrValue.toString() else "-"
+            if (workoutRealTimeData.hrValue != null && workoutRealTimeData.hrValue != 0
+                && workoutRealTimeData.hrValue != 255) workoutRealTimeData.hrValue.toString() else "--"
 
 
         val zoneId = viewModel.getHeartRateZone(workoutRealTimeData.hrValue)
@@ -593,6 +613,7 @@ class RecordWorkoutFragmentV2 :
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {
                             startWorkoutUi()
+                            viewModel.sendWorkoutEvent(true)
                         } else {
                             //context.showShortToast("Workout started : ${it.success}")
                         }
@@ -667,6 +688,7 @@ class RecordWorkoutFragmentV2 :
     }
 
     private fun stopWorkout() {
+        viewModel.sendWorkoutEvent(false)
         viewModel.deleteOngoingRecordWorkout()
         viewModel.currentWorkoutState = 4
         viewModel.stopTimer()

@@ -718,6 +718,12 @@ interface NetworkService {
         @Url url: String,
         @Body req: JsonObject
     ): BaseApiResponse<Any>
+
+    @POST
+    suspend fun updateWorkoutStatus(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     //
 
     /**

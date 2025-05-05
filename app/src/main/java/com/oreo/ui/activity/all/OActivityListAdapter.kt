@@ -121,6 +121,24 @@ class OActivityListAdapter(
                 view.findViewById<TextView>(R.id.tvCalories).text =
                     view.context.getString(R.string.text_value_kcal, activity.calories)
 
+                try {
+                    val calories = activity.calories?.toIntOrNull()
+                    if (calories == null || calories == 0) {
+                        view.findViewById<View>(R.id.lineCalories).gone()
+                        view.findViewById<TextView>(R.id.tvCalories).gone()
+                    } else {
+                        view.findViewById<View>(R.id.lineCalories).visible()
+                        view.findViewById<TextView>(R.id.tvCalories).visible()
+                        view.findViewById<TextView>(R.id.tvCalories).text = view.findViewById<TextView>(R.id.tvCalories).context.getString(
+                            R.string.text_value_kcal,
+                            "${activity.calories}"
+                        )
+                    }
+                } catch (exp: Exception) {
+                    view.findViewById<View>(R.id.lineCalories).gone()
+                    view.findViewById<TextView>(R.id.tvCalories).gone()
+                }
+
                 if (activity.type.equals("apple", true)) {
                     view.findViewById<TextView>(R.id.tvImportedFrom).apply {
                         text = view.context.getString(R.string.text_imported_from_health)

@@ -70,4 +70,6 @@ interface UserRepository {
 
     suspend fun sendAppTrackingEvent(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun updateWorkoutStatus(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
 }

@@ -28,6 +28,7 @@ import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -105,6 +106,12 @@ constructor(
 
     fun logoutUser() {
         viewModelScope.launch {
+
+            if (localDataStore.isInDemoMode()) {
+                removeLocalData()
+                return@launch
+            }
+
             repository.logoutUser().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -130,17 +137,23 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.let {
-                            repository.logoutUserLocally().collect {
-                                if (it) {
-                                    localDataStore.setEndGameValue("")
-                                    localDataStore.deleteYearlyGoal()
-                                    localDataStore.setGoogleFitStatus(false)
-                                    localDataStore.setGoogleFitCrossed(false)
-                                    _logoutSuccess.value = true
-                                }
-                            }
+                            removeLocalData()
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun removeLocalData() {
+        viewModelScope.launch {
+            repository.logoutUserLocally().collect {
+                if (it) {
+                    localDataStore.setEndGameValue("")
+                    localDataStore.deleteYearlyGoal()
+                    localDataStore.setGoogleFitStatus(false)
+                    localDataStore.setGoogleFitCrossed(false)
+                    _logoutSuccess.value = true
                 }
             }
         }
