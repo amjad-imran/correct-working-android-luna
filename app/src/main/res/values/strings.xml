@@ -1947,5 +1947,11 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_data_sharing">Data sharing</string>
 
     <string name="text_google_fit_data_share">We will share this data with Google Fit. We will not take this data from Google Fit.</string>
+    <string name="text_let_s_troubleshoot">Let’s Troubleshoot</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Ensure your ring is placed on the charger</string>
+    <string name="troubleshoot_desc_2">Ensure your ring and your phone are within 1 metre distance</string>
+    <string name="troubleshoot_desc_3">Try turning on/off the bluetooth until the ring gets connected.</string>
+    <string name="troubleshoot_desc_4">Try forgetting the ring from your phone’s bluetooth connected devices</string>
+    <string name="troubleshoot_desc_5">Let’s try to hard reset your ring. Follow the steps below</string>
 
 </resources>

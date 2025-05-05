@@ -90,12 +90,15 @@ class FindDeviceListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvTroubleShoot.gone()
+        binding.imageView75.gone()
+
         viewModel.troubleshootScrPos = 0
 
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_look_for_device_page_visit)
-        binding.lScanning.repeatCount = 0
+        /*binding.lScanning.repeatCount = 0
         binding.lScanning.setAnimation(R.raw.anim_device_default)
-        binding.lScanning.playAnimation()
+        binding.lScanning.playAnimation()*/
 
         setVideo(
             "android.resource://" + requireContext().packageName + "/" +
@@ -365,6 +368,30 @@ class FindDeviceListFragment :
 
     override fun initListener() {
 
+        var isVideoPlayed = true
+        binding.videoOnboard.setOnClickListener {
+            if (viewModel.troubleshootScrPos == 0){
+                return@setOnClickListener
+            }
+            isVideoPlayed = !isVideoPlayed
+            if (!isVideoPlayed){
+                binding.playBtn.visible()
+                binding.videoOnboard.pause()
+            }else{
+                binding.videoOnboard.start()
+                binding.playBtn.gone()
+            }
+        }
+
+        binding.playBtn.setOnClickListener {
+            if (viewModel.troubleshootScrPos == 0){
+                return@setOnClickListener
+            }
+            isVideoPlayed = true
+            binding.videoOnboard.start()
+            binding.playBtn.gone()
+        }
+
         binding.tvTroubleShoot.setOnClickListener {
             if(viewModel.troubleshootScrPos==5){
                 Freshchat.showConversations(requireContext())
@@ -376,7 +403,14 @@ class FindDeviceListFragment :
 //            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to false))
         }
 
+        var displayTroubleshoot = false
         binding.ivRefresh.setOnClickListener {
+            if(!displayTroubleshoot){
+                binding.tvTroubleShoot.text = getString(R.string.text_let_s_troubleshoot)
+                binding.tvTroubleShoot.visible()
+                binding.imageView75.visible()
+            }
+            displayTroubleshoot = true
             viewModel.fetchDeviceList()
         }
 
@@ -385,7 +419,7 @@ class FindDeviceListFragment :
             //activity?.finish()
             navigateUpSafe()
         }
-        binding.lScanning.setOnClickListener {
+        /*binding.lScanning.setOnClickListener {
 
             when (viewModel.findDeviceState) {
                 FindDeviceState.DEFAULT, FindDeviceState.FINISHED -> {
@@ -395,7 +429,7 @@ class FindDeviceListFragment :
                 else -> {}
             }
 
-        }
+        }*/
         if (BuildConfig.DEBUG || viewModel.localDataStore.isInDemoMode()) {
             binding.bPairLater.visible()
         } else
@@ -414,48 +448,46 @@ class FindDeviceListFragment :
         when(viewModel.troubleshootScrPos){
             1 -> {
                 binding.textView.text = getString(R.string.text_let_s_find_your_ring)
+                binding.textView2.text =
+                    getString(R.string.text_ensure_your_ring_is_placed_on_the_charger)
+
                 setVideo(
                     "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
+                            R.raw.troubleshoot_video_2
                 )
                 binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
             }
 
             2 -> {
-                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
-                setVideo(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
-                )
-                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+                binding.textView2.text = getString(R.string.troubleshoot_desc_2)
+                binding.imgOnBoard.setImageResource(R.drawable.troubleshoot_img_2)
+                binding.imgOnBoard.visible()
+                binding.videoOnboard.gone()
+                binding.playBtn.gone()
+//                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
             }
 
             3 -> {
-                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
-                setVideo(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
-                )
-                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+                binding.textView2.text = getString(R.string.troubleshoot_desc_3)
+                binding.imgOnBoard.setImageResource(R.drawable.troubleshoot_img_3)
+//                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
             }
 
             4 -> {
-                binding.textView.text = getString(R.string.text_let_s_find_your_ring)
-                setVideo(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
-                )
-                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
+                binding.textView2.text = getString(R.string.troubleshoot_desc_4)
+                binding.imgOnBoard.setImageResource(R.drawable.troubleshoot_img_4)
+//                binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
             }
 
             5 -> {
                 binding.textView.text = getString(R.string.text_here_is_a_final_step)
-                binding.textView2.text =
-                    getString(R.string.text_try_the_step_below_to_pair_your_ring)
+                binding.textView2.text = getString(R.string.troubleshoot_desc_5)
                 setVideo(
                     "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
+                            R.raw.troubleshoot_video_5
                 )
+                binding.videoOnboard.visible()
+                binding.imgOnBoard.gone()
                 binding.tvTroubleShoot.text = getString(R.string.text_contact_support)
             }
 
@@ -914,19 +946,19 @@ class FindDeviceListFragment :
         if (nullableBinding == null) return
 
         if (scanCount == 0) {
-            binding.lScanning.repeatCount = LottieDrawable.INFINITE
+            /*binding.lScanning.repeatCount = LottieDrawable.INFINITE
             binding.lScanning.setAnimation(R.raw.anim_device_search)
-            binding.lScanning.playAnimation()
+            binding.lScanning.playAnimation()*/
         } else {
-            binding.lScanning.repeatCount = 0
+            /*binding.lScanning.repeatCount = 0
             binding.lScanning.setAnimation(R.raw.anim_device_refresh_to_search)
-            binding.lScanning.playAnimation()
+            binding.lScanning.playAnimation()*/
 
             Handler(Looper.getMainLooper()).postDelayed({
                 if (nullableBinding != null) {
-                    binding.lScanning.repeatCount = LottieDrawable.INFINITE
+                    /*binding.lScanning.repeatCount = LottieDrawable.INFINITE
                     binding.lScanning.setAnimation(R.raw.anim_device_search)
-                    binding.lScanning.playAnimation()
+                    binding.lScanning.playAnimation()*/
                 }
             }, 500)
         }
@@ -940,9 +972,9 @@ class FindDeviceListFragment :
 
 
             viewModel.findDeviceState = FindDeviceState.FINISHED
-            binding.lScanning.repeatCount = 0
+            /*binding.lScanning.repeatCount = 0
             binding.lScanning.setAnimation(R.raw.anim_device_search_to_refresh)
-            binding.lScanning.playAnimation()
+            binding.lScanning.playAnimation()*/
 
             if (viewModel.getScannedDevices().value.isNullOrEmpty()) {
                 binding.tvDevicesFound.text = getString(R.string.text_no_device_found)
