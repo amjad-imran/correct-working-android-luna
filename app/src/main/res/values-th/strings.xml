@@ -1960,5 +1960,7 @@
     <string name="text_sleep_health_monitor">ตัวติดตามการนอนหลับและสุขภาพ</string>
     <string name="text_google_fit_message">การตั้งค่าข้อมูลเหล่านี้อนุญาตให้ อ่าน และ เขียน ข้อมูลบน Google Fit</string>
     <string name="text_data_sharing">การแบ่งปันข้อมูล</string>
+    <string name="text_place_ring_charging">กรุณาวางแหวนบนเครื่องชาร์จก่อนเริ่มอัปเดตเฟิร์มแวร์</string>
+    <string name="text_it_s_on_the_charger">วางอยู่บนเครื่องชาร์จแล้ว</string>
 
 </resources>
