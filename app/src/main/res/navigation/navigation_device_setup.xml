@@ -98,6 +98,11 @@
         android:id="@+id/bottomSheetLowBatteryFirmware"
         android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
         android:label="BottomSheetLowBatteryFirmware" />
+
+    <dialog
+        android:id="@+id/bottomSheetNotCharingFirmware"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetNotChargingFirmware"
+        android:label="BottomSheetNotChargingFirmware" />
     <fragment
         android:id="@+id/firmwareUpdateSuccessFragment"
         android:name="com.noisefit.ui.onboarding.setup.firmware.FirmwareUpdateSuccessFragment"

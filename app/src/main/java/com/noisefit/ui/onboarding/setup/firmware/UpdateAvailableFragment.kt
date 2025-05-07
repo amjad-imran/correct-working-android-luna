@@ -48,6 +48,12 @@ class UpdateAvailableFragment :
                     return@setOnClickListener
                 }
             }
+            val isCharging = viewModel.sessionManager.isRingCharging.value?:false
+
+            if(isCharging.not() && battery!=100){
+                showNotChargingDialog()
+                return@setOnClickListener
+            }
 
 
             navigate(UpdateAvailableFragmentDirections.navigateToUpdateFrag())
@@ -62,6 +68,10 @@ class UpdateAvailableFragment :
             }
         }
         navigate(R.id.bottomSheetLowBatteryFirmware)
+    }
+
+    private fun showNotChargingDialog() {
+        navigate(R.id.bottomSheetNotCharingFirmware)
     }
 
     override fun subscribeObservers() {

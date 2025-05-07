@@ -666,6 +666,10 @@
             app:popUpTo="@id/OAboutDeviceFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetNotCharingFirmware"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetNotChargingFirmware"
+        android:label="BottomSheetNotChargingFirmware" />
     <fragment
         android:id="@+id/ringUpdateFragment"
         android:name="com.oreo.ui.home.summary.update.RingUpdateFragment"

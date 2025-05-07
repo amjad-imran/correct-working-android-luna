@@ -59,12 +59,28 @@ class UpdateDetailFragment :
                 }
 
                 UpdateLaunchMode.OTA -> {
+
+
+                    val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+                    val isCharging = viewModel.sessionManager.isRingCharging.value?:false
+                    if(isCharging.not() && battery!=100){
+                        showNotChargingDialog()
+                        return@setOnClickListener
+                    }
+
                     viewModel.otaUpdateInfo.value?.let {
                         navigate(UpdateDetailFragmentDirections.openRingUpdate(it))
                     } ?: navigateUpSafe()
                 }
 
                 UpdateLaunchMode.OTA_DEVICE -> {
+                    val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+                    val isCharging = viewModel.sessionManager.isRingCharging.value?:false
+                    if(isCharging.not() && battery!=100){
+                        showNotChargingDialog()
+                        return@setOnClickListener
+                    }
+
                     viewModel.otaUpdateInfo.value?.let {
                         navigate(UpdateDetailFragmentDirections.openRingUpdateAboutDevice(it))
                     } ?: navigateUpSafe()
@@ -94,6 +110,10 @@ class UpdateDetailFragment :
         }
 
 
+    }
+
+    private fun showNotChargingDialog() {
+        navigate(R.id.bottomSheetNotCharingFirmware)
     }
 
     override fun subscribeObservers() {
