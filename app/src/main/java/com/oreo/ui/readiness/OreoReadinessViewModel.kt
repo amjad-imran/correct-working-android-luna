@@ -1,5 +1,6 @@
 package com.oreo.ui.readiness
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,6 +28,8 @@ import javax.inject.Inject
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.Contributor
 import com.oreo.data.model.sleep.HealthTrend
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 
 
 @HiltViewModel
@@ -48,8 +51,46 @@ constructor(
 
     private var contriData: List<Contributors>? = null
 
+    private val _selectedChips = mutableStateListOf<String>()
+    val selectedChips: List<String> get() = _selectedChips
+
     init {
         //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+    }
+
+    fun updateChipSelection(chipText: String, isSelected: Boolean) {
+        viewModelScope.launch {
+            if (isSelected) {
+                if (!_selectedChips.contains(chipText)) {
+                    _selectedChips.add(chipText)
+                }
+            } else {
+                _selectedChips.remove(chipText)
+            }
+        }
+    }
+
+    fun submitIrregularityEvents(optionalMessage: String? = null) {
+        viewModelScope.launch {
+            try {
+                JsonObject().apply {
+//                    this.add("data", _selectedChips.toList())
+                    this.addProperty("other_data","$optionalMessage")
+                    this.add("data",JsonArray().apply {
+                        this.add("")
+                        this.add("")
+                        this.add("")
+                    })
+            }
+
+//                val response = repository.submitIrregularityEvents(
+//                    selectedChips = _selectedChips.toList(),
+//                    message = optionalMessage
+//                )
+                _selectedChips.clear()
+            } catch (e: Exception) {
+            }
+        }
     }
 
     fun getContributorInfo() {

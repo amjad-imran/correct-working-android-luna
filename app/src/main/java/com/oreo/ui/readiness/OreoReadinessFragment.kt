@@ -2,8 +2,10 @@ package com.oreo.ui.readiness
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -13,6 +15,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
@@ -24,6 +27,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
@@ -55,6 +59,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
+import androidx.core.graphics.toColorInt
+import com.oreo.data.model.IrregularEventsChipModel
 
 
 @AndroidEntryPoint
@@ -743,6 +749,18 @@ class OreoReadinessFragment :
             )
         }
 
+        binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
+
+        }
+
+        binding.lytIrregularityEvents.btnSubmit.setOnClickListener {
+            val ids: List<Int> = binding.lytIrregularityEvents.chipsPrograms.checkedChipIds
+//            if (viewModel.problemTypeList.isNotEmpty()) viewModel.problemTypeList.clear()
+            for (id in ids) {
+                val chip: Chip = binding.lytIrregularityEvents.chipsPrograms.findViewById(id)
+//                viewModel.problemTypeList.add(chip.text.toString())
+            }
+        }
 
     }
 
@@ -771,6 +789,14 @@ class OreoReadinessFragment :
             //mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
             var moveToPos = -1
 
+            setIrregularityEventsChips(
+                listOf(
+                    IrregularEventsChipModel("canamcam", "jbhqwcasuiccias"),
+                    IrregularEventsChipModel("canamcam", "schjbcsacjcsa"),
+                    IrregularEventsChipModel("other", "other"),
+                    IrregularEventsChipModel("canamcam", "cjhcasjch")
+                )
+            )
 
             LOGS.d("moveToPosition date initia ${mainViewModel.selectedDate}")
 
@@ -827,6 +853,61 @@ class OreoReadinessFragment :
             }
         }
 
+    }
+
+    fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
+        binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
+        if (category != null) {
+            for (item in category) {
+                val mChip: Chip =
+                    layoutInflater.inflate(R.layout.item_chip_feedback, null, false) as Chip
+                mChip.text = item.displayName
+                mChip.tag = item.key
+
+                // Create a ColorStateList programmatically
+                val states = arrayOf(
+                    intArrayOf(android.R.attr.state_checked),  // Checked state
+                    intArrayOf(-android.R.attr.state_checked)   // Unchecked state
+                )
+
+                // Set your colors here (replace with your desired colors)
+                val colors = intArrayOf(
+                    "#7C404E".toColorInt(),  // Checked color
+                    "#0affffff".toColorInt()   // Unchecked color
+                )
+
+                val colorStateList = ColorStateList(states, colors)
+
+                // Apply the color state list to the chip
+                mChip.chipBackgroundColor = colorStateList
+
+                val paddingDp = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
+                )
+                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)
+                mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
+                    mViewModel.updateChipSelection(item.key, isChecked)
+                    if(mChip.tag.toString().equals("other")){
+                        if(isChecked){
+                            binding.lytIrregularityEvents.chatEtx.visible()
+                            binding.lytIrregularityEvents.imgChatEtx.visible()
+                            binding.lytIrregularityEvents.btnSubmit.gone()
+                        }else{
+                            binding.lytIrregularityEvents.chatEtx.gone()
+                            binding.lytIrregularityEvents.imgChatEtx.gone()
+                            binding.lytIrregularityEvents.btnSubmit.visible()
+                        }
+                    }
+                    if (isChecked) {
+                        LOGS.d("Checked Chips ${mChip.text}")
+                        val name = MiscUtil.addUnderscore(mChip.text.toString())
+//                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_feedback + "_${name}_SELECT")
+                    }
+                }
+                binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
+
+            }
+        }
     }
 
     private fun setHealthMonitor(healthTrend: HealthTrend?) {

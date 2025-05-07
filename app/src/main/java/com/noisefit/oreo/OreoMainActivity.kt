@@ -873,6 +873,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 if (viewModel.userHealthData.isEmpty()) {
+                    binding.layoutRetry.tvErrorCode.text = "Error Code : ${viewModel.errorCode}"
                     binding.layoutRetry.root.visible()
                 } else {
                     binding.layoutRetry.root.gone()

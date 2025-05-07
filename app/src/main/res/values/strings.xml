@@ -1953,5 +1953,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="troubleshoot_desc_3">Try turning on/off the bluetooth until the ring gets connected.</string>
     <string name="troubleshoot_desc_4">Try forgetting the ring from your phone’s bluetooth connected devices</string>
     <string name="troubleshoot_desc_5">Let’s try to hard reset your ring. Follow the steps below</string>
+    <string name="text_tell_us_what_happened">Tell us What Happened:</string>
+    <string name="text_irregularity_events">Irregularity Events</string>
 
 </resources>

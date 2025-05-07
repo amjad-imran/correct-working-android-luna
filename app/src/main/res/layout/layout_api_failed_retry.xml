@@ -7,6 +7,7 @@
     android:background="@drawable/back_retry_gradient">
 
     <ImageView
+        android:id="@+id/imageView76"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:src="@drawable/ic_luna_splash"
@@ -44,6 +45,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvErrorCode"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btnRetry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView76" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

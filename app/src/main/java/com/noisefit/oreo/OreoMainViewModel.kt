@@ -128,6 +128,7 @@ constructor(
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
     var caffeineGraphData: CaffeineGraphDataModel ?= null
+    var errorCode: String = ""
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -191,6 +192,7 @@ constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             user = localDataStore.getUser()
+            errorCode = "000000"
             resetMasterDates()
         }
     }
