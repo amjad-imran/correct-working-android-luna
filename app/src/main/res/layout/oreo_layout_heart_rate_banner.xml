@@ -44,8 +44,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 
-
-
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="0dp"

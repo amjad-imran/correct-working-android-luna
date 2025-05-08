@@ -1,14 +1,18 @@
 package com.oreo.ui.heartrate
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
@@ -18,11 +22,16 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.IrregularEventsChipModel
+import com.oreo.data.model.IrregularEventsChipsListModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.health.Nudges
 import com.oreo.ui.custom.Item
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,7 +117,31 @@ class OHeartRateDataFragment :
     }
 
     private fun setUi() {
-
+        binding.lytIrregularityEvents.tvTitle.text = getString(R.string.text_irregularity_events)
+        setIrregularityEventBannerViewPager(
+            listOf(
+                IrregularEventsChipsListModel(
+                    listOf(
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("other", "other"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                    )
+                ),
+                IrregularEventsChipsListModel(
+                    listOf(
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
+                    )
+                )
+            )
+        )
         if (viewModel.summaryHealthData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3()))
             viewModel.getTodayHeartRate()
         else
@@ -239,6 +272,7 @@ class OHeartRateDataFragment :
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
 //        setHRBannerViewPager()
+
         setRecycler()
     }
 
@@ -249,6 +283,53 @@ class OHeartRateDataFragment :
         }
 
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
+    }
+
+    private fun setIrregularityEventBannerViewPager(data: List<IrregularEventsChipsListModel>?){
+        val fragments = ArrayList<IrregularityEventsOHeartRateDataFragment>()
+        data?.forEach {
+            fragments.add(IrregularityEventsOHeartRateDataFragment.newInstance(it).apply {
+                setClickListener(object : IrregularityEventsBannerListener{
+                    override fun onSubmitBtnClicked() {
+
+                    }
+
+                })
+            })
+        }
+
+        val winsAdapter = IrregularityEventsBannerAdapter(
+            childFragmentManager, lifecycle, fragments
+        )
+
+        binding.lytIrregularityEvents.vpBannerSlider.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(40))
+            })
+
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            (getChildAt(0) as RecyclerView).apply {
+                val padding = resources.getDimensionPixelOffset(R.dimen.dimen_4dp)
+                setPadding(padding, 0, padding, 0)
+                clipToPadding = false
+            }
+
+            adapter = winsAdapter
+        }
+
+        TabLayoutMediator(
+            binding.lytIrregularityEvents.tabLayout,
+            binding.lytIrregularityEvents.vpBannerSlider
+        ) { _, _ -> }.attach()
+
+        if (fragments.size > 1) {
+            binding.lytIrregularityEvents.tabLayout.visible()
+        } else {
+            binding.lytIrregularityEvents.tabLayout.invisible()
+        }
     }
 
 }

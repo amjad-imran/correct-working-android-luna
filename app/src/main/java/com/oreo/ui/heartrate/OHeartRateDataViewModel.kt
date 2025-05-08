@@ -12,6 +12,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.HRModel
+import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OHealthOverview
@@ -34,6 +35,7 @@ class OHeartRateDataViewModel @Inject constructor(
     var date: String? = null
     val heartRateData = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
     var summaryHealthData: ServerUserHealthData? = null
+    var selectedChipsList = ArrayList<ArrayList<IrregularEventsChipModel>>()
 
 
     fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
