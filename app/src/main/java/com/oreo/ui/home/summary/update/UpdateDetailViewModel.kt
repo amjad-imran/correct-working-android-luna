@@ -11,6 +11,7 @@ import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -27,6 +28,9 @@ class UpdateDetailViewModel @Inject constructor(
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
     var launchMode: UpdateLaunchMode? = null
+
+    var startUpdate = MutableLiveData<Event<Boolean>>()
+
 
     private fun getAppUpdateDetails() {
         val data = localDataStore.getNewAppVersion()

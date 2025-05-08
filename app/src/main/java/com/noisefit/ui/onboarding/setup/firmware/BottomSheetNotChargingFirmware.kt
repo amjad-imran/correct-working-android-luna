@@ -16,14 +16,18 @@ import com.noisefit.luna.databinding.BottomSheetNotChargingFirmwareBinding
 import com.noisefit.luna.databinding.BottomSheetUpdateFailedBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+const val BATTERY_CHARGE_FIRMWARE = "BATTERY_CHARGE_FIRMWARE"
 
 @AndroidEntryPoint
 class BottomSheetNotChargingFirmware :
@@ -34,14 +38,19 @@ class BottomSheetNotChargingFirmware :
     lateinit var sessionManager: SessionManager
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
     }
 
     override fun initListener() {
         binding.btnOnCharger.setOnClickListener {
+            setFragmentResult(
+                BATTERY_CHARGE_FIRMWARE,
+                bundleOf("start" to true)
+            )
             navigateUpSafe()
         }
         binding.ivClose.setOnClickListener {
@@ -52,9 +61,9 @@ class BottomSheetNotChargingFirmware :
     override fun subscribeObservers() {
         binding.btnOnCharger.invisible()
         sessionManager.isRingCharging.observe(this) {
-            if(it){
+            if (it) {
                 binding.btnOnCharger.visible()
-            }else{
+            } else {
                 binding.btnOnCharger.invisible()
             }
         }
