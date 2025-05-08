@@ -59,6 +59,8 @@ class DeviceSetupSharedViewModel @Inject constructor(
     val updateProgress2 = MutableLiveData<Int>(0)
     val updateProgress3 = MutableLiveData<Int>(0)
 
+    var startUpdate = MutableLiveData<Event<Boolean>>()
+
 
     fun checkOtaVersionServer(pair: Pair<Int, Int>) {
         viewModelScope.launch(Dispatchers.IO) {
