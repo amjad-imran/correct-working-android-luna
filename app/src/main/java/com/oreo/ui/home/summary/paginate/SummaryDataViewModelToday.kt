@@ -1930,81 +1930,84 @@ class SummaryDataViewModelToday @Inject constructor(
         val currentTime = DateFormats.getTimeFormat()
         val isBefore8 = DateFormats.isTimeBefore(currentTime, "20:00")
 
+        priorityList.add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
                     if(hasSleep){
-                        add(itemsMap["readiness"]!!.copy(priority = 1))
-                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
-                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                         if(isAfter12.not()){
-                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                            add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
                     } else {
-                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
-                        add(itemsMap["sleep"]!!.copy(priority = 2))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     }
 
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 5))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
             }
 
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
                     if(hasSleep){
-                        add(itemsMap["readiness"]!!.copy(priority = 1))
-                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
-                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                         if(isAfter12.not()){
-                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                            add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
                     }else{
-                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
-                        add(itemsMap["sleep"]!!.copy(priority = 2))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     }
 
-                    add(itemsMap["activity"]!!.copy(priority = 5))
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 6))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
             }
 
             2 -> { // Evening (balanced)
                 priorityList.apply {
                     if(hasSleep){
-                        add(itemsMap["readiness"]!!.copy(priority = 1))
-                        add(itemsMap["luna_ai"]!!.copy(priority = 2))
-                        add(itemsMap["sleep"]!!.copy(priority = 3))
+                        add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+
                         if (isAfter12.not()) {
-                            add(itemsMap["health_monitor"]!!.copy(priority = 4))
+                            add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
                     }else{
-                        add(itemsMap["luna_ai"]!!.copy(priority = 1))
-                        add(itemsMap["sleep"]!!.copy(priority = 2))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     }
 
-                    add(itemsMap["activity"]!!.copy(priority = 5))
-                    add(itemsMap["sleep_planner"]!!.copy(priority = 6))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
             }
 
             else -> { // Default/Night
                 priorityList.apply {
                     if (isBefore8.not()) {
-                        add(itemsMap["sleep_planner"]!!.copy(priority = 1))
+                        add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                     }
-                    add(itemsMap["activity"]!!.copy(priority = 2))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+
                     if (enableAi) {
-                        add(itemsMap["luna_ai"]!!.copy(priority = 3))
+                        add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                     }
                     if (isBefore8) {
-                        add(itemsMap["sleep_planner"]!!.copy(priority = 4))
+                        add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                     }
                     if (registerDate != 0) {
-                        add(itemsMap["sleep"]!!.copy(priority = 5))
-                        add(itemsMap["readiness"]!!.copy(priority = 6))
+                        add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                     }
                     if (!isAfter12) {
-                        add(itemsMap["health_monitor"]!!.copy(priority = 7))
+                        add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     }
                 }
             }
@@ -2012,15 +2015,15 @@ class SummaryDataViewModelToday @Inject constructor(
 
         priorityList.apply {
             if (isAfter12) {
-                add(itemsMap["health_monitor"]!!.copy(priority = 8))
+                add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
             }
-            add(itemsMap["daily_goals"]!!.copy(priority = 9))
-            add(itemsMap["stress"]!!.copy(priority = 10))
-            add(itemsMap["heart_rate"]!!.copy(priority = 11))
-            add(itemsMap["cycle_tracker"]!!.copy(priority = 12))
-            add(itemsMap["7_day_trends_card"]!!.copy(priority = 13))
-            add(itemsMap["workout_history"]!!.copy(priority = 14))
-            add(itemsMap["caffeine_intake"]!!.copy(priority = 15))
+            add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
+            add(itemsMap["stress"]!!.copy(priority = priorityList.size))
+            add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+            add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
+            add(itemsMap["7_day_trends_card"]!!.copy(priority = priorityList.size))
+            add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
+
         }
 
         return priorityList
