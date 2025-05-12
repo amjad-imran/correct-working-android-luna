@@ -100,10 +100,15 @@ class FindDeviceListFragment :
         binding.lScanning.setAnimation(R.raw.anim_device_default)
         binding.lScanning.playAnimation()*/
 
-        setVideo(
+
+        binding.imgOnBoard.visible()
+        binding.videoOnboard.gone()
+        binding.imgOnBoard.setImageResource(R.drawable.image_ring_connect)
+
+        /*setVideo(
             "android.resource://" + requireContext().packageName + "/" +
                     R.raw.video_find_ring
-        )
+        )*/
 
 
         viewModel.clearScannedDeviceList()
@@ -403,15 +408,15 @@ class FindDeviceListFragment :
 //            navigate(R.id.troubleShootBottomSheetFragment, bundleOf("showLastLocation" to false))
         }
 
-        var displayTroubleshoot = false
+        var refreshCount = 0
         binding.ivRefresh.setOnClickListener {
-            if(!displayTroubleshoot){
+            if(refreshCount==1){
                 binding.tvTroubleShoot.text = getString(R.string.text_let_s_troubleshoot)
                 binding.tvTroubleShoot.visible()
                 binding.imageView75.visible()
             }
-            displayTroubleshoot = true
             viewModel.fetchDeviceList()
+            refreshCount++
         }
 
         binding.backBtn.setOnClickListener {
@@ -450,6 +455,8 @@ class FindDeviceListFragment :
                 binding.textView.text = getString(R.string.text_let_s_find_your_ring)
                 binding.textView2.text =
                     getString(R.string.text_ensure_your_ring_is_placed_on_the_charger)
+                binding.imgOnBoard.gone()
+                binding.videoOnboard.visible()
 
                 setVideo(
                     "android.resource://" + requireContext().packageName + "/" +
