@@ -232,9 +232,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )*/
-            /*val device = getDeviceConnected()
+            val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
-            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+            /*stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
@@ -1283,7 +1283,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     bedTime = it.bedTime,
                     caffeineStartTime = it.caffeineStartTime,
                     caffeineEndTime = it.caffeineEndTime,
-                    caffeineValues = caffeineValues
+                    caffeineValues = caffeineValues,
                 )
             )
         }
@@ -1310,8 +1310,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun getMaxQuantityAndMessage(data: CaffeineWindowData): Pair<String, Int?> {
 
-        val now = LocalTime.now()
-
         val graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         val  graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         val caffeineStart =
@@ -1333,20 +1331,32 @@ class SummaryDataViewModelToday @Inject constructor(
             )
         )
 
+        val todayDate = LocalDate.now()
+        val now = LocalDateTime.now()
+
+        val graphStartDate = LocalDateTime.of(todayDate,graphStart)
+        val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
+        val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+        val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
+            LocalDateTime.of(todayDate,graphEnd)
+        } else {//Next day case
+            LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+        }
+
         var highlightState: HighlightState? = null
         var message: String? = null
         when {
-            now in graphStart..caffeineStart -> {
+            now in graphStartDate..caffeineStartDate -> {
                 message = messageList[0][Random.nextInt(0, 2)]
                 highlightState = HighlightState.START
             }
 
-            now in caffeineStart..caffeineEnd -> {
+            now in caffeineStartDate..caffeineEndDate -> {
                 message = messageList[1][Random.nextInt(0, 2)]
                 highlightState = HighlightState.CAFFEINE
             }
 
-            now in caffeineEnd..graphEnd -> {
+            now in caffeineEndDate..graphEndDate -> {
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
@@ -1359,7 +1369,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val highlightedIndex = getTimeIndex(
             caffeineStart!!,
             caffeineEnd!!,
-            now,
+            LocalTime.now(),
             data.caffeineValues.size
         )
 

@@ -17,6 +17,8 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.dpToPixel
 import com.oreo.data.model.CaffeineWindowData
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -400,8 +402,21 @@ class CaffeineGraphView : View {
         var caffeineWeight = caffeineDuration / totalDuration
         var endWeight = endDuration / totalDuration
 
+
+        val todayDate = LocalDate.now()
+        val nowDateTime = LocalDateTime.now()
+
+        val graphStartDate = LocalDateTime.of(todayDate,graphStart)
+        val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
+        val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+        val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
+            LocalDateTime.of(todayDate,graphEnd)
+        } else {//Next day case
+            LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+        }
+
         when {
-            now in graphStart..caffeineStart -> {
+            nowDateTime in graphStartDate..caffeineStartDate -> {
                 startWeight = 0.5f
                 val remaining = 1f - startWeight
                 val sum = caffeineDuration + endDuration
@@ -410,7 +425,7 @@ class CaffeineGraphView : View {
                 highlightState = HighlightState.START
             }
 
-            now in caffeineStart..caffeineEnd -> {
+            nowDateTime in caffeineStartDate..caffeineEndDate -> {
                 caffeineWeight = 0.5f
                 val remaining = 1f - caffeineWeight
                 val sum = startDuration + endDuration
@@ -419,7 +434,7 @@ class CaffeineGraphView : View {
                 highlightState = HighlightState.CAFFEINE
             }
 
-            now in caffeineEnd..graphEnd -> {
+            nowDateTime in caffeineEndDate..graphEndDate -> {
                 endWeight = 0.5f
                 val remaining = 1f - endWeight
                 val sum = startDuration + caffeineDuration

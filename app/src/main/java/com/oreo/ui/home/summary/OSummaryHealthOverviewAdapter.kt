@@ -90,6 +90,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -2890,25 +2892,38 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 LocalTime.parse(dataa.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
             val caffeineEnd = LocalTime.parse(dataa.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
 
-            val now = LocalTime.now()
+
+            val todayDate = LocalDate.now()
+            val now = LocalDateTime.now()
+
+            val graphStartDate = LocalDateTime.of(todayDate,graphStart)
+            val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
+            val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+            val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
+                LocalDateTime.of(todayDate,graphEnd)
+            } else {//Next day case
+                LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+            }
+
+
             when {
-                now in graphStart..caffeineStart -> {
+                now in graphStartDate..caffeineStartDate -> {
                     binding.tvState.apply {
-                        text = context.getString(R.string.text_open)
+                        text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
 
-                now in caffeineStart..caffeineEnd -> {
+                now in caffeineStartDate..caffeineEndDate -> {
                     binding.tvState.apply {
                         text = context.getString(R.string.text_open)
                         setTextColor("#0EF377".toColorInt())
                     }
                 }
 
-                now in caffeineEnd..graphEnd -> {
+                now in caffeineEndDate..graphEndDate -> {
                     binding.tvState.apply {
-                        text = context.getString(R.string.text_open)
+                        text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
