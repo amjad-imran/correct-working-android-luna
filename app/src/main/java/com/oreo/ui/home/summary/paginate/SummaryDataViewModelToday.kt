@@ -1149,12 +1149,15 @@ class SummaryDataViewModelToday @Inject constructor(
                         )?.let { userActivities.add(it) }
 
                         if(!lunaManaged){
-                            LOGS.d("isAfter12:  ${isAfter12.not()}")
+                            getHealthMonitorData(healthData.sleep)?.let {
+                                userActivities.add(it)
+                            }
+                            /*LOGS.d("isAfter12:  ${isAfter12.not()}")
                             if (isAfter12.not()) {
                                 getHealthMonitorData(healthData.sleep)?.let {
                                     userActivities.add(it)
                                 }
-                            }
+                            }*/
                         }
 
                         if (nap.isNotEmpty()) {

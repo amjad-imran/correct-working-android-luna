@@ -1948,5 +1948,7 @@
     <string name="text_sleep_health_monitor">睡眠与健康监测</string>
     <string name="text_google_fit_message">这些数据控制设置允许您读取和写入 Google Fit 上的数据。</string>
     <string name="text_data_sharing">数据共享</string>
+    <string name="text_place_ring_charging">请在开始固件更新前将戒指放在充电器上。</string>
+    <string name="text_it_s_on_the_charger">已经放在充电器上了</string>
 
 </resources>

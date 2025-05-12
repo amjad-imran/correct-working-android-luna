@@ -1954,5 +1954,7 @@
     <string name="text_sleep_health_monitor">Slaap- en gezondheidsmonitor</string>
     <string name="text_google_fit_message">Met deze gegevensinstellingen kun je GEGEVENS LEZEN en SCHRIJVEN op Google Fit.</string>
     <string name="text_data_sharing">Gegevensdeling</string>
+    <string name="text_place_ring_charging">Plaats je ring op de oplader voordat je de firmware-update start.</string>
+    <string name="text_it_s_on_the_charger">Hij ligt op de oplader</string>
 
 </resources>

@@ -1978,5 +1978,7 @@
     <string name="text_sleep_health_monitor">Monitor de Sono e Saúde</string>
     <string name="text_google_fit_message">Essas configurações de dados permitem LER e ESCREVER dados no Google Fit.</string>
     <string name="text_data_sharing">Compartilhamento de dados</string>
+    <string name="text_place_ring_charging">Coloque seu anel no carregador antes de iniciar a atualização do firmware.</string>
+    <string name="text_it_s_on_the_charger">Está no carregador</string>
 
 </resources>

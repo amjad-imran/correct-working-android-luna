@@ -2073,4 +2073,7 @@ onjour, Luna"</string>
     <string name="text_google_fit_message">Ces paramètres de données permettent de LIRE et d\'ÉCRIRE des données sur Google Fit.</string>
     <string name="text_data_sharing">Partage de données</string>
 
+    <string name="text_place_ring_charging">Veuillez placer votre bague sur le chargeur avant de commencer la mise à jour du firmware.</string>
+    <string name="text_it_s_on_the_charger">Elle est sur le chargeur</string>
+
 </resources>

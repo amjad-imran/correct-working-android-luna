@@ -96,6 +96,7 @@
     <string name="text_update_watchface">Update watch face</string>
     <string name="text_similar_watchfaces">Similar watch faces</string>
     <string name="text_lets_go">Create now</string>
+
     <string name="text_design_own_watchface">Show your creativity and design your own watch faces</string>
     <string name="text_customise_watchface">Customise Watchface</string>
     <string name="text_custom_watchface">Custom watch face</string>
@@ -1386,7 +1387,7 @@
     <string name="text_active_calories_lc">active calories</string>
     <string name="text_last_measured_value">Last measured %1$s</string>
     <string name="text_tap_to_learn_more_about_your_sleep">Tap to learn more about your sleep</string>
-    <string name="text_luna_ai">Luna ai</string>
+    <string name="text_luna_ai">Luna AI</string>
     <string name="text_resp">Resp.</string>
     <string name="text_rhr">RHR</string>
     <string name="text_temp_dot">Temp.</string>
@@ -1955,5 +1956,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="troubleshoot_desc_5">Let’s try to hard reset your ring. Follow the steps below</string>
     <string name="text_tell_us_what_happened">Tell us What Happened:</string>
     <string name="text_irregularity_events">Irregularity Events</string>
+    <string name="text_place_ring_charging">Please place your ring on the charger before starting the firmware update</string>
+    <string name="text_it_s_on_the_charger">It\'s on the charger</string>
 
 </resources>

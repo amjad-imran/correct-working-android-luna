@@ -11,6 +11,9 @@ import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImageWithCache
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 
 class UpdateAvailableFragment :
     BaseFragment<FragmentUpdateAvailableBinding>(FragmentUpdateAvailableBinding::inflate) {
@@ -30,6 +33,8 @@ class UpdateAvailableFragment :
         )
 
         viewModel.updateProgress1.postValue(100)
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+
     }
 
     override fun initListener() {
@@ -39,19 +44,30 @@ class UpdateAvailableFragment :
 
 
         binding.btnUpdateNow.setOnClickListener {
-
-            val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
-            if (battery != 0) {
-                if (battery <= viewModel.getMinBatteryPercent()
-                ) {
-                    showBatteryWarning()
-                    return@setOnClickListener
-                }
-            }
-
-
-            navigate(UpdateAvailableFragmentDirections.navigateToUpdateFrag())
+            onUpdateNowClicked()
         }
+    }
+
+    private fun onUpdateNowClicked(){
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+
+        val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+        if (battery != 0) {
+            if (battery <= viewModel.getMinBatteryPercent()
+            ) {
+                showBatteryWarning()
+                return
+            }
+        }
+        val isCharging = viewModel.sessionManager.isRingCharging.value?:false
+
+        if(isCharging.not() && battery!=100){
+            showNotChargingDialog()
+            return
+        }
+
+
+        navigate(UpdateAvailableFragmentDirections.navigateToUpdateFrag())
     }
 
     private fun showBatteryWarning() {
@@ -64,7 +80,24 @@ class UpdateAvailableFragment :
         navigate(R.id.bottomSheetLowBatteryFirmware)
     }
 
+    private fun showNotChargingDialog() {
+        navigate(R.id.bottomSheetNotCharingFirmware)
+    }
+
     override fun subscribeObservers() {
+
+        setFragmentResultListener(BATTERY_CHARGE_FIRMWARE) { _, bundle ->
+            val start = bundle.getBoolean("start")
+            if (start) {
+                viewModel.startUpdate.postValue(Event(true))
+            }
+        }
+
+        viewModel.startUpdate.observe(this){
+            it.getContent()?.let {
+                this@UpdateAvailableFragment.navigate(UpdateAvailableFragmentDirections.navigateToUpdateFrag())
+            }
+        }
 
     }
 
