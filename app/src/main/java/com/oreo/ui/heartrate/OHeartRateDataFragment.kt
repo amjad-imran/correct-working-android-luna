@@ -36,6 +36,7 @@ import com.oreo.ui.custom.Item
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class OHeartRateDataFragment :
@@ -306,17 +307,49 @@ class OHeartRateDataFragment :
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
+
+            // Get the RecyclerView and configure nested scrolling
+            (getChildAt(0) as? RecyclerView)?.let { recyclerView ->
+                recyclerView.apply {
+                    isNestedScrollingEnabled = true
+
+                    overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+                    addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                        private var initialY = 0f
+
+                        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                            when (e.action) {
+                                MotionEvent.ACTION_DOWN -> {
+                                    initialY = e.y
+
+                                    parent.requestDisallowInterceptTouchEvent(false)
+                                }
+                                MotionEvent.ACTION_MOVE -> {
+                                    val dy = e.y - initialY
+                                    if (abs(dy) > 10) {
+
+                                        parent.requestDisallowInterceptTouchEvent(false)
+                                    } else {
+
+                                        parent.requestDisallowInterceptTouchEvent(true)
+                                    }
+                                }
+                            }
+                            return false
+                        }
+
+                        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+                    })
+                }
+            }
+
             setPageTransformer(CompositePageTransformer().apply {
                 addTransformer(MarginPageTransformer(40))
             })
 
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            (getChildAt(0) as RecyclerView).apply {
-                val padding = resources.getDimensionPixelOffset(R.dimen.dimen_4dp)
-                setPadding(padding, 0, padding, 0)
-                clipToPadding = false
-            }
-
             adapter = winsAdapter
         }
 
