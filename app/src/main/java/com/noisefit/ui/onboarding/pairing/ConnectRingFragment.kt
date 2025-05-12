@@ -16,7 +16,7 @@ class ConnectRingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.videoOnboard.apply {
+       /* binding.videoOnboard.apply {
             setVideoURI(
                 Uri.parse(
                     "android.resource://" + requireContext().packageName + "/" +
@@ -25,20 +25,20 @@ class ConnectRingFragment :
             )
             setOnPreparedListener { mp -> mp.isLooping = true }
             start()
-        }
+        }*/
     }
 
 
     override fun onPause() {
         super.onPause()
-        currentPosition = binding.videoOnboard.currentPosition
-        binding.videoOnboard.pause()
+        /*currentPosition = binding.videoOnboard.currentPosition
+        binding.videoOnboard.pause()*/
     }
 
     override fun onResume() {
         super.onResume()
-        binding.videoOnboard.seekTo(currentPosition)
-        binding.videoOnboard.start()
+        /*binding.videoOnboard.seekTo(currentPosition)
+        binding.videoOnboard.start()*/
     }
 
 

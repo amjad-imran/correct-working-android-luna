@@ -81,7 +81,7 @@
                         android:id="@+id/imgOnBoard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_refresh_device_list_frag"
+                        android:src="@drawable/image_ring_connect"
                         android:visibility="gone" />
 
                     <VideoView
@@ -124,6 +124,7 @@
                     android:textSize="12sp"
                     android:visibility="gone"
                     app:backgroundTint="@null"
+                    app:iconTint="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/tvDevicesFound"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tvDevicesFound"
