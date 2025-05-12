@@ -206,7 +206,7 @@ class CaffeineGraphView : View {
                 segment3Start + endBarWidth / 2,
                 barCenterYPos - 8f.dpToPixel()
             )
-        }else{
+        } else {
             val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
             val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
             canvas.drawText(
@@ -225,7 +225,6 @@ class CaffeineGraphView : View {
         )
 
 
-
         val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
         val textWidthEnd = textPaint.measureText(endText, 0, endText.length)
         canvas.drawText(
@@ -233,7 +232,12 @@ class CaffeineGraphView : View {
             barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
         )
 
-        canvas.drawBitmap(moonRiseBitmap, segment3End-textWidthEnd - 14f.dpToPixel(), barCenterYPos + 8f.dpToPixel(), barPaintDefault)
+        canvas.drawBitmap(
+            moonRiseBitmap,
+            segment3End - textWidthEnd - 14f.dpToPixel(),
+            barCenterYPos + 8f.dpToPixel(),
+            barPaintDefault
+        )
 
         drawBars(
             startBarWidth,
@@ -343,7 +347,12 @@ class CaffeineGraphView : View {
 
         if (highlightedIndex != -1) {
             val left = startX + highlightedIndex * (barWidth + spacing)
-            drawTooltip(canvas, left, highlightedBarTop, "Upto ${caffeineDataList[highlightedIndex]} mg")
+            drawTooltip(
+                canvas,
+                left,
+                highlightedBarTop,
+                "Upto ${caffeineDataList[highlightedIndex]} mg"
+            )
         }
     }
 
@@ -376,7 +385,14 @@ class CaffeineGraphView : View {
 
         val startDuration = Duration.between(graphStart, caffeineStart).toMinutes().toFloat()
         val caffeineDuration = Duration.between(caffeineStart, caffeineEnd).toMinutes().toFloat()
-        val endDuration = Duration.between(caffeineEnd, graphEnd).toMinutes().toFloat()
+
+
+        val endDuration = if (caffeineEnd <= graphEnd) {//same day case
+            Duration.between(caffeineEnd, graphEnd).toMinutes().toFloat()
+        } else {//Next day case
+            (Duration.between(caffeineEnd, LocalTime.of(23, 59)).toMinutes()
+                .toFloat() + Duration.between(LocalTime.of(0, 0), graphEnd).toMinutes().toFloat())
+        }
 
         val totalDuration = startDuration + caffeineDuration + endDuration
 

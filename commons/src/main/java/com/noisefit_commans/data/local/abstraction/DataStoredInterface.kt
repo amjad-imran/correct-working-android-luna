@@ -23,7 +23,7 @@ interface DataStoredInterface {
     fun getCustomHomeScreenItemsPriorityList(): CustomHomeScreenModel?
     fun clearCustomHomeScreenItemsPriorityList()
 
-    fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel)
+    fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel?)
     fun getCaffeineGraphData(): CaffeineGraphDataModel?
     fun clearCaffeineGraphData()
 

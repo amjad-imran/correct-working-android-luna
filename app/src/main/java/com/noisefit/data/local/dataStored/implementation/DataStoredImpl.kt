@@ -571,8 +571,12 @@ class DataStoredImpl
         mPrefs.edit()?.remove(CUSTOMIZE_HOME_SCREEN)?.commit()
     }
 
-    override fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel) {
-        mPrefs.edit()?.putString(CAFFEINE_GRAPH_DATA, gson.toJson(caffeineGraphData))?.apply()
+    override fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel?) {
+        if(caffeineGraphData==null){
+            mPrefs.edit()?.remove(CAFFEINE_GRAPH_DATA)?.commit()
+        }else{
+            mPrefs.edit()?.putString(CAFFEINE_GRAPH_DATA, gson.toJson(caffeineGraphData))?.commit()
+        }
     }
 
     override fun getCaffeineGraphData(): CaffeineGraphDataModel? {

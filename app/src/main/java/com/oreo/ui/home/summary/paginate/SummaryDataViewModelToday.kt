@@ -1240,7 +1240,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "caffeine_intake" -> {
+                        LOGS.d("sdfjhskdjfhsdkf")
                         getCaffeineCardData()?.let {
+                            LOGS.d("sdfjhskdjfhsdkf caffiene data")
                             userActivities.add(it)
                         }
                     }
@@ -1272,7 +1274,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val data = caffeineGraphData?.let {
             val caffeineValues = ArrayList<Int>()
             caffeineGraphData!!.caffeine_window.forEach {
-                caffeineValues.add(it.time.toInt())
+                caffeineValues.add(it.dose)
             }
 
             OHealthOverview.CaffeineWindow(

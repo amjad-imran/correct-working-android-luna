@@ -174,8 +174,8 @@ class OreoUserActivityRepositoryImpl(
             var enableAi: Boolean? = null
             var tempBaseLine: Float? = null
             //
-            var customHomeScreenData : CustomHomeScreenModel ?= null
-            var caffeineGraphData : CaffeineGraphDataModel?= null
+            var customHomeScreenData: CustomHomeScreenModel? = null
+            var caffeineGraphData: CaffeineGraphDataModel? = null
             //
 
             var apiStartDate: String? = startDate
@@ -311,14 +311,18 @@ class OreoUserActivityRepositoryImpl(
                             caffeineGraphData = response.caffeine
 
                             ringDataStore.setFirstStressDay(response.firstStress)
-                            ringDataStore.setCannyState(response.enableCanny?:false)
+                            ringDataStore.setCannyState(response.enableCanny ?: false)
                             ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setEnableAiState(response.enableAi ?: false)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
-                            customHomeScreenData?.let { localDataStore.setCustomHomeScreenItemsPriorityList(it) }
-                            caffeineGraphData?.let { localDataStore.setCaffeineGraphData(it) }
+                            customHomeScreenData?.let {
+                                localDataStore.setCustomHomeScreenItemsPriorityList(
+                                    it
+                                )
+                            }
+                            localDataStore.setCaffeineGraphData(caffeineGraphData)
                         }
                     }
                 }
@@ -364,7 +368,8 @@ class OreoUserActivityRepositoryImpl(
                                             firstStress = firstStress,
                                             stressBeta = stressBeta,
                                             enableAi = enableAi,
-                                            customScreen = customHomeScreenData
+                                            customScreen = customHomeScreenData,
+                                            caffeine = caffeineGraphData
                                         ),
                                         message = "",
                                     )
@@ -1681,7 +1686,7 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/record-workout/$workoutId"
-            remoteDataSource.updateWorkoutDistance(url,request)
+            remoteDataSource.updateWorkoutDistance(url, request)
         }
     }
 
