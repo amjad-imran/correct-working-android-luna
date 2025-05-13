@@ -23,41 +23,66 @@ import com.oreo.ui.activity.OreoActivityBannerFragment
 import com.oreo.ui.activity.SLEEP_ACTIVITY_BANNER
 import com.oreo.ui.readiness.NudgeBannerListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 const val HEART_RATE_IRREGULARITY_EVENTS_BANNER = "HEART_RATE_IRREGULARITY_EVENTS_BANNER"
 
 @AndroidEntryPoint
 class IrregularityEventsOHeartRateDataFragment :
-    BaseFragment<FragmentIrregularityEventsOHeartRateDataBinding>(FragmentIrregularityEventsOHeartRateDataBinding::inflate) {
+    BaseFragment<FragmentIrregularityEventsOHeartRateDataBinding>(
+        FragmentIrregularityEventsOHeartRateDataBinding::inflate
+    ) {
 
-    private var bannerData: IrregularEventsChipsListModel? = null
+    private var data: IrregularEventsChipsListModel? = null
     private var listener: IrregularityEventsBannerListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            bannerData = it.getParcelable(HEART_RATE_IRREGULARITY_EVENTS_BANNER)
+            data = it.getParcelable(HEART_RATE_IRREGULARITY_EVENTS_BANNER)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUi(bannerData)
+        data?.let {
+            setUi(it)
+        }
     }
 
-    private fun setUi(bannerData: IrregularEventsChipsListModel?) {
-        if (bannerData != null) {
-            setIrregularityEventsChips(bannerData.irregularEventsChipsList)
-        }
+    private fun minutesToAmPm(minutes: Int): String {
+        val hours = minutes / 60
+        val mins = minutes % 60
+        val time = LocalTime.of(hours, mins)
+        val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
+        return time.format(formatter)
+    }
+
+    private fun setUi(data: IrregularEventsChipsListModel) {
+        binding.tvMessage.text = getString(R.string.text_hr_spiked_by_value,data.alert.spikePercent?:0)
+        binding.tvTime.text = minutesToAmPm(data.alert.minutes)
+
+        setIrregularityEventsChips(data.irregularEventsChipsList)
     }
 
     override fun initListener() {
         binding.btnSubmit.setOnClickListener {
-            listener?.onSubmitBtnClicked()
+            data?.let {
+                listener?.onSubmitBtnClicked(it)
+            }
         }
 
         binding.imgChatEtx.setOnClickListener {
-            listener?.onSubmitBtnClicked()
+            data?.let {
+                listener?.onSubmitBtnClicked(it)
+            }
+        }
+        binding.ivClose.setOnClickListener {
+            data?.let {
+                listener?.onCrossClicked(it)
+            }
         }
     }
 
@@ -88,7 +113,6 @@ class IrregularityEventsOHeartRateDataFragment :
                 mChip.text = item.displayName
                 mChip.tag = item.key
 
-                // Create a ColorStateList programmatically
                 val states = arrayOf(
                     intArrayOf(android.R.attr.state_checked),  // Checked state
                     intArrayOf(-android.R.attr.state_checked)   // Unchecked state
@@ -105,18 +129,18 @@ class IrregularityEventsOHeartRateDataFragment :
                 // Apply the color state list to the chip
                 mChip.chipBackgroundColor = colorStateList
 
-                val paddingDp = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
+                /*val paddingDp = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 4F, resources.displayMetrics
                 )
-                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)
+                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*/
                 mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
 //                    mViewModel.updateChipSelection(item.key, isChecked)
-                    if(mChip.tag.toString().equals("other")){
-                        if(isChecked){
+                    if (mChip.tag.toString().equals("others")) {
+                        if (isChecked) {
                             binding.chatEtx.visible()
                             binding.imgChatEtx.visible()
                             binding.btnSubmit.gone()
-                        }else{
+                        } else {
                             binding.chatEtx.gone()
                             binding.imgChatEtx.gone()
                             binding.btnSubmit.visible()
@@ -137,5 +161,6 @@ class IrregularityEventsOHeartRateDataFragment :
 }
 
 interface IrregularityEventsBannerListener {
-    fun onSubmitBtnClicked()
+    fun onSubmitBtnClicked(data:IrregularEventsChipsListModel)
+    fun onCrossClicked(data:IrregularEventsChipsListModel)
 }

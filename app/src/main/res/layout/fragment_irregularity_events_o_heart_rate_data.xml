@@ -44,22 +44,21 @@
                 app:srcCompat="@drawable/bg_irregularity_card_readiness" />
 
             <TextView
-                android:id="@+id/textView167"
+                android:id="@+id/tvMessage"
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="20dp"
-                android:lineHeight="17sp"
-                android:text="Your HRV dropped by 45%"
+                tools:text="Your HRV dropped by 45%"
                 android:textColor="#FFCCCC"
-                app:layout_constraintEnd_toStartOf="@+id/imageView77"
+                app:layout_constraintEnd_toStartOf="@+id/ivClose"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView77"
+                android:id="@+id/ivClose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -79,14 +78,14 @@
                 app:srcCompat="@drawable/img_heartrate_irregularity_pulses" />
 
             <TextView
-                android:id="@+id/textView166"
+                android:id="@+id/tvTime"
                 style="@style/S16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="10:34 pm"
-                app:layout_constraintStart_toStartOf="@+id/textView167"
-                app:layout_constraintTop_toBottomOf="@+id/textView167" />
+                tools:text="10:34 pm"
+                app:layout_constraintStart_toStartOf="@+id/tvMessage"
+                app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
 
             <TextView
                 android:id="@+id/textView168"
@@ -95,12 +94,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
-                android:lineHeight="24sp"
                 android:text="@string/text_tell_us_what_happened"
                 android:textColor="#DC8282"
-                app:layout_constraintEnd_toEndOf="@+id/textView167"
+                app:layout_constraintEnd_toEndOf="@+id/tvMessage"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView166" />
+                app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipsPrograms"
@@ -110,8 +108,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
-                android:paddingStart="@dimen/text_margin"
-                android:paddingEnd="@dimen/text_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

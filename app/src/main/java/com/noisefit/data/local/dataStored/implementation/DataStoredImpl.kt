@@ -2,6 +2,7 @@ package com.noisefit.data.local.dataStored.implementation
 
 
 import android.content.SharedPreferences
+import androidx.compose.ui.unit.min
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
@@ -18,6 +19,8 @@ import com.noisefit_commans.data.model.EditHealthOverView
 import com.noisefit_commans.data.model.EndGame
 import com.noisefit_commans.data.model.ExperimentalSettings
 import com.noisefit_commans.data.model.HealthOverviewData
+import com.noisefit_commans.data.model.HrAlert
+import com.noisefit_commans.data.model.HrAlerts
 import com.noisefit_commans.data.model.LocalUserData
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.NplQuizDataModel
@@ -238,6 +241,7 @@ private const val EVENT_SYNC_TIME_END = "EVENT_SYNC_TIME_END"
 private const val EVENT_APP_TIME_START = "EVENT_APP_TIME_START"
 private const val EVENT_APP_TIME_END = "EVENT_APP_TIME_END"
 private const val APP_DEMO_MODE = "APP_DEMO_MODE"
+private const val HR_ALERTS = "HR_ALERTS"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -246,6 +250,64 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveHrAlert(
+        alertPercent:Int,
+        lastMeasuredIndex: Int,
+        lastMeasuredValue: Int,
+        roundedAverage: Int
+    ) {
+        var lastValue = getHrAlerts()
+        val hrData = HrAlert(
+            spikePercent = alertPercent,
+            minutes = lastMeasuredIndex * 5,
+            currentValue = lastMeasuredValue,
+            lastComparedValue = roundedAverage
+        )
+
+        if (lastValue == null) {
+
+            lastValue = HrAlerts(
+                LocalDate.now().toString(),
+                arrayListOf(hrData)
+            )
+            mPrefs.edit()?.putString(HR_ALERTS, gson.toJson(lastValue))?.commit()
+        } else {
+            val filteredData = lastValue.data.find { it.minutes == hrData.minutes }
+            if (filteredData == null) {
+                val list = (lastValue.data as ArrayList)
+                list.add(hrData)
+                lastValue.data = list
+                mPrefs.edit()?.putString(HR_ALERTS, gson.toJson(lastValue))?.commit()
+            }
+        }
+    }
+
+    override fun getHrAlerts(): HrAlerts? {
+        val data = mPrefs.getString(HR_ALERTS, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            val parsedData = gson.fromJson(data, HrAlerts::class.java)
+            return if (parsedData.date.equals(LocalDate.now().toString())) {
+                val nonDeleted = parsedData.data.filter { it.isDeleted==false }
+                if(nonDeleted.size==0){
+                    null
+                }else{
+                    parsedData.apply {
+                        this.data = nonDeleted
+                    }
+                }
+            } else {
+                mPrefs.edit().remove(HR_ALERTS).commit()
+                null
+            }
+        }
+    }
+
+    override fun updateHrAlerts(alerts: HrAlerts) {
+        mPrefs.edit()?.putString(HR_ALERTS, gson.toJson(alerts))?.commit()
+    }
 
     override fun setIsInDemoMode(demoModeState: Boolean) {
         mPrefs.edit().putBoolean(APP_DEMO_MODE, demoModeState).commit()
@@ -271,11 +333,11 @@ class DataStoredImpl
         }
     }
 
-    override fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long,Long>? {
+    override fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long, Long>? {
         val start = mPrefs.getLong(getEventKey(eventName, true), 0)
         val end = mPrefs.getLong(getEventKey(eventName, false), 0)
 
-        return if (start != 0L && end != 0L) Pair(start,end) else null
+        return if (start != 0L && end != 0L) Pair(start, end) else null
     }
 
     private fun getEventKey(eventName: AppTrackEvent, isStart: Boolean): String {
@@ -572,9 +634,9 @@ class DataStoredImpl
     }
 
     override fun setCaffeineGraphData(caffeineGraphData: CaffeineGraphDataModel?) {
-        if(caffeineGraphData==null){
+        if (caffeineGraphData == null) {
             mPrefs.edit()?.remove(CAFFEINE_GRAPH_DATA)?.commit()
-        }else{
+        } else {
             mPrefs.edit()?.putString(CAFFEINE_GRAPH_DATA, gson.toJson(caffeineGraphData))?.commit()
         }
     }

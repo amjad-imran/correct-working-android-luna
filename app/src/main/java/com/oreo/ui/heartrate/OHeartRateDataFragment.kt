@@ -1,39 +1,31 @@
 package com.oreo.ui.heartrate
 
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.graphics.toColorInt
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit_commans.data.model.HrAlert
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
-import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.data.model.IrregularEventsChipsListModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.data.model.health.Nudges
 import com.oreo.ui.custom.Item
-import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -57,7 +49,8 @@ class OHeartRateDataFragment :
                             MoEngageLunaAppEvents.article_clicked,
                             HashMap<String, Any>().apply {
                                 this["source"] = getString(R.string.text_heart_rate)
-                                this["article_name"] = getString(R.string.text_general_heart_rate_terms)
+                                this["article_name"] =
+                                    getString(R.string.text_general_heart_rate_terms)
                             }
                         )
                         navigate(R.id.hrArticle1Fragment)
@@ -68,7 +61,8 @@ class OHeartRateDataFragment :
                             MoEngageLunaAppEvents.article_clicked,
                             HashMap<String, Any>().apply {
                                 this["source"] = getString(R.string.text_heart_rate)
-                                this["article_name"] = getString(R.string.text_normal_heart_rate_for_my_age)
+                                this["article_name"] =
+                                    getString(R.string.text_normal_heart_rate_for_my_age)
                             }
                         )
                         navigate(R.id.hrArticle2Fragment)
@@ -79,7 +73,8 @@ class OHeartRateDataFragment :
                             MoEngageLunaAppEvents.article_clicked,
                             HashMap<String, Any>().apply {
                                 this["source"] = getString(R.string.text_heart_rate)
-                                this["article_name"] = getString(R.string.text_what_are_heart_rate_zones)
+                                this["article_name"] =
+                                    getString(R.string.text_what_are_heart_rate_zones)
                             }
                         )
                         navigate(R.id.hrArticle3Fragment)
@@ -90,7 +85,8 @@ class OHeartRateDataFragment :
                             MoEngageLunaAppEvents.article_clicked,
                             HashMap<String, Any>().apply {
                                 this["source"] = getString(R.string.text_heart_rate)
-                                this["article_name"] = getString(R.string.text_heart_rate_during_sleep)
+                                this["article_name"] =
+                                    getString(R.string.text_heart_rate_during_sleep)
                             }
                         )
                         navigate(R.id.hrArticle4Fragment)
@@ -111,38 +107,14 @@ class OHeartRateDataFragment :
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.summaryHealthData = dash.first
                 viewModel.prepareActivityData(dash.first)
-                setUi()
-
+                setUi(it)
+                viewModel.loadAlertsData()
             }
         }
     }
 
-    private fun setUi() {
-        binding.lytIrregularityEvents.tvTitle.text = getString(R.string.text_irregularity_events)
-        setIrregularityEventBannerViewPager(
-            listOf(
-                IrregularEventsChipsListModel(
-                    listOf(
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("other", "other"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                    )
-                ),
-                IrregularEventsChipsListModel(
-                    listOf(
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                        IrregularEventsChipModel("sdbjsd", "bvwuisvksv"),
-                    )
-                )
-            )
-        )
+    private fun setUi(date: String) {
+
         if (viewModel.summaryHealthData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3()))
             viewModel.getTodayHeartRate()
         else
@@ -171,11 +143,13 @@ class OHeartRateDataFragment :
                     if (item.value != 0) {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = item.value.toString()
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text =
+                            getString(R.string.text_bpm_small)
                         binding.lytHeartRate.tvSubtitle1.text = time
                     } else {
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text =
+                            getString(R.string.text_bpm_small)
                         binding.lytHeartRate.tvSubtitle1.text = ""
                     }
                     if (item.maxValue != 0 && item.minValue != 0) {
@@ -239,6 +213,29 @@ class OHeartRateDataFragment :
                 initHeartRateGraph(viewModel.summaryHealthData, it)
             }
         }
+
+        viewModel.hrAlertsData.observe(this){
+            it.getContent()?.let {
+                val date = viewModel.date
+                if(date==null) return@observe
+
+                if (date.equals(viewModel.getTodayDate(), true)) {
+                    val alerts = viewModel.getIrregularityEventsAlerts()
+                    if(alerts!=null && alerts.data.isEmpty().not()){
+                        binding.divider1.root.visible()
+                        binding.lytIrregularityEvents.root.visible()
+                        setIrregularityEventBannerViewPager(
+                            alerts.data)
+                    }else{
+                        binding.divider1.root.gone()
+                        binding.lytIrregularityEvents.root.gone()
+                    }
+                } else {
+                    binding.divider1.root.gone()
+                    binding.lytIrregularityEvents.root.gone()
+                }
+            }
+        }
     }
 
     private fun updateUI(it: OHealthOverview.HeartRateDataModel) {
@@ -286,15 +283,23 @@ class OHeartRateDataFragment :
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
     }
 
-    private fun setIrregularityEventBannerViewPager(data: List<IrregularEventsChipsListModel>?){
+    private fun setIrregularityEventBannerViewPager(data: List<HrAlert>) {
+
+        val parsedData = viewModel.convertAlertsModel(data)
+
+        binding.lytIrregularityEvents.tvTitle.text = getString(R.string.text_irregularity_events)
         val fragments = ArrayList<IrregularityEventsOHeartRateDataFragment>()
-        data?.forEach {
+        parsedData?.forEach {
             fragments.add(IrregularityEventsOHeartRateDataFragment.newInstance(it).apply {
-                setClickListener(object : IrregularityEventsBannerListener{
-                    override fun onSubmitBtnClicked() {
+                setClickListener(object : IrregularityEventsBannerListener {
+                    override fun onSubmitBtnClicked(data: IrregularEventsChipsListModel) {
 
                     }
 
+                    override fun onCrossClicked(data: IrregularEventsChipsListModel) {
+                        viewModel.removeAlert(data)
+                        viewModel.loadAlertsData()
+                    }
                 })
             })
         }
@@ -318,13 +323,17 @@ class OHeartRateDataFragment :
                     addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
                         private var initialY = 0f
 
-                        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                        override fun onInterceptTouchEvent(
+                            rv: RecyclerView,
+                            e: MotionEvent
+                        ): Boolean {
                             when (e.action) {
                                 MotionEvent.ACTION_DOWN -> {
                                     initialY = e.y
 
                                     parent.requestDisallowInterceptTouchEvent(false)
                                 }
+
                                 MotionEvent.ACTION_MOVE -> {
                                     val dy = e.y - initialY
                                     if (abs(dy) > 10) {

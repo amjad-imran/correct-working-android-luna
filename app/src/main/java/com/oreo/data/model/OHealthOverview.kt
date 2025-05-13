@@ -96,44 +96,45 @@ sealed class OHealthOverview {
 //        var measureState: TapMeasureState = TapMeasureState.DEFAULT
 //    ) : OHealthOverview()
     class HeartRateDataModel(
-        var hrCombineModel: HRCombineModel ?= null,
+        var hrCombineModel: HRCombineModel? = null,
         var lastMeasuredValue: Int,
         var lastMeasuredIndex: Int,
         var trendPercent: Int,
         val listData: List<HRModel>? = null,
-        val rawData:List<Int>?=null,
+        val rawData: List<Int>? = null,
         val average: Float,
         var lastTime: String? = "",
         var value: String? = "",
         var maxValues: Int,
         var minValues: Int,
-        var measureState: TapMeasureState = TapMeasureState.DEFAULT
+        var measureState: TapMeasureState = TapMeasureState.DEFAULT,
+        var alertCount: Int = 0,
     ) : OHealthOverview()
 
     //
     data class WorkoutHistoryCardData(
         val workouts: List<OActivityListModal>
-    ): OHealthOverview()
+    ) : OHealthOverview()
 
     data class DailyGoalsCardData(
         var notificationGoals: NotificationGoals
-    ): OHealthOverview()
+    ) : OHealthOverview()
 
     data class SevenDayTrendsCard(
-        val  trendsData: TrendsData?,
+        val trendsData: TrendsData?,
         val chartModelSleep: List<ChartModel>,
         val chartModelActivity: List<ChartModel>,
         val chartModelReadiness: List<ChartModel>,
         val chartModelEmpty: List<ChartModel>
-    ): OHealthOverview()
+    ) : OHealthOverview()
 
     data class StressCard(
         val data: OHealthOverview.StressDashDataModel?,
         val lastMeasuredValue: Pair<Int, Int>,
         val stressStatus: Pair<String, Int>,
         val stressTrend: Int?,
-        val  resourcesProvider: ResourcesProvider
-    ): OHealthOverview()
+        val resourcesProvider: ResourcesProvider
+    ) : OHealthOverview()
     //
 
     class StressDashDataModel(
@@ -208,8 +209,8 @@ data class CaffeineWindowData(
     val caffeineStartTime: String,//HH:mm:ss
     val caffeineEndTime: String,//HH:mm:ss
     val caffeineValues: List<Int>,
-    var message: String?=null,//"sasacas"
-    var maxQuantity: Int?=null//mg
+    var message: String? = null,//"sasacas"
+    var maxQuantity: Int? = null//mg
 ) : Parcelable
 
 data class PeriodCard2(

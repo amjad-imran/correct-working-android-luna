@@ -140,7 +140,8 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnIvHydratePlusClicked : OSummaryHealthOverviewClickEnum()
     object OnEditGoalsCardEditClicked : OSummaryHealthOverviewClickEnum()
 
-    data class OnCaffeineDashCardClicked(val data: CaffeineWindowData): OSummaryHealthOverviewClickEnum()
+    data class OnCaffeineDashCardClicked(val data: CaffeineWindowData) :
+        OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -1477,6 +1478,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             //
+
+
+            if (data.alertCount == 0) {
+                binding.lytHrSpike.root.gone()
+                binding.bInfo.visible()
+            } else {
+                binding.lytHrSpike.root.visible()
+                binding.bInfo.gone()
+            }
         }
     }
 
@@ -2852,8 +2862,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) : HomeRecyclerViewHolder(binding){
-        fun bind(data: OHealthOverview.CaffeineWindow){
+    class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.CaffeineWindow) {
 
             val dataa = data.data
 
@@ -2861,12 +2872,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val context = binding.root.context
 
-            val fullText = dataa.message?:""
+            val fullText = dataa.message ?: ""
             val splitIndex = fullText.indexOf(':')
 
             if (splitIndex != -1) {
                 val startingWords = "${fullText.substring(0, splitIndex)}:"
-                val remainingText = fullText.substring(splitIndex+1)
+                val remainingText = fullText.substring(splitIndex + 1)
 
                 val spannableString = SpannableString(fullText)
 
@@ -2886,23 +2897,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvMessage.text = spannableString
             }
 
-            val graphStart = LocalTime.parse(dataa.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val graphStart =
+                LocalTime.parse(dataa.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
             val graphEnd = LocalTime.parse(dataa.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
             val caffeineStart =
                 LocalTime.parse(dataa.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-            val caffeineEnd = LocalTime.parse(dataa.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val caffeineEnd =
+                LocalTime.parse(dataa.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
 
 
             val todayDate = LocalDate.now()
             val now = LocalDateTime.now()
 
-            val graphStartDate = LocalDateTime.of(todayDate,graphStart)
-            val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
-            val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+            val graphStartDate = LocalDateTime.of(todayDate, graphStart)
+            val caffeineStartDate = LocalDateTime.of(todayDate, caffeineStart)
+            val caffeineEndDate = LocalDateTime.of(todayDate, caffeineEnd)
             val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
-                LocalDateTime.of(todayDate,graphEnd)
+                LocalDateTime.of(todayDate, graphEnd)
             } else {//Next day case
-                LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+                LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
             }
 
 
@@ -2934,7 +2947,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         private fun initListener(data: CaffeineWindowData) {
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked(data))
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked(
+                        data
+                    )
+                )
             }
         }
     }

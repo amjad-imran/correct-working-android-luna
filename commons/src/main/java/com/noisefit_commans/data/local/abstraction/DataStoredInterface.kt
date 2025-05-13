@@ -524,6 +524,10 @@ interface DataStoredInterface {
      * Returns start and end timestamp
      */
     fun getAppTrackEventTime(eventName: AppTrackEvent): Pair<Long,Long>?
+
+    fun saveHrAlert(alertPercent:Int, lastMeasuredIndex: Int, lastMeasuredValue: Int, roundedAverage: Int)
+    fun getHrAlerts(): HrAlerts?
+    fun updateHrAlerts(alerts: HrAlerts)
 }
 
 enum class AppTrackEvent {

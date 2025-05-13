@@ -1,189 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<androidx.constraintlayout.widget.ConstraintLayout
-    style="@style/ModalStyleTransparentOreo"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:paddingBottom="20dp">
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/H5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:text="@string/text_heart_rate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/lytTrend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintStart_toEndOf="@id/textView"
-        app:layout_constraintTop_toTopOf="@id/textView"
-        app:layout_constraintBottom_toBottomOf="@id/textView"
-        layout="@layout/layout_health_trend_comparison"/>
-
-
-    <ImageView
-        android:id="@+id/bInfo"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="@dimen/side_margin"
-        android:gravity="center"
-        android:src="@drawable/ic_arrow_right_cal"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
-        android:adjustViewBounds="true"
-        android:alpha="0.5"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_arrow_right_duotone"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
-
-
-    <com.oreo.ui.custom.HRCombinedChart
-        android:id="@+id/candleChart"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/ModalStyleTransparentOreo"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        lineChart:bottomWith="30dp"
-        lineChart:leftWith="16dp"
-        android:layout_marginStart="16dp"
-        lineChart:chartLineColor="#FFFFFF"
-        lineChart:chartLineWidth="2dp"
-        lineChart:combineTextSize="16sp"
-        lineChart:gridColor="#80FFFFFF"
-        lineChart:highColor="#ff3371"
-        lineChart:layout_constraintEnd_toEndOf="parent"
-        lineChart:layout_constraintStart_toStartOf="parent"
-        lineChart:layout_constraintTop_toBottomOf="@id/textView"
-        lineChart:lowColor="#ff3371"
-        lineChart:mediumColor="#ff3371"
-        lineChart:restLineColor="#40FFFFFF"
-        android:layout_marginEnd="16dp"
-        lineChart:topWith="30dp"
-        lineChart:xMax="100"
-        lineChart:rightWith="30dp"
-        lineChart:xMin="0"
-        lineChart:xTextColor="#FFFFFF"
-        lineChart:xTextSize="11sp"
-        lineChart:yTextSize="11sp" />
+        android:paddingBottom="20dp">
 
-    <!--    <com.github.mikephil.charting.charts.LineChart-->
-    <!--        android:id="@+id/lineChart"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="120dp"-->
-    <!--        android:layout_margin="@dimen/dimen_16dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+        <TextView
+            android:id="@+id/textView"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_heart_rate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytTrend"
+            layout="@layout/layout_health_trend_comparison"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/textView"
+            app:layout_constraintStart_toEndOf="@id/textView"
+            app:layout_constraintTop_toTopOf="@id/textView"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/lytHrSpike"
+            layout="@layout/layout_hr_spike"
+            app:layout_constraintTop_toTopOf="@id/bInfo"
+            app:layout_constraintBottom_toBottomOf="@id/bInfo"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@id/bInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/bInfo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:visibility="visible"
+            android:src="@drawable/ic_arrow_right_cal"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.5"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_arrow_right_duotone"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
 
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimView"
-        android:layout_width="@dimen/dimen_32dp"
-        android:layout_height="@dimen/dimen_32dp"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_24dp"
-        android:contentDescription="@null"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/candleChart"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/anim_heart_measure" />
+        <com.oreo.ui.custom.HRCombinedChart
+            android:id="@+id/candleChart"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            lineChart:bottomWith="30dp"
+            lineChart:chartLineColor="#FFFFFF"
+            lineChart:chartLineWidth="2dp"
+            lineChart:combineTextSize="16sp"
+            lineChart:gridColor="#80FFFFFF"
+            lineChart:highColor="#ff3371"
+            lineChart:layout_constraintEnd_toEndOf="parent"
+            lineChart:layout_constraintStart_toStartOf="parent"
+            lineChart:layout_constraintTop_toBottomOf="@id/textView"
+            lineChart:leftWith="16dp"
+            lineChart:lowColor="#ff3371"
+            lineChart:mediumColor="#ff3371"
+            lineChart:restLineColor="#40FFFFFF"
+            lineChart:rightWith="30dp"
+            lineChart:topWith="30dp"
+            lineChart:xMax="100"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="11sp"
+            lineChart:yTextSize="11sp" />
 
-    <ImageView
-        android:id="@+id/imvHrMeasure"
-        android:layout_width="@dimen/dimen_32dp"
-        android:layout_height="@dimen/dimen_32dp"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_24dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_black_heart_with_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/candleChart" />
+        <!--    <com.github.mikephil.charting.charts.LineChart-->
+        <!--        android:id="@+id/lineChart"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="120dp"-->
+        <!--        android:layout_margin="@dimen/dimen_16dp"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toBottomOf="@+id/textView" />-->
 
-    <TextView
-        android:id="@+id/tvLastMeasure"
-        style="@style/H6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_8dp"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/white_64"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/lottieAnimView"
-        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
-        app:layout_constraintTop_toBottomOf="@+id/tvHeartUnit"
-        tools:ignore="SmallSp"
-        tools:text="Last measured now" />
 
-    <TextView
-        android:id="@+id/tvHeartValue"
-        style="@style/H4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_8dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvHeartUnit"
-        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
-        tools:text="132" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimView"
+            android:layout_width="@dimen/dimen_32dp"
+            android:layout_height="@dimen/dimen_32dp"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:contentDescription="@null"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/candleChart"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_heart_measure" />
 
-    <TextView
-        android:id="@+id/tvHeartUnit"
-        style="@style/Tinny"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/text_bpm_small"
-        app:layout_constraintBottom_toTopOf="@+id/tvLastMeasure"
-        app:layout_constraintStart_toEndOf="@+id/tvHeartValue"
-        app:layout_constraintTop_toTopOf="@+id/lottieAnimView"
-        app:layout_constraintVertical_chainStyle="packed" />
+        <ImageView
+            android:id="@+id/imvHrMeasure"
+            android:layout_width="@dimen/dimen_32dp"
+            android:layout_height="@dimen/dimen_32dp"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_black_heart_with_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/candleChart" />
 
-    <TextView
-        android:id="@+id/tvEmptyConnect"
-        style="@style/Small"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_8dp"
-        android:layout_marginEnd="@dimen/dimen_8dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:text="@string/text_connect_your_device_to_measure"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
-        app:layout_constraintTop_toTopOf="@+id/imvHrMeasure" />
+        <TextView
+            android:id="@+id/tvLastMeasure"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/white_64"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lottieAnimView"
+            app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+            app:layout_constraintTop_toBottomOf="@+id/tvHeartUnit"
+            tools:ignore="SmallSp"
+            tools:text="Last measured now" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvHeartValue"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvHeartUnit"
+            app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+            tools:text="132" />
+
+        <TextView
+            android:id="@+id/tvHeartUnit"
+            style="@style/Tinny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/text_bpm_small"
+            app:layout_constraintBottom_toTopOf="@+id/tvLastMeasure"
+            app:layout_constraintStart_toEndOf="@+id/tvHeartValue"
+            app:layout_constraintTop_toTopOf="@+id/lottieAnimView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tvEmptyConnect"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="@string/text_connect_your_device_to_measure"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+            app:layout_constraintTop_toTopOf="@+id/imvHrMeasure" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,33 +2,36 @@ package com.oreo.ui.heartrate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.HrAlert
+import com.noisefit_commans.data.model.HrAlerts
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.Event
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.HRModel
 import com.oreo.data.model.IrregularEventsChipModel
+import com.oreo.data.model.IrregularEventsChipsListModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.health.Nudges
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class OHeartRateDataViewModel @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val hrDataConvertor: OreoHRDataConvertor,
+    val localDataStore: DataStoredInterface,
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
@@ -37,6 +40,10 @@ class OHeartRateDataViewModel @Inject constructor(
     var summaryHealthData: ServerUserHealthData? = null
     var selectedChipsList = ArrayList<ArrayList<IrregularEventsChipModel>>()
 
+    val hrAlertsData = MutableLiveData<Event<Boolean>>()
+
+
+    private val todayDate = LocalDate.now().toString()
 
     fun getLearnMoreData(): ArrayList<LearnMoreDataModel> {
         val dataList = ArrayList<LearnMoreDataModel>()
@@ -218,6 +225,60 @@ class OHeartRateDataViewModel @Inject constructor(
             }
         }
         activityData = dataList
+    }
+
+    fun getTodayDate(): String {
+        return todayDate
+    }
+
+    fun getIrregularityEventsAlerts(): HrAlerts? {
+        return localDataStore.getHrAlerts()
+    }
+
+    fun convertAlertsModel(data: List<HrAlert>): List<IrregularEventsChipsListModel> {
+
+        val dataList = ArrayList<IrregularEventsChipsListModel>()
+
+        val eventData = listOf(
+            IrregularEventsChipModel(
+                "exercise_or_physical_activity",
+                "Exercise or Physical Activity"
+            ),
+            IrregularEventsChipModel("stress_or_anxiety", "Stress or Anxiety"),
+            IrregularEventsChipModel("feeling_feverish", "Feeling Feverish"),
+            IrregularEventsChipModel(
+                "caffeine_or_stimulant_intake",
+                "Caffeine or Stimulant Intake"
+            ),
+            IrregularEventsChipModel("medications", "Medications"),
+            IrregularEventsChipModel("others", "Other"),
+        )
+
+        data.forEach {
+            dataList.add(
+                IrregularEventsChipsListModel(
+                    eventData,
+                    it
+                )
+            )
+        }
+        return dataList
+    }
+
+    fun loadAlertsData() {
+        hrAlertsData.postValue(Event(true))
+    }
+
+    fun removeAlert(data: IrregularEventsChipsListModel) {
+        val alerts = localDataStore.getHrAlerts()
+        if (alerts == null) return
+
+        val list = (alerts.data as ArrayList)
+
+        val index = list.indexOfFirst { it.minutes == data.alert.minutes }
+        list[index].isDeleted = true
+        alerts.data = list
+        localDataStore.updateHrAlerts(alerts)
     }
 
 

@@ -207,7 +207,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     //
     var userManagedSwitchState = false
-    var caffeineGraphData: CaffeineGraphDataModel?= null
+    var caffeineGraphData: CaffeineGraphDataModel? = null
     //
 
     fun getStressWalkthroughShownStatus(): Boolean {
@@ -1148,7 +1148,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             isAfter12
                         )?.let { userActivities.add(it) }
 
-                        if(!lunaManaged){
+                        if (!lunaManaged) {
                             getHealthMonitorData(healthData.sleep)?.let {
                                 userActivities.add(it)
                             }
@@ -1213,7 +1213,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     "cycle_tracker" -> {
                         val cycleTrackerCard = getCycleTrackerCard()
-                        if (cycleTrackerCard != null){
+                        if (cycleTrackerCard != null) {
                             userActivities.add(cycleTrackerCard)
                             sessionManager.canLogPeriod = true
                         } else {
@@ -1240,9 +1240,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "caffeine_intake" -> {
-                        LOGS.d("sdfjhskdjfhsdkf")
                         getCaffeineCardData()?.let {
-                            LOGS.d("sdfjhskdjfhsdkf caffiene data")
                             userActivities.add(it)
                         }
                     }
@@ -1268,7 +1266,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {
-        if(caffeineGraphData==null){
+        if (caffeineGraphData == null) {
             return null
         }
         val data = caffeineGraphData?.let {
@@ -1298,7 +1296,7 @@ class SummaryDataViewModelToday @Inject constructor(
 //            ),
 //            message = null
 //        )
-        val (message,maxQuantity) = getMaxQuantityAndMessage(data!!.data)
+        val (message, maxQuantity) = getMaxQuantityAndMessage(data!!.data)
 
         data.data.apply {
             this.message = message
@@ -1311,10 +1309,11 @@ class SummaryDataViewModelToday @Inject constructor(
     fun getMaxQuantityAndMessage(data: CaffeineWindowData): Pair<String, Int?> {
 
         val graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val  graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         val caffeineStart =
             LocalTime.parse(data.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
-        val caffeineEnd = LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val caffeineEnd =
+            LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         val messageList = listOf(
             listOf(
@@ -1334,13 +1333,13 @@ class SummaryDataViewModelToday @Inject constructor(
         val todayDate = LocalDate.now()
         val now = LocalDateTime.now()
 
-        val graphStartDate = LocalDateTime.of(todayDate,graphStart)
-        val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
-        val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+        val graphStartDate = LocalDateTime.of(todayDate, graphStart)
+        val caffeineStartDate = LocalDateTime.of(todayDate, caffeineStart)
+        val caffeineEndDate = LocalDateTime.of(todayDate, caffeineEnd)
         val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
-            LocalDateTime.of(todayDate,graphEnd)
+            LocalDateTime.of(todayDate, graphEnd)
         } else {//Next day case
-            LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+            LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
         }
 
         var highlightState: HighlightState? = null
@@ -1362,8 +1361,8 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
-        if(highlightState == HighlightState.START || highlightState == HighlightState.END){
-            return Pair(message?:"", null)
+        if (highlightState == HighlightState.START || highlightState == HighlightState.END) {
+            return Pair(message ?: "", null)
         }
 
         val highlightedIndex = getTimeIndex(
@@ -1373,13 +1372,14 @@ class SummaryDataViewModelToday @Inject constructor(
             data.caffeineValues.size
         )
 
-        return if (highlightedIndex != -1){
-            Pair(message?:"", data.caffeineValues[highlightedIndex])
-        }else{
-            Pair(message?:"", null)
+        return if (highlightedIndex != -1) {
+            Pair(message ?: "", data.caffeineValues[highlightedIndex])
+        } else {
+            Pair(message ?: "", null)
         }
 
     }
+
     fun getTimeIndex(
         startTime: LocalTime,
         endTime: LocalTime,
@@ -1414,17 +1414,17 @@ class SummaryDataViewModelToday @Inject constructor(
 //            Pair(trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg)
 //        )
 //        stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
-            val chartModelSleep = convertIntToChartModel(trendsData?.sleepScoreAvg?.value)
-            val chartModelActivity = convertIntToChartModel(trendsData?.activityScoreAvg?.value)
-            val chartModelReadiness = convertIntToChartModel(trendsData?.readinessScoreAvg?.value)
-            val chartModelEmpty = convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0))
+        val chartModelSleep = convertIntToChartModel(trendsData?.sleepScoreAvg?.value)
+        val chartModelActivity = convertIntToChartModel(trendsData?.activityScoreAvg?.value)
+        val chartModelReadiness = convertIntToChartModel(trendsData?.readinessScoreAvg?.value)
+        val chartModelEmpty = convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0))
         return OHealthOverview.SevenDayTrendsCard(
-                trendsData,
-                chartModelSleep,
-                chartModelActivity,
-                chartModelReadiness,
-                chartModelEmpty
-            )
+            trendsData,
+            chartModelSleep,
+            chartModelActivity,
+            chartModelReadiness,
+            chartModelEmpty
+        )
     }
 
     private fun getCycleTrackerCard(): OHealthOverview? {
@@ -1432,10 +1432,10 @@ class SummaryDataViewModelToday @Inject constructor(
         val (hasDataLoaded, femaleData) = femaleHealthData
 
         if (!hasDataLoaded) return null
-         var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
+        var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
 
 
-        val data =  if (femaleData == null) {
+        val data = if (femaleData == null) {
             if (gender.equals("male", true).not()) {
                 val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
                 if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
@@ -1585,6 +1585,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (device == null) {
                     this.measureState = TapMeasureState.NO_DEVICE
                 }
+
+
+                val alerts = localDataStore.getHrAlerts()
+
+                data.alertCount = alerts?.data?.size ?: 0
             }
         } else {
             null
@@ -1595,6 +1600,15 @@ class SummaryDataViewModelToday @Inject constructor(
 //            }
 //        })
 //        return null
+    }
+
+    private fun saveHrAlert(
+        percent: Int,
+        lastMeasuredIndex: Int,
+        lastMeasuredValue: Int,
+        roundedAverage: Int
+    ) {
+        localDataStore.saveHrAlert(percent, lastMeasuredIndex, lastMeasuredValue, roundedAverage)
     }
 
     suspend fun updateHeartRateCard(): OHealthOverview? {
@@ -1944,11 +1958,11 @@ class SummaryDataViewModelToday @Inject constructor(
         when (daySlot) {
             0 -> { // Morning (focus on sleep and readiness)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
-                        if(isAfter12.not()){
+                        if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
                     } else {
@@ -1962,14 +1976,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
             1 -> { // Afternoon (focus on activity)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
-                        if(isAfter12.not()){
+                        if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
-                    }else{
+                    } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     }
@@ -1981,7 +1995,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
             2 -> { // Evening (balanced)
                 priorityList.apply {
-                    if(hasSleep){
+                    if (hasSleep) {
                         add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
@@ -1989,7 +2003,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
-                    }else{
+                    } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     }
@@ -3248,6 +3262,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
 
+        //saveHrAlert(50, 120, 70)
 
         if (listData.isNullOrEmpty()) return null
 
@@ -3273,6 +3288,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
             val roundedPercentInc = Math.round(percentInc)
+
+            if (roundedPercentInc > 25) {
+                saveHrAlert(roundedPercentInc, lastMeasuredIndex, lastMeasuredValue, roundedAverage)
+            }
 
             return roundedPercentInc
         }
@@ -3391,7 +3410,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             notificationToggleModel = it
-                            localDataStore.setShouldShowSleepNotification(it.sleep_notification?:false)
+                            localDataStore.setShouldShowSleepNotification(
+                                it.sleep_notification ?: false
+                            )
                             getNotificationGoals()
                         }
                     }
