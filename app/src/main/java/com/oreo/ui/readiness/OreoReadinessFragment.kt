@@ -750,15 +750,18 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
-
+            mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString())
+            binding.lytIrregularityEvents.apply {
+                lytSubmittedIrregularityEvents.root.visible()
+                irrEventsCard.visible()
+            }
         }
 
         binding.lytIrregularityEvents.btnSubmit.setOnClickListener {
-            val ids: List<Int> = binding.lytIrregularityEvents.chipsPrograms.checkedChipIds
-//            if (viewModel.problemTypeList.isNotEmpty()) viewModel.problemTypeList.clear()
-            for (id in ids) {
-                val chip: Chip = binding.lytIrregularityEvents.chipsPrograms.findViewById(id)
-//                viewModel.problemTypeList.add(chip.text.toString())
+            mViewModel.submitIrregularityEvents()
+            binding.lytIrregularityEvents.apply {
+                lytSubmittedIrregularityEvents.root.visible()
+                irrEventsCard.visible()
             }
         }
 
@@ -881,13 +884,13 @@ class OreoReadinessFragment :
                 // Apply the color state list to the chip
                 mChip.chipBackgroundColor = colorStateList
 
-                val paddingDp = TypedValue.applyDimension(
+                /*val paddingDp = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
                 )
-                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)
+                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*/
                 mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
                     mViewModel.updateChipSelection(item.key, isChecked)
-                    if(mChip.tag.toString().equals("other")){
+                    if(mChip.tag.toString().equals("others")){
                         if(isChecked){
                             binding.lytIrregularityEvents.chatEtx.visible()
                             binding.lytIrregularityEvents.imgChatEtx.visible()

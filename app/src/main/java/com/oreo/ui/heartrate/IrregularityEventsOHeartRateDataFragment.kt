@@ -38,6 +38,8 @@ class IrregularityEventsOHeartRateDataFragment :
     private var data: IrregularEventsChipsListModel? = null
     private var listener: IrregularityEventsBannerListener? = null
 
+    private val selectedChips = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,13 +72,21 @@ class IrregularityEventsOHeartRateDataFragment :
     override fun initListener() {
         binding.btnSubmit.setOnClickListener {
             data?.let {
-                listener?.onSubmitBtnClicked(it)
+                listener?.onSubmitBtnClicked(it, selectedChips)
+                binding.lytSubmittedIrregularityEvents.root.visible()
+                binding.irrEventsCard.gone()
             }
         }
 
         binding.imgChatEtx.setOnClickListener {
             data?.let {
-                listener?.onSubmitBtnClicked(it)
+                listener?.onSubmitBtnClicked(
+                    it,
+                    selectedChips,
+                    binding.chatEtx.text.toString()
+                )
+                binding.lytSubmittedIrregularityEvents.root.visible()
+                binding.irrEventsCard.gone()
             }
         }
         binding.ivClose.setOnClickListener {
@@ -149,7 +159,9 @@ class IrregularityEventsOHeartRateDataFragment :
                     if (isChecked) {
                         LOGS.d("Checked Chips ${mChip.text}")
                         val name = MiscUtil.addUnderscore(mChip.text.toString())
-//                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_feedback + "_${name}_SELECT")
+                        selectedChips.add(mChip.tag.toString())
+                    }else{
+                        selectedChips.remove(mChip.tag.toString())
                     }
                 }
                 binding.chipsPrograms.addView(mChip)
@@ -161,6 +173,10 @@ class IrregularityEventsOHeartRateDataFragment :
 }
 
 interface IrregularityEventsBannerListener {
-    fun onSubmitBtnClicked(data:IrregularEventsChipsListModel)
+    fun onSubmitBtnClicked(
+        data: IrregularEventsChipsListModel,
+        selectedChips: List<String>,
+        other: String?=null
+    )
     fun onCrossClicked(data:IrregularEventsChipsListModel)
 }

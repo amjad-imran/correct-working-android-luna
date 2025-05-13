@@ -583,6 +583,12 @@ interface NetworkService {
         @Body requestObject: JsonObject,
     ): BaseApiResponse<Any>
 
+    @POST
+    suspend fun submitIrregularityEvents(
+        @Url url: String,
+        @Body requestObject: JsonObject,
+    ): BaseApiResponse<Any>
+
     /**
      * ===================================
      */

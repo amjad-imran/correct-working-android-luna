@@ -225,7 +225,8 @@ class OHeartRateDataFragment :
                         binding.divider1.root.visible()
                         binding.lytIrregularityEvents.root.visible()
                         setIrregularityEventBannerViewPager(
-                            alerts.data)
+                            alerts.data
+                        )
                     }else{
                         binding.divider1.root.gone()
                         binding.lytIrregularityEvents.root.gone()
@@ -292,8 +293,15 @@ class OHeartRateDataFragment :
         parsedData?.forEach {
             fragments.add(IrregularityEventsOHeartRateDataFragment.newInstance(it).apply {
                 setClickListener(object : IrregularityEventsBannerListener {
-                    override fun onSubmitBtnClicked(data: IrregularEventsChipsListModel) {
 
+                    override fun onSubmitBtnClicked(
+                        data: IrregularEventsChipsListModel,
+                        selectedChips: List<String>,
+                        other: String?
+                    ) {
+                        viewModel.onSubmitButtonClickedIrregularityEvents(
+                            selectedChips, other
+                        )
                     }
 
                     override fun onCrossClicked(data: IrregularEventsChipsListModel) {

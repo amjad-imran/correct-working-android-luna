@@ -1959,5 +1959,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_place_ring_charging">Please place your ring on the charger before starting the firmware update</string>
     <string name="text_it_s_on_the_charger">It\'s on the charger</string>
     <string name="text_hr_spiked_by_value">HR spiked by %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Noted! We will keep you posted whenever we find such irregularities.</string>
 
 </resources>

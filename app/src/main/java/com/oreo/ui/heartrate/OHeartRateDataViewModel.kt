@@ -2,10 +2,15 @@ package com.oreo.ui.heartrate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.HrAlert
 import com.noisefit_commans.data.model.HrAlerts
@@ -281,5 +286,56 @@ class OHeartRateDataViewModel @Inject constructor(
         localDataStore.updateHrAlerts(alerts)
     }
 
+    fun onSubmitButtonClickedIrregularityEvents(
+        selectedChips: List<String>,
+        other: String?
+    ) {
+        viewModelScope.launch {
+            val req = JsonObject().apply {
+                this.addProperty("current_feedback_value", Gson().toJson(selectedChips))
+                this.addProperty("type", "hr")
+                if (!other.isNullOrEmpty()){
+                    this.addProperty("other", other)
+                }
+            }
+
+            userRepository.submitIrregularityEvents(req).collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        onSubmitButtonClickedIrregularityEvents(
+                                            selectedChips,
+                                            other
+                                        )
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+//                            goalsUpdated.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

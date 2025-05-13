@@ -195,4 +195,8 @@ interface OreoUserActivityRepository {
 
     suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
+    suspend fun submitIrregularityEvents(
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>>
+
 }

@@ -2176,6 +2176,13 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun submitIrregularityEvents(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher){
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v3/feedback"
+            remoteDataSource.submitIrregularityEvents(url, request)
+        }
+    }
+
     override suspend fun getNotificationGoals(): Flow<Resource<BaseApiResponse<NotificationGoals>>> {
 
         return flow {

@@ -30,6 +30,7 @@ import com.oreo.data.model.Contributor
 import com.oreo.data.model.sleep.HealthTrend
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.repository.abstraction.UserRepository
 
 
 @HiltViewModel
@@ -39,7 +40,8 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val resourcesProvider: ResourcesProvider,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
     var baseTemp: Float? = null
@@ -73,22 +75,53 @@ constructor(
     fun submitIrregularityEvents(optionalMessage: String? = null) {
         viewModelScope.launch {
             try {
-                JsonObject().apply {
-//                    this.add("data", _selectedChips.toList())
-                    this.addProperty("other_data","$optionalMessage")
-                    this.add("data",JsonArray().apply {
-                        this.add("")
-                        this.add("")
-                        this.add("")
-                    })
-            }
+                val req = JsonObject().apply {
+                    this.addProperty("current_feedback_value", Gson().toJson(selectedChips))
+                    this.addProperty("type", "hrv")
+                    optionalMessage?.let {
+                        this.addProperty("other", optionalMessage)
+                    }
+                }
 
-//                val response = repository.submitIrregularityEvents(
-//                    selectedChips = _selectedChips.toList(),
-//                    message = optionalMessage
-//                )
-                _selectedChips.clear()
-            } catch (e: Exception) {
+                userRepository.submitIrregularityEvents(req).collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            submitIrregularityEvents(
+                                                optionalMessage
+                                            )
+                                        }
+
+                                        override fun no() {
+
+                                        }
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data.let {
+//                            goalsUpdated.postValue(Event(true))
+                                _selectedChips.clear()
+                            }
+                        }
+                    }
+                }
+
+            }catch (e: Exception) {
+
             }
         }
     }
