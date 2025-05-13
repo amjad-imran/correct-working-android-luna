@@ -5,7 +5,6 @@ import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.StressUnderstandingOverview
-import com.oreo.data.model.StressUnderstandingSubList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -40,7 +39,7 @@ constructor(val sessionManager: SessionManager,
         dataList.add(
             StressUnderstandingOverview.ImageWithText(
                 resourcesProvider.getString(R.string.text_making_sense_of_stress_tracking),
-                R.drawable.image_stress_tracking,
+                R.drawable.image_stress_tracking_new,
                 resourcesProvider.getString(R.string.text_stress_content_5) +
                         resourcesProvider.getString(R.string.text_stress_content_6)
 
