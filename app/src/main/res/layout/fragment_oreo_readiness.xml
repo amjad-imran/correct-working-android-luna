@@ -90,7 +90,6 @@
                     app:layout_constraintStart_toStartOf="parent">
 
 
-
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -101,8 +100,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
                     <include
                         android:id="@+id/lytRScoreData"
                         layout="@layout/oreo_layout_activity_score_subdata"
@@ -111,7 +108,7 @@
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="@dimen/side_margin"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <include
                         android:id="@+id/divider111"
@@ -124,11 +121,15 @@
                     <include
                         android:id="@+id/lytIrregularityEvents"
                         layout="@layout/oreo_layout_readiness_irregularity_events"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="@dimen/side_margin"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/divider111" />
 
                     <include
@@ -163,21 +164,21 @@
                         layout="@layout/layout_sleep_health_monitor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider12"
                         android:layout_marginStart="@dimen/side_margin"
                         android:layout_marginTop="24dp"
-                        android:layout_marginEnd="@dimen/side_margin" />
+                        android:layout_marginEnd="@dimen/side_margin"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider12" />
 
 
                     <include
                         android:id="@+id/divider3"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/lytHealthMonitor" />
 
                     <include
@@ -194,9 +195,9 @@
                         android:id="@+id/divider4"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/lytHeartRate" />
 
                     <include
@@ -226,6 +227,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider5" />
+
                     <View
                         android:id="@+id/dummyView"
                         android:layout_width="match_parent"
