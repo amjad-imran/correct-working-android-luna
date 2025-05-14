@@ -110,7 +110,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START,false)
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START, false)
         viewModel.updateAppTrackingEvent(AppTrackEvent.APP_START)
 
         if (viewModel.isBottomNavGifPlaying.not()) {
@@ -770,9 +770,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
-        viewModel.cannyFeedbackUrl.observe(this){
+        viewModel.cannyFeedbackUrl.observe(this) {
             it.getContent()?.let {
-                startActivity(WebViewActivity.getStartIntent(this,getString(R.string.text_suggest_a_feature),it))
+                startActivity(
+                    WebViewActivity.getStartIntent(
+                        this,
+                        getString(R.string.text_suggest_a_feature),
+                        it
+                    )
+                )
             }
         }
 
@@ -873,7 +879,20 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 if (viewModel.userHealthData.isEmpty()) {
-                    binding.layoutRetry.tvErrorCode.text = "Error Code : ${viewModel.errorCode}"
+
+                    if (response.uiComponentType is UIComponentType.RetryApiDialog) {
+                        val code =
+                            viewModel.getApiErrorCode((response.uiComponentType as UIComponentType.RetryApiDialog).message)
+
+                        if (code != null) {
+                            binding.layoutRetry.tvErrorCode.text = "Error Code : ${code}"
+                        } else {
+                            binding.layoutRetry.tvErrorCode.text = ""
+                        }
+                    } else {
+                        binding.layoutRetry.tvErrorCode.text = ""
+                    }
+
                     binding.layoutRetry.root.visible()
                 } else {
                     binding.layoutRetry.root.gone()
@@ -1277,10 +1296,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             AppLinks.LUNA_AI -> {
                 viewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
+
             AppLinks.FEATURE_REQUEST -> {
                 viewModel.viewModelScope.launch(Dispatchers.IO) {
                     val cannyState = viewModel.ringDataStore.getCannyState()
-                    if(cannyState){
+                    if (cannyState) {
                         viewModel.getCannyFeedbackUrl()
                     }
                 }
