@@ -17,6 +17,9 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
+import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
+import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
+import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
@@ -1332,6 +1335,19 @@ constructor(
         }
     }
 
+    fun getApiErrorCode(message: String?): String? {
+        if(message==null) return null
+
+        if(message.equals(NETWORK_ERROR,true)){ //no internet,500 until 599
+            return "000001"
+        }else if(message.equals(NETWORK_ERROR_UNKNOWN,true)){
+            return "000002"
+        }else if(message.equals(NETWORK_ERROR_TIMEOUT,true)){ // timeout case
+            return "000003"
+        }
+
+        return null
+    }
 
 
 }
