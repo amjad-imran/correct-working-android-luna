@@ -31,6 +31,9 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit_commans.utils.Event
+import com.oreo.data.model.IrregularEventsChipModel
+import java.time.LocalDate
 
 
 @HiltViewModel
@@ -56,6 +59,12 @@ constructor(
     private val _selectedChips = mutableStateListOf<String>()
     val selectedChips: List<String> get() = _selectedChips
 
+    val hrvAlertsData = MutableLiveData<Event<Boolean>>()
+
+    var date: String? = null
+
+    val todayDate = LocalDate.now().toString()
+
     init {
         //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
@@ -76,7 +85,7 @@ constructor(
         viewModelScope.launch {
             try {
                 val req = JsonObject().apply {
-                    this.addProperty("current_feedback_value", Gson().toJson(selectedChips))
+                    this.addProperty("current_feedback_value", Gson().toJson(_selectedChips))
                     this.addProperty("type", "hrv")
                     optionalMessage?.let {
                         this.addProperty("other", optionalMessage)
@@ -114,6 +123,7 @@ constructor(
                         is Resource.Success -> {
                             resource.data?.data.let {
 //                            goalsUpdated.postValue(Event(true))
+                                hrvAlertsData.postValue(Event(true))
                                 _selectedChips.clear()
                             }
                         }
@@ -979,5 +989,26 @@ constructor(
             R.drawable.ic_health_good
         }
         return drawable
+    }
+
+    fun getIrregularityEventsChips(): List<IrregularEventsChipModel>? {
+        return listOf(
+            IrregularEventsChipModel(
+                "had_alcohol",
+                "Had Alcohol"
+            ),
+            IrregularEventsChipModel("intense_workout", "SIntense workout"),
+            IrregularEventsChipModel("feeling_feverish", "Feeling Feverish"),
+            IrregularEventsChipModel(
+                "disturbed_sleep_environment",
+                "Disturbed sleep environment"
+            ),
+            IrregularEventsChipModel("late_night_meal", "Late night meal"),
+            IrregularEventsChipModel(
+                "higher_caffeine_intake",
+                "Higher caffeine intake"
+            ),
+            IrregularEventsChipModel("others", "Other"),
+        )
     }
 }

@@ -290,6 +290,12 @@ class OHeartRateDataFragment :
 
         binding.lytIrregularityEvents.tvTitle.text = getString(R.string.text_irregularity_events)
         val fragments = ArrayList<IrregularityEventsOHeartRateDataFragment>()
+        if(fragments.isEmpty()){
+            binding.lytIrregularityEvents.lytIrregularityEventsSubmittedCard.root.visible()
+            binding.lytIrregularityEvents.tabLayout.gone()
+            binding.lytIrregularityEvents.vpBannerSlider.gone()
+            return
+        }
         parsedData?.forEach {
             fragments.add(IrregularityEventsOHeartRateDataFragment.newInstance(it).apply {
                 setClickListener(object : IrregularityEventsBannerListener {

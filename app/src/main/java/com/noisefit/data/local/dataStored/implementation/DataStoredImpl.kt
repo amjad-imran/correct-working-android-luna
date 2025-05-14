@@ -243,6 +243,8 @@ private const val EVENT_APP_TIME_END = "EVENT_APP_TIME_END"
 private const val APP_DEMO_MODE = "APP_DEMO_MODE"
 private const val HR_ALERTS = "HR_ALERTS"
 
+private const val IRR_EVENTS_CARD_VISIBLITY_READINESS = "IRR_EVENTS_CARD_VISIBLITY_READINESS"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -307,6 +309,14 @@ class DataStoredImpl
 
     override fun updateHrAlerts(alerts: HrAlerts) {
         mPrefs.edit()?.putString(HR_ALERTS, gson.toJson(alerts))?.commit()
+    }
+
+    override fun getIrregularityCardsVisibilityReadiness(): Boolean {
+        return mPrefs.getBoolean(IRR_EVENTS_CARD_VISIBLITY_READINESS, true)
+    }
+
+    override fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean) {
+        mPrefs.edit().putBoolean(IRR_EVENTS_CARD_VISIBLITY_READINESS, isVisible).commit()
     }
 
     override fun setIsInDemoMode(demoModeState: Boolean) {
