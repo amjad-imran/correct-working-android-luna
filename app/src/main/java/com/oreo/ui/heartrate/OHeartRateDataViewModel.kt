@@ -2,7 +2,7 @@ package com.oreo.ui.heartrate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
@@ -30,7 +30,10 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -296,13 +299,17 @@ class OHeartRateDataViewModel @Inject constructor(
         onSubmitSuccess: () -> Unit
     ) {
         viewModelScope.launch {
-            LOGS.d("biqwvvqwfqywfqvwi -fboish $selectedChips")
+            val reasonArray = JsonArray()
+            selectedChips.forEach {
+                reasonArray.add(it)
+            }
+
             val req = JsonObject().apply {
-                this.addProperty("current_date", date)
-                this.addProperty("current_time", date)
+                this.addProperty("current_date", getCurrentDate())
+                this.addProperty("current_time", getCurrentTime())
                 this.addProperty("current_value", data.alert.currentValue)
                 this.addProperty("previous_value", data.alert.lastComparedValue)
-                this.addProperty("reason", Gson().toJson(selectedChips))
+                this.add("reason", reasonArray)
                 this.addProperty("type", "hr")
                 if (!other.isNullOrEmpty()){
                     this.addProperty("description", other)
@@ -310,7 +317,6 @@ class OHeartRateDataViewModel @Inject constructor(
             }
 
             userRepository.submitIrregularityEvents(req).collect{ resource ->
-                LOGS.d("biqwvvqwfqywfqvwi - r - $resource")
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -342,16 +348,23 @@ class OHeartRateDataViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        LOGS.d("biqwvvqwfqywfqvwi - s")
                         resource.data?.data.let {
                             onSubmitSuccess()
-//                            LOGS.d("biqwvvqwfqywfqvwi - s")
-//                            goalsUpdated.postValue(Event(true))
                         }
                     }
                 }
             }
         }
+    }
+
+    fun getCurrentDate(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return sdf.format(Date())
+    }
+
+    fun getCurrentTime(): String {
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        return sdf.format(Date())
     }
 
 }
