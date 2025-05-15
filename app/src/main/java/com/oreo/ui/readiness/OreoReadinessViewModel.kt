@@ -31,9 +31,13 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.IrregularEventsChipModel
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 
 
 @HiltViewModel
@@ -43,6 +47,7 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val resourcesProvider: ResourcesProvider,
+    private val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     private val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
@@ -81,60 +86,92 @@ constructor(
         }
     }
 
-    fun submitIrregularityEvents(optionalMessage: String? = null) {
+    fun submitIrregularityEvents(
+        optionalMessage: String? = null,
+        onSubmitSuccess: () -> Unit
+    ) {
         viewModelScope.launch {
-            try {
-                val req = JsonObject().apply {
-                    this.addProperty("current_feedback_value", Gson().toJson(_selectedChips))
-                    this.addProperty("type", "hrv")
-                    optionalMessage?.let {
-                        this.addProperty("other", optionalMessage)
-                    }
+            val reasonArray = JsonArray()
+            selectedChips.forEach {
+                reasonArray.add(it)
+            }
+
+            val req = JsonObject().apply {
+                this.addProperty("current_date", getCurrentDate())
+                this.addProperty("current_time", getCurrentTime())
+                this.addProperty("current_value", localDataStore.getHrvAlerts()?.data?.currentValue)
+                this.addProperty("previous_value", localDataStore.getHrvAlerts()?.data?.currentValue)
+                this.add("reason", reasonArray)
+                this.addProperty("type", "hr")
+                if (!optionalMessage.isNullOrEmpty()){
+                    this.addProperty("description", optionalMessage)
                 }
+            }
 
-                userRepository.submitIrregularityEvents(req).collect { resource ->
-                    when (resource) {
-                        is Resource.GenericError -> {
-                            sendMessage(resource.message)
-                        }
+            userRepository.submitIrregularityEvents(req).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                        is Resource.Loading -> {
-                            setLoading(resource.loading)
-                        }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                        is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
-                                this.uiComponentType as UIComponentType.RetryApiDialog
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                    object : BinaryActionCallback {
-                                        override fun yes() {
-                                            submitIrregularityEvents(
-                                                optionalMessage
-                                            )
-                                        }
-
-                                        override fun no() {
-
-                                        }
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        submitIrregularityEvents(
+                                            optionalMessage,
+                                            onSubmitSuccess
+                                        )
                                     }
-                            })
-                        }
 
-                        is Resource.Success -> {
-                            resource.data?.data.let {
-//                            goalsUpdated.postValue(Event(true))
-                                hrvAlertsData.postValue(Event(true))
-                                _selectedChips.clear()
-                            }
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            onSubmitSuccess()
+                            _selectedChips.clear()
                         }
                     }
                 }
-
-            }catch (e: Exception) {
-
             }
         }
     }
+
+    fun loadAlertsData() {
+        hrvAlertsData.postValue(Event(true))
+    }
+
+    fun updateAlert(displayAlert: Boolean) {
+        val alerts = localDataStore.getHrvAlerts()
+        if (alerts == null) return
+
+        alerts.data.apply {
+            isDeleted = displayAlert
+        }
+        localDataStore.updateHrvAlerts(alerts)
+    }
+
+    fun getCurrentDate(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return sdf.format(Date())
+    }
+
+    fun getCurrentTime(): String {
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        return sdf.format(Date())
+    }
+
 
     fun getContributorInfo() {
         viewModelScope.launch {
