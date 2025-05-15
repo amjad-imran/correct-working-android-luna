@@ -65,6 +65,7 @@ constructor(
     val selectedChips: List<String> get() = _selectedChips
 
     val hrvAlertsData = MutableLiveData<Event<Boolean>>()
+    var isEventSubmitted: Boolean = false
 
     var date: String? = null
 
