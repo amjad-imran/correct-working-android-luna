@@ -228,8 +228,18 @@ class OHeartRateDataFragment :
                             alerts.data
                         )
                     }else{
-                        binding.divider1.root.gone()
-                        binding.lytIrregularityEvents.root.gone()
+                        if(viewModel.isEventSubmitted){
+                            binding.divider1.root.visible()
+                            binding.lytIrregularityEvents.root.visible()
+                            binding.lytIrregularityEvents.lytIrregularityEventsSubmittedCard.root.visible()
+                            binding.lytIrregularityEvents.tabLayout.gone()
+                            binding.lytIrregularityEvents.vpBannerSlider.gone()
+                        }else{
+                            binding.divider1.root.gone()
+                            binding.lytIrregularityEvents.root.gone()
+                        }
+                        /*binding.divider1.root.gone()
+                        binding.lytIrregularityEvents.root.gone()*/
                     }
                 } else {
                     binding.divider1.root.gone()
@@ -290,12 +300,12 @@ class OHeartRateDataFragment :
 
         binding.lytIrregularityEvents.tvTitle.text = getString(R.string.text_irregularity_events)
         val fragments = ArrayList<IrregularityEventsOHeartRateDataFragment>()
-        if(fragments.isEmpty()){
+/*        if(fragments.isEmpty()){
             binding.lytIrregularityEvents.lytIrregularityEventsSubmittedCard.root.visible()
             binding.lytIrregularityEvents.tabLayout.gone()
             binding.lytIrregularityEvents.vpBannerSlider.gone()
             return
-        }
+        }*/
         parsedData?.forEach {
             fragments.add(IrregularityEventsOHeartRateDataFragment.newInstance(it).apply {
                 setClickListener(object : IrregularityEventsBannerListener {
@@ -306,8 +316,12 @@ class OHeartRateDataFragment :
                         other: String?
                     ) {
                         viewModel.onSubmitButtonClickedIrregularityEvents(
-                            selectedChips, other
-                        )
+                            data, selectedChips, other
+                        ) {
+                            viewModel.isEventSubmitted = true
+                            viewModel.removeAlert(data)
+                            viewModel.loadAlertsData()
+                        }
                     }
 
                     override fun onCrossClicked(data: IrregularEventsChipsListModel) {

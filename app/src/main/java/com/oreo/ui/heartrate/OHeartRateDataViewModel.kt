@@ -16,6 +16,7 @@ import com.noisefit_commans.data.model.HrAlert
 import com.noisefit_commans.data.model.HrAlerts
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.HRModel
 import com.oreo.data.model.IrregularEventsChipModel
@@ -44,6 +45,8 @@ class OHeartRateDataViewModel @Inject constructor(
     val heartRateData = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
     var summaryHealthData: ServerUserHealthData? = null
     var selectedChipsList = ArrayList<ArrayList<IrregularEventsChipModel>>()
+
+    var isEventSubmitted = false
 
     val hrAlertsData = MutableLiveData<Event<Boolean>>()
 
@@ -287,19 +290,27 @@ class OHeartRateDataViewModel @Inject constructor(
     }
 
     fun onSubmitButtonClickedIrregularityEvents(
+        data: IrregularEventsChipsListModel,
         selectedChips: List<String>,
-        other: String?
+        other: String?,
+        onSubmitSuccess: () -> Unit
     ) {
         viewModelScope.launch {
+            LOGS.d("biqwvvqwfqywfqvwi -fboish $selectedChips")
             val req = JsonObject().apply {
-                this.addProperty("current_feedback_value", Gson().toJson(selectedChips))
+                this.addProperty("current_date", date)
+                this.addProperty("current_time", date)
+                this.addProperty("current_value", data.alert.currentValue)
+                this.addProperty("previous_value", data.alert.lastComparedValue)
+                this.addProperty("reason", Gson().toJson(selectedChips))
                 this.addProperty("type", "hr")
                 if (!other.isNullOrEmpty()){
-                    this.addProperty("other", other)
+                    this.addProperty("description", other)
                 }
             }
 
             userRepository.submitIrregularityEvents(req).collect{ resource ->
+                LOGS.d("biqwvvqwfqywfqvwi - r - $resource")
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -316,8 +327,10 @@ class OHeartRateDataViewModel @Inject constructor(
                                 object : BinaryActionCallback {
                                     override fun yes() {
                                         onSubmitButtonClickedIrregularityEvents(
+                                            data,
                                             selectedChips,
-                                            other
+                                            other,
+                                            onSubmitSuccess
                                         )
                                     }
 
@@ -329,7 +342,10 @@ class OHeartRateDataViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
+                        LOGS.d("biqwvvqwfqywfqvwi - s")
                         resource.data?.data.let {
+                            onSubmitSuccess()
+//                            LOGS.d("biqwvvqwfqywfqvwi - s")
 //                            goalsUpdated.postValue(Event(true))
                         }
                     }

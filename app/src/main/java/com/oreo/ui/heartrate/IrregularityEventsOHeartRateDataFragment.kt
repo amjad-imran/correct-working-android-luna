@@ -73,8 +73,6 @@ class IrregularityEventsOHeartRateDataFragment :
         binding.btnSubmit.setOnClickListener {
             data?.let {
                 listener?.onSubmitBtnClicked(it, selectedChips)
-                binding.lytSubmittedIrregularityEvents.root.visible()
-                binding.irrEventsCard.gone()
             }
         }
 
@@ -85,8 +83,6 @@ class IrregularityEventsOHeartRateDataFragment :
                     selectedChips,
                     binding.chatEtx.text.toString()
                 )
-                binding.lytSubmittedIrregularityEvents.root.visible()
-                binding.irrEventsCard.gone()
             }
         }
         binding.ivClose.setOnClickListener {
