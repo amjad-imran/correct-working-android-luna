@@ -1962,5 +1962,34 @@
     <string name="text_data_sharing">การแบ่งปันข้อมูล</string>
     <string name="text_place_ring_charging">กรุณาวางแหวนบนเครื่องชาร์จก่อนเริ่มอัปเดตเฟิร์มแวร์</string>
     <string name="text_it_s_on_the_charger">วางอยู่บนเครื่องชาร์จแล้ว</string>
+    <string name="text_no_caffeine_zone">ช่วงห้ามบริโภคคาเฟอีน</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">เพิ่มสมาธิและความตื่นตัว: นี่คือช่วงเวลาที่เหมาะสมที่สุดในการบริโภคคาเฟอีนเพื่อประสิทธิภาพสูงสุด</string>
+    <string name="text_foods">อาหาร</string>
+    <string name="text_all_items">รายการทั้งหมด</string>
+    <string name="text_my_items">รายการของฉัน</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">คำแนะนำนี้อิงจากจังหวะชีวภาพและรูปแบบการเผาผลาญ แต่การตอบสนองต่อคาเฟอีนของแต่ละบุคคลอาจแตกต่างกัน โปรดสังเกตร่างกายของคุณ และปรึกษาผู้เชี่ยวชาญหากคุณมีอาการแพ้หรือปัญหาสุขภาพเฉพาะ</string>
+    <string name="text_caffeine_window">ช่วงเวลาคาเฟอีน</string>
+    <string name="text_restricted">จำกัด</string>
+    <string name="text_open">เปิด</string>
+    <string name="text_caffeine_intake">การบริโภคคาเฟอีน</string>
+    <string name="text_let_s_find_your_ring">มาหาวงแหวนของคุณกัน</string>
+    <string name="text_here_is_a_final_step">นี่คือขั้นตอนสุดท้าย</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">ลองทำตามขั้นตอนด้านล่างเพื่อเชื่อมต่อวงแหวนของคุณ</string>
+    <string name="text_contact_support">ติดต่อฝ่ายสนับสนุน</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">เพิ่มพลังงานและความชัดเจนทางจิตใจ: ช่วงเวลาที่เหมาะที่สุดสำหรับการรับคาเฟอีนอย่างมีประสิทธิภาพ</string>
+    <string name="text_avoid_caffeine_now_message3">หลีกเลี่ยงคาเฟอีนตอนนี้: อาจรบกวนการนอนหลับและการฟื้นฟูร่างกาย</string>
+    <string name="text_avoid_caffeine_now_message4">คาเฟอีนอาจรบกวนการพักผ่อน: หลีกเลี่ยงเพื่อส่งเสริมการนอนลึก</string>
+    <string name="text_avoid_caffeine_now_message5">การบริโภคคาเฟอีนเร็วเกินไปอาจเพิ่มคอร์ติซอล: ควรชะลอเพื่อพลังงานที่ยั่งยืน</string>
+    <string name="text_avoid_caffeine_now_message6">รอการดื่มคาเฟอีน: ร่างกายคุณกำลังมีคอร์ติซอลตามธรรมชาติ ให้มันทำงานก่อน</string>
+    <string name="text_let_s_troubleshoot">มาวิเคราะห์ปัญหากัน</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">ตรวจสอบว่าแหวนอยู่บนแท่นชาร์จ</string>
+    <string name="troubleshoot_desc_2">ตรวจสอบว่าแหวนและโทรศัพท์อยู่ห่างกันไม่เกิน 1 เมตร</string>
+    <string name="troubleshoot_desc_3">ลองเปิด/ปิดบลูทูธจนกว่าแหวนจะเชื่อมต่อ</string>
+    <string name="troubleshoot_desc_4">ลืมแหวนจากอุปกรณ์บลูทูธที่เชื่อมต่อในโทรศัพท์ของคุณ</string>
+    <string name="troubleshoot_desc_5">ลองรีเซ็ตแหวนโดยทำตามขั้นตอนด้านล่าง</string>
+    <string name="text_tell_us_what_happened">บอกเราว่าเกิดอะไรขึ้น:</string>
+    <string name="text_irregularity_events">เหตุการณ์ผิดปกติ</string>
+    <string name="text_hr_spiked_by_value">อัตราการเต้นของหัวใจพุ่งขึ้น %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">รับทราบ! เราจะแจ้งให้คุณทราบเมื่อพบความผิดปกติใด ๆ</string>
 
 </resources>

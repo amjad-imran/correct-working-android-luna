@@ -1922,6 +1922,16 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_custom_homescreen_message_2">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
     <string name="text_dashboard_cannot_be_empty">Dashboard cannot be empty.</string>
     <string name="text_stay_updated_with_battery_alerts_data_sync_reminders_and_key_insights_essential_notifications_to_keep_your_luna_ring_running_smoothly">Stay updated with battery alerts, data sync reminders, and key insights essential notifications to keep your Luna ring running smoothly</string>
+    <string name="text_sleep_health_monitor">Sleep &amp; Health Monitor</string>
+    <string name="text_google_fit_message">These data control settings allow you to READ and WRITE the data on Google Fit.</string>
+    <string name="text_data_sharing">Data sharing</string>
+    <string name="text_copied">Copied</string>
+    <string name="text_place_ring_charging">Please place your ring on the charger before starting the firmware update</string>
+    <string name="text_it_s_on_the_charger">It\'s on the charger</string>
+    <string name="text_google_fit_data_share">We will share this data with Google Fit. We will not take this data from Google Fit.</string>
+
+
+
     <string name="text_no_caffeine_zone">No caffeine zone</string>
     <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Boost focus and alertness: This is your optimal window to enjoy caffeine for peak performance.</string>
     <string name="text_foods">Foods</string>
@@ -1931,7 +1941,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_caffeine_window">Caffeine window</string>
     <string name="text_restricted">Restricted</string>
     <string name="text_open">Open</string>
-    <string name="text_copied">Copied</string>
     <string name="text_caffeine_intake">Caffeine intake</string>
     <string name="text_let_s_find_your_ring">Let’s find your ring</string>
     <string name="text_here_is_a_final_step">Here is a final step</string>
@@ -1942,12 +1951,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_avoid_caffeine_now_message4">Caffeine now can interfere with rest: Avoid it to support deep sleep and overnight recovery.</string>
     <string name="text_avoid_caffeine_now_message5">Caffeine too early can spike cortisol: Delay intake to support natural energy and better focus later.</string>
     <string name="text_avoid_caffeine_now_message6">Hold off on caffeine: Your body’s natural cortisol boost is waking you up—let it work first.</string>
-
-    <string name="text_sleep_health_monitor">Sleep &amp; Health Monitor</string>
-    <string name="text_google_fit_message">These data control settings allow you to READ and WRITE the data on Google Fit.</string>
-    <string name="text_data_sharing">Data sharing</string>
-
-    <string name="text_google_fit_data_share">We will share this data with Google Fit. We will not take this data from Google Fit.</string>
     <string name="text_let_s_troubleshoot">Let’s Troubleshoot</string>
     <string name="text_ensure_your_ring_is_placed_on_the_charger">Ensure your ring is placed on the charger</string>
     <string name="troubleshoot_desc_2">Ensure your ring and your phone are within 1 metre distance</string>
@@ -1956,8 +1959,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="troubleshoot_desc_5">Let’s try to hard reset your ring. Follow the steps below</string>
     <string name="text_tell_us_what_happened">Tell us What Happened:</string>
     <string name="text_irregularity_events">Irregularity Events</string>
-    <string name="text_place_ring_charging">Please place your ring on the charger before starting the firmware update</string>
-    <string name="text_it_s_on_the_charger">It\'s on the charger</string>
     <string name="text_hr_spiked_by_value">HR spiked by %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Noted! We will keep you posted whenever we find such irregularities.</string>
 

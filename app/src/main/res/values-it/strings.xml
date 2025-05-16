@@ -1957,5 +1957,34 @@
     <string name="text_data_sharing">Condivisione dei dati</string>
     <string name="text_place_ring_charging">Si prega di posizionare l\'anello sul caricatore prima di avviare l\'aggiornamento del firmware.</string>
     <string name="text_it_s_on_the_charger">È sul caricatore</string>
+    <string name="text_no_caffeine_zone">Zona senza caffeina</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Aumenta la concentrazione: questa è la tua finestra ottimale per assumere caffeina e rendere al meglio.</string>
+    <string name="text_foods">Alimenti</string>
+    <string name="text_all_items">Tutti gli articoli</string>
+    <string name="text_my_items">I miei articoli</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">Questa guida si basa su ritmi circadiani e metabolici, ma le risposte individuali alla caffeina possono variare. Ascolta il tuo corpo e consulta un professionista se hai condizioni specifiche.</string>
+    <string name="text_caffeine_window">Finestra caffeina</string>
+    <string name="text_restricted">Limitato</string>
+    <string name="text_open">Aperto</string>
+    <string name="text_caffeine_intake">Assunzione di caffeina</string>
+    <string name="text_let_s_find_your_ring">Troviamo il tuo anello</string>
+    <string name="text_here_is_a_final_step">Ecco l’ultimo passaggio</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Prova il passaggio seguente per associare l’anello</string>
+    <string name="text_contact_support">Contatta il supporto</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Massimizza energia e chiarezza: questo è il momento ideale per una carica di caffeina.</string>
+    <string name="text_avoid_caffeine_now_message3">Evita la caffeina ora: potrebbe disturbare il sonno e la qualità del recupero.</string>
+    <string name="text_avoid_caffeine_now_message4">La caffeina può interferire con il riposo: evitala per favorire il sonno profondo.</string>
+    <string name="text_avoid_caffeine_now_message5">Troppa caffeina presto aumenta il cortisolo: aspetta per una migliore energia naturale.</string>
+    <string name="text_avoid_caffeine_now_message6">Aspetta con la caffeina: il tuo corpo ha già un picco naturale di cortisolo.</string>
+    <string name="text_let_s_troubleshoot">Risolviamo il problema</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Assicurati che l’anello sia sul caricatore</string>
+    <string name="troubleshoot_desc_2">Assicurati che l’anello e il telefono siano a meno di 1 metro di distanza</string>
+    <string name="troubleshoot_desc_3">Prova ad attivare/disattivare il Bluetooth finché l’anello non si connette</string>
+    <string name="troubleshoot_desc_4">Prova a rimuovere l’anello dai dispositivi Bluetooth collegati del telefono</string>
+    <string name="troubleshoot_desc_5">Proviamo a resettare l’anello. Segui i passaggi seguenti</string>
+    <string name="text_tell_us_what_happened">Dicci cosa è successo:</string>
+    <string name="text_irregularity_events">Eventi di irregolarità</string>
+    <string name="text_hr_spiked_by_value">Frequenza cardiaca aumentata del %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Ricevuto! Ti informeremo se rileviamo altre irregolarità.</string>
 
 </resources>

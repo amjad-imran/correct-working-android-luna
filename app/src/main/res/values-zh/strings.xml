@@ -1950,5 +1950,34 @@
     <string name="text_data_sharing">数据共享</string>
     <string name="text_place_ring_charging">请在开始固件更新前将戒指放在充电器上。</string>
     <string name="text_it_s_on_the_charger">已经放在充电器上了</string>
+    <string name="text_no_caffeine_zone">禁咖啡因时段</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">提升专注力与警觉性：这是摄入咖啡因以实现最佳表现的理想时机。</string>
+    <string name="text_foods">食物</string>
+    <string name="text_all_items">所有项目</string>
+    <string name="text_my_items">我的项目</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">本建议基于昼夜节律和代谢模式，但每个人对咖啡因的反应可能不同。请倾听身体的感受，如有特殊敏感或健康问题请咨询医疗专业人员。</string>
+    <string name="text_caffeine_window">咖啡因时段</string>
+    <string name="text_restricted">受限</string>
+    <string name="text_open">开放</string>
+    <string name="text_caffeine_intake">咖啡因摄入</string>
+    <string name="text_let_s_find_your_ring">让我们找到你的戒指</string>
+    <string name="text_here_is_a_final_step">这是最后一步</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">尝试以下步骤连接你的戒指</string>
+    <string name="text_contact_support">联系支持</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">提升能量与头脑清晰：现在是补充咖啡因的理想时间。</string>
+    <string name="text_avoid_caffeine_now_message3">现在避免摄入咖啡因：可能会影响睡眠并降低恢复质量。</string>
+    <string name="text_avoid_caffeine_now_message4">此时摄入咖啡因会干扰休息：避免使用以促进深度睡眠。</string>
+    <string name="text_avoid_caffeine_now_message5">太早摄入咖啡因会刺激皮质醇：请推迟摄入以支持自然能量。</string>
+    <string name="text_avoid_caffeine_now_message6">先别摄入咖啡因：身体正在自然提升皮质醇水平—让它自行运作。</string>
+    <string name="text_let_s_troubleshoot">让我们排查问题</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">确保你的戒指放在充电器上</string>
+    <string name="troubleshoot_desc_2">确保你的戒指和手机距离不超过1米</string>
+    <string name="troubleshoot_desc_3">尝试打开/关闭蓝牙直到戒指连接</string>
+    <string name="troubleshoot_desc_4">尝试在手机蓝牙设置中忘记戒指设备</string>
+    <string name="troubleshoot_desc_5">让我们尝试强制重置你的戒指。请按照以下步骤操作</string>
+    <string name="text_tell_us_what_happened">告诉我们发生了什么：</string>
+    <string name="text_irregularity_events">异常事件</string>
+    <string name="text_hr_spiked_by_value">心率激增了 %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">已记录！我们会在发现此类异常时通知你。</string>
 
 </resources>

@@ -1955,4 +1955,35 @@
     <string name="text_data_sharing">Datenfreigabe</string>
     <string name="text_place_ring_charging">Bitte legen Sie Ihren Ring vor dem Firmware-Update auf das Ladegerät.</string>
     <string name="text_it_s_on_the_charger">Er befindet sich auf dem Ladegerät</string>
+
+    <string name="text_no_caffeine_zone">Kein Koffeinbereich</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Steigern Sie Fokus und Wachsamkeit: Dies ist Ihr optimales Zeitfenster für Koffeinkonsum zur Spitzenleistung.</string>
+    <string name="text_foods">Lebensmittel</string>
+    <string name="text_all_items">Alle Artikel</string>
+    <string name="text_my_items">Meine Artikel</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">Diese Empfehlung basiert auf zirkadianen und metabolischen Mustern, aber individuelle Reaktionen auf Koffein können variieren. Achten Sie auf Ihr Körpergefühl und konsultieren Sie bei Empfindlichkeiten oder Gesundheitsproblemen eine Fachkraft.</string>
+    <string name="text_caffeine_window">Koffeinfester</string>
+    <string name="text_restricted">Eingeschränkt</string>
+    <string name="text_open">Offen</string>
+    <string name="text_caffeine_intake">Koffeinaufnahme</string>
+    <string name="text_let_s_find_your_ring">Lass uns deinen Ring finden</string>
+    <string name="text_here_is_a_final_step">Hier ist der letzte Schritt</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Versuche den folgenden Schritt, um deinen Ring zu koppeln</string>
+    <string name="text_contact_support">Support kontaktieren</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Maximiere Energie und Klarheit: Jetzt ist die ideale Zeit für einen wirksamen Koffein-Kick.</string>
+    <string name="text_avoid_caffeine_now_message3">Jetzt kein Koffein: Konsum in diesem Zeitfenster kann den Schlaf stören und die Erholung beeinträchtigen.</string>
+    <string name="text_avoid_caffeine_now_message4">Koffein kann jetzt die Ruhe stören: Vermeide es, um den Tiefschlaf und die Erholung zu fördern.</string>
+    <string name="text_avoid_caffeine_now_message5">Zu frühes Koffein steigert Cortisol: Verzögere den Konsum für natürliche Energie und bessere Konzentration später.</string>
+    <string name="text_avoid_caffeine_now_message6">Warte mit dem Koffein: Dein natürlicher Cortisol-Schub weckt dich gerade – lass ihn wirken.</string>
+    <string name="text_let_s_troubleshoot">Lass uns das Problem lösen</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Stelle sicher, dass dein Ring auf dem Ladegerät liegt</string>
+    <string name="troubleshoot_desc_2">Stelle sicher, dass sich Ring und Telefon in einem Abstand von 1 Meter befinden</string>
+    <string name="troubleshoot_desc_3">Versuche, Bluetooth aus- und wieder einzuschalten, bis der Ring verbunden ist.</string>
+    <string name="troubleshoot_desc_4">Versuche, den Ring aus den Bluetooth-Geräten deines Telefons zu entfernen</string>
+    <string name="troubleshoot_desc_5">Versuchen wir einen Hard-Reset deines Rings. Folge den Schritten unten</string>
+    <string name="text_tell_us_what_happened">Erzähl uns, was passiert ist:</string>
+    <string name="text_irregularity_events">Unregelmäßige Ereignisse</string>
+    <string name="text_hr_spiked_by_value">Herzfrequenz stieg um %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Vermerkt! Wir informieren dich, sobald wir solche Unregelmäßigkeiten feststellen.</string>
+
 </resources>

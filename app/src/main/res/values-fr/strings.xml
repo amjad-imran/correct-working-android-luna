@@ -2076,4 +2076,34 @@ onjour, Luna"</string>
     <string name="text_place_ring_charging">Veuillez placer votre bague sur le chargeur avant de commencer la mise à jour du firmware.</string>
     <string name="text_it_s_on_the_charger">Elle est sur le chargeur</string>
 
+    <string name="text_no_caffeine_zone">Zone sans caféine</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Améliorez votre concentration : c’est votre fenêtre optimale pour consommer de la caféine et être au top.</string>
+    <string name="text_foods">Aliments</string>
+    <string name="text_all_items">Tous les articles</string>
+    <string name="text_my_items">Mes articles</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">Ces conseils sont basés sur les rythmes circadiens et métaboliques, mais les réactions à la caféine peuvent varier. Écoutez votre corps et consultez un professionnel de santé si vous avez des sensibilités ou des conditions particulières.</string>
+    <string name="text_caffeine_window">Fenêtre caféine</string>
+    <string name="text_restricted">Restreint</string>
+    <string name="text_open">Ouvert</string>
+    <string name="text_caffeine_intake">Consommation de caféine</string>
+    <string name="text_let_s_find_your_ring">Trouvons votre bague</string>
+    <string name="text_here_is_a_final_step">Voici une dernière étape</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Essayez l’étape ci-dessous pour jumeler votre bague</string>
+    <string name="text_contact_support">Contacter le support</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Maximisez votre énergie : c’est le moment idéal pour un boost de caféine efficace.</string>
+    <string name="text_avoid_caffeine_now_message3">Évitez la caféine maintenant : elle pourrait perturber votre sommeil et réduire votre récupération.</string>
+    <string name="text_avoid_caffeine_now_message4">La caféine peut nuire au repos : évitez-la pour favoriser un sommeil profond.</string>
+    <string name="text_avoid_caffeine_now_message5">Trop tôt pour la caféine : attendez pour ne pas perturber le cortisol naturel.</string>
+    <string name="text_avoid_caffeine_now_message6">Attendez avant de consommer de la caféine : laissez votre boost naturel de cortisol agir.</string>
+    <string name="text_let_s_troubleshoot">Résolvons le problème</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Assurez-vous que la bague est sur le chargeur</string>
+    <string name="troubleshoot_desc_2">Assurez-vous que votre bague et votre téléphone sont à moins d’un mètre</string>
+    <string name="troubleshoot_desc_3">Essayez d’activer/désactiver le Bluetooth jusqu’à ce que la bague se connecte</string>
+    <string name="troubleshoot_desc_4">Essayez d’oublier la bague dans les paramètres Bluetooth de votre téléphone</string>
+    <string name="troubleshoot_desc_5">Essayons de réinitialiser la bague. Suivez les étapes ci-dessous</string>
+    <string name="text_tell_us_what_happened">Dites-nous ce qui s’est passé :</string>
+    <string name="text_irregularity_events">Événements irréguliers</string>
+    <string name="text_hr_spiked_by_value">Le rythme cardiaque a augmenté de %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">C’est noté ! Nous vous tiendrons informé(e) de toute irrégularité détectée.</string>
+
 </resources>

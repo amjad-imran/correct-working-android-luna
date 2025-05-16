@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CaffeineWindowData
 import java.time.Duration
 import java.time.LocalDate
@@ -122,6 +123,7 @@ class CaffeineGraphView : View {
 
     fun updateData(data: CaffeineWindowData) {
 
+        LOGS.d("caffeine_graph $data")
         graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         caffeineStart =
@@ -383,8 +385,6 @@ class CaffeineGraphView : View {
         totalWidth: Float
     ): Triple<Float, Float, Float> {
 
-        val now = LocalTime.now() //LocalTime.of(9, 0)
-
         val startDuration = Duration.between(graphStart, caffeineStart).toMinutes().toFloat()
         val caffeineDuration = Duration.between(caffeineStart, caffeineEnd).toMinutes().toFloat()
 
@@ -441,6 +441,9 @@ class CaffeineGraphView : View {
                 startWeight = (startDuration / sum) * remaining
                 caffeineWeight = (caffeineDuration / sum) * remaining
                 highlightState = HighlightState.END
+            }
+            else->{
+                LOGS.d("caffeine_graph in else case $nowDateTime - ${graphStartDate} - ${caffeineStartDate}")
             }
         }
 

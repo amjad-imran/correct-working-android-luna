@@ -1978,5 +1978,34 @@
     <string name="text_data_sharing">Совместное использование данных</string>
     <string name="text_place_ring_charging">Пожалуйста, поместите кольцо на зарядное устройство перед обновлением прошивки.</string>
     <string name="text_it_s_on_the_charger">Оно на зарядке</string>
+    <string name="text_no_caffeine_zone">Зона без кофеина</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Улучшите фокус и бодрость: это оптимальное время для приема кофеина.</string>
+    <string name="text_foods">Продукты</string>
+    <string name="text_all_items">Все элементы</string>
+    <string name="text_my_items">Мои элементы</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">Эта рекомендация основана на циркадных и метаболических ритмах, но реакции на кофеин индивидуальны. Прислушивайтесь к своему телу и проконсультируйтесь с врачом при наличии чувствительности или заболеваний.</string>
+    <string name="text_caffeine_window">Окно кофеина</string>
+    <string name="text_restricted">Ограничено</string>
+    <string name="text_open">Открыто</string>
+    <string name="text_caffeine_intake">Потребление кофеина</string>
+    <string name="text_let_s_find_your_ring">Найдем ваше кольцо</string>
+    <string name="text_here_is_a_final_step">Заключительный шаг</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Попробуйте выполнить шаг ниже для сопряжения кольца</string>
+    <string name="text_contact_support">Связаться с поддержкой</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Максимум энергии и ясности: идеальное время для приема кофеина.</string>
+    <string name="text_avoid_caffeine_now_message3">Избегайте кофеина сейчас: это может нарушить сон и восстановление.</string>
+    <string name="text_avoid_caffeine_now_message4">Кофеин может мешать отдыху: избегайте для лучшего сна.</string>
+    <string name="text_avoid_caffeine_now_message5">Кофеин рано повышает кортизол: отложите прием для лучшего фокуса позже.</string>
+    <string name="text_avoid_caffeine_now_message6">Воздержитесь от кофеина: ваше тело уже получает естественный кортизол.</string>
+    <string name="text_let_s_troubleshoot">Давайте устраним проблему</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Убедитесь, что кольцо на зарядке</string>
+    <string name="troubleshoot_desc_2">Убедитесь, что кольцо и телефон на расстоянии менее 1 метра</string>
+    <string name="troubleshoot_desc_3">Попробуйте включить/выключить Bluetooth, пока кольцо не подключится</string>
+    <string name="troubleshoot_desc_4">Забудьте кольцо в настройках Bluetooth телефона</string>
+    <string name="troubleshoot_desc_5">Попробуем сбросить настройки кольца. Следуйте инструкциям ниже</string>
+    <string name="text_tell_us_what_happened">Расскажите, что произошло:</string>
+    <string name="text_irregularity_events">Нарушения</string>
+    <string name="text_hr_spiked_by_value">Пульс повысился на %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Принято! Мы сообщим вам при обнаружении нарушений.</string>
 
 </resources>

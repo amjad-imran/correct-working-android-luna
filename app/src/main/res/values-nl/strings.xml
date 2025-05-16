@@ -1956,5 +1956,34 @@
     <string name="text_data_sharing">Gegevensdeling</string>
     <string name="text_place_ring_charging">Plaats je ring op de oplader voordat je de firmware-update start.</string>
     <string name="text_it_s_on_the_charger">Hij ligt op de oplader</string>
+    <string name="text_no_caffeine_zone">Geen cafeïne zone</string>
+    <string name="text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance">Verhoog focus en alertheid: dit is jouw optimale moment om cafeïne te gebruiken voor maximale prestaties.</string>
+    <string name="text_foods">Voedingsmiddelen</string>
+    <string name="text_all_items">Alle items</string>
+    <string name="text_my_items">Mijn items</string>
+    <string name="text_this_guidance_is_based_on_circadian_and_metabolic_patterns_but_individual_responses_to_caffeine_can_vary_tune_into_how_your_body_feels_and_consult_a_healthcare_professional_if_you_have_specific_sensitivities_or_health_conditions">Deze richtlijn is gebaseerd op circadiane en metabolische patronen, maar individuele reacties op cafeïne kunnen variëren. Luister naar je lichaam en raadpleeg een arts bij specifieke gevoeligheden of aandoeningen.</string>
+    <string name="text_caffeine_window">Cafeïneperiode</string>
+    <string name="text_restricted">Beperkt</string>
+    <string name="text_open">Open</string>
+    <string name="text_caffeine_intake">Cafeïne-inname</string>
+    <string name="text_let_s_find_your_ring">Laten we je ring vinden</string>
+    <string name="text_here_is_a_final_step">Hier is de laatste stap</string>
+    <string name="text_try_the_step_below_to_pair_your_ring">Probeer de onderstaande stap om je ring te koppelen</string>
+    <string name="text_contact_support">Contact opnemen met ondersteuning</string>
+    <string name="text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works">Maximaliseer energie en helderheid: dit is jouw ideale moment voor een effectieve cafeïneboost.</string>
+    <string name="text_avoid_caffeine_now_message3">Vermijd cafeïne nu: het kan je slaap verstoren en herstel beïnvloeden.</string>
+    <string name="text_avoid_caffeine_now_message4">Cafeïne kan je rust verstoren: vermijd het voor een diepere slaap.</string>
+    <string name="text_avoid_caffeine_now_message5">Te vroeg cafeïne verhoogt cortisol: stel inname uit voor betere focus later.</string>
+    <string name="text_avoid_caffeine_now_message6">Wacht met cafeïne: laat je natuurlijke cortisolboost eerst werken.</string>
+    <string name="text_let_s_troubleshoot">Laten we het probleem oplossen</string>
+    <string name="text_ensure_your_ring_is_placed_on_the_charger">Zorg dat je ring op de oplader ligt</string>
+    <string name="troubleshoot_desc_2">Zorg dat je ring en telefoon binnen 1 meter van elkaar zijn</string>
+    <string name="troubleshoot_desc_3">Probeer Bluetooth aan/uit te zetten totdat de ring verbindt</string>
+    <string name="troubleshoot_desc_4">Verwijder de ring uit de gekoppelde Bluetooth-apparaten van je telefoon</string>
+    <string name="troubleshoot_desc_5">Laten we je ring hard resetten. Volg onderstaande stappen</string>
+    <string name="text_tell_us_what_happened">Vertel ons wat er is gebeurd:</string>
+    <string name="text_irregularity_events">Onregelmatigheden</string>
+    <string name="text_hr_spiked_by_value">Hartslag steeg met %1$d%%</string>
+    <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Genoteerd! We houden je op de hoogte van verdere onregelmatigheden.</string>
 
 </resources>

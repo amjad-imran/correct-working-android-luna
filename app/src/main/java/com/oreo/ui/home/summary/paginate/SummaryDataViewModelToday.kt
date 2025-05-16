@@ -1317,6 +1317,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val messageList = listOf(
             listOf(
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message5),
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message6)
+            ),
+            listOf(
                 resourceProvider.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance),
                 resourceProvider.getString(R.string.text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works)
             ),
@@ -1324,10 +1328,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 resourceProvider.getString(R.string.text_avoid_caffeine_now_message3),
                 resourceProvider.getString(R.string.text_avoid_caffeine_now_message4)
             ),
-            listOf(
-                resourceProvider.getString(R.string.text_avoid_caffeine_now_message5),
-                resourceProvider.getString(R.string.text_avoid_caffeine_now_message6)
-            )
+
         )
 
         val todayDate = LocalDate.now()
