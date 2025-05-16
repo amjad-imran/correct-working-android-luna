@@ -1369,6 +1369,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
+            else->{
+                message = messageList[0][Random.nextInt(0, 2)]
+                highlightState = HighlightState.START
+            }
         }
 
         if (highlightState == HighlightState.START || highlightState == HighlightState.END) {

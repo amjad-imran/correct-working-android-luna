@@ -2940,6 +2940,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
+                else->{
+                    binding.tvState.apply {
+                        text = context.getString(R.string.text_restricted)
+                        setTextColor("#FF6389".toColorInt())
+                    }
+                }
             }
 
             binding.caffeineGraphView.updateData(dataa)

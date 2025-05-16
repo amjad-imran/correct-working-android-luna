@@ -444,6 +444,13 @@ class CaffeineGraphView : View {
             }
             else->{
                 LOGS.d("caffeine_graph in else case $nowDateTime - ${graphStartDate} - ${caffeineStartDate}")
+
+                startWeight = 0.5f
+                val remaining = 1f - startWeight
+                val sum = caffeineDuration + endDuration
+                caffeineWeight = (caffeineDuration / sum) * remaining
+                endWeight = (endDuration / sum) * remaining
+                highlightState = HighlightState.START
             }
         }
 

@@ -797,13 +797,16 @@ class OreoReadinessFragment :
                             mViewModel.getIrregularityEventsChips()
                         )
                         binding.lytIrregularityEvents.root.visible()
+                        binding.divider111.root.visible()
                     }else{
                         if(mViewModel.isEventSubmitted){
                             binding.lytIrregularityEvents.irrEventsCard.gone()
                             binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.root.visible()
                             binding.lytIrregularityEvents.root.visible()
+                            binding.divider111.root.visible()
                         }else {
                             binding.lytIrregularityEvents.root.gone()
+                            binding.divider111.root.gone()
                         }
                     }
                 }
