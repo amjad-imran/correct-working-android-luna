@@ -91,6 +91,18 @@ class CustomHomescreenViewModel @Inject constructor(
                 this.priority = card.size + (index + 1)
             })
         }
+
+        //handle new cards
+        // caffeine_intake
+        val caffeineCard = card.find { it.key.equals("caffeine_intake",true) }
+        if(caffeineCard==null){
+            val index = cardsToAdd.indexOfFirst { it.key.equals("caffeine_intake",true) }
+            if(index!=-1){
+                cardsToAdd[index].switchState = true
+            }
+        }
+
+
         return cardsToAdd
     }
 

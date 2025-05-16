@@ -1247,6 +1247,15 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
+            if (userActivities.find { it is OHealthOverview.CaffeineWindow } == null) {
+                val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake",true) }
+                if (hasCaffeineKey == null) {
+                    getCaffeineCardData()?.let {
+                        userActivities.add(it)
+                    }
+                }
+            }
+
             // Add naps if any (this could also be moved to a separate function)
 //            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
 //                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
@@ -1329,7 +1338,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 resourceProvider.getString(R.string.text_avoid_caffeine_now_message4)
             ),
 
-        )
+            )
 
         val todayDate = LocalDate.now()
         val now = LocalDateTime.now()
@@ -1669,7 +1678,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val currentDayHRV = healthData.readiness?.hrv?.value
         val previous14DayAvg = healthData.readiness?.prev14DayAvgHRV
 
-        if(currentDayHRV != null && previous14DayAvg != null) {
+        if (currentDayHRV != null && previous14DayAvg != null) {
             val percentageDrop = ((previous14DayAvg - currentDayHRV) / previous14DayAvg) * 100
             if (percentageDrop > 30) {
                 saveHrvAlert(
