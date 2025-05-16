@@ -1985,5 +1985,7 @@
     <string name="text_irregularity_events">Onregelmatigheden</string>
     <string name="text_hr_spiked_by_value">Hartslag steeg met %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Genoteerd! We houden je op de hoogte van verdere onregelmatigheden.</string>
+    <string name="text_place_ring_charges">Plaats je ring op de oplader en zorg ervoor dat Bluetooth is ingeschakeld op je telefoon</string>
+    <string name="text_upto_value_mg">Tot %1$d mg</string>
 
 </resources>

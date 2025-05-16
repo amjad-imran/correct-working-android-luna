@@ -1991,5 +1991,7 @@
     <string name="text_irregularity_events">เหตุการณ์ผิดปกติ</string>
     <string name="text_hr_spiked_by_value">อัตราการเต้นของหัวใจพุ่งขึ้น %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">รับทราบ! เราจะแจ้งให้คุณทราบเมื่อพบความผิดปกติใด ๆ</string>
+    <string name="text_place_ring_charges">วางแหวนของคุณบนแท่นชาร์จ และตรวจสอบว่าเปิดบลูทูธในโทรศัพท์แล้ว</string>
+    <string name="text_upto_value_mg">สูงสุด %1$d มก.</string>
 
 </resources>

@@ -1979,5 +1979,7 @@
     <string name="text_irregularity_events">异常事件</string>
     <string name="text_hr_spiked_by_value">心率激增了 %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">已记录！我们会在发现此类异常时通知你。</string>
+    <string name="text_place_ring_charges">将戒指放在充电器上，并确保手机已启用蓝牙</string>
+    <string name="text_upto_value_mg">高达 %1$d 毫克</string>
 
 </resources>

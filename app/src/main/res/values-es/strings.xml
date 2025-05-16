@@ -1955,6 +1955,8 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_irregularity_events">Eventos irregulares</string>
     <string name="text_hr_spiked_by_value">La FC aumentó un %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">¡Anotado! Te mantendremos informado si detectamos irregularidades.</string>
+    <string name="text_place_ring_charges">Coloca tu anillo en el cargador y asegúrate de que el Bluetooth esté activado en tu teléfono</string>
+    <string name="text_upto_value_mg">Hasta %1$d mg</string>
 
 
 </resources>

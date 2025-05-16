@@ -2007,5 +2007,7 @@
     <string name="text_irregularity_events">Нарушения</string>
     <string name="text_hr_spiked_by_value">Пульс повысился на %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Принято! Мы сообщим вам при обнаружении нарушений.</string>
+    <string name="text_place_ring_charges">Поместите кольцо на зарядное устройство и убедитесь, что Bluetooth включён на вашем телефоне</string>
+    <string name="text_upto_value_mg">До %1$d мг</string>
 
 </resources>

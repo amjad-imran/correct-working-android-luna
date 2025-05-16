@@ -1985,5 +1985,7 @@
     <string name="text_irregularity_events">Unregelmäßige Ereignisse</string>
     <string name="text_hr_spiked_by_value">Herzfrequenz stieg um %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Vermerkt! Wir informieren dich, sobald wir solche Unregelmäßigkeiten feststellen.</string>
+    <string name="text_place_ring_charges">Legen Sie Ihren Ring auf das Ladegerät und stellen Sie sicher, dass Bluetooth auf Ihrem Telefon aktiviert ist</string>
+    <string name="text_upto_value_mg">Bis zu %1$d mg</string>
 
 </resources>

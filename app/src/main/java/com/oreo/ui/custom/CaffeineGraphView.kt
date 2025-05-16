@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class CaffeineGraphView : View {
@@ -189,7 +190,7 @@ class CaffeineGraphView : View {
             if (isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
         )
 
-        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
         val textHeight = textPaint.descent() - textPaint.ascent()
         canvas.drawText(
             caffeineTextStart,
@@ -211,7 +212,7 @@ class CaffeineGraphView : View {
                 barCenterYPos - 8f.dpToPixel()
             )
         } else {
-            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
             val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
             canvas.drawText(
                 caffeineTextEnd, segment3Start - textWidth / 2,
@@ -229,7 +230,7 @@ class CaffeineGraphView : View {
         )
 
 
-        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma"))
+        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
         val textWidthEnd = textPaint.measureText(endText, 0, endText.length)
         canvas.drawText(
             endText, segment3End - textWidthEnd,
@@ -355,7 +356,7 @@ class CaffeineGraphView : View {
                 canvas,
                 left,
                 highlightedBarTop,
-                "Upto ${caffeineDataList[highlightedIndex]} mg"
+                context.getString(R.string.text_upto_value_mg, caffeineDataList[highlightedIndex])
             )
         }
     }

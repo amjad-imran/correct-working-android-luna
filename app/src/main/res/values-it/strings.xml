@@ -1986,5 +1986,7 @@
     <string name="text_irregularity_events">Eventi di irregolarità</string>
     <string name="text_hr_spiked_by_value">Frequenza cardiaca aumentata del %1$d%%</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Ricevuto! Ti informeremo se rileviamo altre irregolarità.</string>
+    <string name="text_place_ring_charges">Posiziona l\'anello sul caricatore e assicurati che il Bluetooth sia attivato sul telefono</string>
+    <string name="text_upto_value_mg">Fino a %1$d mg</string>
 
 </resources>

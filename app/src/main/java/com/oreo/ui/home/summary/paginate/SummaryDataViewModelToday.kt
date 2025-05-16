@@ -1129,11 +1129,15 @@ class SummaryDataViewModelToday @Inject constructor(
                     getLunaManagedPriority(hasSleep)
                 }
             } else {
-                Log.d("hjbcwbjwqd", "getUserManagedHealthData: $lunaManaged")
                 getLunaManagedPriority(hasSleep)
             }
 
-            LOGS.d("sdfkmhsdkfjh $priorityList")
+            val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake",true) }
+            if (hasCaffeineKey == null) {
+                getCaffeineCardData()?.let {
+                    userActivities.add(it)
+                }
+            }
 
             priorityList.forEach { item ->
                 if (item.switchState.not()) return@forEach
@@ -1247,14 +1251,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if (userActivities.find { it is OHealthOverview.CaffeineWindow } == null) {
-                val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake",true) }
-                if (hasCaffeineKey == null) {
-                    getCaffeineCardData()?.let {
-                        userActivities.add(it)
-                    }
-                }
-            }
+
 
             // Add naps if any (this could also be moved to a separate function)
 //            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
