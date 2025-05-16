@@ -52,7 +52,8 @@ data class OreoReadinessModel(
     @SerializedName("readiness_nap_score_impact")
     val readinessNapScoreImpact: Int? = null,
     @SerializedName("no_of_naps")
-    val noOfNaps: Int? = null
+    val noOfNaps: Int? = null,
+    val prev14DayAvgHRV: Int? = null
 )
 
 data class UnitDataModel(val value: Int)

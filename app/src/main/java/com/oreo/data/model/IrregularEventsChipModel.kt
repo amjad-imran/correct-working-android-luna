@@ -2,6 +2,7 @@ package com.oreo.data.model
 
 import android.os.Parcelable
 import com.noisefit_commans.data.model.HrAlert
+import com.noisefit_commans.data.model.HrvAlert
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -14,4 +15,11 @@ data class IrregularEventsChipsListModel(
 data class IrregularEventsChipModel(
     val key:String,
     val displayName:String
+) : Parcelable
+
+@Parcelize
+data class IrregularEventsChipsListHrvAlertModel(
+    val date:String,
+    val irregularEventsChipsList: List<IrregularEventsChipModel>,
+    val alert: HrvAlert
 ) : Parcelable

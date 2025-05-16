@@ -529,6 +529,10 @@ interface DataStoredInterface {
     fun getHrAlerts(): HrAlerts?
     fun updateHrAlerts(alerts: HrAlerts)
 
+    fun saveHrvAlert(prevMeasuredValue: Int, currentMeasuredValue: Int)
+    fun getHrvAlerts(): HrvAlerts?
+    fun updateHrvAlerts(alerts: HrvAlerts)
+
     fun getIrregularityCardsVisibilityReadiness(): Boolean
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)
 }

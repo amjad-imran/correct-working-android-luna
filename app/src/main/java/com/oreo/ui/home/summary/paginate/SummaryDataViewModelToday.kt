@@ -1651,6 +1651,13 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    private fun saveHrvAlert(
+        prevMeasuredValue: Int,
+        currentMeasuredValue: Int,
+    ) {
+        localDataStore.saveHrvAlert(prevMeasuredValue, currentMeasuredValue)
+    }
+
     private fun getReadinessDataCard(
         healthData: ServerUserHealthData,
         readiness: OreoReadinessModel?,
@@ -1658,6 +1665,20 @@ class SummaryDataViewModelToday @Inject constructor(
         daySlot: Int
     ): OHealthOverview? {
         val sleep = healthData.sleep
+
+        val currentDayHRV = healthData.readiness?.hrv?.value
+        val previous14DayAvg = healthData.readiness?.prev14DayAvgHRV
+
+        if(currentDayHRV != null && previous14DayAvg != null) {
+            val percentageDrop = ((previous14DayAvg - currentDayHRV) / previous14DayAvg) * 100
+            if (percentageDrop > 30) {
+                saveHrvAlert(
+                    previous14DayAvg,
+                    currentDayHRV
+                )
+            }
+        }
+
 
         val readinessModel = ODashboardReadinessModel(
             readinessScore = readiness?.readinessScore?.value,

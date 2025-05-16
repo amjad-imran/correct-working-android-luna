@@ -21,6 +21,8 @@ import com.noisefit_commans.data.model.ExperimentalSettings
 import com.noisefit_commans.data.model.HealthOverviewData
 import com.noisefit_commans.data.model.HrAlert
 import com.noisefit_commans.data.model.HrAlerts
+import com.noisefit_commans.data.model.HrvAlert
+import com.noisefit_commans.data.model.HrvAlerts
 import com.noisefit_commans.data.model.LocalUserData
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.NplQuizDataModel
@@ -242,6 +244,7 @@ private const val EVENT_APP_TIME_START = "EVENT_APP_TIME_START"
 private const val EVENT_APP_TIME_END = "EVENT_APP_TIME_END"
 private const val APP_DEMO_MODE = "APP_DEMO_MODE"
 private const val HR_ALERTS = "HR_ALERTS"
+private const val HRV_ALERTS = "HRV_ALERTS"
 
 private const val IRR_EVENTS_CARD_VISIBLITY_READINESS = "IRR_EVENTS_CARD_VISIBLITY_READINESS"
 
@@ -252,6 +255,53 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveHrvAlert(
+        prevMeasuredValue: Int,
+        currentMeasuredValue: Int
+    ) {
+        val hrvData = HrvAlert(
+            spikePercent = -1,
+            minutes = -1,
+            currentValue = currentMeasuredValue,
+            lastComparedValue = prevMeasuredValue
+        )
+
+        var hrvAlerts = getHrvAlerts()
+        if (hrvAlerts == null){
+            hrvAlerts = HrvAlerts(
+                LocalDate.now().toString(),
+                hrvData
+            )
+            mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
+        }else{
+            hrvAlerts.apply {
+                this.data = hrvData
+            }
+            mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
+        }
+    }
+
+    override fun getHrvAlerts(): HrvAlerts? {
+        val data = mPrefs.getString(HRV_ALERTS, null)
+        if (data.isNullOrEmpty()) {
+            return null
+        }
+
+        val parsedData = gson.fromJson(data, HrvAlerts::class.java)
+        if (!parsedData.date.equals(LocalDate.now().toString()) ||
+            parsedData.data.isDeleted)
+        {
+            mPrefs.edit().remove(HR_ALERTS).commit()
+            return null
+        }
+
+        return parsedData
+    }
+
+    override fun updateHrvAlerts(alerts: HrvAlerts) {
+        mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(alerts))?.commit()
+    }
 
     override fun saveHrAlert(
         alertPercent:Int,

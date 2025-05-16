@@ -147,25 +147,7 @@ class OreoReadinessFragment :
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
 
-        mViewModel.todayDate.let {
-            val todayData = mainViewModel.userHealthData[mViewModel.todayDate]
-            LOGS.d("dateeeee: ${todayData}")
-            todayData?.let {
-                if (
-                    mainViewModel.localDataStore.getIrregularityCardsVisibilityReadiness() &&
-                    it.sleep?.avg_hrv != null &&
-                    it.readiness?.hrvBreakUp?.avg != null &&
-                    it.readiness?.hrv!!.value < (it.sleep?.avg_hrv!! * 0.7)
-                ) {
-                    setIrregularityEventsChips(
-                        mViewModel.getIrregularityEventsChips()
-                    )
-                    binding.lytIrregularityEvents.root.visible()
-                } else {
-                    binding.lytIrregularityEvents.root.gone()
-                }
-            }
-        }
+        mViewModel.loadAlertsData()
 
         if (mViewModel.ringDataStore.isReadinessWalkAroundShown()) {
             mViewModel.getReadinessDetailsData()
@@ -769,16 +751,26 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.btnClose.setOnClickListener {
-            mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
-            binding.lytIrregularityEvents.root.gone()
+            /*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
+            binding.lytIrregularityEvents.root.gone()*/
+            mViewModel.updateAlert(true)
+            mViewModel.loadAlertsData()
         }
 
         binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
-            mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString())
+            mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString()){
+                mViewModel.isEventSubmitted = true
+                mViewModel.updateAlert(true)
+                mViewModel.loadAlertsData()
+            }
         }
 
         binding.lytIrregularityEvents.btnSubmit.setOnClickListener {
-            mViewModel.submitIrregularityEvents()
+            mViewModel.submitIrregularityEvents(){
+                mViewModel.isEventSubmitted = true
+                mViewModel.updateAlert(true)
+                mViewModel.loadAlertsData()
+            }
         }
 
     }
@@ -798,9 +790,22 @@ class OreoReadinessFragment :
 
         mViewModel.hrvAlertsData.observe(this){
             it.getContent()?.let {
-                binding.lytIrregularityEvents.apply {
-                    lytSubmittedIrregularityEvents.root.visible()
-                    irrEventsCard.visible()
+                mViewModel.todayDate.let {
+                    val hrvAlerts = mainViewModel.localDataStore.getHrvAlerts()
+                    if (hrvAlerts != null){
+                        setIrregularityEventsChips(
+                            mViewModel.getIrregularityEventsChips()
+                        )
+                        binding.lytIrregularityEvents.root.visible()
+                    }else{
+                        if(mViewModel.isEventSubmitted){
+                            binding.lytIrregularityEvents.irrEventsCard.gone()
+                            binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.root.visible()
+                            binding.lytIrregularityEvents.root.visible()
+                        }else {
+                            binding.lytIrregularityEvents.root.gone()
+                        }
+                    }
                 }
             }
         }
