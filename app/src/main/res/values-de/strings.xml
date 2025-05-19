@@ -1988,5 +1988,15 @@
     <string name="text_place_ring_charges">Legen Sie Ihren Ring auf das Ladegerät und stellen Sie sicher, dass Bluetooth auf Ihrem Telefon aktiviert ist</string>
     <string name="text_upto_value_mg">Bis zu %1$d mg</string>
     <string name="text_searching_your_ring_dot">Suche nach deinem Ring...</string>
-
+    <string name="text_had_alcohol">Alkohol konsumiert</string>
+    <string name="text_intense_workout">Intensives Training</string>
+    <string name="text_feeling_feverish">Fiebergefühl</string>
+    <string name="text_disturbed_sleep_environment">Gestörte Schlafumgebung</string>
+    <string name="text_late_night_meal">Spätes Abendessen</string>
+    <string name="text_higher_caffeine_intake">Hoher Koffeinkonsum</string>
+    <string name="text_your_hrv_dropped_by_last_night">Dein HRV ist letzte Nacht um %1$d%% gesunken!</string>
+    <string name="text_exercise_or_physical_activity">Sport oder körperliche Aktivität</string>
+    <string name="text_stress_or_anxiety">Stress oder Angst</string>
+    <string name="text_caffeine_or_stimulant_intake">Koffein- oder Stimulanzienaufnahme</string>
+    <string name="text_medications">Medikamente</string>
 </resources>

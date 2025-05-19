@@ -2108,5 +2108,15 @@ onjour, Luna"</string>
     <string name="text_place_ring_charges">Placez votre bague sur le chargeur et assurez-vous que le Bluetooth est activé sur votre téléphone</string>
     <string name="text_upto_value_mg">Jusqu’à %1$d mg</string>
     <string name="text_searching_your_ring_dot">Recherche de votre bague...</string>
-
+    <string name="text_had_alcohol">A consommé de l\'alcool</string>
+    <string name="text_intense_workout">Entraînement intense</string>
+    <string name="text_feeling_feverish">Sensation de fièvre</string>
+    <string name="text_disturbed_sleep_environment">Environnement de sommeil perturbé</string>
+    <string name="text_late_night_meal">Repas tard dans la nuit</string>
+    <string name="text_higher_caffeine_intake">Consommation élevée de caféine</string>
+    <string name="text_your_hrv_dropped_by_last_night">Votre VRC a chuté de %1$d%% la nuit dernière !</string>
+    <string name="text_exercise_or_physical_activity">Exercice ou activité physique</string>
+    <string name="text_stress_or_anxiety">Stress ou anxiété</string>
+    <string name="text_caffeine_or_stimulant_intake">Consommation de caféine ou de stimulants</string>
+    <string name="text_medications">Médicaments</string>
 </resources>

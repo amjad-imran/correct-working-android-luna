@@ -1982,5 +1982,15 @@
     <string name="text_place_ring_charges">将戒指放在充电器上，并确保手机已启用蓝牙</string>
     <string name="text_upto_value_mg">高达 %1$d 毫克</string>
     <string name="text_searching_your_ring_dot">正在搜索您的戒指...</string>
-
+    <string name="text_had_alcohol">饮酒</string>
+    <string name="text_intense_workout">高强度锻炼</string>
+    <string name="text_feeling_feverish">感觉发烧</string>
+    <string name="text_disturbed_sleep_environment">睡眠环境受干扰</string>
+    <string name="text_late_night_meal">深夜进食</string>
+    <string name="text_higher_caffeine_intake">咖啡因摄入量增加</string>
+    <string name="text_your_hrv_dropped_by_last_night">你的HRV昨晚下降了%1$d%%！</string>
+    <string name="text_exercise_or_physical_activity">锻炼或体育活动</string>
+    <string name="text_stress_or_anxiety">压力或焦虑</string>
+    <string name="text_caffeine_or_stimulant_intake">咖啡因或兴奋剂摄入</string>
+    <string name="text_medications">药物</string>
 </resources>

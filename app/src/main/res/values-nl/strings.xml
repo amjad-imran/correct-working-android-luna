@@ -1988,5 +1988,15 @@
     <string name="text_place_ring_charges">Plaats je ring op de oplader en zorg ervoor dat Bluetooth is ingeschakeld op je telefoon</string>
     <string name="text_upto_value_mg">Tot %1$d mg</string>
     <string name="text_searching_your_ring_dot">Bezig met zoeken naar je ring...</string>
-
+    <string name="text_had_alcohol">Alcohol gedronken</string>
+    <string name="text_intense_workout">Intensieve training</string>
+    <string name="text_feeling_feverish">Koortsig gevoel</string>
+    <string name="text_disturbed_sleep_environment">Verstoorde slaapomgeving</string>
+    <string name="text_late_night_meal">Laat avondmaal</string>
+    <string name="text_higher_caffeine_intake">Hoge cafeïne-inname</string>
+    <string name="text_your_hrv_dropped_by_last_night">Je HRV is gedaald met %1$d%% afgelopen nacht!</string>
+    <string name="text_exercise_or_physical_activity">Lichaamsbeweging of fysieke activiteit</string>
+    <string name="text_stress_or_anxiety">Stress of angst</string>
+    <string name="text_caffeine_or_stimulant_intake">Inname van cafeïne of stimulerende middelen</string>
+    <string name="text_medications">Medicijnen</string>
 </resources>

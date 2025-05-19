@@ -2010,5 +2010,15 @@
     <string name="text_place_ring_charges">Поместите кольцо на зарядное устройство и убедитесь, что Bluetooth включён на вашем телефоне</string>
     <string name="text_upto_value_mg">До %1$d мг</string>
     <string name="text_searching_your_ring_dot">Поиск вашего кольца...</string>
-
+    <string name="text_had_alcohol">Употреблял алкоголь</string>
+    <string name="text_intense_workout">Интенсивная тренировка</string>
+    <string name="text_feeling_feverish">Ощущение жара</string>
+    <string name="text_disturbed_sleep_environment">Нарушенная обстановка сна</string>
+    <string name="text_late_night_meal">Поздний ужин</string>
+    <string name="text_higher_caffeine_intake">Повышенное потребление кофеина</string>
+    <string name="text_your_hrv_dropped_by_last_night">Ваш ВРС снизился на %1$d%% прошлой ночью!</string>
+    <string name="text_exercise_or_physical_activity">Физические упражнения или активность</string>
+    <string name="text_stress_or_anxiety">Стресс или тревожность</string>
+    <string name="text_caffeine_or_stimulant_intake">Кофеин или стимуляторы</string>
+    <string name="text_medications">Лекарства</string>
 </resources>

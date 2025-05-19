@@ -253,16 +253,17 @@ class OHeartRateDataViewModel @Inject constructor(
         val eventData = listOf(
             IrregularEventsChipModel(
                 "exercise_or_physical_activity",
-                "Exercise or Physical Activity"
+                resourcesProvider.getString(R.string.text_exercise_or_physical_activity)
             ),
-            IrregularEventsChipModel("stress_or_anxiety", "Stress or Anxiety"),
-            IrregularEventsChipModel("feeling_feverish", "Feeling Feverish"),
+            IrregularEventsChipModel("stress_or_anxiety",
+                resourcesProvider.getString(R.string.text_stress_or_anxiety)),
+            IrregularEventsChipModel("feeling_feverish", resourcesProvider.getString(R.string.text_feeling_feverish)),
             IrregularEventsChipModel(
                 "caffeine_or_stimulant_intake",
-                "Caffeine or Stimulant Intake"
+                resourcesProvider.getString(R.string.text_caffeine_or_stimulant_intake)
             ),
-            IrregularEventsChipModel("medications", "Medications"),
-            IrregularEventsChipModel("others", "Other"),
+            IrregularEventsChipModel("medications", resourcesProvider.getString(R.string.text_medications)),
+            IrregularEventsChipModel("others", resourcesProvider.getString(R.string.text_other)),
         )
 
         data.forEach {
