@@ -2011,6 +2011,7 @@
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Anotado! Avisaremos sempre que encontrarmos irregularidades.</string>
     <string name="text_place_ring_charges">Coloque o anel no carregador e certifique-se de que o Bluetooth está ativado no seu telefone</string>
     <string name="text_upto_value_mg">Até %1$d mg</string>
+    <string name="text_searching_your_ring_dot">Procurando seu anel...</string>
 
 
 </resources>

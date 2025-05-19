@@ -113,7 +113,7 @@ class FindDeviceListFragment :
 
         viewModel.clearScannedDeviceList()
 
-        binding.tvDevicesFound.text = "Searching your ring..."
+        binding.tvDevicesFound.text = getString(R.string.text_searching_your_ring_dot)
         setRecycler()
         viewModel.fetchDeviceList()
 

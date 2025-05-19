@@ -1963,5 +1963,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">Noted! We will keep you posted whenever we find such irregularities.</string>
     <string name="text_place_ring_charges">Place your ring on the charger and make sure bluetooth is enabled on your phone</string>
     <string name="text_upto_value_mg">Upto %1$d mg</string>
+    <string name="text_searching_your_ring_dot">Searching your ring...</string>
 
 </resources>

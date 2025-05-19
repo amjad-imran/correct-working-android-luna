@@ -2107,5 +2107,6 @@ onjour, Luna"</string>
     <string name="text_noted_we_will_keep_you_posted_whenever_we_find_such_irregularities">C’est noté ! Nous vous tiendrons informé(e) de toute irrégularité détectée.</string>
     <string name="text_place_ring_charges">Placez votre bague sur le chargeur et assurez-vous que le Bluetooth est activé sur votre téléphone</string>
     <string name="text_upto_value_mg">Jusqu’à %1$d mg</string>
+    <string name="text_searching_your_ring_dot">Recherche de votre bague...</string>
 
 </resources>

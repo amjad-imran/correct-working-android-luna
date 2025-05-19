@@ -190,7 +190,7 @@ class CaffeineGraphView : View {
             if (isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
         )
 
-        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
+        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
         val textHeight = textPaint.descent() - textPaint.ascent()
         canvas.drawText(
             caffeineTextStart,
@@ -212,7 +212,7 @@ class CaffeineGraphView : View {
                 barCenterYPos - 8f.dpToPixel()
             )
         } else {
-            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
+            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
             val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
             canvas.drawText(
                 caffeineTextEnd, segment3Start - textWidth / 2,
@@ -230,7 +230,7 @@ class CaffeineGraphView : View {
         )
 
 
-        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US))
+        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
         val textWidthEnd = textPaint.measureText(endText, 0, endText.length)
         canvas.drawText(
             endText, segment3End - textWidthEnd,
