@@ -96,16 +96,20 @@ constructor(
             selectedChips.forEach {
                 reasonArray.add(it)
             }
+            val data = localDataStore.getHrvAlerts(true)
 
             val req = JsonObject().apply {
                 this.addProperty("current_date", getCurrentDate())
                 this.addProperty("current_time", getCurrentTime())
-                this.addProperty("current_value", localDataStore.getHrvAlerts()?.data?.currentValue)
-                this.addProperty("previous_value", localDataStore.getHrvAlerts()?.data?.currentValue)
+                this.addProperty("current_value", data?.data?.currentValue)
+                this.addProperty("previous_value", data?.data?.lastComparedValue)
                 this.add("reason", reasonArray)
-                this.addProperty("type", "hr")
-                if (!optionalMessage.isNullOrEmpty()){
-                    this.addProperty("description", optionalMessage)
+                this.addProperty("type", "hrv")
+
+                if(selectedChips.find { it.equals("others") }!=null){
+                    if (!optionalMessage.isNullOrEmpty()){
+                        this.addProperty("description", optionalMessage)
+                    }
                 }
             }
 
@@ -150,11 +154,11 @@ constructor(
     }
 
     fun loadAlertsData() {
-        hrvAlertsData.postValue(Event(true))
+        hrvAlertsData.value = (Event(true))
     }
 
     fun updateAlert(displayAlert: Boolean) {
-        val alerts = localDataStore.getHrvAlerts()
+        val alerts = localDataStore.getHrvAlerts(true)
         if (alerts == null) return
 
         alerts.data.apply {
@@ -1033,20 +1037,23 @@ constructor(
         return listOf(
             IrregularEventsChipModel(
                 "had_alcohol",
-                "Had Alcohol"
+                resourcesProvider.getString(R.string.text_had_alcohol)
             ),
-            IrregularEventsChipModel("intense_workout", "SIntense workout"),
-            IrregularEventsChipModel("feeling_feverish", "Feeling Feverish"),
+            IrregularEventsChipModel("intense_workout",
+                resourcesProvider.getString(R.string.text_intense_workout)),
+            IrregularEventsChipModel("feeling_feverish",
+                resourcesProvider.getString(R.string.text_feeling_feverish)),
             IrregularEventsChipModel(
                 "disturbed_sleep_environment",
-                "Disturbed sleep environment"
+                resourcesProvider.getString(R.string.text_disturbed_sleep_environment)
             ),
-            IrregularEventsChipModel("late_night_meal", "Late night meal"),
+            IrregularEventsChipModel("late_night_meal",
+                resourcesProvider.getString(R.string.text_late_night_meal)),
             IrregularEventsChipModel(
                 "higher_caffeine_intake",
-                "Higher caffeine intake"
+                resourcesProvider.getString(R.string.text_higher_caffeine_intake)
             ),
-            IrregularEventsChipModel("others", "Other"),
+            IrregularEventsChipModel("others", resourcesProvider.getString(R.string.text_other)),
         )
     }
 }

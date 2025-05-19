@@ -529,12 +529,14 @@ interface DataStoredInterface {
     fun getHrAlerts(): HrAlerts?
     fun updateHrAlerts(alerts: HrAlerts)
 
-    fun saveHrvAlert(prevMeasuredValue: Int, currentMeasuredValue: Int)
-    fun getHrvAlerts(): HrvAlerts?
+    fun saveHrvAlert(prevMeasuredValue: Int, currentMeasuredValue: Int,
+                     spikePercent: Int)
+    fun getHrvAlerts(ignoreDeleted: Boolean): HrvAlerts?
     fun updateHrvAlerts(alerts: HrvAlerts)
 
     fun getIrregularityCardsVisibilityReadiness(): Boolean
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)
+    fun clearAlerts()
 }
 
 enum class AppTrackEvent {

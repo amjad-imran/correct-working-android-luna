@@ -1664,8 +1664,9 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun saveHrvAlert(
         prevMeasuredValue: Int,
         currentMeasuredValue: Int,
+        spike:Int
     ) {
-        localDataStore.saveHrvAlert(prevMeasuredValue, currentMeasuredValue)
+        localDataStore.saveHrvAlert(prevMeasuredValue, currentMeasuredValue,spike)
     }
 
     private fun getReadinessDataCard(
@@ -1679,12 +1680,17 @@ class SummaryDataViewModelToday @Inject constructor(
         val currentDayHRV = healthData.readiness?.hrv?.value
         val previous14DayAvg = healthData.readiness?.prev14DayAvgHRV
 
-        if (currentDayHRV != null && previous14DayAvg != null) {
-            val percentageDrop = ((previous14DayAvg - currentDayHRV) / previous14DayAvg) * 100
-            if (percentageDrop > 30) {
+       /* val currentDayHRV = 39
+        val previous14DayAvg = 62*/
+
+
+        if (currentDayHRV != null && previous14DayAvg != null && currentDayHRV != 0 && previous14DayAvg != 0) {
+            val percentageDrop = ((previous14DayAvg - currentDayHRV).toFloat() / previous14DayAvg) * 100
+            if ((percentageDrop.roundToInt()) > 30) {
                 saveHrvAlert(
                     previous14DayAvg,
-                    currentDayHRV
+                    currentDayHRV,
+                    percentageDrop.roundToInt()
                 )
             }
         }

@@ -113,6 +113,10 @@ class AuthenticationRepositoryImpl(
             localDataSource.clearDisplayEditHomeScreenCard()
             localDataSource.clearCustomHomeScreenApiCallTimeStamps()
             localDataSource.clearCustomHomeScreenItemsPriorityList()
+
+
+            localDataSource.clearAlerts()
+
             //
             emit(true)
         }

@@ -1964,5 +1964,12 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_place_ring_charges">Place your ring on the charger and make sure bluetooth is enabled on your phone</string>
     <string name="text_upto_value_mg">Upto %1$d mg</string>
     <string name="text_searching_your_ring_dot">Searching your ring...</string>
+    <string name="text_had_alcohol">Had Alcohol</string>
+    <string name="text_intense_workout">Intense workout</string>
+    <string name="text_feeling_feverish">Feeling Feverish</string>
+    <string name="text_disturbed_sleep_environment">Disturbed sleep environment</string>
+    <string name="text_late_night_meal">Late night meal</string>
+    <string name="text_higher_caffeine_intake">Higher caffeine intake</string>
+    <string name="text_your_hrv_dropped_by_last_night">Your HRV dropped by %1$d%% Last Night!</string>
 
 </resources>

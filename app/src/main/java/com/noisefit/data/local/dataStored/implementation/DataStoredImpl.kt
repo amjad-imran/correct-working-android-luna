@@ -258,42 +258,52 @@ class DataStoredImpl
 
     override fun saveHrvAlert(
         prevMeasuredValue: Int,
-        currentMeasuredValue: Int
+        currentMeasuredValue: Int,
+        spikePercent: Int
     ) {
         val hrvData = HrvAlert(
-            spikePercent = -1,
+            spikePercent = spikePercent,
             minutes = -1,
             currentValue = currentMeasuredValue,
             lastComparedValue = prevMeasuredValue
         )
 
-        var hrvAlerts = getHrvAlerts()
-        if (hrvAlerts == null){
+        var hrvAlerts = getHrvAlerts(true)
+        if (hrvAlerts == null) {
             hrvAlerts = HrvAlerts(
                 LocalDate.now().toString(),
                 hrvData
             )
             mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
-        }else{
-            hrvAlerts.apply {
+        } else {
+            /*hrvAlerts.apply {
                 this.data = hrvData
             }
-            mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
+            mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()*/
         }
     }
 
-    override fun getHrvAlerts(): HrvAlerts? {
+    override fun clearAlerts() {
+        mPrefs.edit()?.remove(HRV_ALERTS)?.commit()
+        mPrefs.edit()?.remove(HR_ALERTS)?.commit()
+
+    }
+
+    override fun getHrvAlerts(ignoreDeleted: Boolean): HrvAlerts? {
         val data = mPrefs.getString(HRV_ALERTS, null)
         if (data.isNullOrEmpty()) {
             return null
         }
 
         val parsedData = gson.fromJson(data, HrvAlerts::class.java)
-        if (!parsedData.date.equals(LocalDate.now().toString()) ||
-            parsedData.data.isDeleted)
-        {
+        if (parsedData.date.equals(LocalDate.now().toString()).not()) {
             mPrefs.edit().remove(HR_ALERTS).commit()
             return null
+        }
+        if (ignoreDeleted.not()) {
+            if (parsedData.data.isDeleted) {
+                return null
+            }
         }
 
         return parsedData
@@ -304,7 +314,7 @@ class DataStoredImpl
     }
 
     override fun saveHrAlert(
-        alertPercent:Int,
+        alertPercent: Int,
         lastMeasuredIndex: Int,
         lastMeasuredValue: Int,
         roundedAverage: Int
@@ -342,10 +352,10 @@ class DataStoredImpl
         } else {
             val parsedData = gson.fromJson(data, HrAlerts::class.java)
             return if (parsedData.date.equals(LocalDate.now().toString())) {
-                val nonDeleted = parsedData.data.filter { it.isDeleted==false }
-                if(nonDeleted.size==0){
+                val nonDeleted = parsedData.data.filter { it.isDeleted == false }
+                if (nonDeleted.size == 0) {
                     null
-                }else{
+                } else {
                     parsedData.apply {
                         this.data = nonDeleted
                     }

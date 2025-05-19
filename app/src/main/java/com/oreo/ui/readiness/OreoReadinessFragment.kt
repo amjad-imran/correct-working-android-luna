@@ -758,7 +758,7 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
-            mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString()){
+            mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString()) {
                 mViewModel.isEventSubmitted = true
                 mViewModel.updateAlert(true)
                 mViewModel.loadAlertsData()
@@ -766,11 +766,16 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.btnSubmit.setOnClickListener {
-            mViewModel.submitIrregularityEvents(){
+            mViewModel.submitIrregularityEvents() {
                 mViewModel.isEventSubmitted = true
                 mViewModel.updateAlert(true)
                 mViewModel.loadAlertsData()
             }
+        }
+
+        binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.ivClose.setOnClickListener {
+            mViewModel.isEventSubmitted = false
+            mViewModel.loadAlertsData()
         }
 
     }
@@ -788,26 +793,31 @@ class OreoReadinessFragment :
              }
          }*/
 
-        mViewModel.hrvAlertsData.observe(this){
+        mViewModel.hrvAlertsData.observe(this) {
             it.getContent()?.let {
-                mViewModel.todayDate.let {
-                    val hrvAlerts = mainViewModel.localDataStore.getHrvAlerts()
-                    if (hrvAlerts != null){
-                        setIrregularityEventsChips(
-                            mViewModel.getIrregularityEventsChips()
-                        )
+                val hrvAlerts = mainViewModel.localDataStore.getHrvAlerts(false)
+                if (hrvAlerts != null) {
+
+                    val drop = hrvAlerts.data.spikePercent
+
+                    binding.lytIrregularityEvents.tvDropPercent.text =
+                        getString(R.string.text_your_hrv_dropped_by_last_night, drop)
+
+                    setIrregularityEventsChips(
+                        mViewModel.getIrregularityEventsChips()
+                    )
+                    binding.lytIrregularityEvents.root.visible()
+                    binding.divider111.root.visible()
+                } else {
+                    if (mViewModel.isEventSubmitted) {
+                        mViewModel.isEventSubmitted = false
+                        binding.lytIrregularityEvents.irrEventsCard.gone()
+                        binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.root.visible()
                         binding.lytIrregularityEvents.root.visible()
                         binding.divider111.root.visible()
-                    }else{
-                        if(mViewModel.isEventSubmitted){
-                            binding.lytIrregularityEvents.irrEventsCard.gone()
-                            binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.root.visible()
-                            binding.lytIrregularityEvents.root.visible()
-                            binding.divider111.root.visible()
-                        }else {
-                            binding.lytIrregularityEvents.root.gone()
-                            binding.divider111.root.gone()
-                        }
+                    } else {
+                        binding.lytIrregularityEvents.root.gone()
+                        binding.divider111.root.gone()
                     }
                 }
             }
@@ -914,12 +924,12 @@ class OreoReadinessFragment :
                 mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*/
                 mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
                     mViewModel.updateChipSelection(item.key, isChecked)
-                    if(mChip.tag.toString().equals("others")){
-                        if(isChecked){
+                    if (mChip.tag.toString().equals("others")) {
+                        if (isChecked) {
                             binding.lytIrregularityEvents.chatEtx.visible()
                             binding.lytIrregularityEvents.imgChatEtx.visible()
                             binding.lytIrregularityEvents.btnSubmit.gone()
-                        }else{
+                        } else {
                             binding.lytIrregularityEvents.chatEtx.gone()
                             binding.lytIrregularityEvents.imgChatEtx.gone()
                             binding.lytIrregularityEvents.btnSubmit.visible()
@@ -1250,6 +1260,12 @@ class OreoReadinessFragment :
              sleepStartTime,
              sleepEndTime
          )*/
+        if (it.date.equals(LocalDate.now().toString())) {
+            mViewModel.loadAlertsData()
+        } else {
+            binding.lytIrregularityEvents.root.gone()
+            binding.divider111.root.gone()
+        }
     }
 
 
