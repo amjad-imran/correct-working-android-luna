@@ -132,6 +132,10 @@ class OHeartRateDataFragment :
 
     override fun initListener() {
 
+        binding.lytIrregularityEvents.lytIrregularityEventsSubmittedCard.ivClose.setOnClickListener {
+            viewModel.loadAlertsData()
+        }
+
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
             override fun onValueSelected(
@@ -229,6 +233,7 @@ class OHeartRateDataFragment :
                         )
                     }else{
                         if(viewModel.isEventSubmitted){
+                            viewModel.isEventSubmitted = false
                             binding.divider1.root.visible()
                             binding.lytIrregularityEvents.root.visible()
                             binding.lytIrregularityEvents.lytIrregularityEventsSubmittedCard.root.visible()
@@ -386,7 +391,7 @@ class OHeartRateDataFragment :
                 addTransformer(MarginPageTransformer(40))
             })
 
-            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            //orientation = ViewPager2.ORIENTATION_HORIZONTAL
             adapter = winsAdapter
         }
 

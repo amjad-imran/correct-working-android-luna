@@ -83,17 +83,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_close_dash_alert" />
 
-            <ImageView
-                android:id="@+id/imageView78"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                android:alpha="0.2"
-                app:layout_constraintEnd_toStartOf="@+id/btnClose"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/img_readiness_irregularity_arrow_down" />
-
             <TextView
                 android:id="@+id/textView168"
                 style="@style/S12"
@@ -101,11 +90,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="20dp"
                 android:lineHeight="24sp"
                 android:text="@string/text_tell_us_what_happened"
                 android:textColor="#DC8282"
-                app:layout_constraintEnd_toStartOf="@+id/imageView78"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDropPercent" />
 

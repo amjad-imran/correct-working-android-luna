@@ -102,7 +102,7 @@ class NetworkConnectionInterceptor(
         }
 
         Handler(Looper.getMainLooper()).post {
-            appContext.showShortToast(appContext.getString(R.string.text_session_expired))
+            appContext.showShortToast(resourcesProvider.getString(R.string.text_session_expired))
         }
 
         Freshchat.resetUser(NoiseFitApplicationMain.context)

@@ -3300,7 +3300,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
 
-        //saveHrAlert(50,50, 120, 70)
+        //saveHrAlert(90,120, 120, 70)
 
         if (listData.isNullOrEmpty()) return null
 
