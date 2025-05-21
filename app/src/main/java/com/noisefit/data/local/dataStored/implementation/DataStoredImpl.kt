@@ -268,7 +268,7 @@ class DataStoredImpl
             lastComparedValue = prevMeasuredValue
         )
 
-        var hrvAlerts = getHrvAlerts(false)
+        var hrvAlerts = getHrvAlerts(true)
         if (hrvAlerts == null) {
             hrvAlerts = HrvAlerts(
                 LocalDate.now().toString(),
@@ -276,6 +276,12 @@ class DataStoredImpl
             )
             mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
         } else {
+            if (hrvAlerts.data.currentValue != currentMeasuredValue ||
+                hrvAlerts.data.lastComparedValue != prevMeasuredValue
+            ) {
+                hrvAlerts.data = hrvData
+                mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(hrvAlerts))?.commit()
+            }
             /*hrvAlerts.apply {
                 this.data = hrvData
             }
