@@ -135,7 +135,7 @@
     <string name="text_sports_mode_selection">Selección de modo deportivo</string>
     <string name="text_sports_mode">Modo deportivo</string>
     <string name="text_last_menstruation">Última menstruación</string>
-    <string name="text_heart_rate">Frecuencia cardíaca</string>
+    <string name="text_heart_rate">Pulso</string>
     <string name="text_device_restart">Reinicio del dispositivo</string>
     <string name="text_watch_face_gallery">Galería de esferas</string>
     <string name="text_select_watchface_default">Selecciona una de las siguientes esferas para establecerla como predeterminada</string>

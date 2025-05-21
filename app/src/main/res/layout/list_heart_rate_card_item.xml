@@ -25,10 +25,12 @@
         <include
             android:id="@+id/lytTrend"
             layout="@layout/layout_health_trend_comparison"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:visibility="gone"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintEnd_toStartOf="@id/lytHrSpike"
             app:layout_constraintBottom_toBottomOf="@id/textView"
             app:layout_constraintStart_toEndOf="@id/textView"
             app:layout_constraintTop_toTopOf="@id/textView"

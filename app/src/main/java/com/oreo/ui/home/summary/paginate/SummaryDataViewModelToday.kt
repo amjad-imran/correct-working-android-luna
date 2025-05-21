@@ -1132,7 +1132,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
-            val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake",true) }
+            val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
             if (hasCaffeineKey == null) {
                 getCaffeineCardData()?.let {
                     userActivities.add(it)
@@ -1252,7 +1252,6 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
 
-
             // Add naps if any (this could also be moved to a separate function)
 //            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
 //                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
@@ -1366,7 +1365,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
-            else->{
+
+            else -> {
                 message = messageList[0][Random.nextInt(0, 2)]
                 highlightState = HighlightState.START
             }
@@ -1664,9 +1664,9 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun saveHrvAlert(
         prevMeasuredValue: Int,
         currentMeasuredValue: Int,
-        spike:Int
+        spike: Int
     ) {
-        localDataStore.saveHrvAlert(prevMeasuredValue, currentMeasuredValue,spike)
+        localDataStore.saveHrvAlert(prevMeasuredValue, currentMeasuredValue, spike)
     }
 
     private fun getReadinessDataCard(
@@ -1680,12 +1680,13 @@ class SummaryDataViewModelToday @Inject constructor(
         val currentDayHRV = healthData.readiness?.hrv?.value
         val previous14DayAvg = healthData.readiness?.prev14DayAvgHRV
 
-       /* val currentDayHRV = 39
-        val previous14DayAvg = 62*/
+        /* val currentDayHRV = 39
+         val previous14DayAvg = 62*/
 
 
         if (currentDayHRV != null && previous14DayAvg != null && currentDayHRV != 0 && previous14DayAvg != 0) {
-            val percentageDrop = ((previous14DayAvg - currentDayHRV).toFloat() / previous14DayAvg) * 100
+            val percentageDrop =
+                ((previous14DayAvg - currentDayHRV).toFloat() / previous14DayAvg) * 100
             if ((percentageDrop.roundToInt()) > 30) {
                 saveHrvAlert(
                     previous14DayAvg,
@@ -1693,6 +1694,14 @@ class SummaryDataViewModelToday @Inject constructor(
                     percentageDrop.roundToInt()
                 )
             }
+        }
+
+        val alerts = localDataStore.getHrvAlerts(true)
+
+        val alertCount = if (alerts?.data == null) {
+            0
+        } else {
+            1
         }
 
 
@@ -1704,7 +1713,8 @@ class SummaryDataViewModelToday @Inject constructor(
             totalScoreImpact = readiness?.totalScoreImpact ?: 0,
             noOfNaps = sleep?.naps?.size ?: 0,
             noOfSleeps = sleep?.sleeps?.size ?: 0,
-            impact = impactData?.readinessScore
+            impact = impactData?.readinessScore,
+            alertCount = alertCount
         )
 
         when (daySlot) {
@@ -3300,7 +3310,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun getHrTrend(listData: List<Int>?, lastMeasuredIndex: Int): Int? {
 
-        //saveHrAlert(90,120, 120, 70)
+        /*saveHrAlert(90,90, 120, 70)
+        saveHrAlert(90,100, 120, 70)*/
 
         if (listData.isNullOrEmpty()) return null
 

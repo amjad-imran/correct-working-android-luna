@@ -138,7 +138,7 @@
     <string name="text_sports_mode_selection">Выбор спортивного режима</string>
     <string name="text_sports_mode">Спортивный режим</string>
     <string name="text_last_menstruation">Последняя менструация</string>
-    <string name="text_heart_rate">Частота сердечных сокращений</string>
+    <string name="text_heart_rate">Пульс</string>
     <string name="text_device_restart">Перезагрузка устройства</string>
     <string name="text_watch_face_gallery">Галерея циферблатов</string>
     <string name="text_select_watchface_default">Выберите любой циферблат ниже, чтобы установить его по умолчанию</string>

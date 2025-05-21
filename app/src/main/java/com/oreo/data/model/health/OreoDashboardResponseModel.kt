@@ -31,7 +31,8 @@ data class ODashboardReadinessModel(
     val status: String? = "",
     val statusCode: String? = null,
     val nudges: List<Nudges>? = null,
-    val impact: Int? = null
+    val impact: Int? = null,
+    val alertCount: Int = 0,
 )
 
 data class ODashboardActivityScoreModel(
@@ -70,7 +71,7 @@ data class ODashboardSleepModel(
     val restingHr: Int? = null,
     val sleepStage: List<SleepHourlyBreakup> = ArrayList(),
     val status: String? = "",
-    val statusCode:String?=null,
+    val statusCode: String? = null,
     @SerializedName("start_time")
     val startTime: String? = "",
     @SerializedName("end_time")

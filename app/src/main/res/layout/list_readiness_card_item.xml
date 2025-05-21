@@ -39,10 +39,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/textView"
         app:layout_constraintStart_toEndOf="@id/textView"
-        app:layout_constraintTop_toTopOf="@id/textView" />
+        app:layout_constraintTop_toTopOf="@id/textView"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/lytHrvSpike"
+        layout="@layout/layout_hr_spike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/imageView14"
+        app:layout_constraintEnd_toStartOf="@id/imageView14"
+        app:layout_constraintTop_toTopOf="@id/imageView14"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -71,9 +83,9 @@
         android:id="@+id/tvValue"
         style="@style/H32"
         android:layout_width="wrap_content"
-        android:textSize="40sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toTopOf="@+id/lottieAnimationView"

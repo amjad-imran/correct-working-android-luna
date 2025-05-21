@@ -1957,6 +1957,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            if (data.data.alertCount == 0) {
+                binding.lytHrvSpike.root.gone()
+                binding.imageView14.visible()
+            } else {
+
+                binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.root.visible()
+                binding.imageView14.gone()
+            }
+
             val impact = data.data.impact
 
             if (impact != null) {
@@ -2112,6 +2122,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             } else {
                 binding.lytTrend.root.gone()
+            }
+
+            if (data.data.alertCount == 0) {
+                binding.lytHrvSpike.root.gone()
+                binding.imageView14.visible()
+            } else {
+                binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.root.visible()
+                binding.imageView14.gone()
             }
 
             binding.root.setOnClickListener {
@@ -2940,7 +2959,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
-                else->{
+
+                else -> {
                     binding.tvState.apply {
                         text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())

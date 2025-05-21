@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.IrregularEventsChipsListModel
@@ -345,6 +346,12 @@ class OHeartRateDataFragment :
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(40))
+            })
+
+            adapter = winsAdapter
+
 
             // Get the RecyclerView and configure nested scrolling
             (getChildAt(0) as? RecyclerView)?.let { recyclerView ->
@@ -387,13 +394,17 @@ class OHeartRateDataFragment :
                 }
             }
 
-            setPageTransformer(CompositePageTransformer().apply {
-                addTransformer(MarginPageTransformer(40))
-            })
 
             //orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            adapter = winsAdapter
         }
+
+        /*binding.lytIrregularityEvents.vpBannerSlider.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                LOGS.d("sdfjkhskjdfh onpageScrolled")
+                val outerFragment = parentFragment as? OHeartRateDetailsFragment
+                outerFragment?.setOuterPagingEnabled(state == ViewPager2.SCROLL_STATE_IDLE)
+            }
+        })*/
 
         TabLayoutMediator(
             binding.lytIrregularityEvents.tabLayout,

@@ -50,4 +50,5 @@ class HeartRatePagerAdapter (fragmentActivity: Fragment) : FragmentStateAdapter(
         return OHeartRateDataFragment.newInstance(date)
 
     }
+
 }

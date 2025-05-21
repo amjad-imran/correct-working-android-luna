@@ -758,6 +758,10 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
+            if (binding.lytIrregularityEvents.chatEtx.text.toString().isEmpty()) {
+                return@setOnClickListener
+            }
+
             mViewModel.submitIrregularityEvents(binding.lytIrregularityEvents.chatEtx.text.toString()) {
                 mViewModel.isEventSubmitted = true
                 mViewModel.updateAlert(true)
@@ -766,6 +770,11 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.btnSubmit.setOnClickListener {
+
+            if (mViewModel.selectedChips.isEmpty()) {
+                return@setOnClickListener
+            }
+
             mViewModel.submitIrregularityEvents() {
                 mViewModel.isEventSubmitted = true
                 mViewModel.updateAlert(true)

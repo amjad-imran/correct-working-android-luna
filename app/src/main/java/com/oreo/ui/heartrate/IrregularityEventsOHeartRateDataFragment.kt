@@ -63,7 +63,8 @@ class IrregularityEventsOHeartRateDataFragment :
     }
 
     private fun setUi(data: IrregularEventsChipsListModel) {
-        binding.tvMessage.text = getString(R.string.text_hr_spiked_by_value,data.alert.spikePercent)
+        binding.tvMessage.text =
+            getString(R.string.text_hr_spiked_by_value, data.alert.spikePercent)
         binding.tvTime.text = minutesToAmPm(data.alert.minutes)
 
         setIrregularityEventsChips(data.irregularEventsChipsList)
@@ -72,12 +73,17 @@ class IrregularityEventsOHeartRateDataFragment :
     override fun initListener() {
         binding.btnSubmit.setOnClickListener {
             data?.let {
+                if (selectedChips.isEmpty()) return@setOnClickListener
+
                 listener?.onSubmitBtnClicked(it, selectedChips)
             }
         }
 
         binding.imgChatEtx.setOnClickListener {
             data?.let {
+
+                if (binding.chatEtx.text.toString().isEmpty()) return@setOnClickListener
+
                 listener?.onSubmitBtnClicked(
                     it,
                     selectedChips,
@@ -85,7 +91,8 @@ class IrregularityEventsOHeartRateDataFragment :
                 )
             }
         }
-        binding.ivClose.setOnClickListener {
+
+        binding.btnClose.setOnClickListener {
             data?.let {
                 listener?.onCrossClicked(it)
             }
@@ -156,7 +163,7 @@ class IrregularityEventsOHeartRateDataFragment :
                         LOGS.d("Checked Chips ${mChip.text}")
                         val name = MiscUtil.addUnderscore(mChip.text.toString())
                         selectedChips.add(mChip.tag.toString())
-                    }else{
+                    } else {
                         selectedChips.remove(mChip.tag.toString())
                     }
                 }
@@ -172,7 +179,8 @@ interface IrregularityEventsBannerListener {
     fun onSubmitBtnClicked(
         data: IrregularEventsChipsListModel,
         selectedChips: List<String>,
-        other: String?=null
+        other: String? = null
     )
-    fun onCrossClicked(data:IrregularEventsChipsListModel)
+
+    fun onCrossClicked(data: IrregularEventsChipsListModel)
 }

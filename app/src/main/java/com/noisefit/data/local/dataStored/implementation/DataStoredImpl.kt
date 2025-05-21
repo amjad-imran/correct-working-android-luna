@@ -352,8 +352,8 @@ class DataStoredImpl
         } else {
             val parsedData = gson.fromJson(data, HrAlerts::class.java)
             return if (parsedData.date.equals(LocalDate.now().toString())) {
-                val nonDeleted = parsedData.data.filter { it.isDeleted == false }
-                if (nonDeleted.size == 0) {
+                val nonDeleted = parsedData.data.filter { !(it.isDeleted) }
+                if (nonDeleted.isEmpty()) {
                     null
                 } else {
                     parsedData.apply {
