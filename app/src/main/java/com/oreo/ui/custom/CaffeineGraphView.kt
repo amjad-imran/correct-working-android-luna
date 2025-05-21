@@ -213,13 +213,17 @@ class CaffeineGraphView : View {
                 barCenterYPos - 8f.dpToPixel()
             )
         }/* else {*/
-        val caffeineTextEnd =
-            caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
-        val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
-        canvas.drawText(
-            caffeineTextEnd, segment3Start - textWidth / 2,
-            barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
-        )
+
+        if(isStartHighlighted.not()){
+            val caffeineTextEnd =
+                caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
+            val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
+            canvas.drawText(
+                caffeineTextEnd, segment3Start - textWidth / 2,
+                barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
+            )
+        }
+
         /*}*/
         canvas.drawRoundRect(
             segment3Start,

@@ -51,9 +51,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/side_margin"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/imageView14"
+        app:layout_constraintBottom_toBottomOf="@id/textView"
         app:layout_constraintEnd_toStartOf="@id/imageView14"
-        app:layout_constraintTop_toTopOf="@id/imageView14"
+        app:layout_constraintTop_toTopOf="@id/textView"
         tools:visibility="visible" />
 
     <ImageView
