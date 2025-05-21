@@ -268,7 +268,7 @@ class DataStoredImpl
             lastComparedValue = prevMeasuredValue
         )
 
-        var hrvAlerts = getHrvAlerts(true)
+        var hrvAlerts = getHrvAlerts(false)
         if (hrvAlerts == null) {
             hrvAlerts = HrvAlerts(
                 LocalDate.now().toString(),

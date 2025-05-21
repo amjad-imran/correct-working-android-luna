@@ -65,7 +65,7 @@ class IrregularityEventsOHeartRateDataFragment :
     private fun setUi(data: IrregularEventsChipsListModel) {
         binding.tvMessage.text =
             getString(R.string.text_hr_spiked_by_value, data.alert.spikePercent)
-        binding.tvTime.text = minutesToAmPm(data.alert.minutes)
+        binding.tvTime.text = minutesToAmPm(data.alert.minutes).lowercase()
 
         setIrregularityEventsChips(data.irregularEventsChipsList)
     }
