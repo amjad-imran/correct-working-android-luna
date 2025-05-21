@@ -3,6 +3,7 @@ package com.oreo.ui.heartrate
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -361,7 +362,7 @@ class OHeartRateDataFragment :
                     overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
                     addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-                        private var initialY = 0f
+                        /*private var initialY = 0f
 
                         override fun onInterceptTouchEvent(
                             rv: RecyclerView,
@@ -383,6 +384,39 @@ class OHeartRateDataFragment :
 
                                         parent.requestDisallowInterceptTouchEvent(true)
                                     }
+                                }
+                            }
+                            return false
+                        }
+
+                        override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+                        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}*/
+                        private var initialX = 0f
+                        private var initialY = 0f
+                        private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+
+                        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                            when (e.action) {
+                                MotionEvent.ACTION_DOWN -> {
+                                    initialX = e.x
+                                    initialY = e.y
+                                    parent.requestDisallowInterceptTouchEvent(true)
+                                }
+
+                                MotionEvent.ACTION_MOVE -> {
+                                    val dx = abs(e.x - initialX)
+                                    val dy = abs(e.y - initialY)
+
+                                    // Only block parent if it's a horizontal gesture
+                                    if (dx > touchSlop && dx > dy) {
+                                        parent.requestDisallowInterceptTouchEvent(true) // Horizontal → block parent
+                                    } else if (dy > touchSlop && dy > dx) {
+                                        parent.requestDisallowInterceptTouchEvent(false) // Vertical → let parent handle
+                                    }
+                                }
+
+                                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                                    parent.requestDisallowInterceptTouchEvent(false)
                                 }
                             }
                             return false
