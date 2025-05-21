@@ -190,7 +190,8 @@ class CaffeineGraphView : View {
             if (isCaffeineHighlighted) greenPaintEnabled else greenPaintDisabled
         )
 
-        val caffeineTextStart = caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
+        val caffeineTextStart =
+            caffeineStart!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
         val textHeight = textPaint.descent() - textPaint.ascent()
         canvas.drawText(
             caffeineTextStart,
@@ -212,12 +213,13 @@ class CaffeineGraphView : View {
                 barCenterYPos - 8f.dpToPixel()
             )
         }/* else {*/
-            val caffeineTextEnd = caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
-            val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
-            canvas.drawText(
-                caffeineTextEnd, segment3Start - textWidth / 2,
-                barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
-            )
+        val caffeineTextEnd =
+            caffeineEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
+        val textWidth = textPaint.measureText(caffeineTextEnd, 0, caffeineTextEnd.length)
+        canvas.drawText(
+            caffeineTextEnd, segment3Start - textWidth / 2,
+            barCenterYPos + textHeight + 8f.dpToPixel(), textPaint
+        )
         /*}*/
         canvas.drawRoundRect(
             segment3Start,
@@ -230,7 +232,8 @@ class CaffeineGraphView : View {
         )
 
 
-        val endText = graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
+        val endText =
+            graphEnd!!.format(DateTimeFormatter.ofPattern("hh:mma", Locale.US)).lowercase()
         val textWidthEnd = textPaint.measureText(endText, 0, endText.length)
         canvas.drawText(
             endText, segment3End - textWidthEnd,
@@ -311,7 +314,7 @@ class CaffeineGraphView : View {
         val spacing = 2f.dpToPixel()
         val totalSpacing = spacing * (barCount - 1)
         val barWidth = (availableWidth - totalSpacing) / barCount
-        val barTopY = 24f.dpToPixel()
+        val barTopY = 26f.dpToPixel()
 
         val cornerRadius = 3f.dpToPixel()
 
@@ -407,17 +410,19 @@ class CaffeineGraphView : View {
         val todayDate = LocalDate.now()
         val nowDateTime = LocalDateTime.now()
 
-        val graphStartDate = LocalDateTime.of(todayDate,graphStart)
-        val caffeineStartDate = LocalDateTime.of(todayDate,caffeineStart)
-        val caffeineEndDate = LocalDateTime.of(todayDate,caffeineEnd)
+        val graphStartDate = LocalDateTime.of(todayDate, graphStart)
+        val caffeineStartDate = LocalDateTime.of(todayDate, caffeineStart)
+        val caffeineEndDate = LocalDateTime.of(todayDate, caffeineEnd)
         val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
-            LocalDateTime.of(todayDate,graphEnd)
+            LocalDateTime.of(todayDate, graphEnd)
         } else {//Next day case
-            LocalDateTime.of(todayDate.plusDays(1L),graphEnd)
+            LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
         }
 
+        val startOffset = graphStartDate.minusHours(3)
+
         when {
-            nowDateTime in graphStartDate..caffeineStartDate -> {
+            nowDateTime in startOffset..caffeineStartDate -> {
                 startWeight = 0.5f
                 val remaining = 1f - startWeight
                 val sum = caffeineDuration + endDuration
@@ -435,7 +440,7 @@ class CaffeineGraphView : View {
                 highlightState = HighlightState.CAFFEINE
             }
 
-            nowDateTime in caffeineEndDate..graphEndDate -> {
+            (nowDateTime in caffeineEndDate..graphEndDate) -> {
                 endWeight = 0.5f
                 val remaining = 1f - endWeight
                 val sum = startDuration + caffeineDuration
@@ -443,15 +448,14 @@ class CaffeineGraphView : View {
                 caffeineWeight = (caffeineDuration / sum) * remaining
                 highlightState = HighlightState.END
             }
-            else->{
-                LOGS.d("caffeine_graph in else case $nowDateTime - ${graphStartDate} - ${caffeineStartDate}")
 
-                startWeight = 0.5f
-                val remaining = 1f - startWeight
-                val sum = caffeineDuration + endDuration
+            else -> {
+                endWeight = 0.5f
+                val remaining = 1f - endWeight
+                val sum = startDuration + caffeineDuration
+                startWeight = (startDuration / sum) * remaining
                 caffeineWeight = (caffeineDuration / sum) * remaining
-                endWeight = (endDuration / sum) * remaining
-                highlightState = HighlightState.START
+                highlightState = HighlightState.END
             }
         }
 

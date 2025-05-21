@@ -2937,9 +2937,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
             }
 
-
+            val startOffset = graphStartDate.minusHours(3)
             when {
-                now in graphStartDate..caffeineStartDate -> {
+                now in startOffset..caffeineStartDate -> {
                     binding.tvState.apply {
                         text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())
@@ -2959,8 +2959,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
-
-                else -> {
+                else->{
                     binding.tvState.apply {
                         text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())

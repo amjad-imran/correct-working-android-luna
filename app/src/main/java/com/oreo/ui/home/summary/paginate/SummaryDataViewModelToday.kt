@@ -1348,10 +1348,12 @@ class SummaryDataViewModelToday @Inject constructor(
             LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
         }
 
+        val startOffset = graphStartDate.minusHours(3)
+
         var highlightState: HighlightState? = null
         var message: String? = null
         when {
-            now in graphStartDate..caffeineStartDate -> {
+            now in startOffset..caffeineStartDate -> {
                 message = messageList[0][Random.nextInt(0, 2)]
                 highlightState = HighlightState.START
             }
@@ -1365,8 +1367,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
-
-            else -> {
+            else->{
                 message = messageList[0][Random.nextInt(0, 2)]
                 highlightState = HighlightState.START
             }
