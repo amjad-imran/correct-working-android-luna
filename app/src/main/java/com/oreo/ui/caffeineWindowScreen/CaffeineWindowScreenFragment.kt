@@ -179,7 +179,15 @@ class CaffeineWindowScreenFragment :
 
         viewModel.dataUpdated.observe(this){
             it.getContent()?.let {
-
+                if (viewModel._myItemsList.value.isNullOrEmpty()){
+                    binding.llMyItems.gone()
+                    binding.rvMyItems.gone()
+                    viewModel.rvDisplayAllItemsToggleState.postValue(true)
+                }else{
+                    viewModel.rvDisplayAllItemsToggleState.postValue(false)
+                    binding.llMyItems.visible()
+                    binding.rvMyItems.visible()
+                }
             }
         }
 

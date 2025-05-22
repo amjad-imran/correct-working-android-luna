@@ -169,6 +169,7 @@ class CaffeineWindowScreenViewModel @Inject constructor(
                 canTake.addAll(canNotTake)
 
                 _allItemsList.postValue(canTake)
+                dataUpdated.postValue(Event(true))
             }
         }else{
             _myItemsList.value?.let {
@@ -186,6 +187,7 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
                 canTake.addAll(canNotTake)
                 _myItemsList.postValue(canTake)
+                dataUpdated.postValue(Event(true))
             }
         }
     }
