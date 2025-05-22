@@ -37,6 +37,8 @@ class ItemAdapter(
             text = "${item.quantity} ${item.unit}"
             if (item.quantity >= maxQuantity){
                 setTextColor("#7b8085".toColorInt())
+            }else{
+                setTextColor("#FFFFFF".toColorInt())
             }
         }
 

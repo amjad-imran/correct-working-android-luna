@@ -30,6 +30,8 @@ class CaffeineWindowScreenViewModel @Inject constructor(
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
 
+    var maxQuantity: Int = 0
+
     fun loadItems() {
         viewModelScope.launch {
 
@@ -69,19 +71,41 @@ class CaffeineWindowScreenViewModel @Inject constructor(
     }
 
     fun justLoadIt(mainList: List<CaffeineFoodItem>){
-        val allItems = ArrayList<CaffeineFoodItem>()
-        val myItems = ArrayList<CaffeineFoodItem>()
+        val allItemsCanTake = ArrayList<CaffeineFoodItem>()
+        val allItemsCanNotTake = ArrayList<CaffeineFoodItem>()
+
+        val myItemsCanTake = ArrayList<CaffeineFoodItem>()
+        val myItemsCanNotTake = ArrayList<CaffeineFoodItem>()
         LOGS.d("caffeineData: $mainList")
         mainList.forEach {
             if(it.is_favorite == true){
-                myItems.add(it)
+                if (it.quantity < maxQuantity){
+                    myItemsCanTake.add(it)
+                }else{
+                    myItemsCanNotTake.add(it)
+                }
+//                myItems.add(it)
             }else{
-                allItems.add(it)
+                if (it.quantity < maxQuantity){
+                    allItemsCanTake.add(it)
+                }else{
+                    allItemsCanNotTake.add(it)
+                }
+//                allItems.add(it)
             }
         }
 
-        _myItemsList.postValue(myItems)
-        _allItemsList.postValue(allItems)
+        myItemsCanTake.sortBy { it.name }
+        myItemsCanNotTake.sortBy { it.name }
+        allItemsCanTake.sortBy { it.name }
+        allItemsCanNotTake.sortBy { it.name }
+
+        allItemsCanTake.addAll(allItemsCanNotTake)
+
+        myItemsCanTake.addAll(myItemsCanNotTake)
+
+        _myItemsList.postValue(myItemsCanTake)
+        _allItemsList.postValue(allItemsCanTake)
     }
 
     fun hitPostApiToUpdateItems(postData: CaffeinePostApiModel){
@@ -120,6 +144,48 @@ class CaffeineWindowScreenViewModel @Inject constructor(
                     }
                 }
 
+            }
+        }
+    }
+
+    fun performAddOrDeleteAndSorting(
+        curItem: CaffeineFoodItem,
+        isAllItems: Boolean,
+        isAdd: Boolean
+    ){
+        if(isAllItems){
+            _allItemsList.value?.let {
+                val canTake = ArrayList<CaffeineFoodItem>()
+                val canNotTake = ArrayList<CaffeineFoodItem>()
+
+                if (isAdd) it.add(curItem) else it.remove(curItem)
+                it.sortedBy { it1 -> it1.name }.forEach { item ->
+                    if(item.quantity < maxQuantity){
+                        canTake.add(item)
+                    }else{
+                        canNotTake.add(item)
+                    }
+                }
+                canTake.addAll(canNotTake)
+
+                _allItemsList.postValue(canTake)
+            }
+        }else{
+            _myItemsList.value?.let {
+                val canTake = ArrayList<CaffeineFoodItem>()
+                val canNotTake = ArrayList<CaffeineFoodItem>()
+
+                if (isAdd) it.add(curItem) else it.remove(curItem)
+                it.sortedBy { it1 -> it1.name }.forEach { item ->
+                    if(item.quantity < maxQuantity){
+                        canTake.add(item)
+                    }else{
+                        canNotTake.add(item)
+                    }
+                }
+
+                canTake.addAll(canNotTake)
+                _myItemsList.postValue(canTake)
             }
         }
     }
