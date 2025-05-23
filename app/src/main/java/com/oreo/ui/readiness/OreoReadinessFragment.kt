@@ -904,11 +904,6 @@ class OreoReadinessFragment :
     fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
         binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
 
-        val percentageDrop = 45
-        val timePeriod = "Last Night"
-        binding.lytIrregularityEvents.tvDropPercent.text =
-            getString(R.string.text_your_hrv_dropped_by_value, percentageDrop, timePeriod)
-
         if (category != null) {
             for (item in category) {
                 val mChip: Chip =

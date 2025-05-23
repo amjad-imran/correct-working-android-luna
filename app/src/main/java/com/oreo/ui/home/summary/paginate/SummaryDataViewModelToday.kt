@@ -1694,6 +1694,8 @@ class SummaryDataViewModelToday @Inject constructor(
                     currentDayHRV,
                     percentageDrop.roundToInt()
                 )
+            }else{
+                localDataStore.clearHrvAlerts()
             }
         }else{
             localDataStore.clearHrvAlerts()
