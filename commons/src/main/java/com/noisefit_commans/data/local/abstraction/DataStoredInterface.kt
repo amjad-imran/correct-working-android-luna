@@ -534,7 +534,6 @@ interface DataStoredInterface {
     fun getHrvAlerts(ignoreDeleted: Boolean): HrvAlerts?
     fun updateHrvAlerts(alerts: HrvAlerts)
     fun removeHrvAlerts()
-    fun clearHrvAlerts()
 
     fun getIrregularityCardsVisibilityReadiness(): Boolean
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)
