@@ -533,6 +533,7 @@ interface DataStoredInterface {
                      spikePercent: Int)
     fun getHrvAlerts(ignoreDeleted: Boolean): HrvAlerts?
     fun updateHrvAlerts(alerts: HrvAlerts)
+    fun removeHrvAlerts()
 
     fun getIrregularityCardsVisibilityReadiness(): Boolean
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)

@@ -1694,7 +1694,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     currentDayHRV,
                     percentageDrop.roundToInt()
                 )
+            }else{
+                localDataStore.removeHrvAlerts()
             }
+        }else{
+            localDataStore.removeHrvAlerts()
         }
 
         val alerts = localDataStore.getHrvAlerts(true)
