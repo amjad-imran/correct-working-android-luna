@@ -180,13 +180,9 @@ class CaffeineWindowScreenFragment :
         viewModel.dataUpdated.observe(this){
             it.getContent()?.let {
                 if (viewModel._myItemsList.value.isNullOrEmpty()){
-                    binding.llMyItems.gone()
-                    binding.rvMyItems.gone()
                     viewModel.rvDisplayAllItemsToggleState.postValue(true)
                 }else{
                     viewModel.rvDisplayAllItemsToggleState.postValue(false)
-                    binding.llMyItems.visible()
-                    binding.rvMyItems.visible()
                 }
             }
         }
@@ -196,8 +192,8 @@ class CaffeineWindowScreenFragment :
     override fun subscribeObservers() {
         viewModel.rvDisplayAllItemsToggleState.observe(this){
             binding.ivToggleRv.setImageResource(
-                if (it) R.drawable.ic_baseline_keyboard_arrow_down_24
-                else R.drawable.ic_arrow_up_stress
+                if (it) R.drawable.ic_arrow_up_stress
+                else R.drawable.ic_baseline_keyboard_arrow_down_24
             )
 
             binding.rvAllItems.setVisibilityByCondition(it)
@@ -206,7 +202,11 @@ class CaffeineWindowScreenFragment :
         viewModel._myItemsList.observe(viewLifecycleOwner) { items ->
             if (!items.isNullOrEmpty()) {
                 myItemsAdapter.updateItems(items)
-//                binding.rvMyItems.setVisibilityByCondition(true)
+                binding.llMyItems.visible()
+                binding.rvMyItems.visible()
+            }else{
+                binding.llMyItems.gone()
+                binding.rvMyItems.gone()
             }
         }
 
