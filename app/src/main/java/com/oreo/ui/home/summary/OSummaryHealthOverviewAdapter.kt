@@ -1331,6 +1331,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
             val lytHeartRate = binding
             lytHeartRate.root.visible()
+            val heartRateText = binding.root.context.getString(R.string.text_heart_rate)
+
             lytHeartRate.candleChart.enableInteractiveMode(false)
             lytHeartRate.candleChart.updateData(
                 data.hrCombineModel,
@@ -1342,6 +1344,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (lastMeasuredValue == 0) {
                 lytHeartRate.lytTrend.root.gone()
+                binding.textView.text = heartRateText
             } else {
                 val lastUpdatedTimestamp =
                     DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
@@ -1360,6 +1363,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                 backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
                                 tvPercent.text = "$trendPercent%"
                                 tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                                binding.textView.text = "${heartRateText.take(10)}.."
                                 root.visible()
                             }
                         } else {
@@ -1368,14 +1372,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                 backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
                                 tvPercent.text = "${abs(trendPercent)}%"
                                 tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                                binding.textView.text = "${heartRateText.take(10)}.."
                                 root.visible()
                             }
                         }
                     } else {
                         lytHeartRate.lytTrend.root.gone()
+                        binding.textView.text = heartRateText
                     }
                 } else {
                     lytHeartRate.lytTrend.root.gone()
+                    binding.textView.text = heartRateText
                 }
             }
 
