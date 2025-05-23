@@ -1599,7 +1599,7 @@
     <string name="text_same_as_yesterday">так же, как вчера</string>
     <string name="text_more_than_yesterday">больше, чем вчера</string>
     <string name="text_less_than_yesterday">меньше, чем вчера</string>
-    <string name="text_from_yesterday">с вчерашнего дня</string>
+    <string name="text_from_yesterday">с вчера</string>
     <string name="text_same_as_last_week">так же, как на прошлой неделе</string>
     <string name="text_more_than_last_week">больше, чем на прошлой неделе</string>
     <string name="text_less_than_last_week">меньше, чем на прошлой неделе</string>
