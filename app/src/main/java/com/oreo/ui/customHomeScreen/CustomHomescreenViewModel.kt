@@ -213,18 +213,19 @@ class CustomHomescreenViewModel @Inject constructor(
 
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
-            this["sleep"] = CustomHomeScreenItem(
-                R.drawable.icon_sleep,
-                "sleep",
-                resourceProvider.getString(R.string.text_sleep),
-                true,
-                1
-            )
 
             this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
                 "caffeine_intake",
                 resourceProvider.getString(R.string.text_caffeine_window),
+                true,
+                1
+            )
+
+            this["sleep"] = CustomHomeScreenItem(
+                R.drawable.icon_sleep,
+                "sleep",
+                resourceProvider.getString(R.string.text_sleep),
                 true,
                 2
             )
