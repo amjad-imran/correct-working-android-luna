@@ -319,6 +319,10 @@ class DataStoredImpl
         mPrefs.edit()?.putString(HRV_ALERTS, gson.toJson(alerts))?.commit()
     }
 
+    override fun clearHrvAlerts() {
+        mPrefs.edit()?.remove(HRV_ALERTS)?.commit()
+    }
+
     override fun saveHrAlert(
         alertPercent: Int,
         lastMeasuredIndex: Int,

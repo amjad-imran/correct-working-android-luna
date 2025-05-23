@@ -1695,6 +1695,8 @@ class SummaryDataViewModelToday @Inject constructor(
                     percentageDrop.roundToInt()
                 )
             }
+        }else{
+            localDataStore.clearHrvAlerts()
         }
 
         val alerts = localDataStore.getHrvAlerts(true)
