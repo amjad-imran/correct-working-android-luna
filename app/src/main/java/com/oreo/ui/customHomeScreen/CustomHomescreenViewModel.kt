@@ -224,7 +224,7 @@ class CustomHomescreenViewModel @Inject constructor(
             this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
                 "caffeine_intake",
-                resourceProvider.getString(R.string.text_caffeine_intake),
+                resourceProvider.getString(R.string.text_caffeine_window),
                 true,
                 2
             )

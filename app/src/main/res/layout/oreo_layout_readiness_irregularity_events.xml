@@ -66,9 +66,9 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="20dp"
                 android:lineHeight="17sp"
-                tools:text="Your HRV dropped by 45% Last Night!"
+                tools:text="Your HRV dropped by 45%\nLast Night!"
                 android:textColor="#FFCCCC"
-                app:layout_constraintEnd_toStartOf="@+id/imageView78"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

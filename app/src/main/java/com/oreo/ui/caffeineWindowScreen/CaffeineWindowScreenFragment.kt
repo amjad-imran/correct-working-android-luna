@@ -42,6 +42,7 @@ class CaffeineWindowScreenFragment :
 
                 myItemsAdapter.setMaxQuantity(it.maxQuantity?:0)
                 allItemsAdapter.setMaxQuantity(it.maxQuantity?:0)
+                viewModel.maxQuantity = it.maxQuantity?:0
 
                 viewModel.loadItems()
                 initUi(it.message?:"")
@@ -113,11 +114,13 @@ class CaffeineWindowScreenFragment :
                         )
                         //
 
-                        myItemsList.removeAt(curIdx)
-                        myItemsAdapter.updateSingleItem(null, curIdx)
+                        viewModel.performAddOrDeleteAndSorting(curItem, false, false)
+//                        myItemsList.removeAt(curIdx)
+//                        myItemsAdapter.updateSingleItem(null, curIdx)
 
-                        viewModel._allItemsList.value?.add(curItem)
-                        allItemsAdapter.updateSingleItem(curItem, -1)
+                        viewModel.performAddOrDeleteAndSorting(curItem, true, true)
+//                        viewModel._allItemsList.value?.add(curItem)
+//                        allItemsAdapter.updateSingleItem(curItem, -1)
 
                     }
                 }
@@ -143,11 +146,13 @@ class CaffeineWindowScreenFragment :
                         )
                         //
 
-                        allItemsList.removeAt(curIdx)
-                        allItemsAdapter.updateSingleItem(null, curIdx)
+                        viewModel.performAddOrDeleteAndSorting(curItem, true, false)
+//                        allItemsList.removeAt(curIdx)
+//                        allItemsAdapter.updateSingleItem(null, curIdx)
 
-                        viewModel._myItemsList.value?.add(curItem)
-                        myItemsAdapter.updateSingleItem(curItem, -1)
+                        viewModel.performAddOrDeleteAndSorting(curItem, false, true)
+//                        viewModel._myItemsList.value?.add(curItem)
+//                        myItemsAdapter.updateSingleItem(curItem, -1)
                     }
                 }
             }
@@ -174,7 +179,15 @@ class CaffeineWindowScreenFragment :
 
         viewModel.dataUpdated.observe(this){
             it.getContent()?.let {
-
+                if (viewModel._myItemsList.value.isNullOrEmpty()){
+                    binding.llMyItems.gone()
+                    binding.rvMyItems.gone()
+                    viewModel.rvDisplayAllItemsToggleState.postValue(true)
+                }else{
+                    viewModel.rvDisplayAllItemsToggleState.postValue(false)
+                    binding.llMyItems.visible()
+                    binding.rvMyItems.visible()
+                }
             }
         }
 
