@@ -1970,6 +1970,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             } else {
 
                 binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.imgUpDown.setImageResource(R.drawable.ic_arrow_red_down)
                 binding.lytHrvSpike.root.visible()
                 binding.imageView14.gone()
             }
@@ -2136,6 +2137,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.imageView14.visible()
             } else {
                 binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.imgUpDown.setImageResource(R.drawable.ic_arrow_red_down)
                 binding.lytHrvSpike.root.visible()
                 binding.imageView14.gone()
             }
