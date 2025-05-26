@@ -207,6 +207,7 @@ class CaffeineWindowScreenFragment :
             }else{
                 binding.llMyItems.gone()
                 binding.rvMyItems.gone()
+                viewModel.rvDisplayAllItemsToggleState.postValue(true)
             }
         }
 
