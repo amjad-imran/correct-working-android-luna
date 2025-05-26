@@ -2005,4 +2005,8 @@
     <string name="text_stress_or_anxiety">ความเครียดหรือความกังวล</string>
     <string name="text_caffeine_or_stimulant_intake">การบริโภคคาเฟอีนหรือสารกระตุ้น</string>
     <string name="text_medications">ยา</string>
+
+    <string name="text_your_hrv_dropped_by_value">ค่า HRV ของคุณลดลง %1$d%%\n%2$s!</string>
+    <string name="error_code_value">รหัสข้อผิดพลาด: %1$s</string>
+
 </resources>

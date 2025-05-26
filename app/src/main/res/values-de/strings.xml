@@ -1999,4 +1999,8 @@
     <string name="text_stress_or_anxiety">Stress oder Angst</string>
     <string name="text_caffeine_or_stimulant_intake">Koffein- oder Stimulanzienaufnahme</string>
     <string name="text_medications">Medikamente</string>
+
+    <string name="text_your_hrv_dropped_by_value">Dein HRV ist um %1$d%% gesunken\n%2$s!</string>
+    <string name="error_code_value">Fehlercode: %1$s</string>
+
 </resources>

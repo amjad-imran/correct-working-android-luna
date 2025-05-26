@@ -885,7 +885,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                             viewModel.getApiErrorCode((response.uiComponentType as UIComponentType.RetryApiDialog).message)
 
                         if (code != null) {
-                            binding.layoutRetry.tvErrorCode.text = "Error Code : ${code}"
+                            binding.layoutRetry.tvErrorCode.text =
+                                getString(R.string.error_code_value, code)
                         } else {
                             binding.layoutRetry.tvErrorCode.text = ""
                         }

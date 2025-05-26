@@ -2000,4 +2000,8 @@
     <string name="text_stress_or_anxiety">Stress o ansia</string>
     <string name="text_caffeine_or_stimulant_intake">Assunzione di caffeina o stimolanti</string>
     <string name="text_medications">Farmaci</string>
+
+    <string name="text_your_hrv_dropped_by_value">Il tuo HRV è diminuito del %1$d%%\n%2$s!</string>
+    <string name="error_code_value">Codice di errore: %1$s</string>
+
 </resources>

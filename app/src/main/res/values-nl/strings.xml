@@ -1999,4 +1999,8 @@
     <string name="text_stress_or_anxiety">Stress of angst</string>
     <string name="text_caffeine_or_stimulant_intake">Inname van cafeïne of stimulerende middelen</string>
     <string name="text_medications">Medicijnen</string>
+
+    <string name="text_your_hrv_dropped_by_value">Je HRV is met %1$d%% gedaald\n%2$s!</string>
+    <string name="error_code_value">Foutcode: %1$s</string>
+
 </resources>
