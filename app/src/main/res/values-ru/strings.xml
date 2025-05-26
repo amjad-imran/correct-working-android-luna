@@ -2024,5 +2024,6 @@
 
     <string name="text_your_hrv_dropped_by_value">Ваш ВРС снизился на %1$d%%\n%2$s!</string>
     <string name="text_error_code_value">Код ошибки: %1$s</string>
+    <string name="text_since_value_mins">с 30 mins</string>
 
 </resources>

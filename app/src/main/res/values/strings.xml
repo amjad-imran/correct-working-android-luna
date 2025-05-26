@@ -1977,5 +1977,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_medications">Medications</string>
     <string name="text_your_hrv_dropped_by_value">Your HRV dropped by %1$d%%\n%2$s!</string>
     <string name="text_error_code_value">Error Code : %1$s</string>
+    <string name="text_since_value_mins">since 30 mins</string>
 
 </resources>

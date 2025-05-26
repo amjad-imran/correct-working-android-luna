@@ -1972,6 +1972,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
 
     <string name="text_your_hrv_dropped_by_value">Tu HRV ha bajado un %1$d%%\n%2$s!</string>
     <string name="text_error_code_value">Código de error: %1$s</string>
+    <string name="text_since_value_mins">desde hace 30 mins</string>
 
 
 </resources>
