@@ -2121,6 +2121,6 @@ onjour, Luna"</string>
     <string name="text_medications">Médicaments</string>
 
     <string name="text_your_hrv_dropped_by_value">Votre VRC a diminué de %1$d%%\n%2$s !</string>
-    <string name="error_code_value">Code d'erreur : %1$s</string>
+    <string name="error_code_value">Code d\'erreur : %1$s</string>
 
 </resources>
