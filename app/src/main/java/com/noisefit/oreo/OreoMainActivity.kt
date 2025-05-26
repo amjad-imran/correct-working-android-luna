@@ -886,7 +886,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                         if (code != null) {
                             binding.layoutRetry.tvErrorCode.text =
-                                getString(R.string.error_code_value, code)
+                                getString(R.string.text_error_code_value, code)
                         } else {
                             binding.layoutRetry.tvErrorCode.text = ""
                         }

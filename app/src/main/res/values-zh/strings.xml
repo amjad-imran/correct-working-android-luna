@@ -1995,6 +1995,6 @@
     <string name="text_medications">药物</string>
 
     <string name="text_your_hrv_dropped_by_value">您的HRV下降了%1$d%%\n%2$s！</string>
-    <string name="error_code_value">错误代码：%1$s</string>
+    <string name="text_error_code_value">错误代码：%1$s</string>
 
 </resources>
