@@ -2004,5 +2004,8 @@
     <string name="text_your_hrv_dropped_by_value">Il tuo HRV è diminuito del %1$d%%\n%2$s!</string>
     <string name="text_error_code_value">Codice di errore: %1$s</string>
     <string name="text_since_value_mins">da 30 mins</string>
+    <string name="text_monitor_caffeine_sources">Monitora le Fonti di Caffeina</string>
+    <string name="text_stimulant_list">Elenco degli Stimolanti</string>
+
 
 </resources>

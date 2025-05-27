@@ -1997,5 +1997,8 @@
     <string name="text_your_hrv_dropped_by_value">您的HRV下降了%1$d%%\n%2$s！</string>
     <string name="text_error_code_value">错误代码：%1$s</string>
     <string name="text_since_value_mins">自 30 mins</string>
+    <string name="text_monitor_caffeine_sources">监测咖啡因来源</string>
+    <string name="text_stimulant_list">兴奋剂列表</string>
+
 
 </resources>

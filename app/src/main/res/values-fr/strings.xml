@@ -2123,5 +2123,8 @@ onjour, Luna"</string>
     <string name="text_your_hrv_dropped_by_value">Votre VRC a diminué de %1$d%%\n%2$s !</string>
     <string name="text_error_code_value">Code d\'erreur : %1$s</string>
     <string name="text_since_value_mins">depuis 30 mins</string>
+    <string name="text_monitor_caffeine_sources">Surveiller les Sources de Caféine</string>
+    <string name="text_stimulant_list">Liste des Stimulants</string>
+
 
 </resources>

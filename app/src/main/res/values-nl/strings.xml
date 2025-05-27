@@ -2003,5 +2003,8 @@
     <string name="text_your_hrv_dropped_by_value">Je HRV is met %1$d%% gedaald\n%2$s!</string>
     <string name="text_error_code_value">Foutcode: %1$s</string>
     <string name="text_since_value_mins">sinds 30 mins</string>
+    <string name="text_monitor_caffeine_sources">Cafeïnebronnen Monitoren</string>
+    <string name="text_stimulant_list">Lijst van Stimulerende Middelen</string>
+
 
 </resources>

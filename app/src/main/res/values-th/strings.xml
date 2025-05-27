@@ -2009,5 +2009,8 @@
     <string name="text_your_hrv_dropped_by_value">ค่า HRV ของคุณลดลง %1$d%%\n%2$s!</string>
     <string name="text_error_code_value">รหัสข้อผิดพลาด: %1$s</string>
     <string name="text_since_value_mins">ตั้งแต่ 30 mins</string>
+    <string name="text_monitor_caffeine_sources">ติดตามแหล่งคาเฟอีน</string>
+    <string name="text_stimulant_list">รายการสารกระตุ้น</string>
+
 
 </resources>
