@@ -166,6 +166,15 @@ class IrregularityEventsOHeartRateDataFragment :
                     } else {
                         selectedChips.remove(mChip.tag.toString())
                     }
+
+                    if(selectedChips.isEmpty()){
+                        binding.btnSubmitDisabled.visible()
+                        binding.btnSubmit.gone()
+                    }else{
+                        binding.btnSubmit.visible()
+                        binding.btnSubmitDisabled.gone()
+                    }
+
                 }
                 binding.chipsPrograms.addView(mChip)
 
