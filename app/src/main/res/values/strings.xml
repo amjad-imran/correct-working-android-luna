@@ -1970,7 +1970,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_disturbed_sleep_environment">Disturbed sleep environment</string>
     <string name="text_late_night_meal">Late night meal</string>
     <string name="text_higher_caffeine_intake">Higher caffeine intake</string>
-    <string name="text_your_hrv_dropped_by_last_night">Your HRV dropped by %1$d%% Last Night!</string>
+    <string name="text_your_hrv_dropped_by_last_night">Your HRV dropped by %1$d%%\nLast Night!</string>
     <string name="text_exercise_or_physical_activity">Exercise or Physical Activity</string>
     <string name="text_stress_or_anxiety">Stress or Anxiety</string>
     <string name="text_caffeine_or_stimulant_intake">Caffeine or Stimulant Intake</string>

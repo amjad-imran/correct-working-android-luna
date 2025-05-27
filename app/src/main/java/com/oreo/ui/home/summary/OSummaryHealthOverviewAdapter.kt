@@ -1332,6 +1332,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val lytHeartRate = binding
             lytHeartRate.root.visible()
             val heartRateText = binding.root.context.getString(R.string.text_heart_rate)
+            val heartRateShortText = if(heartRateText.length <= 10) heartRateText
+                                    else "${heartRateText.take(10)}.."
 
             lytHeartRate.candleChart.enableInteractiveMode(false)
             lytHeartRate.candleChart.updateData(
@@ -1363,7 +1365,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                 backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
                                 tvPercent.text = "$trendPercent%"
                                 tvPercent.setTextColor(Color.parseColor("#FF426F"))
-                                binding.textView.text = "${heartRateText.take(10)}.."
+                                binding.textView.text = heartRateShortText
                                 root.visible()
                             }
                         } else {
@@ -1372,7 +1374,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                 backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
                                 tvPercent.text = "${abs(trendPercent)}%"
                                 tvPercent.setTextColor(Color.parseColor("#00FF66"))
-                                binding.textView.text = "${heartRateText.take(10)}.."
+                                binding.textView.text = heartRateShortText
                                 root.visible()
                             }
                         }

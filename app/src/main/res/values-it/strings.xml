@@ -1995,7 +1995,7 @@
     <string name="text_disturbed_sleep_environment">Ambiente di sonno disturbato</string>
     <string name="text_late_night_meal">Pasto notturno</string>
     <string name="text_higher_caffeine_intake">Alto consumo di caffeina</string>
-    <string name="text_your_hrv_dropped_by_last_night">Il tuo HRV è diminuito del %1$d%% la scorsa notte!</string>
+    <string name="text_your_hrv_dropped_by_last_night">Il tuo HRV è diminuito del %1$d%%\nla scorsa notte!</string>
     <string name="text_exercise_or_physical_activity">Esercizio o attività fisica</string>
     <string name="text_stress_or_anxiety">Stress o ansia</string>
     <string name="text_caffeine_or_stimulant_intake">Assunzione di caffeina o stimolanti</string>

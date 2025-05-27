@@ -1994,7 +1994,7 @@
     <string name="text_disturbed_sleep_environment">Verstoorde slaapomgeving</string>
     <string name="text_late_night_meal">Laat avondmaal</string>
     <string name="text_higher_caffeine_intake">Hoge cafeïne-inname</string>
-    <string name="text_your_hrv_dropped_by_last_night">Je HRV is gedaald met %1$d%% afgelopen nacht!</string>
+    <string name="text_your_hrv_dropped_by_last_night">Je HRV is gedaald met %1$d%%\nafgelopen nacht!</string>
     <string name="text_exercise_or_physical_activity">Lichaamsbeweging of fysieke activiteit</string>
     <string name="text_stress_or_anxiety">Stress of angst</string>
     <string name="text_caffeine_or_stimulant_intake">Inname van cafeïne of stimulerende middelen</string>
