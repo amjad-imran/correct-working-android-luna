@@ -950,6 +950,15 @@ class OreoReadinessFragment :
                         val name = MiscUtil.addUnderscore(mChip.text.toString())
 //                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_feedback + "_${name}_SELECT")
                     }
+
+                    if(mViewModel.selectedChips.isEmpty()){
+                        binding.lytIrregularityEvents.btnSubmitDisabled.visible()
+                        binding.lytIrregularityEvents.btnSubmit.gone()
+                    }else{
+                        binding.lytIrregularityEvents.btnSubmit.visible()
+                        binding.lytIrregularityEvents.btnSubmitDisabled.gone()
+                    }
+
                 }
                 binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
 
