@@ -3343,7 +3343,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
             val roundedPercentInc = Math.round(percentInc)
 
-            if (roundedPercentInc > 2) {
+            if (roundedPercentInc > 25) {
                 saveHrAlert(roundedPercentInc, lastMeasuredIndex, lastMeasuredValue, roundedAverage)
             }
 

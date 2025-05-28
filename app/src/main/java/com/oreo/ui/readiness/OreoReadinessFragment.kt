@@ -939,6 +939,7 @@ class OreoReadinessFragment :
                             binding.lytIrregularityEvents.chatEtx.visible()
                             binding.lytIrregularityEvents.imgChatEtx.visible()
                             binding.lytIrregularityEvents.btnSubmit.gone()
+                            binding.lytIrregularityEvents.btnSubmitDisabled.gone()
                         } else {
                             binding.lytIrregularityEvents.chatEtx.gone()
                             binding.lytIrregularityEvents.imgChatEtx.gone()
@@ -957,6 +958,16 @@ class OreoReadinessFragment :
                     }else{
                         binding.lytIrregularityEvents.btnSubmit.visible()
                         binding.lytIrregularityEvents.btnSubmitDisabled.gone()
+                    }
+
+                    if(mViewModel.selectedChips.contains("others").not()){
+                        if(mViewModel.selectedChips.isEmpty()){
+                            binding.lytIrregularityEvents.btnSubmitDisabled.visible()
+                            binding.lytIrregularityEvents.btnSubmit.gone()
+                        }else{
+                            binding.lytIrregularityEvents.btnSubmit.visible()
+                            binding.lytIrregularityEvents.btnSubmitDisabled.gone()
+                        }
                     }
 
                 }
