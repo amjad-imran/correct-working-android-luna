@@ -1368,8 +1368,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 highlightState = HighlightState.END
             }
             else->{
-                message = messageList[0][Random.nextInt(0, 2)]
-                highlightState = HighlightState.START
+                message = messageList[2][Random.nextInt(0, 2)]
+                highlightState = HighlightState.END
             }
         }
 
@@ -3343,7 +3343,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val percentInc = (lastMeasuredValue - roundedAverage).toFloat() / roundedAverage * 100
             val roundedPercentInc = Math.round(percentInc)
 
-            if (roundedPercentInc > 25) {
+            if (roundedPercentInc > 2) {
                 saveHrAlert(roundedPercentInc, lastMeasuredIndex, lastMeasuredValue, roundedAverage)
             }
 
