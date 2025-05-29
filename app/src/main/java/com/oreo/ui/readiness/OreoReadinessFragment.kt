@@ -952,14 +952,6 @@ class OreoReadinessFragment :
 //                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_feedback + "_${name}_SELECT")
                     }
 
-                    if(mViewModel.selectedChips.isEmpty()){
-                        binding.lytIrregularityEvents.btnSubmitDisabled.visible()
-                        binding.lytIrregularityEvents.btnSubmit.gone()
-                    }else{
-                        binding.lytIrregularityEvents.btnSubmit.visible()
-                        binding.lytIrregularityEvents.btnSubmitDisabled.gone()
-                    }
-
                     if(mViewModel.selectedChips.contains("others").not()){
                         if(mViewModel.selectedChips.isEmpty()){
                             binding.lytIrregularityEvents.btnSubmitDisabled.visible()
