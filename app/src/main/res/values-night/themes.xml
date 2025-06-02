@@ -219,17 +219,14 @@
     </style>
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
-        <!-- Chip background color selector -->
         <item name="chipBackgroundColor">@color/chip_background_color_state</item>
         <item name="fontFamily">@font/gilroy_regular</item>
         <item name="textSize">@dimen/text_14sp</item>
         <item name="chipSurfaceColor">@android:color/transparent</item>
-        <item name="android:padding">@dimen/dimen_4dp</item>
         <!-- Border color -->
         <item name="chipStrokeColor">@color/chip_stroke_color_state</item>
         <item name="chipStrokeWidth">1dp</item>
 
-        <!-- Chip text color selector -->
         <item name="android:textColor">@color/chip_text_color_state</item>
     </style>
 
