@@ -248,7 +248,7 @@ class CaffeineGraphView : View {
             moonRiseBitmap,
             segment3End - textWidthEnd - 14f.dpToPixel(),
             barCenterYPos + 8f.dpToPixel(),
-            barPaintDefault
+            null
         )
 
         drawBars(
@@ -258,7 +258,7 @@ class CaffeineGraphView : View {
             canvas
         )
 
-        canvas.drawBitmap(sunRiseBitmap, 0f, barCenterYPos + 8f.dpToPixel(), barPaintDefault)
+        canvas.drawBitmap(sunRiseBitmap, 0f, barCenterYPos + 8f.dpToPixel(), null)
     }
 
     private fun drawXAxis(canvas: Canvas, yAxis: Float) {
