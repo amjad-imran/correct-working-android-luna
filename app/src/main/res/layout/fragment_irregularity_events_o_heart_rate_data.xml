@@ -57,6 +57,15 @@
                 app:layout_constraintVertical_bias="0.5"
                 app:srcCompat="@drawable/bg_irregularity_card_hr" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:alpha="0.5"
+                android:src="@drawable/image_hr_events"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tvMessage"
                 style="@style/S16"

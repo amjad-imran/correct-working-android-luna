@@ -426,6 +426,7 @@ constructor(
      */
     override fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {
         LOGS.d("startWorkout updateOngoingWorkout ${sportType} -------> $action")
+        AppLogs.sendAppLogs("updateOngoingWorkout sportType-> $sportType | action-> $action")
         val status = when (action) {
             2 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_PAUSE.status
             3 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_RESUME.status
