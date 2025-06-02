@@ -195,6 +195,7 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_readiness_irreg_events_submit_disabled"
                 android:text="@string/text_submit"
+                android:textColor="#967373"
                 android:textAllCaps="false"
                 android:visibility="visible"
                 app:backgroundTint="@null"
