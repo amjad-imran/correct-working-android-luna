@@ -78,6 +78,8 @@ object ApplicationUtils {
             AppLinks.FEATURE_REQUEST
         }else if(string.equals("/applinks/dashboard", true)){
             AppLinks.DASHBOARD
+        }else if(string.equals("/applinks/female-health", true)){
+            AppLinks.FEMALE_HEALTH
         } else {
             null
         }

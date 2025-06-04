@@ -1306,6 +1306,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     }
                 }
             }
+
+            AppLinks.FEMALE_HEALTH -> {
+                val user = viewModel.localDataStore.getUser()
+                if (user?.userInfo?.gender.equals("male", true)) {
+                    showShortToast(getString(R.string.text_feature_not_enabled_for_this_user))
+                } else {
+                    navController?.navigate(R.id.fragmentCycleTracker)
+                }
+            }
         }
     }
 

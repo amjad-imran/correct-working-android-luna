@@ -1980,5 +1980,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_since_value_mins">since 30 mins</string>
     <string name="text_monitor_caffeine_sources">Monitor Caffeine Sources</string>
     <string name="text_stimulant_list">Stimulant List</string>
+    <string name="text_feature_not_enabled_for_this_user">Feature not enabled for this user</string>
 
 </resources>
