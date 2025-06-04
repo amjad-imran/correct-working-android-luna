@@ -1703,7 +1703,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val alerts = localDataStore.getHrvAlerts(true)
 
-        val alertCount = if (alerts?.data == null) {
+        val alertCount = if (alerts?.data == null || alerts.data.isDeleted == true) {
             0
         } else {
             1
