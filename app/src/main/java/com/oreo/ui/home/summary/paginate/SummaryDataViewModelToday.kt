@@ -1274,6 +1274,13 @@ class SummaryDataViewModelToday @Inject constructor(
         if (caffeineGraphData == null) {
             return null
         }
+
+        if (caffeineGraphData?.status == false) {
+            return OHealthOverview.CaffeineWindowCalibrating(
+                caffeineGraphData?.title,
+                caffeineGraphData?.message
+            )
+        }
         val data = caffeineGraphData?.let {
             val caffeineValues = ArrayList<Int>()
             caffeineGraphData!!.caffeine_window.forEach {
@@ -1367,7 +1374,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
-            else->{
+
+            else -> {
                 message = messageList[2][Random.nextInt(0, 2)]
                 highlightState = HighlightState.END
             }
@@ -1694,10 +1702,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     currentDayHRV,
                     percentageDrop.roundToInt()
                 )
-            }else{
+            } else {
                 localDataStore.removeHrvAlerts()
             }
-        }else{
+        } else {
             localDataStore.removeHrvAlerts()
         }
 
@@ -2667,6 +2675,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun checkForNewAppVersion() {
         viewModelScope.launch(Dispatchers.IO) {
+
+            checkAppVersionServer()
+
 
             val callApi = postOfflineAppUpdateData()
             if (callApi.not()) return@launch

@@ -90,6 +90,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
+import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -293,6 +294,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 )
             )
 
+            R.layout.layout_caffeine_calibrating -> HomeRecyclerViewHolder.CaffeineRestrictedViewHolder(
+                LayoutCaffeineCalibratingBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_dash_sleep_planner_card -> {
                 HomeRecyclerViewHolder.SleepPlannerViewHolder(
                     LayoutDashSleepPlannerCardBinding.inflate(
@@ -468,6 +475,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 items[position] as OHealthOverview.CaffeineWindow,
             )
 
+            is HomeRecyclerViewHolder.CaffeineRestrictedViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CaffeineWindowCalibrating,
+            )
+
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
@@ -524,6 +535,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.SevenDayTrendsCard -> R.layout.item_seven_day_trends_card
             is OHealthOverview.StressCard -> R.layout.layout_stress_dash_measure
             //
+            is OHealthOverview.CaffeineWindowCalibrating -> R.layout.layout_caffeine_calibrating
         }
     }
 
@@ -1332,8 +1344,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val lytHeartRate = binding
             lytHeartRate.root.visible()
             val heartRateText = binding.root.context.getString(R.string.text_heart_rate)
-            val heartRateShortText = if(heartRateText.length <= 10) heartRateText
-                                    else "${heartRateText.take(10)}.."
+            val heartRateShortText = if (heartRateText.length <= 10) heartRateText
+            else "${heartRateText.take(10)}.."
 
             lytHeartRate.candleChart.enableInteractiveMode(false)
             lytHeartRate.candleChart.updateData(
@@ -1971,7 +1983,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.imageView14.visible()
             } else {
 
-                binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.tvText.text =
+                    binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
                 binding.lytHrvSpike.imgUpDown.setImageResource(R.drawable.ic_arrow_red_down)
                 binding.lytHrvSpike.root.visible()
                 binding.imageView14.gone()
@@ -2138,7 +2151,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.lytHrvSpike.root.gone()
                 binding.imageView14.visible()
             } else {
-                binding.lytHrvSpike.tvText.text = binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
+                binding.lytHrvSpike.tvText.text =
+                    binding.lytHrvSpike.root.context.getString(R.string.text_hrv)
                 binding.lytHrvSpike.imgUpDown.setImageResource(R.drawable.ic_arrow_red_down)
                 binding.lytHrvSpike.root.visible()
                 binding.imageView14.gone()
@@ -2892,6 +2906,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
+    class CaffeineRestrictedViewHolder(private val binding: LayoutCaffeineCalibratingBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        fun bind(data: OHealthOverview.CaffeineWindowCalibrating) {
+
+            binding.tvTitle.text = data.title
+            binding.tvMessage.text = data.message
+
+        }
+
+
+    }
+
     class CaffeineViewHolder(private val binding: LayoutCardCaffeineDashBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(data: OHealthOverview.CaffeineWindow) {
@@ -2970,7 +2997,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor("#FF6389".toColorInt())
                     }
                 }
-                else->{
+
+                else -> {
                     binding.tvState.apply {
                         text = context.getString(R.string.text_restricted)
                         setTextColor("#FF6389".toColorInt())
