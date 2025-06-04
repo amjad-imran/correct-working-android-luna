@@ -127,7 +127,7 @@
         tools:visibility="visible" />
 
 
-    <!--  <com.airbnb.lottie.LottieAnimationView
+      <com.airbnb.lottie.LottieAnimationView
           android:id="@+id/lottieAnimView"
           android:layout_width="@dimen/dimen_32dp"
           android:layout_height="@dimen/dimen_32dp"
@@ -211,5 +211,5 @@
           android:id="@+id/groupValue"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />-->
+          app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />
 </androidx.constraintlayout.widget.ConstraintLayout>

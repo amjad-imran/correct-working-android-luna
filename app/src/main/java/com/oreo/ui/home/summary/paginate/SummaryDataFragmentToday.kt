@@ -36,6 +36,7 @@ import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.model.NotificationGoals
@@ -494,6 +495,10 @@ class SummaryDataFragmentToday :
                     performOnHeartMeasureImvClicked(type.data)
                 }
 
+                is OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked -> {
+                    performOnStressMeasureImvClicked(type.data)
+                }
+
                 OSummaryHealthOverviewClickEnum.OnViewAddWorkout -> {
                     if (viewModel.isDeviceConnected()) {
                         navigate(R.id.addWorkoutFragment)
@@ -647,6 +652,44 @@ class SummaryDataFragmentToday :
         }
 
         return
+    }
+
+    private fun performOnStressMeasureImvClicked(allData: OHealthOverview.StressCard) {
+        val data = allData.data
+
+        if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
+            context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
+            viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                this.measureState = TapMeasureState.ERROR
+            })
+            return
+        }
+
+        if (data?.measureState == TapMeasureState.MEASURING || data?.measureState == TapMeasureState.NO_DEVICE) {
+            return
+        }
+
+        if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            return
+        }
+
+        if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+            return
+        }
+
+
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            context?.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
+                        this.measureState = TapMeasureState.ERROR
+                    })
+                    return@launch
+                }
+                viewModel.measureStress(true)
+            }
+        }
     }
 
 
@@ -1327,6 +1370,9 @@ class SummaryDataFragmentToday :
         viewModel.stateStressCard.observe(viewLifecycleOwner) {
             if (it != null) {
                 //setStressCardUi(it)
+                viewModel.viewModelScope.launch {
+                    healthOverviewAdapter.updateData(viewModel.updateStressCard())
+                }
             }
         }
 

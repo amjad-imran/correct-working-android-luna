@@ -1659,6 +1659,11 @@ class SummaryDataViewModelToday @Inject constructor(
 //        return null
     }
 
+    suspend fun updateStressCard(): OHealthOverview? {
+        val device = ringDataStore.getRingDevice()
+        return serverUserHealthData?.let { getStressCard(it) }
+    }
+
     private fun getSleepPlannerDataCard(hasSleep: Boolean): OHealthOverview? {
         return sleepPlannerData.second?.let {
             OHealthOverview.SleepPlannerCard(

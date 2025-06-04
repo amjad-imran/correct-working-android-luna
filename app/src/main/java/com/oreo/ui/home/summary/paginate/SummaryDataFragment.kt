@@ -171,6 +171,7 @@ class SummaryDataFragment :
                 is OSummaryHealthOverviewClickEnum.OnIvNotificationHydrateClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnIvNotificationStepsClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked -> {}
             }
         }
 

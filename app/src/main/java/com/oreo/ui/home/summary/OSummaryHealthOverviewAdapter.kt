@@ -126,6 +126,9 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class OnHeartMeasureImvClicked(val data: OHealthOverview.HeartRateDataModel) :
         OSummaryHealthOverviewClickEnum()
 
+    data class OnStressMeasureImvClicked(val data: OHealthOverview.StressCard) :
+        OSummaryHealthOverviewClickEnum()
+
     object OnHeartRateCardClicked : OSummaryHealthOverviewClickEnum()
 
     object OnViewAddWorkout : OSummaryHealthOverviewClickEnum()
@@ -570,6 +573,11 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        }else if (heathOverViewData is OHealthOverview.StressCard){
+            val index = items.indexOfFirst { it is OHealthOverview.StressCard }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -621,17 +629,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lytStress.root.visible()
             lytStress.graphStress.updateData(data?.data)
 
+            val isGen2 = true
+            val context = binding.root.context
 
-            /*lytStress.lottieAnimView.gone()
+            if (isGen2) {
+                /*lytStress.lottieAnimView.gone()
             lytStress.imvHrMeasure.gone()
             lytStress.tvLastMeasure.gone()
             lytStress.tvHeartValue.gone()
             lytStress.tvHeartUnit.gone()
             lytStress.tvEmptyConnect.gone()
 
-            return
+            return*/
 
-            when (data.measureState) {
+            when (data?.measureState) {
                 TapMeasureState.NO_DEVICE -> {
                     lytStress.lottieAnimView.invisible()
                     lytStress.imvHrMeasure.visible()
@@ -651,7 +662,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.tvEmptyConnect.gone()
 
                     lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
-                    lytStress.tvHeartUnit.text = viewModel.getStressStatus(data.value)
+                    val (displayValue, displayColor) = allData.stressStatus
+                    lytStress.tvHeartUnit.text = displayValue
 
                     lytStress.tvLastMeasure.apply {
                         setTextColor(Color.parseColor("#a3ffffff"))
@@ -668,7 +680,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     lytStress.tvEmptyConnect.apply {
                         setTextColor(resources.getColor(R.color.white))
-                        text = getString(R.string.text_measuring_dots)
+                        text = context.getString(R.string.text_measuring_dots)
                     }
                 }
 
@@ -680,7 +692,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.tvEmptyConnect.visible()
                     lytStress.tvEmptyConnect.apply {
                         setTextColor(Color.parseColor("#88b0ff"))
-                        text = getString(R.string.text_tap_to_measure)
+                        text = context.getString(R.string.text_tap_to_measure)
                     }
                 }
 
@@ -694,9 +706,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     lytStress.tvLastMeasure.apply {
                         setTextColor(Color.parseColor("#88b0ff"))
-                        text = getString(R.string.text_try_again)
+                        text = context.getString(R.string.text_try_again)
                     }
-                    lytStress.tvHeartUnit.text = getString(R.string.text_unable_to_measure)
+                    lytStress.tvHeartUnit.text = context.getString(R.string.text_unable_to_measure)
 
                 }
 
@@ -708,122 +720,101 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.tvEmptyConnect.gone()
                     lytStress.tvHeartValue.gone()
                 }
+
+                null -> {}
             }
             lytStress.imvHrMeasure.setOnClickListener {
-
-                if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
-                    context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
-                    *//*viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
-                    this.measureState = TapMeasureState.ERROR
-                })*//*
-                return@setOnClickListener
-            }
-
-            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
-                return@setOnClickListener
-            }
-
-            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                return@setOnClickListener
-            }
-
-            if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
-                return@setOnClickListener
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked(allData)
+                )
             }
 
 
-            viewModel.viewModelScope.launch(Dispatchers.IO) {
-                context?.let {
-                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-                    if (isWorkerRunning) {
-                        viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
-                            this.measureState = TapMeasureState.ERROR
-                        })
-                        return@launch
-                    }
-                    viewModel.measureStress(true)
-                }
-            }
-
-            return@setOnClickListener
-        }*/
-
-
-            /*binding.graphStress.updateData(data.data)
+                /*binding.graphStress.updateData(data.data)
             binding.tvBeta.setVisibilityByCondition(data.isBeta)
             binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
-
+            }
+        else {
+            binding.apply {
+                lytStress.lottieAnimView.gone()
+                lytStress.imvHrMeasure.gone()
+                lytStress.tvLastMeasure.gone()
+                lytStress.tvHeartValue.gone()
+                lytStress.tvHeartUnit.gone()
+                lytStress.tvEmptyConnect.gone()
+            }
 
 //            val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
-            val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
+                val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
 
 
-            if (lastMeasuredValue == 0) {
-                lytStress.tvStressValue.gone()
-                lytStress.tvStressStatus.gone()
-                lytStress.tvLastUpdate.gone()
-                lytStress.lytTrend.root.gone()
-            } else {
-                lytStress.tvStressValue.visible()
-                lytStress.tvStressStatus.visible()
-                lytStress.tvLastUpdate.visible()
+                if (lastMeasuredValue == 0) {
+                    lytStress.tvStressValue.gone()
+                    lytStress.tvStressStatus.gone()
+                    lytStress.tvLastUpdate.gone()
+                    lytStress.lytTrend.root.gone()
+                } else {
+                    lytStress.tvStressValue.visible()
+                    lytStress.tvStressStatus.visible()
+                    lytStress.tvLastUpdate.visible()
 
-                lytStress.tvStressValue.text = "$lastMeasuredValue"
+                    lytStress.tvStressValue.text = "$lastMeasuredValue"
 //                val (displayValue, displayColor) = viewModel.getStressStatus(lastMeasuredValue)
-                val (displayValue, displayColor) = allData.stressStatus
-                lytStress.tvStressStatus.text = displayValue
-                lytStress.tvStressStatus.setTextColor(displayColor)
+                    val (displayValue, displayColor) = allData.stressStatus
+                    lytStress.tvStressStatus.text = displayValue
+                    lytStress.tvStressStatus.setTextColor(displayColor)
 
 
-                val lastUpdatedTimestamp =
-                    DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 15 * 60 * 1000
+                    val lastUpdatedTimestamp =
+                        DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 15 * 60 * 1000
 
 
-                val currentTimeStamp = DateFormats.getTimeStamp()
-                val timeDiff = currentTimeStamp - lastUpdatedTimestamp
-                if (timeDiff <= (15 * 60 * 1000)) {
+                    val currentTimeStamp = DateFormats.getTimeStamp()
+                    val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+                    if (timeDiff <= (15 * 60 * 1000)) {
 
 //                    val trendPercent = viewModel.getStressTrend(data.listData, lastMeasuredIndex)
-                    val trendPercent = allData.stressTrend
+                        val trendPercent = allData.stressTrend
 
-                    if (trendPercent != null && trendPercent != 0) {
-                        if (trendPercent > 0) {
-                            lytStress.lytTrend.apply {
-                                ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
-                                backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
-                                tvPercent.text = "$trendPercent%"
-                                tvPercent.setTextColor(Color.parseColor("#FF426F"))
-                                root.visible()
+                        if (trendPercent != null && trendPercent != 0) {
+                            if (trendPercent > 0) {
+                                lytStress.lytTrend.apply {
+                                    ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                                    backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                                    tvPercent.text = "$trendPercent%"
+                                    tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                                    root.visible()
+                                }
+
+                            } else {
+                                lytStress.lytTrend.apply {
+                                    ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                                    backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                                    tvPercent.text = "${abs(trendPercent)}%"
+                                    tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                                    root.visible()
+                                }
                             }
-
                         } else {
-                            lytStress.lytTrend.apply {
-                                ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
-                                backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
-                                tvPercent.text = "${abs(trendPercent)}%"
-                                tvPercent.setTextColor(Color.parseColor("#00FF66"))
-                                root.visible()
-                            }
+                            lytStress.lytTrend.root.gone()
                         }
                     } else {
                         lytStress.lytTrend.root.gone()
                     }
-                } else {
-                    lytStress.lytTrend.root.gone()
-                }
 
 
-                if (lastUpdatedTimestamp == 0L) {
-                    lytStress.tvLastUpdate.text = ""
-                } else {
-                    lytStress.tvLastUpdate.text =
-                        lytStress.tvLastUpdate.context.getString(
-                            R.string.text_updated_value,
-                            DateTimeUtil.getRelativeTime(
-                                lastUpdatedTimestamp,
-                                allData.resourcesProvider
-                            ).lowercase()
-                        )
+                    if (lastUpdatedTimestamp == 0L) {
+                        lytStress.tvLastUpdate.text = ""
+                    } else {
+                        lytStress.tvLastUpdate.text =
+                            lytStress.tvLastUpdate.context.getString(
+                                R.string.text_updated_value,
+                                DateTimeUtil.getRelativeTime(
+                                    lastUpdatedTimestamp,
+                                    allData.resourcesProvider
+                                ).lowercase()
+                            )
+                    }
                 }
             }
 
