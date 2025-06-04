@@ -180,6 +180,11 @@ sealed class OHealthOverview {
         val data: CaffeineWindowData
     ) : OHealthOverview()
 
+    class CaffeineWindowCalibrating(
+        val title: String?=null,
+        val message: String?=null,
+    ) : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()
@@ -209,6 +214,7 @@ data class CaffeineWindowData(
     val caffeineStartTime: String,//HH:mm:ss
     val caffeineEndTime: String,//HH:mm:ss
     val caffeineValues: List<Int>,
+    val title:String?=null,
     var message: String? = null,//"sasacas"
     var maxQuantity: Int? = null//mg
 ) : Parcelable
