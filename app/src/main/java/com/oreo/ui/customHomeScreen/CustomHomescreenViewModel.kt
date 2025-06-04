@@ -110,6 +110,7 @@ class CustomHomescreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             if (!canMakeApiCall()) {
+                lunaManagedState.postValue(!isToggleOn)
                 return@launch
             }
 
