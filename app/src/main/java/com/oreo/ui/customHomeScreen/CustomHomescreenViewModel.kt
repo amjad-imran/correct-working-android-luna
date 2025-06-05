@@ -110,9 +110,7 @@ class CustomHomescreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             if (!canMakeApiCall()) {
-                lunaManagedState.postValue(
-                    localDataSource.getCustomHomeScreenItemsPriorityList()?.manage?:true
-                )
+                lunaManagedState.postValue(lunaManagedState.value)
                 return@launch
             }
 
@@ -165,6 +163,7 @@ class CustomHomescreenViewModel @Inject constructor(
                                 localDataSource.setCustomHomeScreenItemsPriorityList(
                                     customHomeScreenData
                                 )
+                                lunaManagedState.postValue(isToggleOn)
                                 dataUpdated.postValue(Event(true))
                             }
                         }
