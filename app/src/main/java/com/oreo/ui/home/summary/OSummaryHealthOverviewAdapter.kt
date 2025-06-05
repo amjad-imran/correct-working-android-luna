@@ -629,18 +629,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lytStress.root.visible()
             lytStress.graphStress.updateData(data?.data)
 
-            val isGen2 = true
+            val isGen2 = false
             val context = binding.root.context
 
             if (isGen2) {
-                /*lytStress.lottieAnimView.gone()
-            lytStress.imvHrMeasure.gone()
-            lytStress.tvLastMeasure.gone()
-            lytStress.tvHeartValue.gone()
-            lytStress.tvHeartUnit.gone()
-            lytStress.tvEmptyConnect.gone()
-
-            return*/
 
             when (data?.measureState) {
                 TapMeasureState.NO_DEVICE -> {
@@ -735,14 +727,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
             }
         else {
-            binding.apply {
+                lytStress.tvHeartUnit.gone()
                 lytStress.lottieAnimView.gone()
                 lytStress.imvHrMeasure.gone()
                 lytStress.tvLastMeasure.gone()
                 lytStress.tvHeartValue.gone()
-                lytStress.tvHeartUnit.gone()
                 lytStress.tvEmptyConnect.gone()
-            }
+                lytStress.groupValue.gone()
 
 //            val (lastMeasuredValue, lastMeasuredIndex) = viewModel.getLastMeasuredValue(data.listData)
                 val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
