@@ -1659,11 +1659,6 @@ class SummaryDataViewModelToday @Inject constructor(
 //        return null
     }
 
-    suspend fun updateStressCard(): OHealthOverview? {
-        val device = ringDataStore.getRingDevice()
-        return serverUserHealthData?.let { getStressCard(it) }
-    }
-
     private fun getSleepPlannerDataCard(hasSleep: Boolean): OHealthOverview? {
         return sleepPlannerData.second?.let {
             OHealthOverview.SleepPlannerCard(
@@ -1966,6 +1961,41 @@ class SummaryDataViewModelToday @Inject constructor(
 //        }
     }
 
+    suspend fun updateStressCard(): OHealthOverview? {
+        val device = ringDataStore.getRingDevice()
+        val combinedData = serverUserHealthData?.let {
+            oreoStressDataConvertor.getStressCombinedData(
+                it
+            )
+        }
+
+        val stressData = userRepository.getSummaryStressData().apply {
+            this?.data = combinedData
+            if (device == null) {
+                this?.measureState = TapMeasureState.NO_DEVICE
+            }
+        }
+
+        stateStressCard.value?.apply {
+            this.data = combinedData
+            if (device == null) {
+                this.measureState = TapMeasureState.NO_DEVICE
+            }
+        }
+
+        val lastMeasuredValue = getLastMeasuredValue(stressData?.listData)
+        val stressStatus = getStressStatus(lastMeasuredValue.first)
+        val stressTrend = getStressTrend(stressData?.listData, lastMeasuredValue.second)
+
+        return OHealthOverview.StressCard(
+            stateStressCard.value,
+            lastMeasuredValue,
+            stressStatus,
+            stressTrend,
+            resourceProvider
+        )
+    }
+
     private suspend fun getStressCard(
         healthData: ServerUserHealthData
     ): OHealthOverview? {
@@ -1980,6 +2010,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 this?.measureState = TapMeasureState.NO_DEVICE
             }
         }
+
+        stateStressCard.postValue(stressData)
 
         val lastMeasuredValue = getLastMeasuredValue(stateStressCard.value?.listData)
         val stressStatus = getStressStatus(lastMeasuredValue.first)
