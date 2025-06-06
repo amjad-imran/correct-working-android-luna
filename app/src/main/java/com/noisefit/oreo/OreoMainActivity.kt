@@ -1315,6 +1315,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.navigate(R.id.fragmentCycleTracker)
                 }
             }
+
+            AppLinks.CAFFEINE_WINDOW -> {
+                navController?.navigate(R.id.caffeineWindowScreenFragment)
+            }
+
         }
     }
 

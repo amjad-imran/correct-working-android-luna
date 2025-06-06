@@ -80,6 +80,8 @@ object ApplicationUtils {
             AppLinks.DASHBOARD
         }else if(string.equals("/applinks/female-health", true)){
             AppLinks.FEMALE_HEALTH
+        }else if(string.equals("/applinks/caffeine", true)){
+            AppLinks.CAFFEINE_WINDOW
         } else {
             null
         }
