@@ -1369,4 +1369,13 @@
             app:argType="com.oreo.data.model.CaffeineWindowData"
             app:nullable="true" />
     </fragment>
+    <dialog
+        android:id="@+id/reportToDevelopersBottomSheet"
+        android:name="com.oreo.ui.profile.ReportToDevelopersBottomSheet"
+        android:label="ReportToDevelopersBottomSheet" />
+
+    <dialog
+        android:id="@+id/reportToDevelopersSuccessBottomSheet"
+        android:name="com.oreo.ui.profile.ReportToDevelopersSuccessBottomSheet"
+        android:label="ReportToDevelopersSuccessBottomSheet" />
 </navigation>

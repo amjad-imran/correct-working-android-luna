@@ -1981,5 +1981,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_monitor_caffeine_sources">Monitor Caffeine Sources</string>
     <string name="text_stimulant_list">Stimulant List</string>
     <string name="text_feature_not_enabled_for_this_user">Feature not enabled for this user</string>
+    <string name="text_report_to_developers">Report to Developers</string>
+    <string name="text_title">Title</string>
+    <string name="text_issue_reported_successfully">Issue Reported Successfully</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Thank you! Our team will review and address the issue soon.</string>
 
 </resources>

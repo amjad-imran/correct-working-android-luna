@@ -60,6 +60,7 @@ constructor(
 
     val cannyFeedbackUrl = MutableLiveData<Event<String>>()
 
+    val dataReportToDevUpdated = MutableLiveData<Event<Boolean>>()
 
     fun getUser(): LiveData<User> = _user
     fun getFormattedGender(): LiveData<String> = _userGender
@@ -425,6 +426,12 @@ constructor(
             }
         }
 
+    }
+
+    fun sendReportToDevFeedback() {
+        viewModelScope.launch {
+            dataReportToDevUpdated.postValue(Event(true))
+        }
     }
 
 

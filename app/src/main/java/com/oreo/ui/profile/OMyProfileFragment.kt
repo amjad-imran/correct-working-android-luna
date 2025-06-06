@@ -286,6 +286,16 @@ class OMyProfileFragment :
             )
             navigate(R.id.custom_homecreen)
         }
+
+        binding.rowReportToDevs.setOnClickListener {
+            setFragmentResultListener(REPORT_TO_DEVS_KEY){ _, bundle ->
+                val titleReportToDev = bundle.getString("title")
+                val descReportToDev = bundle.getString("desc")
+
+                viewModel.sendReportToDevFeedback()
+            }
+            navigate(R.id.reportToDevelopersBottomSheet)
+        }
         //
 
     }
@@ -299,6 +309,12 @@ class OMyProfileFragment :
 
 
     override fun subscribeObservers() {
+
+        viewModel.dataReportToDevUpdated.observe(this){
+            it.getContent()?.let {
+                navigate(R.id.reportToDevelopersSuccessBottomSheet)
+            }
+        }
 
         viewModel.cannyFeedbackUrl.observe(this){
             it.getContent()?.let {

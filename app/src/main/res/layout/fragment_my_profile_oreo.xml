@@ -253,6 +253,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/rowSelectLanguage"
                     app:text="@string/text_help_and_support" />
 
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowReportToDevs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:image="@drawable/ic_question_mark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowHelp"
+                    app:text="@string/text_report_to_developers" />
+
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowFeedBack"
@@ -262,7 +272,7 @@
                     app:image="@drawable/ic_document_duotone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowHelp"
+                    app:layout_constraintTop_toBottomOf="@+id/rowReportToDevs"
                     app:text="@string/text_rate_us" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
