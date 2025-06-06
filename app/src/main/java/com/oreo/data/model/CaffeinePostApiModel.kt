@@ -1,4 +1,4 @@
-package com.oreo.ui.caffeineWindowScreen
+package com.oreo.data.model
 
 data class CaffeinePostApiModel(
     val favorite_item_id: Int?= null,
