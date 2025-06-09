@@ -133,7 +133,8 @@ sealed class OHealthOverview {
         val lastMeasuredValue: Pair<Int, Int>,
         val stressStatus: Pair<String, Int>,
         val stressTrend: Int?,
-        val resourcesProvider: ResourcesProvider
+        val resourcesProvider: ResourcesProvider,
+        var ringGeneration: Int?
     ) : OHealthOverview()
     //
 

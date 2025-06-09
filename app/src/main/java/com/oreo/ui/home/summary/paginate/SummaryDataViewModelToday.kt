@@ -1992,7 +1992,8 @@ class SummaryDataViewModelToday @Inject constructor(
             lastMeasuredValue,
             stressStatus,
             stressTrend,
-            resourceProvider
+            resourceProvider,
+            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         )
     }
 
@@ -2023,11 +2024,23 @@ class SummaryDataViewModelToday @Inject constructor(
             lastMeasuredValue,
             stressStatus,
             stressTrend,
-            resourceProvider
+            resourceProvider,
+            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         )
         /*}*/
 
         return stressCard
+    }
+
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
     }
 
     private fun getCardsPriorityFromApi(cards: List<CustomHomeScreenNetworkItem>): List<CustomHomeScreenItem> {

@@ -629,7 +629,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lytStress.root.visible()
             lytStress.graphStress.updateData(data?.data)
 
-            val isGen2 = false
+            val isGen2 = allData.ringGeneration==2
             val context = binding.root.context
 
             if (isGen2) {
