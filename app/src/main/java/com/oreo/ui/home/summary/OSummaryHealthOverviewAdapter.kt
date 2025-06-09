@@ -655,7 +655,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
                     val (displayValue, displayColor) = allData.stressStatus
-                    lytStress.tvHeartUnit.text = displayValue
+                    /*lytStress.tvHeartUnit.text = displayValue*/
 
                     lytStress.tvLastMeasure.apply {
                         setTextColor(Color.parseColor("#a3ffffff"))
