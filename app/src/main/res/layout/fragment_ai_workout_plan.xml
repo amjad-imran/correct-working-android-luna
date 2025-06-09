@@ -84,6 +84,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp" />
+
+            <Button
+                android:id="@+id/btnSwitch"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_gravity="center_horizontal"
+                tools:text="@string/text_switch_to_regular_diet"
+                app:backgroundTint="@null" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

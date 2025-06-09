@@ -1985,5 +1985,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_title">Title</string>
     <string name="text_issue_reported_successfully">Issue Reported Successfully</string>
     <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Thank you! Our team will review and address the issue soon.</string>
+    <string name="text_switch_to_regular_diet">Switch to regular Diet</string>
 
 </resources>
