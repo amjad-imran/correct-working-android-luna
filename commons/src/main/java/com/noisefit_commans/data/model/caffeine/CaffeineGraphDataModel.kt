@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class CaffeineGraphDataModel(
     @SerializedName("wake_time")
     val wakeUpTime: String,//HH:mm:ss
-    val status: Boolean,
+    val status: Boolean?=null,
     @SerializedName("bed_time")
     val bedTime: String,//HH:mm:ss
     @SerializedName("caffeine_start")

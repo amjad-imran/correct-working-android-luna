@@ -41,8 +41,8 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.RingLocationData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
-import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
-import com.oreo.ui.caffeineWindowScreen.CaffeinePostApiModel
+import com.oreo.data.model.CaffeineFoodItem
+import com.oreo.data.model.CaffeinePostApiModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

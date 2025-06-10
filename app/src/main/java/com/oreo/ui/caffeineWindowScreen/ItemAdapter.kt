@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemCaffeineFoodBinding
 import androidx.core.graphics.toColorInt
+import com.oreo.data.model.CaffeineFoodItem
 
 sealed class CaffeineWindowScreenClickEnum {
     data class onFavIconClicked(var position: Int): CaffeineWindowScreenClickEnum()

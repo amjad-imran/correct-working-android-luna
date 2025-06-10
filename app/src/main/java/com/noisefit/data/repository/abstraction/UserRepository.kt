@@ -14,8 +14,8 @@ import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.models.*
 import com.oreo.data.model.NotificationToggleModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
-import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
-import com.oreo.ui.caffeineWindowScreen.CaffeinePostApiModel
+import com.oreo.data.model.CaffeineFoodItem
+import com.oreo.data.model.CaffeinePostApiModel
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

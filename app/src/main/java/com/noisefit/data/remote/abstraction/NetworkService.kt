@@ -67,8 +67,8 @@ import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.model.referral.ReferralsMain
 import com.oreo.data.model.sleep.SleepDataResponse
-import com.oreo.ui.caffeineWindowScreen.CaffeineFoodItem
-import com.oreo.ui.caffeineWindowScreen.CaffeinePostApiModel
+import com.oreo.data.model.CaffeineFoodItem
+import com.oreo.data.model.CaffeinePostApiModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
