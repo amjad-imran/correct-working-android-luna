@@ -657,13 +657,13 @@ class SummaryDataFragmentToday :
     private fun performOnStressMeasureImvClicked(allData: OHealthOverview.StressCard) {
         val data = allData.data
 
-        if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
+        /*if (WatchInfoGlobals.firmwareDeviceIdRing != WatchInfoGlobals.GEN_2_DEVICE_ID) {
             context.showShortToast(getString(R.string.text_tap_to_measure_is_only))
             viewModel.stateStressCard.postValue(viewModel.stateStressCard.value?.apply {
                 this.measureState = TapMeasureState.ERROR
             })
             return
-        }
+        }*/
 
         if (data?.measureState == TapMeasureState.MEASURING || data?.measureState == TapMeasureState.NO_DEVICE) {
             return
