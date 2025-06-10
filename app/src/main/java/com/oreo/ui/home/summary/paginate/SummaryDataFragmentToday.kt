@@ -1398,7 +1398,7 @@ class SummaryDataFragmentToday :
         viewModel.stateLunaAiCard.observe(viewLifecycleOwner) {
             if (it != null) {
                 viewModel.viewModelScope.launch {
-                    /*healthOverviewAdapter.updateData()*/
+                    healthOverviewAdapter.updateData(it)
                 }
             }
         }

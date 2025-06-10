@@ -582,6 +582,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             items[index] = heathOverViewData
             notifyItemChanged(index)
         }
+        else if (heathOverViewData is OHealthOverview.LunaAiCard){
+            val index = items.indexOfFirst { it is OHealthOverview.LunaAiCard }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        }
     }
 
     fun updateDailyToggle(goal: NotificationGoal) {
