@@ -1277,7 +1277,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {
-        if (caffeineGraphData == null) {
+        if (caffeineGraphData == null || caffeineGraphData?.status == null) {
             return null
         }
 

@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.CaffeinePostApiModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
