@@ -1751,25 +1751,30 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             when(data.dailyHealthDigestCardState){
                 SummaryStates.NO_DEVICE -> {
-                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Device"
+                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                    binding.lytDailyHealthDigest.tvTitle.text =
+                        context.getString(R.string.text_ring_not_connected)
                 }
                 SummaryStates.NO_DATA -> {
-                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Data"
+                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
                 }
                 SummaryStates.GENERATING -> {
-                    binding.lytDailyHealthDigestMain.tvTitle.text =
-                        context.getString(R.string.text_ngenerating)
+                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_generating)
                 }
                 SummaryStates.DATA_AVAILABLE -> {
-                    binding.lytDailyHealthDigestMain.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
-                    binding.lytDailyHealthDigestMain.root.setOnClickListener {
+                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
+                    binding.lytDailyHealthDigest.root.setOnClickListener {
                         itemClickListener?.invoke(
                             OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked
                         )
                     }
                 }
                 SummaryStates.NONE, null -> {
-                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Device"
+                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
                 }
             }
 

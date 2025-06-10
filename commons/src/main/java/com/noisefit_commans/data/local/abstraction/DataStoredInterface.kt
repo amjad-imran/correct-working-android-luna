@@ -27,6 +27,10 @@ interface DataStoredInterface {
     fun getCaffeineGraphData(): CaffeineGraphDataModel?
     fun clearCaffeineGraphData()
 
+    fun setSummaryAvailableData(isSummaryAvailable: Boolean?)
+    fun getSummaryAvailableData(): Boolean?
+    fun clearSummaryAvailableData()
+
 
     fun setIsInDemoMode(multiLogin: Boolean)
     fun isInDemoMode(): Boolean

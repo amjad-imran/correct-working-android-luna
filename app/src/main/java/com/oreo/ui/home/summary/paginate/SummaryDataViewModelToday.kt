@@ -170,7 +170,10 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
-    val stateLunaAiCard = MutableLiveData<OHealthOverview.LunaAiCard?>()
+    val stateLunaAiCard = MutableLiveData<OHealthOverview.LunaAiCard?>(
+        OHealthOverview.LunaAiCard(null)
+    )
+    val summaryStates = MutableLiveData<SummaryStates>()
 
     val stateStressCard = MutableLiveData<OHealthOverview.StressDashDataModel?>()
 
@@ -210,6 +213,7 @@ class SummaryDataViewModelToday @Inject constructor(
     //
     var userManagedSwitchState = false
     var caffeineGraphData: CaffeineGraphDataModel? = null
+    var summaryAvailable: Boolean? = false
     //
 
     fun getStressWalkthroughShownStatus(): Boolean {
@@ -1526,8 +1530,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun getLunaAiCard(): OHealthOverview? {
         return if (enableAi) {
-            // TODO
-            val summaryAvailable = false
             val dailyHealthDigestState: SummaryStates = getSummaryStates(summaryAvailable)
             stateLunaAiCard.postValue(
                 OHealthOverview.LunaAiCard(

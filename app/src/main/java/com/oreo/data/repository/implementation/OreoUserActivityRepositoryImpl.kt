@@ -176,6 +176,7 @@ class OreoUserActivityRepositoryImpl(
             //
             var customHomeScreenData: CustomHomeScreenModel? = null
             var caffeineGraphData: CaffeineGraphDataModel? = null
+            var summaryAvailable: Boolean?= null
             //
 
             var apiStartDate: String? = startDate
@@ -267,7 +268,8 @@ class OreoUserActivityRepositoryImpl(
                                 enableAi = ringDataStore.getEnableAiState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine(),
                                 customScreen = localDataStore.getCustomHomeScreenItemsPriorityList(),
-                                caffeine = localDataStore.getCaffeineGraphData()
+                                caffeine = localDataStore.getCaffeineGraphData(),
+                                summaryAvailable = localDataStore.getSummaryAvailableData()
                             ),
                             message = "",
                         )
@@ -309,6 +311,7 @@ class OreoUserActivityRepositoryImpl(
                             enableAi = response.enableAi
                             customHomeScreenData = response.customScreen
                             caffeineGraphData = response.caffeine
+                            summaryAvailable = response.summaryAvailable
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -323,6 +326,7 @@ class OreoUserActivityRepositoryImpl(
                                 )
                             }
                             localDataStore.setCaffeineGraphData(caffeineGraphData)
+                            localDataStore.setSummaryAvailableData(summaryAvailable)
                         }
                     }
                 }
@@ -369,7 +373,8 @@ class OreoUserActivityRepositoryImpl(
                                             stressBeta = stressBeta,
                                             enableAi = enableAi,
                                             customScreen = customHomeScreenData,
-                                            caffeine = caffeineGraphData
+                                            caffeine = caffeineGraphData,
+                                            summaryAvailable = summaryAvailable
                                         ),
                                         message = "",
                                     )

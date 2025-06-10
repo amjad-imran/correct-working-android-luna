@@ -39,7 +39,10 @@ data class ServerUserHealthResponse(
     val customScreen: CustomHomeScreenModel ?= null,
 
     @SerializedName("caffeine")
-    val caffeine: CaffeineGraphDataModel ?= null
+    val caffeine: CaffeineGraphDataModel ?= null,
+
+    @SerializedName("summary_available")
+    val summaryAvailable: Boolean? = false,
     //
 ) : ColorfitData()
 

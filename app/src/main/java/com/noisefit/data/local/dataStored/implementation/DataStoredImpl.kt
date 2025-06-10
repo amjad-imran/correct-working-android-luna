@@ -233,6 +233,7 @@ private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CAFFEINE_GRAPH_DATA = "CAFFEINE_GRAPH_DATA"
+private const val SUMMARY_AVAILABLE_DATA = "SUMMARY_AVAILABLE_DATA"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
 private const val CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP = "CUSTOM_HOME_SCREEN_API_CALL_TIMESTAMP"
@@ -732,6 +733,23 @@ class DataStoredImpl
 
     override fun clearCaffeineGraphData() {
         mPrefs.edit()?.remove(CAFFEINE_GRAPH_DATA)?.commit()
+    }
+
+    override fun setSummaryAvailableData(isSummaryAvailable: Boolean?) {
+        if (isSummaryAvailable == null) {
+            mPrefs.edit()?.remove(SUMMARY_AVAILABLE_DATA)?.commit()
+        } else {
+            mPrefs.edit()?.putBoolean(SUMMARY_AVAILABLE_DATA, isSummaryAvailable)?.commit()
+        }
+    }
+
+    override fun getSummaryAvailableData(): Boolean? {
+        val data = mPrefs.getBoolean(SUMMARY_AVAILABLE_DATA, false)
+        return data
+    }
+
+    override fun clearSummaryAvailableData() {
+        mPrefs.edit()?.remove(SUMMARY_AVAILABLE_DATA)?.commit()
     }
     //
 

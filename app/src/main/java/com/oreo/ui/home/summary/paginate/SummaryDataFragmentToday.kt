@@ -73,6 +73,7 @@ import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
@@ -227,6 +228,7 @@ class SummaryDataFragmentToday :
                 viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 viewModel.caffeineGraphData = mainViewModel.caffeineGraphData
+                viewModel.summaryAvailable = mainViewModel.summaryAvailable
                 setUi(dash.first, dash.second, dash.third)
             }
         }
@@ -944,6 +946,28 @@ class SummaryDataFragmentToday :
 
 
     override fun subscribeObservers() {
+
+        mainViewModel.syncTextState.observe(this){
+            if(!it.isNullOrEmpty()) {
+                viewModel.summaryStates.postValue(SummaryStates.GENERATING)
+            }
+        }
+
+        viewModel.summaryStates.observe(this) {
+
+            var state = it
+
+            if (mainViewModel.syncTextState.value.isNullOrEmpty().not()
+                && mainViewModel.syncTextState.value.equals(context?.getString(R.string.text_all_set)).not()) {
+                state = SummaryStates.GENERATING
+            }
+
+            viewModel.stateLunaAiCard.postValue(
+                viewModel.stateLunaAiCard.value.apply {
+                    this?.dailyHealthDigestCardState = it
+                }
+            )
+        }
 
         viewModel.notificationGoalsCardDataInit.observe(this) {
             it.getContent()?.let {

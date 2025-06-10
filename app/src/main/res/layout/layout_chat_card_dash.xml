@@ -17,50 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
         android:id="@+id/lytDailyHealthDigest"
+        layout="@layout/item_daily_health_digest"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/lytTalkToLunaAi"
-        app:layout_constraintTop_toTopOf="parent" >
-
-    <include
-        android:id="@+id/lytDailyHealthDigestMain"
-        layout="@layout/item_daily_health_digest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/lytDailyHealthDigestNoDevice"
-        layout="@layout/item_daily_health_digest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/lytDailyHealthDigestNoData"
-        layout="@layout/item_daily_health_digest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
