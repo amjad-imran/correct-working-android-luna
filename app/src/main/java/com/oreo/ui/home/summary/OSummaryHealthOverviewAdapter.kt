@@ -91,6 +91,7 @@ import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
+import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -146,6 +147,8 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     data class OnCaffeineDashCardClicked(val data: CaffeineWindowData) :
         OSummaryHealthOverviewClickEnum()
+
+    object OnDailyDigestMainCardClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -1739,9 +1742,37 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         fun bind(
             data: OHealthOverview.LunaAiCard,
         ) {
-            binding.root.setOnClickListener {
+
+            val context = binding.root.context
+
+            binding.lytTalkToLunaAi.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnAiCardClicked)
             }
+
+            when(data.dailyHealthDigestCardState){
+                SummaryStates.NO_DEVICE -> {
+                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Device"
+                }
+                SummaryStates.NO_DATA -> {
+                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Data"
+                }
+                SummaryStates.GENERATING -> {
+                    binding.lytDailyHealthDigestMain.tvTitle.text =
+                        context.getString(R.string.text_ngenerating)
+                }
+                SummaryStates.DATA_AVAILABLE -> {
+                    binding.lytDailyHealthDigestMain.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
+                    binding.lytDailyHealthDigestMain.root.setOnClickListener {
+                        itemClickListener?.invoke(
+                            OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked
+                        )
+                    }
+                }
+                SummaryStates.NONE, null -> {
+                    binding.lytDailyHealthDigestMain.tvTitle.text = "No Device"
+                }
+            }
+
         }
     }
 

@@ -289,6 +289,10 @@ class SummaryDataFragmentToday :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
+                OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {
+                    navigate(R.id.aiSummaryFragment)
+                }
+
                 is OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {
                     navigate(
                         R.id.caffeineWindowScreenFragment,
@@ -1363,6 +1367,14 @@ class SummaryDataFragmentToday :
             if (it != null) {
                 viewModel.viewModelScope.launch {
                     healthOverviewAdapter.updateData(viewModel.updateHeartRateCard())
+                }
+            }
+        }
+
+        viewModel.stateLunaAiCard.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.viewModelScope.launch {
+                    /*healthOverviewAdapter.updateData()*/
                 }
             }
         }

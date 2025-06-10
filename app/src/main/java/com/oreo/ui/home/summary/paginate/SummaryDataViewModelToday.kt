@@ -91,6 +91,7 @@ import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -169,6 +170,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
+    val stateLunaAiCard = MutableLiveData<OHealthOverview.LunaAiCard?>()
 
     val stateStressCard = MutableLiveData<OHealthOverview.StressDashDataModel?>()
 
@@ -668,7 +670,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 }
                             }
                             if (enableAi) {
-                                userActivities.add(OHealthOverview.LunaAiCard())
+                                /*userActivities.add(OHealthOverview.LunaAiCard())*/
                             }
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
@@ -688,12 +690,12 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         } else {
                             if (enableAi) {
-                                userActivities.add(OHealthOverview.LunaAiCard())
+                                /*userActivities.add(OHealthOverview.LunaAiCard())*/
                             }
                         }
                     } else {
                         if (enableAi) {
-                            userActivities.add(OHealthOverview.LunaAiCard())
+                            /*userActivities.add(OHealthOverview.LunaAiCard())*/
                         }
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
@@ -723,7 +725,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 }
                             }
                             if (enableAi) {
-                                userActivities.add(OHealthOverview.LunaAiCard())
+                                /*userActivities.add(OHealthOverview.LunaAiCard())*/
                             }
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
@@ -743,12 +745,12 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         } else {
                             if (enableAi) {
-                                userActivities.add(OHealthOverview.LunaAiCard())
+                                /*userActivities.add(OHealthOverview.LunaAiCard())*/
                             }
                         }
                     } else {
                         if (enableAi) {
-                            userActivities.add(OHealthOverview.LunaAiCard())
+                            /*userActivities.add(OHealthOverview.LunaAiCard())*/
                         }
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
@@ -797,7 +799,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                         if (enableAi) {
-                            userActivities.add(OHealthOverview.LunaAiCard())
+                            /*userActivities.add(OHealthOverview.LunaAiCard())*/
                         }
 
                         healthData.sleep?.let {
@@ -820,7 +822,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     } else {
                         if (enableAi) {
-                            userActivities.add(OHealthOverview.LunaAiCard())
+                            /*userActivities.add(OHealthOverview.LunaAiCard())*/
                         }
                     }
                     if (nap.isNotEmpty()) {
@@ -898,7 +900,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     if (enableAi) {
-                        userActivities.add(OHealthOverview.LunaAiCard())
+                        /*userActivities.add(OHealthOverview.LunaAiCard())*/
                     }
 
                     if (isBefore8) {
@@ -1524,9 +1526,29 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun getLunaAiCard(): OHealthOverview? {
         return if (enableAi) {
-            OHealthOverview.LunaAiCard()
+            // TODO
+            val summaryAvailable = false
+            val dailyHealthDigestState: SummaryStates = getSummaryStates(summaryAvailable)
+            stateLunaAiCard.postValue(
+                OHealthOverview.LunaAiCard(
+                    dailyHealthDigestCardState = dailyHealthDigestState
+                )
+            )
+            stateLunaAiCard.value
         } else {
             null
+        }
+    }
+
+    private fun getSummaryStates(summaryAvailable: Boolean?): SummaryStates {
+        if (summaryAvailable == true) {
+            return SummaryStates.DATA_AVAILABLE
+        }
+        val isDeviceConnected = ringDataStore.getRingDevice() != null
+        if (isDeviceConnected.not()) {
+            return SummaryStates.NO_DEVICE
+        } else {
+            return SummaryStates.NO_DATA
         }
     }
 

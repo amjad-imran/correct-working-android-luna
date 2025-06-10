@@ -12,6 +12,7 @@ import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 import kotlinx.parcelize.Parcelize
@@ -42,6 +43,7 @@ sealed class OHealthOverview {
 
 
     class LunaAiCard(
+        var dailyHealthDigestCardState: SummaryStates ?
     ) : OHealthOverview()
 
     class HealthMonitorCard(
