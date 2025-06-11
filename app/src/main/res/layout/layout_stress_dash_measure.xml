@@ -179,15 +179,13 @@
         tools:text="132" />
 
     <TextView
-        android:id="@+id/tvHeartUnit"
+        android:id="@+id/tvUnableToMeasure"
         style="@style/Tinny"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/text_bpm_small"
-        app:layout_constraintBottom_toBottomOf="@+id/tvLastMeasure"
-        app:layout_constraintStart_toEndOf="@+id/lottieAnimView"
-        app:layout_constraintTop_toTopOf="@+id/lottieAnimView"
-        app:layout_constraintVertical_chainStyle="packed" />
+        android:text="@string/text_unable_to_measure"
+        app:layout_constraintBottom_toTopOf="@+id/tvLastMeasure"
+        app:layout_constraintEnd_toEndOf="@+id/tvLastMeasure" />
 
       <TextView
           android:id="@+id/tvEmptyConnect"
@@ -209,5 +207,5 @@
           android:id="@+id/groupValue"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />
+          app:constraint_referenced_ids="tvLastMeasure,tvHeartValue" />
 </androidx.constraintlayout.widget.ConstraintLayout>
