@@ -647,6 +647,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 TapMeasureState.NO_DEVICE -> {
                     lytStress.lottieAnimView.invisible()
                     lytStress.imvHrMeasure.visible()
+                    lytStress.tvUnableToMeasure.gone()
 
                     lytStress.groupValue.gone()
                     lytStress.tvEmptyConnect.visible()
@@ -658,9 +659,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 TapMeasureState.LAST_MEASURED -> {
                     lytStress.lottieAnimView.invisible()
                     lytStress.imvHrMeasure.visible()
+                    lytStress.tvUnableToMeasure.gone()
 
                     lytStress.groupValue.visible()
-                    lytStress.tvEmptyConnect.gone()
+                    lytStress.tvEmptyConnect.visible()
+                    lytStress.tvEmptyConnect.text = context.getString(R.string.text_tap_to_measure)
 
                     lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
                     val (displayValue, displayColor) = allData.stressStatus
@@ -675,6 +678,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 TapMeasureState.MEASURING -> {
                     lytStress.lottieAnimView.visible()
                     lytStress.imvHrMeasure.invisible()
+                    lytStress.tvUnableToMeasure.gone()
 
                     lytStress.groupValue.gone()
                     lytStress.tvEmptyConnect.visible()
@@ -688,6 +692,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 TapMeasureState.DEFAULT -> {
                     lytStress.lottieAnimView.invisible()
                     lytStress.imvHrMeasure.visible()
+                    lytStress.tvUnableToMeasure.gone()
 
                     lytStress.groupValue.gone()
                     lytStress.tvEmptyConnect.visible()
@@ -709,7 +714,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setTextColor(Color.parseColor("#88b0ff"))
                         text = context.getString(R.string.text_try_again)
                     }
-                    lytStress.tvHeartUnit.text = context.getString(R.string.text_unable_to_measure)
+                    /*lytStress.tvHeartUnit.text = context.getString(R.string.text_unable_to_measure)*/
+                    lytStress.tvUnableToMeasure.visible()
 
                 }
 
@@ -720,6 +726,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.groupValue.invisible()
                     lytStress.tvEmptyConnect.gone()
                     lytStress.tvHeartValue.gone()
+                    lytStress.tvUnableToMeasure.gone()
                 }
 
                 null -> {}
@@ -736,7 +743,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
             }
         else {
-                lytStress.tvHeartUnit.gone()
+                lytStress.tvUnableToMeasure.gone()
                 lytStress.lottieAnimView.gone()
                 lytStress.imvHrMeasure.gone()
                 lytStress.tvLastMeasure.gone()
@@ -1410,7 +1417,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytHeartRate.imvHrMeasure.visible()
 
                     lytHeartRate.groupValue.visible()
-                    lytHeartRate.tvEmptyConnect.gone()
+                    lytHeartRate.tvEmptyConnect.visible()
+                    lytHeartRate.tvEmptyConnect.apply {
+                        text = context.getString(R.string.text_tap_to_measure)
+                    }
 
                     lytHeartRate.tvHeartValue.text = data.value
                     lytHeartRate.tvHeartUnit.text =
@@ -1443,7 +1453,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytHeartRate.groupValue.gone()
                     lytHeartRate.tvEmptyConnect.visible()
                     lytHeartRate.tvEmptyConnect.apply {
-                        setTextColor(Color.parseColor("#88b0ff"))
+                        /*setTextColor(Color.parseColor("#88b0ff"))*/
                         text = context.getString(R.string.text_tap_to_measure)
                     }
                 }
