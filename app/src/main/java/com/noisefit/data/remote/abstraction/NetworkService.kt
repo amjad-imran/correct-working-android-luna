@@ -135,6 +135,17 @@ interface NetworkService {
 
     @Multipart
     @POST
+    suspend fun reportToDeveloper(
+        @Url url: String,
+        @Part appLogs: MultipartBody.Part?,
+        @Part ringLogs: MultipartBody.Part?,
+        @Part firmwareLogs: MultipartBody.Part?,
+        @Part("title") title: RequestBody?,
+        @Part("description") description: RequestBody?,
+    ): BaseApiResponseData<Any>
+
+    @Multipart
+    @POST
     suspend fun submitFeedbackFile(
         @Url url: String,
         @Part("platform") platform: RequestBody,

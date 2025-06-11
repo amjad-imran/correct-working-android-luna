@@ -42,8 +42,15 @@ class FeedbackSubmitWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         LOGS.w("FeedbackSubmitWorker", "Worker running")
         try {
+            val title = inputData.getString("title")
+            val description = inputData.getString("description")
+
             getFileLogs().collect { files ->
-                sendFeedback(files.first, files.second, files.third, this)
+                sendFeedback(
+                    files.first, files.second, files.third,
+                    title, description,
+                    this
+                )
             }
 
             Result.success()
@@ -110,6 +117,8 @@ class FeedbackSubmitWorker @AssistedInject constructor(
         appLogFile: File?,
         watchLogFile: File?,
         firmwareLogs: File?,
+        title: String?,
+        description: String?,
         scope: CoroutineScope
     ) {
 
@@ -121,52 +130,107 @@ class FeedbackSubmitWorker @AssistedInject constructor(
             val tempFirmwareLogFile =
                 async { createTempAppLogFile("tempFirmwareLogs", firmwareLogs) }
 
+            val reportToDev = title.isNullOrEmpty().not()
 
-            deviceRepository.periodicFeedbackFile(
-                tempAppLogFile.await(), watchLogFile/*.await()*/, tempFirmwareLogFile.await()
-            ).collect { resource ->
+            if (reportToDev) {
+                deviceRepository.reportToDeveloper(
+                    tempAppLogFile.await(),
+                    watchLogFile/*.await()*/,
+                    tempFirmwareLogFile.await(),
+                    title,
+                    description
+                ).collect { resource ->
 
 
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.let {
+                    when (resource) {
+                        is Resource.Success -> {
+                            resource.data?.let {
 
-                            val appFile = tempAppLogFile.await()
-                            //val ringFile = tempRingLogFile.await()
-                            val firmwareFile = tempFirmwareLogFile.await()
-                            if (appFile?.exists() == true) {
-                                appFile.delete()
+                                val appFile = tempAppLogFile.await()
+                                //val ringFile = tempRingLogFile.await()
+                                val firmwareFile = tempFirmwareLogFile.await()
+                                if (appFile?.exists() == true) {
+                                    appFile.delete()
+                                }
+
+                                /*if (ringFile?.exists() == true) {
+                                    ringFile.delete()
+                                    LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
+                                }*/
+                                if (firmwareFile?.exists() == true) {
+                                    firmwareFile.delete()
+                                }
+
+
+                                ringDataStore.saveAutoLogsTimeStamp()
+
+                                /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
+                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
+                                } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
+                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.PAIRING_FEEDBACK)
+                                }*/
                             }
+                        }
 
-                            /*if (ringFile?.exists() == true) {
-                                ringFile.delete()
-                                LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
-                            }*/
-                            if (firmwareFile?.exists() == true) {
-                                firmwareFile.delete()
-                            }
-
-
-                            ringDataStore.saveAutoLogsTimeStamp()
-
-                            /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
-                                lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
-                            } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
-                                lastSyncProvider.setSyncTimeStamp(LastSyncItems.PAIRING_FEEDBACK)
-                            }*/
+                        else -> {
+                            LOGS.e("Failed")
                         }
                     }
 
-                    else -> {
-                        LOGS.e("Failed")
-                    }
                 }
+            } else {
+                deviceRepository.periodicFeedbackFile(
+                    tempAppLogFile.await(), watchLogFile/*.await()*/, tempFirmwareLogFile.await()
+                ).collect { resource ->
 
+
+                    when (resource) {
+                        is Resource.Success -> {
+                            resource.data?.let {
+
+                                val appFile = tempAppLogFile.await()
+                                //val ringFile = tempRingLogFile.await()
+                                val firmwareFile = tempFirmwareLogFile.await()
+                                if (appFile?.exists() == true) {
+                                    appFile.delete()
+                                }
+
+                                /*if (ringFile?.exists() == true) {
+                                    ringFile.delete()
+                                    LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
+                                }*/
+                                if (firmwareFile?.exists() == true) {
+                                    firmwareFile.delete()
+                                }
+
+
+                                ringDataStore.saveAutoLogsTimeStamp()
+
+                                /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
+                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
+                                } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
+                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.PAIRING_FEEDBACK)
+                                }*/
+                            }
+                        }
+
+                        else -> {
+                            LOGS.e("Failed")
+                        }
+                    }
+
+                }
             }
+
+
         }
     }
 
-    private suspend fun createTempAppLogFile(fileName: String, originalFile: File?,extension:String = "txt"): File? {
+    private suspend fun createTempAppLogFile(
+        fileName: String,
+        originalFile: File?,
+        extension: String = "txt"
+    ): File? {
         if (originalFile == null) {
             return null
         }
