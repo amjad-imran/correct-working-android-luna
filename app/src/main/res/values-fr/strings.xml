@@ -2126,5 +2126,15 @@ onjour, Luna"</string>
     <string name="text_monitor_caffeine_sources">Surveiller les Sources de Caféine</string>
     <string name="text_stimulant_list">Liste des Stimulants</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Fonction non activée pour cet utilisateur</string>
+    <string name="text_report_to_developers">Signaler aux développeurs</string>
+    <string name="text_title">Titre</string>
+    <string name="text_issue_reported_successfully">Problème signalé avec succès</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Merci ! Notre équipe examinera et traitera le problème bientôt.</string>
+    <string name="text_switch_to_regular_diet">Passer à un régime régulier</string>
+    <string name="text_daily_nhealth_digest">Résumé quotidien\nde santé</string>
+    <string name="text_generating">Génération en cours...</string>
+    <string name="text_ring_not_connected">Bague non connectée</string>
+
 
 </resources>

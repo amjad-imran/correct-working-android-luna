@@ -2012,5 +2012,15 @@
     <string name="text_monitor_caffeine_sources">ติดตามแหล่งคาเฟอีน</string>
     <string name="text_stimulant_list">รายการสารกระตุ้น</string>
 
+    <string name="text_feature_not_enabled_for_this_user">ฟีเจอร์นี้ยังไม่เปิดใช้งานสำหรับผู้ใช้นี้</string>
+    <string name="text_report_to_developers">รายงานให้ผู้พัฒนาทราบ</string>
+    <string name="text_title">หัวเรื่อง</string>
+    <string name="text_issue_reported_successfully">รายงานปัญหาเรียบร้อยแล้ว</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">ขอบคุณ! ทีมของเราจะตรวจสอบและแก้ไขปัญหาในเร็ว ๆ นี้</string>
+    <string name="text_switch_to_regular_diet">เปลี่ยนเป็นอาหารปกติ</string>
+    <string name="text_daily_nhealth_digest">สรุปสุขภาพ\nประจำวัน</string>
+    <string name="text_generating">กำลังสร้าง...</string>
+    <string name="text_ring_not_connected">ยังไม่ได้เชื่อมต่อแหวน</string>
+
 
 </resources>

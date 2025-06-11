@@ -2030,5 +2030,15 @@
     <string name="text_monitor_caffeine_sources">Monitorar Fontes de Cafeína</string>
     <string name="text_stimulant_list">Lista de Estimulantes</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Recurso não habilitado para este usuário</string>
+    <string name="text_report_to_developers">Reportar aos desenvolvedores</string>
+    <string name="text_title">Título</string>
+    <string name="text_issue_reported_successfully">Problema reportado com sucesso</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Obrigado! Nossa equipe revisará e resolverá o problema em breve.</string>
+    <string name="text_switch_to_regular_diet">Mudar para dieta regular</string>
+    <string name="text_daily_nhealth_digest">Resumo diário\nde saúde</string>
+    <string name="text_generating">Gerando...</string>
+    <string name="text_ring_not_connected">Anel não conectado</string>
+
 
 </resources>

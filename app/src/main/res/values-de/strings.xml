@@ -2006,5 +2006,16 @@
     <string name="text_monitor_caffeine_sources">Koffeinquellen überwachen</string>
     <string name="text_stimulant_list">Stimulanzienliste</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Funktion ist für diesen Benutzer nicht aktiviert</string>
+    <string name="text_report_to_developers">An Entwickler melden</string>
+    <string name="text_title">Titel</string>
+    <string name="text_issue_reported_successfully">Problem erfolgreich gemeldet</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Vielen Dank! Unser Team wird das Problem bald überprüfen und beheben.</string>
+    <string name="text_switch_to_regular_diet">Zur normalen Ernährung wechseln</string>
+    <string name="text_daily_nhealth_digest">Tägliche\ngesundheitsübersicht</string>
+    <string name="text_generating">Wird generiert...</string>
+    <string name="text_ring_not_connected">Ring nicht verbunden</string>
+
+
 
 </resources>

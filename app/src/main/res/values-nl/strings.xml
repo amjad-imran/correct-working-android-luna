@@ -2006,5 +2006,15 @@
     <string name="text_monitor_caffeine_sources">Cafeïnebronnen Monitoren</string>
     <string name="text_stimulant_list">Lijst van Stimulerende Middelen</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Functie niet ingeschakeld voor deze gebruiker</string>
+    <string name="text_report_to_developers">Rapporteer aan ontwikkelaars</string>
+    <string name="text_title">Titel</string>
+    <string name="text_issue_reported_successfully">Probleem succesvol gerapporteerd</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Dank je! Ons team zal het probleem spoedig beoordelen en aanpakken.</string>
+    <string name="text_switch_to_regular_diet">Overschakelen naar regulier dieet</string>
+    <string name="text_daily_nhealth_digest">Dagelijkse\ngesondheidsupdate</string>
+    <string name="text_generating">Bezig met genereren...</string>
+    <string name="text_ring_not_connected">Ring niet verbonden</string>
+
 
 </resources>

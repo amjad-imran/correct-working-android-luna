@@ -2000,5 +2000,14 @@
     <string name="text_monitor_caffeine_sources">监测咖啡因来源</string>
     <string name="text_stimulant_list">兴奋剂列表</string>
 
+    <string name="text_feature_not_enabled_for_this_user">该用户未启用此功能</string>
+    <string name="text_report_to_developers">报告给开发人员</string>
+    <string name="text_title">标题</string>
+    <string name="text_issue_reported_successfully">问题报告成功</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">谢谢！我们的团队将尽快审核并处理该问题。</string>
+    <string name="text_switch_to_regular_diet">切换到常规饮食</string>
+    <string name="text_daily_nhealth_digest">每日\n健康摘要</string>
+    <string name="text_generating">生成中...</string>
+    <string name="text_ring_not_connected">戒指未连接</string>
 
 </resources>

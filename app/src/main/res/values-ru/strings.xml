@@ -2028,5 +2028,15 @@
     <string name="text_monitor_caffeine_sources">Отслеживание источников кофеина</string>
     <string name="text_stimulant_list">Список стимуляторов</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Функция не доступна для этого пользователя</string>
+    <string name="text_report_to_developers">Сообщить разработчикам</string>
+    <string name="text_title">Заголовок</string>
+    <string name="text_issue_reported_successfully">Проблема успешно отправлена</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Спасибо! Наша команда вскоре рассмотрит и решит проблему.</string>
+    <string name="text_switch_to_regular_diet">Переключиться на обычную диету</string>
+    <string name="text_daily_nhealth_digest">Ежедневный\nобзор здоровья</string>
+    <string name="text_generating">Генерация...</string>
+    <string name="text_ring_not_connected">Кольцо не подключено</string>
+
 
 </resources>

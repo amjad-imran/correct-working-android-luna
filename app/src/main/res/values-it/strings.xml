@@ -2007,5 +2007,15 @@
     <string name="text_monitor_caffeine_sources">Monitora le Fonti di Caffeina</string>
     <string name="text_stimulant_list">Elenco degli Stimolanti</string>
 
+    <string name="text_feature_not_enabled_for_this_user">Funzionalità non abilitata per questo utente</string>
+    <string name="text_report_to_developers">Segnala agli sviluppatori</string>
+    <string name="text_title">Titolo</string>
+    <string name="text_issue_reported_successfully">Problema segnalato con successo</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Grazie! Il nostro team esaminerà e affronterà il problema al più presto.</string>
+    <string name="text_switch_to_regular_diet">Passa alla dieta regolare</string>
+    <string name="text_daily_nhealth_digest">Digest quotidiano\ndi salute</string>
+    <string name="text_generating">Generazione in corso...</string>
+    <string name="text_ring_not_connected">Anello non connesso</string>
+
 
 </resources>

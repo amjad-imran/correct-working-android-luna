@@ -1977,5 +1977,15 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_stimulant_list">Lista de Estimulantes</string>
 
 
+    <string name="text_feature_not_enabled_for_this_user">Función no habilitada para este usuario</string>
+    <string name="text_report_to_developers">Informar a los desarrolladores</string>
+    <string name="text_title">Título</string>
+    <string name="text_issue_reported_successfully">Problema informado con éxito</string>
+    <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">¡Gracias! Nuestro equipo revisará y abordará el problema pronto.</string>
+    <string name="text_switch_to_regular_diet">Cambiar a dieta regular</string>
+    <string name="text_daily_nhealth_digest">Resumen diario\nde salud</string>
+    <string name="text_generating">Generando...</string>
+    <string name="text_ring_not_connected">Anillo no conectado</string>
+
 
 </resources>
