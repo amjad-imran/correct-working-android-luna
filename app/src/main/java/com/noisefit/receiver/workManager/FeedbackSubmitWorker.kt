@@ -126,7 +126,6 @@ class FeedbackSubmitWorker @AssistedInject constructor(
 
             val tempAppLogFile =
                 async(Dispatchers.IO) { createTempAppLogFile("tempAppLogs", appLogFile) }
-            //val tempRingLogFile = async { createTempAppLogFile("tempRingLogs", watchLogFile,"zip") }
             val tempFirmwareLogFile =
                 async { createTempAppLogFile("tempFirmwareLogs", firmwareLogs) }
 
@@ -141,34 +140,19 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                     description
                 ).collect { resource ->
 
-
                     when (resource) {
                         is Resource.Success -> {
                             resource.data?.let {
-
                                 val appFile = tempAppLogFile.await()
-                                //val ringFile = tempRingLogFile.await()
                                 val firmwareFile = tempFirmwareLogFile.await()
                                 if (appFile?.exists() == true) {
                                     appFile.delete()
                                 }
 
-                                /*if (ringFile?.exists() == true) {
-                                    ringFile.delete()
-                                    LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
-                                }*/
+
                                 if (firmwareFile?.exists() == true) {
                                     firmwareFile.delete()
                                 }
-
-
-                                ringDataStore.saveAutoLogsTimeStamp()
-
-                                /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
-                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
-                                } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
-                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.PAIRING_FEEDBACK)
-                                }*/
                             }
                         }
 
@@ -189,28 +173,15 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                             resource.data?.let {
 
                                 val appFile = tempAppLogFile.await()
-                                //val ringFile = tempRingLogFile.await()
                                 val firmwareFile = tempFirmwareLogFile.await()
                                 if (appFile?.exists() == true) {
                                     appFile.delete()
                                 }
 
-                                /*if (ringFile?.exists() == true) {
-                                    ringFile.delete()
-                                    LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
-                                }*/
                                 if (firmwareFile?.exists() == true) {
                                     firmwareFile.delete()
                                 }
-
-
                                 ringDataStore.saveAutoLogsTimeStamp()
-
-                                /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
-                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
-                                } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
-                                    lastSyncProvider.setSyncTimeStamp(LastSyncItems.PAIRING_FEEDBACK)
-                                }*/
                             }
                         }
 
