@@ -7,9 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
-import com.freshchat.consumer.sdk.FaqOptions
 import com.freshchat.consumer.sdk.Freshchat
-import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -18,13 +16,15 @@ import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.ui.profile.ProfileViewModel
 import com.noisefit.ui.profile.ReferralRunningState
 import com.noisefit.ui.web.WebViewActivity
+import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.interfaces.QueryAction
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.chatGpt.PlanType
@@ -59,17 +59,17 @@ class OMyProfileFragment :
             binding.rowCycleTracker.visible()
         }
 
-        if(
+        if (
             mainViewModel.registerDate > 6
-        ){
+        ) {
             binding.llCustomHomeScreen.visible()
-        }else{
+        } else {
             binding.llCustomHomeScreen.gone()
         }
 
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             val cannyState = viewModel.ringDataStore.getCannyState()
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 binding.rowCannyFeedback.setVisibilityByCondition(cannyState)
             }
         }
@@ -93,7 +93,10 @@ class OMyProfileFragment :
                     this["target"] = "Voice_calibration"
                 }
             )
-            navigate(R.id.audioAiCalibrationFragment,bundleOf("planType" to PlanType.NONE, "text" to null))
+            navigate(
+                R.id.audioAiCalibrationFragment,
+                bundleOf("planType" to PlanType.NONE, "text" to null)
+            )
         }
 
         binding.lytUpdateToViewReferral.tvUpdateNow.setOnClickListener {
@@ -288,11 +291,21 @@ class OMyProfileFragment :
         }
 
         binding.rowReportToDevs.setOnClickListener {
-            setFragmentResultListener(REPORT_TO_DEVS_KEY){ _, bundle ->
+            viewModel.sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
+
+            setFragmentResultListener(REPORT_TO_DEVS_KEY) { _, bundle ->
                 val titleReportToDev = bundle.getString("title")
                 val descReportToDev = bundle.getString("desc")
 
-                viewModel.sendReportToDevFeedback()
+                context?.let { ctx ->
+                    val status = ApplicationUtils.startFeedbackSubmitWorker(
+                        ctx,
+                        titleReportToDev,
+                        descReportToDev
+                    )
+                }
+
+                viewModel.sendReportToDevFeedback(titleReportToDev, descReportToDev)
             }
             navigate(R.id.reportToDevelopersBottomSheet)
         }
@@ -310,15 +323,21 @@ class OMyProfileFragment :
 
     override fun subscribeObservers() {
 
-        viewModel.dataReportToDevUpdated.observe(this){
+        viewModel.dataReportToDevUpdated.observe(this) {
             it.getContent()?.let {
                 navigate(R.id.reportToDevelopersSuccessBottomSheet)
             }
         }
 
-        viewModel.cannyFeedbackUrl.observe(this){
+        viewModel.cannyFeedbackUrl.observe(this) {
             it.getContent()?.let {
-                startActivity(WebViewActivity.getStartIntent(requireContext(),getString(R.string.text_suggest_a_feature),it))
+                startActivity(
+                    WebViewActivity.getStartIntent(
+                        requireContext(),
+                        getString(R.string.text_suggest_a_feature),
+                        it
+                    )
+                )
             }
         }
         viewModel.referralRunningState.observe(this) {

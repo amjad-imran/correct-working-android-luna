@@ -44,118 +44,81 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view40" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/titleInputLayout"
-                    style="@style/ModalStyleNew"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginEnd="24dp"
-                    android:hint="@string/text_title"
-                    android:padding="@dimen/dimen_8dp"
-                    android:textColorHint="@color/white_60"
-                    app:boxBackgroundMode="none"
-                    app:errorEnabled="true"
-                    app:helperTextTextColor="@color/white_60"
-                    app:hintEnabled="true"
-                    app:hintTextColor="@color/white_60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTitle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/titleEtv"
-                        style="@style/H6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:gravity="top|start"
-
-                        android:includeFontPadding="true"
-                        android:maxLines="1"
-                        android:padding="@dimen/dimen_4dp"
-
-                        android:scrollbars="vertical"
-                        android:textColor="@android:color/white"
-
-                        android:textCursorDrawable="@null" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descInputLayout"
-                    style="@style/ModalStyleNew"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginEnd="24dp"
-                    android:hint="@string/text_description"
-                    android:padding="@dimen/dimen_8dp"
-                    android:textColorHint="@color/white_60"
-                    app:boxBackgroundMode="none"
-                    app:errorEnabled="true"
-                    app:helperTextTextColor="@color/white_60"
-                    app:hintEnabled="true"
-                    app:hintTextColor="@color/white_60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/titleInputLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/descEtv"
-                        style="@style/H6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:gravity="top|start"
-
-                        android:includeFontPadding="true"
-                        android:inputType="textMultiLine"
-                        android:lines="5"
-                        android:maxLength="250"
-                        android:maxLines="5"
-                        android:padding="@dimen/dimen_4dp"
-
-                        android:scrollbars="vertical"
-                        android:textColor="@android:color/white"
-
-                        android:textCursorDrawable="@null" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/titleInputLayout"
+                style="@style/H6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/back_modal_new"
+                android:hint="@string/text_title"
+                android:maxLength="100"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:singleLine="true"
+                android:textColorHint="@color/white_60"
+                app:hintTextColor="@color/white_60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 
-                <Button
-                    android:id="@+id/btnCancel"
-                    style="@style/SecondaryButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/dimen_24dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="@dimen/dimen_12dp"
-                    android:layout_marginBottom="@dimen/dimen_24dp"
-                    android:text="@string/text_cancel"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/descInputLayout"
-                    app:layout_constraintVertical_bias="0.0" />
+            <EditText
+                android:id="@+id/descInputLayout"
+                style="@style/H6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/back_modal_new"
+                android:gravity="top"
+                android:hint="@string/text_description"
+                android:lines="5"
+                android:maxLength="1000"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:textColorHint="@color/white_60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleInputLayout" />
 
-                <Button
-                    android:id="@+id/btnSubmit"
-                    style="@style/PrimaryButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="@dimen/dimen_12dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="@dimen/dimen_24dp"
-                    android:layout_marginBottom="@dimen/dimen_24dp"
-                    android:text="@string/text_submit"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/btnCancel"
-                    app:layout_constraintTop_toBottomOf="@+id/descInputLayout" />=
+
+            <Button
+                android:id="@+id/btnCancel"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:text="@string/text_cancel"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/descInputLayout"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/btnSubmit"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_12dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/dimen_24dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:enabled="false"
+                android:text="@string/text_submit"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnCancel"
+                app:layout_constraintTop_toBottomOf="@+id/descInputLayout" />=
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>

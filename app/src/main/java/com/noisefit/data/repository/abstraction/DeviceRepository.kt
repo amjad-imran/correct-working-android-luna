@@ -53,6 +53,14 @@ interface DeviceRepository {
         firmwareLogs: File?,
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
 
+    suspend fun reportToDeveloper(
+        appLogs: File?,
+        ringLogs: File?,
+        firmwareLogs: File?,
+        title: String,
+        description: String?
+    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
+
 
     suspend fun submitFeedbackFile(
         feedback: FeedbackNew,

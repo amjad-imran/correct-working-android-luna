@@ -488,6 +488,60 @@ class DeviceRepositoryImpl(
         }
     }
 
+    override suspend fun reportToDeveloper(
+        appLogs: File?,
+        ringLogs: File?,
+        firmwareLogs: File?,
+        title: String,
+        description: String?
+    ): Flow<Resource<BaseApiResponseData<Any>>> {
+        var appLog: MultipartBody.Part? = null
+        var ringLog: MultipartBody.Part? = null
+        var firmwareLog: MultipartBody.Part? = null
+        if (appLogs != null) {
+            appLog = MultipartBody.Part.createFormData(
+                "app_logs",
+                "appLogs.txt"/*feedback.file!!.name*/,
+                appLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+        }
+        if (ringLogs != null) {
+            var filename = ringLogs.name
+            if (filename.isNullOrEmpty()) {
+                filename = "ringLogs.txt"
+            }
+
+            ringLog = MultipartBody.Part.createFormData(
+                "ring_logs",
+                filename/*feedback.watchLogs!!.name*/,
+                ringLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+
+        }
+        if (firmwareLogs != null) {
+            firmwareLog = MultipartBody.Part.createFormData(
+                "firmware_logs",
+                "firmware_logs.txt",
+                firmwareLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+
+        }
+
+
+        val url =
+            "${BuildConfig.BASE_URL_NEW}/luna/protean/v3/hamburger"
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.reportToDeveloper(
+                url,
+                appLog,
+                ringLog,
+                firmwareLog,
+                title.getRequestBody(),
+                description?.getRequestBody()
+            )
+        }
+    }
+
     override suspend fun submitFeedbackFile(feedback: FeedbackNew): Flow<Resource<BaseApiResponseData<String>>> {
 
         val logList = ArrayList<MultipartBody.Part>()

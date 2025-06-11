@@ -61,26 +61,26 @@ object ApplicationUtils {
     fun getDefaultLanguage() = AppLanguage("English", "en")
 
 
-    fun parseAppLink(string: String?): AppLinks?{
+    fun parseAppLink(string: String?): AppLinks? {
         if (string.isNullOrEmpty()) return null
 
         return if (string.equals("/applinks/referral", true)) {
             AppLinks.REFERRAL
-        }else if(string.equals("/applinks/notification-control", true)){
+        } else if (string.equals("/applinks/notification-control", true)) {
             AppLinks.NOTIFICATION_CONTROL
-        }else if(string.equals("/applinks/profile", true)){
+        } else if (string.equals("/applinks/profile", true)) {
             AppLinks.PROFILE
-        }else if(string.equals("/applinks/sleep-planner", true)){
+        } else if (string.equals("/applinks/sleep-planner", true)) {
             AppLinks.SLEEP_PLANNER
-        }else if(string.equals("/applinks/luna-ai", true)){
+        } else if (string.equals("/applinks/luna-ai", true)) {
             AppLinks.LUNA_AI
-        }else if(string.equals("/applinks/feature-request", true)){
+        } else if (string.equals("/applinks/feature-request", true)) {
             AppLinks.FEATURE_REQUEST
-        }else if(string.equals("/applinks/dashboard", true)){
+        } else if (string.equals("/applinks/dashboard", true)) {
             AppLinks.DASHBOARD
-        }else if(string.equals("/applinks/female-health", true)){
+        } else if (string.equals("/applinks/female-health", true)) {
             AppLinks.FEMALE_HEALTH
-        }else if(string.equals("/applinks/caffeine", true)){
+        } else if (string.equals("/applinks/caffeine", true)) {
             AppLinks.CAFFEINE_WINDOW
         } else {
             null
@@ -421,15 +421,25 @@ object ApplicationUtils {
     }
 
 
-    fun startFeedbackSubmitWorker(context: Context): Boolean {
+    fun startFeedbackSubmitWorker(
+        context: Context,
+        title: String? = null,
+        description: String? = null
+    ): Boolean {
 
         val constraints: Constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val inputData = Data.Builder()
+            .putString("title", title)
+            .putString("description", description)
+            .build()
+
         val workRequest =
             OneTimeWorkRequest.Builder(FeedbackSubmitWorker::class.java)
                 .addTag(LOGS_SYNC_WORKER_NAME)
+                .setInputData(inputData)
                 .setConstraints(constraints)
                 .build()
 
