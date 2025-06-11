@@ -1755,22 +1755,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnAiCardClicked)
             }
 
+            if (data.dailyHealthDigestCardState == SummaryStates.DATA_AVAILABLE){
+                binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                binding.lytDailyHealthDigest.root.isClickable = true
+            }else{
+                binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                binding.lytDailyHealthDigest.root.isClickable = false
+            }
+
             when(data.dailyHealthDigestCardState){
                 SummaryStates.NO_DEVICE -> {
-                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                     binding.lytDailyHealthDigest.tvTitle.text =
                         context.getString(R.string.text_ring_not_connected)
                 }
                 SummaryStates.NO_DATA -> {
-                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
                 }
                 SummaryStates.GENERATING -> {
-                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_generating)
                 }
                 SummaryStates.DATA_AVAILABLE -> {
-                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
                     binding.lytDailyHealthDigest.root.setOnClickListener {
                         itemClickListener?.invoke(
@@ -1779,7 +1783,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
                 }
                 SummaryStates.NONE, null -> {
-                    binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
                 }
             }

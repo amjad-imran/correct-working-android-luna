@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
-    android:background="@drawable/back_chat_bot_card"
+    android:background="@drawable/bg_talk_to_luna_ai_dash"
     android:padding="16dp">
 
     <TextView
