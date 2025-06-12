@@ -51,6 +51,12 @@ class MealPlanViewModel @Inject constructor(
         } else {
             isMale.postValue(false)
         }
+        //
+        if(!localDataStore.getLdwReadinessData() && !localDataStore.getLdwReadinessData()){
+            dietState.postValue(DietState.REGULAR)
+        }else{
+            dietState.postValue(DietState.COMFORT)
+        }
     }
 
     fun getMealPlans() {
@@ -154,7 +160,7 @@ class MealPlanViewModel @Inject constructor(
         }
 
         if(meals != null && isMale.value == false){
-            boosterFood.postValue(meals.booster)
+            /*boosterFood.postValue(meals.booster)*/
         }
 
         //dayNutrients.postValue(arrayListOf("", "", "", ""))
