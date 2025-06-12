@@ -47,7 +47,8 @@ class ReportToDevelopersBottomSheet :
     override fun subscribeObservers() {
 
         binding.titleInputLayout.addTextChangedListener {
-            binding.btnSubmit.isEnabled = it.isNullOrEmpty().not()
+            val content = it?.toString()?.trim()
+            binding.btnSubmit.isEnabled = content.isNullOrEmpty().not()
         }
     }
 
