@@ -521,6 +521,11 @@ interface NetworkService {
     ): BaseApiResponse<List<AiMealResponse>>
 
     @GET
+    suspend fun getAiComfortMealPlans(
+        @Url url: String
+    ): BaseApiResponse<List<AiMealResponse>>
+
+    @GET
     suspend fun getDailySummaryData(
         @Url url: String
     ): BaseApiResponse<List<AiDailySummaryModel>>

@@ -177,6 +177,8 @@ class OreoUserActivityRepositoryImpl(
             var customHomeScreenData: CustomHomeScreenModel? = null
             var caffeineGraphData: CaffeineGraphDataModel? = null
             var summaryAvailable: Boolean?= null
+            var ldw_readiness: Boolean?= null
+            var ldw_cycle_tracker: Boolean?= null
             //
 
             var apiStartDate: String? = startDate
@@ -269,7 +271,9 @@ class OreoUserActivityRepositoryImpl(
                                 tempBaseLine = ringDataStore.getTempBaseLine(),
                                 customScreen = localDataStore.getCustomHomeScreenItemsPriorityList(),
                                 caffeine = localDataStore.getCaffeineGraphData(),
-                                summaryAvailable = localDataStore.getSummaryAvailableData()
+                                summaryAvailable = localDataStore.getSummaryAvailableData(),
+                                ldw_readiness = localDataStore.getLdwReadinessData(),
+                                ldw_cycle_tracker = localDataStore.getLdwCycleTrackerData()
                             ),
                             message = "",
                         )
@@ -312,6 +316,8 @@ class OreoUserActivityRepositoryImpl(
                             customHomeScreenData = response.customScreen
                             caffeineGraphData = response.caffeine
                             summaryAvailable = response.summaryAvailable
+                            ldw_readiness = response.ldw_readiness
+                            ldw_cycle_tracker = response.ldw_cycle_tracker
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -327,6 +333,8 @@ class OreoUserActivityRepositoryImpl(
                             }
                             localDataStore.setCaffeineGraphData(caffeineGraphData)
                             localDataStore.setSummaryAvailableData(summaryAvailable)
+                            localDataStore.setLdwReadinessData(ldw_readiness)
+                            localDataStore.setLdwCycleTrackerData(ldw_cycle_tracker)
                         }
                     }
                 }
@@ -374,7 +382,9 @@ class OreoUserActivityRepositoryImpl(
                                             enableAi = enableAi,
                                             customScreen = customHomeScreenData,
                                             caffeine = caffeineGraphData,
-                                            summaryAvailable = summaryAvailable
+                                            summaryAvailable = summaryAvailable,
+                                            ldw_readiness = ldw_readiness,
+                                            ldw_cycle_tracker = ldw_cycle_tracker
                                         ),
                                         message = "",
                                     )

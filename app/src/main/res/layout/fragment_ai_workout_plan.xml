@@ -72,6 +72,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <include
+                android:id="@+id/lytCreateComfortFood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/layout_suggest_a_add_diet_plan"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+
+            <include
+                android:id="@+id/lytBoosterFoods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/row_sub_meal"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNutrients"
                 android:layout_width="match_parent"
@@ -92,7 +111,10 @@
                 android:layout_marginTop="28dp"
                 android:layout_gravity="center_horizontal"
                 tools:text="@string/text_switch_to_regular_diet"
-                app:backgroundTint="@null" />
+                app:backgroundTint="@null"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

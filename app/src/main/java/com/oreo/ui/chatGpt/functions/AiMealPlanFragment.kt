@@ -3,6 +3,7 @@ package com.oreo.ui.chatGpt.functions
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -53,6 +54,41 @@ class AiMealPlanFragment :
         setRecycler()
     }
 
+    private fun setUi(){
+        binding.btnSwitch.post {
+            binding.btnSwitch.paint.shader = viewModel.getTextShaderForGradient(
+                binding.btnSwitch.measuredWidth.toFloat(),
+                "#AAADFF".toColorInt(),
+                "#FFFFFF".toColorInt()
+            )
+        }
+    }
+
+    private fun displayComfortFood(){
+        binding.lytCreateComfortFood.apply {
+            tvTitle.text = getString(R.string.text_comfort_food_for_you)
+            tvTitle.post {
+                tvTitle.paint.shader = viewModel.getTextShaderForGradient(
+                    tvTitle.measuredWidth.toFloat(),
+                        "#9BC5FF".toColorInt(),
+                        "#FFFFFF".toColorInt()
+                    )
+            }
+
+            tvDesc.text = getString(R.string.text_plan_nourishing_meals_to_help_you_feel_your_best)
+
+            btnCreate.post{
+                btnCreate.paint.shader = viewModel.getTextShaderForGradient(
+                    btnCreate.measuredWidth.toFloat(),
+                    "#9E93FF".toColorInt(),
+                    "#FFFFFF".toColorInt()
+                )
+            }
+
+            root.visible()
+        }
+    }
+
 
     override fun initListener() {
         binding.lytWeek.tvMon.setOnClickListener(weekListener)
@@ -85,6 +121,13 @@ class AiMealPlanFragment :
                     PlanType.DIET
                 )
             )
+        }
+
+        binding.btnSwitch.setOnClickListener {
+            val isRegularState = viewModel.dietState.value==MealPlanViewModel.DietState.REGULAR
+            val nextState = if (isRegularState) MealPlanViewModel.DietState.COMFORT
+                            else MealPlanViewModel.DietState.REGULAR
+            viewModel.dietState.postValue(nextState)
         }
     }
 
@@ -143,6 +186,49 @@ class AiMealPlanFragment :
                 }
             }
 
+        }
+
+        viewModel.dietState.observe(this){
+            val isLowDietPlanAndWorkout = viewModel.localDataStore.isLowDietPlanAndWorkout()
+            val isLowDietPlanAndWorkoutSetUp = viewModel.localDataStore.isLowDietPlanAndWorkoutSetUp()
+            if(
+                isLowDietPlanAndWorkout &&
+                isLowDietPlanAndWorkoutSetUp
+                )
+            {
+                binding.btnSwitch.visible()
+            }else{
+                binding.btnSwitch.gone()
+            }
+
+            when(it){
+                MealPlanViewModel.DietState.REGULAR -> {
+                    if(isLowDietPlanAndWorkoutSetUp){
+                        binding.btnSwitch.visible()
+                    }else{
+                        binding.lytCreateComfortFood.root.visible()
+                        binding.btnSwitch.gone()
+                    }
+                    viewModel.getMealPlans()
+                }
+                MealPlanViewModel.DietState.COMFORT -> {
+                    if(isLowDietPlanAndWorkoutSetUp){
+                        viewModel.getComfortMealPlans()
+                    }else{
+                        binding.lytCreateComfortFood.root.gone()
+                        binding.btnSwitch.gone()
+                        viewModel.getMealPlans()
+                    }
+                }
+            }
+        }
+
+        viewModel.boosterFood.observe(this){
+            if(it==null){
+                binding.lytBoosterFoods.root.gone()
+            }else{
+                // Code for booster food - set ui
+            }
         }
 
     }

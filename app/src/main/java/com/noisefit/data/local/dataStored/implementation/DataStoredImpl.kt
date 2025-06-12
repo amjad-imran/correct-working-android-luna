@@ -249,6 +249,13 @@ private const val HRV_ALERTS = "HRV_ALERTS"
 
 private const val IRR_EVENTS_CARD_VISIBLITY_READINESS = "IRR_EVENTS_CARD_VISIBLITY_READINESS"
 
+private const val AI_MEAL_PLAN_DIET_STATE = "AI_MEAL_PLAN_DIET_STATE"
+private const val LOW_DIET_PLAN_WORKOUT = "LOW_DIET_PLAN_WORKOUT"
+private const val IS_LOW_DIET_PLAN_WORKOUT_SETUP = "IS_LOW_DIET_PLAN_WORKOUT_SETUP"
+
+private const val LDW_READINESS = "LDW_READINESS"
+private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -743,13 +750,47 @@ class DataStoredImpl
         }
     }
 
-    override fun getSummaryAvailableData(): Boolean? {
+    override fun getSummaryAvailableData(): Boolean {
         val data = mPrefs.getBoolean(SUMMARY_AVAILABLE_DATA, false)
         return data
     }
 
     override fun clearSummaryAvailableData() {
         mPrefs.edit()?.remove(SUMMARY_AVAILABLE_DATA)?.commit()
+    }
+
+    override fun setLdwReadinessData(isLdwReadiness: Boolean?) {
+        if (isLdwReadiness == null) {
+            mPrefs.edit()?.remove(LDW_READINESS)?.commit()
+        } else {
+            mPrefs.edit()?.putBoolean(LDW_READINESS, isLdwReadiness)?.commit()
+        }
+    }
+
+    override fun getLdwReadinessData(): Boolean {
+        val data = mPrefs.getBoolean(LDW_READINESS, false)
+        return data
+    }
+
+    override fun clearLdwReadinessData() {
+        mPrefs.edit()?.remove(LDW_READINESS)?.commit()
+    }
+
+    override fun setLdwCycleTrackerData(isLdwCycleTracker: Boolean?) {
+        if (isLdwCycleTracker == null) {
+            mPrefs.edit()?.remove(LDW_CYCLE_TRACKER)?.commit()
+        } else {
+            mPrefs.edit()?.putBoolean(LDW_CYCLE_TRACKER, isLdwCycleTracker)?.commit()
+        }
+    }
+
+    override fun getLdwCycleTrackerData(): Boolean {
+        val data = mPrefs.getBoolean(LDW_CYCLE_TRACKER, false)
+        return data
+    }
+
+    override fun clearLdwCycleTrackerData() {
+        mPrefs.edit()?.remove(LDW_CYCLE_TRACKER)?.commit()
     }
     //
 
@@ -2160,5 +2201,24 @@ class DataStoredImpl
         return mPrefs.getBoolean(SHOW_REVIEW_POP_UP, false)
     }
 
+    override fun getAiMealPlanDietInRegularState(): Boolean {
+        return mPrefs.getBoolean(AI_MEAL_PLAN_DIET_STATE, true)
+    }
+
+    override fun setAiMealPlanDietInRegularState(isRegular: Boolean?) {
+        if(isRegular==null){
+
+        }else{
+            mPrefs.edit()?.putBoolean(AI_MEAL_PLAN_DIET_STATE, isRegular)?.apply()
+        }
+    }
+
+    override fun isLowDietPlanAndWorkout(): Boolean {
+        return mPrefs.getBoolean(LOW_DIET_PLAN_WORKOUT, false)
+    }
+
+    override fun isLowDietPlanAndWorkoutSetUp(): Boolean {
+        return mPrefs.getBoolean(IS_LOW_DIET_PLAN_WORKOUT_SETUP, false)
+    }
 
 }
