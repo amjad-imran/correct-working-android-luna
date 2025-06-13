@@ -28,8 +28,16 @@ interface DataStoredInterface {
     fun clearCaffeineGraphData()
 
     fun setSummaryAvailableData(isSummaryAvailable: Boolean?)
-    fun getSummaryAvailableData(): Boolean?
+    fun getSummaryAvailableData(): Boolean
     fun clearSummaryAvailableData()
+
+    fun setLdwReadinessData(isLdwReadiness: Boolean?)
+    fun getLdwReadinessData(): Boolean
+    fun clearLdwReadinessData()
+
+    fun setLdwCycleTrackerData(isLdwCycleTracker: Boolean?)
+    fun getLdwCycleTrackerData(): Boolean
+    fun clearLdwCycleTrackerData()
 
 
     fun setIsInDemoMode(multiLogin: Boolean)
@@ -542,6 +550,11 @@ interface DataStoredInterface {
     fun getIrregularityCardsVisibilityReadiness(): Boolean
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)
     fun clearAlerts()
+
+    fun getAiMealPlanDietInRegularState(): Boolean
+    fun setAiMealPlanDietInRegularState(isRegular: Boolean?)
+    fun isLowDietPlanAndWorkout(): Boolean
+    fun isLowDietPlanAndWorkoutSetUp(): Boolean
 }
 
 enum class AppTrackEvent {

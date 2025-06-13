@@ -363,6 +363,33 @@ class CycleTrackerFragment :
             val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
             navigate(frag, bundle)
         }
+
+        binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
+
+        }
+
+        binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
+
+        }
+    }
+
+    private fun displayWomansDayCard(){
+        binding.dividerWomenDayAnnouncement.root.visible()
+
+        binding.lytWomenDayAnnouncement.lytDietAnnc.apply {
+            root.setBackgroundResource(R.drawable.bg_fuel_your_flow_cycle_tracker)
+            tvTitle.text = getString(R.string.text_fuel_your_flow)
+            tvDesc.text = getString(R.string.text_get_personalized_food_recommendations_for_this_phase_of_your_cycle)
+        }
+
+        binding.lytWomenDayAnnouncement.lytWorkoutAnnc.apply {
+            root.setBackgroundResource(R.drawable.bg_power_in_gentle_progress_cycle_tracker)
+            tvTitle.text = getString(R.string.text_power_in_gentle_progress)
+            tvDesc.text =
+                getString(R.string.text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout)
+        }
+
+        binding.lytWomenDayAnnouncement.root.visible()
     }
 
     private fun notificationTextFade(textView1: TextView, textView2: TextView) {

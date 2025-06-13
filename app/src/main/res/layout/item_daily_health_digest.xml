@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/mainCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="36dp"
@@ -18,12 +19,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consLytDailyHealthDigest"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_daily_health_digest_main_dash">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvTitle"
-                style="@style/S12"
+                style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -39,8 +39,8 @@
 
             <ImageView
                 android:id="@+id/imageView11"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_arrow_summary"

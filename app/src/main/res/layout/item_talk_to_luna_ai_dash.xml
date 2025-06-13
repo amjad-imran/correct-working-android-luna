@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/textView109"
-        style="@style/S12"
+        style="@style/S10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -21,11 +21,12 @@
     <ImageView
         android:id="@+id/imageView24"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:src="@drawable/image_luna_ai_logo"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_luna_ai_img_dash"
         app:layout_constraintBottom_toBottomOf="@+id/textView109"
-        app:layout_constraintStart_toEndOf="@+id/textView109" />
+        app:layout_constraintStart_toEndOf="@+id/textView109"
+        app:layout_constraintTop_toTopOf="@+id/textView109" />
 
     <TextView
         style="@style/S12"
@@ -41,8 +42,8 @@
 
     <ImageView
         android:id="@+id/imageView78"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/image_ai_thinking"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

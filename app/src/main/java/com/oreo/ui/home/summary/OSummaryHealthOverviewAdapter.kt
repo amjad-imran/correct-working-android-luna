@@ -1766,10 +1766,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             if (data.dailyHealthDigestCardState == SummaryStates.DATA_AVAILABLE){
-                binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                binding.lytDailyHealthDigest.mainCard.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                 binding.lytDailyHealthDigest.root.isClickable = true
             }else{
-                binding.lytDailyHealthDigest.root.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
+                binding.lytDailyHealthDigest.mainCard.setBackgroundResource(R.drawable.bg_daily_health_digest_other_dash)
                 binding.lytDailyHealthDigest.root.isClickable = false
             }
 
