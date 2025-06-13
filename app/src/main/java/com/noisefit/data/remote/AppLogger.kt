@@ -29,6 +29,11 @@ object AppLogger {
         if (BuildConfig.DEBUG) {
             try {
 
+                val url = request.url.toString()
+                if (url.contains("luna/protean/v3/hamburger").not()) {
+                    return
+                }
+
                 LOGS.d("API_URL_LOGGER", "${request.url}")
                 val sb = StringBuilder()
                 sb.append("==============================================================================\n")
