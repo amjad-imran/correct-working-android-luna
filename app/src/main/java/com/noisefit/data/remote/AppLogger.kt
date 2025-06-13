@@ -67,9 +67,9 @@ object AppLogger {
                     sb.append("--> BODY: <empty>\n")
                 }
                 sb.append("==============================================================================\n")
-                logNetwork(sb.toString())
+                logNetwork(sb.toString(), request.url.toString())
             } catch (e: Exception) {
-                logNetwork("logRequest error: $e")
+                logNetwork("logRequest error: $e", request.url.toString())
             }
         }
     }
@@ -115,15 +115,17 @@ object AppLogger {
                     }
                 }
                 sb.append("==============================================================================\n")
-                logNetwork(sb.toString())
+                logNetwork(sb.toString(), url)
             } catch (e: Exception) {
-                logNetwork("logResponse error: $e")
+                logNetwork("logResponse error: $e", url)
             }
         }
     }
 
-    private fun logNetwork(msg: String) {
+    private fun logNetwork(msg: String, url: String? = null) {
         LOGS.d(msg)
-        AppLogs.sendAppLogs(msg)
+        if (url != null && url.contains("luna/protean/v3/hamburger").not()) {
+            AppLogs.sendAppLogs(msg)
+        }
     }
 }
