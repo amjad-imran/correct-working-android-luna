@@ -523,7 +523,7 @@ interface NetworkService {
     @GET
     suspend fun getAiComfortMealPlans(
         @Url url: String
-    ): BaseApiResponse<List<AiMealResponse>>
+    ): BaseApiResponse<AiMealResponse>
 
     @GET
     suspend fun getDailySummaryData(

@@ -141,7 +141,7 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getAiComfortMealPlans(): Flow<Resource<BaseApiResponse<List<AiMealResponse>>?>> {
+    override suspend fun getAiComfortMealPlans(): Flow<Resource<BaseApiResponse<AiMealResponse>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/women"
