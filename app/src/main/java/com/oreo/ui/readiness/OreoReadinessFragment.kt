@@ -60,6 +60,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
+import com.noisefit.oreo.OreoMainActivity
 import com.oreo.data.model.IrregularEventsChipModel
 
 
@@ -758,6 +759,7 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.imgChatEtx.setOnClickListener {
+            (activity as OreoMainActivity).hideSoftKeyboard()
             if (binding.lytIrregularityEvents.chatEtx.text.toString().isEmpty()) {
                 return@setOnClickListener
             }
@@ -783,6 +785,7 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.lytSubmittedIrregularityEvents.ivClose.setOnClickListener {
+            (activity as OreoMainActivity).hideSoftKeyboard()
             mViewModel.isEventSubmitted = false
             mViewModel.loadAlertsData()
         }
