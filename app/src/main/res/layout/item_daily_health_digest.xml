@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/mainCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="36dp"
@@ -18,8 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consLytDailyHealthDigest"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_daily_health_digest_main_dash">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvTitle"
