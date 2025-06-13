@@ -33,18 +33,18 @@ class MealPlanViewModel @Inject constructor(
     private val mealResponse = ArrayList<AiMealResponse>()
     val dayMealList = MutableLiveData<List<AiMeals>?>()
 
-    val dietState = MutableLiveData<DietState>()
+    /*val dietState = MutableLiveData<DietState>()
 
     val isRegularDiet = MutableLiveData<Boolean>()
 
     val boosterFood = MutableLiveData<AiMeal?>()
-    val isMale = MutableLiveData<Boolean>()
+    val isMale = MutableLiveData<Boolean>()*/
 
     init {
         currentSelectedWeekDayPosition.postValue(LocalDate.now().dayOfWeek.value)
     }
 
-    private fun initData(){
+    /*private fun initData(){
         val user = localDataStore.getUser()
         if(user?.userInfo?.gender.equals("male", true)) {
             isMale.postValue(true)
@@ -57,7 +57,7 @@ class MealPlanViewModel @Inject constructor(
         }else{
             dietState.postValue(DietState.COMFORT)
         }
-    }
+    }*/
 
     fun getMealPlans() {
         viewModelScope.launch {
@@ -159,9 +159,9 @@ class MealPlanViewModel @Inject constructor(
             dayMealList.postValue(meals.meals)
         }
 
-        if(meals != null && isMale.value == false){
-            /*boosterFood.postValue(meals.booster)*/
-        }
+        /*if(meals != null && isMale.value == false){
+            *//*boosterFood.postValue(meals.booster)*//*
+        }*/
 
         //dayNutrients.postValue(arrayListOf("", "", "", ""))
     }
@@ -170,7 +170,7 @@ class MealPlanViewModel @Inject constructor(
         return "day_$position"
     }
 
-    fun getTextShaderForGradient(
+    /*fun getTextShaderForGradient(
         width: Float,
         startGradColor: Int,
         endGradColor: Int
@@ -184,7 +184,7 @@ class MealPlanViewModel @Inject constructor(
             null,
             Shader.TileMode.CLAMP
         )
-    }
+    }*/
 
     enum class DietState {
         REGULAR, COMFORT

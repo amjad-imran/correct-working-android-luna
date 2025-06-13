@@ -3,7 +3,6 @@ package com.oreo.ui.chatGpt.functions
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -54,7 +53,7 @@ class AiMealPlanFragment :
         setRecycler()
     }
 
-    private fun setUi(){
+    /*private fun setUi(){
         binding.btnSwitch.post {
             binding.btnSwitch.paint.shader = viewModel.getTextShaderForGradient(
                 binding.btnSwitch.measuredWidth.toFloat(),
@@ -87,7 +86,7 @@ class AiMealPlanFragment :
 
             root.visible()
         }
-    }
+    }*/
 
 
     override fun initListener() {
@@ -123,12 +122,12 @@ class AiMealPlanFragment :
             )
         }
 
-        binding.btnSwitch.setOnClickListener {
+        /*binding.btnSwitch.setOnClickListener {
             val isRegularState = viewModel.dietState.value==MealPlanViewModel.DietState.REGULAR
             val nextState = if (isRegularState) MealPlanViewModel.DietState.COMFORT
                             else MealPlanViewModel.DietState.REGULAR
             viewModel.dietState.postValue(nextState)
-        }
+        }*/
     }
 
     override fun subscribeObservers() {
@@ -188,7 +187,7 @@ class AiMealPlanFragment :
 
         }
 
-        viewModel.dietState.observe(this){
+        /*viewModel.dietState.observe(this){
             val isLowDietPlanAndWorkout = viewModel.localDataStore.isLowDietPlanAndWorkout()
             val isLowDietPlanAndWorkoutSetUp = viewModel.localDataStore.isLowDietPlanAndWorkoutSetUp()
             if(
@@ -229,7 +228,7 @@ class AiMealPlanFragment :
             }else{
                 // Code for booster food - set ui
             }
-        }
+        }*/
 
     }
 
