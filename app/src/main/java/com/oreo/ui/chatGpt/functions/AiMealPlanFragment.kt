@@ -3,6 +3,7 @@ package com.oreo.ui.chatGpt.functions
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -16,11 +17,14 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class AiMealPlanFragment :
@@ -31,6 +35,8 @@ class AiMealPlanFragment :
     private val nutrientsAdapter: NutrientsAdapter by lazy {
         NutrientsAdapter()
     }
+
+    val currentDay = LocalDate.now().dayOfWeek.value;
 
     private val mealsAdapter: MealsAdapter by lazy {
         MealsAdapter(onMealSelected = { view,meal, mealName ->
@@ -61,9 +67,9 @@ class AiMealPlanFragment :
                 "#FFFFFF".toColorInt()
             )
         }
-    }
+    }*/
 
-    private fun displayComfortFood(){
+    private fun displayComfortFoodCreationLyt(){
         binding.lytCreateComfortFood.apply {
             tvTitle.text = getString(R.string.text_comfort_food_for_you)
             tvTitle.post {
@@ -78,15 +84,16 @@ class AiMealPlanFragment :
 
             btnCreate.post{
                 btnCreate.paint.shader = viewModel.getTextShaderForGradient(
-                    btnCreate.measuredWidth.toFloat(),
+                    btnCreate.paint.measureText(btnCreate.text.toString()),
                     "#9E93FF".toColorInt(),
                     "#FFFFFF".toColorInt()
                 )
+                btnCreate.invalidate()
             }
-
+            btnDismiss.text= getString(R.string.text_dismiss)
             root.visible()
         }
-    }*/
+    }
 
 
     override fun initListener() {
@@ -122,12 +129,18 @@ class AiMealPlanFragment :
             )
         }
 
-        /*binding.btnSwitch.setOnClickListener {
-            val isRegularState = viewModel.dietState.value==MealPlanViewModel.DietState.REGULAR
-            val nextState = if (isRegularState) MealPlanViewModel.DietState.COMFORT
-                            else MealPlanViewModel.DietState.REGULAR
-            viewModel.dietState.postValue(nextState)
-        }*/
+        binding.btnSwitch.setOnClickListener {
+            val isRegularState = viewModel.dietState.value == DietState.REGULAR
+            val nextState = if (isRegularState) DietState.COMFORT
+                            else DietState.REGULAR
+            viewModel.dietState.value = (nextState)
+
+            viewModel.setSelectedPosition(1)
+        }
+
+        binding.lytCreateComfortFood.btnCreate.setOnClickListener {
+            viewModel.getComfortMealPlans()
+        }
     }
 
     override fun subscribeObservers() {
@@ -161,7 +174,10 @@ class AiMealPlanFragment :
         }
 
         viewModel.dayMealList.observe(this) {
-            mealsAdapter.setDataSet(it ?: ArrayList())
+
+            aisehi(it.second)
+            LOGS.d("yashhhhhhhh : $it")
+            mealsAdapter.setDataSet(it.first ?: ArrayList())
         }
 
 
@@ -185,6 +201,13 @@ class AiMealPlanFragment :
                 }
             }
 
+        }
+
+
+        viewModel.currentDayBoosterMeals.observe(this){
+            it?.let {
+                /*viewModel.selectedPosition*/
+            }
         }
 
         /*viewModel.dietState.observe(this){
@@ -267,4 +290,67 @@ class AiMealPlanFragment :
             }
         }
     }
+
+    private fun aisehi(dietState: DietState){
+        LOGS.d("ibvldskvsdjvn : $dietState")
+        when(dietState){
+            DietState.REGULAR -> {
+                binding.root.setBackgroundResource(R.drawable.back_ai_nutrition)
+                binding.toolbar.lytComfortTag.gone()
+                binding.toolbar.tvTitle.setTextColor("#8ACA88".toColorInt())
+                binding.btnSwitch.apply {
+                    text = getString(R.string.text_switch_to_comfort_diet)
+                    post {
+                        paint.shader = viewModel.getTextShaderForGradient(
+                            binding.btnSwitch.measuredWidth.toFloat(),
+                            "#AAADFF".toColorInt(),
+                            "#FFFFFF".toColorInt()
+                        )
+                    }
+                }
+
+                if(viewModel.currentDayBoosterMeals.value==null){
+                    displayComfortFoodCreationLyt()
+                    binding.btnSwitch.gone()
+                }else{
+                    binding.lytCreateComfortFood.root.gone()
+                    binding.btnSwitch.visible()
+                }
+            }
+
+
+            DietState.COMFORT -> {
+                binding.root.setBackgroundResource(R.drawable.back_ai_nutrition_comfort)
+
+                binding.toolbar.apply {
+                    tvTitle.setTextColor("#88A0CA".toColorInt())
+                    tvComfortTag.apply {
+                        text = getString(R.string.text_comfort)
+                        paint.shader = viewModel.getTextShaderForGradient(
+                            this.measuredWidth.toFloat(),
+                            "#AAADFF".toColorInt(),
+                            "#FFFFFF".toColorInt()
+                        )
+                    }
+                    lytComfortTag.visible()
+                }
+                binding.lytCreateComfortFood.root.gone()
+                binding.btnSwitch.apply {
+                    text = getString(R.string.text_switch_to_regular_diet)
+                    setTextColor("#E9E9E9".toColorInt())
+                    visible()
+                }
+            }
+
+
+            DietState.NORMAL -> {
+                binding.root.setBackgroundResource(R.drawable.back_ai_nutrition)
+                binding.toolbar.lytComfortTag.gone()
+                binding.toolbar.tvTitle.setTextColor("#8ACA88".toColorInt())
+                binding.lytCreateComfortFood.root.gone()
+                binding.btnSwitch.gone()
+            }
+        }
+    }
+
 }
