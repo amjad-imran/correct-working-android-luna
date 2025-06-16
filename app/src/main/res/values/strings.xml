@@ -1998,5 +1998,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_comfort_food_for_you">Comfort Food for You</string>
     <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Plan nourishing meals to help you feel your best.</string>
     <string name="text_create">Create</string>
+    <string name="text_switch_to_comfort_diet">Switch  to Comfort diet</string>
+    <string name="text_comfort">Comfort</string>
 
 </resources>

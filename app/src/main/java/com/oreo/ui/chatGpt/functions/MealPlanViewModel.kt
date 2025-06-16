@@ -12,6 +12,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,11 +32,16 @@ class MealPlanViewModel @Inject constructor(
     val currentSelectedWeekDayPosition = MutableLiveData<Int>()
 
     private val mealResponse = ArrayList<AiMealResponse>()
-    val dayMealList = MutableLiveData<List<AiMeals>?>()
+    val dayMealList = MutableLiveData<Pair<List<AiMeals>?,DietState>>()
 
-    /*val dietState = MutableLiveData<DietState>()
+    val currentDayBoosterMeals = MutableLiveData<AiMealResponse>()
+//    val currentDayRegularMeals = MutableLiveData<AiMealResponse>()
 
-    val isRegularDiet = MutableLiveData<Boolean>()
+    val dietState = MutableLiveData<DietState>()
+
+//    var rememberCurDayDietState: DietState?
+
+    /*val isRegularDiet = MutableLiveData<Boolean>()
 
     val boosterFood = MutableLiveData<AiMeal?>()
     val isMale = MutableLiveData<Boolean>()*/
@@ -93,6 +99,21 @@ class MealPlanViewModel @Inject constructor(
                             mealResponse.clear()
                             mealResponse.addAll(it)
 
+                            if (
+                                !localDataStore.getLdwReadinessData() &&
+                                !localDataStore.getLdwCycleTrackerData()
+                            )
+                            {
+                                LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : normal")
+
+                                dietState.postValue(DietState.NORMAL)
+//                                rememberCurDayDietState = DietState.NORMAL
+                            }else{
+                                LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : regular")
+                                dietState.postValue(DietState.REGULAR)
+//                                rememberCurDayDietState = DietState.REGULAR
+                            }
+
                             setSelectedPosition(LocalDate.now().dayOfWeek.value)
                         }
                     }
@@ -103,39 +124,47 @@ class MealPlanViewModel @Inject constructor(
 
     fun getComfortMealPlans() {
         viewModelScope.launch {
-            oreoDeviceRepository.getAiComfortMealPlans().collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
+            if(currentDayBoosterMeals.value==null || currentDayBoosterMeals.value?.meals==null) {
+                oreoDeviceRepository.getAiComfortMealPlans().collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
 
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getMealPlans()
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                this.uiComponentType as UIComponentType.RetryApiDialog
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            getMealPlans()
+                                        }
+
+                                        override fun no() {
+
+                                        }
                                     }
+                            })
+                        }
 
-                                    override fun no() {
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
 
-                                    }
-                                }
-                        })
-                    }
+                                /*mealResponse.clear()
+                            mealResponse.addAll(it)*/
+                                dietState.value = (DietState.COMFORT)
+                                currentDayBoosterMeals.value = (it)
+                                LOGS.d("lkncascan : ${it.meals}")
+                                LOGS.d("lkncascanaa : ${currentDayBoosterMeals.value}")
+                                /*dayMealList.postValue(it.meals)*/
 
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
+                                setSelectedPosition(LocalDate.now().dayOfWeek.value)
 
-                            mealResponse.clear()
-                            mealResponse.addAll(it)
-
-                            setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                            }
                         }
                     }
                 }
@@ -153,10 +182,26 @@ class MealPlanViewModel @Inject constructor(
             it.day_name.equals(getDayName(position), true)
         }
 
+        LOGS.d("yashhhhhhhh post : ${meals?.meals}")
+
         if (meals == null) {
-            dayMealList.postValue(null)
+            dayMealList.postValue(Pair(null, DietState.NORMAL))
         } else {
-            dayMealList.postValue(meals.meals)
+            /*if(currentDayRegularMeals.value==null && position == LocalDate.now().dayOfWeek.value){
+                meals?.let { cm -> currentDayRegularMeals.postValue(cm) }
+            }*/
+            if(position==LocalDate.now().dayOfWeek.value){
+                when(dietState.value){
+                    DietState.COMFORT -> {
+                        dayMealList.postValue(Pair(currentDayBoosterMeals.value?.meals,DietState.COMFORT))
+                    }
+                    DietState.REGULAR, DietState.NORMAL, null -> {
+                        dayMealList.postValue(Pair(meals.meals,DietState.REGULAR))
+                    }
+                }
+            }else {
+                dayMealList.postValue(Pair(meals.meals,DietState.NORMAL))
+            }
         }
 
         /*if(meals != null && isMale.value == false){
@@ -170,7 +215,7 @@ class MealPlanViewModel @Inject constructor(
         return "day_$position"
     }
 
-    /*fun getTextShaderForGradient(
+    fun getTextShaderForGradient(
         width: Float,
         startGradColor: Int,
         endGradColor: Int
@@ -184,10 +229,10 @@ class MealPlanViewModel @Inject constructor(
             null,
             Shader.TileMode.CLAMP
         )
-    }*/
+    }
 
     enum class DietState {
-        REGULAR, COMFORT
+        REGULAR, COMFORT, NORMAL
     }
 
 }
