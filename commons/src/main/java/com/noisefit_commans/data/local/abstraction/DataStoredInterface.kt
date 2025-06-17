@@ -555,7 +555,7 @@ interface DataStoredInterface {
     fun isLowDietPlanSetUp(): ComfortDietWorkoutModel?
     fun setIsLowDietPlanSetUp(isSetUp: Boolean)
 
-    fun isLowWorkoutPlanSetUp(): Boolean
+    fun isLowWorkoutPlanSetUp(): ComfortDietWorkoutModel?
     fun setIsWorkoutPlanSetUp(isSetUp: Boolean)
 
     fun clearComfortFoodAndWorkoutData()

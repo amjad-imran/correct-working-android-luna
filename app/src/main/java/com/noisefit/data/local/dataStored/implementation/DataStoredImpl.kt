@@ -2243,13 +2243,42 @@ class DataStoredImpl
         }
     }
 
-    override fun isLowWorkoutPlanSetUp(): Boolean {
-        return mPrefs.getBoolean(IS_LOW_WORKOUT_PLAN_SETUP, false)
+    override fun isLowWorkoutPlanSetUp(): ComfortDietWorkoutModel? {
+        val data = mPrefs.getString(IS_LOW_WORKOUT_PLAN_SETUP, null)
+        if (data.isNullOrEmpty()) {
+            return null
+        }
+
+        val parsedData = gson.fromJson(data, ComfortDietWorkoutModel::class.java)
+        if (parsedData.date.equals(LocalDate.now().toString()).not()) {
+            mPrefs.edit().remove(IS_LOW_WORKOUT_PLAN_SETUP).commit()
+            return null
+        }
+        return parsedData
     }
 
     override fun setIsWorkoutPlanSetUp(isSetUp: Boolean) {
-        mPrefs.edit()?.putBoolean(IS_LOW_WORKOUT_PLAN_SETUP, isSetUp)?.apply()
+        val curDate = LocalDate.now().toString()
+
+        var oldData = isLowWorkoutPlanSetUp()
+        if (oldData == null) {
+            oldData = ComfortDietWorkoutModel(
+                LocalDate.now().toString(),
+                isSetUp
+            )
+            mPrefs.edit()?.putString(IS_LOW_WORKOUT_PLAN_SETUP, gson.toJson(oldData))?.commit()
+        } else {
+            if (!oldData.date.equals(curDate) ||
+                oldData.isSetup != isSetUp
+            ) {
+                oldData.date = curDate
+                oldData.isSetup = isSetUp
+                mPrefs.edit()?.putString(IS_LOW_WORKOUT_PLAN_SETUP, gson.toJson(oldData))?.commit()
+            }
+        }
     }
+
+
 
     override fun clearComfortFoodAndWorkoutData() {
         clearLdwReadinessData()

@@ -154,6 +154,7 @@ class AiMealPlanFragment :
 
         binding.lytCreateComfortFood.btnDismiss.setOnClickListener {
             viewModel.localDataStore.setIsLowDietPlanSetUp(false)
+            binding.lytCreateComfortFood.root.gone()
         }
     }
 
