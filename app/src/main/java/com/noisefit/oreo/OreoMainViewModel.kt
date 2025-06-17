@@ -132,6 +132,8 @@ constructor(
 //    var lunaManagedData: CustomHomeScreenModel? = null
     var caffeineGraphData: CaffeineGraphDataModel ?= null
     var summaryAvailable: Boolean ?= null
+    var ldwReadiness: Boolean ?= null
+    var ldwCycleTracker: Boolean ?= null
     var errorCode: String = ""
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
@@ -344,6 +346,8 @@ constructor(
 //                            Log.d("yashhhhhhhhhhhhhh" , "$lunaManagedData")
                             caffeineGraphData = it.caffeine ?: null
                             summaryAvailable = it.summaryAvailable ?: false
+                            ldwReadiness = it.ldw_readiness ?: false
+                            ldwCycleTracker = it.ldw_cycle_tracker ?: false
                             //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE

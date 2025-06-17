@@ -251,7 +251,8 @@ private const val IRR_EVENTS_CARD_VISIBLITY_READINESS = "IRR_EVENTS_CARD_VISIBLI
 
 private const val AI_MEAL_PLAN_DIET_STATE = "AI_MEAL_PLAN_DIET_STATE"
 private const val LOW_DIET_PLAN_WORKOUT = "LOW_DIET_PLAN_WORKOUT"
-private const val IS_LOW_DIET_PLAN_WORKOUT_SETUP = "IS_LOW_DIET_PLAN_WORKOUT_SETUP"
+private const val IS_LOW_DIET_PLAN_SETUP = "IS_LOW_DIET_PLAN_SETUP"
+private const val IS_LOW_WORKOUT_PLAN_SETUP = "IS_LOW_WORKOUT_PLAN_SETUP"
 
 private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
@@ -2217,8 +2218,32 @@ class DataStoredImpl
         return mPrefs.getBoolean(LOW_DIET_PLAN_WORKOUT, false)
     }
 
-    override fun isLowDietPlanAndWorkoutSetUp(): Boolean {
-        return mPrefs.getBoolean(IS_LOW_DIET_PLAN_WORKOUT_SETUP, false)
+    /*
+    0 -> null(First Time)
+    1 -> SetUp Created
+    2 -> SetUp Dismiss
+    */
+    override fun isLowDietPlanSetUp(): Boolean {
+        return mPrefs.getBoolean(IS_LOW_DIET_PLAN_SETUP, false)
+    }
+
+    override fun setIsLowDietPlanSetUp(isSetUp: Boolean) {
+        mPrefs.edit()?.putBoolean(IS_LOW_DIET_PLAN_SETUP, isSetUp)?.apply()
+    }
+
+    override fun isLowWorkoutPlanSetUp(): Boolean {
+        return mPrefs.getBoolean(IS_LOW_WORKOUT_PLAN_SETUP, false)
+    }
+
+    override fun setIsWorkoutPlanSetUp(isSetUp: Boolean) {
+        mPrefs.edit()?.putBoolean(IS_LOW_WORKOUT_PLAN_SETUP, isSetUp)?.apply()
+    }
+
+    override fun clearComfortFoodAndWorkoutData() {
+        clearLdwReadinessData()
+        clearLdwCycleTrackerData()
+        mPrefs.edit()?.remove(IS_LOW_DIET_PLAN_SETUP)?.commit()
+        mPrefs.edit()?.remove(IS_LOW_WORKOUT_PLAN_SETUP)?.commit()
     }
 
 }

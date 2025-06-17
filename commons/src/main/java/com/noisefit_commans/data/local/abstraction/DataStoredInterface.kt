@@ -554,7 +554,14 @@ interface DataStoredInterface {
     fun getAiMealPlanDietInRegularState(): Boolean
     fun setAiMealPlanDietInRegularState(isRegular: Boolean?)
     fun isLowDietPlanAndWorkout(): Boolean
-    fun isLowDietPlanAndWorkoutSetUp(): Boolean
+
+    fun isLowDietPlanSetUp(): Boolean
+    fun setIsLowDietPlanSetUp(isSetUp: Boolean)
+
+    fun isLowWorkoutPlanSetUp(): Boolean
+    fun setIsWorkoutPlanSetUp(isSetUp: Boolean)
+
+    fun clearComfortFoodAndWorkoutData()
 }
 
 enum class AppTrackEvent {

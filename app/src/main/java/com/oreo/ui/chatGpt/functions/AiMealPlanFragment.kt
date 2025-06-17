@@ -130,12 +130,15 @@ class AiMealPlanFragment :
         }
 
         binding.btnSwitch.setOnClickListener {
-            val isRegularState = viewModel.dietState.value == DietState.REGULAR
-            val nextState = if (isRegularState) DietState.COMFORT
-                            else DietState.REGULAR
-            viewModel.dietState.value = (nextState)
-
-            viewModel.setSelectedPosition(1)
+            LOGS.d("noisnv : ${viewModel.dietState.value}")
+            val isRegularState =
+                viewModel.dietState.value == DietState.REGULAR || viewModel.dietState.value == DietState.NORMAL
+            if (isRegularState){
+                viewModel.getComfortMealPlans()
+            }
+            else{
+                viewModel.getMealPlans()
+            }
         }
 
         binding.lytCreateComfortFood.btnCreate.setOnClickListener {
@@ -177,7 +180,7 @@ class AiMealPlanFragment :
 
             aisehi(it.second)
             LOGS.d("yashhhhhhhh : $it")
-            mealsAdapter.setDataSet(it.first ?: ArrayList())
+            mealsAdapter.setDataSet(it.first ?: ArrayList(), it.second)
         }
 
 
@@ -209,49 +212,6 @@ class AiMealPlanFragment :
                 /*viewModel.selectedPosition*/
             }
         }
-
-        /*viewModel.dietState.observe(this){
-            val isLowDietPlanAndWorkout = viewModel.localDataStore.isLowDietPlanAndWorkout()
-            val isLowDietPlanAndWorkoutSetUp = viewModel.localDataStore.isLowDietPlanAndWorkoutSetUp()
-            if(
-                isLowDietPlanAndWorkout &&
-                isLowDietPlanAndWorkoutSetUp
-                )
-            {
-                binding.btnSwitch.visible()
-            }else{
-                binding.btnSwitch.gone()
-            }
-
-            when(it){
-                MealPlanViewModel.DietState.REGULAR -> {
-                    if(isLowDietPlanAndWorkoutSetUp){
-                        binding.btnSwitch.visible()
-                    }else{
-                        binding.lytCreateComfortFood.root.visible()
-                        binding.btnSwitch.gone()
-                    }
-                    viewModel.getMealPlans()
-                }
-                MealPlanViewModel.DietState.COMFORT -> {
-                    if(isLowDietPlanAndWorkoutSetUp){
-                        viewModel.getComfortMealPlans()
-                    }else{
-                        binding.lytCreateComfortFood.root.gone()
-                        binding.btnSwitch.gone()
-                        viewModel.getMealPlans()
-                    }
-                }
-            }
-        }
-
-        viewModel.boosterFood.observe(this){
-            if(it==null){
-                binding.lytBoosterFoods.root.gone()
-            }else{
-                // Code for booster food - set ui
-            }
-        }*/
 
     }
 
@@ -309,7 +269,7 @@ class AiMealPlanFragment :
                     }
                 }
 
-                if(viewModel.currentDayBoosterMeals.value==null){
+                if(!viewModel.localDataStore.isLowDietPlanSetUp()){
                     displayComfortFoodCreationLyt()
                     binding.btnSwitch.gone()
                 }else{

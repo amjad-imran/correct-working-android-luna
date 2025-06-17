@@ -12,11 +12,13 @@ import com.noisefit.luna.databinding.RowMealDataBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 
 class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
 
     private val mDataSet = ArrayList<AiMeals>()
+    private var mDietState = DietState.NORMAL
 
     inner class ViewHolder(val binding: RowMealDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -24,9 +26,13 @@ class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
 
             binding.tvTitle.text = data.meal_type
             binding.rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvMeals.adapter = SubMealAdapter(data.meal ?: ArrayList(), onMealSelected = {
-                onMealSelected.invoke(binding.root,it,data.meal_type?:"")
-            })
+            binding.rvMeals.adapter = SubMealAdapter(
+                data.meal ?: ArrayList(),
+                onMealSelected = {
+                    onMealSelected.invoke(binding.root, it, data.meal_type ?: "")
+                },
+                mDietState
+            )
 
         }
 
@@ -50,7 +56,8 @@ class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
         holder.bind(mDataSet[position])
     }
 
-    fun setDataSet(dataSet: List<AiMeals>) {
+    fun setDataSet(dataSet: List<AiMeals>, dietState: DietState) {
+        mDietState = dietState
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()
