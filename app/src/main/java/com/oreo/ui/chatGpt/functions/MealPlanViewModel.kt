@@ -152,8 +152,8 @@ class MealPlanViewModel @Inject constructor(
 
                                 /*mealResponse.clear()
                             mealResponse.addAll(it)*/
-                                dietState.value = (DietState.COMFORT)
-                                currentDayBoosterMeals.value = (it)
+                                currentDayBoosterMeals.value = it
+                                dietState.value = DietState.COMFORT
                                 LOGS.d("lkncascan : ${it.meals}")
                                 LOGS.d("lkncascanaa : ${currentDayBoosterMeals.value}")
                                 /*dayMealList.postValue(it.meals)*/

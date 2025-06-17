@@ -7,6 +7,7 @@ import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
 import com.noisefit_commans.models.EnabledAppsForNotifications
@@ -551,11 +552,7 @@ interface DataStoredInterface {
     fun setIrregularityCardsVisibilityReadiness(isVisible: Boolean)
     fun clearAlerts()
 
-    fun getAiMealPlanDietInRegularState(): Boolean
-    fun setAiMealPlanDietInRegularState(isRegular: Boolean?)
-    fun isLowDietPlanAndWorkout(): Boolean
-
-    fun isLowDietPlanSetUp(): Boolean
+    fun isLowDietPlanSetUp(): ComfortDietWorkoutModel?
     fun setIsLowDietPlanSetUp(isSetUp: Boolean)
 
     fun isLowWorkoutPlanSetUp(): Boolean

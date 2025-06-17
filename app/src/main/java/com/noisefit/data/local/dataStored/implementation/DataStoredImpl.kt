@@ -42,6 +42,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -2202,33 +2203,44 @@ class DataStoredImpl
         return mPrefs.getBoolean(SHOW_REVIEW_POP_UP, false)
     }
 
-    override fun getAiMealPlanDietInRegularState(): Boolean {
-        return mPrefs.getBoolean(AI_MEAL_PLAN_DIET_STATE, true)
-    }
-
-    override fun setAiMealPlanDietInRegularState(isRegular: Boolean?) {
-        if(isRegular==null){
-
-        }else{
-            mPrefs.edit()?.putBoolean(AI_MEAL_PLAN_DIET_STATE, isRegular)?.apply()
-        }
-    }
-
-    override fun isLowDietPlanAndWorkout(): Boolean {
-        return mPrefs.getBoolean(LOW_DIET_PLAN_WORKOUT, false)
-    }
-
     /*
     0 -> null(First Time)
     1 -> SetUp Created
     2 -> SetUp Dismiss
     */
-    override fun isLowDietPlanSetUp(): Boolean {
-        return mPrefs.getBoolean(IS_LOW_DIET_PLAN_SETUP, false)
+    override fun isLowDietPlanSetUp(): ComfortDietWorkoutModel? {
+        val data = mPrefs.getString(IS_LOW_DIET_PLAN_SETUP, null)
+        if (data.isNullOrEmpty()) {
+            return null
+        }
+
+        val parsedData = gson.fromJson(data, ComfortDietWorkoutModel::class.java)
+        if (parsedData.date.equals(LocalDate.now().toString()).not()) {
+            mPrefs.edit().remove(IS_LOW_DIET_PLAN_SETUP).commit()
+            return null
+        }
+        return parsedData
     }
 
     override fun setIsLowDietPlanSetUp(isSetUp: Boolean) {
-        mPrefs.edit()?.putBoolean(IS_LOW_DIET_PLAN_SETUP, isSetUp)?.apply()
+        val curDate = LocalDate.now().toString()
+
+        var oldData = isLowDietPlanSetUp()
+        if (oldData == null) {
+            oldData = ComfortDietWorkoutModel(
+                LocalDate.now().toString(),
+                isSetUp
+            )
+            mPrefs.edit()?.putString(IS_LOW_DIET_PLAN_SETUP, gson.toJson(oldData))?.commit()
+        } else {
+            if (!oldData.date.equals(curDate) ||
+                oldData.isSetup != isSetUp
+            ) {
+                oldData.date = curDate
+                oldData.isSetup = isSetUp
+                mPrefs.edit()?.putString(IS_LOW_DIET_PLAN_SETUP, gson.toJson(oldData))?.commit()
+            }
+        }
     }
 
     override fun isLowWorkoutPlanSetUp(): Boolean {

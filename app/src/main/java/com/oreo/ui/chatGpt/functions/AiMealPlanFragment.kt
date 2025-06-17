@@ -56,6 +56,13 @@ class AiMealPlanFragment :
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
         viewModel.getMealPlans()
 
+        viewModel.localDataStore.isLowDietPlanSetUp()?.let {
+            if(it.isSetup){
+                LOGS.d("nsonicslk : ${it.isSetup}")
+                viewModel.getComfortMealPlans()
+            }
+        }
+
         setRecycler()
     }
 
@@ -143,6 +150,10 @@ class AiMealPlanFragment :
 
         binding.lytCreateComfortFood.btnCreate.setOnClickListener {
             viewModel.getComfortMealPlans()
+        }
+
+        binding.lytCreateComfortFood.btnDismiss.setOnClickListener {
+            viewModel.localDataStore.setIsLowDietPlanSetUp(false)
         }
     }
 
@@ -269,7 +280,17 @@ class AiMealPlanFragment :
                     }
                 }
 
-                if(!viewModel.localDataStore.isLowDietPlanSetUp()){
+                val isComfortDietSetup = viewModel.localDataStore.isLowDietPlanSetUp()
+                /*
+                null -> not setup
+                true -> setup Done Already
+                false -> setup dismiss
+                */
+                if(isComfortDietSetup == null){
+                    displayComfortFoodCreationLyt()
+                    binding.btnSwitch.gone()
+                }
+                else if(!isComfortDietSetup.isSetup){
                     displayComfortFoodCreationLyt()
                     binding.btnSwitch.gone()
                 }else{
