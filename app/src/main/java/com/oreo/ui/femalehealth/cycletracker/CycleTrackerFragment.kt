@@ -365,11 +365,11 @@ class CycleTrackerFragment :
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
-
+            navigate(R.id.workoutPlansFragment)
         }
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
-
+            navigate(R.id.aiMealPlanFragment)
         }
     }
 
@@ -480,6 +480,18 @@ class CycleTrackerFragment :
                     Locale(NoiseFitApplicationMain.appLanguage.languageCode)
                 )
             )
+
+            if(it==LocalDate.now()){
+                if(viewModel.localDataStore.getLdwCycleTrackerData()){
+                    displayWomansDayCard()
+                }else{
+                    binding.dividerWomenDayAnnouncement.root.gone()
+                    binding.lytWomenDayAnnouncement.root.gone()
+                }
+            }else{
+                binding.dividerWomenDayAnnouncement.root.gone()
+                binding.lytWomenDayAnnouncement.root.gone()
+            }
 
             viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         }

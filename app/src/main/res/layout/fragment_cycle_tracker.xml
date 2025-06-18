@@ -76,6 +76,7 @@
             <include
                 android:id="@+id/lytWomenDayAnnouncement"
                 layout="@layout/item_comfort_diet_workout_announcement"
+                android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"

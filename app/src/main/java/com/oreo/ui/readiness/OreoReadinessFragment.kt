@@ -545,6 +545,31 @@ class OreoReadinessFragment :
 
     }
 
+    private fun displayWomansDayCard(){
+
+        binding.lytWomenDayAnnouncement.lytDietAnnc.apply {
+            root.setBackgroundResource(R.drawable.bg_comfort_food_for_you_readiness)
+            tvTitle.apply {
+                text = getString(R.string.text_comfort_food_for_you)
+                setTextColor("#CEDDFF".toColorInt())
+            }
+            tvDesc.text = getString(R.string.text_plan_nourishing_meals_to_help_you_feel_your_best)
+        }
+
+        binding.lytWomenDayAnnouncement.lytWorkoutAnnc.apply {
+            root.setBackgroundResource(R.drawable.bg_gentle_movement_readiness)
+            tvTitle.apply {
+                text = getString(R.string.text_gentle_movement_for_your_flow)
+                setTextColor("#B7DEFF".toColorInt())
+            }
+            tvDesc.text =
+                getString(R.string.text_create_a_light_workout_to_support_your_body_s_needs_today)
+        }
+
+        binding.dividerWomenDayAnnouncement.root.visible()
+        binding.lytWomenDayAnnouncement.root.visible()
+    }
+
     private fun showCalendar() {
         setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
             val selectedDate =
@@ -788,6 +813,14 @@ class OreoReadinessFragment :
             (activity as OreoMainActivity).hideSoftKeyboard()
             mViewModel.isEventSubmitted = false
             mViewModel.loadAlertsData()
+        }
+
+        binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
+            navigate(R.id.workoutPlansFragment)
+        }
+
+        binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
+            navigate(R.id.aiMealPlanFragment)
         }
 
     }
@@ -1287,9 +1320,17 @@ class OreoReadinessFragment :
          )*/
         if (it.date.equals(LocalDate.now().toString())) {
             mViewModel.loadAlertsData()
+            if(mViewModel.getLdwReadinessData()){
+                displayWomansDayCard()
+            }else{
+                binding.dividerWomenDayAnnouncement.root.gone()
+                binding.lytWomenDayAnnouncement.root.gone()
+            }
         } else {
             binding.lytIrregularityEvents.root.gone()
             binding.divider111.root.gone()
+            binding.dividerWomenDayAnnouncement.root.gone()
+            binding.lytWomenDayAnnouncement.root.gone()
         }
     }
 
