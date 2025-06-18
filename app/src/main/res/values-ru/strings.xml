@@ -2038,5 +2038,21 @@
     <string name="text_generating">Генерация...</string>
     <string name="text_ring_not_connected">Кольцо не подключено</string>
 
+    <string name="text_fuel_your_flow">Подпитай свой поток</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Получите персональные рекомендации по питанию для этого этапа вашего цикла.</string>
+    <string name="text_suggest_a_add">Предложить добавление</string>
+    <string name="text_suggest_to_add_desc">Мы заметили снижение уровня вашей энергии. Основываясь на ваших данных об энергии и уровне готовности, хотите, чтобы мы порекомендовали продукты, которые помогут зарядиться энергией сегодня?</string>
+    <string name="text_power_in_gentle_progress">Сила в\nМягком Прогрессе</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">С учётом ваших данных об энергии и уровня готовности, хотите, чтобы мы порекомендовали тренировку с низкой интенсивностью?</string>
+    <string name="text_comfort_food_for_you">Еда для Уюта</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Планируйте питательные блюда, чтобы чувствовать себя как можно лучше.</string>
+    <string name="text_create">Создать</string>
+    <string name="text_switch_to_comfort_diet">Переключиться на комфортное питание</string>
+    <string name="text_comfort">Комфорт</string>
+    <string name="text_gentle_movement_for_your_flow">Мягкое Движение для Вашего Потока</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Создайте лёгкую тренировку, чтобы поддержать потребности вашего тела сегодня.</string>
+    <string name="text_switch_to_regular_workout">Переключиться на обычную тренировку</string>
+    <string name="text_switch_to_a_relaxed_workout">Переключиться на расслабленную тренировку</string>
+
 
 </resources>

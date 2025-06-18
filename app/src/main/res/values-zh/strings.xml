@@ -2010,4 +2010,20 @@
     <string name="text_generating">生成中...</string>
     <string name="text_ring_not_connected">戒指未连接</string>
 
+    <string name="text_fuel_your_flow">为你的节律补充能量</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">获取针对你当前周期阶段的个性化饮食推荐。</string>
+    <string name="text_suggest_a_add">建议添加</string>
+    <string name="text_suggest_to_add_desc">我们注意到你的能量水平有所下降。根据你的能量数据和准备状态，是否希望我们为你推荐一些能提升能量的食物？</string>
+    <string name="text_power_in_gentle_progress">温和进展中的力量</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">根据你的能量数据和准备状态，是否希望我们推荐一个低强度的锻炼？</string>
+    <string name="text_comfort_food_for_you">为你准备的安慰食物</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">规划营养餐，帮助你保持最佳状态。</string>
+    <string name="text_create">创建</string>
+    <string name="text_switch_to_comfort_diet">切换到舒适饮食</string>
+    <string name="text_comfort">舒适</string>
+    <string name="text_gentle_movement_for_your_flow">适合你周期的温和运动</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">创建一个轻度锻炼来支持你身体今天的需求。</string>
+    <string name="text_switch_to_regular_workout">切换到常规锻炼</string>
+    <string name="text_switch_to_a_relaxed_workout">切换到放松锻炼</string>
+
 </resources>

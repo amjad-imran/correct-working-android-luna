@@ -2136,5 +2136,21 @@ onjour, Luna"</string>
     <string name="text_generating">Génération en cours...</string>
     <string name="text_ring_not_connected">Bague non connectée</string>
 
+    <string name="text_fuel_your_flow">Alimente ton flux</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Obtiens des recommandations alimentaires personnalisées pour cette phase de ton cycle.</string>
+    <string name="text_suggest_a_add">Suggérer un ajout</string>
+    <string name="text_suggest_to_add_desc">Nous avons remarqué une baisse de ton niveau d'énergie. D’après tes données d’énergie et ton niveau de préparation, veux-tu que nous te recommandions des aliments pour te rebooster aujourd’hui ?</string>
+    <string name="text_power_in_gentle_progress">Force dans\nle Progrès Doux</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">D’après tes données d’énergie et ton niveau de préparation, veux-tu que nous te recommandions un entraînement de faible intensité ?</string>
+    <string name="text_comfort_food_for_you">Nourriture Réconfortante pour Toi</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Planifie des repas nourrissants pour t’aider à te sentir au mieux.</string>
+    <string name="text_create">Créer</string>
+    <string name="text_switch_to_comfort_diet">Passer à un régime réconfortant</string>
+    <string name="text_comfort">Confort</string>
+    <string name="text_gentle_movement_for_your_flow">Mouvement Doux pour Ton Flux</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crée un entraînement léger pour répondre aux besoins de ton corps aujourd’hui.</string>
+    <string name="text_switch_to_regular_workout">Passer à un entraînement régulier</string>
+    <string name="text_switch_to_a_relaxed_workout">Passer à un entraînement détendu</string>
+
 
 </resources>

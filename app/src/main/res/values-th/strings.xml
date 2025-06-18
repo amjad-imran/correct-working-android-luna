@@ -2022,5 +2022,21 @@
     <string name="text_generating">กำลังสร้าง...</string>
     <string name="text_ring_not_connected">ยังไม่ได้เชื่อมต่อแหวน</string>
 
+    <string name="text_fuel_your_flow">เติมพลังให้ร่างกายของคุณ</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">รับคำแนะนำด้านอาหารที่เหมาะกับช่วงเวลานี้ของรอบเดือนคุณ</string>
+    <string name="text_suggest_a_add">แนะนำสิ่งที่ควรเพิ่ม</string>
+    <string name="text_suggest_to_add_desc">เราสังเกตเห็นว่าระดับพลังงานของคุณลดลง จากข้อมูลพลังงานและระดับความพร้อมของคุณ คุณต้องการให้เราแนะนำอาหารบางอย่างเพื่อเพิ่มพลังงานให้คุณวันนี้หรือไม่?</string>
+    <string name="text_power_in_gentle_progress">พลังงานใน\nความก้าวหน้าอย่างอ่อนโยน</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">จากข้อมูลพลังงานและระดับความพร้อมของคุณ คุณต้องการให้เราแนะนำการออกกำลังกายที่มีความเข้มข้นต่ำหรือไม่?</string>
+    <string name="text_comfort_food_for_you">อาหารปลอบโยนสำหรับคุณ</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">วางแผนมื้ออาหารที่มีประโยชน์เพื่อช่วยให้คุณรู้สึกดีที่สุด</string>
+    <string name="text_create">สร้าง</string>
+    <string name="text_switch_to_comfort_diet">เปลี่ยนเป็นอาหารเพื่อความสบาย</string>
+    <string name="text_comfort">ความสบาย</string>
+    <string name="text_gentle_movement_for_your_flow">การเคลื่อนไหวอย่างนุ่มนวลสำหรับรอบเดือนของคุณ</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">สร้างการออกกำลังกายเบา ๆ เพื่อรองรับความต้องการของร่างกายคุณในวันนี้</string>
+    <string name="text_switch_to_regular_workout">เปลี่ยนเป็นการออกกำลังกายตามปกติ</string>
+    <string name="text_switch_to_a_relaxed_workout">เปลี่ยนเป็นการออกกำลังกายแบบผ่อนคลาย</string>
+
 
 </resources>

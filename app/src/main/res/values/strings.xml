@@ -1989,6 +1989,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_daily_nhealth_digest">Daily\nhealth Digest</string>
     <string name="text_generating">Generating...</string>
     <string name="text_ring_not_connected">Ring not connected</string>
+
     <string name="text_fuel_your_flow">Fuel your flow</string>
     <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Get personalized food recommendations for this phase of your cycle.</string>
     <string name="text_suggest_a_add">Suggest a add</string>

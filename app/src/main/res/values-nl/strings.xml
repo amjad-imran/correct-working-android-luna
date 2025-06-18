@@ -2016,5 +2016,21 @@
     <string name="text_generating">Bezig met genereren...</string>
     <string name="text_ring_not_connected">Ring niet verbonden</string>
 
+    <string name="text_fuel_your_flow">Voed je flow</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Krijg gepersonaliseerde voedselaanbevelingen voor deze fase van je cyclus.</string>
+    <string name="text_suggest_a_add">Suggestie voor toevoeging</string>
+    <string name="text_suggest_to_add_desc">We hebben een daling in je energieniveau opgemerkt. Op basis van je energiegegevens en paraatheidsniveau, wil je dat we wat voeding aanbevelen om je vandaag meer energie te geven?</string>
+    <string name="text_power_in_gentle_progress">Kracht in\nZachte Vooruitgang</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">Op basis van je energiegegevens en paraatheidsniveau, wil je dat we een training met lage intensiteit aanbevelen?</string>
+    <string name="text_comfort_food_for_you">Comfortvoedsel voor jou</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Plan voedzame maaltijden om je op je best te laten voelen.</string>
+    <string name="text_create">Creëren</string>
+    <string name="text_switch_to_comfort_diet">Overschakelen naar comfortdieet</string>
+    <string name="text_comfort">Comfort</string>
+    <string name="text_gentle_movement_for_your_flow">Zachte Beweging voor je Flow</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Stel een lichte training samen om vandaag aan de behoeften van je lichaam te voldoen.</string>
+    <string name="text_switch_to_regular_workout">Overschakelen naar reguliere training</string>
+    <string name="text_switch_to_a_relaxed_workout">Overschakelen naar een ontspannen training</string>
+
 
 </resources>

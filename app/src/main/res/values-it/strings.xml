@@ -2017,5 +2017,21 @@
     <string name="text_generating">Generazione in corso...</string>
     <string name="text_ring_not_connected">Anello non connesso</string>
 
+    <string name="text_fuel_your_flow">Alimenta il tuo flusso</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Ricevi consigli alimentari personalizzati per questa fase del tuo ciclo.</string>
+    <string name="text_suggest_a_add">Suggerisci un\'aggiunta</string>
+    <string name="text_suggest_to_add_desc">Abbiamo notato un calo nei tuoi livelli di energia. In base ai tuoi dati energetici e ai livelli di prontezza, vuoi che ti consigliamo alcuni alimenti per darti energia oggi?</string>
+    <string name="text_power_in_gentle_progress">Forza nel\nProgresso Delicato</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">In base ai tuoi dati energetici e ai livelli di prontezza, vuoi che ti consigliamo un allenamento a bassa intensità?</string>
+    <string name="text_comfort_food_for_you">Cibo Confortevole per Te</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Pianifica pasti nutrienti per aiutarti a sentirti al meglio.</string>
+    <string name="text_create">Crea</string>
+    <string name="text_switch_to_comfort_diet">Passa a una dieta confortevole</string>
+    <string name="text_comfort">Conforto</string>
+    <string name="text_gentle_movement_for_your_flow">Movimento Delicato per il Tuo Flusso</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crea un allenamento leggero per supportare le esigenze del tuo corpo oggi.</string>
+    <string name="text_switch_to_regular_workout">Passa a un allenamento regolare</string>
+    <string name="text_switch_to_a_relaxed_workout">Passa a un allenamento rilassato</string>
+
 
 </resources>

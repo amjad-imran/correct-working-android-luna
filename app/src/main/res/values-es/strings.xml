@@ -1987,5 +1987,21 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_generating">Generando...</string>
     <string name="text_ring_not_connected">Anillo no conectado</string>
 
+    <string name="text_fuel_your_flow">Impulsa tu flujo</string>
+    <string name="text_get_personalized_food_recommendations_for_this_phase_of_your_cycle">Obtén recomendaciones de alimentos personalizadas para esta fase de tu ciclo.</string>
+    <string name="text_suggest_a_add">Sugerir una adición</string>
+    <string name="text_suggest_to_add_desc">Hemos notado una disminución en tus niveles de energía. Basándonos en tus datos de energía y niveles de preparación, ¿quieres que te recomendemos algunos alimentos para energizarte hoy?</string>
+    <string name="text_power_in_gentle_progress">Poder en\nProgreso Suave</string>
+    <string name="text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout">Basándonos en tus datos de energía y niveles de preparación, ¿quieres que te recomendemos un entrenamiento de baja intensidad?</string>
+    <string name="text_comfort_food_for_you">Comida Reconfortante para Ti</string>
+    <string name="text_plan_nourishing_meals_to_help_you_feel_your_best">Planifica comidas nutritivas para ayudarte a sentirte lo mejor posible.</string>
+    <string name="text_create">Crear</string>
+    <string name="text_switch_to_comfort_diet">Cambiar a dieta reconfortante</string>
+    <string name="text_comfort">Comodidad</string>
+    <string name="text_gentle_movement_for_your_flow">Movimiento Suave para Tu Flujo</string>
+    <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crea un entrenamiento ligero para apoyar las necesidades de tu cuerpo hoy.</string>
+    <string name="text_switch_to_regular_workout">Cambiar a entrenamiento regular</string>
+    <string name="text_switch_to_a_relaxed_workout">Cambiar a un entrenamiento relajado</string>
+
 
 </resources>
