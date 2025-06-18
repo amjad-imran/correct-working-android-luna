@@ -56,12 +56,6 @@ class AiMealPlanFragment :
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
         viewModel.getMealPlans()
 
-        viewModel.localDataStore.isLowDietPlanSetUp()?.let {
-            if(it.isSetup){
-                LOGS.d("nsonicslk : ${it.isSetup}")
-                viewModel.getComfortMealPlans()
-            }
-        }
 
         setRecycler()
     }
@@ -292,7 +286,7 @@ class AiMealPlanFragment :
                     binding.btnSwitch.gone()
                 }
                 else if(!isComfortDietSetup.isSetup){
-                    displayComfortFoodCreationLyt()
+                    binding.lytCreateComfortFood.root.gone()
                     binding.btnSwitch.gone()
                 }else{
                     binding.lytCreateComfortFood.root.gone()

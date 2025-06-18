@@ -2002,5 +2002,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_comfort">Comfort</string>
     <string name="text_gentle_movement_for_your_flow">Gentle Movement for Your Flow</string>
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Create a light workout to support your body’s needs today.</string>
+    <string name="text_switch_to_regular_workout">Switch to Regular workout</string>
+    <string name="text_switch_to_a_relaxed_workout">Switch to a Relaxed workout</string>
 
 </resources>

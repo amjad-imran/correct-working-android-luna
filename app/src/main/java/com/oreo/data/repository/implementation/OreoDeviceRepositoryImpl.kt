@@ -133,6 +133,14 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
+    override suspend fun getAiRelaxedWorkoutPlans(): Flow<Resource<BaseApiResponse<AiWorkoutResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/women"
+            remoteDataSource.getAiRelaxedWorkoutPlans(url)
+        }
+    }
+
     override suspend fun getAiMealPlans(): Flow<Resource<BaseApiResponse<List<AiMealResponse>>?>> {
         return safeApiCallFlow(dispatcher) {
             val url =

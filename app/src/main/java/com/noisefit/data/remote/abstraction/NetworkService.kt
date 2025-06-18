@@ -516,6 +516,11 @@ interface NetworkService {
     ): BaseApiResponse<List<AiWorkoutResponse>>
 
     @GET
+    suspend fun getAiRelaxedWorkoutPlans(
+        @Url url: String
+    ): BaseApiResponse<AiWorkoutResponse>
+
+    @GET
     suspend fun getAiMealPlans(
         @Url url: String
     ): BaseApiResponse<List<AiMealResponse>>

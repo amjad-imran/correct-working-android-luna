@@ -120,53 +120,48 @@ class MealPlanViewModel @Inject constructor(
 
     fun getComfortMealPlans() {
         viewModelScope.launch {
-            if(currentDayBoosterMeals.value==null || currentDayBoosterMeals.value?.meals==null) {
-                oreoDeviceRepository.getAiComfortMealPlans().collect { resource ->
-                    when (resource) {
-                        is Resource.GenericError -> {
-                            sendMessage(resource.message)
-                        }
+            oreoDeviceRepository.getAiComfortMealPlans().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                        is Resource.Loading -> {
-                            setLoading(resource.loading)
-                        }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                        is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
-                                this.uiComponentType as UIComponentType.RetryApiDialog
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                    object : BinaryActionCallback {
-                                        override fun yes() {
-                                            getMealPlans()
-                                        }
-
-                                        override fun no() {
-
-                                        }
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getMealPlans()
                                     }
-                            })
-                        }
 
-                        is Resource.Success -> {
-                            resource.data?.data?.let {
+                                    override fun no() {
 
-                                /*mealResponse.clear()
-                            mealResponse.addAll(it)*/
-                                currentDayBoosterMeals.value = it
-                                dietState.value = DietState.COMFORT
-                                LOGS.d("lkncascan : ${it.meals}")
-                                LOGS.d("lkncascanaa : ${currentDayBoosterMeals.value}")
-                                /*dayMealList.postValue(it.meals)*/
+                                    }
+                                }
+                        })
+                    }
 
-                                setSelectedPosition(LocalDate.now().dayOfWeek.value)
-                                localDataStore.setIsLowDietPlanSetUp(true)
-                            }
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            /*mealResponse.clear()
+                        mealResponse.addAll(it)*/
+                            currentDayBoosterMeals.value = it
+                            dietState.value = DietState.COMFORT
+                            LOGS.d("lkncascan : ${it.meals}")
+                            LOGS.d("lkncascanaa : ${currentDayBoosterMeals.value}")
+                            /*dayMealList.postValue(it.meals)*/
+
+                            setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                            localDataStore.setIsLowDietPlanSetUp(true)
                         }
                     }
                 }
-            }else{
-                dietState.value = (DietState.COMFORT)
-                setSelectedPosition(LocalDate.now().dayOfWeek.value)
             }
         }
     }

@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
+        layout="@layout/layout_toolbar_ai_mealplan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+    <include
+        android:id="@+id/lytCreateRelaxedWorkout"
+        layout="@layout/layout_create_relaxed_workout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lytWeek" />
+
     <TextView
         android:id="@+id/tvDayName"
         style="@style/S18"
@@ -47,7 +58,7 @@
         android:layout_marginTop="32dp"
         android:textColor="#E8E8E8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lytWeek"
+        app:layout_constraintTop_toBottomOf="@+id/lytCreateRelaxedWorkout"
         tools:text="Chest day" />
 
     <include
@@ -71,10 +82,24 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/btnSwitch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDayName" />
+
+    <Button
+        android:id="@+id/btnSwitch"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/text_switch_to_regular_diet"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/progressBar"

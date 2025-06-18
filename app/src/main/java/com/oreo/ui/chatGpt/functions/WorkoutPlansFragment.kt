@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,12 +20,15 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class WorkoutPlansFragment :
@@ -50,7 +54,7 @@ class WorkoutPlansFragment :
 
         binding.toolbar.tvTitle.text = getString(R.string.text_workout)
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#A8FFFF"))
-
+        binding.root.setBackgroundResource(R.drawable.bg_ai_workout_screen)
         viewModel.getWorkoutPlans()
         setRecycler()
 
@@ -90,6 +94,30 @@ class WorkoutPlansFragment :
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
+        binding.lytCreateRelaxedWorkout.btnCreate.setOnClickListener {
+            viewModel.getRelaxedWorkoutPlans()
+        }
+
+        binding.lytCreateRelaxedWorkout.btnDismiss.setOnClickListener {
+            viewModel.localDataStore.setIsWorkoutPlanSetUp(false)
+            binding.lytCreateRelaxedWorkout.root.gone()
+        }
+
+        binding.btnSwitch.setOnClickListener {
+            LOGS.d("noisnv : ${viewModel.workoutState.value}")
+            val curDay = LocalDate.now().dayOfWeek.value
+            val isRegularState =
+                viewModel.workoutState.value == DietState.REGULAR || viewModel.workoutState.value == DietState.NORMAL
+            if (isRegularState){
+                viewModel.workoutState.value = DietState.COMFORT
+            }
+            else{
+                viewModel.workoutState.value = DietState.REGULAR
+            }
+            viewModel.setSelectedPosition(curDay)
+        }
+
     }
 
     override fun subscribeObservers() {
@@ -98,8 +126,9 @@ class WorkoutPlansFragment :
         }
 
         viewModel.workoutList.observe(this) {
-            mAdapter.setDataSet(it ?: ArrayList())
-            binding.lytRestDay.root.setVisibilityByCondition(it.isNullOrEmpty())
+            setUi(it.second)
+            mAdapter.setDataSet(it.first ?: ArrayList())
+            binding.lytRestDay.root.setVisibilityByCondition(it.first.isNullOrEmpty())
         }
 
         viewModel.dayTitle.observe(this) {
@@ -180,6 +209,84 @@ class WorkoutPlansFragment :
                 it.setBackgroundResource(R.drawable.bg_week_selected)
             } else {
                 it.setBackgroundResource(0)
+            }
+        }
+    }
+
+    private fun setUi(dietState: DietState){
+        LOGS.d("ibvldskvsdjvn : $dietState")
+        when(dietState){
+            DietState.REGULAR -> {
+                binding.root.setBackgroundResource(R.drawable.bg_ai_workout_screen)
+                binding.toolbar.apply {
+                    tvTitle.setTextColor("#FFFFFF".toColorInt())
+                    lytComfortTag.gone()
+                }
+                binding.btnSwitch.apply {
+                    text = getString(R.string.text_switch_to_a_relaxed_workout)
+                    post {
+                        setBackgroundResource(R.drawable.bg_create_create_relaxed_workout)
+                        paint.shader = viewModel.getTextShaderForGradient(
+                            binding.btnSwitch.measuredWidth.toFloat(),
+                            "#AAADFF".toColorInt(),
+                            "#FFFFFF".toColorInt()
+                        )
+                    }
+                }
+
+                val isRelaxedWorkoutSetup = viewModel.localDataStore.isLowWorkoutPlanSetUp()
+                /*
+                null -> not setup
+                true -> setup Done Already
+                false -> setup dismiss
+                */
+                if(isRelaxedWorkoutSetup == null){
+                    binding.lytCreateRelaxedWorkout.root.visible()
+                    binding.btnSwitch.gone()
+                }
+                else if(!isRelaxedWorkoutSetup.isSetup){
+                    binding.lytCreateRelaxedWorkout.root.gone()
+                    binding.btnSwitch.gone()
+                }else{
+                    binding.lytCreateRelaxedWorkout.root.gone()
+                    binding.btnSwitch.visible()
+                }
+            }
+
+
+            DietState.COMFORT -> {
+                binding.root.setBackgroundResource(R.drawable.bg_ai_workout_relaxed_screen)
+
+                binding.toolbar.apply {
+                    tvTitle.setTextColor("#A8FFFF".toColorInt())
+                    tvComfortTag.apply {
+                        text = getString(R.string.text_relaxed)
+                        paint.shader = viewModel.getTextShaderForGradient(
+                            this.measuredWidth.toFloat(),
+                            "#B7E9FF".toColorInt(),
+                            "#FFFFFF".toColorInt()
+                        )
+                    }
+                    lytComfortTag.visible()
+                }
+                binding.lytCreateRelaxedWorkout.root.gone()
+                binding.btnSwitch.apply {
+                    setBackgroundResource(R.drawable.bg_create_create_relaxed_workout)
+                    text = getString(R.string.text_switch_to_regular_workout)
+                    setTextColor("#DBF4FF".toColorInt())
+                    visible()
+                }
+            }
+
+
+            DietState.NORMAL -> {
+                binding.root.setBackgroundResource(R.drawable.bg_ai_workout_screen)
+                binding.toolbar.apply {
+                    tvTitle.setTextColor("#FFFFFF".toColorInt())
+                    lytComfortTag.gone()
+                }
+                binding.lytCreateRelaxedWorkout.root.gone()
+                binding.btnSwitch.gone()
             }
         }
     }
