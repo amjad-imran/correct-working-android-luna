@@ -659,7 +659,8 @@ class CycleTrackerViewModel @Inject constructor(
             val master = notificationToggleModel.value?.hydrate_notification ?: false == true ||
                     notificationToggleModel?.value?.steps_notification ?: false == true ||
                     notificationToggleModel?.value?.female_health ?: false == true ||
-                    notificationToggleModel?.value?.sleep_notification ?: false == true
+                    notificationToggleModel?.value?.sleep_notification ?: false == true ||
+                    notificationToggleModel?.value?.caffeine ?: false == true
 
             val request = JsonObject().apply {
                 this.addProperty("master_notification", master)
@@ -678,6 +679,10 @@ class CycleTrackerViewModel @Inject constructor(
                 this.addProperty(
                     "female_health_notification",
                     notificationToggleModel.value?.female_health ?: false
+                )
+                this.addProperty(
+                    "caffeine",
+                    notificationToggleModel.value?.caffeine ?: false
                 )
             }
             userRepositoryOld.updateNotificationToggle(request)

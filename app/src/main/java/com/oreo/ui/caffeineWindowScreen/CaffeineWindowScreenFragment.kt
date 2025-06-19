@@ -46,6 +46,7 @@ class CaffeineWindowScreenFragment :
                 viewModel.maxQuantity = it.maxQuantity?:0
 
                 viewModel.loadItems()
+                viewModel.getNotificationToggle()
                 initUi(it.message?:"")
             }
         }
@@ -188,6 +189,12 @@ class CaffeineWindowScreenFragment :
             }
         }
 
+        binding.ivNotification.setOnClickListener {
+            val lastValue = viewModel.notificationToggleModel.value?.caffeine ?: false
+            viewModel.notificationToggleModel.value?.caffeine = lastValue.not()
+            viewModel.updateNotificationToggle()
+        }
+
     }
 
     override fun subscribeObservers() {
@@ -219,6 +226,14 @@ class CaffeineWindowScreenFragment :
             }
         }
 
+        viewModel.notificationToggleModel.observe(this) {
+            val isOn = it.caffeine?:false
+            if (isOn){
+                binding.ivNotification.setImageResource(R.drawable.ic_notification_on_caffeine)
+            }else{
+                binding.ivNotification.setImageResource(R.drawable.ic_notification_off_caffeine)
+            }
+        }
     }
 
 //    private fun setRvVisibility(){

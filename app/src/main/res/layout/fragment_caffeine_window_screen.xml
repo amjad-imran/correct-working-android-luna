@@ -22,6 +22,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/ivNotification"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutToolbar"
+        app:layout_constraintTop_toTopOf="@id/layoutToolbar"
+        app:layout_constraintEnd_toEndOf="@id/layoutToolbar" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView3"
         android:layout_width="match_parent"

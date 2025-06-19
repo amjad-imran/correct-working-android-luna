@@ -2,6 +2,7 @@ package com.oreo.ui.caffeineWindowScreen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
@@ -10,9 +11,12 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
+import com.oreo.data.model.NotificationToggleModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +25,9 @@ import javax.inject.Inject
 class CaffeineWindowScreenViewModel @Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
-    private val localDataSource: DataStoredInterface
+    private val localDataStore: DataStoredInterface,
+    val vibrationUtils: VibrationUtils,
+    val userRepositoryOld: UserRepository,
 ): BaseViewModel(){
 
     val rvDisplayAllItemsToggleState: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -31,6 +37,8 @@ class CaffeineWindowScreenViewModel @Inject constructor(
     val _allItemsList = MutableLiveData<ArrayList<CaffeineFoodItem>>()
 
     val dataUpdated= MutableLiveData<Event<Boolean>>()
+
+    var notificationToggleModel = MutableLiveData<NotificationToggleModel>()
 
     var maxQuantity: Int = 0
 
@@ -189,6 +197,100 @@ class CaffeineWindowScreenViewModel @Inject constructor(
                 canTake.addAll(canNotTake)
                 _myItemsList.postValue(canTake)
             }
+        }
+    }
+
+    fun getNotificationToggle() {
+        viewModelScope.launch {
+            userRepositoryOld.getNotificationToggle().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            notificationToggleModel.postValue(it)
+                            /*localDataStore.setShouldShowSleepNotification(it.sleep_notification?:false)*/
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+    }
+
+    fun updateNotificationToggle() {
+        viewModelScope.launch {
+
+            vibrationUtils.vibrate(HAPTIC_VIBRATION)
+
+            val master = notificationToggleModel.value?.hydrate_notification ?: false == true ||
+                    notificationToggleModel?.value?.steps_notification ?: false == true ||
+                    notificationToggleModel?.value?.female_health ?: false == true ||
+                    notificationToggleModel?.value?.sleep_notification ?: false == true ||
+                    notificationToggleModel?.value?.caffeine ?: false == true
+
+            val request = JsonObject().apply {
+                this.addProperty("master_notification", master)
+                this.addProperty(
+                    "hydrate_notification",
+                    notificationToggleModel.value?.hydrate_notification ?: false
+                )
+                this.addProperty(
+                    "steps_notification",
+                    notificationToggleModel.value?.steps_notification ?: false
+                )
+                this.addProperty(
+                    "sleep_notification",
+                    notificationToggleModel.value?.sleep_notification ?: false
+                )
+                this.addProperty(
+                    "female_health_notification",
+                    notificationToggleModel.value?.female_health ?: false
+                )
+                this.addProperty(
+                    "caffeine",
+                    notificationToggleModel.value?.caffeine ?: false
+                )
+            }
+            userRepositoryOld.updateNotificationToggle(request)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            updateNotificationToggle()
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                if (notificationToggleModel.value?.hydrate_notification == true ||
+                                    notificationToggleModel.value?.steps_notification == true ||
+                                    notificationToggleModel.value?.sleep_notification == true
+                                ) {
+                                    notificationToggleModel.value?.master_notification = true
+                                }
+
+                                notificationToggleModel.postValue(notificationToggleModel.value?.copy())
+                            }
+                        }
+                    }
+                }
         }
     }
 
