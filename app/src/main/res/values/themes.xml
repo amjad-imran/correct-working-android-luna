@@ -464,6 +464,13 @@
         <item name="android:background">@drawable/back_modal_dialog</item>
     </style>
 
+    <style name="MyCustomDialogStyleWithBlurEffect" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">#CC030F1D</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+
+    </style>
+
     <style name="ModalStyleReadinessNew">
         <item name="android:background">@drawable/back_modal_dialog_new</item>
     </style>
