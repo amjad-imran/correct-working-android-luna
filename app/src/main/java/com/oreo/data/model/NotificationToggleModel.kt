@@ -10,4 +10,5 @@ data class NotificationToggleModel(
     var steps_notification: Boolean? = false,
     var sleep_notification: Boolean? = false,
     var female_health: Boolean? = false,
+    var caffeine: Boolean? = false,
 ) : Parcelable

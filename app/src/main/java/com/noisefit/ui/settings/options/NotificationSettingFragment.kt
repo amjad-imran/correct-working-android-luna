@@ -44,11 +44,13 @@ class NotificationSettingFragment :
             lytHydration.tvTitle.text = getString(R.string.text_hydration)
             lytSteps.tvTitle.text = getString(R.string.text_steps)
             lytSleep.tvTitle.text = getString(R.string.text_sleep)
+            lytCaffeineWindow.tvTitle.text = getString(R.string.text_caffeine_window)
 
 
             lytHydration.ivSetting.setImageResource(R.drawable.ic_settings_hydration)
             lytSteps.ivSetting.setImageResource(R.drawable.ic_settings_steps)
             lytSleep.ivSetting.setImageResource(R.drawable.ic_settings_sleep)
+            lytCaffeineWindow.ivSetting.setImageResource(R.drawable.icon_caffeine_intake)
 
             if (viewModel.shouldShowFemaleHealth()) {
                 lytFemaleHealth.tvTitle.text = getString(R.string.text_menstrual_health)
@@ -106,11 +108,13 @@ class NotificationSettingFragment :
             binding.lytOther.lytSteps.switchMain.isChecked = isChecked
             binding.lytOther.lytSleep.switchMain.isChecked = isChecked
             binding.lytOther.lytFemaleHealth.switchMain.isChecked = isChecked
+            binding.lytOther.lytCaffeineWindow.switchMain.isChecked = isChecked
 
             viewModel.hydrationToggle = isChecked
             viewModel.stepsToggle = isChecked
             viewModel.sleepToggle = isChecked
             viewModel.femaleHealthToggle = isChecked
+            viewModel.caffeineWindowToggle = isChecked
 
             viewModel.updateNotificationToggle()
 
@@ -190,13 +194,36 @@ class NotificationSettingFragment :
             viewModel.updateNotificationToggle()
         }
 
+        binding.lytOther.lytCaffeineWindow.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (buttonView.isPressed.not()) {
+                return@setOnCheckedChangeListener
+            }
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.notification_toggled,
+                HashMap<String, Any>().apply {
+                    this["target"] = "caffeine"
+                }
+            )
+
+            viewModel.caffeineWindowToggle = isChecked
+            if (isChecked) {
+                binding.lytOther.switchOtherMain.isChecked = true
+            }
+
+            checkOtherNotifications()
+            viewModel.updateNotificationToggle()
+        }
+
     }
 
     fun checkOtherNotifications() {
         if (binding.lytOther.lytHydration.switchMain.isChecked.not() &&
             binding.lytOther.lytSteps.switchMain.isChecked.not() &&
             binding.lytOther.lytSleep.switchMain.isChecked.not() &&
-            binding.lytOther.lytFemaleHealth.switchMain.isChecked.not()
+            binding.lytOther.lytFemaleHealth.switchMain.isChecked.not() &&
+            binding.lytOther.lytCaffeineWindow.switchMain.isChecked.not()
         ) {
             binding.lytOther.switchOtherMain.isChecked = false
         }
@@ -207,17 +234,20 @@ class NotificationSettingFragment :
         binding.lytOther.lytSteps.switchMain.isEnabled = state
         binding.lytOther.lytSleep.switchMain.isEnabled = state
         binding.lytOther.lytFemaleHealth.switchMain.isEnabled = state
+        binding.lytOther.lytCaffeineWindow.switchMain.isEnabled = state
 
         binding.lytOther.switchOtherMain.isChecked = state
         binding.lytOther.lytHydration.switchMain.isChecked = state
         binding.lytOther.lytSteps.switchMain.isChecked = state
         binding.lytOther.lytSleep.switchMain.isChecked = state
         binding.lytOther.lytFemaleHealth.switchMain.isChecked = state
+        binding.lytOther.lytCaffeineWindow.switchMain.isChecked = state
 
         viewModel.hydrationToggle = state
         viewModel.stepsToggle = state
         viewModel.sleepToggle = state
         viewModel.femaleHealthToggle = state
+        viewModel.caffeineWindowToggle = state
     }
 
     override fun subscribeObservers() {
@@ -230,18 +260,21 @@ class NotificationSettingFragment :
                 if (viewModel.masterToggle) {
 
                     binding.lytOther.switchOtherMain.isChecked =
-                        viewModel.hydrationToggle || viewModel.stepsToggle || viewModel.sleepToggle|| viewModel.femaleHealthToggle
+                        viewModel.hydrationToggle || viewModel.stepsToggle || viewModel.sleepToggle||
+                                viewModel.femaleHealthToggle || viewModel.caffeineWindowToggle
 
                     binding.lytOther.lytHydration.switchMain.isChecked = viewModel.hydrationToggle
                     binding.lytOther.lytSteps.switchMain.isChecked = viewModel.stepsToggle
                     binding.lytOther.lytSleep.switchMain.isChecked = viewModel.sleepToggle
                     binding.lytOther.lytFemaleHealth.switchMain.isChecked = viewModel.femaleHealthToggle
+                    binding.lytOther.lytCaffeineWindow.switchMain.isChecked = viewModel.caffeineWindowToggle
                 }else{
                     binding.lytOther.switchOtherMain.isEnabled = false
                     binding.lytOther.lytHydration.switchMain.isEnabled = false
                     binding.lytOther.lytSteps.switchMain.isEnabled = false
                     binding.lytOther.lytSleep.switchMain.isEnabled = false
                     binding.lytOther.lytFemaleHealth.switchMain.isEnabled = false
+                    binding.lytOther.lytCaffeineWindow.switchMain.isEnabled = false
                 }
             }
         }
