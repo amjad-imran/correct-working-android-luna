@@ -9,6 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -37,6 +38,8 @@ import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
@@ -365,30 +368,77 @@ class CycleTrackerFragment :
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
-            navigate(R.id.workoutPlansFragment)
+            viewModel.getComfortDietWorkoutData(true)
         }
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
-            navigate(R.id.aiMealPlanFragment)
+            viewModel.getComfortDietWorkoutData(false)
+        }
+    }
+
+    private fun handleComfortDietFoodClick(triple: Triple<Boolean, Boolean, Boolean>) {
+        if(triple.third) {
+            // Workout
+            val workoutSetup = triple.first
+            if (workoutSetup) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_workout_plan)
+
+                navigate(R.id.workoutPlansFragment)
+
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_workout_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.WORKOUT
+                )
+                navigate(frag, bundle)
+            }
+        }
+        else {
+            // Diet
+            val mealSetup = triple.second
+            if (mealSetup) {
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_nutrition_plan)
+
+                navigate(R.id.aiMealPlanFragment)
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_weekly_diet_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.DIET
+                )
+                navigate(frag, bundle)
+            }
         }
     }
 
     private fun displayWomansDayCard(){
-        binding.dividerWomenDayAnnouncement.root.visible()
-
         binding.lytWomenDayAnnouncement.lytDietAnnc.apply {
-            root.setBackgroundResource(R.drawable.bg_fuel_your_flow_cycle_tracker)
-            tvTitle.text = getString(R.string.text_fuel_your_flow)
-            tvDesc.text = getString(R.string.text_get_personalized_food_recommendations_for_this_phase_of_your_cycle)
+            root.setBackgroundResource(R.drawable.bg_comfort_food_for_you_readiness)
+            tvTitle.apply {
+                text = getString(R.string.text_comfort_food_for_you)
+                setTextColor("#CEDDFF".toColorInt())
+            }
+            tvDesc.text = getString(R.string.text_plan_nourishing_meals_to_help_you_feel_your_best)
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.apply {
-            root.setBackgroundResource(R.drawable.bg_power_in_gentle_progress_cycle_tracker)
-            tvTitle.text = getString(R.string.text_power_in_gentle_progress)
+            root.setBackgroundResource(R.drawable.bg_gentle_movement_readiness)
+            tvTitle.apply {
+                text = getString(R.string.text_gentle_movement_for_your_flow)
+                setTextColor("#B7DEFF".toColorInt())
+            }
             tvDesc.text =
-                getString(R.string.text_based_on_your_energy_data_and_readiness_levels_would_you_like_us_to_recommend_a_low_intensity_workout)
+                getString(R.string.text_create_a_light_workout_to_support_your_body_s_needs_today)
         }
 
+        binding.dividerWomenDayAnnouncement.root.visible()
         binding.lytWomenDayAnnouncement.root.visible()
     }
 
@@ -447,6 +497,13 @@ class CycleTrackerFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.planState.observe(this){
+            it.getContent()?.let { triple ->
+                handleComfortDietFoodClick(triple)
+            }
+        }
+
         viewModel.notificationToggleModel.observe(this) {
             binding.lytTrackerTop.ivNotificationStatus.setImageResource(
                 viewModel.getBellResource(it.female_health?:false)

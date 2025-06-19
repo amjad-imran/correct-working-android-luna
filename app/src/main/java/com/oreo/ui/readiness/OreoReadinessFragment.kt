@@ -62,6 +62,8 @@ import javax.inject.Inject
 import androidx.core.graphics.toColorInt
 import com.noisefit.oreo.OreoMainActivity
 import com.oreo.data.model.IrregularEventsChipModel
+import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.PlanType
 
 
 @AndroidEntryPoint
@@ -623,6 +625,48 @@ class OreoReadinessFragment :
             }
         }
 
+    private fun handleComfortDietFoodClick(triple: Triple<Boolean, Boolean, Boolean>) {
+        if(triple.third) {
+            // Workout
+            val workoutSetup = triple.first
+            if (workoutSetup) {
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_workout_plan)
+
+                navigate(R.id.workoutPlansFragment)
+
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_workout_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.WORKOUT
+                )
+                navigate(frag, bundle)
+            }
+        }
+        else {
+            // Diet
+            val mealSetup = triple.second
+            if (mealSetup) {
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_nutrition_plan)
+
+                navigate(R.id.aiMealPlanFragment)
+            } else {
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    getString(R.string.text_build_me_a_weekly_diet_plan),
+                    null,
+                    AITopics.GENERAL,
+                    planType = PlanType.DIET
+                )
+                navigate(frag, bundle)
+            }
+        }
+    }
+
     override fun initListener() {
 
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
@@ -816,11 +860,11 @@ class OreoReadinessFragment :
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
-            navigate(R.id.workoutPlansFragment)
+            mViewModel.getComfortDietFoodData(true)
         }
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
-            navigate(R.id.aiMealPlanFragment)
+            mViewModel.getComfortDietFoodData(false)
         }
 
     }
@@ -837,6 +881,12 @@ class OreoReadinessFragment :
                  }
              }
          }*/
+
+        mViewModel.planState.observe(this){
+            it.getContent()?.let { triple ->
+                handleComfortDietFoodClick(triple)
+            }
+        }
 
         mViewModel.hrvAlertsData.observe(this) {
             it.getContent()?.let {

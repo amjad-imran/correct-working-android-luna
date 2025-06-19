@@ -26,6 +26,7 @@ import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
 import com.oreo.ui.custom.TempPeriodCombineModel
@@ -48,7 +49,8 @@ class CycleTrackerViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val resourcesProvider: ResourcesProvider,
     val vibrationUtils: VibrationUtils,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val deviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 
     var notificationToggleModel = MutableLiveData<NotificationToggleModel>()
@@ -81,6 +83,8 @@ class CycleTrackerViewModel @Inject constructor(
     var currentSelectedPhase: CyclePhase? = null
 
     var healthDataDateList = HashMap<LocalDate, DayState>()
+
+    val planState = MutableLiveData<Event<Triple<Boolean, Boolean, Boolean>>>()
 
     var lastDataLoadedFor: String? = null
 
@@ -298,6 +302,52 @@ class CycleTrackerViewModel @Inject constructor(
             resourcesProvider.getString(R.string.text_decreasing_chance_of_pregnancy)
         } else {
             ""
+        }
+    }
+
+    fun getComfortDietWorkoutData(isComfortWorkout: Boolean) {
+        viewModelScope.launch {
+            deviceRepository.getLunaZoneData().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getComfortDietWorkoutData(isComfortWorkout)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            planState.postValue(
+                                Event(
+                                    Triple(
+                                        it.workoutPlan ?: false,
+                                        it.nutritionalPlan ?: false,
+                                        isComfortWorkout
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

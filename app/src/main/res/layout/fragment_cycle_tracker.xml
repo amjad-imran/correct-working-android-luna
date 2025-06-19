@@ -50,21 +50,6 @@
                 android:visibility="visible" />
 
             <include
-                android:id="@+id/dividerPrediction"
-                layout="@layout/layout_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="24dp" />
-
-            <include
-                android:id="@+id/lytPrediction"
-                layout="@layout/layout_card_cycle_prediction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <include
                 android:id="@+id/dividerWomenDayAnnouncement"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
@@ -77,6 +62,21 @@
                 android:id="@+id/lytWomenDayAnnouncement"
                 layout="@layout/item_comfort_diet_workout_announcement"
                 android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <include
+                android:id="@+id/dividerPrediction"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp" />
+
+            <include
+                android:id="@+id/lytPrediction"
+                layout="@layout/layout_card_cycle_prediction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"

@@ -34,6 +34,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.IrregularEventsChipModel
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -50,6 +51,7 @@ constructor(
     private val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     private val userRepository: OreoUserActivityRepository,
+    private val deviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 
     var baseTemp: Float? = null
@@ -66,6 +68,8 @@ constructor(
 
     val hrvAlertsData = MutableLiveData<Event<Boolean>>()
     var isEventSubmitted: Boolean = false
+
+    val planState = MutableLiveData<Event<Triple<Boolean, Boolean, Boolean>>>()
 
     var date: String? = null
 
@@ -222,6 +226,52 @@ constructor(
         }
 
 
+    }
+
+    fun getComfortDietFoodData(isComfortWorkout: Boolean) {
+        viewModelScope.launch {
+            deviceRepository.getLunaZoneData().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getComfortDietFoodData(isComfortWorkout)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            planState.postValue(
+                                Event(
+                                    Triple(
+                                        it.workoutPlan ?: false,
+                                        it.nutritionalPlan ?: false,
+                                        isComfortWorkout
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
