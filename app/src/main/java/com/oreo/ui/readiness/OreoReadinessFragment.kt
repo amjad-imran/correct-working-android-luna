@@ -821,6 +821,7 @@ class OreoReadinessFragment :
         }
 
         binding.lytIrregularityEvents.btnClose.setOnClickListener {
+            (activity as OreoMainActivity).hideSoftKeyboard()
             /*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
             binding.lytIrregularityEvents.root.gone()*/
             mViewModel.updateAlert(true)
