@@ -2657,7 +2657,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     } else {
                         stateStressCard.value?.measureState = TapMeasureState.LAST_MEASURED
                         stateStressCard.value?.lastTime =
-                            resourceProvider.getString(R.string.text_last_measured_just_now)
+                            resourceProvider.getString(R.string.text_just_now)
                     }
                     stateStressCard.value?.value = manualMeasurement.value
                 }
@@ -2675,7 +2675,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     } else {
                         stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
                         stateHeartRateCard.value?.lastTime =
-                            resourceProvider.getString(R.string.text_last_measured_just_now)
+                            resourceProvider.getString(R.string.text_just_now)
                     }
                     stateHeartRateCard.value?.value = manualMeasurement.value.toString()
                 }

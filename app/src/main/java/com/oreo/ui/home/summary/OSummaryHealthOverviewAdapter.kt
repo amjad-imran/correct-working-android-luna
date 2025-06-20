@@ -662,8 +662,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.tvUnableToMeasure.gone()
 
                     lytStress.groupValue.visible()
-                    lytStress.tvEmptyConnect.visible()
-                    lytStress.tvEmptyConnect.text = context.getString(R.string.text_tap_to_measure)
+                    lytStress.tvEmptyConnect.apply {
+                        visible()
+                        setTextColor(Color.parseColor("#ffffff"))
+                        text = context.getString(R.string.text_tap_to_measure)
+                    }
 
                     lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
                     val (displayValue, displayColor) = allData.stressStatus
@@ -697,7 +700,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytStress.groupValue.gone()
                     lytStress.tvEmptyConnect.visible()
                     lytStress.tvEmptyConnect.apply {
-                        setTextColor(Color.parseColor("#88b0ff"))
+                        setTextColor(Color.parseColor("#ffffff"))
                         text = context.getString(R.string.text_tap_to_measure)
                     }
                 }
