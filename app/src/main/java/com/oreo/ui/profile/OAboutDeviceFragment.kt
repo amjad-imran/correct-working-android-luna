@@ -175,7 +175,9 @@ class OAboutDeviceFragment :
         }
         binding.btnCopyMac.setOnClickListener {
             updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_copy_mac_click)
-            connectedDevice?.address?.copyToClipBoard()
+            connectedDevice?.address?.copyToClipBoard(
+                getString(R.string.text_copied)
+            )
         }
     }
 
