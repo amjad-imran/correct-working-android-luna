@@ -76,6 +76,8 @@
                 android:background="@drawable/back_modal_new"
                 android:gravity="top"
                 android:hint="@string/text_description"
+                android:inputType="textCapSentences|textMultiLine"
+                android:scrollHorizontally="false"
                 android:lines="5"
                 android:maxLength="1000"
                 android:paddingHorizontal="16dp"
