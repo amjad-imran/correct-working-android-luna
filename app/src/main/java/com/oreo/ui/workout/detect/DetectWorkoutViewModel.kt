@@ -176,7 +176,7 @@ constructor(
             calories = data.calories
             intensity = getIntensity(data.intensity ?: 0)
             steps = data.steps
-            date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3())
+            date = DateFormats.convertTimestampToDate(data.startTime, DateFormats.dateFormat3())
 
             tryCatch {
                 val startTime =
