@@ -52,68 +52,57 @@ class MealPlanViewModel @Inject constructor(
 
     fun getMealPlans() {
         viewModelScope.launch {
-            if(mealResponse.isEmpty()) {
-                oreoDeviceRepository.getAiMealPlans().collect { resource ->
-                    when (resource) {
-                        is Resource.GenericError -> {
-                            sendMessage(resource.message)
-                        }
+            oreoDeviceRepository.getAiMealPlans().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                        is Resource.Loading -> {
-                            setLoading(resource.loading)
-                        }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                        is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
-                                this.uiComponentType as UIComponentType.RetryApiDialog
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                    object : BinaryActionCallback {
-                                        override fun yes() {
-                                            getMealPlans()
-                                        }
-
-                                        override fun no() {
-
-                                        }
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getMealPlans()
                                     }
-                            })
-                        }
 
-                        is Resource.Success -> {
-                            resource.data?.data?.let {
+                                    override fun no() {
 
-                                mealResponse.clear()
-                                mealResponse.addAll(it)
-
-                                if (
-                                    !localDataStore.getLdwReadinessData() &&
-                                    !localDataStore.getLdwCycleTrackerData()
-                                ) {
-                                    LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : normal")
-
-                                    dietState.value = DietState.NORMAL
-//                                rememberCurDayDietState = DietState.NORMAL
-                                } else {
-                                    LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : regular")
-                                    dietState.value = DietState.REGULAR
-//                                rememberCurDayDietState = DietState.REGULAR
+                                    }
                                 }
+                        })
+                    }
 
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            mealResponse.clear()
+                            mealResponse.addAll(it)
+
+                            if (
+                                !localDataStore.getLdwReadinessData() &&
+                                !localDataStore.getLdwCycleTrackerData()
+                            ) {
+                                dietState.value = DietState.NORMAL
                                 setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                            } else {
+                                val isLowDietPlanSetUp =  localDataStore.isLowDietPlanSetUp()?.isSetup ?: false
+                                if(isLowDietPlanSetUp){
+                                    getComfortMealPlans()
+                                }else{
+                                    dietState.value = DietState.REGULAR
+                                    setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                                }
+                                dietState.value = DietState.REGULAR
                             }
                         }
                     }
                 }
-            }else{
-                if (
-                    !localDataStore.getLdwReadinessData() &&
-                    !localDataStore.getLdwCycleTrackerData()
-                ) {
-                    dietState.value = DietState.NORMAL
-                } else {
-                    dietState.value = DietState.REGULAR
-                }
-                setSelectedPosition(LocalDate.now().dayOfWeek.value)
             }
         }
     }

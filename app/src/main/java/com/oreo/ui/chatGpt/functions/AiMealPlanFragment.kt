@@ -131,15 +131,16 @@ class AiMealPlanFragment :
         }
 
         binding.btnSwitch.setOnClickListener {
-            LOGS.d("noisnv : ${viewModel.dietState.value}")
+            val curDay = LocalDate.now().dayOfWeek.value
             val isRegularState =
                 viewModel.dietState.value == DietState.REGULAR || viewModel.dietState.value == DietState.NORMAL
             if (isRegularState){
-                viewModel.getComfortMealPlans()
+                viewModel.dietState.value = DietState.COMFORT
             }
             else{
-                viewModel.getMealPlans()
+                viewModel.dietState.value = DietState.REGULAR
             }
+            viewModel.setSelectedPosition(curDay)
         }
 
         binding.lytCreateComfortFood.btnCreate.setOnClickListener {
