@@ -255,10 +255,11 @@ constructor(
             ""
         } else {
             measureState = TapMeasureState.LAST_MEASURED
-            resourcesProvider.getString(
+            DateTimeUtil.getRelativeTime(manualMeasureTime, resourcesProvider)
+            /*resourcesProvider.getString(
                 R.string.text_last_measured_value,
                 DateTimeUtil.getRelativeTime(manualMeasureTime, resourcesProvider).lowercase()
-            )
+            )*/
         }
 
         return OHealthOverview.StressDashDataModel(
@@ -386,10 +387,11 @@ constructor(
             ""
         } else {
             measureState = TapMeasureState.LAST_MEASURED
-            resourcesProvider.getString(
+            DateTimeUtil.getRelativeTime(manualMeasureTime,resourcesProvider)
+            /*resourcesProvider.getString(
                 R.string.text_last_measured_value,
                 DateTimeUtil.getRelativeTime(manualMeasureTime,resourcesProvider).lowercase()
-            )
+            )*/
         }
 
         return OHealthOverview.HeartRateDataModel(
