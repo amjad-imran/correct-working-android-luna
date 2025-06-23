@@ -1183,6 +1183,46 @@ constructor(
         }
     }
 
+    fun getCaffeineWindowData(data:(d:CaffeineGraphDataModel)->Unit){
+        viewModelScope.launch {
+            userActivityRepository.getCaffeineWindowData().collect{
+                    resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getCaffeineWindowData(data)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            if (it != null) {
+                                data(it)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     private fun getReferralRunningState(referralInfoResponse: ReferralInfoResponse?): Boolean {
         if (referralInfoResponse == null) return false
 

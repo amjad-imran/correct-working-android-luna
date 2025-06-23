@@ -158,7 +158,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/referral" />
             </intent-filter>
 
@@ -170,7 +170,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/notification-control" />
             </intent-filter>
 
@@ -182,7 +182,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/profile" />
             </intent-filter>
 
@@ -194,7 +194,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/sleep-planner" />
             </intent-filter>
 
@@ -206,7 +206,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/dashboard" />
             </intent-filter>
 
@@ -218,7 +218,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/luna-ai" />
             </intent-filter>
 
@@ -230,7 +230,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/feature-request" />
             </intent-filter>
 
@@ -242,7 +242,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/female-health" />
             </intent-filter>
 
@@ -254,7 +254,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="lunazone.com" />
+                <data android:host="link.lunazone.com" />
                 <data android:pathPattern="/applinks/caffeine" />
             </intent-filter>
 

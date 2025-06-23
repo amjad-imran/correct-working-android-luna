@@ -53,6 +53,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
@@ -381,6 +382,11 @@ interface NetworkService {
         @Query("filter_type") filterType: String,
         @Query("contri_type") contriType: String,
     ): BaseApiResponse<OInternalPageResponseModal>
+
+    @GET
+    suspend fun getCaffeineWindowData(
+        @Url url: String,
+    ): BaseApiResponse<CaffeineGraphDataModel>
 
 
     @POST

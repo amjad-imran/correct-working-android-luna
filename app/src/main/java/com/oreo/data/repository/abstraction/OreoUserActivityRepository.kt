@@ -26,6 +26,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
+import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.sleep.SleepDataResponse
@@ -56,6 +57,8 @@ interface OreoUserActivityRepository {
      * @param date - YYYY-MM-dd
      */
     suspend fun getHrDataByDate(date: String): OreoHeartRate?
+
+    suspend fun getCaffeineWindowData(): Flow<Resource<BaseApiResponse<CaffeineGraphDataModel>>>
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 

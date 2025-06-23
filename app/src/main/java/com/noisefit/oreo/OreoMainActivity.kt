@@ -54,6 +54,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.data.model.CaffeineWindowData
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
@@ -1317,6 +1318,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
 
             AppLinks.CAFFEINE_WINDOW -> {
+                viewModel.getCaffeineWindowData { caffeineGraphData ->
+                    if(caffeineGraphData.status == true){
+                        val caffeineValues = ArrayList<Int>()
+                        caffeineGraphData.caffeine_window.forEach {
+                            caffeineValues.add(it.dose)
+                        }
+                        val mainData = CaffeineWindowData(
+                            wakeUpTime = caffeineGraphData.wakeUpTime,
+                            bedTime = caffeineGraphData.bedTime,
+                            caffeineStartTime = caffeineGraphData.caffeineStartTime,
+                            caffeineEndTime = caffeineGraphData.caffeineEndTime,
+                            caffeineValues = caffeineValues,
+                        )
+                        navController?.navigate(
+                            R.id.caffeineWindowScreenFragment,
+                            Bundle().apply {
+                                this.putParcelable("caffeineGraphData", mainData)
+                            }
+                        )
+                    }
+                }
                 //navController?.navigate(R.id.caffeineWindowScreenFragment)
             }
 

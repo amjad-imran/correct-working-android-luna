@@ -1392,6 +1392,13 @@ class OreoUserActivityRepositoryImpl(
         )
     }
 
+    override suspend fun getCaffeineWindowData(): Flow<Resource<BaseApiResponse<CaffeineGraphDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v3/caffeine-logs"
+            remoteDataSource.getCaffeineWindowData(url)
+        }
+    }
+
     override suspend fun getSummaryStressData(): OHealthOverview.StressDashDataModel? {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)
