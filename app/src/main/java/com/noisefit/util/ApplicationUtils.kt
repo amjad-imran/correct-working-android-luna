@@ -36,6 +36,7 @@ import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.GoogleFitSyncWork
 import com.oreo.receiver.workManager.OreoSyncDataWork
+import java.net.URLEncoder
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -431,9 +432,10 @@ object ApplicationUtils {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val urlSafeDesc   = URLEncoder.encode(description, "UTF-8")
         val inputData = Data.Builder()
             .putString("title", title)
-            .putString("description", description)
+            .putString("description", urlSafeDesc)
             .build()
 
         val workRequest =
