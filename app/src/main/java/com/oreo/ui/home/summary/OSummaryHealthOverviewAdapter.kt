@@ -758,7 +758,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
 
 
-                if (lastMeasuredValue == 0) {
+                if (lastMeasuredValue == 0 || allData.isRingPaired!=true) {
                     lytStress.tvStressValue.gone()
                     lytStress.tvStressStatus.gone()
                     lytStress.tvLastUpdate.gone()

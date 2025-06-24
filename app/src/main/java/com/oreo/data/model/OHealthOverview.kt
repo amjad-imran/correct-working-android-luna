@@ -136,7 +136,8 @@ sealed class OHealthOverview {
         val stressStatus: Pair<String, Int>,
         val stressTrend: Int?,
         val resourcesProvider: ResourcesProvider,
-        var ringGeneration: Int?
+        var ringGeneration: Int?,
+        val isRingPaired: Boolean?
     ) : OHealthOverview()
     //
 

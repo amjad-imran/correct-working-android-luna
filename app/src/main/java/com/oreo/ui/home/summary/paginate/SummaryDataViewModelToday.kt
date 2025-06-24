@@ -2017,7 +2017,8 @@ class SummaryDataViewModelToday @Inject constructor(
             stressStatus,
             stressTrend,
             resourceProvider,
-            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw),
+            ringDataStore.getRingDevice() != null
         )
     }
 
@@ -2049,7 +2050,8 @@ class SummaryDataViewModelToday @Inject constructor(
             stressStatus,
             stressTrend,
             resourceProvider,
-            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw),
+            ringDataStore.getRingDevice() != null
         )
         /*}*/
 
