@@ -481,6 +481,8 @@ class OWorkoutDetailsFragmentV2 :
         }
         map.isBuildingsEnabled = false
 
+        map.setMinZoomPreference(15f)
+
         map.uiSettings.apply {
             isCompassEnabled = false
             isZoomControlsEnabled = false
@@ -513,9 +515,14 @@ class OWorkoutDetailsFragmentV2 :
 
                         //googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
                         googleMap.setOnMapLoadedCallback {
-                            googleMap.animateCamera(
-                                CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
-                            )
+                            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
+                            googleMap.moveCamera(cameraUpdate)
+
+                            // Check zoom level and fix if it's too close
+                            val currentZoom = googleMap.cameraPosition.zoom
+                            if (currentZoom > 16f) {
+                                googleMap.animateCamera(CameraUpdateFactory.zoomTo(16f))
+                            }
                         }
                         /*googleMap.animateCamera(
                             CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
