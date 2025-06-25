@@ -194,7 +194,6 @@ class CaffeineWindowScreenFragment :
             viewModel.notificationToggleModel.value?.caffeine = lastValue.not()
             viewModel.updateNotificationToggle()
         }
-
     }
 
     override fun subscribeObservers() {
