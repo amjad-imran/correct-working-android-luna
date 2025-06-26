@@ -284,8 +284,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
             viewModel.notificationType = it.getStringExtra(NOTIFICATION_BUNDLE_TYPE)
             viewModel.notificationIndex = it.getStringExtra(NOTIFICATION_BUNDLE_INDEX)
-            //viewModel.deeplink = it.getStringExtra(NOTIFICATION_BUNDLE_LINK)
-            viewModel.appLink = null
+            viewModel.appLink = ApplicationUtils.parseAppLink(it.getStringExtra(NOTIFICATION_BUNDLE_LINK))
+            //viewModel.appLink = null
 
             intent1.data = null
             intent1.putExtra(NOTIFICATION_BUNDLE_TYPE, "")
