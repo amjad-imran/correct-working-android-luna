@@ -87,7 +87,7 @@
         lineChart:xTextSize="12sp"
         lineChart:yTextSize="12sp" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tvStressValue"
         style="@style/H28"
         android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/tvStressValue"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Updated 13 min ago"
-        tools:visibility="visible" />
+        tools:visibility="visible" />-->
 
 
       <com.airbnb.lottie.LottieAnimationView

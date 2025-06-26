@@ -758,13 +758,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val (lastMeasuredValue, lastMeasuredIndex) = allData.lastMeasuredValue
 
 
-                if (lastMeasuredValue == 0 || allData.isRingPaired!=true) {
+                if (lastMeasuredValue == 0) {
+                /*if (lastMeasuredValue == 0 || allData.isRingPaired!=true) {
                     lytStress.tvStressValue.gone()
                     lytStress.tvStressStatus.gone()
-                    lytStress.tvLastUpdate.gone()
+                    lytStress.tvLastUpdate.gone()*/
                     lytStress.lytTrend.root.gone()
                 } else {
-                    lytStress.tvStressValue.visible()
+                    /*lytStress.tvStressValue.visible()
                     lytStress.tvStressStatus.visible()
                     lytStress.tvLastUpdate.visible()
 
@@ -772,7 +773,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //                val (displayValue, displayColor) = viewModel.getStressStatus(lastMeasuredValue)
                     val (displayValue, displayColor) = allData.stressStatus
                     lytStress.tvStressStatus.text = displayValue
-                    lytStress.tvStressStatus.setTextColor(displayColor)
+                    lytStress.tvStressStatus.setTextColor(displayColor)*/
 
 
                     val lastUpdatedTimestamp =
@@ -813,7 +814,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
 
 
-                    if (lastUpdatedTimestamp == 0L) {
+                    /*if (lastUpdatedTimestamp == 0L) {
                         lytStress.tvLastUpdate.text = ""
                     } else {
                         lytStress.tvLastUpdate.text =
@@ -824,7 +825,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                     allData.resourcesProvider
                                 ).lowercase()
                             )
-                    }
+                    }*/
                 }
             }
 
