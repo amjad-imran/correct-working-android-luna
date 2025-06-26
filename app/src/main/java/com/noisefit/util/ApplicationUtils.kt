@@ -432,10 +432,9 @@ object ApplicationUtils {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val urlSafeDesc = URLEncoder.encode(description?:"", "UTF-8")
         val inputData = Data.Builder()
             .putString("title", title)
-            .putString("description", urlSafeDesc)
+            .putString("description", description)
             .build()
 
         val workRequest =
