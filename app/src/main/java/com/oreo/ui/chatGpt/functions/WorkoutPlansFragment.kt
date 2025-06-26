@@ -55,7 +55,11 @@ class WorkoutPlansFragment :
         binding.toolbar.tvTitle.text = getString(R.string.text_workout)
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#A8FFFF"))
         binding.root.setBackgroundResource(R.drawable.bg_ai_workout_screen)
-        viewModel.getWorkoutPlans()
+        if(viewModel.workoutList.value == null){
+            viewModel.getWorkoutPlans()
+        }else{
+            viewModel.setSelectedPosition(viewModel.selectedPosition.value ?: LocalDate.now().dayOfWeek.value)
+        }
         setRecycler()
 
         handleAddWorkoutVisibility()
