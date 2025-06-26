@@ -65,28 +65,6 @@
             android:name="com.oreo.util.alarm.WindDownNotification"
             android:exported="true" />
 
-        <receiver
-            android:name="com.oreo.widget.WidgetProviderOne"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info_1" />
-        </receiver>
-
-        <receiver
-            android:name="com.oreo.widget.WidgetProviderTwo"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info_2" />
-        </receiver>
-
         <service
             android:name="com.oreo.util.alarm.AlarmService"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
