@@ -1778,16 +1778,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             when(data.dailyHealthDigestCardState){
                 SummaryStates.NO_DEVICE -> {
+                    binding.lytDailyHealthDigest.imageView11.gone()
                     binding.lytDailyHealthDigest.tvTitle.text =
                         context.getString(R.string.text_ring_not_connected)
                 }
                 SummaryStates.NO_DATA -> {
+                    binding.lytDailyHealthDigest.imageView11.gone()
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
                 }
                 SummaryStates.GENERATING -> {
+                    binding.lytDailyHealthDigest.imageView11.gone()
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_generating)
                 }
                 SummaryStates.DATA_AVAILABLE -> {
+                    binding.lytDailyHealthDigest.imageView11.visible()
                     binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
                     binding.lytDailyHealthDigest.root.setOnClickListener {
                         itemClickListener?.invoke(
