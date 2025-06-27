@@ -517,7 +517,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
-                        if (gender.equals("male", true).not()) {
+                        if (gender.equals("female", true)) {
 
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
@@ -1462,7 +1462,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
         val data = if (femaleData == null) {
-            if (gender.equals("male", true).not()) {
+            if (gender.equals("female", true)) {
                 val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
                 if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
                     //OHealthOverview.CardTrackFemaleHealth(FemaleHealthCardState.TRACK)
@@ -3107,7 +3107,7 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             if (date == null) return@launch
             gender = localDataStore.getUser()?.userInfo?.gender
-            if (gender.equals("male", true)) return@launch
+            if (gender.equals("female", true).not()) return@launch
 
             if (localDataStore.getFemaleHealthStatus().not()) return@launch
 

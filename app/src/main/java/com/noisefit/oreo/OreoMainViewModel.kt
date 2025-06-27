@@ -965,7 +965,7 @@ constructor(
     }
 
     fun shouldShowFemaleHealthCta(): Boolean {
-        val genderCondition = !sessionManager.gender.equals("male", true)
+        val genderCondition = sessionManager.gender.equals("female", true)
         if (genderCondition) {
             return sessionManager.canLogPeriod
         }

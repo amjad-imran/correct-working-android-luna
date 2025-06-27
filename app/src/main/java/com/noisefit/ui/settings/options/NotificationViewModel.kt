@@ -128,6 +128,6 @@ class NotificationViewModel @Inject constructor(
 
     fun shouldShowFemaleHealth(): Boolean {
         val user=  localDataStore.getUser()
-        return !user?.userInfo?.gender.equals("male", true)
+        return user?.userInfo?.gender.equals("female", true)
     }
 }

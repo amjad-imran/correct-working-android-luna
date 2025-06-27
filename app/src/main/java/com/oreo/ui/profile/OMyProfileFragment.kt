@@ -53,7 +53,7 @@ class OMyProfileFragment :
 //        )
 
 
-        if (user?.userInfo?.gender.equals("male", true)) {
+        if (user?.userInfo?.gender.equals("female", true).not()) {
             binding.rowCycleTracker.gone()
         } else {
             binding.rowCycleTracker.visible()
