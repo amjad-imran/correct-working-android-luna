@@ -1196,7 +1196,7 @@
     <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
     <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
     <string name="text_talk_to">Talk to</string>
-    <string name="text_learn_more_about_yourself">Learn more about yourself.</string>
+    <string name="text_learn_more_about_yourself">Learn more about yourself</string>
     <string name="text_ai_content_1">Connect with Luna AI, your smart health coach. Ask questions and get tailored feedback on your health metrics. Luna AI guides your wellness journey with practical, actionable insights.</string>
     <string name="text_ai_content_2">When overwhelmed or fatigued, Luna AI helps identify factors affecting your well-being, offering personalized advice to improve rest and manage stress, maintaining balance and resilience.</string>
     <string name="text_ai_content_3">Prepare for your next athletic challenge with Luna AI as your personal coach and nutritionist.</string>
@@ -1986,7 +1986,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_issue_reported_successfully">Issue Reported Successfully</string>
     <string name="text_thank_you_our_team_will_review_and_address_the_issue_soon">Thank you! Our team will review and address the issue soon.</string>
     <string name="text_switch_to_regular_diet">Switch to Regular diet</string>
-    <string name="text_daily_nhealth_digest">Daily\nhealth Digest</string>
+    <string name="text_daily_nhealth_digest">Daily\nHealth Digest</string>
     <string name="text_generating">Generating...</string>
     <string name="text_ring_not_connected">Ring not connected</string>
 

@@ -54,7 +54,12 @@ class AiMealPlanFragment :
 
         binding.toolbar.tvTitle.text = getString(R.string.text_nutrition_plan)
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
-        viewModel.getMealPlans()
+        if(viewModel.dayMealList.value == null){
+            viewModel.getMealPlans()
+        }
+        else{
+            viewModel.setSelectedPosition(viewModel.selectedPosition.value ?: LocalDate.now().dayOfWeek.value)
+        }
 
 
         setRecycler()
