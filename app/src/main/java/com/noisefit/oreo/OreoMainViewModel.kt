@@ -346,8 +346,8 @@ constructor(
 //                            Log.d("yashhhhhhhhhhhhhh" , "$lunaManagedData")
                             caffeineGraphData = it.caffeine ?: null
                             summaryAvailable = it.summaryAvailable ?: false
-                            ldwReadiness = it.ldw_readiness ?: false
-                            ldwCycleTracker = it.ldw_cycle_tracker ?: false
+                            ldwReadiness = it.comfort_readiness ?: false
+                            ldwCycleTracker = it.comfort_cycle ?: false
                             //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE

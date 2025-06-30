@@ -272,8 +272,8 @@ class OreoUserActivityRepositoryImpl(
                                 customScreen = localDataStore.getCustomHomeScreenItemsPriorityList(),
                                 caffeine = localDataStore.getCaffeineGraphData(),
                                 summaryAvailable = localDataStore.getSummaryAvailableData(),
-                                ldw_readiness = localDataStore.getLdwReadinessData(),
-                                ldw_cycle_tracker = localDataStore.getLdwCycleTrackerData()
+                                comfort_readiness = localDataStore.getLdwReadinessData(),
+                                comfort_cycle = localDataStore.getLdwCycleTrackerData()
                             ),
                             message = "",
                         )
@@ -316,8 +316,8 @@ class OreoUserActivityRepositoryImpl(
                             customHomeScreenData = response.customScreen
                             caffeineGraphData = response.caffeine
                             summaryAvailable = response.summaryAvailable
-                            ldw_readiness = response.ldw_readiness
-                            ldw_cycle_tracker = response.ldw_cycle_tracker
+                            ldw_readiness = response.comfort_readiness
+                            ldw_cycle_tracker = response.comfort_cycle
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -383,8 +383,8 @@ class OreoUserActivityRepositoryImpl(
                                             customScreen = customHomeScreenData,
                                             caffeine = caffeineGraphData,
                                             summaryAvailable = summaryAvailable,
-                                            ldw_readiness = ldw_readiness,
-                                            ldw_cycle_tracker = ldw_cycle_tracker
+                                            comfort_readiness = ldw_readiness,
+                                            comfort_cycle = ldw_cycle_tracker
                                         ),
                                         message = "",
                                     )
