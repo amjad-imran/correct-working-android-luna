@@ -1112,8 +1112,6 @@
     <string name="text_notifications">Meldingen</string>
     <string name="text_metric">Metrisch</string>
     <string name="text_imperial">Imperiaal</string>
-    <string name="text_metric_message">Metingen in meters, kilogrammen en liters.</string>
-    <string name="text_message_imperial">Metingen in voeten, inches en ponden.</string>
     <string name="text_enable_notifications">Meldingen inschakelen</string>
     <string name="text_notification_message">Sta LUNA toe je te informeren over: batterijstatus, inactiviteitswaarschuwingen, voortgang, slaaptijdherinneringen en persoonlijke inzichten.</string>
     <string name="text_track_your_cycle">Volg je cyclus</string>
@@ -2031,6 +2029,7 @@
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Stel een lichte training samen om vandaag aan de behoeften van je lichaam te voldoen.</string>
     <string name="text_switch_to_regular_workout">Overschakelen naar reguliere training</string>
     <string name="text_switch_to_a_relaxed_workout">Overschakelen naar een ontspannen training</string>
-
+    <string name="text_metric_message">Meet in meters, kilogrammen, liters en graden Celsius.</string>
+    <string name="text_message_imperial">Meet in voeten, inches, ponden en graden Fahrenheit.</string>
 
 </resources>

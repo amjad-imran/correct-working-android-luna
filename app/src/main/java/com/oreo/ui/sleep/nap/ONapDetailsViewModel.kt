@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.models.SleepData
@@ -22,7 +23,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ONapDetailsViewModel @Inject constructor(val userActivityRepository: OreoUserActivityRepository) :
+class ONapDetailsViewModel @Inject constructor(
+    val userActivityRepository: OreoUserActivityRepository,
+    val sessionManager: SessionManager
+) :
     BaseViewModel() {
     private val _napDetailsResponse = MutableLiveData<OreoNapDetailsDataModel>()
     val napDetailsResponse: LiveData<OreoNapDetailsDataModel> = _napDetailsResponse
@@ -48,7 +52,7 @@ class ONapDetailsViewModel @Inject constructor(val userActivityRepository: OreoU
         textView.paint.shader = textShader
     }
 
-    fun getUserNapData(napId:String) {
+    fun getUserNapData(napId: String) {
         viewModelScope.launch {
             userActivityRepository.getUserNapData(
                 napId
@@ -90,7 +94,6 @@ class ONapDetailsViewModel @Inject constructor(val userActivityRepository: OreoU
     }
 
 
-
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
         val dummyList = ArrayList<Int>()
         for (i in 0..287) {
@@ -109,7 +112,7 @@ class ONapDetailsViewModel @Inject constructor(val userActivityRepository: OreoU
 
     }
 
-    fun getNapArrayData(duration:Int): ArrayList<SleepData.SleepDataBreakup> {
+    fun getNapArrayData(duration: Int): ArrayList<SleepData.SleepDataBreakup> {
         val child1 = SleepData.SleepDataBreakup(
             sleepType = "deep",
             date = null,

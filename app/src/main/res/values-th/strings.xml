@@ -1113,8 +1113,6 @@
     <string name="text_notifications">การแจ้งเตือน</string>
     <string name="text_metric">เมตริก</string>
     <string name="text_imperial">อิมพีเรียล</string>
-    <string name="text_metric_message">วัดเป็นเมตร กิโลกรัม และลิตร</string>
-    <string name="text_message_imperial">วัดเป็นฟุต นิ้ว และปอนด์</string>
     <string name="text_enable_notifications">เปิดใช้งานการแจ้งเตือน</string>
     <string name="text_notification_message">ให้ LUNA แจ้งเตือนคุณเกี่ยวกับ: ระดับแบตเตอรี่ การแจ้งเตือนการไม่เคลื่อนไหว ความคืบหน้ากิจกรรม การเตือนก่อนนอน และข้อมูลเชิงลึกเฉพาะตัว</string>
     <string name="text_track_your_cycle">ติดตามรอบเดือนของคุณ</string>
@@ -2037,6 +2035,8 @@
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">สร้างการออกกำลังกายเบา ๆ เพื่อรองรับความต้องการของร่างกายคุณในวันนี้</string>
     <string name="text_switch_to_regular_workout">เปลี่ยนเป็นการออกกำลังกายตามปกติ</string>
     <string name="text_switch_to_a_relaxed_workout">เปลี่ยนเป็นการออกกำลังกายแบบผ่อนคลาย</string>
+    <string name="text_metric_message">วัดเป็นเมตร กิโลกรัม ลิตร และเซลเซียส</string>
+    <string name="text_message_imperial">วัดเป็นฟุต นิ้ว ปอนด์ และฟาเรนไฮต์</string>
 
 
 </resources>

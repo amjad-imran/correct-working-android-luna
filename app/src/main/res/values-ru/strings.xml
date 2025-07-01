@@ -1112,8 +1112,6 @@
     <string name="text_notifications">Уведомления</string>
     <string name="text_metric">Метрическая</string>
     <string name="text_imperial">Имперская</string>
-    <string name="text_metric_message">Измерения в метрах, килограммах и литрах.</string>
-    <string name="text_message_imperial">Измерения в футах, дюймах и фунтах.</string>
     <string name="text_enable_notifications">Включить уведомления</string>
     <string name="text_notification_message">Разрешите LUNA уведомлять вас о заряде батареи, бездействии, прогрессе, напоминаниях о сне и персонализированных рекомендациях.</string>
     <string name="text_track_your_cycle">Отслеживайте цикл</string>
@@ -2053,6 +2051,7 @@
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Создайте лёгкую тренировку, чтобы поддержать потребности вашего тела сегодня.</string>
     <string name="text_switch_to_regular_workout">Переключиться на обычную тренировку</string>
     <string name="text_switch_to_a_relaxed_workout">Переключиться на расслабленную тренировку</string>
-
+    <string name="text_metric_message">Измеряется в метрах, килограммах, литрах и градусах Цельсия.</string>
+    <string name="text_message_imperial">Измеряется в футах, дюймах, фунтах и градусах Фаренгейта.</string>
 
 </resources>

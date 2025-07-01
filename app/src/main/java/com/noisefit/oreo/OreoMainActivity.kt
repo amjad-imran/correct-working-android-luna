@@ -1331,6 +1331,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                             caffeineEndTime = caffeineGraphData.caffeineEndTime,
                             caffeineValues = caffeineValues,
                         )
+
+                        val (message, maxQuantity) = viewModel.getMaxQuantityAndMessage(mainData)
+
+                        mainData.apply {
+                            this.message = message
+                            this.maxQuantity = maxQuantity
+                        }
+
+
                         navController?.navigate(
                             R.id.caffeineWindowScreenFragment,
                             Bundle().apply {
