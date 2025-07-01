@@ -51,6 +51,7 @@ interface OreoDeviceRepository {
 
     suspend fun getAiMealPlans(): Flow<Resource<BaseApiResponse<List<AiMealResponse>>?>>
     suspend fun getAiComfortMealPlans(): Flow<Resource<BaseApiResponse<AiMealResponse>?>>
+    suspend fun getAiBoosterMealPlans(): Flow<Resource<BaseApiResponse<AiMealResponse>?>>
 
     suspend fun getDailySummaryData(): Flow<Resource<BaseApiResponse<List<AiDailySummaryModel>>?>>
 

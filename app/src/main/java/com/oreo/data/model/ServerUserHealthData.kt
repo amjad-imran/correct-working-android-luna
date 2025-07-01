@@ -45,6 +45,7 @@ data class ServerUserHealthResponse(
     val summaryAvailable: Boolean? = false,
     val comfort_readiness: Boolean? = false,
     val comfort_cycle: Boolean? = false,
+    val booster_women: Boolean? = false,
     //
 ) : ColorfitData()
 

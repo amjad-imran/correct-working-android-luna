@@ -24,7 +24,6 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
-import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -295,6 +294,8 @@ class WorkoutPlansFragment :
                 binding.lytCreateRelaxedWorkout.root.gone()
                 binding.btnSwitch.gone()
             }
+
+            DietState.BOOSTER -> {}
         }
     }
 }

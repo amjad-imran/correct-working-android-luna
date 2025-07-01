@@ -134,6 +134,7 @@ constructor(
     var summaryAvailable: Boolean ?= null
     var ldwReadiness: Boolean ?= null
     var ldwCycleTracker: Boolean ?= null
+    var boosterWomen: Boolean ?= null
     var errorCode: String = ""
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
@@ -348,6 +349,7 @@ constructor(
                             summaryAvailable = it.summaryAvailable ?: false
                             ldwReadiness = it.comfort_readiness ?: false
                             ldwCycleTracker = it.comfort_cycle ?: false
+                            boosterWomen = it.booster_women ?: false
                             //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE

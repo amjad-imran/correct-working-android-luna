@@ -5,7 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 data class AiMealResponse(
     val day_name: String? = null,//day_1, day_2
-    val meals: List<AiMeals>? = null
+    val meals: List<AiMeals>? = null,
+    val booster: List<AiMeals>? = null,
 )
 
 @Parcelize

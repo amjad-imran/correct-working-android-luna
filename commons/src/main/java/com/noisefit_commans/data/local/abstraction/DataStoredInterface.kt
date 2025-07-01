@@ -40,6 +40,9 @@ interface DataStoredInterface {
     fun getLdwCycleTrackerData(): Boolean
     fun clearLdwCycleTrackerData()
 
+    fun setBoosterWomenData(isBooster: Boolean?)
+    fun getBoosterWomenData(): Boolean
+
 
     fun setIsInDemoMode(multiLogin: Boolean)
     fun isInDemoMode(): Boolean

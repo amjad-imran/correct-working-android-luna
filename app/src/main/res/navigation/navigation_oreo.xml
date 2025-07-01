@@ -1350,6 +1350,9 @@
         <argument
             android:name="mealName"
             app:argType="string" />
+        <argument
+            android:name="dietState"
+            app:argType="com.oreo.ui.chatGpt.functions.DietState" />
     </fragment>
     <fragment
         android:id="@+id/editNotificationGoalFragment"

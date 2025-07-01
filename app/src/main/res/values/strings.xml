@@ -2006,5 +2006,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_switch_to_regular_workout">Switch to Regular workout</string>
     <string name="text_switch_to_a_relaxed_workout">Switch to a Relaxed workout</string>
     <string name="text_just_now">Just now</string>
+    <string name="text_booster_foods">Booster foods</string>
+    <string name="text_menstrual_cycle_based">Menstrual cycle based</string>
 
 </resources>

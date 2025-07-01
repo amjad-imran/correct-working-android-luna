@@ -257,6 +257,7 @@ private const val IS_LOW_WORKOUT_PLAN_SETUP = "IS_LOW_WORKOUT_PLAN_SETUP"
 
 private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
+private const val BOOSTER_WOMEN = "BOOSTER_WOMEN"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -794,6 +795,20 @@ class DataStoredImpl
     override fun clearLdwCycleTrackerData() {
         mPrefs.edit()?.remove(LDW_CYCLE_TRACKER)?.commit()
     }
+
+    override fun setBoosterWomenData(isBooster: Boolean?) {
+        if (isBooster==null){
+            mPrefs.edit()?.remove(BOOSTER_WOMEN)?.commit()
+        }
+        else {
+            mPrefs.edit()?.putBoolean(BOOSTER_WOMEN, isBooster)?.commit()
+        }
+    }
+
+    override fun getBoosterWomenData(): Boolean {
+        return mPrefs.getBoolean(BOOSTER_WOMEN, false)
+    }
+
     //
 
     override fun getSleepNotificationTimeStamp(): Long {

@@ -179,6 +179,7 @@ class OreoUserActivityRepositoryImpl(
             var summaryAvailable: Boolean?= null
             var ldw_readiness: Boolean?= null
             var ldw_cycle_tracker: Boolean?= null
+            var booster_women: Boolean?= null
             //
 
             var apiStartDate: String? = startDate
@@ -273,7 +274,8 @@ class OreoUserActivityRepositoryImpl(
                                 caffeine = localDataStore.getCaffeineGraphData(),
                                 summaryAvailable = localDataStore.getSummaryAvailableData(),
                                 comfort_readiness = localDataStore.getLdwReadinessData(),
-                                comfort_cycle = localDataStore.getLdwCycleTrackerData()
+                                comfort_cycle = localDataStore.getLdwCycleTrackerData(),
+                                booster_women = localDataStore.getBoosterWomenData()
                             ),
                             message = "",
                         )
@@ -318,6 +320,7 @@ class OreoUserActivityRepositoryImpl(
                             summaryAvailable = response.summaryAvailable
                             ldw_readiness = response.comfort_readiness
                             ldw_cycle_tracker = response.comfort_cycle
+                            booster_women = response.booster_women
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -335,6 +338,7 @@ class OreoUserActivityRepositoryImpl(
                             localDataStore.setSummaryAvailableData(summaryAvailable)
                             localDataStore.setLdwReadinessData(ldw_readiness)
                             localDataStore.setLdwCycleTrackerData(ldw_cycle_tracker)
+                            localDataStore.setBoosterWomenData(booster_women)
                         }
                     }
                 }
@@ -384,7 +388,8 @@ class OreoUserActivityRepositoryImpl(
                                             caffeine = caffeineGraphData,
                                             summaryAvailable = summaryAvailable,
                                             comfort_readiness = ldw_readiness,
-                                            comfort_cycle = ldw_cycle_tracker
+                                            comfort_cycle = ldw_cycle_tracker,
+                                            booster_women = booster_women,
                                         ),
                                         message = "",
                                     )
