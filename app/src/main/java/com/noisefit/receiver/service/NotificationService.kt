@@ -23,6 +23,7 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.AppNotification
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +69,9 @@ constructor() : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         LOGS.d(TAG, "onMessageReceived event received ${Gson().toJson(message)}")
+        if(BuildConfig.DEBUG){
+            AppLogs.sendAppLogs("onMessageReceived event received ${Gson().toJson(message)}")
+        }
         message.data.apply {
             try {
                 val pushPayload = message.data
@@ -79,6 +83,8 @@ constructor() : FirebaseMessagingService() {
                     Freshchat.handleFcmMessage(this@NotificationService, message)
                 } else {
                     Logger.print { "$TAG onMessageReceived() : Not a MoEngage Payload." }
+                    AppLogs.sendAppLogs("onMessageReceived() : Not a MoEngage Payload.")
+
                     val extras = Bundle()
                     for ((key, value) in this) {
                         extras.putString(key, value)

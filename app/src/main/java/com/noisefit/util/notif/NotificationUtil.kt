@@ -23,6 +23,7 @@ import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY
 import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 
@@ -49,6 +50,10 @@ object NotificationUtil {
             notificationIndex,
             deepLink
         )
+        if(BuildConfig.DEBUG){
+            AppLogs.sendAppLogs("NotificationHelper.handleNotificationType Deeplink - $deepLink")
+        }
+
         /*val intent = Intent(context, SplashActivity::class.java)
         val contentIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)*/

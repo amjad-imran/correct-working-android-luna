@@ -42,6 +42,7 @@ import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.databinding.DefaultLoaderBinding
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -285,6 +286,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             viewModel.notificationType = it.getStringExtra(NOTIFICATION_BUNDLE_TYPE)
             viewModel.notificationIndex = it.getStringExtra(NOTIFICATION_BUNDLE_INDEX)
             viewModel.appLink = ApplicationUtils.parseAppLink(it.getStringExtra(NOTIFICATION_BUNDLE_LINK))
+
+            if(BuildConfig.DEBUG){
+                AppLogs.sendAppLogs("Splash Deeplink -  ${viewModel.appLink}")
+            }
             //viewModel.appLink = null
 
             intent1.data = null
