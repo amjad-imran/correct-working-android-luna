@@ -62,8 +62,11 @@ class WorkoutPlansFragment :
         }
         setRecycler()
 
-        handleAddWorkoutVisibility()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        handleAddWorkoutVisibility()
     }
 
 
