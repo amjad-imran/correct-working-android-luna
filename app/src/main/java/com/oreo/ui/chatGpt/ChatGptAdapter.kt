@@ -223,7 +223,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                 root.visible()
                 //ivMealImage.loadImage(ivMealImage.context, data.meal.img)
                 rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
-                rvMeals.adapter = SubMealAdapter(data.meal.meal?.let { ArrayList(it) } ?: ArrayList(), {})
+                rvMeals.adapter = SubMealAdapter(data.meal.meal ?: ArrayList(), {})
             }
 
         }

@@ -22,7 +22,6 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
-import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -45,7 +44,11 @@ class AiMealPlanFragment :
                 navOptions = null,
                 navigatorExtras = FragmentNavigatorExtras(view to "sharedImage_"))*/
 
-            navigate(R.id.aiMealDetailFragment, bundleOf("meal" to meal, "mealName" to mealName))
+            navigate(R.id.aiMealDetailFragment, bundleOf(
+                "meal" to meal,
+                "mealName" to mealName,
+                "dietState" to viewModel.dietState.value
+            ))
         })
     }
 
@@ -332,6 +335,8 @@ class AiMealPlanFragment :
                 binding.lytCreateComfortFood.root.gone()
                 binding.btnSwitch.gone()
             }
+
+            DietState.BOOSTER -> {}
         }
     }
 

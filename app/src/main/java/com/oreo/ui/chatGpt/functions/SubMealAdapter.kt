@@ -10,7 +10,7 @@ import com.noisefit.luna.databinding.RowSubMealBinding
 import com.noisefit_commans.ui.gone
 
 class SubMealAdapter(
-    val mDataSet: ArrayList<AiMeal>,
+    val mDataSet: List<AiMeal>,
     val onMealSelected: (AiMeal) -> Unit,
     val dietState: DietState?=null
 ) :
@@ -55,11 +55,4 @@ class SubMealAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(mDataSet[position])
     }
-
-    fun updateDataSet(data: List<AiMeal>){
-        mDataSet.clear()
-        mDataSet.addAll(data)
-        notifyDataSetChanged()
-    }
-
 }

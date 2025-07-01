@@ -12,7 +12,6 @@ import com.noisefit.luna.databinding.RowMealDataBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.oreo.ui.chatGpt.functions.MealPlanViewModel.DietState
 
 class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.ViewHolder>() {

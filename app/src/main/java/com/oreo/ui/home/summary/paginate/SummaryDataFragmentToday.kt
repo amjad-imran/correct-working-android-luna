@@ -229,6 +229,7 @@ class SummaryDataFragmentToday :
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 viewModel.caffeineGraphData = mainViewModel.caffeineGraphData
                 viewModel.summaryAvailable = mainViewModel.summaryAvailable
+                viewModel.localDataStore.setBoosterWomenData(true)
                 setUi(dash.first, dash.second, dash.third)
             }
         }

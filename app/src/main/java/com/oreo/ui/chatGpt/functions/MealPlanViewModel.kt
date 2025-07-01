@@ -155,6 +155,46 @@ class MealPlanViewModel @Inject constructor(
         }
     }
 
+    fun getBoosterMealPlans() {
+        viewModelScope.launch {
+            oreoDeviceRepository.getAiBoosterMealPlans().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getBoosterMealPlans()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      *@param position-> 1..7 (Mon - Sun)
      */
@@ -179,6 +219,8 @@ class MealPlanViewModel @Inject constructor(
                     DietState.NORMAL, null -> {
                         dayMealList.postValue(Pair(meals.meals,DietState.NORMAL))
                     }
+
+                    DietState.BOOSTER -> {}
                 }
             }else {
                 dayMealList.postValue(Pair(meals.meals,DietState.NORMAL))
@@ -212,8 +254,8 @@ class MealPlanViewModel @Inject constructor(
         )
     }
 
-    enum class DietState {
-        REGULAR, COMFORT, NORMAL
-    }
+}
 
+enum class DietState {
+    REGULAR, COMFORT, NORMAL, BOOSTER
 }
