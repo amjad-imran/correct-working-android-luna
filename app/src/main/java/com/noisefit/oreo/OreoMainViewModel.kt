@@ -12,6 +12,7 @@ import com.freshchat.consumer.sdk.FreshchatUser
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
@@ -53,6 +54,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ImpactData
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
@@ -63,6 +65,7 @@ import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -75,11 +78,14 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.Duration
 import java.time.Instant
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 const val HEALTH_DATA_PAGINATION_DAYS = 7
@@ -97,6 +103,7 @@ constructor(
     val dataConverter: DataConverter,
     val keyValueDataSource: KeyValueDataSource,
     val locationDataSource: LocationDataSource,
+    val resourceProvider: ResourcesProvider,
     val userActivityRepository: OreoUserActivityRepository,
     val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
@@ -1393,6 +1400,104 @@ constructor(
         }
 
         return null
+    }
+
+    fun getMaxQuantityAndMessage(data: CaffeineWindowData): Pair<String, Int?> {
+
+        val graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val caffeineStart =
+            LocalTime.parse(data.caffeineStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        val caffeineEnd =
+            LocalTime.parse(data.caffeineEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+        val messageList = listOf(
+            listOf(
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message5),
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message6)
+            ),
+            listOf(
+                resourceProvider.getString(R.string.text_boost_focus_and_alertness_this_is_your_optimal_window_to_enjoy_caffeine_for_peak_performance),
+                resourceProvider.getString(R.string.text_maximize_energy_and_mental_clarity_this_is_your_ideal_time_for_a_caffeine_boost_that_works)
+            ),
+            listOf(
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message3),
+                resourceProvider.getString(R.string.text_avoid_caffeine_now_message4)
+            ),
+
+            )
+
+        val todayDate = java.time.LocalDate.now()
+        val now = java.time.LocalDateTime.now()
+
+        val graphStartDate = java.time.LocalDateTime.of(todayDate, graphStart)
+        val caffeineStartDate = java.time.LocalDateTime.of(todayDate, caffeineStart)
+        val caffeineEndDate = java.time.LocalDateTime.of(todayDate, caffeineEnd)
+        val graphEndDate = if (caffeineEnd <= graphEnd) {//same day case
+            java.time.LocalDateTime.of(todayDate, graphEnd)
+        } else {//Next day case
+            java.time.LocalDateTime.of(todayDate.plusDays(1L), graphEnd)
+        }
+
+        val startOffset = graphStartDate.minusHours(3)
+
+        var highlightState: HighlightState? = null
+        var message: String? = null
+        when {
+            now in startOffset..caffeineStartDate -> {
+                message = messageList[0][Random.nextInt(0, 2)]
+                highlightState = HighlightState.START
+            }
+
+            now in caffeineStartDate..caffeineEndDate -> {
+                message = messageList[1][Random.nextInt(0, 2)]
+                highlightState = HighlightState.CAFFEINE
+            }
+
+            now in caffeineEndDate..graphEndDate -> {
+                message = messageList[2][Random.nextInt(0, 2)]
+                highlightState = HighlightState.END
+            }
+
+            else -> {
+                message = messageList[2][Random.nextInt(0, 2)]
+                highlightState = HighlightState.END
+            }
+        }
+
+        if (highlightState == HighlightState.START || highlightState == HighlightState.END) {
+            return Pair(message ?: "", null)
+        }
+
+        val highlightedIndex = getTimeIndex(
+            caffeineStart!!,
+            caffeineEnd!!,
+            LocalTime.now(),
+            data.caffeineValues.size
+        )
+
+        return if (highlightedIndex != -1) {
+            Pair(message ?: "", data.caffeineValues[highlightedIndex])
+        } else {
+            Pair(message ?: "", null)
+        }
+
+    }
+
+    fun getTimeIndex(
+        startTime: LocalTime,
+        endTime: LocalTime,
+        currentTime: LocalTime,
+        parts: Int
+    ): Int {
+        if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) return -1
+
+        val totalDuration = Duration.between(startTime, endTime).toMinutes()
+        val interval = totalDuration / parts
+
+        val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
+
+        return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
     }
 
 
