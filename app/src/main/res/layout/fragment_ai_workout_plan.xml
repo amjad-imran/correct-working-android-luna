@@ -60,6 +60,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:layout_marginTop="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -100,6 +101,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMeals"
+                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp" />

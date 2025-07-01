@@ -43,8 +43,8 @@ data class ServerUserHealthResponse(
 
     @SerializedName("summary_available")
     val summaryAvailable: Boolean? = false,
-    val ldw_readiness: Boolean? = false,
-    val ldw_cycle_tracker: Boolean? = false,
+    val comfort_readiness: Boolean? = false,
+    val comfort_cycle: Boolean? = false,
     //
 ) : ColorfitData()
 
