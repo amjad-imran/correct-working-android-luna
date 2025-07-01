@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -27,6 +28,7 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class ONapDetailsFragment :
@@ -242,9 +244,22 @@ class ONapDetailsFragment :
 
 
         if (!isTempDataNull) {
-            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakup?.avg}"
+
+            if (mViewModel.sessionManager.isMetric()) {
+                binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°C"
+                binding.lytTemperature.lytSubtitleValue1.tvValue.text = String.format(
+                    locale = Locale.US,
+                    "%.1f",
+                    AppConversionUtils.fahrenheitToCelsius(it.temperatureBreakup?.avg?:0.0f)
+                )
+
+            } else {
+                binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
+                binding.lytTemperature.lytSubtitleValue1.tvValue.text = String.format(locale = Locale.US, "%.1f", it.temperatureBreakup?.avg)
+            }
+
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
-            binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
+
         } else {
             temperatureGraphDefaultView()
         }
@@ -517,7 +532,16 @@ class ONapDetailsFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData.addAll(temperatureBreakUpData)
+
+            val convertedData = if(mViewModel.sessionManager.isMetric()){
+                temperatureBreakUpData.map {
+                    AppConversionUtils.fahrenheitToCelsius(it)
+                }
+            }else{
+                temperatureBreakUpData
+            }
+
+            breakUpData.addAll(convertedData)
         }
 
         val baseTimeListNew =

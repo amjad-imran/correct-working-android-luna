@@ -1080,8 +1080,6 @@
     <string name="text_notifications">Notificaciones</string>
     <string name="text_metric">Métrico</string>
     <string name="text_imperial">Imperial</string>
-    <string name="text_metric_message">Mediciones en metros, kilogramos y litros.</string>
-    <string name="text_message_imperial">Mediciones en pies, pulgadas y libras.</string>
     <string name="text_enable_notifications">Habilitar notificaciones</string>
     <string name="text_notification_message">Permite que LUNA te actualice sobre: nivel de batería, alertas de inactividad, progreso de actividad, recordatorios de hora de dormir y análisis personalizados.</string>
     <string name="text_track_your_cycle">Sigue tu ciclo</string>
@@ -2002,6 +2000,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crea un entrenamiento ligero para apoyar las necesidades de tu cuerpo hoy.</string>
     <string name="text_switch_to_regular_workout">Cambiar a entrenamiento regular</string>
     <string name="text_switch_to_a_relaxed_workout">Cambiar a un entrenamiento relajado</string>
-
+    <string name="text_metric_message">Mide en metros, kilogramos, litros y grados Celsius.</string>
+    <string name="text_message_imperial">Mide en pies, pulgadas, libras y grados Fahrenheit.</string>
 
 </resources>

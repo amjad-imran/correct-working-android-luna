@@ -1112,8 +1112,6 @@
     <string name="text_notifications">Notifiche</string>
     <string name="text_metric">Metrico</string>
     <string name="text_imperial">Imperiale</string>
-    <string name="text_metric_message">Misure in metri, chilogrammi e litri.</string>
-    <string name="text_message_imperial">Misure in piedi, pollici e libbre.</string>
     <string name="text_enable_notifications">Abilita notifiche</string>
     <string name="text_notification_message">Consenti a LUNA di aggiornarti su: livello batteria, avvisi di inattività, progressi dell\'attività, promemoria per il sonno e approfondimenti personalizzati.</string>
     <string name="text_track_your_cycle">Monitora il tuo ciclo</string>
@@ -2032,6 +2030,7 @@
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crea un allenamento leggero per supportare le esigenze del tuo corpo oggi.</string>
     <string name="text_switch_to_regular_workout">Passa a un allenamento regolare</string>
     <string name="text_switch_to_a_relaxed_workout">Passa a un allenamento rilassato</string>
-
+    <string name="text_metric_message">Misura in metri, chilogrammi, litri e gradi Celsius.</string>
+    <string name="text_message_imperial">Misura in piedi, pollici, libbre e gradi Fahrenheit.</string>
 
 </resources>

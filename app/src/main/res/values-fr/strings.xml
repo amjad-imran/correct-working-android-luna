@@ -1102,8 +1102,6 @@
     <string name="text_notifications">Notifications</string>
     <string name="text_metric">Métrique</string>
     <string name="text_imperial">Impérial</string>
-    <string name="text_metric_message">Mesures en mètres, kilogrammes et litres.</string>
-    <string name="text_message_imperial">Mesures en pieds, pouces et livres.</string>
     <string name="text_enable_notifications">Activer les notifications</string>
     <string name="text_notification_message">Autorisez LUNA à vous informer sur : niveau de batterie, alertes d\'inactivité, progression d\'activité, rappels de coucher, et informations personnalisées.</string>
     <string name="text_track_your_cycle">Suivez votre cycle</string>
@@ -2151,6 +2149,7 @@ onjour, Luna"</string>
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">Crée un entraînement léger pour répondre aux besoins de ton corps aujourd’hui.</string>
     <string name="text_switch_to_regular_workout">Passer à un entraînement régulier</string>
     <string name="text_switch_to_a_relaxed_workout">Passer à un entraînement détendu</string>
-
+    <string name="text_metric_message">Mesure en mètres, kilogrammes, litres et degrés Celsius.</string>
+    <string name="text_message_imperial">Mesure en pieds, pouces, livres et degrés Fahrenheit.</string>
 
 </resources>

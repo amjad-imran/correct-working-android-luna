@@ -1105,8 +1105,6 @@
     <string name="text_notifications">通知</string>
     <string name="text_metric">公制</string>
     <string name="text_imperial">英制</string>
-    <string name="text_metric_message">以米、千克和升为单位。</string>
-    <string name="text_message_imperial">以英尺、英寸和磅为单位。</string>
     <string name="text_enable_notifications">启用通知</string>
     <string name="text_notification_message">允许 LUNA 向您发送电量、久坐提醒、活动进度、就寝提醒和个性化洞察的通知。</string>
     <string name="text_track_your_cycle">跟踪您的周期</string>
@@ -2025,5 +2023,7 @@
     <string name="text_create_a_light_workout_to_support_your_body_s_needs_today">创建一个轻度锻炼来支持你身体今天的需求。</string>
     <string name="text_switch_to_regular_workout">切换到常规锻炼</string>
     <string name="text_switch_to_a_relaxed_workout">切换到放松锻炼</string>
+    <string name="text_metric_message">以米、千克、升和摄氏度为单位。</string>
+    <string name="text_message_imperial">以英尺、英寸、磅和华氏度为单位。</string>
 
 </resources>
