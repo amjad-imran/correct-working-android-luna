@@ -307,7 +307,7 @@ class AiMealPlanFragment :
                 {
                     navigate(R.id.aiMealDetailFragment, bundleOf(
                         "meal" to it,
-                        "mealName" to it.meal_name,
+                        "mealName" to (it.title ?: getString(R.string.text_booster_foods)),
                         "dietState" to DietState.BOOSTER
                     ))
                 },

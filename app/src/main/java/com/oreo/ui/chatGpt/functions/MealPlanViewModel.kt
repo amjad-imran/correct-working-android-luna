@@ -199,13 +199,14 @@ class MealPlanViewModel @Inject constructor(
 
                             val finalList: ArrayList<AiMeal> = ArrayList()
 
-                            aiMealResponse.booster?.let { aiMeals ->
-                                aiMeals.forEach {
-                                    it.meal?.let { it1 -> finalList.addAll(it1) }
+                            aiMealResponse.booster?.forEach {aiMeals ->
+                                aiMeals.meal?.forEach {
+                                    finalList.add(it.apply { title = aiMeals.meal_type })
                                 }
-                                if(aiMeals.isNotEmpty()){
-                                    femaleBoosterMeals.postValue(finalList)
-                                }
+                            }
+
+                            if(finalList.isNotEmpty()){
+                                femaleBoosterMeals.postValue(finalList)
                             }
 
                             LOGS.d("svsdv : $finalList")
