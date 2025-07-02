@@ -2055,5 +2055,8 @@
     <string name="text_switch_to_a_relaxed_workout">Mudar para treino relaxado</string>
     <string name="text_metric_message">Mede em metros, quilogramas, litros e graus Celsius.</string>
     <string name="text_message_imperial">Mede em pés, polegadas, libras e graus Fahrenheit.</string>
+    <string name="text_booster_foods">Alimentos estimulantes</string>
+    <string name="text_menstrual_cycle_based">Baseado no ciclo menstrual</string>
+
 
 </resources>

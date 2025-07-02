@@ -2031,5 +2031,8 @@
     <string name="text_switch_to_a_relaxed_workout">Overschakelen naar een ontspannen training</string>
     <string name="text_metric_message">Meet in meters, kilogrammen, liters en graden Celsius.</string>
     <string name="text_message_imperial">Meet in voeten, inches, ponden en graden Fahrenheit.</string>
+    <string name="text_booster_foods">Booster-voeding</string>
+    <string name="text_menstrual_cycle_based">Gebaseerd op de menstruatiecyclus</string>
+
 
 </resources>
