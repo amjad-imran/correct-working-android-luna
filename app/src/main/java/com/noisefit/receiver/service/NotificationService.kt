@@ -118,10 +118,10 @@ constructor() : FirebaseMessagingService() {
 //                    LOGS.d("NOTIFICATION_TYPE $notificationType ${message.notification?.body} ${message.data[NOTIFICATION_INDEX_EXTRA]}")
                     // not from CleverTap handle yourself or pass to another provider
 
-                    launchSendNotificationJob(
+                    /*launchSendNotificationJob(
                         message.notification?.title ?: "",
                         message.notification?.body ?: ""
-                    )
+                    )*/
                 }
 
             } catch (t: Throwable) {

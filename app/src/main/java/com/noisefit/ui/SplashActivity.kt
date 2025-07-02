@@ -285,7 +285,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
             viewModel.notificationType = it.getStringExtra(NOTIFICATION_BUNDLE_TYPE)
             viewModel.notificationIndex = it.getStringExtra(NOTIFICATION_BUNDLE_INDEX)
-            viewModel.appLink = ApplicationUtils.parseAppLink(it.getStringExtra(NOTIFICATION_BUNDLE_LINK))
+
+            val deeplinkUrl = it.getStringExtra(NOTIFICATION_LINK)
+            val path = deeplinkUrl?.removePrefix("https://link.lunazone.com")
+            viewModel.appLink = ApplicationUtils.parseAppLink(path)
 
             if(BuildConfig.DEBUG){
                 AppLogs.sendAppLogs("Splash Deeplink -  ${viewModel.appLink}")
