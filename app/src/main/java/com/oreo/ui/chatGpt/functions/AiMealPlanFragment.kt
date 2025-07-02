@@ -167,6 +167,16 @@ class AiMealPlanFragment :
             viewModel.localDataStore.setIsLowDietPlanSetUp(false)
             binding.lytCreateComfortFood.root.gone()
         }
+
+        binding.lytBoosterFoods.imageView80.setOnClickListener {
+            viewModel.femaleBoosterMeals.value?.get(0).let {meal ->
+                navigate(R.id.aiMealDetailFragment, bundleOf(
+                    "meal" to meal,
+                    "mealName" to (meal?.meal_name ?: ""),
+                    "dietState" to DietState.BOOSTER
+                ))
+            }
+        }
     }
 
     override fun subscribeObservers() {
