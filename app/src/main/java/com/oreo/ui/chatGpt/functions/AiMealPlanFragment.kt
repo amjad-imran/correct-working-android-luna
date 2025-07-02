@@ -21,6 +21,7 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import androidx.navigation.fragment.navArgs
 
 @AndroidEntryPoint
 class AiMealPlanFragment :
@@ -49,8 +50,12 @@ class AiMealPlanFragment :
         })
     }
 
+    private val navArgs: AiMealPlanFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.isComfortEnabled = navArgs.isComfortEnabled
 
         binding.toolbar.tvTitle.text = getString(R.string.text_nutrition_plan)
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
@@ -281,7 +286,7 @@ class AiMealPlanFragment :
 
     private fun handleBoosterFoods(aiMeals: ArrayList<AiMeal>) {
         if(
-            currentDay != viewModel.currentSelectedWeekDayPosition.value ||
+            currentDay != viewModel.selectedPosition.value ||
             !viewModel.localDataStore.getBoosterWomenData() ||
             viewModel.femaleBoosterMeals.value.isNullOrEmpty()
         ){

@@ -41,6 +41,8 @@ class MealPlanViewModel @Inject constructor(
 
     val dietState = MutableLiveData<DietState>()
 
+    var isComfortEnabled = false
+
 //    var rememberCurDayDietState: DietState?
 
     /*val isRegularDiet = MutableLiveData<Boolean>()
@@ -86,22 +88,29 @@ class MealPlanViewModel @Inject constructor(
                             mealResponse.clear()
                             mealResponse.addAll(it)
 
-                            if (
-                                !localDataStore.getLdwReadinessData() &&
-                                !localDataStore.getLdwCycleTrackerData()
-                            ) {
-                                dietState.value = DietState.NORMAL
-                                setSelectedPosition(LocalDate.now().dayOfWeek.value)
-                            } else {
-                                val isLowDietPlanSetUp =  localDataStore.isLowDietPlanSetUp()?.isSetup ?: false
-                                if(isLowDietPlanSetUp){
-                                    getComfortMealPlans()
-                                }else{
-                                    dietState.value = DietState.REGULAR
+                            if(isComfortEnabled){
+                                getComfortMealPlans()
+                            }else{
+
+                                if (
+                                    !localDataStore.getLdwReadinessData() &&
+                                    !localDataStore.getLdwCycleTrackerData()
+                                ) {
+                                    dietState.value = DietState.NORMAL
                                     setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                                } else {
+                                    val isLowDietPlanSetUp =  localDataStore.isLowDietPlanSetUp()?.isSetup ?: false
+                                    if(isLowDietPlanSetUp){
+                                        getComfortMealPlans()
+                                    }else{
+                                        dietState.value = DietState.REGULAR
+                                        setSelectedPosition(LocalDate.now().dayOfWeek.value)
+                                    }
+                                    dietState.value = DietState.REGULAR
                                 }
-                                dietState.value = DietState.REGULAR
+
                             }
+
                         }
                     }
                 }

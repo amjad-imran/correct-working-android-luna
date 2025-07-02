@@ -1234,6 +1234,10 @@
         android:id="@+id/workoutPlansFragment"
         android:name="com.oreo.ui.chatGpt.functions.WorkoutPlansFragment"
         android:label="fragment_workout_plans">
+        <argument
+            android:name="isComfortEnabled"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_workoutPlansFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
@@ -1271,6 +1275,10 @@
         android:id="@+id/aiMealPlanFragment"
         android:name="com.oreo.ui.chatGpt.functions.AiMealPlanFragment"
         android:label="fragment_ai_workout_plan">
+        <argument
+            android:name="isComfortEnabled"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_aiMealPlanFragment_to_chatGptFragment"
             app:destination="@id/chatGptFragment"
