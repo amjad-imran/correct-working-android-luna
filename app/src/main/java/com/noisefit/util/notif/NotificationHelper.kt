@@ -132,7 +132,7 @@ object NotificationHelper {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_TYPE, notificationType)
             putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_INDEX, notificationIndex)
-            putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_LINK, deepLink)
+            putExtra(NotificationEventsClass.NOTIFICATION_LINK, deepLink)
         }
 
         return PendingIntent.getActivity(
