@@ -26,7 +26,13 @@ class SubMealAdapter(
                 binding.imageView65.setImageResource(R.drawable.back_nutrition_card_comfort)
                 binding.tvTitle.setTextColor("#00298F".toColorInt())
                 binding.tvSubTitle.setTextColor("#E60048E3".toColorInt())
-            }else{
+            }
+            else if(dietState==DietState.BOOSTER){
+                binding.imageView65.setImageResource(R.drawable.back_nutrition_card_booster)
+                binding.tvTitle.setTextColor("#FFC0D9".toColorInt())
+                binding.tvSubTitle.setTextColor("#E6E180B2".toColorInt())
+            }
+            else{
                 binding.imageView65.setImageResource(R.drawable.back_nutrition_card)
                 binding.tvTitle.setTextColor("#01460B".toColorInt())
                 binding.tvSubTitle.setTextColor("#E611551B".toColorInt())

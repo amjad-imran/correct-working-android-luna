@@ -43,11 +43,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMeals"
+        android:id="@+id/rvBoosterMeals"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

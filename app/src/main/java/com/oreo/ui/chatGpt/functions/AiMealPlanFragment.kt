@@ -6,10 +6,9 @@ import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.data.model.AiMeal
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiWorkoutPlanBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -19,9 +18,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
-import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
-import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -38,7 +35,7 @@ class AiMealPlanFragment :
     val currentDay = LocalDate.now().dayOfWeek.value;
 
     private val mealsAdapter: MealsAdapter by lazy {
-        MealsAdapter(onMealSelected = { view,meal, mealName ->
+        MealsAdapter(onMealSelected = { view,meal, mealName, dietState ->
            /* findNavController().navigate(R.id.aiMealDetailFragment,
                 args = bundleOf("meal" to meal, "mealName" to mealName),
                 navOptions = null,
@@ -47,7 +44,7 @@ class AiMealPlanFragment :
             navigate(R.id.aiMealDetailFragment, bundleOf(
                 "meal" to meal,
                 "mealName" to mealName,
-                "dietState" to viewModel.dietState.value
+                "dietState" to dietState
             ))
         })
     }
@@ -64,6 +61,12 @@ class AiMealPlanFragment :
             viewModel.setSelectedPosition(viewModel.selectedPosition.value ?: LocalDate.now().dayOfWeek.value)
         }
 
+        if(
+            viewModel.localDataStore.getBoosterWomenData() &&
+            viewModel.femaleBoosterMeals.value.isNullOrEmpty()
+        ){
+            viewModel.getBoosterMealPlans()
+        }
 
         setRecycler()
     }
@@ -192,7 +195,11 @@ class AiMealPlanFragment :
         }
 
         viewModel.dayMealList.observe(this) {
-
+            if(viewModel.femaleBoosterMeals.value.isNullOrEmpty()){
+                binding.lytBoosterFoods.root.gone()
+            }else{
+                viewModel.femaleBoosterMeals.value?.let { handleBoosterFoods(it) }
+            }
             aisehi(it.second)
             LOGS.d("yashhhhhhhh : $it")
             mealsAdapter.setDataSet(it.first ?: ArrayList(), it.second)
@@ -228,6 +235,10 @@ class AiMealPlanFragment :
             }
         }
 
+        viewModel.femaleBoosterMeals.observe(this){ aiMeals ->
+            handleBoosterFoods(aiMeals)
+        }
+
     }
 
     private fun setRecycler() {
@@ -236,6 +247,8 @@ class AiMealPlanFragment :
 
         binding.rvMeals.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMeals.adapter = mealsAdapter
+
+        binding.lytBoosterFoods.rvBoosterMeals.layoutManager = LinearLayoutManager(requireContext())
     }
 
 
@@ -263,6 +276,29 @@ class AiMealPlanFragment :
             } else {
                 it.setBackgroundResource(0)
             }
+        }
+    }
+
+    private fun handleBoosterFoods(aiMeals: ArrayList<AiMeal>) {
+        if(
+            currentDay != viewModel.currentSelectedWeekDayPosition.value ||
+            !viewModel.localDataStore.getBoosterWomenData() ||
+            viewModel.femaleBoosterMeals.value.isNullOrEmpty()
+        ){
+            binding.lytBoosterFoods.root.gone()
+        }else{
+            binding.lytBoosterFoods.rvBoosterMeals.adapter = SubMealAdapter(
+                aiMeals,
+                {
+                    navigate(R.id.aiMealDetailFragment, bundleOf(
+                        "meal" to it,
+                        "mealName" to it.meal_name,
+                        "dietState" to DietState.BOOSTER
+                    ))
+                },
+                DietState.BOOSTER
+            )
+            binding.lytBoosterFoods.root.visible()
         }
     }
 

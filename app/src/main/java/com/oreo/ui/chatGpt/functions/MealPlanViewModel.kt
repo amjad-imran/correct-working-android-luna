@@ -35,6 +35,8 @@ class MealPlanViewModel @Inject constructor(
     val dayMealList = MutableLiveData<Pair<List<AiMeals>?,DietState>>()
 
     val currentDayBoosterMeals = MutableLiveData<AiMealResponse>()
+
+    val femaleBoosterMeals = MutableLiveData<ArrayList<AiMeal>>()
 //    val currentDayRegularMeals = MutableLiveData<AiMealResponse>()
 
     val dietState = MutableLiveData<DietState>()
@@ -184,9 +186,20 @@ class MealPlanViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.data?.let { aiMealResponse ->
 
+                            val finalList: ArrayList<AiMeal> = ArrayList()
 
+                            aiMealResponse.booster?.let { aiMeals ->
+                                aiMeals.forEach {
+                                    it.meal?.let { it1 -> finalList.addAll(it1) }
+                                }
+                                if(aiMeals.isNotEmpty()){
+                                    femaleBoosterMeals.postValue(finalList)
+                                }
+                            }
+
+                            LOGS.d("svsdv : $finalList")
 
                         }
                     }

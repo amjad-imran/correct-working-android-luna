@@ -13,7 +13,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 
-class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
+class MealsAdapter(val onMealSelected: (View, AiMeal, String, DietState) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
 
     private val mDataSet = ArrayList<AiMeals>()
@@ -27,8 +27,8 @@ class MealsAdapter(val onMealSelected: (View, AiMeal, String) -> Unit) :
             binding.rvMeals.layoutManager = LinearLayoutManager(binding.root.context)
             binding.rvMeals.adapter = SubMealAdapter(
                 data.meal ?: ArrayList(),
-                onMealSelected = {
-                    onMealSelected.invoke(binding.root, it, data.meal_type ?: "")
+                onMealSelected = { subAiMeal ->
+                    onMealSelected.invoke(binding.root, subAiMeal, data.meal_type ?: "", mDietState)
                 },
                 mDietState
             )

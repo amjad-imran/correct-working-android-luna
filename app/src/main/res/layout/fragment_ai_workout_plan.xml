@@ -83,14 +83,14 @@
                 />
 
 
-            <!--<include
+            <include
                 android:id="@+id/lytBoosterFoods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/row_sub_meal"
+                layout="@layout/layout_ai_booster_food"
                 android:visibility="gone"
                 tools:visibility="visible"
-                />-->
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNutrients"
