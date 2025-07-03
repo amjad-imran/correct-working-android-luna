@@ -2053,8 +2053,8 @@
     <string name="text_switch_to_a_relaxed_workout">Переключиться на расслабленную тренировку</string>
     <string name="text_metric_message">Измеряется в метрах, килограммах, литрах и градусах Цельсия.</string>
     <string name="text_message_imperial">Измеряется в футах, дюймах, фунтах и градусах Фаренгейта.</string>
-    <string name="text_booster_foods">Продукты-усилители</string>
-    <string name="text_menstrual_cycle_based">На основе менструального цикла</string>
+    <string name="text_booster_foods">Бустеры</string>
+    <string name="text_menstrual_cycle_based">По циклу</string>
 
 
 </resources>

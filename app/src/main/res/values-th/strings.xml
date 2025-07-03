@@ -2037,8 +2037,8 @@
     <string name="text_switch_to_a_relaxed_workout">เปลี่ยนเป็นการออกกำลังกายแบบผ่อนคลาย</string>
     <string name="text_metric_message">วัดเป็นเมตร กิโลกรัม ลิตร และเซลเซียส</string>
     <string name="text_message_imperial">วัดเป็นฟุต นิ้ว ปอนด์ และฟาเรนไฮต์</string>
-    <string name="text_booster_foods">อาหารเสริมพลัง</string>
-    <string name="text_menstrual_cycle_based">อ้างอิงตามรอบประจำเดือน</string>
+    <string name="text_booster_foods">เพิ่มพลัง</string>
+    <string name="text_menstrual_cycle_based">ตามรอบเดือน</string>
 
 
 

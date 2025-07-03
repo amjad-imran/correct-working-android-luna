@@ -561,7 +561,7 @@ interface DataStoredInterface {
     fun isLowWorkoutPlanSetUp(): ComfortDietWorkoutModel?
     fun setIsWorkoutPlanSetUp(isSetUp: Boolean)
 
-    fun clearComfortFoodAndWorkoutData()
+    fun clearBoosterComfortFoodAndWorkoutData()
 }
 
 enum class AppTrackEvent {

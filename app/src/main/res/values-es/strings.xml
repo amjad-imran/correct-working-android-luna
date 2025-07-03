@@ -2002,8 +2002,8 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_switch_to_a_relaxed_workout">Cambiar a un entrenamiento relajado</string>
     <string name="text_metric_message">Mide en metros, kilogramos, litros y grados Celsius.</string>
     <string name="text_message_imperial">Mide en pies, pulgadas, libras y grados Fahrenheit.</string>
-    <string name="text_booster_foods">Alimentos potenciadores</string>
-    <string name="text_menstrual_cycle_based">Basado en el ciclo menstrual</string>
+    <string name="text_booster_foods">Potenciadores</string>
+    <string name="text_menstrual_cycle_based">Según ciclo</string>
 
 
 </resources>
