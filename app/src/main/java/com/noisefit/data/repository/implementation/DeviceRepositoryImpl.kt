@@ -494,7 +494,8 @@ class DeviceRepositoryImpl(
         firmwareLogs: File?,
         title: String?,
         description: String?,
-        mac: String?
+        mac: String?,
+        serialNo: String?
     ): Flow<Resource<BaseApiResponseData<Any>>> {
         var appLog: MultipartBody.Part? = null
         var ringLog: MultipartBody.Part? = null
@@ -540,6 +541,7 @@ class DeviceRepositoryImpl(
                 title?.getRequestBody(),
                 description?.getRequestBody(),
                 mac?.getRequestBody(),
+                serialNo?.getRequestBody(),
             )
         }
     }

@@ -59,7 +59,8 @@ interface DeviceRepository {
         firmwareLogs: File?,
         title: String?,
         description: String?,
-        mac:String?
+        mac:String?,
+        serialNo:String?
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
 
 
