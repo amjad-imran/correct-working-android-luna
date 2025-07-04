@@ -57,8 +57,9 @@ interface DeviceRepository {
         appLogs: File?,
         ringLogs: File?,
         firmwareLogs: File?,
-        title: String,
-        description: String?
+        title: String?,
+        description: String?,
+        mac:String?
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
 
 

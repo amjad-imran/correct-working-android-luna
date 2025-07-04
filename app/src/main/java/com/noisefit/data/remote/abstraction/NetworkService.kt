@@ -143,6 +143,7 @@ interface NetworkService {
         @Part firmwareLogs: MultipartBody.Part?,
         @Part("title") title: RequestBody?,
         @Part("description") description: RequestBody?,
+        @Part("mac") mac: RequestBody?,
     ): BaseApiResponseData<Any>
 
     @Multipart
