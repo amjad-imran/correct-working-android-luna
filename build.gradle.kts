@@ -1,7 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-
-
 
 buildscript {
 
@@ -17,8 +13,8 @@ buildscript {
 }
 plugins {
     alias(libs.plugins.androidApplication) apply false
-    id("com.android.library") version "8.3.2" apply false
-    id("org.jetbrains.kotlin.jvm") version "2.0.0" apply false
+    id("com.android.library") version "8.11.0" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.2.0" apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
 }
 

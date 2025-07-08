@@ -23,4 +23,8 @@ class LocationDataModel(
     override fun getSnippet(): String {
         return ""
     }
+
+    override fun getZIndex(): Float? {
+        return 0f
+    }
 }

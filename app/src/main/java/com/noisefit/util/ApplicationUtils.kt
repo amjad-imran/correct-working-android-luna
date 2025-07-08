@@ -440,7 +440,7 @@ object ApplicationUtils {
     private suspend fun isWorkScheduled1(workName: String, context: Context): Boolean {
         var running = false
         val workManager = WorkManager.getInstance(context)
-        val workInfos = workManager.getWorkInfosForUniqueWork(workName).await()
+        val workInfos = workManager.getWorkInfosForUniqueWork(workName).get()
         if (workInfos == null || workInfos.size == 0) return false
         for (workStatus in workInfos) {
             running =
@@ -451,7 +451,7 @@ object ApplicationUtils {
 
     private suspend fun isWorkScheduled(workName: String, context: Context): Boolean {
         val workManager = WorkManager.getInstance(context)
-        val workInfos = workManager.getWorkInfosForUniqueWork(workName).await()
+        val workInfos = workManager.getWorkInfosForUniqueWork(workName).get()
         return if (workInfos.size == 1) {
             val workInfo = workInfos[0]
             workInfo.state == WorkInfo.State.BLOCKED || workInfo.state == WorkInfo.State.RUNNING

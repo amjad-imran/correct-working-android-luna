@@ -3,22 +3,14 @@ apply {
 }
 
 
-
 dependencies {
 
     implementation project(":noisefit_libraries_zh")
-
-
-    //def timber = "4.7.1"
-
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
-
     implementation libs.protobuf
     implementation libs.androidx.localbroadcastmanager
-
     //utils
-    implementation libs.utilcodex.v1311
+    implementation libs.utilcodex
 
     implementation (project(Modules.commons))
 //    implementation project(path: ':commons')
