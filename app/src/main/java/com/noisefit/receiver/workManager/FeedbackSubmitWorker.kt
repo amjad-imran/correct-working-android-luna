@@ -132,12 +132,18 @@ class FeedbackSubmitWorker @AssistedInject constructor(
             val reportToDev = title.isNullOrEmpty().not()
 
             if (reportToDev) {
+                val device = ringDataStore.getRingDevice()
+                val mac = device?.address
+                val serialNo = device?.ringInfo?.serialNoRaw
+
                 deviceRepository.reportToDeveloper(
                     tempAppLogFile.await(),
                     watchLogFile/*.await()*/,
                     tempFirmwareLogFile.await(),
                     title,
-                    description
+                    description,
+                    mac,
+                    serialNo
                 ).collect { resource ->
 
                     when (resource) {

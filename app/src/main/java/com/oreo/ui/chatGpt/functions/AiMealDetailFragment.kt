@@ -160,7 +160,7 @@ class AiMealDetailFragment :
             DietState.BOOSTER -> {
                 binding.root.setBackgroundResource(R.drawable.back_ai_nutrition)
 
-                binding.toolbar.tvTitle.text = getString(R.string.text_booster_foods)
+                binding.toolbar.tvTitle.text = meal.title
                 binding.toolbar.tvTitle.setTextColor(Color.parseColor("#8ACA88"))
 
                 binding.lytMealDetails.root.gone()

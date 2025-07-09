@@ -26,4 +26,5 @@ data class AiMeal(
     val carbohydrate: String? = null,
     val meal_name: String? = null,
     val description: String? = null,
+    var title: String? = null
 ) : Parcelable

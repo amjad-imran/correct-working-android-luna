@@ -2151,5 +2151,8 @@ onjour, Luna"</string>
     <string name="text_switch_to_a_relaxed_workout">Passer à un entraînement détendu</string>
     <string name="text_metric_message">Mesure en mètres, kilogrammes, litres et degrés Celsius.</string>
     <string name="text_message_imperial">Mesure en pieds, pouces, livres et degrés Fahrenheit.</string>
+    <string name="text_booster_foods">Aliments boosters</string>
+    <string name="text_menstrual_cycle_based">Selon cycle</string>
+
 
 </resources>

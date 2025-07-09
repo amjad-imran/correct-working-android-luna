@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWorkoutPlansBinding
@@ -46,10 +47,14 @@ class WorkoutPlansFragment :
         })
     }
 
+    private val navArgs: WorkoutPlansFragmentArgs by navArgs()
+
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.isComfortEnabled = navArgs.isComfortEnabled
 
         binding.toolbar.tvTitle.text = getString(R.string.text_workout)
         binding.toolbar.tvTitle.setTextColor(Color.parseColor("#A8FFFF"))

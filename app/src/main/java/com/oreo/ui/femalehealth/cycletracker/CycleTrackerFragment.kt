@@ -383,7 +383,12 @@ class CycleTrackerFragment :
             if (workoutSetup) {
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_workout_plan)
 
-                navigate(R.id.workoutPlansFragment)
+                navigate(
+                    R.id.workoutPlansFragment,
+                    bundleOf(
+                        "isComfortEnabled" to true
+                    )
+                )
 
             } else {
                 val (frag, bundle) = ChatGptFragment.getStartData(
@@ -403,7 +408,12 @@ class CycleTrackerFragment :
             if (mealSetup) {
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_nutrition_plan)
 
-                navigate(R.id.aiMealPlanFragment)
+                navigate(
+                    R.id.aiMealPlanFragment,
+                    bundleOf(
+                        "isComfortEnabled" to true
+                    )
+                )
             } else {
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,

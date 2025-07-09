@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
+        android:paddingBottom="1dp"
         android:src="@drawable/ic_luna_ai_img_dash"
         app:layout_constraintBottom_toBottomOf="@+id/textView109"
         app:layout_constraintStart_toEndOf="@+id/textView109"

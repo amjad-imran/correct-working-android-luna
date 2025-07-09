@@ -1313,7 +1313,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 if (user?.userInfo?.gender.equals("female", true).not()) {
                     showShortToast(getString(R.string.text_feature_not_enabled_for_this_user))
                 } else {
-                    navController?.navigate(R.id.fragmentCycleTracker)
+                    viewModel.getCycleHistoryData(){
+                        navController?.navigate(R.id.fragmentCycleTracker)
+                    }
                 }
             }
 

@@ -2032,5 +2032,8 @@
     <string name="text_switch_to_a_relaxed_workout">Passa a un allenamento rilassato</string>
     <string name="text_metric_message">Misura in metri, chilogrammi, litri e gradi Celsius.</string>
     <string name="text_message_imperial">Misura in piedi, pollici, libbre e gradi Fahrenheit.</string>
+    <string name="text_booster_foods">Booster</string>
+    <string name="text_menstrual_cycle_based">Secondo ciclo</string>
+
 
 </resources>

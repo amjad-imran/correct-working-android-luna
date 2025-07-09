@@ -62,6 +62,7 @@ import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.AlarmRepository
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -108,7 +109,8 @@ constructor(
     val userRepository: UserRepository,
     val oreoDeviceRepository: OreoDeviceRepository,
     val referralRepository: ReferralRepository,
-    val alarmRepository: AlarmRepository
+    val alarmRepository: AlarmRepository,
+    val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
 
@@ -411,6 +413,43 @@ constructor(
         }
 
 
+    }
+
+    fun getCycleHistoryData(navigateFun: () -> Unit) {
+        viewModelScope.launch {
+            femaleHealthRepository.getPeriodCycleHistory().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getCycleHistoryData(navigateFun)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            if (!it.cycleHistory.isNullOrEmpty()) {
+                                navigateFun()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun sendSleepEvents(data: ServerUserHealthData) {

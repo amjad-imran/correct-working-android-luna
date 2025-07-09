@@ -28,26 +28,47 @@
         app:layout_constraintTop_toTopOf="@+id/tvTag"
         app:srcCompat="@drawable/ic_arrow_planner_right" />
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tvTag"
-        style="@style/S10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="8dp"
-        android:textColor="#DDB3FF"
-        android:layout_marginStart="16dp"
-        android:text="@string/text_menstrual_cycle_based"
-        android:background="@drawable/bg_menstrual_cycle_based_tag"
+        android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@+id/tvTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_menstrual_cycle_based_tag"
+            app:layout_constraintBottom_toBottomOf="@id/tvComfortTag"
+            app:layout_constraintEnd_toEndOf="@id/tvComfortTag"
+            app:layout_constraintStart_toStartOf="@id/tvComfortTag"
+            app:layout_constraintTop_toTopOf="@id/tvComfortTag" />
+
+        <TextView
+            android:id="@+id/tvComfortTag"
+            style="@style/S10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="8dp"
+            android:text="@string/text_menstrual_cycle_based"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMeals"
+        android:id="@+id/rvBoosterMeals"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

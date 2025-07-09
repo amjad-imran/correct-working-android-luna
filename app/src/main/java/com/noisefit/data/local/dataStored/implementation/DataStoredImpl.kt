@@ -2295,11 +2295,14 @@ class DataStoredImpl
 
 
 
-    override fun clearComfortFoodAndWorkoutData() {
-        clearLdwReadinessData()
-        clearLdwCycleTrackerData()
+    override fun clearBoosterComfortFoodAndWorkoutData() {
+        mPrefs.edit()?.remove(LDW_READINESS)?.commit()
+        mPrefs.edit()?.remove(LDW_CYCLE_TRACKER)?.commit()
+
         mPrefs.edit()?.remove(IS_LOW_DIET_PLAN_SETUP)?.commit()
         mPrefs.edit()?.remove(IS_LOW_WORKOUT_PLAN_SETUP)?.commit()
+
+        mPrefs.edit().remove(BOOSTER_WOMEN).commit()
     }
 
 }

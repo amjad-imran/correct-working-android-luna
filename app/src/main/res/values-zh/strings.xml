@@ -2025,5 +2025,8 @@
     <string name="text_switch_to_a_relaxed_workout">切换到放松锻炼</string>
     <string name="text_metric_message">以米、千克、升和摄氏度为单位。</string>
     <string name="text_message_imperial">以英尺、英寸、磅和华氏度为单位。</string>
+    <string name="text_booster_foods">助力食物</string>
+    <string name="text_menstrual_cycle_based">基于月经周期</string>
+
 
 </resources>

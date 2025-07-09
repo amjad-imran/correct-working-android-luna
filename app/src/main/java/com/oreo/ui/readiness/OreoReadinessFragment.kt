@@ -632,7 +632,12 @@ class OreoReadinessFragment :
             if (workoutSetup) {
                 mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_workout_plan)
 
-                navigate(R.id.workoutPlansFragment)
+                navigate(
+                    R.id.workoutPlansFragment,
+                    bundleOf(
+                        "isComfortEnabled" to true
+                    )
+                )
 
             } else {
                 val (frag, bundle) = ChatGptFragment.getStartData(
@@ -652,7 +657,12 @@ class OreoReadinessFragment :
             if (mealSetup) {
                 mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_nutrition_plan)
 
-                navigate(R.id.aiMealPlanFragment)
+                navigate(
+                    R.id.aiMealPlanFragment,
+                    bundleOf(
+                        "isComfortEnabled" to true
+                    )
+                )
             } else {
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,

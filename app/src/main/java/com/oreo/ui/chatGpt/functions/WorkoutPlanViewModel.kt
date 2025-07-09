@@ -40,6 +40,8 @@ class WorkoutPlanViewModel @Inject constructor(
         currentSelectedWeekDayPosition.postValue(LocalDate.now().dayOfWeek.value)
     }
 
+    var isComfortEnabled = false
+
     fun getWorkoutPlans() {
         viewModelScope.launch {
             oreoDeviceRepository.getAiWorkoutPlans().collect { resource ->
@@ -75,31 +77,31 @@ class WorkoutPlanViewModel @Inject constructor(
                             workoutResponse.addAll(it)
 
                             val curDay = LocalDate.now().dayOfWeek.value
+                            val isCurrentDayRest = isCurrentDayRest(curDay)
 
-                            if (
-                                !localDataStore.getLdwReadinessData() &&
-                                !localDataStore.getLdwCycleTrackerData()
-                            ) {
-                                LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : normal")
-
-                                workoutState.value = DietState.NORMAL
-                                setSelectedPosition(LocalDate.now().dayOfWeek.value)
-//                                rememberCurDayDietState = DietState.NORMAL
-                            } else {
-                                LOGS.d("yashhhhhhhhdkkfdkjhdsfk  : regular")
-                                if(isCurrentDayRest(LocalDate.now().dayOfWeek.value)){
+                            if(!isCurrentDayRest && isComfortEnabled){
+                                getRelaxedWorkoutPlans()
+                            }
+                            else {
+                                if (
+                                    !localDataStore.getLdwReadinessData() &&
+                                    !localDataStore.getLdwCycleTrackerData()
+                                ) {
                                     workoutState.value = DietState.NORMAL
-                                    setSelectedPosition(LocalDate.now().dayOfWeek.value)
-                                }else{
-                                    LOGS.d("dsvmsdvsvs : not rest day")
-                                    val isLowWorkoutPlanSetUp =  localDataStore.isLowWorkoutPlanSetUp()?.isSetup ?: false
-                                    if(isLowWorkoutPlanSetUp){
-                                        LOGS.d("dsvmsdvsvs cijvkdkjv")
-                                        getRelaxedWorkoutPlans()
-                                    }else{
-                                        LOGS.d("dsvmsdvsvs : nnnnnnn")
-                                        workoutState.value = DietState.REGULAR
+                                    setSelectedPosition(curDay)
+                                } else {
+                                    if (isCurrentDayRest) {
+                                        workoutState.value = DietState.NORMAL
                                         setSelectedPosition(curDay)
+                                    } else {
+                                        val isLowWorkoutPlanSetUp =
+                                            localDataStore.isLowWorkoutPlanSetUp()?.isSetup ?: false
+                                        if (isLowWorkoutPlanSetUp) {
+                                            getRelaxedWorkoutPlans()
+                                        } else {
+                                            workoutState.value = DietState.REGULAR
+                                            setSelectedPosition(curDay)
+                                        }
                                     }
                                 }
                             }

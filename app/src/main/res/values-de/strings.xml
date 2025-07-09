@@ -2031,5 +2031,8 @@
     <string name="text_switch_to_a_relaxed_workout">Zum entspannten Workout wechseln</string>
     <string name="text_metric_message">Misst in Metern, Kilogramm, Litern und Celsius.</string>
     <string name="text_message_imperial">Misst in Fuß, Zoll, Pfund und Fahrenheit.</string>
+    <string name="text_booster_foods">Booster</string>
+    <string name="text_menstrual_cycle_based">Zyklusbasiert</string>
+
 
 </resources>
