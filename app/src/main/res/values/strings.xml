@@ -2008,5 +2008,18 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_just_now">Just now</string>
     <string name="text_booster_foods">Booster foods</string>
     <string name="text_menstrual_cycle_based">Menstrual cycle based</string>
+    <string name="text_circadian_alignment">Circadian Alignment</string>
+    <string name="text_focus_window">Focus Window</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">Wear your luna ring when you go to bed to track your sleep. Make sure to charge your ring to avoid missing out valuable insights.</string>
+    <string name="text_sleep_mid_point">Sleep Mid-Point</string>
+    <string name="text_phase_advance">Phase Advance</string>
+    <string name="text_correcting">Correcting</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">Your rhythm shifted later — try dimming lights and reducing screen time before bed to realign.</string>
+    <string name="text_acitivity_monitor">Acitivity Monitor</string>
+    <string name="text_your_overall_circadian_is_well_aligned">Your Overall Circadian is well Aligned.</string>
+    <string name="text_corrective_activities">Corrective Activities</string>
+    <string name="text_corrective_activities_desc">To shift your rhythm, complete these actions within your correction window — it opens early in the day if you\'re delayed, and later in the evening if you\'re advanced.</string>
+    <string name="text_light_exposure">Light exposure</string>
+    <string name="text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up">Soak in some natural light—it\'s a powerful cue for your body to wake up</string>
 
 </resources>

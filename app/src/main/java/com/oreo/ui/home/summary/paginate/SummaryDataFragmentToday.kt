@@ -291,6 +291,10 @@ class SummaryDataFragmentToday :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
+                OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
+                    navigate(R.id.circadianAlignmentFrag)
+                }
+
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {
                     navigate(R.id.aiSummaryFragment)
                 }

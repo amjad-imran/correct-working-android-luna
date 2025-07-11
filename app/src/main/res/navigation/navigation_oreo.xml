@@ -1389,4 +1389,9 @@
         android:id="@+id/reportToDevelopersSuccessBottomSheet"
         android:name="com.oreo.ui.profile.ReportToDevelopersSuccessBottomSheet"
         android:label="ReportToDevelopersSuccessBottomSheet" />
+    <fragment
+        android:id="@+id/circadianAlignmentFrag"
+        android:name="com.oreo.ui.circadianAlignment.CircadianAlignmentFrag"
+        android:label="fragment_circadian_alignment"
+        tools:layout="@layout/fragment_circadian_alignment" />
 </navigation>

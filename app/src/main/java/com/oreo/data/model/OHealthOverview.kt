@@ -189,6 +189,8 @@ sealed class OHealthOverview {
         val message: String?=null,
     ) : OHealthOverview()
 
+    class CircadianAlignment : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()

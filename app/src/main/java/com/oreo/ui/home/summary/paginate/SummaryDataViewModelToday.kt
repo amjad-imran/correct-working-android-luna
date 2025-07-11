@@ -1254,6 +1254,13 @@ class SummaryDataViewModelToday @Inject constructor(
                             userActivities.add(it)
                         }
                     }
+
+                    "circadian_alignment" -> {
+                        getCircadianAlignmentCardData()?.let {
+                            userActivities.add(it)
+                        }
+                    }
+
                 }
             }
 
@@ -1274,6 +1281,12 @@ class SummaryDataViewModelToday @Inject constructor(
             handleSleepAlert(healthData.sleep)
             handleGoogleFitCard()
         }
+    }
+
+    private fun getCircadianAlignmentCardData(): OHealthOverview? {
+        return OHealthOverview.CircadianAlignment(
+
+        )
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {
@@ -2184,7 +2197,7 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
             add(itemsMap["7_day_trends_card"]!!.copy(priority = priorityList.size))
             add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
-
+            add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
         }
 
         return priorityList
@@ -2286,6 +2299,14 @@ class SummaryDataViewModelToday @Inject constructor(
                 resourceProvider.getString(R.string.text_heart_monitor),
                 true,
                 13
+            )
+
+            this["circadian_alignment"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_monitor,
+                "circadian_alignment",
+                resourceProvider.getString(R.string.text_circadian_alignment),
+                true,
+                14
             )
 
         }

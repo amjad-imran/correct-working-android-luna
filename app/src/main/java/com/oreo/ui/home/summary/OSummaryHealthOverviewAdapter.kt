@@ -91,6 +91,7 @@ import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
+import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -149,6 +150,8 @@ sealed class OSummaryHealthOverviewClickEnum {
         OSummaryHealthOverviewClickEnum()
 
     object OnDailyDigestMainCardClicked: OSummaryHealthOverviewClickEnum()
+
+    object OnCircadianAlignmentCardClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -302,6 +305,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 
             R.layout.layout_caffeine_calibrating -> HomeRecyclerViewHolder.CaffeineRestrictedViewHolder(
                 LayoutCaffeineCalibratingBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
+            R.layout.layout_dash_circadian -> HomeRecyclerViewHolder.CircadianAlignmentViewHolder(
+                LayoutDashCircadianBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
@@ -485,6 +494,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 items[position] as OHealthOverview.CaffeineWindowCalibrating,
             )
 
+            is HomeRecyclerViewHolder.CircadianAlignmentViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CircadianAlignment,
+            )
+
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
@@ -542,6 +555,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.StressCard -> R.layout.layout_stress_dash_measure
             //
             is OHealthOverview.CaffeineWindowCalibrating -> R.layout.layout_caffeine_calibrating
+            is OHealthOverview.CircadianAlignment -> R.layout.layout_dash_circadian
         }
     }
 
@@ -2961,6 +2975,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         }
 
+
+    }
+
+    class CircadianAlignmentViewHolder(private val binding: LayoutDashCircadianBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        fun bind(data: OHealthOverview.CircadianAlignment) {
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
+            }
+        }
 
     }
 
