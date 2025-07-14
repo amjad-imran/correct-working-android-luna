@@ -1168,8 +1168,16 @@ class SummaryDataFragmentToday :
                     this.tvTitle.text = it.description?.header
                     //
                     it.description?.shortDescription?.let { descText ->
+
+                        val words = descText.split(" ")
+                        var descTxt = if(words.size > 10){
+                            words.take(10).joinToString(" ") + "..."
+                        }else{
+                            descText
+                        }
+
                         val readMoreText = "Read More"
-                        val descTxt = descText + " " + getString(R.string.text_read_more)
+                        descTxt += " " + getString(R.string.text_read_more)
                         val spannable = SpannableString(descTxt)
 
                         val start = descTxt.indexOf(readMoreText)
@@ -1229,8 +1237,16 @@ class SummaryDataFragmentToday :
                     this.tvTitle.text = it.description?.header
                     //
                     it.description?.shortDescription?.let { descText ->
+
+                        val words = descText.split(" ")
+                        var descTxt = if(words.size > 10){
+                            words.take(10).joinToString(" ") + "..."
+                        }else{
+                            descText
+                        }
+
                         val readMoreText = "Read More"
-                        val descTxt = descText + " " + getString(R.string.text_read_more)
+                        descTxt += " " + getString(R.string.text_read_more)
                         val spannable = SpannableString(descTxt)
 
                         val start = descTxt.indexOf(readMoreText)
