@@ -8,9 +8,10 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imvBack"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
-        android:minHeight="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_app_update_card_dash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,14 +24,12 @@
         style="@style/S22"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvMessage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView82"
+        app:layout_constraintStart_toEndOf="@+id/imageView83"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
         tools:text="App update available" />
 
 
@@ -39,27 +38,51 @@
         style="@style/S14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
         android:lineSpacingExtra="4sp"
         android:textColor="@color/white_64"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpdateNow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView82"
+        app:layout_constraintStart_toEndOf="@+id/imageView83"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:text="This version includes critical bug fixes and improvements. " />
 
     <Button
         android:id="@+id/btnUpdateNow"
         style="@style/PrimaryButtonStyle2"
         android:layout_width="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="false"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
         android:text="@string/text_update_now"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
+
+    <ImageView
+        android:id="@+id/imageView82"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/freshchat_ic_calendar_close" />
+
+    <ImageView
+        android:id="@+id/imageView83"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTitle"
+        app:srcCompat="@drawable/luna_logo_sqr" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

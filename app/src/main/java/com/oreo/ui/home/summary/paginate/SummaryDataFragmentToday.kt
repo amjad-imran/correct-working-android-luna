@@ -10,6 +10,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -18,6 +25,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -1148,7 +1156,50 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytAppUpdate.apply {
                     this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
+                    //
+                    it.description?.shortDescription?.let { descTxt ->
+                        val readMoreText = "Read More"
+
+                        val spannable = SpannableString(descTxt)
+
+                        val start = descTxt.indexOf(readMoreText)
+                        val end = start + readMoreText.length
+
+                        spannable.setSpan(
+                            ForegroundColorSpan("#6F9BFF".toColorInt()),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        spannable.setSpan(
+                            UnderlineSpan(),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val clickableSpan = object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                // Handle your click here
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = true
+                                ds.color = Color.BLUE
+                            }
+                        }
+
+                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        this.tvMessage.apply {
+                            text = spannable
+                            movementMethod = LinkMovementMethod.getInstance()
+                            highlightColor = Color.TRANSPARENT
+                        }
+                    }
+                    //
+//                    this.tvMessage.text = it.description?.shortDescription
                     this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
