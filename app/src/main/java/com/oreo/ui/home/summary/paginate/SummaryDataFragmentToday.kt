@@ -809,20 +809,30 @@ class SummaryDataFragmentToday :
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
         }*/
 
-        binding.contentMain.lytAppUpdate.root.setOnClickListener {
+        binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
             navigate(
                 R.id.appUpdateDetailFragment,
                 bundleOf("launchMode" to UpdateLaunchMode.APP)
             )
         }
 
-        binding.contentMain.lytOtaUpdate.root.setOnClickListener {
+        binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
             val isConnected = viewModel.isDeviceConnected()
             if (isConnected.not()) {
                 context.showShortToast("Ring not connected")
                 return@setOnClickListener
             }
             navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+        }
+
+        binding.contentMain.lytAppUpdate.ivClose.setOnClickListener {
+            viewModel.appRemindLater()
+            binding.contentMain.lytAppUpdate.root.gone()
+        }
+
+        binding.contentMain.lytOtaUpdate.ivClose.setOnClickListener {
+            viewModel.otaRemindLater()
+            binding.contentMain.lytOtaUpdate.root.gone()
         }
 
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
@@ -1157,16 +1167,17 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytAppUpdate.apply {
                     this.tvTitle.text = it.description?.header
                     //
-                    it.description?.shortDescription?.let { descTxt ->
+                    it.description?.shortDescription?.let { descText ->
                         val readMoreText = "Read More"
-
+                        val descTxt = descText + " " + getString(R.string.text_read_more)
                         val spannable = SpannableString(descTxt)
 
                         val start = descTxt.indexOf(readMoreText)
                         val end = start + readMoreText.length
 
+                        val descTxtColor = "#6F9BFF".toColorInt()
                         spannable.setSpan(
-                            ForegroundColorSpan("#6F9BFF".toColorInt()),
+                            ForegroundColorSpan(descTxtColor),
                             start,
                             end,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -1181,13 +1192,16 @@ class SummaryDataFragmentToday :
 
                         val clickableSpan = object : ClickableSpan() {
                             override fun onClick(widget: View) {
-                                // Handle your click here
+                                navigate(
+                                    R.id.appUpdateDetailFragment,
+                                    bundleOf("launchMode" to UpdateLaunchMode.APP)
+                                )
                             }
 
                             override fun updateDrawState(ds: TextPaint) {
                                 super.updateDrawState(ds)
                                 ds.isUnderlineText = true
-                                ds.color = Color.BLUE
+                                ds.color = descTxtColor
                             }
                         }
 
@@ -1200,7 +1214,7 @@ class SummaryDataFragmentToday :
                     }
                     //
 //                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+//                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
             }
@@ -1213,8 +1227,57 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytOtaUpdate.apply {
                     this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    //
+                    it.description?.shortDescription?.let { descText ->
+                        val readMoreText = "Read More"
+                        val descTxt = descText + " " + getString(R.string.text_read_more)
+                        val spannable = SpannableString(descTxt)
+
+                        val start = descTxt.indexOf(readMoreText)
+                        val end = start + readMoreText.length
+
+                        val descTxtColor = "#6F9BFF".toColorInt()
+                        spannable.setSpan(
+                            ForegroundColorSpan(descTxtColor),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        spannable.setSpan(
+                            UnderlineSpan(),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val clickableSpan = object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                val isConnected = viewModel.isDeviceConnected()
+                                if (isConnected.not()) {
+                                    context.showShortToast("Ring not connected")
+                                    return
+                                }
+                                navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = true
+                                ds.color = descTxtColor
+                            }
+                        }
+
+                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        this.tvMessage.apply {
+                            text = spannable
+                            movementMethod = LinkMovementMethod.getInstance()
+                            highlightColor = Color.TRANSPARENT
+                        }
+                    }
+                    //
+//                    this.tvMessage.text = it.description?.shortDescription
+//                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
 
