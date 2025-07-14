@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/shapeableImageView16"
+        android:id="@+id/shapeableImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/image_back_health_monitor"
@@ -137,5 +137,84 @@
             tools:text="02:31 left" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/lytImageWithText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/ivOnlyImg"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:id="@+id/tvOnlyText"
+            style="@style/S14"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textColor="#FFE1CF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="23\nmins" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lytWithProgressBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.oreo.ui.custom.progress.CircularProgressBar
+                android:id="@+id/circularProgressBar"
+                android:layout_width="54dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                app:archWidth="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackColor="@color/white_10" />
+
+            <ImageView
+                android:id="@+id/imageView88"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
+                app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
+                app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
+                app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
+                app:srcCompat="@drawable/back_add_workout" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        style="@style/S12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        tools:text="23 mins" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
