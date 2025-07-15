@@ -74,6 +74,12 @@
         android:layout_height="1dp"
         android:layout_marginTop="24dp" />
 
+    <include
+        android:id="@+id/lytCorrectiveActivities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_circadian_corrective_activities" />
+
     </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

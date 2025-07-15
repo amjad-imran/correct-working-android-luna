@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shapeableImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/image_back_health_monitor"
+        android:background="@drawable/bg_light_exposure_corrective_activities"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +19,7 @@
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <LinearLayout
-        android:id="@+id/linearLayout9"
+        android:id="@+id/llLytDoneLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            tools:text="@string/text_done" />
+            android:text="@string/text_done" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -51,19 +52,19 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <TextView
-        android:id="@+id/textView174"
+        android:id="@+id/tvTitile"
         style="@style/S14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/text_light_exposure" />
 
     <TextView
-        android:id="@+id/textView175"
+        android:id="@+id/tvDesc"
         style="@style/S10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -72,9 +73,9 @@
         android:lineHeight="12sp"
         android:text="@string/text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up"
         android:textColor="#C4CBD9"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/textView174" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitile" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytOpenCloseTag"
@@ -84,7 +85,7 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/textView175">
+        app:layout_constraintTop_toBottomOf="@+id/tvDesc">
 
         <TextView
             android:id="@+id/tvOpenCloseTag"
@@ -99,7 +100,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/text_done" />
+            tools:text="@string/text_open" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,7 +145,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +175,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"
@@ -209,6 +211,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tvProgressTxt"
         style="@style/S12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
