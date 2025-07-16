@@ -3691,6 +3691,15 @@ class SummaryDataViewModelToday @Inject constructor(
         val roundedOunces = (ounces / 10).roundToInt() * 10
         return roundedOunces
     }
+
+    fun otaRemindLater() {
+        updateRepository.otaRemindLater()
+    }
+
+    fun appRemindLater() {
+        updateRepository.appRemindLater()
+    }
+
 }
 
 enum class NotificationGoal {

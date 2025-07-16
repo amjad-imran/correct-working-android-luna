@@ -52,7 +52,14 @@ class ReportToDevelopersBottomSheet :
 
         binding.titleInputLayout.addTextChangedListener {
             val content = it?.toString()?.trim()
-            binding.btnSubmit.isEnabled = content.isNullOrEmpty().not()
+            binding.btnSubmit.isEnabled = content.isNullOrEmpty().not() &&
+                    binding.descInputLayout.text.trim().isNotEmpty()
+        }
+
+        binding.descInputLayout.addTextChangedListener {
+            val content = it?.toString()?.trim()
+            binding.btnSubmit.isEnabled = content.isNullOrEmpty().not() &&
+                    binding.titleInputLayout.text.trim().isNotEmpty()
         }
     }
 
