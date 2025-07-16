@@ -1169,15 +1169,17 @@ class SummaryDataFragmentToday :
                     //
                     it.description?.shortDescription?.let { descText ->
 
-                        val words = descText.split(" ")
+                        /*val words = descText.split(" ")
                         var descTxt = if(words.size > 10){
                             words.take(10).joinToString(" ") + "..."
                         }else{
                             descText
-                        }
+                        }*/
+                        var descTxt = if(descText.length > 60) descText.trim().substring(0, 61) + "..."
+                                    else descText.trim()
 
-                        val readMoreText = "Read More"
-                        descTxt += " " + getString(R.string.text_read_more)
+                        val readMoreText = getString(R.string.text_read_more)
+                        descTxt += " $readMoreText"
                         val spannable = SpannableString(descTxt)
 
                         val start = descTxt.indexOf(readMoreText)
@@ -1238,15 +1240,18 @@ class SummaryDataFragmentToday :
                     //
                     it.description?.shortDescription?.let { descText ->
 
-                        val words = descText.split(" ")
+                        /*val words = descText.split(" ")
                         var descTxt = if(words.size > 10){
                             words.take(10).joinToString(" ") + "..."
                         }else{
                             descText
-                        }
+                        }*/
+                        var descTxt =
+                            if(descText.length > 60) descText.trim().substring(0, 61) + "..."
+                            else descText.trim()
 
-                        val readMoreText = "Read More"
-                        descTxt += " " + getString(R.string.text_read_more)
+                        val readMoreText = getString(R.string.text_read_more)
+                        descTxt += " $readMoreText"
                         val spannable = SpannableString(descTxt)
 
                         val start = descTxt.indexOf(readMoreText)
