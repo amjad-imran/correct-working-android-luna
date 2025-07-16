@@ -24,24 +24,57 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center_vertical"
-        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView85"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            app:srcCompat="@drawable/ic_check_circadian" />
-
-        <TextView
-            android:id="@+id/textView167"
-            style="@style/S12"
+        <LinearLayout
+            android:id="@+id/llLytLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/text_done" />
+            android:visibility="gone"
+            android:background="@drawable/bg_log_45_perc_transparent_circadian"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                app:srcCompat="@drawable/ic_add" />
+
+            <TextView
+                style="@style/S12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_log" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLytDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="@drawable/bg_done_45_perc_green_circadian"
+            android:padding="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                app:srcCompat="@drawable/ic_check_circadian" />
+
+            <TextView
+                style="@style/S12"
+                android:textColor="#4CBD88"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_done" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -108,6 +141,7 @@
         android:id="@+id/lytTimerTag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_timer_6_perc_transparent_circadian"
         android:layout_marginStart="4dp"
         android:paddingHorizontal="6dp"
         android:paddingVertical="3dp"
