@@ -36,8 +36,8 @@ class TestDataListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvData.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvData.adapter = adapter
+//        binding.rvData.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvData.adapter = adapter
 
 
         binding.toolbar.tvTitle.text = args.data.type.name

@@ -1,31 +1,21 @@
 package com.oreo.ui
 
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.base.ResourcesProvider
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTestDataBinding
-import com.noisefit.luna.databinding.RowTabsBinding
 import com.noisefit.luna.databinding.TestUserDataBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.TestUserData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,46 +32,94 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
 
     private val userDataLive = MutableLiveData<List<TestUserData>>()
 
-    private val adapter: TestDataAdapter by lazy {
-        TestDataAdapter {
-
-            if (it.type == DataType.ACTIVITY || it.type == DataType.SLEEP) {
-                navigate(R.id.testDataActivityFragment, Bundle().apply {
-                    this.putParcelable("data", it)
-                })
-            } else {
-                navigate(R.id.testDataListFragment, Bundle().apply {
-                    this.putParcelable("data", it)
-                })
-            }
-
-        }
-    }
+//    private val adapter: TestDataAdapter by lazy {
+//        TestDataAdapter {
+//
+//            if (it.type == DataType.ACTIVITY || it.type == DataType.SLEEP) {
+//                navigate(R.id.testDataActivityFragment, Bundle().apply {
+//                    this.putParcelable("data", it)
+//                })
+//            } else {
+//                navigate(R.id.testDataListFragment, Bundle().apply {
+//                    this.putParcelable("data", it)
+//                })
+//            }
+//
+//        }
+//    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvData.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvData.adapter = adapter
+        val graphView = binding.circadianGraph
 
-        binding.toolbar.tvTitle.text = "Ring Data"
+        val circadianGraphModelList = ArrayList<CircadianGraphModel>()
+        for (index in 0..binding.circadianGraph.totalBars - 1) {
+            var xAxis: String? = null
+            var isBeforeAvg: Boolean = false
+            var isNowAvg: Boolean = false
+            when (index) {
+                0 -> {
+                    xAxis = "12:00 am"
+                }
 
-        binding.tvLastSync.text = "last sync ${
-            sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,resourcesProvider) }
-        }"
+                10 -> {
+                    isBeforeAvg = true
+                }
 
+                15 -> {
+                    isNowAvg = true
+                }
 
-        getData()
-    }
+                binding.circadianGraph.totalBars - 1 -> {
+                    xAxis = "5:00 am"
+                }
+            }
 
-
-    fun getData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val userActivities = oreoDataRepository.getTestData()
-            userDataLive.postValue(userActivities)
+            circadianGraphModelList.add(
+                CircadianGraphModel(
+                    xAxis = xAxis,
+                    isNowAvg = isNowAvg,
+                    isBeforeAvg = isBeforeAvg
+                )
+            )
         }
+
+        val colors = List(binding.circadianGraph.totalBars) {
+            when (it) {
+                in 0..5 -> Color.parseColor("#444444")
+                in 6..12 -> Color.parseColor("#aa8866")
+                in 13..20 -> Color.parseColor("#7799cc")
+                else -> Color.parseColor("#333333")
+            }
+        }
+
+        graphView.avgBeforeIndex = 6
+        graphView.avgNowIndex = 9
+
+        graphView.updateBars(circadianGraphModelList, colors)
+
+//        binding.rvData.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvData.adapter = adapter
+//
+//        binding.toolbar.tvTitle.text = "Ring Data"
+//
+//        binding.tvLastSync.text = "last sync ${
+//            sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,resourcesProvider) }
+//        }"
+//
+//
+//        getData()
     }
+
+
+//    fun getData() {
+//        GlobalScope.launch(Dispatchers.IO) {
+//            val userActivities = oreoDataRepository.getTestData()
+//            userDataLive.postValue(userActivities)
+//        }
+//    }
 
     override fun initListener() {
         binding.toolbar.backBtn.setOnClickListener {
@@ -92,14 +130,13 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
 
     override fun subscribeObservers() {
         userDataLive.observe(this) {
-            adapter.setDataSet(it)
+//            adapter.setDataSet(it)
         }
 
     }
 
 
 }
-
 
 
 enum class DataType {

@@ -69,6 +69,7 @@ class SummaryDataFragment :
         viewModel.user = mainViewModel.user
         loadData()
 
+        navigate(R.id.testDataFragment)
 
     }
 
