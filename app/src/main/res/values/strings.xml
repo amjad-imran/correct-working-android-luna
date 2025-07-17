@@ -2021,5 +2021,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_corrective_activities_desc">To shift your rhythm, complete these actions within your correction window — it opens early in the day if you\'re delayed, and later in the evening if you\'re advanced.</string>
     <string name="text_light_exposure">Light exposure</string>
     <string name="text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up">Soak in some natural light—it\'s a powerful cue for your body to wake up</string>
+    <string name="text_daily_steps">Daily Steps</string>
+    <string name="text_meal_window">Meal Window</string>
+    <string name="text_caffeine_window2">Caffeine Window</string>
 
 </resources>
