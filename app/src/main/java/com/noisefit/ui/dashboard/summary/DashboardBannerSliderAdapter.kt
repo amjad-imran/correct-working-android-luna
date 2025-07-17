@@ -32,17 +32,17 @@ class DashboardBannerSliderAdapter(val listener: DashboardBannerAction) :
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<Drawable>?,
+                        target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
                         return false
                     }
 
                     override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
+                        resource: Drawable,
+                        model: Any,
                         target: Target<Drawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
                         listener.imageLoadedSuccessfully()

@@ -1,5 +1,4 @@
 
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.compose.compiler)
@@ -11,8 +10,6 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
-//    id("com.huawei.agconnect")
-
 }
 
 
@@ -187,30 +184,8 @@ android {
             }
     }
 
-
-    //Make sure you add this in your gradle inside android {}
-
-//    testOptions{
-//        unitTests.all {
-//            useJUnitPlatform()
-//        }
-//    }
-
-
 }
-//tasks.register("test", Test::class) {
-//    useJUnitPlatform()
-//}
-////tasks.test {
-////    useJUnitPlatform()
-////    testLogging {
-////        events("passed", "skipped", "failed")
-////    }
-////}
-//
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}
+
 dependencies {
 
 
@@ -271,7 +246,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     testImplementation(libs.junit)
-    testImplementation(libs.truth.v144)
+    testImplementation(libs.truth)
 
 
 
@@ -296,7 +271,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.legacy.support)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material.v161)
+    implementation(libs.android.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.sdp.android)
 
