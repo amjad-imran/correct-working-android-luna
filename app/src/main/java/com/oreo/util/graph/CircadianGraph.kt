@@ -67,7 +67,8 @@ class CircadianGraph @JvmOverloads constructor(
     fun updateBars(barData: List<CircadianGraphModel>, colors: List<Int>) {
         this.barData = barData
         barColors = colors
-        invalidate()
+        invalidate()        // --- Draw Label 2 ---
+
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -88,14 +89,14 @@ class CircadianGraph @JvmOverloads constructor(
 
             canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 8f, 8f, barPaint)
 
-            if (value.isNowAvg) {
+            if (value.secondMidPoint) {
                 nowAvgLeftStart = left
                 val top = centerY - avgBarHeight
                 val bottom = centerY + avgBarHeight
                 canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 8f, 8f, avgNowPaint)
             }
 
-            if (value.isBeforeAvg) {
+            if (value.firstMidPoint) {
                 beforeAvgLeftStart = left
                 val top = centerY - avgBarHeight
                 val bottom = centerY + avgBarHeight

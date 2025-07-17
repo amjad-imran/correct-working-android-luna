@@ -62,17 +62,20 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
             when (index) {
                 0 -> {
                     xAxis = "12:00 am"
-                }
-
-                10 -> {
                     isBeforeAvg = true
                 }
 
-                15 -> {
-                    isNowAvg = true
+                4 -> {
+
+
+                }
+
+                27 -> {
+
                 }
 
                 binding.circadianGraph.totalBars - 1 -> {
+                    isNowAvg = true
                     xAxis = "5:00 am"
                 }
             }
@@ -80,8 +83,8 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
             circadianGraphModelList.add(
                 CircadianGraphModel(
                     xAxis = xAxis,
-                    isNowAvg = isNowAvg,
-                    isBeforeAvg = isBeforeAvg
+                    secondMidPoint = isNowAvg,
+                    firstMidPoint = isBeforeAvg
                 )
             )
         }

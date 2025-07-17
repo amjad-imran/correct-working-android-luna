@@ -2,6 +2,15 @@ package com.oreo.data.model
 
 data class CircadianGraphModel(
     val xAxis: String? = null,
-    val isBeforeAvg: Boolean = false,
-    val isNowAvg: Boolean = false
-)
+    val firstMidPoint: Boolean = false,
+    val firstMidPointTitle: String? = null,
+    val secondMidPoint: Boolean = false,
+    val secondMidPointTitle: String? = null)
+
+enum class CircadianMidPointState{
+    PhaseAligned,
+    PhaseDelay,
+    PhaseAdvance,
+    SleepMissing,
+    AwaitingSync
+}
