@@ -10,6 +10,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -18,6 +25,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -805,20 +813,30 @@ class SummaryDataFragmentToday :
             mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
         }*/
 
-        binding.contentMain.lytAppUpdate.root.setOnClickListener {
+        binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
             navigate(
                 R.id.appUpdateDetailFragment,
                 bundleOf("launchMode" to UpdateLaunchMode.APP)
             )
         }
 
-        binding.contentMain.lytOtaUpdate.root.setOnClickListener {
+        binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
             val isConnected = viewModel.isDeviceConnected()
             if (isConnected.not()) {
                 context.showShortToast("Ring not connected")
                 return@setOnClickListener
             }
             navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+        }
+
+        binding.contentMain.lytAppUpdate.ivClose.setOnClickListener {
+            viewModel.appRemindLater()
+            binding.contentMain.lytAppUpdate.root.gone()
+        }
+
+        binding.contentMain.lytOtaUpdate.ivClose.setOnClickListener {
+            viewModel.otaRemindLater()
+            binding.contentMain.lytOtaUpdate.root.gone()
         }
 
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
@@ -1152,8 +1170,65 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytAppUpdate.apply {
                     this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    //
+                    it.description?.shortDescription?.let { descText ->
+
+                        /*val words = descText.split(" ")
+                        var descTxt = if(words.size > 10){
+                            words.take(10).joinToString(" ") + "..."
+                        }else{
+                            descText
+                        }*/
+                        var descTxt = if(descText.length > 60) descText.trim().substring(0, 61) + "..."
+                                    else descText.trim()
+
+                        val readMoreText = getString(R.string.text_read_more)
+                        descTxt += " $readMoreText"
+                        val spannable = SpannableString(descTxt)
+
+                        val start = descTxt.indexOf(readMoreText)
+                        val end = start + readMoreText.length
+
+                        val descTxtColor = "#6F9BFF".toColorInt()
+                        spannable.setSpan(
+                            ForegroundColorSpan(descTxtColor),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        spannable.setSpan(
+                            UnderlineSpan(),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val clickableSpan = object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                navigate(
+                                    R.id.appUpdateDetailFragment,
+                                    bundleOf("launchMode" to UpdateLaunchMode.APP)
+                                )
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = true
+                                ds.color = descTxtColor
+                            }
+                        }
+
+                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        this.tvMessage.apply {
+                            text = spannable
+                            movementMethod = LinkMovementMethod.getInstance()
+                            highlightColor = Color.TRANSPARENT
+                        }
+                    }
+                    //
+//                    this.tvMessage.text = it.description?.shortDescription
+//                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
             }
@@ -1166,8 +1241,68 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytOtaUpdate.apply {
                     this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    //
+                    it.description?.shortDescription?.let { descText ->
+
+                        /*val words = descText.split(" ")
+                        var descTxt = if(words.size > 10){
+                            words.take(10).joinToString(" ") + "..."
+                        }else{
+                            descText
+                        }*/
+                        var descTxt =
+                            if(descText.length > 60) descText.trim().substring(0, 61) + "..."
+                            else descText.trim()
+
+                        val readMoreText = getString(R.string.text_read_more)
+                        descTxt += " $readMoreText"
+                        val spannable = SpannableString(descTxt)
+
+                        val start = descTxt.indexOf(readMoreText)
+                        val end = start + readMoreText.length
+
+                        val descTxtColor = "#6F9BFF".toColorInt()
+                        spannable.setSpan(
+                            ForegroundColorSpan(descTxtColor),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        spannable.setSpan(
+                            UnderlineSpan(),
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val clickableSpan = object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                val isConnected = viewModel.isDeviceConnected()
+                                if (isConnected.not()) {
+                                    context.showShortToast("Ring not connected")
+                                    return
+                                }
+                                navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = true
+                                ds.color = descTxtColor
+                            }
+                        }
+
+                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        this.tvMessage.apply {
+                            text = spannable
+                            movementMethod = LinkMovementMethod.getInstance()
+                            highlightColor = Color.TRANSPARENT
+                        }
+                    }
+                    //
+//                    this.tvMessage.text = it.description?.shortDescription
+//                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
 

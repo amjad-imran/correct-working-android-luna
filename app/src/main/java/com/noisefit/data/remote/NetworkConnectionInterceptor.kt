@@ -277,6 +277,7 @@ class NetworkConnectionInterceptor(
                     Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
                 ).toString()
             )
+            addHeader("device-no", WatchInfoGlobals.firmwareDeviceIdRing.toString())
         }.build()
     }
 
