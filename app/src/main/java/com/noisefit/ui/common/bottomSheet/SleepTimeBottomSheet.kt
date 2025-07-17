@@ -54,10 +54,15 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         binding.lytTimePicker.timePicker.currentHour = addSleep.hour.toInt()
         binding.lytTimePicker.timePicker.currentMinute = addSleep.minute.toInt()
         val calendar = Calendar.getInstance()
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
+        /*val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)*/
         binding.lytTimePicker.timePicker.setOnTimeChangedListener { _, hour, minute ->
-            checkCondition(hour, currentHour, currentMinute, minute)
+            checkCondition(
+                hour,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                minute
+            )
         }
 
         binding.lytTimePicker.timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
@@ -77,7 +82,15 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
                     context.showShortToast(getString(R.string.text_please_select_a_time_before_current_time))
                 }
 
-            } else {
+            }
+            else if(hour == currentHour && minute > currentMinute){
+                binding.lytTimePicker.timePicker.currentMinute = currentMinute
+                if (!showTodayToast) {
+                    showTodayToast = true
+                    context.showShortToast(getString(R.string.text_please_select_a_time_before_current_time))
+                }
+            }
+            else {
                 if (hour != currentHour && minute != 0) {
                     showTodayToast = false
                 }

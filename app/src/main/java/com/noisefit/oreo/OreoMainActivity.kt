@@ -1260,6 +1260,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun handleAppLinkNavigation(appLink: AppLinks) {
+        val savedWorkout = viewModel.ringDataStore.getOngoingRecordWorkout()
+        if (savedWorkout != null) return
+
         when (appLink) {
             AppLinks.REFERRAL -> {
                 viewModel.getReferralInfo { data ->
@@ -1313,7 +1316,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 if (user?.userInfo?.gender.equals("female", true).not()) {
                     showShortToast(getString(R.string.text_feature_not_enabled_for_this_user))
                 } else {
-                    viewModel.getCycleHistoryData(){
+                    viewModel.getCycleHistoryData() {
                         navController?.navigate(R.id.fragmentCycleTracker)
                     }
                 }
@@ -1321,7 +1324,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
             AppLinks.CAFFEINE_WINDOW -> {
                 viewModel.getCaffeineWindowData { caffeineGraphData ->
-                    if(caffeineGraphData.status == true){
+                    if (caffeineGraphData.status == true) {
                         val caffeineValues = ArrayList<Int>()
                         caffeineGraphData.caffeine_window.forEach {
                             caffeineValues.add(it.dose)

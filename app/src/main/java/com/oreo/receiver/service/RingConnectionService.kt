@@ -1919,6 +1919,9 @@ constructor() : LifecycleService() {
         GlobalScope.launch {
             val mac = ringDataStore.getRingDevice()?.address
             val batteryPercent = watchDataStore.getBatteryPercentRing()
+
+            if (batteryPercent == 0) return@launch
+
             val request = JsonObject().apply {
                 this.addProperty("latitude", location.first)
                 this.addProperty("longitude", location.second)
