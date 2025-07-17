@@ -228,7 +228,7 @@ class SleepSleepTImeChartFragment :
             val dispFormat = DateTimeFormatter.ofPattern("h:mm a")
             while (current < max) {
 
-                yAxis.add(Pair(minMinutes, current.format(dispFormat).toUpperCase()))
+                yAxis.add(Pair(minMinutes, current.format(dispFormat).uppercase()))
                 minMinutes = minMinutes.plus(4 * 60)
                 current = current.plusMinutes(4 * 60)
             }

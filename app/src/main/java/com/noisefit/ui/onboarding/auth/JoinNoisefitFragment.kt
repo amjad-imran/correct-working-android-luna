@@ -155,44 +155,44 @@ class JoinNoisefitFragment :
     }
 
     private fun facebookLogin() {
-        callbackManager = CallbackManager.Factory.create()
-        binding.facebookHideBtn.setPermissions(listOf(FB_PUBLIC_PROFILE, FB_EMAIL))
-        binding.facebookHideBtn.fragment = this
-        binding.facebookHideBtn.registerCallback(
-            callbackManager,
-            object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    val request = GraphRequest.newMeRequest(
-                        loginResult.accessToken
-                    ) { response, _ ->
-                        if (response != null) {
-                            authViewModel.handleSocialLogin(
-                                loginResult.accessToken.token,
-                                AuthMode.facebook,
-                                null
-                            )
-                            disconnectFromFacebook()
-                        }
-                    }
-                    val parameters = Bundle()
-                    parameters.putString(
-                        "fields",
-                        "$FB_ID, $FB_EMAIL, $FB_FIRST_NAME, $FB_LAST_NAME, $FB_PICTURE"
-                    )
-                    request.parameters = parameters
-                    request.executeAsync()
-
-                }
-
-                override fun onCancel() {
-
-                }
-
-                override fun onError(error: FacebookException) {
-                    error.printStackTrace()
-                    uiController.onDisplayError(getString(R.string.text_something_went_wrong))
-                }
-            })
+//        callbackManager = CallbackManager.Factory.create()
+//        binding.facebookHideBtn.setPermissions(listOf(FB_PUBLIC_PROFILE, FB_EMAIL))
+//        binding.facebookHideBtn.fragment = this
+//        binding.facebookHideBtn.registerCallback(
+//            callbackManager,
+//            object : FacebookCallback<LoginResult> {
+//                override fun onSuccess(loginResult: LoginResult) {
+//                    val request = GraphRequest.newMeRequest(
+//                        loginResult.accessToken
+//                    ) { response, _ ->
+//                        if (response != null) {
+//                            authViewModel.handleSocialLogin(
+//                                loginResult.accessToken.token,
+//                                AuthMode.facebook,
+//                                null
+//                            )
+//                            disconnectFromFacebook()
+//                        }
+//                    }
+//                    val parameters = Bundle()
+//                    parameters.putString(
+//                        "fields",
+//                        "$FB_ID, $FB_EMAIL, $FB_FIRST_NAME, $FB_LAST_NAME, $FB_PICTURE"
+//                    )
+//                    request.parameters = parameters
+//                    request.executeAsync()
+//
+//                }
+//
+//                override fun onCancel() {
+//
+//                }
+//
+//                override fun onError(error: FacebookException) {
+//                    error.printStackTrace()
+//                    uiController.onDisplayError(getString(R.string.text_something_went_wrong))
+//                }
+//            })
     }
 
     private fun disconnectFromFacebook() {
