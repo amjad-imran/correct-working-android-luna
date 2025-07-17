@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shapeableImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/image_back_health_monitor"
+        android:background="@drawable/bg_light_exposure_corrective_activities"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,29 +19,62 @@
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <LinearLayout
-        android:id="@+id/linearLayout9"
+        android:id="@+id/llLytDoneLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center_vertical"
-        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView85"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            app:srcCompat="@drawable/ic_check_circadian" />
-
-        <TextView
-            android:id="@+id/textView167"
-            style="@style/S12"
+        <LinearLayout
+            android:id="@+id/llLytLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            tools:text="@string/text_done" />
+            android:visibility="gone"
+            android:background="@drawable/bg_log_45_perc_transparent_circadian"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                app:srcCompat="@drawable/ic_add" />
+
+            <TextView
+                style="@style/S12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_log" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLytDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:background="@drawable/bg_done_45_perc_green_circadian"
+            android:padding="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                app:srcCompat="@drawable/ic_check_circadian" />
+
+            <TextView
+                style="@style/S12"
+                android:textColor="#4CBD88"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_done" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -51,19 +85,19 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <TextView
-        android:id="@+id/textView174"
+        android:id="@+id/tvTitile"
         style="@style/S14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/text_light_exposure" />
 
     <TextView
-        android:id="@+id/textView175"
+        android:id="@+id/tvDesc"
         style="@style/S10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -72,9 +106,9 @@
         android:lineHeight="12sp"
         android:text="@string/text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up"
         android:textColor="#C4CBD9"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/textView174" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitile" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytOpenCloseTag"
@@ -84,7 +118,7 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/textView175">
+        app:layout_constraintTop_toBottomOf="@+id/tvDesc">
 
         <TextView
             android:id="@+id/tvOpenCloseTag"
@@ -99,7 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/text_done" />
+            tools:text="@string/text_open" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,6 +141,7 @@
         android:id="@+id/lytTimerTag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_timer_6_perc_transparent_circadian"
         android:layout_marginStart="4dp"
         android:paddingHorizontal="6dp"
         android:paddingVertical="3dp"
@@ -144,7 +179,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +209,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"
@@ -209,6 +245,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tvProgressTxt"
         style="@style/S12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

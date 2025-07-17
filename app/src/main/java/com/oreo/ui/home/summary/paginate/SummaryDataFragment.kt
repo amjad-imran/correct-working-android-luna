@@ -149,7 +149,13 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
                 }
 
-                OSummaryHealthOverviewClickEnum.StressCardClicked -> {}
+                OSummaryHealthOverviewClickEnum.StressCardClicked -> {
+                    if (viewModel.getStressWalkthroughShownStatus()) {
+                        navigate(R.id.fragmentOStressDetails)
+                    } else {
+                        navigate(R.id.stressSplashFragment)
+                    }
+                }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))

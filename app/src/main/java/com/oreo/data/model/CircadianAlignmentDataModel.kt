@@ -1,9 +1,11 @@
 package com.oreo.data.model
 
-import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 
 data class CorrectiveActivitiesModel(
-    @ColorRes val bgMainImg: Int,
+    @DrawableRes val bgMainImg: Int,
+    val title: String,
+    val desc: String,
     val onlyImgWithText: OnlyImgWithText?= null,
     val progressBarLytData: ProgressBarLytData?= null,
     val isOpen: Boolean ?= false,
@@ -11,13 +13,13 @@ data class CorrectiveActivitiesModel(
 )
 
 data class OnlyImgWithText(
-    @ColorRes val img: Int,
-    val txt: String
+    @DrawableRes val img: Int,
+    val txt: String ?= null
 )
 
 data class ProgressBarLytData(
     val totalProgress: Int,
     val currentProgress: Int,
-    @ColorRes val img: Int,
+    @DrawableRes val img: Int,
     val txt: String
 )

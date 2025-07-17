@@ -1220,7 +1220,7 @@ constructor(
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
                 if (BuildConfig.DEBUG) {
-                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.i(msg, p2 ?: "")
+                    Log.i(msg, p2 ?: "")
                 }
                 FileLogsUtils.saveILogs(
                     noiseFitDevice,
@@ -1233,7 +1233,7 @@ constructor(
 
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
                 if (BuildConfig.DEBUG) {
-                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.v(msg, p2 ?: "")
+                    Log.v(msg, p2 ?: "")
                 }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
@@ -1246,7 +1246,7 @@ constructor(
 
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
                 if (BuildConfig.DEBUG) {
-                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.e(msg, p2 ?: "")
+                    Log.e(msg, p2 ?: "")
                 }
                 FileLogsUtils.saveELogs(
                     noiseFitDevice,
@@ -1259,7 +1259,7 @@ constructor(
 
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
                 if (BuildConfig.DEBUG) {
-                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.d(msg, p2 ?: "")
+                    Log.d(msg, p2 ?: "")
                 }
                 FileLogsUtils.saveDLogs(
                     noiseFitDevice,
@@ -1272,7 +1272,7 @@ constructor(
 
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
                 if (BuildConfig.DEBUG) {
-                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.w(msg, p2 ?: "")
+                    Log.w(msg, p2 ?: "")
                 }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
