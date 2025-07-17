@@ -67,6 +67,7 @@ import com.zhapp.ble.bean.SportResponseBean
 import com.zhapp.ble.bean.SportStatusBean
 import com.zhapp.ble.bean.TodayActiveTypeData
 import com.zhapp.ble.bean.TodayRespiratoryRateData
+import com.zhapp.ble.bean.berry.DrinkWaterBean
 import com.zhapp.ble.callback.AutoSportDataCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.FitnessDataCallBack
@@ -609,6 +610,10 @@ constructor(
             }
 
             override fun onRingBatteryData(p0: RingBatteryBean?) {
+
+            }
+
+            override fun onDrinkWaterData(p0: DrinkWaterBean?) {
 
             }
 
