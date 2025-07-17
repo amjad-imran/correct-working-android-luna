@@ -8,6 +8,7 @@ import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.AiWorkouts
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutPlanViewModel @Inject constructor(
+    val sessionManager: SessionManager,
     val oreoDeviceRepository: OreoDeviceRepository,
     val localDataStore: DataStoredInterface,
 ) : BaseViewModel() {
