@@ -29,6 +29,9 @@ private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private const val MANUAL_MEASUREMENT_KEY_STRESS = "MANUAL_MEASUREMENT_KEY_STRESS"
+private const val MANUAL_MEASUREMENT_KEY_BODY_TEMP = "MANUAL_MEASUREMENT_KEY_BODY_TEMP"
+private const val MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN = "MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN"
+private const val MANUAL_MEASUREMENT_KEY_HRV = "MANUAL_MEASUREMENT_KEY_HRV"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
 private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 
@@ -363,6 +366,39 @@ class RingDataStoreImpl
     override fun getManualMeasurementValueStress(): ManualMeasurement? {
         return gson.fromJson(
             mPrefs.getString(MANUAL_MEASUREMENT_KEY_STRESS, null),
+            ManualMeasurement::class.java
+        )
+    }
+
+    override fun setManualMeasurementValueBodyTemp(data: ManualMeasurement) {
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_BODY_TEMP, gson.toJson(data))?.commit()
+    }
+
+    override fun getManualMeasurementValueBodyTemp(): ManualMeasurement? {
+        return gson.fromJson(
+            mPrefs.getString(MANUAL_MEASUREMENT_KEY_BODY_TEMP, null),
+            ManualMeasurement::class.java
+        )
+    }
+
+    override fun setManualMeasurementValueBloodOxygen(data: ManualMeasurement) {
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN, gson.toJson(data))?.commit()
+    }
+
+    override fun getManualMeasurementValueBloodOxygen(): ManualMeasurement? {
+        return gson.fromJson(
+            mPrefs.getString(MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN, null),
+            ManualMeasurement::class.java
+        )
+    }
+
+    override fun setManualMeasurementValueHrv(data: ManualMeasurement) {
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_HRV, gson.toJson(data))?.commit()
+    }
+
+    override fun getManualMeasurementValueHrv(): ManualMeasurement? {
+        return gson.fromJson(
+            mPrefs.getString(MANUAL_MEASUREMENT_KEY_HRV, null),
             ManualMeasurement::class.java
         )
     }

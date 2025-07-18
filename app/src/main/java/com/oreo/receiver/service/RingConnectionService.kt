@@ -1826,7 +1826,29 @@ constructor() : LifecycleService() {
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    } else {
+                    }
+                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BODY_TEMPERATURE){
+                        ringDataStore.setManualMeasurementValueBodyTemp(dataCallback.manualMeasurement)
+                        sessionManager.setManualMeasurementValue(
+                            true,
+                            dataCallback.manualMeasurement.manualMeasureType
+                        )
+                    }
+                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BLOOD_OXYGEN){
+                        ringDataStore.setManualMeasurementValueBloodOxygen(dataCallback.manualMeasurement)
+                        sessionManager.setManualMeasurementValue(
+                            true,
+                            dataCallback.manualMeasurement.manualMeasureType
+                        )
+                    }
+                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.HRV){
+                        ringDataStore.setManualMeasurementValueHrv(dataCallback.manualMeasurement)
+                        sessionManager.setManualMeasurementValue(
+                            true,
+                            dataCallback.manualMeasurement.manualMeasureType
+                        )
+                    }
+                    else {
                         ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,
