@@ -10,6 +10,10 @@ constructor() : KeyValueDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateData(keyValue: KeyValue) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getData(key: String, type: KeyValueDataType): KeyValue? {
         TODO("Not yet implemented")
     }
