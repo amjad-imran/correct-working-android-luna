@@ -1399,4 +1399,9 @@
         android:name="com.oreo.ui.measurementsTestingScreen.MeasurementsFragment"
         android:label="fragment_measurements"
         tools:layout="@layout/fragment_measurements" />
+    <fragment
+        android:id="@+id/quizCircadianFragment"
+        android:name="com.oreo.ui.circadianAlignment.QuizCircadianFragment"
+        android:label="fragment_quiz_circadian"
+        tools:layout="@layout/fragment_quiz_circadian" />
 </navigation>

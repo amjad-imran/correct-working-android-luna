@@ -2026,5 +2026,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_caffeine_window2">Caffeine Window</string>
     <string name="text_your_chronotype">YOUR CHRONOTYPE</string>
     <string name="text_retake_chronotype_quiz">Retake chronotype quiz</string>
+    <string name="text_skip2">Skip</string>
 
 </resources>
