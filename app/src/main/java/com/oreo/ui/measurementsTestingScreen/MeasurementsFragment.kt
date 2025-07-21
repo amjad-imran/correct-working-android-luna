@@ -166,7 +166,9 @@ class MeasurementsFragment :
                         showToast(context, "Please Connect the Ring")
                     }
                     TapMeasureState.LAST_MEASURED -> {
-                        binding.tvResult.text = "BodyTemp Val: ${it.second}"
+                        it.second?.let {
+                            binding.tvResult.text = "BodyTemp Val: ${it/100f}"
+                        }
                         viewModel.isMeasuringAny.postValue(false)
                     }
                     TapMeasureState.MEASURING -> {
