@@ -10,8 +10,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianGraphModel
+import com.oreo.data.model.CircadianMidPointModel
 
 
 class CircadianGraph @JvmOverloads constructor(
@@ -29,13 +29,13 @@ class CircadianGraph @JvmOverloads constructor(
     var avgBeforeIndex: Int = 6 // Example: 12:00 AM
     var avgNowIndex: Int = 9    // Example: 01:30 AM
 
-    val firstLabelPaint = Paint().apply {
+    val firstLabelBgPaint = Paint().apply {
         style = Paint.Style.FILL
         color = "#2C241F".toColorInt()
         strokeWidth = 2f
         isAntiAlias = true
     }
-    val secondLabelPaint = Paint().apply {
+    val secondLabelBgPaint = Paint().apply {
         style = Paint.Style.FILL
         color = "#3D3F43".toColorInt()
         strokeWidth = 2f
@@ -52,11 +52,11 @@ class CircadianGraph @JvmOverloads constructor(
     private val iconBitmapStart = BitmapFactory.decodeResource(resources, R.drawable.ic_sunset_grey)
     private val iconBitmapEnd = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise_grey)
 
-    private val avgBeforePaint = Paint().apply {
+    private val firstPaint = Paint().apply {
         color = Color.WHITE
     }
 
-    private val avgNowPaint = Paint().apply {
+    private val secondPaint = Paint().apply {
         color = Color.YELLOW
     }
 
@@ -66,8 +66,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     fun updateBars(barData: List<CircadianGraphModel>, colors: List<Int>) {
         this.barData = barData
-        barColors = colors
-        invalidate()        // --- Draw Label 2 ---
+        this.barColors = colors
+        invalidate()
 
     }
 
@@ -79,37 +79,49 @@ class CircadianGraph @JvmOverloads constructor(
         val barHeight = 100f
         val avgBarHeight = 120f
 
-        var nowAvgLeftStart = -1f
-        var beforeAvgLeftStart = -1f
+        var firstCircadianMidPointModel: CircadianMidPointModel? = null
+        var secondCircadianMidPointModel: CircadianMidPointModel? = null
+        var secondMidPointLeftStart = -1f
+        var firstMidPointLeftStart = -1f
         barData.forEachIndexed { index, value ->
             barPaint.color = barColors[index]
             val left = index * barWidth
             val top = centerY - barHeight
             val bottom = centerY + barHeight
 
-            canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 8f, 8f, barPaint)
+            canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, barPaint)
 
-            if (value.secondMidPoint) {
-                nowAvgLeftStart = left
+            if (value.firstMidPoint != null) {
+                firstCircadianMidPointModel = value.firstMidPoint
+                firstMidPointLeftStart = left
                 val top = centerY - avgBarHeight
                 val bottom = centerY + avgBarHeight
-                canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 8f, 8f, avgNowPaint)
-            }
-
-            if (value.firstMidPoint) {
-                beforeAvgLeftStart = left
-                val top = centerY - avgBarHeight
-                val bottom = centerY + avgBarHeight
+                value.firstMidPoint.color?.let {
+                    secondPaint.color = it
+                }
                 canvas.drawRoundRect(
                     left,
                     top,
                     left + barWidth * 0.6f,
                     bottom,
-                    8f,
-                    8f,
-                    avgBeforePaint
+                    4f,
+                    4f,
+                    firstPaint
                 )
             }
+
+            if (value.secondMidPoint != null) {
+                secondCircadianMidPointModel = value.secondMidPoint
+                secondMidPointLeftStart = left
+                val top = centerY - avgBarHeight
+                val bottom = centerY + avgBarHeight
+                value.secondMidPoint.color?.let {
+                    secondPaint.color = it
+                }
+                canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, secondPaint)
+            }
+
+
 
             if (index == 0 && !value.xAxis.isNullOrEmpty()) {
                 val textStartX = iconBitmapStart.width.toFloat() + 100f
@@ -142,18 +154,26 @@ class CircadianGraph @JvmOverloads constructor(
 
         }
 
-        drawTwoAboveText(canvas, beforeAvgLeftStart, nowAvgLeftStart)
+        drawTwoAboveText(
+            canvas,
+            firstMidPointLeftStart,
+            secondMidPointLeftStart,
+            firstCircadianMidPointModel,
+            secondCircadianMidPointModel
+        )
 
     }
 
     private fun drawTwoAboveText(
         canvas: Canvas,
-        beforeAvgLeftStart: Float,
-        nowAvgLeftStart: Float
+        firstMidPointLeftStart: Float,
+        secondMidPointLeftStart: Float,
+        firstCircadianMidPointModel: CircadianMidPointModel?,
+        secondCircadianMidPointModel: CircadianMidPointModel?
     ) {
         val cornerRadius = 100f
-        val label1 = "Avg Before"
-        val label2 = "Avg Now"
+        val label1 = firstCircadianMidPointModel?.title ?: ""
+        val label2 = secondCircadianMidPointModel?.title ?: ""
         val minSpacing = 24f
         val paddingH = 16f
         val paddingV = 8f
@@ -168,8 +188,8 @@ class CircadianGraph @JvmOverloads constructor(
         val label1BoxWidth = label1Width + paddingH * 4
         val label2BoxWidth = label2Width + paddingH * 4
 
-        var label1Left = beforeAvgLeftStart - label1BoxWidth / 2f
-        var label2Left = nowAvgLeftStart - label2BoxWidth / 2f
+        var label1Left = firstMidPointLeftStart - label1BoxWidth / 2f
+        var label2Left = secondMidPointLeftStart - label2BoxWidth / 2f
 
         label1Left = label1Left.coerceIn(0f, screenWidth - label1BoxWidth)
         label2Left = label2Left.coerceIn(0f, screenWidth - label2BoxWidth)
@@ -194,7 +214,14 @@ class CircadianGraph @JvmOverloads constructor(
             label1Left + label1BoxWidth,
             labelTop + labelBoxHeight
         )
-        canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelPaint)
+        firstCircadianMidPointModel?.bgColor?.let {
+            firstLabelBgPaint.color = it
+        }
+
+        firstCircadianMidPointModel?.color?.let {
+            textPaint.color = it
+        }
+        canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelBgPaint)
         textPaint.textAlign = Paint.Align.CENTER
         val text1X = label1Rect.centerX()
         val text1Y = label1Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
@@ -206,114 +233,19 @@ class CircadianGraph @JvmOverloads constructor(
             label2Left + label2BoxWidth,
             labelTop + labelBoxHeight
         )
-        canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelPaint)
+
+
+        secondCircadianMidPointModel?.bgColor?.let {
+            secondLabelBgPaint.color = it
+        }
+        secondCircadianMidPointModel?.color?.let {
+            textPaint.color = it
+        }
+        canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelBgPaint)
         val text2X = label2Rect.centerX()
         val text2Y = label2Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
         canvas.drawText(label2, text2X, text2Y, textPaint)
     }
 
 
-    private fun drawFirstAboveText(canvas: Canvas, firstBoxLeft: Float) {
-        val cornerRadius = 100f
-        val label2 = "Avg Now"
-        val label1 = "Avg Before"
-        val minSpacing = 24f
-
-        val label1Width = textPaint.measureText(label1)
-        val label2Width = textPaint.measureText(label2)
-        val textHeight = textPaint.fontMetrics.run { bottom - top }
-        val paddingH = 16f
-        val paddingV = 8f
-
-        val label1BoxWidth = label1Width + paddingH * 4
-        val label2BoxWidth = label2Width + paddingH * 4
-        val labelBoxHeight = textHeight + paddingV * 4
-
-        val totalWidthNeeded = label1BoxWidth + minSpacing + label2BoxWidth
-        val screenWidth = width.toFloat()
-
-        val label1BoxCenter = label1BoxWidth / 2
-
-        var label1Left = firstBoxLeft - label1BoxCenter
-
-        LOGS.d("label1Left $label1Left  --> firstBoxLeft $firstBoxLeft ===> label1BoxWidth $label1BoxWidth")
-
-        if (label1Left < 0) {
-            label1Left = firstBoxLeft
-        } else if (firstBoxLeft + totalWidthNeeded > screenWidth) {
-            label1Left = screenWidth - totalWidthNeeded
-        }
-
-        val label2Left = label1Left + label1BoxWidth + minSpacing
-        val labelTop = 40f
-        val fontMetrics = textPaint.fontMetrics
-
-        val label1Rect =
-            RectF(label1Left, labelTop, label1Left + label1BoxWidth, labelTop + labelBoxHeight)
-        canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelPaint)
-        textPaint.textAlign = Paint.Align.CENTER
-        val textX = label1Rect.centerX()
-        val textY = label1Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-        canvas.drawText(label1, textX, textY, textPaint)
-
-
-//        val label2Rect =
-//            RectF(label2Left, labelTop, label2Left + label2BoxWidth, labelTop + labelBoxHeight)
-//        canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelPaint)
-//        val text2X = label2Rect.centerX()
-//        val text2Y = label2Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-//        canvas.drawText(label2, text2X, text2Y, textPaint)
-    }
-
-    private fun drawSecondAboveText(canvas: Canvas, firstBoxLeft: Float) {
-        val cornerRadius = 100f
-        val label2 = "Avg Now"
-        val label1 = "Avg Before"
-        val minSpacing = 24f
-
-        val label1Width = textPaint.measureText(label1)
-        val label2Width = textPaint.measureText(label2)
-        val textHeight = textPaint.fontMetrics.run { bottom - top }
-        val paddingH = 16f
-        val paddingV = 8f
-
-        val label1BoxWidth = label1Width + paddingH * 4
-        val label2BoxWidth = label2Width + paddingH * 4
-        val labelBoxHeight = textHeight + paddingV * 4
-
-        val totalWidthNeeded = label1BoxWidth + minSpacing + label2BoxWidth
-        val screenWidth = width.toFloat()
-
-        val label1BoxCenter = label1BoxWidth / 2
-
-        var label1Left = firstBoxLeft - label1BoxCenter
-
-        LOGS.d("label1Left $label1Left  --> firstBoxLeft $firstBoxLeft ===> label1BoxWidth $label1BoxWidth")
-
-        if (label1Left < 0) {
-            label1Left = firstBoxLeft
-        } else if (firstBoxLeft + totalWidthNeeded > screenWidth) {
-            label1Left = screenWidth - totalWidthNeeded
-        }
-
-        val label2Left = label1Left + label1BoxWidth + minSpacing
-        val labelTop = 40f
-        val fontMetrics = textPaint.fontMetrics
-
-//        val label1Rect =
-//            RectF(label1Left, labelTop, label1Left + label1BoxWidth, labelTop + labelBoxHeight)
-//        canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelPaint)
-//        textPaint.textAlign = Paint.Align.CENTER
-//        val textX = label1Rect.centerX()
-//        val textY = label1Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-//        canvas.drawText(label1, textX, textY, textPaint)
-
-
-        val label2Rect =
-            RectF(label2Left, labelTop, label2Left + label2BoxWidth, labelTop + labelBoxHeight)
-        canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelPaint)
-        val text2X = label2Rect.centerX()
-        val text2Y = label2Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-        canvas.drawText(label2, text2X, text2Y, textPaint)
-    }
 }
