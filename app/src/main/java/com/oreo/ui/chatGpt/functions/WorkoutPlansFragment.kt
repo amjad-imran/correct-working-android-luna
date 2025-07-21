@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -90,6 +91,12 @@ class WorkoutPlansFragment :
         binding.lytWeek.tvSun.setOnClickListener(weekListener)
 
         binding.ivEdit.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lunaai_edit_clicked,
+                HashMap<String, Any>().apply {
+                    this["Section"] = "workout"
+                }
+            )
             navigate(
                 WorkoutPlansFragmentDirections.actionWorkoutPlansFragmentToChatGptFragment(
                     "",
@@ -218,6 +225,12 @@ class WorkoutPlansFragment :
         layouts.forEach {
             if (it.tag.toString().toInt() == selectedTag) {
                 it.setBackgroundResource(R.drawable.bg_week_selected)
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.ai_day_selected,
+                    HashMap<String, Any>().apply {
+                        this["Section"] = "workout"
+                    }
+                )
             } else {
                 it.setBackgroundResource(0)
             }

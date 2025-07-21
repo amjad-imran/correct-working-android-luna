@@ -560,6 +560,12 @@ class CycleTrackerFragment :
                 binding.lytWomenDayAnnouncement.root.gone()
             }
 
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.day_change_click,
+                HashMap<String, Any>().apply {
+                    this["source"] = "cycle_tracker"
+                }
+            )
             viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         }
 

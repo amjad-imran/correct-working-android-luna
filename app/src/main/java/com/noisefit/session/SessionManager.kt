@@ -165,6 +165,9 @@ class SessionManager
     private val _showSyncOfflineData = MutableLiveData<Event<HealthOverviewDataType>>()
     private val _manualMeasurementValue = MutableLiveData<Event<Boolean>>()
     private val _manualMeasurementValueStress = MutableLiveData<Event<Boolean>>()
+    private val _manualMeasurementBodyTemp = MutableLiveData<Event<Boolean>>()
+    private val _manualMeasurementBloodOxygen = MutableLiveData<Event<Boolean>>()
+    private val _manualMeasurementHrv = MutableLiveData<Event<Boolean>>()
     private val _deviceQueryAction = MutableLiveData<QueryAction>()
     private val _updateDeviceQueryAction = MutableLiveData<UpdateDeviceAction>()
     private val _deviceQueryCallback = MutableLiveData<QueryCallback>()
@@ -190,6 +193,15 @@ class SessionManager
 
     val manualMeasurementValueStress: LiveData<Event<Boolean>>
         get() = _manualMeasurementValueStress
+
+    val manualMeasurementBodyTemp: LiveData<Event<Boolean>>
+        get() = _manualMeasurementBodyTemp
+
+    val manualMeasurementBloodOxygen: LiveData<Event<Boolean>>
+        get() = _manualMeasurementBloodOxygen
+
+    val manualMeasurementHrv: LiveData<Event<Boolean>>
+        get() = _manualMeasurementHrv
 
     val bluetoothState: LiveData<Boolean>
         get() = _bluetoothOnState
@@ -261,8 +273,18 @@ class SessionManager
         GlobalScope.launch(Main) {
             if (manualMeasureType == ManualMeasureType.STRESS) {
                 _manualMeasurementValueStress.value = Event(status)
-            } else if (manualMeasureType == ManualMeasureType.HEART_RATE) {
+            }
+            else if (manualMeasureType == ManualMeasureType.HEART_RATE) {
                 _manualMeasurementValue.value = Event(status)
+            }
+            else if(manualMeasureType == ManualMeasureType.BODY_TEMPERATURE){
+                _manualMeasurementBodyTemp.value = Event(status)
+            }
+            else if(manualMeasureType == ManualMeasureType.BLOOD_OXYGEN){
+                _manualMeasurementBloodOxygen.value = Event(status)
+            }
+            else if(manualMeasureType == ManualMeasureType.HRV){
+                _manualMeasurementHrv.value = Event(status)
             }
         }
     }

@@ -247,6 +247,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun initListener() {
 
         binding.blurViewSelector.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.activity_event_cancelled,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage,activity"
+                }
+            )
             animateFabDown()
             //binding.blurViewSelector.gone()
         }
@@ -290,6 +296,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.activity_event_cancelled,
+                HashMap<String, Any>().apply {
+                    this["source"] = "homepage,activity"
+                }
+            )
             animateFabDown()
         }
 

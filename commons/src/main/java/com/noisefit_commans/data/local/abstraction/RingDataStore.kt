@@ -53,6 +53,16 @@ interface RingDataStore {
     fun setManualMeasurementValueStress(data: ManualMeasurement)
     fun getManualMeasurementValueStress(): ManualMeasurement?
 
+    fun setManualMeasurementValueBodyTemp(data: ManualMeasurement)
+    fun getManualMeasurementValueBodyTemp(): ManualMeasurement?
+
+    fun setManualMeasurementValueBloodOxygen(data: ManualMeasurement)
+    fun getManualMeasurementValueBloodOxygen(): ManualMeasurement?
+
+    fun setManualMeasurementValueHrv(data: ManualMeasurement)
+    fun getManualMeasurementValueHrv(): ManualMeasurement?
+
+
     fun saveAutoLogsTimeStamp()
     fun getAutoLogsTimeStamp(): Long
     fun isShowDeviceIntro(): Boolean

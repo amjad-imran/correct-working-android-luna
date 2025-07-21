@@ -438,6 +438,10 @@ constructor(
                 ManualMeasureType.STRESS
             }
 
+            ActiveMeasureCallBack.MeasureType.STRESS_HRV.type -> {
+                ManualMeasureType.HRV
+            }
+
             else -> {
                 ManualMeasureType.HEART_RATE
             }
@@ -466,6 +470,10 @@ constructor(
 
             ManualMeasureType.STRESS -> {
                 ActiveMeasureCallBack.MeasureType.STRESS.type
+            }
+
+            ManualMeasureType.HRV -> {
+                ActiveMeasureCallBack.MeasureType.STRESS_HRV.type
             }
         }
 

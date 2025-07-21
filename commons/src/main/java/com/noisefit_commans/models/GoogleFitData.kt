@@ -23,6 +23,7 @@ enum class ManualMeasureType() {
     HEART_RATE,
     BLOOD_OXYGEN,
     STRESS,
+    HRV,
     BODY_TEMPERATURE
 }
 
