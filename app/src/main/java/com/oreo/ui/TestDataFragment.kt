@@ -80,13 +80,13 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
                 }
             }
 
-            circadianGraphModelList.add(
-                CircadianGraphModel(
-                    xAxis = xAxis,
-                    secondMidPoint = isNowAvg,
-                    firstMidPoint = isBeforeAvg
-                )
-            )
+//            circadianGraphModelList.add(
+//                CircadianGraphModel(
+//                    xAxis = xAxis,
+//                    secondMidPoint = isNowAvg,
+//                    firstMidPoint = isBeforeAvg
+//                )
+//            )
         }
 
         val colors = List(binding.circadianGraph.totalBars) {
