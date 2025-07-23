@@ -4,14 +4,12 @@
     android:id="@+id/questions_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oreo.ui.circadianAlignment.QuizCircadianFragment">
+    tools:context="com.oreo.ui.circadianAlignment.quiz.QuizCircadianFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.oreo.ui.circadianAlignment.quiz.OneByOneRecyclerView
         android:id="@+id/rvQuestions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp" />
+        android:clipToPadding="false" />
 
 </FrameLayout>

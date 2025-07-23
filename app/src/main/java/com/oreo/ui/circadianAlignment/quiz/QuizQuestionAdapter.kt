@@ -1,4 +1,4 @@
-package com.oreo.ui.circadianAlignment
+package com.oreo.ui.circadianAlignment.quiz
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
