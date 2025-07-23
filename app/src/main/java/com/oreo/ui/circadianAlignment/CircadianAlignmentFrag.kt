@@ -219,6 +219,10 @@ class CircadianAlignmentFrag :
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
+        binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
+            navigate(R.id.quizCircadianFragment)
+        }
     }
 
     override fun subscribeObservers() {

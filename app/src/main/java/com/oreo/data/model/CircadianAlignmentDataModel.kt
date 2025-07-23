@@ -23,3 +23,9 @@ data class ProgressBarLytData(
     @DrawableRes val img: Int,
     val txt: String
 )
+
+data class QuizQuestionCircadianDataModel(
+    val text: String,
+    val options: List<String>,
+    var selectedOption: String? = null
+)
