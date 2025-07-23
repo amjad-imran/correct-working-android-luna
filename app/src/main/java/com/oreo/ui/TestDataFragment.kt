@@ -55,53 +55,10 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
         val graphView = binding.circadianGraph
 
         val circadianGraphModelList = ArrayList<CircadianGraphModel>()
-        for (index in 0..binding.circadianGraph.totalBars - 1) {
-            var xAxis: String? = null
-            var isBeforeAvg: Boolean = false
-            var isNowAvg: Boolean = false
-            when (index) {
-                0 -> {
-                    xAxis = "12:00 am"
-                    isBeforeAvg = true
-                }
 
-                4 -> {
-
-
-                }
-
-                27 -> {
-
-                }
-
-                binding.circadianGraph.totalBars - 1 -> {
-                    isNowAvg = true
-                    xAxis = "5:00 am"
-                }
-            }
-
-//            circadianGraphModelList.add(
-//                CircadianGraphModel(
-//                    xAxis = xAxis,
-//                    secondMidPoint = isNowAvg,
-//                    firstMidPoint = isBeforeAvg
-//                )
-//            )
-        }
-
-        val colors = List(binding.circadianGraph.totalBars) {
-            when (it) {
-                in 0..5 -> Color.parseColor("#444444")
-                in 6..12 -> Color.parseColor("#aa8866")
-                in 13..20 -> Color.parseColor("#7799cc")
-                else -> Color.parseColor("#333333")
-            }
-        }
-
-        graphView.avgBeforeIndex = 6
-        graphView.avgNowIndex = 9
-
-        graphView.updateBars(circadianGraphModelList, colors)
+//        graphView.avgBeforeIndex = 6
+//        graphView.avgNowIndex = 9
+//        graphView.updateBars(circadianGraphModelList, colors)
 
 //        binding.rvData.layoutManager = LinearLayoutManager(requireContext())
 //        binding.rvData.adapter = adapter

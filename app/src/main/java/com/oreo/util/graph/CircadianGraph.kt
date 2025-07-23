@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.toColorInt
@@ -20,14 +22,12 @@ class CircadianGraph @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val totalHours = 6
-    private val perHourInterval = 6
-    val totalBars = totalHours * perHourInterval
-    private var barData: List<CircadianGraphModel> = ArrayList()
-    private var barColors: List<Int> = List(totalBars) { Color.DKGRAY }
+    private var totalHours = 6
+    private val perHourInterval = 6 ///60/10 = 6 (10 minutes right now)
 
-    var avgBeforeIndex: Int = 6 // Example: 12:00 AM
-    var avgNowIndex: Int = 9    // Example: 01:30 AM
+    private var barData: List<CircadianGraphModel> = ArrayList()
+    private var barColors: List<Int> = List(totalBars()) { Color.DKGRAY }
+
 
     val firstLabelBgPaint = Paint().apply {
         style = Paint.Style.FILL
@@ -52,6 +52,13 @@ class CircadianGraph @JvmOverloads constructor(
     private val iconBitmapStart = BitmapFactory.decodeResource(resources, R.drawable.ic_sunset_grey)
     private val iconBitmapEnd = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise_grey)
 
+    fun totalBars(): Int{
+       return totalHours * perHourInterval
+    }
+    fun updateTotalHours(hour: Int){
+        totalHours = hour
+
+    }
     private val firstPaint = Paint().apply {
         color = Color.WHITE
     }
@@ -74,10 +81,10 @@ class CircadianGraph @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val barWidth = width.toFloat() / totalBars
+        val barWidth = width.toFloat() / totalBars()
         val centerY = height / 2f
-        val barHeight = 100f
-        val avgBarHeight = 120f
+        val barHeight = 80f
+        val avgBarHeight = 100f
 
         var firstCircadianMidPointModel: CircadianMidPointModel? = null
         var secondCircadianMidPointModel: CircadianMidPointModel? = null
@@ -89,6 +96,20 @@ class CircadianGraph @JvmOverloads constructor(
             val top = centerY - barHeight
             val bottom = centerY + barHeight
 
+//            val gradient = LinearGradient(
+//                left, top,  // Start (left)
+//                left + barWidth * 0.6f, top, // End (right), y is same for horizontal gradient
+//                intArrayOf(Color.RED, Color.YELLOW), // Start to end colors
+//                null, // Use default evenly spaced positions
+//                Shader.TileMode.CLAMP
+//            )
+
+//            val gradient = LinearGradient(
+//                left, top, left + barWidth * 0.6f, bottom,
+//                Color.RED, Color.BLUE,
+//                Shader.TileMode.CLAMP
+//            )
+//            barPaint.shader = gradient
             canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, barPaint)
 
             if (value.firstMidPoint != null) {
@@ -96,7 +117,7 @@ class CircadianGraph @JvmOverloads constructor(
                 firstMidPointLeftStart = left
                 val top = centerY - avgBarHeight
                 val bottom = centerY + avgBarHeight
-                value.firstMidPoint.color?.let {
+                value.firstMidPoint?.color?.let {
                     secondPaint.color = it
                 }
                 canvas.drawRoundRect(
@@ -115,26 +136,32 @@ class CircadianGraph @JvmOverloads constructor(
                 secondMidPointLeftStart = left
                 val top = centerY - avgBarHeight
                 val bottom = centerY + avgBarHeight
-                value.secondMidPoint.color?.let {
+                value.secondMidPoint?.color?.let {
                     secondPaint.color = it
                 }
-                canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, secondPaint)
+                if(firstMidPointLeftStart == secondMidPointLeftStart){
+                    canvas.drawRoundRect(left, top + 15f, left + barWidth * 0.6f, bottom- 15f, 4f, 4f, secondPaint)
+                }else{
+                    canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, secondPaint)
+                }
+
             }
 
 
-
             if (index == 0 && !value.xAxis.isNullOrEmpty()) {
+                textPaint.color = "#555A5E".toColorInt()
                 val textStartX = iconBitmapStart.width.toFloat() + 100f
                 canvas.drawBitmap(iconBitmapStart, left, bottom + 40, null)
                 canvas.drawText(
                     value.xAxis,
                     textStartX,
-                    bottom + 30 + iconBitmapStart.height.toFloat(),
+                    bottom + 35 + iconBitmapStart.height.toFloat(),
                     textPaint
                 )
 
 
             } else if (index == barData.size - 1 && !value.xAxis.isNullOrEmpty()) {
+                textPaint.color = "#555A5E".toColorInt()
                 val textStartX = left - iconBitmapEnd.width.toFloat() - 80f
                 canvas.drawBitmap(
                     iconBitmapEnd,
@@ -145,10 +172,19 @@ class CircadianGraph @JvmOverloads constructor(
                 canvas.drawText(
                     value.xAxis,
                     textStartX,
-                    bottom + 30 + iconBitmapStart.height.toFloat(),
+                    bottom + 35 + iconBitmapStart.height.toFloat(),
                     textPaint
                 )
 
+            }else if(!value.xAxis.isNullOrEmpty()){
+                textPaint.color = "#555A5E".toColorInt()
+                val label1Width = textPaint.measureText(value.xAxis)
+                canvas.drawText(
+                    value.xAxis,
+                    left,
+                    bottom + 35 + iconBitmapStart.height.toFloat(),
+                    textPaint
+                )
             }
 
 
@@ -208,43 +244,52 @@ class CircadianGraph @JvmOverloads constructor(
 
         val labelTop = 40f
 
-        val label1Rect = RectF(
-            label1Left,
-            labelTop,
-            label1Left + label1BoxWidth,
-            labelTop + labelBoxHeight
-        )
-        firstCircadianMidPointModel?.bgColor?.let {
-            firstLabelBgPaint.color = it
-        }
-
-        firstCircadianMidPointModel?.color?.let {
-            textPaint.color = it
-        }
-        canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelBgPaint)
-        textPaint.textAlign = Paint.Align.CENTER
-        val text1X = label1Rect.centerX()
-        val text1Y = label1Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-        canvas.drawText(label1, text1X, text1Y, textPaint)
-
-        val label2Rect = RectF(
-            label2Left,
-            labelTop,
-            label2Left + label2BoxWidth,
-            labelTop + labelBoxHeight
-        )
 
 
-        secondCircadianMidPointModel?.bgColor?.let {
-            secondLabelBgPaint.color = it
+        firstCircadianMidPointModel?.let {
+            val label1Rect = RectF(
+                label1Left,
+                labelTop,
+                label1Left + label1BoxWidth,
+                labelTop + labelBoxHeight
+            )
+
+            firstCircadianMidPointModel.bgColor?.let {
+                firstLabelBgPaint.color = it
+            }
+
+            firstCircadianMidPointModel.color?.let {
+                textPaint.color = it
+            }
+            canvas.drawRoundRect(label1Rect, cornerRadius, cornerRadius, firstLabelBgPaint)
+            textPaint.textAlign = Paint.Align.CENTER
+            val text1X = label1Rect.centerX()
+            val text1Y = label1Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
+            canvas.drawText(label1, text1X, text1Y, textPaint)
         }
-        secondCircadianMidPointModel?.color?.let {
-            textPaint.color = it
+
+        secondCircadianMidPointModel?.let {
+            val label2Rect = RectF(
+                label2Left,
+                labelTop,
+                label2Left + label2BoxWidth,
+                labelTop + labelBoxHeight
+            )
+
+
+            secondCircadianMidPointModel.bgColor?.let {
+                secondLabelBgPaint.color = it
+            }
+            secondCircadianMidPointModel.color?.let {
+                textPaint.color = it
+            }
+            canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelBgPaint)
+            val text2X = label2Rect.centerX()
+            val text2Y = label2Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
+            canvas.drawText(label2, text2X, text2Y, textPaint)
         }
-        canvas.drawRoundRect(label2Rect, cornerRadius, cornerRadius, secondLabelBgPaint)
-        val text2X = label2Rect.centerX()
-        val text2Y = label2Rect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2
-        canvas.drawText(label2, text2X, text2Y, textPaint)
+
+
     }
 
 
