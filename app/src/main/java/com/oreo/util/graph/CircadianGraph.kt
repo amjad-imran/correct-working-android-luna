@@ -44,7 +44,7 @@ class CircadianGraph @JvmOverloads constructor(
 
     private val textPaint = Paint().apply {
         color = "#555A5E".toColorInt()
-        textSize = 36f
+        textSize = 24f
         textAlign = Paint.Align.CENTER
         isAntiAlias = true
     }
@@ -85,8 +85,8 @@ class CircadianGraph @JvmOverloads constructor(
 
         val barWidth = width.toFloat() / totalBars()
         val centerY = height / 2f
-        val barHeight = 80f
-        val avgBarHeight = 100f
+        val barHeight = 60f
+        val avgBarHeight = 70f
 
         var firstCircadianMidPointModel: CircadianMidPointModel? = null
         var secondCircadianMidPointModel: CircadianMidPointModel? = null
@@ -128,9 +128,9 @@ class CircadianGraph @JvmOverloads constructor(
                     }
                     canvas.drawRoundRect(
                         left,
-                        top2 + 15f,
+                        top2 + 10f,
                         left + barWidth * 0.6f,
-                        bottom2 - 15f,
+                        bottom2 - 10f,
                         4f,
                         4f,
                         secondPaint
@@ -180,7 +180,7 @@ class CircadianGraph @JvmOverloads constructor(
 
             if (index == 0 && !value.xAxis.isNullOrEmpty()) {
                 textPaint.color = "#555A5E".toColorInt()
-                val textStartX = iconBitmapStart.width.toFloat() + 100f
+                val textStartX = iconBitmapStart.width.toFloat() + 60f
                 canvas.drawBitmap(iconBitmapStart, left, bottom + 40, null)
                 canvas.drawText(
                     value.xAxis,
@@ -192,7 +192,7 @@ class CircadianGraph @JvmOverloads constructor(
 
             } else if (index == barData.size - 1 && !value.xAxis.isNullOrEmpty()) {
                 textPaint.color = "#555A5E".toColorInt()
-                val textStartX = left - iconBitmapEnd.width.toFloat() - 80f
+                val textStartX = left - iconBitmapEnd.width.toFloat() - 40f
                 canvas.drawBitmap(
                     iconBitmapEnd,
                     left - iconBitmapEnd.width / 2,
