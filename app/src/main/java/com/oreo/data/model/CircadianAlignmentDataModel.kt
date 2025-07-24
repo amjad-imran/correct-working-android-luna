@@ -3,13 +3,14 @@ package com.oreo.data.model
 import androidx.annotation.DrawableRes
 
 data class CorrectiveActivitiesModel(
+    val key: String,
     @DrawableRes val bgMainImg: Int,
     val title: String,
     val desc: String,
     val onlyImgWithText: OnlyImgWithText?= null,
     val progressBarLytData: ProgressBarLytData?= null,
-    val isOpen: Boolean ?= false,
-    val time:String
+    val logStatus: Boolean?,
+    val time:String?
 )
 
 data class OnlyImgWithText(

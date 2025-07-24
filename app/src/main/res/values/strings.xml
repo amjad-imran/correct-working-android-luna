@@ -2027,5 +2027,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_your_chronotype">YOUR CHRONOTYPE</string>
     <string name="text_retake_chronotype_quiz">Retake chronotype quiz</string>
     <string name="text_skip2">Skip</string>
+    <string name="text_have_you_completed_this_task">Have you completed this task?</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Ensure that you were able to complete the activity in the corrective window.</string>
+    <string name="text_timeval_left">%1$s left</string>
 
 </resources>

@@ -10,7 +10,9 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.CorrectiveActivitiesModel
 
-class CorrectiveActivitiesAdapter:
+class CorrectiveActivitiesAdapter(
+    val onLogClick: (CorrectiveActivitiesModel) -> Unit
+):
     RecyclerView.Adapter<CorrectiveActivitiesAdapter.ViewHolder>() {
 
         private val mList: ArrayList<CorrectiveActivitiesModel> = ArrayList()
@@ -22,11 +24,13 @@ class CorrectiveActivitiesAdapter:
         val context: Context = binding.root.context
 
         fun bind(data: CorrectiveActivitiesModel) {
+            val context = binding.root.context
+
             binding.shapeableImageView.setImageResource(data.bgMainImg)
             binding.tvTitile.text = data.title
             binding.tvDesc.text = data.desc
 
-            if(data.isOpen == true){
+            /*if(data.isOpen == true){
                 binding.lytOpenCloseTag.setBackgroundResource(R.drawable.back_hm_optimal)
                 binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
 
@@ -37,7 +41,7 @@ class CorrectiveActivitiesAdapter:
                 binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
 
                 binding.lytTimerTag.gone()
-            }
+            }*/
 
             data.onlyImgWithText?.let { lytData ->
                 binding.lytWithProgressBar.gone()
@@ -71,6 +75,33 @@ class CorrectiveActivitiesAdapter:
                     //code
                     visible()
                 }*/
+            }
+
+            if (data.time==null){
+                binding.lytTimerTag.gone()
+                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
+                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
+            }else{
+                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
+                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_open_tag_circadian)
+
+                binding.tvTimerTag.text = data.time
+                binding.lytTimerTag.visible()
+            }
+
+            if(data.logStatus == null){
+                binding.llLytDone.gone()
+                binding.llLytLog.gone()
+            }else if(data.logStatus){
+                binding.llLytLog.gone()
+                binding.llLytDone.visible()
+            }else{
+                binding.llLytDoneLog.gone()
+                binding.llLytLog.visible()
+            }
+
+            binding.llLytDoneLog.setOnClickListener {
+                onLogClick(data)
             }
 
         }
