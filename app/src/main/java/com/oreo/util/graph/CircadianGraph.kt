@@ -4,10 +4,8 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.toColorInt
@@ -24,6 +22,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     private var totalHours = 6
     private val perHourInterval = 6 ///60/10 = 6 (10 minutes right now)
+
+    var drawOnSameIndex = false
 
     private var barData: List<CircadianGraphModel> = ArrayList()
     private var barColors: List<Int> = List(totalBars()) { Color.DKGRAY }
@@ -52,13 +52,15 @@ class CircadianGraph @JvmOverloads constructor(
     private val iconBitmapStart = BitmapFactory.decodeResource(resources, R.drawable.ic_sunset_grey)
     private val iconBitmapEnd = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise_grey)
 
-    fun totalBars(): Int{
-       return totalHours * perHourInterval
+    fun totalBars(): Int {
+        return totalHours * perHourInterval
     }
-    fun updateTotalHours(hour: Int){
+
+    fun updateTotalHours(hour: Int) {
         totalHours = hour
 
     }
+
     private val firstPaint = Paint().apply {
         color = Color.WHITE
     }
@@ -96,55 +98,83 @@ class CircadianGraph @JvmOverloads constructor(
             val top = centerY - barHeight
             val bottom = centerY + barHeight
 
-//            val gradient = LinearGradient(
-//                left, top,  // Start (left)
-//                left + barWidth * 0.6f, top, // End (right), y is same for horizontal gradient
-//                intArrayOf(Color.RED, Color.YELLOW), // Start to end colors
-//                null, // Use default evenly spaced positions
-//                Shader.TileMode.CLAMP
-//            )
-
-//            val gradient = LinearGradient(
-//                left, top, left + barWidth * 0.6f, bottom,
-//                Color.RED, Color.BLUE,
-//                Shader.TileMode.CLAMP
-//            )
-//            barPaint.shader = gradient
             canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, barPaint)
 
-            if (value.firstMidPoint != null) {
-                firstCircadianMidPointModel = value.firstMidPoint
-                firstMidPointLeftStart = left
-                val top = centerY - avgBarHeight
-                val bottom = centerY + avgBarHeight
-                value.firstMidPoint?.color?.let {
-                    secondPaint.color = it
-                }
-                canvas.drawRoundRect(
-                    left,
-                    top,
-                    left + barWidth * 0.6f,
-                    bottom,
-                    4f,
-                    4f,
-                    firstPaint
-                )
-            }
+            if (drawOnSameIndex) {
+                if (value.bothMidPoint != null) {
+                    firstCircadianMidPointModel = value.bothMidPoint?.first
+                    firstMidPointLeftStart = left
+                    val top = centerY - avgBarHeight
+                    val bottom = centerY + avgBarHeight
+                    value.bothMidPoint?.first?.color?.let {
+                        firstPaint.color = it
+                    }
+                    canvas.drawRoundRect(
+                        left,
+                        top,
+                        left + barWidth * 0.6f,
+                        bottom,
+                        4f,
+                        4f,
+                        firstPaint
+                    )
 
-            if (value.secondMidPoint != null) {
-                secondCircadianMidPointModel = value.secondMidPoint
-                secondMidPointLeftStart = left
-                val top = centerY - avgBarHeight
-                val bottom = centerY + avgBarHeight
-                value.secondMidPoint?.color?.let {
-                    secondPaint.color = it
-                }
-                if(firstMidPointLeftStart == secondMidPointLeftStart){
-                    canvas.drawRoundRect(left, top + 15f, left + barWidth * 0.6f, bottom- 15f, 4f, 4f, secondPaint)
-                }else{
-                    canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, secondPaint)
+                    secondCircadianMidPointModel = value.bothMidPoint?.second
+                    secondMidPointLeftStart = left
+                    val top2 = centerY - avgBarHeight
+                    val bottom2 = centerY + avgBarHeight
+                    value.bothMidPoint?.second?.color?.let {
+                        secondPaint.color = it
+                    }
+                    canvas.drawRoundRect(
+                        left,
+                        top2 + 15f,
+                        left + barWidth * 0.6f,
+                        bottom2 - 15f,
+                        4f,
+                        4f,
+                        secondPaint
+                    )
                 }
 
+            } else {
+                if (value.firstMidPoint != null) {
+                    firstCircadianMidPointModel = value.firstMidPoint
+                    firstMidPointLeftStart = left
+                    val top = centerY - avgBarHeight
+                    val bottom = centerY + avgBarHeight
+                    value.firstMidPoint?.color?.let {
+                        firstPaint.color = it
+                    }
+                    canvas.drawRoundRect(
+                        left,
+                        top,
+                        left + barWidth * 0.6f,
+                        bottom,
+                        4f,
+                        4f,
+                        firstPaint
+                    )
+                } else if (value.secondMidPoint != null) {
+                    secondCircadianMidPointModel = value.secondMidPoint
+                    secondMidPointLeftStart = left
+                    val top = centerY - avgBarHeight
+                    val bottom = centerY + avgBarHeight
+                    value.secondMidPoint?.color?.let {
+                        secondPaint.color = it
+                    }
+                    canvas.drawRoundRect(
+                        left,
+                        top,
+                        left + barWidth * 0.6f,
+                        bottom,
+                        4f,
+                        4f,
+                        secondPaint
+                    )
+
+
+                }
             }
 
 
@@ -176,7 +206,7 @@ class CircadianGraph @JvmOverloads constructor(
                     textPaint
                 )
 
-            }else if(!value.xAxis.isNullOrEmpty()){
+            } else if (!value.xAxis.isNullOrEmpty()) {
                 textPaint.color = "#555A5E".toColorInt()
                 val label1Width = textPaint.measureText(value.xAxis)
                 canvas.drawText(

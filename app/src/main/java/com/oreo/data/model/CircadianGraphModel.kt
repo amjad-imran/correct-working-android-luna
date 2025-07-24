@@ -4,6 +4,7 @@ data class CircadianGraphModel(
     val xAxis: String? = null,
     var firstMidPoint: CircadianMidPointModel? = null,
     var secondMidPoint: CircadianMidPointModel? = null,
+    var bothMidPoint: Pair<CircadianMidPointModel?,CircadianMidPointModel?>? = null,
 )
 
 data class CircadianMidPointModel(

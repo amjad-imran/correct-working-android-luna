@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CircadianAlignmentViewModel @Inject constructor(
     val resourceProvider: ResourcesProvider,
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val lightExposureData = MutableLiveData<CorrectiveActivitiesModel>()
     val dailyStepsData = MutableLiveData<CorrectiveActivitiesModel>()
@@ -27,7 +28,7 @@ class CircadianAlignmentViewModel @Inject constructor(
     val workoutData = MutableLiveData<CorrectiveActivitiesModel>()
     val caffeineWindowData = MutableLiveData<CorrectiveActivitiesModel>()
 
-    fun prepareCorrectiveActivitiesData(): List<CorrectiveActivitiesModel>{
+    fun prepareCorrectiveActivitiesData(): List<CorrectiveActivitiesModel> {
 
         // Light Exposure Data
         lightExposureData.value = CorrectiveActivitiesModel(
@@ -117,10 +118,8 @@ class CircadianAlignmentViewModel @Inject constructor(
 
     fun getMidPointIndex(startDateTime: LocalDateTime, currentDateTime: LocalDateTime): Int {
         val intervalSize = 10
+        LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk startDateTime $startDateTime currentDateTime $currentDateTime")
         val circadianMinutesBetween = ChronoUnit.MINUTES.between(startDateTime, currentDateTime)
-        if (circadianMinutesBetween < 0) {
-            return -1
-        }
         return (circadianMinutesBetween / intervalSize).toInt() //+ 1
     }
 
@@ -174,7 +173,7 @@ class CircadianAlignmentViewModel @Inject constructor(
         }
     }
 
-     fun phaseState(
+    fun phaseState(
         bgRange: IntArray,
         phaseRange: IntArray,
         avgBeforeIndex: Int,
@@ -189,15 +188,20 @@ class CircadianAlignmentViewModel @Inject constructor(
             return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
         }
 
-        if (avgNowIndex == avgBeforeIndex) {
+        val beforeInPhase = avgBeforeIndex in phaseRange
+        val nowInPhase = avgNowIndex in phaseRange
+        val beforeInBg = avgBeforeIndex in bgRange
+        val nowInBg = avgNowIndex in bgRange
+
+        // Fully aligned
+        if (avgBeforeIndex == avgNowIndex && beforeInPhase && nowInPhase) {
             return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
         }
-        print("1")
-        val hasAvgBeforeInBgRange = bgRange.find { it == avgBeforeIndex }
-        val hasAvgNowInBgRange = bgRange.find { it == avgNowIndex }
 
-        if (hasAvgBeforeInBgRange == null && hasAvgNowInBgRange == null) {
-            return if (phaseRange.first() > avgBeforeIndex && phaseRange.first() > avgNowIndex) {
+        // Outside both phase and bg ranges
+        if (!beforeInBg && !nowInBg) {
+            val isBeforeAndNowLeft = avgBeforeIndex < phaseRange.first() && avgNowIndex < phaseRange.first()
+            return if (isBeforeAndNowLeft) {
                 if (avgNowIndex < avgBeforeIndex) {
                     Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
                 } else {
@@ -212,17 +216,13 @@ class CircadianAlignmentViewModel @Inject constructor(
             }
         }
 
-        print("2")
-        val hasAvgBeforeInRange = phaseRange.find { it == avgBeforeIndex }
-        val hasAvgNowInRange = phaseRange.find { it == avgNowIndex }
-
-        if (hasAvgNowInRange != null && hasAvgBeforeInRange != null) {
-            print("123123 $avgBeforeIndex $avgNowIndex")
+        // Both in phase range
+        if (beforeInPhase && nowInPhase) {
             return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
         }
 
-        print("3")
-        if (phaseRange.last() < avgBeforeIndex && phaseRange.last() < avgNowIndex) {
+        // Both after phase range
+        if (avgBeforeIndex > phaseRange.last() && avgNowIndex > phaseRange.last()) {
             return if (avgNowIndex < avgBeforeIndex) {
                 Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Correcting)
             } else {
@@ -230,38 +230,119 @@ class CircadianAlignmentViewModel @Inject constructor(
             }
         }
 
-        if (hasAvgNowInRange != null && phaseRange.last() < avgBeforeIndex) {
-            print("4")
+        // Moved from after to inside phase
+        if (nowInPhase && avgBeforeIndex > phaseRange.last()) {
             return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
         }
 
-        if (hasAvgBeforeInRange != null && phaseRange.first() < avgNowIndex) {
+        // Moved from inside to after phase
+        if (beforeInPhase && avgNowIndex > phaseRange.last()) {
             return Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
         }
 
-
-
-        if (hasAvgBeforeInRange != null && phaseRange.first() > avgNowIndex) {
+        // Moved from inside to before phase
+        if (beforeInPhase && avgNowIndex < phaseRange.first()) {
             return Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
         }
 
-        if (phaseRange.first() > avgBeforeIndex && phaseRange.first() > avgNowIndex) {
-            if (avgNowIndex > avgBeforeIndex) {
-                return Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Correcting)
-            }
-        }
-
-        if (hasAvgNowInRange != null && phaseRange.first() > avgBeforeIndex) {
+        // Moved from before to inside phase
+        if (nowInPhase && avgBeforeIndex < phaseRange.first()) {
             return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
         }
 
-
-
+        // Fallback
         return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
     }
 
+//    fun phaseState(
+//        bgRange: IntArray,
+//        phaseRange: IntArray,
+//        avgBeforeIndex: Int,
+//        avgNowIndex: Int
+//    ): Pair<CircadianMidPointState, CircadianMidPointStatus> {
+//
+//        if (avgBeforeIndex == Int.MIN_VALUE) {
+//            return Pair(CircadianMidPointState.None, CircadianMidPointStatus.Locked)
+//        }
+//
+//        if (avgNowIndex == Int.MIN_VALUE) {
+//            return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
+//        }
+//        val hasAvgBeforeInRange = phaseRange.find { it == avgBeforeIndex }
+//        val hasAvgNowInRange = phaseRange.find { it == avgNowIndex }
+//
+//        if (avgNowIndex == avgBeforeIndex && hasAvgBeforeInRange != null && hasAvgNowInRange != null) {
+//            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
+//        }
+//
+//        val hasAvgBeforeInBgRange = bgRange.find { it == avgBeforeIndex }
+//        val hasAvgNowInBgRange = bgRange.find { it == avgNowIndex }
+//
+//        if (hasAvgBeforeInBgRange == null && hasAvgNowInBgRange == null) {
+//            return if (phaseRange.first() > avgBeforeIndex && phaseRange.first() > avgNowIndex) {
+//                if (avgNowIndex < avgBeforeIndex) {
+//                    Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
+//                } else {
+//                    Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Correcting)
+//                }
+//            } else {
+//                if (avgNowIndex < avgBeforeIndex) {
+//                    Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Correcting)
+//                } else {
+//                    Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+//                }
+//            }
+//        }
+//
+//        print("2")
+//
+//
+//        if (hasAvgNowInRange != null && hasAvgBeforeInRange != null) {
+//            print("123123 $avgBeforeIndex $avgNowIndex")
+//            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
+//        }
+//
+//        print("3")
+//        if (phaseRange.last() < avgBeforeIndex && phaseRange.last() < avgNowIndex) {
+//            return if (avgNowIndex < avgBeforeIndex) {
+//                Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Correcting)
+//            } else {
+//                Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+//            }
+//        }
+//
+//        if (hasAvgNowInRange != null && phaseRange.last() < avgBeforeIndex) {
+//            print("4")
+//            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
+//        }
+//
+//        if (hasAvgBeforeInRange != null && phaseRange.first() < avgNowIndex) {
+//            return Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+//        }
+//
+//
+//
+//        if (hasAvgBeforeInRange != null && phaseRange.first() > avgNowIndex) {
+//            return Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
+//        }
+//
+//        if (phaseRange.first() > avgBeforeIndex && phaseRange.first() > avgNowIndex) {
+//            if (avgNowIndex > avgBeforeIndex) {
+//                return Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Correcting)
+//            }
+//        }
+//
+//        if (hasAvgNowInRange != null && phaseRange.first() > avgBeforeIndex) {
+//            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
+//        }
+//
+//
+//
+//        return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
+//    }
+
 }
 
-enum class CorrectiveActivitiesEnum{
+enum class CorrectiveActivitiesEnum {
     LIGHT_EXPOSURE, DAILY_STEPS, MEAL_WINDOW, WORKOUT, CAFFEINE
 }
