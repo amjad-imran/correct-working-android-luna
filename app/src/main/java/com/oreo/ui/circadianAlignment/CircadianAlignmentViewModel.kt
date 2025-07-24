@@ -1,5 +1,6 @@
 package com.oreo.ui.circadianAlignment
 
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
@@ -11,6 +12,9 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.CircadianMidPointModel
+import com.oreo.data.model.CircadianMidPointState
+import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.CorrectiveActivitiesModel
 import com.oreo.data.model.OnlyImgWithText
 import com.oreo.data.model.ProgressBarLytData
@@ -18,6 +22,8 @@ import com.oreo.data.model.circadian.Activity
 import com.oreo.data.model.circadian.CircadianResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,11 +50,6 @@ class CircadianAlignmentViewModel @Inject constructor(
     val circadianResponseData = MutableLiveData<CircadianResponseModel>()
 
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
-
-    init {
-        LOGS.d("nvj qkjv vkv ")
-        initData()
-    }
 
     fun initData(){
         viewModelScope.launch {
@@ -241,5 +242,8 @@ class CircadianAlignmentViewModel @Inject constructor(
             }
         }
     }
+}
 
+enum class CorrectiveActivitiesEnum {
+    LIGHT_EXPOSURE, DAILY_STEPS, MEAL_WINDOW, WORKOUT, CAFFEINE
 }
