@@ -11,6 +11,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
+import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -129,34 +130,63 @@ class CircadianAlignmentFrag :
         var avgNowMidPoint: CircadianMidPointModel? = null
         val avgBeforeMidPoint: CircadianMidPointModel? = viewModel.whiteMidPoint("Avg Before")
 
-
         val bgRange = IntArray(totalBars) { it }
         val phaseRange = (midStartIndex..midEndIndex).toList().toIntArray()
 
         val phaseState = viewModel.phaseState(bgRange, phaseRange, avgBeforeIndex, avgNowIndex)
-
+        setMidPointGraphState(phaseState.first)
         when (phaseState.second) {
             CircadianMidPointStatus.Locked -> {
                 avgNowMidPoint = viewModel.whiteMidPoint("Avg Now")
             }
 
             CircadianMidPointStatus.Maintained -> {
+                setMidPointGraphData(
+                    R.drawable.ic_maintained,
+                    "#FFB963",
+                    getString(R.string.text_maintained)
+                )
                 avgNowMidPoint = viewModel.orangeMidPoint("Avg Now")
             }
 
             CircadianMidPointStatus.Worsening -> {
+                setMidPointGraphData(
+                    R.drawable.ic_worsening,
+                    "#FF8A8A",
+                    getString(R.string.text_worsening)
+                )
+
+
                 avgNowMidPoint = viewModel.redMidPoint("Avg Now")
             }
 
             CircadianMidPointStatus.Correcting -> {
+                setMidPointGraphData(
+                    R.drawable.ic_correcting,
+                    "#63FFB6",
+                    getString(R.string.text_correcting)
+                )
+
                 avgNowMidPoint = viewModel.greenMidPoint("Avg Now")
             }
 
             CircadianMidPointStatus.SleepMissing -> {
+                setMidPointGraphData(
+                    R.drawable.ic_waiting_for_sleep,
+                    "#A7ACFF",
+                    getString(R.string.text_missing_sleep)
+                )
+
                 avgNowMidPoint = viewModel.whiteMidPoint("Avg Now")
             }
 
             CircadianMidPointStatus.AwaitingSync -> {
+                setMidPointGraphData(
+                    R.drawable.ic_waiting_for_sleep,
+                    "#A7ACFF",
+                    getString(R.string.text_awaiting_sync)
+                )
+
                 avgNowMidPoint = viewModel.whiteMidPoint("Avg Now")
             }
         }
@@ -185,24 +215,53 @@ class CircadianAlignmentFrag :
 
         val colors = List(totalBars) {
             when (it) {
-                midStartIndex ->{
+                midStartIndex -> {
                     "#aa8866".toColorInt()
                 }
-                midEndIndex ->{
+
+                midEndIndex -> {
                     "#7799cc".toColorInt()
                 }
+
                 else -> "#1CFFFFFF".toColorInt()
-//                in 0..midStartIndex - 1 -> "#444444".toColorInt()
-//                in midStartIndex..midEndIndex - gradMidIndex -> "#aa8866".toColorInt()
-//                in midEndIndex - gradMidIndex..midEndIndex -> "#7799cc".toColorInt()
-//                else -> "#333333".toColorInt()
             }
         }
-
 
         graphView.updateBars(circadianGraphModelList, colors)
     }
 
+    private fun setMidPointGraphState(data: CircadianMidPointState){
+        when(data){
+            CircadianMidPointState.PhaseAligned -> {
+                binding.lytSleepMidPoint.tvState.apply {
+                    text = getString(R.string.text_phase_aligned)
+                    setTextColor("#59E1A5".toColorInt())
+                }
+            }
+            CircadianMidPointState.PhaseDelay -> {
+                binding.lytSleepMidPoint.tvState.apply {
+                    text = getString(R.string.text_phase_delay)
+                    setTextColor("#FF8A8A".toColorInt())
+                }
+            }
+            CircadianMidPointState.PhaseAdvance -> {
+                binding.lytSleepMidPoint.tvState.apply {
+                    text = getString(R.string.text_phase_advance)
+                    setTextColor("#FF8A8A".toColorInt())
+                }
+            }
+            CircadianMidPointState.None -> {
+                binding.lytSleepMidPoint.tvState.text = ""
+            }
+        }
+    }
+    private fun setMidPointGraphData(icon: Int, color: String, text: String) {
+        binding.lytSleepMidPoint.apply {
+            imvStatus.setImageResource(icon)
+            tvStatus.setTextColor(color.toColorInt())
+            tvStatus.text = text
+        }
+    }
 
     private fun setUi() {
         binding.toolbar.tvTitle.text = getString(R.string.text_circadian_alignment)

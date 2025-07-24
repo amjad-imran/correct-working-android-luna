@@ -242,7 +242,7 @@ class CircadianGraph @JvmOverloads constructor(
             }
         }
 
-        val labelTop = 40f
+        val labelTop = 0f
 
 
 
