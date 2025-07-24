@@ -1073,7 +1073,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 hasDetectedWorkout = false
             }
 
-            handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
+            //handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
             var totalSleep: Int? = null
             healthData.sleep?.sleeps?.forEach {
@@ -1274,7 +1274,7 @@ class SummaryDataViewModelToday @Inject constructor(
             healthOverviewData.postValue(userActivities)
 
             //viewedCardsData.postValue(viewedCardsData)
-            this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
+            //this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
 
             // Handle other operations
             loadNapsToConfirm()
