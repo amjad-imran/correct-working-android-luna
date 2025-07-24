@@ -28,11 +28,33 @@
         tools:text="@string/text_phase_advance"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/leftCdArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_left_carcadian_arrow"
+        app:layout_constraintEnd_toStartOf="@+id/circadianGraph"
+        app:layout_constraintTop_toTopOf="@+id/circadianGraph" />
+
+    <ImageView
+        android:id="@+id/rightCdArrow"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_right_carcadian_arrow"
+        app:layout_constraintStart_toEndOf="@+id/circadianGraph"
+        app:layout_constraintTop_toTopOf="@+id/circadianGraph" />
+
     <com.oreo.util.graph.CircadianGraph
         android:id="@+id/circadianGraph"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:layout_marginHorizontal="12dp"
+        android:layout_marginHorizontal="28dp"
         android:layout_marginTop="@dimen/dimen_32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,10 +77,10 @@
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="4dp"
+        android:src="@drawable/ic_waiting_for_sleep"
         app:layout_constraintBottom_toBottomOf="@+id/tvStatus"
         app:layout_constraintStart_toEndOf="@+id/tvStatus"
-        app:layout_constraintTop_toTopOf="@+id/tvStatus"
-        android:src="@drawable/ic_waiting_for_sleep" />
+        app:layout_constraintTop_toTopOf="@+id/tvStatus" />
 
     <TextView
         android:id="@+id/textView173"

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
@@ -49,8 +50,8 @@ class CircadianAlignmentFrag :
         val circadianResponse = CircadianResponse(
             "2025-07-22 23:39:00",
             "2025-07-23 02:15:00",
-            "2025-07-23 01:34:00",
-            "2025-07-23 03:34:18",
+            "2025-07-22 01:34:00",
+            "2025-07-22 01:34:18",
             "You’re improving — staying active later and delaying sleep cues is helping."
         )
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -195,6 +196,7 @@ class CircadianAlignmentFrag :
 
         if (avgBeforeIndex < 0 && avgNowIndex < 0) {
             // Use indices 0 and 1 for drawing since both are off-graph
+            binding.lytSleepMidPoint.leftCdArrow.visible()
             graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
             if(graphView.drawOnSameIndex){
                 circadianGraphModelList.getOrNull(0)?.bothMidPoint = Pair(avgBeforeMidPoint,avgNowMidPoint)
@@ -213,6 +215,7 @@ class CircadianAlignmentFrag :
 
 
         } else if (avgBeforeIndex > bgRange.last() && avgNowIndex > bgRange.last()) {
+            binding.lytSleepMidPoint.rightCdArrow.visible()
             // Use indices 0 and 1 for drawing since both are off-graph
             graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
             val secondIndex = totalBars-1
