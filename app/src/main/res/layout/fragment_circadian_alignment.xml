@@ -27,13 +27,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:id="@+id/mainGraph"
+            <com.oreo.util.graph.Circadian24HourGraph
+                android:id="@+id/graphView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutToolbar" />
+                app:layout_constraintTop_toBottomOf="@id/layoutToolbar"
+                />
+
 
             <include
                 android:id="@+id/lytFocusWindow"
