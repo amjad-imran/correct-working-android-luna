@@ -91,6 +91,7 @@ import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
+import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
@@ -315,6 +316,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 )
             )
 
+            R.layout.layout_circadian_onboarding_dash -> HomeRecyclerViewHolder.CircadianOnboardingViewHolder(
+                LayoutCircadianOnboardingDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_dash_sleep_planner_card -> {
                 HomeRecyclerViewHolder.SleepPlannerViewHolder(
                     LayoutDashSleepPlannerCardBinding.inflate(
@@ -509,6 +516,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is HomeRecyclerViewHolder.DashHealthMonitorViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.HealthMonitorCard)
             }
+
+            is HomeRecyclerViewHolder.CircadianOnboardingViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.CircadianAlignmentOnboarding)
+            }
         }
     }
 
@@ -556,6 +567,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             //
             is OHealthOverview.CaffeineWindowCalibrating -> R.layout.layout_caffeine_calibrating
             is OHealthOverview.CircadianAlignment -> R.layout.layout_dash_circadian
+            OHealthOverview.CircadianAlignmentOnboarding -> R.layout.layout_circadian_onboarding_dash
         }
     }
 
@@ -637,6 +649,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
+    class CircadianOnboardingViewHolder(private val binding: LayoutCircadianOnboardingDashBinding):
+        HomeRecyclerViewHolder(binding){
+            
+        fun bind(data: OHealthOverview.CircadianAlignmentOnboarding){
+
+            binding.btnGetStarted.setOnClickListener {
+
+            }
+        }
+            
+    }
+    
     class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(allData: OHealthOverview.StressCard) {

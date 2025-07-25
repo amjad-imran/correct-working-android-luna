@@ -2036,5 +2036,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_have_you_completed_this_task">Have you completed this task?</string>
     <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Ensure that you were able to complete the activity in the corrective window.</string>
     <string name="text_timeval_left">%1$s left</string>
+    <string name="text_your_body_runs_on_a_clock">Your body runs on a clock</string>
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Aligning it well can help you sleep better, feel more energetic, and recover faster</string>
 
 </resources>

@@ -51,6 +51,10 @@ class CircadianAlignmentViewModel @Inject constructor(
 
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
 
+    init {
+        initData()
+    }
+
     fun initData(){
         viewModelScope.launch {
             userRepository.getCircadianData().collect{ resource ->

@@ -191,6 +191,8 @@ sealed class OHealthOverview {
 
     class CircadianAlignment : OHealthOverview()
 
+    object CircadianAlignmentOnboarding : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()
