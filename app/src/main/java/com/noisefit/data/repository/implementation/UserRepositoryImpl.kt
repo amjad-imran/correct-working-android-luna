@@ -43,6 +43,7 @@ import com.oreo.data.model.RingLocationData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
+import com.oreo.data.model.circadian.CircadianResponseModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -417,4 +418,22 @@ class UserRepositoryImpl(
             )
         }
     }
+
+    override suspend fun submitLogCircadianData(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogCircadianData(
+                "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/logs",
+                request
+            )
+        }
+    }
+
+    override suspend fun getCircadianData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getCircadianData(
+                "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/logs",
+            )
+        }
+    }
+
 }

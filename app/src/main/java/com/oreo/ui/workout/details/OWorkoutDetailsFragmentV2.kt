@@ -28,11 +28,13 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsV2Binding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.models.LocationDataNetwork
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -46,6 +48,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
+import com.oreo.data.model.LocationObj
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
@@ -480,8 +483,6 @@ class OWorkoutDetailsFragmentV2 :
             LOGS.e("Can't find style. Error: $e")
         }
         map.isBuildingsEnabled = false
-
-        map.setMinZoomPreference(15f)
 
         map.uiSettings.apply {
             isCompassEnabled = false

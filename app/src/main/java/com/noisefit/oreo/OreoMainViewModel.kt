@@ -492,6 +492,8 @@ constructor(
 
         if (selectedDate.isNullOrEmpty()) return false
 
+        if((sleepHistoryResponse.value!![1]).date.isNullOrEmpty()) return false
+
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
                 selectedDate
             )

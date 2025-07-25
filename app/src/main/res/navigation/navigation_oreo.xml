@@ -1404,4 +1404,8 @@
         android:name="com.oreo.ui.circadianAlignment.quiz.QuizCircadianFragment"
         android:label="fragment_quiz_circadian"
         tools:layout="@layout/fragment_quiz_circadian" />
+    <dialog
+        android:id="@+id/logCircadianBottomSheetFragment"
+        android:name="com.oreo.ui.circadianAlignment.LogCircadianBottomSheetFragment"
+        android:label="LogCircadianBottomSheetFragment" />
 </navigation>

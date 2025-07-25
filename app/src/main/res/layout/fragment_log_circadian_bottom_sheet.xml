@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <View
+                android:id="@+id/view40"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnNo"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_24dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:text="@string/text_no"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnYes"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView175" />
+
+            <Button
+                android:id="@+id/btnYes"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_12dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/dimen_24dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:enabled="false"
+                android:text="@string/text_yes"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnNo"
+                app:layout_constraintTop_toBottomOf="@+id/textView175" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <ImageView
+                android:id="@+id/tvClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/freshchat_ic_calendar_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView174"
+                style="@style/S22"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:lineHeight="26sp"
+                android:text="@string/text_have_you_completed_this_task"
+                app:layout_constraintEnd_toStartOf="@+id/tvClose"
+                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                app:layout_constraintTop_toBottomOf="@+id/tvClose" />
+
+            <TextView
+                android:id="@+id/textView175"
+                style="@style/S14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:lineHeight="17sp"
+                android:text="@string/text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window"
+                android:textColor="#A3FFFFFF"
+                app:layout_constraintEnd_toStartOf="@+id/tvClose"
+                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                app:layout_constraintTop_toBottomOf="@+id/textView174" />
+
+            <ImageView
+                android:id="@+id/ivOnlyIcon"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView174"
+                tools:src="@drawable/ic_caffeine_corrective_activities" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="@+id/textView175"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView174">
+
+                <ImageView
+                    android:id="@+id/ivIconWithText"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_sun_rise" />
+
+                <TextView
+                    android:id="@+id/tvTextWithIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    style="@style/S24"
+                    android:textColor="#FFE1CF"
+                    android:layout_marginTop="8dp"
+                    android:text="45\nmins" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>
