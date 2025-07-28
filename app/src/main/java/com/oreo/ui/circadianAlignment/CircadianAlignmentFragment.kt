@@ -3,29 +3,29 @@ package com.oreo.ui.circadianAlignment
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.toColorInt
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
-import dagger.hilt.android.AndroidEntryPoint
-import androidx.core.graphics.toColorInt
-import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import com.oreo.data.model.circadian.CircadianResponseModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
-class CircadianAlignmentFrag :
+class CircadianAlignmentFragment :
     BaseFragment<FragmentCircadianAlignmentBinding>(FragmentCircadianAlignmentBinding::inflate) {
 
     private val viewModel: CircadianAlignmentViewModel by viewModels()
@@ -45,6 +45,10 @@ class CircadianAlignmentFrag :
         setUi()
         setRecycler()
         setCircadianGraph()
+
+        binding.lytCorrectiveActivities.root.setOnClickListener {
+            navigate(R.id.quizCircadianFragment)
+        }
 //        correctiveActivitiesAdapter.updateDataSet(viewModel.prepareCorrectiveActivitiesData(it.activities))
     }
 
@@ -55,9 +59,6 @@ class CircadianAlignmentFrag :
         val avgBefore: String,
         val nudge: String
     )
-
-
-
 
     private fun setCircadianGraph() {
 
@@ -218,7 +219,7 @@ class CircadianAlignmentFrag :
                 val firstIndex = 0
                 val secondIndex = 1
 
-               if (avgNowIndex < avgBeforeIndex) {
+                if (avgNowIndex < avgBeforeIndex) {
                     assignMidpoints(circadianGraphModelList,firstIndex, avgNowMidPoint, null)
                     assignMidpoints(circadianGraphModelList,secondIndex, null, avgBeforeMidPoint)
                 } else {
@@ -239,7 +240,7 @@ class CircadianAlignmentFrag :
                 val firstIndex = totalBars-2
                 val secondIndex = totalBars-1
 
-               if (avgNowIndex < avgBeforeIndex) {
+                if (avgNowIndex < avgBeforeIndex) {
                     assignMidpoints(circadianGraphModelList,firstIndex, avgNowMidPoint, null)
                     assignMidpoints(circadianGraphModelList,secondIndex, null, avgBeforeMidPoint)
                 } else {
@@ -348,11 +349,12 @@ class CircadianAlignmentFrag :
     }
 
     override fun initListener() {
+        LOGS.d("askascas: initListener")
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
 
-        binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
+        binding.lytCorrectiveActivities.root.setOnClickListener {
             navigate(R.id.quizCircadianFragment)
         }
     }
@@ -366,6 +368,25 @@ class CircadianAlignmentFrag :
         viewModel.correctiveActivitiesListData.observe(this){
             if(!it.isNullOrEmpty()){
                 correctiveActivitiesAdapter.updateDataSet(it)
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
     }
