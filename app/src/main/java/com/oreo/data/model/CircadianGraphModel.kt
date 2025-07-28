@@ -4,7 +4,17 @@ data class CircadianGraphModel(
     val xAxis: String? = null,
     var firstMidPoint: CircadianMidPointModel? = null,
     var secondMidPoint: CircadianMidPointModel? = null,
-    var bothMidPoint: Pair<CircadianMidPointModel?,CircadianMidPointModel?>? = null,
+    var bothMidPoint: Pair<CircadianMidPointModel?, CircadianMidPointModel?>? = null,
+)
+
+data class TimeWindow(
+    val startHour: Float,  // e.g., 9.0f or 13.5f
+    val endHour: Float,
+    val startColor: Int,
+    val endColor:Int,
+    val textColor:Int,
+    val rowIndex: Int = 0,
+    val label: String = ""
 )
 
 data class CircadianMidPointModel(
