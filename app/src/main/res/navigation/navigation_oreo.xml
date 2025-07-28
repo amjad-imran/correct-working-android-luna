@@ -1389,11 +1389,7 @@
         android:id="@+id/reportToDevelopersSuccessBottomSheet"
         android:name="com.oreo.ui.profile.ReportToDevelopersSuccessBottomSheet"
         android:label="ReportToDevelopersSuccessBottomSheet" />
-    <fragment
-        android:id="@+id/circadianAlignmentFrag"
-        android:name="com.oreo.ui.circadianAlignment.CircadianAlignmentFrag"
-        android:label="fragment_circadian_alignment"
-        tools:layout="@layout/fragment_circadian_alignment" />
+
     <fragment
         android:id="@+id/measurementsFragment"
         android:name="com.oreo.ui.measurementsTestingScreen.MeasurementsFragment"
@@ -1408,4 +1404,14 @@
         android:id="@+id/logCircadianBottomSheetFragment"
         android:name="com.oreo.ui.circadianAlignment.LogCircadianBottomSheetFragment"
         android:label="LogCircadianBottomSheetFragment" />
+    <fragment
+        android:id="@+id/circadianSplashScreenFragment"
+        android:name="com.oreo.ui.circadianAlignment.onboarding.CircadianSplashScreenFragment"
+        android:label="fragment_circadian_splash_screen"
+        tools:layout="@layout/fragment_circadian_splash_screen" />
+    <fragment
+        android:id="@+id/circadianAlignmentFragment"
+        android:name="com.oreo.ui.circadianAlignment.CircadianAlignmentFragment"
+        android:label="fragment_circadian_alignment"
+        tools:layout="@layout/fragment_circadian_alignment" />
 </navigation>

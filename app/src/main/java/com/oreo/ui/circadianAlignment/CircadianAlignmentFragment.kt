@@ -11,6 +11,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianGraphModel
@@ -26,7 +28,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
-class CircadianAlignmentFrag :
+class CircadianAlignmentFragment :
     BaseFragment<FragmentCircadianAlignmentBinding>(FragmentCircadianAlignmentBinding::inflate) {
 
     private val viewModel: CircadianAlignmentViewModel by viewModels()
@@ -398,6 +400,25 @@ class CircadianAlignmentFrag :
         viewModel.correctiveActivitiesListData.observe(this) {
             if (!it.isNullOrEmpty()) {
                 correctiveActivitiesAdapter.updateDataSet(it)
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
     }

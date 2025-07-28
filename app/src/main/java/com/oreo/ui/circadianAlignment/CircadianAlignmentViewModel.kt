@@ -1,6 +1,6 @@
 package com.oreo.ui.circadianAlignment
 
-import androidx.core.graphics.toColorInt
+import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
@@ -50,6 +50,8 @@ class CircadianAlignmentViewModel @Inject constructor(
     val circadianResponseData = MutableLiveData<CircadianResponseModel>()
 
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
+
+    private val timerMap = mutableMapOf<String, CountDownTimer>()
 
     init {
         initData()
@@ -118,7 +120,8 @@ class CircadianAlignmentViewModel @Inject constructor(
                         ),
                         progressBarLytData = null,
                         logStatus = isLogged,
-                        time = timeLeft
+                        time = timeLeft,
+                        timeInSec = it.time
                     )
                 }
 
@@ -137,7 +140,8 @@ class CircadianAlignmentViewModel @Inject constructor(
                             txt = "2334"
                         ),
                         logStatus = isLogged,
-                        time = timeLeft
+                        time = timeLeft,
+                        timeInSec = it.time
                     )
                 }
 
@@ -154,7 +158,8 @@ class CircadianAlignmentViewModel @Inject constructor(
                         ),
                         progressBarLytData = null,
                         logStatus = isLogged,
-                        time = timeLeft
+                        time = timeLeft,
+                        timeInSec = it.time
                     )
                 }
 
@@ -173,7 +178,8 @@ class CircadianAlignmentViewModel @Inject constructor(
                             txt = "23 mins"
                         ),
                         logStatus = isLogged,
-                        time = timeLeft
+                        time = timeLeft,
+                        timeInSec = it.time
                     )
                 }
 
@@ -190,7 +196,8 @@ class CircadianAlignmentViewModel @Inject constructor(
                         ),
                         progressBarLytData = null,
                         logStatus = isLogged,
-                        time = timeLeft
+                        time = timeLeft,
+                        timeInSec = it.time
                     )
                 }
             }
@@ -206,12 +213,51 @@ class CircadianAlignmentViewModel @Inject constructor(
         caffeineWindowData.value?.let { correctiveActivitiesList.add(it) }
 
         correctiveActivitiesListData.postValue(correctiveActivitiesList)
+        startTimers(correctiveActivitiesList)
     }
 
     fun formatSecondsToHHMM(seconds: Int): String {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
         return String.format("%02d:%02d", hours, minutes)
+    }
+
+    fun startTimers(list: ArrayList<CorrectiveActivitiesModel>) {
+        viewModelScope.launch {
+
+            list.forEach { card ->
+                if(card.time != null && card.timeInSec != null){
+                    val totalMillis = card.timeInSec * 1000L
+
+                    timerMap[card.key]?.cancel() // Cancel existing if any
+
+                    val timer = object : CountDownTimer(totalMillis, 60_000L) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            val remainingSeconds = (millisUntilFinished / 1000).toInt()
+                            updateCard(card.key, formatSecondsToHHMM(remainingSeconds), false)
+                        }
+
+                        override fun onFinish() {
+                            updateCard(card.key, "00:00", true)
+                        }
+                    }
+
+                    timer.start()
+                    timerMap[card.key] = timer
+                }
+            }
+        }
+    }
+
+    private fun updateCard(cardkey: String, formattedTime: String, isFinished: Boolean) {
+        getCorrectiveActivitiesLiveData(cardkey)?.let { liveData ->
+            liveData.postValue(
+                liveData.value?.copy(
+                    time = formattedTime,
+                    logStatus = isFinished
+                )
+            )
+        }
     }
 
     fun postLogData(key: String?, isLogged: Boolean?) {
@@ -228,23 +274,32 @@ class CircadianAlignmentViewModel @Inject constructor(
                         is Resource.Loading -> {}
                         is Resource.NetworkError -> {}
                         is Resource.Success<*> -> {
-                            when(key){
-                                light_exposure_key -> {
-
-                                }
-                                meal_window_key -> {
-
-                                }
-                                caffeine_window_key -> {
-
-                                }
-                                else -> {}
+                            getCorrectiveActivitiesLiveData(key)?.let { livaDataObj ->
+                                livaDataObj.postValue(livaDataObj.value?.copy(
+                                    logStatus = true
+                                ))
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    fun getCorrectiveActivitiesLiveData(key: String): MutableLiveData<CorrectiveActivitiesModel>?{
+        return when(key){
+            light_exposure_key -> lightExposureData
+            daily_steps_key -> dailyStepsData
+            meal_window_key -> mealWindowData
+            caffeine_window_key -> caffeineWindowData
+            workout_key -> workoutData
+            else -> null
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timerMap.values.forEach { it.cancel() }
     }
 }
 
