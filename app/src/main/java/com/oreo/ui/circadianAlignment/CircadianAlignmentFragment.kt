@@ -24,6 +24,7 @@ import com.oreo.data.model.circadian.CircadianResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
@@ -60,17 +61,19 @@ class CircadianAlignmentFragment :
 
 
     private fun setCircadianGraph() {
-
+        binding.graphView.isScrollLocked = false
+        binding.graphView.graphStartTime = LocalTime.of(6,0)
+        binding.graphView.graphEndTime = LocalTime.of(23,0)
 
         binding.graphView.timeWindows = listOf(
-            TimeWindow(6f, 8f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
-            TimeWindow(8f, 13f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 0, label = "Caffeine"),
+            TimeWindow(10f, 11f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
+            TimeWindow(11f, 13f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 0, label = "Caffeine"),
             TimeWindow(13f, 22f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
 
-            TimeWindow(6f, 15f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 1, label = "No Caffeine"),
+            TimeWindow(12f, 15f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 1, label = "No Caffeine"),
             TimeWindow(15f, 19f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 1, label = "Caffeine"),
 
-            TimeWindow(9f, 22f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 2, label = "Caffeine"),
+            TimeWindow(10f, 18f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 2, label = "Caffeine"),
 
         )
         binding.graphView.redraw()
