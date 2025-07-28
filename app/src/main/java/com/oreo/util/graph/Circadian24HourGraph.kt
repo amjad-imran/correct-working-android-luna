@@ -15,18 +15,17 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewTreeObserver
-import android.widget.OverScroller
 import androidx.core.graphics.toColorInt
-import com.oreo.data.model.TimeWindow
-import java.util.Calendar
-import kotlin.math.abs
-import kotlin.math.sin
 import androidx.core.graphics.withTranslation
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.TimeWindow
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.sin
 
 
 class Circadian24HourGraph @JvmOverloads constructor(
@@ -34,30 +33,37 @@ class Circadian24HourGraph @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
+    var isScrollLocked = false
 
-    private val totalHours = 24
     private val hourWidthPx = 200f
 
-    private val totalWidth = totalHours * hourWidthPx
+
     private val bottomPaddingForLabels = 80f
     private val topPadding = 30f
 
-//    var graphStartTime: LocalTime = LocalTime.of(9, 0)  // 9 AM today
-//    var graphEndTime: LocalTime = LocalTime.of(8, 0)    // 8 AM next day
-//
-//    val totalHours: Int
-//        get() {
-//            val diff = Duration.between(graphStartTime, graphEndTime)
-//            return if (diff.isNegative) 24 + diff.toHours().toInt() else diff.toHours().toInt()
-//        }
+    var graphStartTime: LocalTime = LocalTime.of(6, 0)
+    var graphEndTime: LocalTime = LocalTime.of(8, 0)
 
-//    fun getHourAt(index: Int): LocalTime {
-//        return graphStartTime.plusHours(index.toLong() % 24)
-//    }
+    val totalHours: Int
+        get() {
+            var hours = Duration.between(graphStartTime, graphEndTime).toHours().toInt()
+            if (hours <= 0) hours += 24
+            return hours
+        }
 
-    fun getGraphHeight(): Float{
+
+    fun getTotalWidth(): Float {
+        return totalHours * hourWidthPx
+    }
+
+    fun getHourAt(index: Int): LocalTime {
+        return graphStartTime.plusHours(index.toLong() % 24)
+    }
+
+    fun getGraphHeight(): Float {
         return height.toFloat()
     }
+
     private val energyPath = Path()
 
     var timeWindows: List<TimeWindow> = emptyList()
@@ -127,18 +133,25 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     private var isBeingDragged = false
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onScroll(e1: MotionEvent?, e2: MotionEvent, dx: Float, dy: Float): Boolean {
-            scrollOffsetX = (scrollOffsetX + dx).coerceIn(0f, totalWidth - width.toFloat())
-            invalidate()
-            return true
-        }
-    })
+    private val gestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onScroll(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                dx: Float,
+                dy: Float
+            ): Boolean {
+                scrollOffsetX = (scrollOffsetX + dx).coerceIn(0f, getTotalWidth() - width.toFloat())
+                invalidate()
+                return true
+            }
+        })
 
     init {
         setWillNotDraw(false)
 
-        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 scrollOffsetX = calculateInitialScrollOffset()
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -148,13 +161,16 @@ class Circadian24HourGraph @JvmOverloads constructor(
     }
 
     private fun calculateInitialScrollOffset(): Float {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        val hourFraction = hour + minute / 60f
-        val hourPosition = hourFraction * hourWidthPx
+        val now = LocalTime.now()
+
+        // Calculate offset from graphStartTime, handle next-day wrapping
+        var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
+        if (offsetHours < 0) offsetHours += 24  // wrap around
+
+        val hourPosition = offsetHours * hourWidthPx
         val centerX = width / 2f
-        return (hourPosition - centerX).coerceIn(0f, totalWidth - width.toFloat())
+
+        return (hourPosition - centerX).coerceIn(0f, getTotalWidth() - width.toFloat())
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -169,20 +185,27 @@ class Circadian24HourGraph @JvmOverloads constructor(
         drawCurrentTimeLine(canvas)
     }
 
-    fun redraw(){
+    fun redraw() {
         invalidate()
     }
+
     private fun drawHourLines(canvas: Canvas) {
 
         for (i in 0..totalHours) {
             val x = i * hourWidthPx
             hourLinePaint.shader = LinearGradient(
                 x, topPadding,
-                x,  getGraphHeight() - bottomPaddingForLabels,
+                x, getGraphHeight() - bottomPaddingForLabels,
                 "#000000".toColorInt(), "#99FFFFFF".toColorInt(),
                 Shader.TileMode.CLAMP
             )
-            canvas.drawLine(x, topPadding, x,  getGraphHeight() - bottomPaddingForLabels, hourLinePaint)
+            canvas.drawLine(
+                x,
+                topPadding,
+                x,
+                getGraphHeight() - bottomPaddingForLabels,
+                hourLinePaint
+            )
         }
     }
 
@@ -193,29 +216,37 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
 
     private fun drawTimeLabels(canvas: Canvas) {
-        val labelY =  getGraphHeight().toFloat() - 20f
+        val labelY = getGraphHeight().toFloat() - 20f
+        val labelPadding = 10f
+
         for (i in 0..totalHours) {
-//            val hour = getHourAt(i)
-
-
+            val hour = getHourAt(i)
             val x = i * hourWidthPx
-            val hrFormat = String.format("%02d:00", i % 24)
-            val label = formatTo12Hour(LocalTime.parse(hrFormat,DateTimeFormatter.ofPattern("HH:mm")))
-            //LOGS.d("hgdfhjfsdhjdsfhj $hour")
+            val label = formatTo12Hour(LocalTime.of(hour.hour, hour.minute))
             val textWidth = bottomXPaint.measureText(label)
-            val textX = x - textWidth / 2
+
+            val textX = when (i) {
+                0 -> (x + labelPadding)
+                totalHours -> (x - textWidth - labelPadding)
+                else -> (x - textWidth / 2)
+            }
+
             canvas.drawText(label, textX, labelY, bottomXPaint)
         }
     }
 
     private fun drawEnergyCurve(canvas: Canvas) {
         energyPath.reset()
-        val usableHeight =  getGraphHeight() - bottomPaddingForLabels - topPadding
 
-        for (i in 0 until totalHours) {
+        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding
+
+        for (i in 0..totalHours) {
+            val time = graphStartTime.plusHours(i.toLong() % 24)
             val x = i * hourWidthPx
-            val energy = getEnergyForHour(i)
+
+            val energy = getEnergyForHour(time.hour)
             val y = usableHeight - (energy * usableHeight * 0.8f + usableHeight * 0.1f)
+
             if (i == 0) {
                 energyPath.moveTo(x, y)
             } else {
@@ -226,50 +257,57 @@ class Circadian24HourGraph @JvmOverloads constructor(
         canvas.drawPath(energyPath, energyPaint)
     }
 
+
+
     private fun getEnergyForHour(hour: Int): Float {
         val radians = (hour - 8) / 12f * Math.PI
         return (0.5 + 0.5 * sin(radians)).toFloat()
     }
 
-
     private fun drawCurrentTimeLine(canvas: Canvas) {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
-        val hrFormat = String.format("%02d:%02d", hour, minute)
-        val label = formatTo12Hour(LocalTime.parse(hrFormat,DateTimeFormatter.ofPattern("HH:mm")))
-        val x = ((hour + minute / 60f) * hourWidthPx) - scrollOffsetX
-        val yTop = topPadding
-        val yBottom =  getGraphHeight() - bottomPaddingForLabels
+        val currentTime = LocalTime.of(hour, minute)
 
-        // Draw vertical line
+        val label = formatTo12Hour(currentTime)
+
+        var offsetHours = Duration.between(graphStartTime, currentTime).toMinutes() / 60f
+        if (offsetHours < 0) offsetHours += 24  // Wrap around for next day
+
+        val x = (offsetHours * hourWidthPx) - scrollOffsetX
+
+        val yTop = topPadding
+        val yBottom = getGraphHeight() - bottomPaddingForLabels
+
+
         canvas.drawLine(x, yTop, x, yBottom, currentTimeLinePaint)
 
         val circleRadius = 10f
+
         val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = "#3D4A3F".toColorInt()
-            style = Paint.Style.STROKE
-            strokeWidth = 4f
+            style = Paint.Style.FILL
         }
 
         val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.WHITE             // Stroke color
+            color = Color.WHITE
             style = Paint.Style.STROKE
             strokeWidth = 4f
         }
 
+        // Top circle marker
         canvas.drawCircle(x, 20f, circleRadius, circlePaint)
-
         canvas.drawCircle(x, 20f, circleRadius, strokePaint)
 
-        // Draw rounded box with time text
+        // Rounded box with time label at bottom
         val textPadding = 12f
         val textHeight = textPaint.descent() - textPaint.ascent()
         val textWidth = textPaint.measureText(label)
 
-        val boxLeft = x - textWidth / 2f - textPadding - 10
-        val boxRight = x + textWidth / 2f + textPadding + 10
-        val boxBottom =  getGraphHeight().toFloat()
+        val boxLeft = x - textWidth / 2f - textPadding
+        val boxRight = x + textWidth / 2f + textPadding
+        val boxBottom = getGraphHeight().toFloat()
         val boxTop = boxBottom - textHeight - 2 * textPadding
 
         val rect = RectF(boxLeft, boxTop, boxRight, boxBottom)
@@ -280,7 +318,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
 
         canvas.drawRoundRect(rect, 16f, 16f, boxPaint)
-        // Draw time text
+
+        // Draw time text inside rounded box
         val textY = boxTop + textPadding - textPaint.ascent()
         canvas.drawText(label, x - textWidth / 2f, textY, textPaint)
     }
@@ -288,51 +327,59 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private fun drawTopAndBottomAxis(canvas: Canvas) {
         val yTop = topPadding
-        val yBottom =  getGraphHeight().toFloat() - bottomPaddingForLabels
+        val yBottom = getGraphHeight().toFloat() - bottomPaddingForLabels
 
-        canvas.drawLine(0f, yTop, totalWidth, yTop, topDottedAxisPaint)
-        canvas.drawLine(0f, yBottom, totalWidth, yBottom, bottomAxisPaint)
+        canvas.drawLine(0f, yTop, getTotalWidth(), yTop, topDottedAxisPaint)
+        canvas.drawLine(0f, yBottom, getTotalWidth(), yBottom, bottomAxisPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {
-                lastX = event.x
-                lastY = event.y
-                isBeingDragged = false
-                parent.requestDisallowInterceptTouchEvent(true)
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                val dx = abs(event.x - lastX)
-                val dy = abs(event.y - lastY)
-                if (dx > touchSlop && dx > dy) {
-                    isBeingDragged = true
+        return if (isScrollLocked) {
+            false
+        } else {
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    lastX = event.x
+                    lastY = event.y
+                    isBeingDragged = false
                     parent.requestDisallowInterceptTouchEvent(true)
-                } else if (dy > touchSlop && dy > dx) {
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    val dx = abs(event.x - lastX)
+                    val dy = abs(event.y - lastY)
+                    if (dx > touchSlop && dx > dy) {
+                        isBeingDragged = true
+                        parent.requestDisallowInterceptTouchEvent(true)
+                    } else if (dy > touchSlop && dy > dx) {
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    isBeingDragged = false
                     parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
 
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                isBeingDragged = false
-                parent.requestDisallowInterceptTouchEvent(false)
-            }
+            gestureDetector.onTouchEvent(event)
+            return true
         }
 
-        gestureDetector.onTouchEvent(event)
-        return true
     }
 
     private fun drawTimeWindows(canvas: Canvas) {
-        val rowHeight =  getGraphHeight() * 0.12f
+        val rowHeight = getGraphHeight() * 0.12f
         val rowSpacing = 8f
-        val baseBottom =  getGraphHeight() - bottomPaddingForLabels - 20f
+        val baseBottom = getGraphHeight() - bottomPaddingForLabels - 20f
         val cornerRadius = 16f
 
         for (window in timeWindows) {
-            val left = window.startHour * hourWidthPx
-            val right = window.endHour * hourWidthPx
+            val startOffset = hoursFromStart(LocalTime.of(window.startHour.toInt(), 0))
+            val endOffset = hoursFromStart(LocalTime.of(window.endHour.toInt(), 0))
+
+            val left = startOffset * hourWidthPx
+            val right = endOffset * hourWidthPx
 
             val rowOffset = window.rowIndex * (rowHeight + rowSpacing)
             val bottom = baseBottom - rowOffset
@@ -354,12 +401,17 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
             canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
             labelTextPaint.color = window.textColor
-            // Draw label
-            val labelY = top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
-            val labelX = left + 108f // 8f is optional padding
+            val labelY =
+                top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
+            val labelX = left + 100f
             canvas.drawText(window.label, labelX, labelY, labelTextPaint)
-//            canvas.drawText(window.label, (left + right) / 2f, labelY, labelTextPaint)
         }
+    }
+
+    fun hoursFromStart(time: LocalTime): Int {
+        var hours = Duration.between(graphStartTime, time).toHours().toInt()
+        if (hours < 0) hours += 24
+        return hours
     }
 
 
