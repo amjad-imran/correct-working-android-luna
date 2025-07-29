@@ -76,5 +76,6 @@ interface UserRepository {
     suspend fun submitLogCircadianData(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getCircadianData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>>
+    suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>>
 
 }

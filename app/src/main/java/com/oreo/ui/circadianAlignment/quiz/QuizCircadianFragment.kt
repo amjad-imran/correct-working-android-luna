@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.QuizQuestionCircadianDataModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(FragmentQuizCircadianBinding::inflate) {
 
     private val questionAdapter: QuizQuestionAdapter by lazy {

@@ -27,7 +27,8 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class CircadianAlignmentViewModel @Inject constructor(
+class CircadianAlignmentViewModel
+@Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository
 ): BaseViewModel() {
@@ -52,10 +53,6 @@ class CircadianAlignmentViewModel @Inject constructor(
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
 
     private val timerMap = mutableMapOf<String, CountDownTimer>()
-
-    init {
-        initData()
-    }
 
     fun initData(){
         viewModelScope.launch {
@@ -206,11 +203,30 @@ class CircadianAlignmentViewModel @Inject constructor(
         val correctiveActivitiesList:
                 ArrayList<CorrectiveActivitiesModel> = ArrayList()
 
-        lightExposureData.value?.let { correctiveActivitiesList.add(it) }
-        dailyStepsData.value?.let { correctiveActivitiesList.add(it) }
-        mealWindowData.value?.let { correctiveActivitiesList.add(it) }
-        workoutData.value?.let { correctiveActivitiesList.add(it) }
-        caffeineWindowData.value?.let { correctiveActivitiesList.add(it) }
+        lightExposureData.value?.let {
+            correctiveActivitiesList.add(it)
+
+        }
+
+        dailyStepsData.value?.let {
+            correctiveActivitiesList.add(it)
+
+        }
+
+        mealWindowData.value?.let {
+            correctiveActivitiesList.add(it)
+
+        }
+
+        workoutData.value?.let {
+            correctiveActivitiesList.add(it)
+
+        }
+
+        caffeineWindowData.value?.let {
+            correctiveActivitiesList.add(it)
+
+        }
 
         correctiveActivitiesListData.postValue(correctiveActivitiesList)
         startTimers(correctiveActivitiesList)

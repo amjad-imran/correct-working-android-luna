@@ -300,7 +300,7 @@ class SummaryDataFragmentToday :
             when (type) {
 
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
-                    navigate(R.id.circadianAlignmentFrag)
+                    navigate(R.id.circadianAlignmentFragment)
                 }
 
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {

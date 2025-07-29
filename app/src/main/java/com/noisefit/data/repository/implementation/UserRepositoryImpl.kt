@@ -436,4 +436,8 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>> {
+        TODO("Not yet implemented")
+    }
+
 }

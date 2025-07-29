@@ -48,6 +48,9 @@ class CircadianAlignmentFragment :
         setUi()
         setRecycler()
         setCircadianGraph()
+        initListener()
+        subscribeObservers()
+        viewModel.initData()
 //        correctiveActivitiesAdapter.updateDataSet(viewModel.prepareCorrectiveActivitiesData(it.activities))
     }
 
@@ -403,11 +406,32 @@ class CircadianAlignmentFragment :
             }
         }
 
+        viewModel.lightExposureData.observe(this){
+            correctiveActivitiesAdapter.updateSingleElement(it, 0)
+        }
+
+        viewModel.dailyStepsData.observe(this){
+            correctiveActivitiesAdapter.updateSingleElement(it, 1)
+        }
+
+        viewModel.mealWindowData.observe(this){
+            correctiveActivitiesAdapter.updateSingleElement(it, 2)
+        }
+
+        viewModel.workoutData.observe(this){
+            correctiveActivitiesAdapter.updateSingleElement(it, 3)
+        }
+
+        viewModel.caffeineWindowData.observe(this){
+            correctiveActivitiesAdapter.updateSingleElement(it, 4)
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
+
         viewModel.getApiErrors().observe(viewLifecycleOwner) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
