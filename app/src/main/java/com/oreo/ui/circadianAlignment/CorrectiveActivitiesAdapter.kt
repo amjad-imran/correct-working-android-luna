@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemCorrectiveActivitiesCircadianBinding
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.CorrectiveActivitiesModel
 
@@ -79,9 +80,15 @@ class CorrectiveActivitiesAdapter(
 
             if (data.time==null){
                 binding.lytTimerTag.gone()
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
+                binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_today)
                 binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
-            }else{
+            }
+            else if(data.time == "0"){
+                binding.lytTimerTag.gone()
+                binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_tomorrow)
+                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
+            }
+            else{
                 binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
                 binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_open_tag_circadian)
 
@@ -89,18 +96,22 @@ class CorrectiveActivitiesAdapter(
                 binding.lytTimerTag.visible()
             }
 
-            if(data.logStatus == null){
-                binding.llLytDone.gone()
-                binding.llLytLog.gone()
-            }else if(data.logStatus){
-                binding.llLytLog.gone()
-                binding.llLytDone.visible()
-            }else{
-                binding.llLytDoneLog.gone()
-                binding.llLytLog.visible()
+            when(data.logStatus){
+                true -> {
+                    binding.llLytDone.visible()
+                    binding.llLytLog.invisible()
+                }
+                false -> {
+                    binding.llLytLog.visible()
+                    binding.llLytDone.invisible()
+                }
+                null -> {
+                    binding.llLytDone.invisible()
+                    binding.llLytLog.invisible()
+                }
             }
 
-            binding.llLytDoneLog.setOnClickListener {
+            binding.llLytLog.setOnClickListener {
                 onLogClick(data)
             }
 

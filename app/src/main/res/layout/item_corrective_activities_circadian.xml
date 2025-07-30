@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/llLytDoneLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:id="@+id/llLytLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:background="@drawable/bg_log_45_perc_transparent_circadian"
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp"
@@ -55,7 +55,7 @@
             android:id="@+id/llLytDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:background="@drawable/bg_done_45_perc_green_circadian"
             android:padding="6dp"
             android:gravity="center_vertical">
@@ -75,7 +75,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
@@ -209,7 +209,6 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="parent"

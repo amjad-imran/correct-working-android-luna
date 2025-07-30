@@ -39,7 +39,7 @@ class CircadianAlignmentViewModel
         const val meal_window_key = "meal_window"
         const val caffeine_window_key = "caffeine_window"
         const val workout_key = "workout"
-        val actMonStatusList = listOf("partial", "done")
+        val actMonStatusList = listOf("partial", "done", "not-done")
     }
 
     val lightExposureData = MutableLiveData<CorrectiveActivitiesModel>()
@@ -98,7 +98,11 @@ class CircadianAlignmentViewModel
             val timeLeft =
                 if (it.time == null || it.time == 0) {
                     null
-                }else{
+                }
+                else if(it.time <= 0){
+                    "0"
+                }
+                else{
                     val calcTime = formatSecondsToHHMM(it.time)
                     resourceProvider.getString(R.string.text_timeval_left, calcTime)
                 }
@@ -136,7 +140,7 @@ class CircadianAlignmentViewModel
                             img = R.drawable.ic_shoe_corrective_activities,
                             txt = "2334"
                         ),
-                        logStatus = isLogged,
+                        logStatus = null,
                         time = timeLeft,
                         timeInSec = it.time
                     )
@@ -174,7 +178,7 @@ class CircadianAlignmentViewModel
                             img = R.drawable.ic_workout_corrective_activities,
                             txt = "23 mins"
                         ),
-                        logStatus = isLogged,
+                        logStatus = null,
                         time = timeLeft,
                         timeInSec = it.time
                     )
@@ -267,10 +271,12 @@ class CircadianAlignmentViewModel
 
     private fun updateCard(cardkey: String, formattedTime: String, isFinished: Boolean) {
         getCorrectiveActivitiesLiveData(cardkey)?.let { liveData ->
+
+            val time = if(isFinished) "0"
+                       else resourceProvider.getString(R.string.text_timeval_left, formattedTime)
             liveData.postValue(
                 liveData.value?.copy(
-                    time = formattedTime,
-                    logStatus = isFinished
+                    time = time
                 )
             )
         }

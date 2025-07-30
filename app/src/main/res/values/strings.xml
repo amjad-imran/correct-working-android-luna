@@ -2039,5 +2039,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_your_body_runs_on_a_clock">Your body runs on a clock</string>
     <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Aligning it well can help you sleep better, feel more energetic, and recover faster</string>
     <string name="text_onboarding_circadian_desc_1">Your body follows a 24-hour cycle called your circadian rhythm. It affects how you sleep, focus, and feel throughout the day.</string>
+    <string name="text_opens_today">Opens Today</string>
+    <string name="text_opens_tomorrow">Opens Tomorrow</string>
 
 </resources>

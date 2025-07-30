@@ -43,6 +43,7 @@ import com.oreo.data.model.RingLocationData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
+import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -436,8 +437,21 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>> {
-        TODO("Not yet implemented")
+    override suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<List<CircadianQuizResponseModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getCircadianQuizData(
+                "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/chrono/ques",
+            )
+        }
+    }
+
+    override suspend fun submitCircadianQuizData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitCircadianQuizData(
+                "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/onboarding",
+                req
+            )
+        }
     }
 
 }

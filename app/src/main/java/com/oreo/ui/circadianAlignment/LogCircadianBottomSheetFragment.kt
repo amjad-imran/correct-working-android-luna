@@ -2,6 +2,7 @@ package com.oreo.ui.circadianAlignment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -13,6 +14,7 @@ import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.BindingEvents
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LogEvents
 
 
@@ -22,6 +24,34 @@ class LogCircadianBottomSheetFragment  :
     BaseBottomSheetWithTransparent<FragmentLogCircadianBottomSheetBinding>(
         FragmentLogCircadianBottomSheetBinding::inflate
     ) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            setUi(it.getString("key"), it.getString("textKey"))
+        }
+    }
+
+    private fun setUi(key: String?, text: String?) {
+        LOGS.d("iovhvnibv : key: $key, text: $text")
+        when(key){
+            CircadianAlignmentViewModel.light_exposure_key -> {
+                binding.ivIconWithText.setImageResource(R.drawable.ic_sun_rise)
+                binding.tvTextWithIcon.text = text?: "-"
+            }
+
+            CircadianAlignmentViewModel.meal_window_key -> {
+                binding.ivOnlyIcon.setImageResource(R.drawable.ic_meal_corrective_activities)
+            }
+
+            CircadianAlignmentViewModel.caffeine_window_key -> {
+                binding.ivOnlyIcon.setImageResource(R.drawable.ic_caffeine_corrective_activities)
+            }
+
+            else -> {}
+        }
+    }
+
     override fun initListener() {
         binding.btnYes.setOnClickListener {
             if (!ApplicationUtils.isInternetConnected()) {
@@ -34,12 +64,15 @@ class LogCircadianBottomSheetFragment  :
             setFragmentResult(
                 LOG_CIRCADIAN_BOTTOM_SHEET_KEY,
                 Bundle().apply {
-                    putString("key", "")
                 }
             )
         }
 
         binding.btnNo.setOnClickListener {
+            dismiss()
+        }
+
+        binding.tvClose.setOnClickListener {
             dismiss()
         }
     }

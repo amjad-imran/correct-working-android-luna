@@ -70,6 +70,7 @@ import com.oreo.data.model.referral.ReferralsMain
 import com.oreo.data.model.sleep.SleepDataResponse
 import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
+import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -776,6 +777,17 @@ interface NetworkService {
     suspend fun getCircadianData(
         @Url url: String,
     ): BaseApiResponse<CircadianResponseModel>
+
+    @GET
+    suspend fun getCircadianQuizData(
+        @Url url: String,
+    ): BaseApiResponse<List<CircadianQuizResponseModel>>
+
+    @POST
+    suspend fun submitCircadianQuizData(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     //
 
     /**

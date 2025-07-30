@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.toColorInt
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,11 +37,15 @@ class CircadianAlignmentFragment :
     private val correctiveActivitiesAdapter by lazy {
         CorrectiveActivitiesAdapter() {
             setFragmentResultListener(LOG_CIRCADIAN_BOTTOM_SHEET_KEY) { _, bundle ->
-                val key = bundle.getString("key")
-                val isLogged = bundle.getBoolean("isLogged")
-                viewModel.postLogData(key, isLogged)
+                viewModel.postLogData(it.key, true)
             }
-            navigate(R.id.logCircadianBottomSheetFragment)
+            navigate(
+                R.id.logCircadianBottomSheetFragment,
+                bundleOf(
+                    "key" to it.key,
+                    "textKey" to it.onlyImgWithText?.txt
+                )
+            )
         }
     }
 
@@ -395,38 +400,38 @@ class CircadianAlignmentFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.circadianResponseData.observe(this) {
+        viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
         }
 
-        viewModel.correctiveActivitiesListData.observe(this) {
+        viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 correctiveActivitiesAdapter.updateDataSet(it)
             }
         }
 
-        viewModel.lightExposureData.observe(this){
+        viewModel.lightExposureData.observe(viewLifecycleOwner){
             correctiveActivitiesAdapter.updateSingleElement(it, 0)
         }
 
-        viewModel.dailyStepsData.observe(this){
+        viewModel.dailyStepsData.observe(viewLifecycleOwner){
             correctiveActivitiesAdapter.updateSingleElement(it, 1)
         }
 
-        viewModel.mealWindowData.observe(this){
+        viewModel.mealWindowData.observe(viewLifecycleOwner){
             correctiveActivitiesAdapter.updateSingleElement(it, 2)
         }
 
-        viewModel.workoutData.observe(this){
+        viewModel.workoutData.observe(viewLifecycleOwner){
             correctiveActivitiesAdapter.updateSingleElement(it, 3)
         }
 
-        viewModel.caffeineWindowData.observe(this){
+        viewModel.caffeineWindowData.observe(viewLifecycleOwner){
             correctiveActivitiesAdapter.updateSingleElement(it, 4)
         }
 
-        viewModel.getMessages().observe(this) {
+        viewModel.getMessages().observe(viewLifecycleOwner) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
@@ -438,7 +443,7 @@ class CircadianAlignmentFragment :
             }
         }
 
-        viewModel.getLoading().observe(this) {
+        viewModel.getLoading().observe(viewLifecycleOwner) {
             if (it) {
                 binding.progressBar.root.visible()
             } else {
@@ -498,15 +503,16 @@ class CircadianAlignmentFragment :
         // your chronotype
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
-            tvTitle.text = chronotypeData.type
-            tvDesc.text = chronotypeData.description
+            tvType.text = chronotypeData.type
+            tvDescType.text = chronotypeData.description
         }
     }
 
     private fun getActMoniStatusIcon(status: String?): Int {
         return when (status) {
-            CircadianAlignmentViewModel.actMonStatusList.get(0) -> R.drawable.ic_cancel
-            CircadianAlignmentViewModel.actMonStatusList.get(1) -> R.drawable.ic_hm_check_mark
+            CircadianAlignmentViewModel.actMonStatusList[0] -> R.drawable.ic_partially_done_circadian
+            CircadianAlignmentViewModel.actMonStatusList[1] -> R.drawable.ic_hm_check_mark
+            CircadianAlignmentViewModel.actMonStatusList[2] -> R.drawable.ic_not_done_circadian
             else -> R.drawable.ic_hm_check_default_circadian
         }
     }

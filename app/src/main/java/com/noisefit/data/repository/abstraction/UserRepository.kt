@@ -16,6 +16,7 @@ import com.oreo.data.model.NotificationToggleModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
+import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import kotlinx.coroutines.flow.Flow
 
@@ -76,6 +77,9 @@ interface UserRepository {
     suspend fun submitLogCircadianData(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getCircadianData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>>
-    suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>>
+
+    suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<List<CircadianQuizResponseModel>>>>
+
+    suspend fun submitCircadianQuizData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
 }

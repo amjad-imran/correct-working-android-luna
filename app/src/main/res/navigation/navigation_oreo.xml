@@ -1403,7 +1403,15 @@
     <dialog
         android:id="@+id/logCircadianBottomSheetFragment"
         android:name="com.oreo.ui.circadianAlignment.LogCircadianBottomSheetFragment"
-        android:label="LogCircadianBottomSheetFragment" />
+        android:label="LogCircadianBottomSheetFragment" >
+        <argument
+            android:name="key"
+            app:argType="string" />
+        <argument
+            android:name="textKey"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
     <fragment
         android:id="@+id/circadianSplashScreenFragment"
         android:name="com.oreo.ui.circadianAlignment.onboarding.CircadianSplashScreenFragment"
