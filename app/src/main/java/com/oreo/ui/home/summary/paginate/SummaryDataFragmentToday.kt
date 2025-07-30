@@ -237,6 +237,7 @@ class SummaryDataFragmentToday :
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 viewModel.caffeineGraphData = mainViewModel.caffeineGraphData
                 viewModel.summaryAvailable = mainViewModel.summaryAvailable
+                viewModel.circadianGraphData = mainViewModel.circadianGraphData
                 setUi(dash.first, dash.second, dash.third)
             }
         }
@@ -299,8 +300,16 @@ class SummaryDataFragmentToday :
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
+                OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked -> {
+                    navigate(R.id.circadianSplashScreenFragment)
+                }
+
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
-                    navigate(R.id.circadianAlignmentFragment)
+                    if(viewModel.localDataStore.isCircadianOnboardShown()){
+                        navigate(R.id.circadianAlignmentFragment)
+                    }else{
+                        navigate(R.id.circadianSplashScreenFragment)
+                    }
                 }
 
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {

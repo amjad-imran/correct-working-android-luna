@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -26,14 +27,15 @@
         app:layout_constraintTop_toTopOf="@+id/tvTitle"
         app:srcCompat="@drawable/ic_arrow_right_circadian" />
 
-    <View
-        android:id="@+id/view41"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+    <com.oreo.util.graph.Circadian24HourGraph
+        android:id="@+id/graphView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        />
 
     <TextView
         android:id="@+id/tvWindow"
@@ -48,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view41" />
+        app:layout_constraintTop_toBottomOf="@+id/graphView" />
 
     <TextView
         android:id="@+id/tvDesc"

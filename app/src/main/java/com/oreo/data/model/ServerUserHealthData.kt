@@ -3,6 +3,7 @@ package com.oreo.data.model
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.models.ColorfitData
 import com.oreo.data.model.health.ODashboardActivityScoreModel
@@ -46,6 +47,9 @@ data class ServerUserHealthResponse(
     val comfort_readiness: Boolean? = false,
     val comfort_cycle: Boolean? = false,
     val booster_women: Boolean? = false,
+
+    @SerializedName("circadian_graph")
+    val circadianGraph: CircadianGraphData?= null,
     //
 ) : ColorfitData()
 

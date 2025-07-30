@@ -7,6 +7,7 @@ import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
@@ -562,6 +563,12 @@ interface DataStoredInterface {
     fun setIsWorkoutPlanSetUp(isSetUp: Boolean)
 
     fun clearBoosterComfortFoodAndWorkoutData()
+
+    fun isCircadianOnboardShown(): Boolean
+    fun setCircadianOnboardShown()
+
+    fun setCircadianGraphData(graphData: CircadianGraphData?)
+    fun getCircadianGraphData(): CircadianGraphData?
 }
 
 enum class AppTrackEvent {

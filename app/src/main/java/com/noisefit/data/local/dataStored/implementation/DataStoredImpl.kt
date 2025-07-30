@@ -42,6 +42,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -210,6 +211,7 @@ private const val FMH_WALK_THROUGH = "FMH_WALK_THROUGH"
 private const val FMH_REMIND_LATER = "FMH_REMIND_LATER"
 private const val SLEEP_MOENGAGE_SYNC_DATE = "SLEEP_MOENGAGE_SYNC_DATE"
 private const val AI_CHAT_ONBOARD = "AI_CHAT_ONBOARD"
+private const val CIRCADIAN_ONBOARD = "CIRCADIAN_ONBOARD"
 private const val GOT_PERIOD_CLICKED = "GOT_PERIOD_CLICKED"
 
 
@@ -234,6 +236,7 @@ private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 private const val GOOGLE_FIT_SYNC_CROSSED = "GOOGLE_FIT_SYNC_CROSSED"
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CAFFEINE_GRAPH_DATA = "CAFFEINE_GRAPH_DATA"
+private const val CIRCADIAN_GRAPH_DATA = "CIRCADIAN_GRAPH_DATA"
 private const val SUMMARY_AVAILABLE_DATA = "SUMMARY_AVAILABLE_DATA"
 private const val DISPLAY_HOME_SCREEN_CARD = "DISPLAY_HOME_SCREEN_CARD"
 
@@ -638,6 +641,14 @@ class DataStoredImpl
         mPrefs.edit()?.putBoolean(AI_CHAT_ONBOARD, true)?.commit()
     }
 
+    override fun isCircadianOnboardShown(): Boolean {
+        return mPrefs.getBoolean(CIRCADIAN_ONBOARD, false)
+    }
+
+    override fun setCircadianOnboardShown() {
+        mPrefs.edit()?.putBoolean(CIRCADIAN_ONBOARD, true)?.commit()
+    }
+
     override fun getStressWalkthroughShownStatus(): Boolean {
         return mPrefs.getBoolean(STRESS_WALKRHTOUGH, false)
     }
@@ -837,6 +848,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(FMH_WALK_THROUGH)?.apply()
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
+        mPrefs.edit()?.remove(CIRCADIAN_ONBOARD)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2303,6 +2315,23 @@ class DataStoredImpl
         mPrefs.edit()?.remove(IS_LOW_WORKOUT_PLAN_SETUP)?.commit()
 
         mPrefs.edit().remove(BOOSTER_WOMEN).commit()
+    }
+
+    override fun setCircadianGraphData(graphData: CircadianGraphData?) {
+        if (graphData == null) {
+            mPrefs.edit()?.remove(CIRCADIAN_GRAPH_DATA)?.commit()
+        } else {
+            mPrefs.edit()?.putString(CIRCADIAN_GRAPH_DATA, gson.toJson(graphData))?.commit()
+        }
+    }
+
+    override fun getCircadianGraphData(): CircadianGraphData? {
+        val data = mPrefs.getString(CIRCADIAN_GRAPH_DATA, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            gson.fromJson(data, CircadianGraphData::class.java)
+        }
     }
 
 }

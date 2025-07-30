@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
@@ -91,13 +92,25 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
     }
 
     override fun initListener() {
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
 
+        binding.tvSkip.setOnClickListener {
+            viewModel.submitQuizQuesAndAnswers(false)
+        }
     }
 
     override fun subscribeObservers() {
         viewModel.quizData.observe(this){
             val list:List<CircadianQuizResponseModel> = it
             questionAdapter.updateDataSet(list)
+        }
+
+        viewModel.quizDataSubmitted.observe(this){
+            it.getContent()?.let {
+                navigate(R.id.circadianAlignmentFragment)
+            }
         }
     }
 

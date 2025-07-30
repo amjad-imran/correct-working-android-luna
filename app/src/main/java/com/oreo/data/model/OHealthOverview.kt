@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -189,7 +190,10 @@ sealed class OHealthOverview {
         val message: String?=null,
     ) : OHealthOverview()
 
-    class CircadianAlignment : OHealthOverview()
+    class CircadianAlignment(
+        val graphData: CircadianGraphData?=null,
+        val timeWindow: List<TimeWindow>?=null,
+    ) : OHealthOverview()
 
     object CircadianAlignmentOnboarding : OHealthOverview()
 

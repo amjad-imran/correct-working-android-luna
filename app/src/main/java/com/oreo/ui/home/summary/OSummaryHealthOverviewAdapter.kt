@@ -153,6 +153,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnDailyDigestMainCardClicked: OSummaryHealthOverviewClickEnum()
 
     object OnCircadianAlignmentCardClicked: OSummaryHealthOverviewClickEnum()
+    object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -655,7 +656,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         fun bind(data: OHealthOverview.CircadianAlignmentOnboarding){
 
             binding.btnGetStarted.setOnClickListener {
-
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked)
             }
         }
             
@@ -3006,9 +3007,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
+            setCircadianGraph(data)
+            // Graph
+
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
             }
+        }
+
+        private fun setCircadianGraph(data: OHealthOverview.CircadianAlignment) {
+            binding.graphView.isScrollLocked = true
+            binding.graphView.graphStartTime = LocalTime.of(6,0)
+            binding.graphView.graphEndTime = LocalTime.of(23,0)
+
+            data.timeWindow?.let {
+                binding.graphView.timeWindows = it
+            }
+            binding.graphView.redraw()
         }
 
     }

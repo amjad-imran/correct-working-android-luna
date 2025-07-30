@@ -56,7 +56,6 @@ class CircadianAlignmentFragment :
         initListener()
         subscribeObservers()
         viewModel.initData()
-//        correctiveActivitiesAdapter.updateDataSet(viewModel.prepareCorrectiveActivitiesData(it.activities))
     }
 
     data class CircadianResponse(

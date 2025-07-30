@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
 import android.util.Log
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -33,6 +34,8 @@ import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.ItemCircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -73,6 +76,7 @@ import com.oreo.data.model.PeriodCard2
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
@@ -213,6 +217,7 @@ class SummaryDataViewModelToday @Inject constructor(
     //
     var userManagedSwitchState = false
     var caffeineGraphData: CaffeineGraphDataModel? = null
+    var circadianGraphData: CircadianGraphData? = null
     var summaryAvailable: Boolean? = false
     //
 
@@ -1284,9 +1289,44 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCircadianAlignmentCardData(): OHealthOverview? {
-        return OHealthOverview.CircadianAlignment(
+        /*if (circadianGraphData == null) {
+            return null
+        }*/
+        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
+        return if(isOnboardingDone){
+            /*val data = CircadianGraphData(
+                activityWindowGraph = ItemCircadianGraphData(
+                    start_time = ,
+                    end_time =
+                ),
+                caffeineWindowGraph = ,
+                cortisolPeakWindowGraph = ,
+                dlmoPhaseWindowGraph = ,
+                firstFocusPeakWindowGraph = ,
+                ghPulseWindowGraph = ,
+                lightAnchoringPhaswWindowGraph = ,
+                melatoninPrepPhaseWindowGraph = ,
+                secondFocusPeakWindowGraph = ,
+                sleepWindowOpensGraph =
+            )
+            data.*/
+            val timeWindowList = listOf(
+                TimeWindow(10f, 11f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
+                TimeWindow(11f, 13f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 0, label = "Caffeine"),
+                TimeWindow(13f, 22f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
 
-        )
+                TimeWindow(12f, 15f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 1, label = "No Caffeine"),
+                TimeWindow(15f, 19f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 1, label = "Caffeine"),
+
+                TimeWindow(10f, 18f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 2, label = "Caffeine"),
+                )
+            OHealthOverview.CircadianAlignment(
+                graphData = null,
+                timeWindow = timeWindowList
+            )
+        }else{
+            OHealthOverview.CircadianAlignmentOnboarding
+        }
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {

@@ -9,6 +9,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,6 +23,8 @@ class QuizCircadianViewModel @Inject constructor(
     val quizData = MutableLiveData<ArrayList<CircadianQuizResponseModel>>()
 
     val quesOptionMap = HashMap<Int, Int>()
+
+    val quizDataSubmitted = MutableLiveData<Event<Boolean>>()
 
     fun getQuizData(){
         viewModelScope.launch {
@@ -68,19 +71,6 @@ class QuizCircadianViewModel @Inject constructor(
     fun submitQuizQuesAndAnswers(isAllDone: Boolean){
         viewModelScope.launch {
 
-
-
-            /*val jsonArrayRes = JSONArray()
-            if(isAllDone){
-                quesOptionMap.forEach { (quesId, ansId) ->
-                    jsonArrayRes.put(
-                        JSONObject().apply {
-                            this.put("ques_id", quesId)
-                            this.put("ans_id", ansId)
-                        }
-                    )
-                }
-            }*/
             val reqObj = JsonObject()
             val jsonArrayRes = JsonArray()
             if(isAllDone){
@@ -101,7 +91,7 @@ class QuizCircadianViewModel @Inject constructor(
                     is Resource.Loading -> {}
                     is Resource.NetworkError -> {}
                     is Resource.Success<*> -> {
-
+                        quizDataSubmitted.postValue(Event(true))
                     }
                 }
             }

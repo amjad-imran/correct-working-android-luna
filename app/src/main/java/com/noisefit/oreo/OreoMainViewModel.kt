@@ -42,6 +42,7 @@ import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -143,6 +144,7 @@ constructor(
     var ldwReadiness: Boolean ?= null
     var ldwCycleTracker: Boolean ?= null
     var boosterWomen: Boolean ?= null
+    var circadianGraphData: CircadianGraphData ?= null
     var errorCode: String = ""
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
@@ -358,6 +360,7 @@ constructor(
                             ldwReadiness = it.comfort_readiness ?: false
                             ldwCycleTracker = it.comfort_cycle ?: false
                             boosterWomen = it.booster_women ?: false
+                            circadianGraphData = it.circadianGraph
                             //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE

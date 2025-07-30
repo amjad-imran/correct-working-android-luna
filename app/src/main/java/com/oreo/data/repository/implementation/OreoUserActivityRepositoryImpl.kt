@@ -64,6 +64,7 @@ import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.ImpactData
 import com.oreo.data.model.NotificationToggleModel
@@ -180,6 +181,7 @@ class OreoUserActivityRepositoryImpl(
             var ldw_readiness: Boolean?= null
             var ldw_cycle_tracker: Boolean?= null
             var booster_women: Boolean?= null
+            var circadianGraphData: CircadianGraphData?= null
             //
 
             var apiStartDate: String? = startDate
@@ -275,7 +277,8 @@ class OreoUserActivityRepositoryImpl(
                                 summaryAvailable = localDataStore.getSummaryAvailableData(),
                                 comfort_readiness = localDataStore.getLdwReadinessData(),
                                 comfort_cycle = localDataStore.getLdwCycleTrackerData(),
-                                booster_women = localDataStore.getBoosterWomenData()
+                                booster_women = localDataStore.getBoosterWomenData(),
+                                circadianGraph =localDataStore.getCircadianGraphData()
                             ),
                             message = "",
                         )
@@ -321,6 +324,7 @@ class OreoUserActivityRepositoryImpl(
                             ldw_readiness = response.comfort_readiness
                             ldw_cycle_tracker = response.comfort_cycle
                             booster_women = response.booster_women
+                            circadianGraphData = response.circadianGraph
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -339,6 +343,7 @@ class OreoUserActivityRepositoryImpl(
                             localDataStore.setLdwReadinessData(ldw_readiness)
                             localDataStore.setLdwCycleTrackerData(ldw_cycle_tracker)
                             localDataStore.setBoosterWomenData(booster_women)
+                            localDataStore.setCircadianGraphData(circadianGraphData)
                         }
                     }
                 }
@@ -390,6 +395,7 @@ class OreoUserActivityRepositoryImpl(
                                             comfort_readiness = ldw_readiness,
                                             comfort_cycle = ldw_cycle_tracker,
                                             booster_women = booster_women,
+                                            circadianGraph = circadianGraphData,
                                         ),
                                         message = "",
                                     )

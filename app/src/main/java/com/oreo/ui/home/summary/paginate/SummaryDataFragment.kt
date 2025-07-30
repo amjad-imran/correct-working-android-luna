@@ -181,6 +181,7 @@ class SummaryDataFragment :
                 is OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked -> {}
             }
         }
 
