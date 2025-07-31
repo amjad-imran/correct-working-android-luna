@@ -8,6 +8,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizCircadianViewModel @Inject constructor(
+    val localDataStore: DataStoredInterface,
     private val userRepository: UserRepository
 ): BaseViewModel() {
 

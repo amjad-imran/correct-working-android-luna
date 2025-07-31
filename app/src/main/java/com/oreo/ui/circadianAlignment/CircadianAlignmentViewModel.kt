@@ -329,7 +329,7 @@ class CircadianAlignmentViewModel
         circadianGraphData?.activityWindowGraph?.let {
             if(it.startTime == null || it.endTime == null) return@let
             data.add(
-                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Activity")
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#9E6FC7".toColorInt(),"#4C4192".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Activity")
             )
         }
 
@@ -343,21 +343,21 @@ class CircadianAlignmentViewModel
         circadianGraphData?.cortisolPeakWindowGraph?.let {
             if(it.startTime == null || it.endTime == null) return@let
             data.add(
-                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Cortisol Peak Window")
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#33296F".toColorInt(),"#634ED5".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Cortisol Peak Window")
             )
         }
 
         circadianGraphData?.dlmoPhaseWindowGraph?.let {
             if(it.startTime == null || it.endTime == null) return@let
             data.add(
-                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_dim_light_melatonin_onset))
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#613644".toColorInt(),"#BD6FC7".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_dim_light_melatonin_onset))
             )
         }
 
         circadianGraphData?.firstFocusPeakWindowGraph?.let {
             if(it.startTime == null || it.endTime == null) return@let
             data.add(
-                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "First Focus Peak")
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "First Focus Peak")
             )
         }
 

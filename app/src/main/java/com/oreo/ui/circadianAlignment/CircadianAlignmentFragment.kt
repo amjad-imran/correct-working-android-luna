@@ -20,6 +20,7 @@ import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
+import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.circadian.CircadianResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -50,6 +51,7 @@ class CircadianAlignmentFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUi()
+        setCircadianGraph()
         setRecycler()
         initListener()
         subscribeObservers()
@@ -65,56 +67,15 @@ class CircadianAlignmentFragment :
     )
 
 
-    private fun setCircadianGraph(graphData: CircadianGraphData?) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+    private fun setCircadianGraph() {
 
         binding.graphView.isScrollLocked = false
+        binding.graphView.graphStartTime = LocalTime.of(6,0)
+        binding.graphView.graphEndTime = LocalTime.of(23,0)
 
-        var startTime: LocalTime?= null
-        var endTime: LocalTime?= null
-        if(graphData?.startTime != null && graphData.endTime != null){
+        binding.graphView.timeWindows = ArrayList<TimeWindow>()
+//        binding.graphView.redraw()
 
-            val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
-            val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
-
-            startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-            endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
-        }
-        startTime?.let {
-            binding.graphView.graphStartTime = it
-        }
-
-        endTime?.let {
-            binding.graphView.graphEndTime = it
-        }
-        /*binding.graphView.graphStartTime = LocalTime.of(6,0)
-        binding.graphView.graphEndTime = LocalTime.of(23,0)*/
-
-        /*binding.graphView.timeWindows = listOf(
-            TimeWindow(10f, 11f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
-            TimeWindow(11f, 13f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 0, label = "Caffeine"),
-            TimeWindow(13f, 22f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "No Caffeine"),
-
-            TimeWindow(12f, 15f, "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 1, label = "No Caffeine"),
-            TimeWindow(15f, 19f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 1, label = "Caffeine"),
-
-            TimeWindow(10f, 18f, "#A1734E".toColorInt(),"#D6A176".toColorInt(),"#FFFFFF".toColorInt(), rowIndex = 2, label = "Caffeine"),
-
-        )*/
-        binding.graphView.timeWindows = viewModel.getScrollGraphList(graphData)
-        binding.graphView.redraw()
-
-        val circadianMidpointData = graphData?.circadianMidPointData
-        circadianMidpointData?.let {
-            val circadianMidPointResponse = CircadianResponse(
-                it.startTime?:"",
-                it.endTime?:"",
-                it.circadianMidpoint?:"",
-                it.avgBefore?:"",
-                it.nudge ?: "",
-            )
-        }
         val circadianResponse = CircadianResponse(
             "2025-07-22 23:39:00",
             "2025-07-23 02:15:00",
@@ -122,6 +83,13 @@ class CircadianAlignmentFragment :
             "2025-07-23 01:44:18",
             "You’re improving — staying active later and delaying sleep cues is helping."
         )
+        setCircadianMidPointGraph(circadianResponse)
+
+    }
+
+    private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse){
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
         val midStartDateTime = LocalDateTime.parse(circadianResponse.startTime, formatter)
         val midEndDateTime = LocalDateTime.parse(circadianResponse.endTime, formatter)
@@ -405,9 +373,41 @@ class CircadianAlignmentFragment :
         }
     }
 
+    private fun updateGraph(graphData: CircadianGraphData){
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        binding.graphView.graphStartTime = LocalTime.of(6,0)
+        binding.graphView.graphEndTime = LocalTime.of(23,0)
+        if(graphData.startTime != null && graphData.endTime != null){
+
+            val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+            val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+
+            val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+            val endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+
+            binding.graphView.graphStartTime = startTime
+            binding.graphView.graphEndTime = endTime
+
+            binding.graphView.timeWindows = viewModel.getScrollGraphList(graphData)
+            binding.graphView.redraw()
+        }
+
+        val circadianMidpointData = graphData.circadianMidPointData
+        circadianMidpointData?.let {
+            val circadianMidPointResponse = CircadianResponse(
+                it.startTime?:"",
+                it.endTime?:"",
+                it.circadianMidpoint?:"",
+                it.avgBefore?:"",
+                it.nudge ?: "",
+            )
+//            setCircadianMidPointGraph(circadianMidPointResponse)
+        }
+    }
+
     private fun setUi() {
         binding.toolbar.tvTitle.text = getString(R.string.text_circadian_alignment)
-
     }
 
     private fun setRecycler() {
@@ -429,7 +429,7 @@ class CircadianAlignmentFragment :
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            setCircadianGraph(it.graph_data)
+            it.graph_data?.let { it1 -> updateGraph(it1) }
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {

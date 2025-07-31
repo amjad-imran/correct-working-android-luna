@@ -109,7 +109,12 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
 
         viewModel.quizDataSubmitted.observe(this){
             it.getContent()?.let {
-                navigate(R.id.circadianAlignmentFragment)
+                if(viewModel.localDataStore.isCircadianOnboardShown()){
+                    navigateUpSafe()
+                }else{
+                    viewModel.localDataStore.setCircadianOnboardShown()
+                    navigate(QuizCircadianFragmentDirections.actionQuizCircadianFragmentToCircadianAlignmentFragment())
+                }
             }
         }
     }

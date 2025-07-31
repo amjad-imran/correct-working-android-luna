@@ -1399,7 +1399,13 @@
         android:id="@+id/quizCircadianFragment"
         android:name="com.oreo.ui.circadianAlignment.quiz.QuizCircadianFragment"
         android:label="fragment_quiz_circadian"
-        tools:layout="@layout/fragment_quiz_circadian" />
+        tools:layout="@layout/fragment_quiz_circadian" >
+        <action
+            android:id="@+id/action_quizCircadianFragment_to_circadianAlignmentFragment"
+            app:destination="@id/circadianAlignmentFragment"
+            app:popUpTo="@id/quizCircadianFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <dialog
         android:id="@+id/logCircadianBottomSheetFragment"
         android:name="com.oreo.ui.circadianAlignment.LogCircadianBottomSheetFragment"
@@ -1416,7 +1422,13 @@
         android:id="@+id/circadianSplashScreenFragment"
         android:name="com.oreo.ui.circadianAlignment.onboarding.CircadianSplashScreenFragment"
         android:label="fragment_circadian_splash_screen"
-        tools:layout="@layout/fragment_circadian_splash_screen" />
+        tools:layout="@layout/fragment_circadian_splash_screen" >
+        <action
+            android:id="@+id/action_circadianSplashScreenFragment_to_quizCircadianFragment"
+            app:destination="@id/quizCircadianFragment"
+            app:popUpTo="@id/circadianSplashScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/circadianAlignmentFragment"
         android:name="com.oreo.ui.circadianAlignment.CircadianAlignmentFragment"

@@ -23,9 +23,6 @@ class CircadianSplashScreenFragment :
         OnboardingCarcadianFragment5(),
     )
 
-    @Inject
-    lateinit var localDataStore: DataStoredInterface
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,14 +44,12 @@ class CircadianSplashScreenFragment :
             if (nextItem < fragments.size) {
                 binding.viewPager.setCurrentItem(nextItem, true)
             } else {
-                localDataStore.setCircadianOnboardShown()
-                navigate(R.id.quizCircadianFragment)
+                navigate(CircadianSplashScreenFragmentDirections.actionCircadianSplashScreenFragmentToQuizCircadianFragment())
             }
         }
 
         binding.tvSkip.setOnClickListener {
-            /*viewModel.setOnboardingCompleted()
-            navigate(R.id.action_onboarding_to_home)*/
+            navigate(CircadianSplashScreenFragmentDirections.actionCircadianSplashScreenFragmentToQuizCircadianFragment())
         }
 
         binding.toolbar.backBtn.setOnClickListener {
