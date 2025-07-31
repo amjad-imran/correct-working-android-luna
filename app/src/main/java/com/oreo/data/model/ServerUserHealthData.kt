@@ -48,7 +48,7 @@ data class ServerUserHealthResponse(
     val comfort_cycle: Boolean? = false,
     val booster_women: Boolean? = false,
 
-    @SerializedName("circadian_graph")
+    @SerializedName("circadian_graphs")
     val circadianGraph: CircadianGraphData?= null,
     //
 ) : ColorfitData()

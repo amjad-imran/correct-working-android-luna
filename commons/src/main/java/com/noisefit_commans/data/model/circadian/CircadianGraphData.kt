@@ -1,19 +1,76 @@
 package com.noisefit_commans.data.model.circadian
 
+import com.google.gson.annotations.SerializedName
+
 data class CircadianGraphData(
+    @SerializedName("activity_window_graph")
     val activityWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("caffeine_window_graph")
     val caffeineWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("cortisol_peak_window_graph")
     val cortisolPeakWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("dlmo_phase_window_graph")
     val dlmoPhaseWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("first_focus_peak_window_graph")
     val firstFocusPeakWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("gh_pulse_window_graph")
     val ghPulseWindowGraph: ItemCircadianGraphData?,
-    val lightAnchoringPhaswWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("light_anchoring_phase_window_graph")
+    val lightAnchoringPhaseWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("melatonin_prep_phase_window_graph")
     val melatoninPrepPhaseWindowGraph: ItemCircadianGraphData?,
+
+    @SerializedName("second_focus_peak_window_graph")
     val secondFocusPeakWindowGraph: ItemCircadianGraphData?,
-    val sleepWindowOpensGraph: ItemCircadianGraphData?
+
+    @SerializedName("sleep_window_opens_graph")
+    val sleepWindowOpensGraph: ItemCircadianGraphData?,
+
+    //-
+    @SerializedName("circadian_mid_point")
+    val circadianMidPointData: CircadianMidPointData?,
+
+    @SerializedName("start_time")
+    val startTime: String?,
+
+    @SerializedName("end_time")
+    val endTime: String?,
+
+    val title: String?,
+    val description: String?,
 )
 
 data class ItemCircadianGraphData(
-    val start_time: String,
-    val end_time: String,
+    @SerializedName("start_time")
+    val startTime: String?,
+
+    @SerializedName("end_time")
+    val endTime: String?
+)
+
+data class CircadianMidPointData(
+    @SerializedName("start_time")
+    val startTime: String?,
+
+    @SerializedName("end_time")
+    val endTime: String?,
+
+    @SerializedName("circadian_midpoint")
+    val circadianMidpoint: String?,
+
+    @SerializedName("avg_now")
+    val avgNow: String?,
+
+    @SerializedName("avg_before")
+    val avgBefore: String?,
+
+    @SerializedName("nudge")
+    val nudge: String?
 )

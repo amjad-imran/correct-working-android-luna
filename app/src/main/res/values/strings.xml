@@ -2041,5 +2041,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_onboarding_circadian_desc_1">Your body follows a 24-hour cycle called your circadian rhythm. It affects how you sleep, focus, and feel throughout the day.</string>
     <string name="text_opens_today">Opens Today</string>
     <string name="text_opens_tomorrow">Opens Tomorrow</string>
+    <string name="text_caffeine_open">caffeine open</string>
+    <string name="text_dim_light_melatonin_onset">Dim-light melatonin onset</string>
 
 </resources>

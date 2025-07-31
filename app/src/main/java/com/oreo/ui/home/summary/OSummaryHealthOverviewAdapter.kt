@@ -3021,10 +3021,21 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.graphView.graphStartTime = LocalTime.of(6,0)
             binding.graphView.graphEndTime = LocalTime.of(23,0)
 
+            data.startTime?.let {
+                binding.graphView.graphStartTime = it
+            }
+
+            data.endTime?.let {
+                binding.graphView.graphEndTime = it
+            }
+
             data.timeWindow?.let {
                 binding.graphView.timeWindows = it
             }
             binding.graphView.redraw()
+
+            binding.tvWindow.text = data.title ?: "-"
+            binding.tvDesc.text = data.description ?: "-"
         }
 
     }

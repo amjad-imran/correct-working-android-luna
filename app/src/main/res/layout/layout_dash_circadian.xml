@@ -6,13 +6,26 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_caffeine_window_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
     <TextView
         android:id="@+id/tvTitle"
         style="@style/S16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="@string/text_circadian_alignment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,35 +52,35 @@
 
     <TextView
         android:id="@+id/tvWindow"
+        style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/S16"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        tools:text="Performance Window"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/graphView" />
+        app:layout_constraintTop_toBottomOf="@+id/graphView"
+        tools:text="Performance Window" />
 
     <TextView
         android:id="@+id/tvDesc"
+        style="@style/S12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/S12"
-        android:lineHeight="15sp"
-        android:textColor="#B2C0ACAC"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        tools:text="Your sleep index was excellent yesterday and your readiness score is in great shape. You might want to push a little more today"
+        android:layout_marginBottom="28dp"
+        android:lineHeight="15sp"
         android:textAlignment="center"
+        android:textColor="#B2C0ACAC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWindow" />
+        app:layout_constraintTop_toBottomOf="@+id/tvWindow"
+        tools:text="Your sleep index was excellent yesterday and your readiness score is in great shape. You might want to push a little more today" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

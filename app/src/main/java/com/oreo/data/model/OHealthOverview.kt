@@ -17,6 +17,7 @@ import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 import kotlinx.parcelize.Parcelize
+import java.time.LocalTime
 
 
 sealed class OHealthOverview {
@@ -191,8 +192,11 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class CircadianAlignment(
-        val graphData: CircadianGraphData?=null,
+        val startTime: LocalTime?,
+        val endTime: LocalTime?,
         val timeWindow: List<TimeWindow>?=null,
+        val title: String?,
+        val description: String?,
     ) : OHealthOverview()
 
     object CircadianAlignmentOnboarding : OHealthOverview()

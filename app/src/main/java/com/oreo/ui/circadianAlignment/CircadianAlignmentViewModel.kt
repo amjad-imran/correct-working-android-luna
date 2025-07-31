@@ -1,6 +1,7 @@
 package com.oreo.ui.circadianAlignment
 
 import android.os.CountDownTimer
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
@@ -10,20 +11,19 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.CircadianMidPointModel
-import com.oreo.data.model.CircadianMidPointState
-import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.CorrectiveActivitiesModel
 import com.oreo.data.model.OnlyImgWithText
 import com.oreo.data.model.ProgressBarLytData
+import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.circadian.Activity
 import com.oreo.data.model.circadian.CircadianResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -323,6 +323,91 @@ class CircadianAlignmentViewModel
         super.onCleared()
         timerMap.values.forEach { it.cancel() }
     }
+
+    fun getScrollGraphList(circadianGraphData: CircadianGraphData?): List<TimeWindow> {
+        val data = ArrayList<TimeWindow>()
+        circadianGraphData?.activityWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Activity")
+            )
+        }
+
+        circadianGraphData?.caffeineWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_caffeine_open))
+            )
+        }
+
+        circadianGraphData?.cortisolPeakWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Cortisol Peak Window")
+            )
+        }
+
+        circadianGraphData?.dlmoPhaseWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_dim_light_melatonin_onset))
+            )
+        }
+
+        circadianGraphData?.firstFocusPeakWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "First Focus Peak")
+            )
+        }
+
+        circadianGraphData?.ghPulseWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "GH Pulse")
+            )
+        }
+
+        circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Light Anchoring")
+            )
+        }
+
+        circadianGraphData?.melatoninPrepPhaseWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "melatonin Phase")
+            )
+        }
+
+        circadianGraphData?.secondFocusPeakWindowGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Second Focus Peak")
+            )
+        }
+
+        circadianGraphData?.sleepWindowOpensGraph?.let {
+            if(it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_sleep))
+            )
+        }
+
+        return data
+    }
+
+    private fun getCircadianTimeFloatValue(time: String?): Float{
+        if(time == null){
+            return -1f
+        }
+        val timee =  LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"))
+//        timee.minute.toFloat()
+        return timee.hour.toFloat()
+    }
+
 }
 
 enum class CorrectiveActivitiesEnum {
