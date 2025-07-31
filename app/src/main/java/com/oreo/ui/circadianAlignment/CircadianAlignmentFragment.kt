@@ -521,12 +521,6 @@ class CircadianAlignmentFragment :
             }
         }
 
-        // corrective activities
-        /*val correctiveActivitiesData = data.activities
-        binding.lytCorrectiveActivities.apply {
-            correctiveActivitiesData.
-        }*/
-
         // your chronotype
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
