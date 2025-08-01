@@ -569,6 +569,10 @@ interface DataStoredInterface {
 
     fun setCircadianGraphData(graphData: CircadianGraphData?)
     fun getCircadianGraphData(): CircadianGraphData?
+
+    fun getLastKnownTimezone(): String?
+    fun setLastKnownTimezone(timeZone: String)
+    fun isTimezoneChangedAlertCardDismissed(isChanged: Boolean?=null): Boolean
 }
 
 enum class AppTrackEvent {

@@ -113,6 +113,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -2222,12 +2223,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                         if (isAfter12.not()) {
                             add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                         }
                     } else {
                         add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     }
 
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
@@ -2249,6 +2252,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
             }
@@ -2269,6 +2273,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
             }
@@ -2289,6 +2294,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     if (registerDate != 0) {
                         add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                         add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                        add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     }
                     if (!isAfter12) {
                         add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
@@ -2307,7 +2313,6 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
             add(itemsMap["7_day_trends_card"]!!.copy(priority = priorityList.size))
             add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
-            add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
         }
 
         return priorityList
@@ -3829,6 +3834,24 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun appRemindLater() {
         updateRepository.appRemindLater()
+    }
+
+    fun shouldShowTimezoneChangedAlert(setTimezone: Boolean?=null): Boolean {
+        val currentTimezone = TimeZone.getDefault().id
+        val storedTimezone = if(setTimezone==true) null
+                            else localDataStore.getLastKnownTimezone()
+//        val alertDismissed = localDataStore.isTimezoneChangedAlertCardDismissed()
+        return when{
+            storedTimezone == null -> {
+                localDataStore.setLastKnownTimezone(currentTimezone)
+//                localDataStore.isTimezoneChangedAlertCardDismissed(false)
+                false
+            }
+
+            storedTimezone != currentTimezone /*&& !alertDismissed*/ -> true
+
+            else -> /*!alertDismissed*/ false
+        }
     }
 
 }

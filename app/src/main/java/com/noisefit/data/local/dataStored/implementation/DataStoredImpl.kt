@@ -262,6 +262,9 @@ private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
 private const val BOOSTER_WOMEN = "BOOSTER_WOMEN"
 
+private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
+private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -2332,6 +2335,22 @@ class DataStoredImpl
         } else {
             gson.fromJson(data, CircadianGraphData::class.java)
         }
+    }
+
+    override fun getLastKnownTimezone(): String? {
+        return mPrefs.getString(LAST_KNOWN_TIMEZONE, null)
+    }
+
+    override fun setLastKnownTimezone(timeZone: String) {
+        mPrefs.edit()?.putString(LAST_KNOWN_TIMEZONE, timeZone)?.commit()
+    }
+
+    override fun isTimezoneChangedAlertCardDismissed(isChanged: Boolean?): Boolean {
+        val output = mPrefs.getBoolean(TIMEZONE_CHANGED_CARD_DISMISSED, false)
+        if(isChanged != null){
+            mPrefs.edit()?.putBoolean(TIMEZONE_CHANGED_CARD_DISMISSED, isChanged)?.commit()
+        }
+        return output
     }
 
 }

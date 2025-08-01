@@ -2043,5 +2043,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_opens_tomorrow">Opens Tomorrow</string>
     <string name="text_caffeine_open">caffeine open</string>
     <string name="text_dim_light_melatonin_onset">Dim-light melatonin onset</string>
+    <string name="text_timezone_change_detected">Timezone change detected.</string>
+    <string name="text_timezone_changed_desc_dash">You may notice minor data shifts during travel dates, but core metrics and long-term trends remain accurate</string>
 
 </resources>

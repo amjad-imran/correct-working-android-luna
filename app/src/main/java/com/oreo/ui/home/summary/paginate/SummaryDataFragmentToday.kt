@@ -57,6 +57,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
@@ -249,6 +250,9 @@ class SummaryDataFragmentToday :
         impactData: ImpactData?
     ) {
         viewModel.initTodayData()
+
+        binding.contentMain.lytTimezoneChanged.root.setVisibilityByCondition(viewModel.shouldShowTimezoneChangedAlert())
+
         val lunaManagedData = viewModel.localDataStore.getCustomHomeScreenItemsPriorityList()
         if (
             lunaManagedData == null &&
@@ -895,6 +899,16 @@ class SummaryDataFragmentToday :
 
             syncData()
 
+        }
+
+        binding.contentMain.lytTimezoneChanged.ivClose.setOnClickListener {
+            viewModel.shouldShowTimezoneChangedAlert(true)
+            binding.contentMain.lytTimezoneChanged.root.gone()
+        }
+
+        binding.contentMain.lytTimezoneChanged.tvDismiss.setOnClickListener {
+            viewModel.shouldShowTimezoneChangedAlert(true)
+            binding.contentMain.lytTimezoneChanged.root.gone()
         }
 
         binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
