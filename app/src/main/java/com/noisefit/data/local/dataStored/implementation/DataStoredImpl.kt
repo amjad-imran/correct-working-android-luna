@@ -853,6 +853,9 @@ class DataStoredImpl
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
         mPrefs.edit()?.remove(CIRCADIAN_ONBOARD)?.apply()
 
+        mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()
+        mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
+
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_SYNC_CROSSED)?.apply()
