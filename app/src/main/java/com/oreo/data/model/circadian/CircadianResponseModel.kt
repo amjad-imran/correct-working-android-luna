@@ -1,13 +1,22 @@
 package com.oreo.data.model.circadian
 
+import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 
 data class CircadianResponseModel(
-    val activities: List<Activity>,
-    val activity_monitor: List<ActivityMonitor>,
-    val chronotype: Chronotype,
-    val circadian_mid_point: CircadianMidPoint?,
-    val graph_data: CircadianGraphData?,
+    val activities: List<Activity>?,
+
+    @SerializedName("activity_monitor")
+    val activityMonitor: List<ActivityMonitor>?,
+
+    val chronotype: Chronotype?,
+
+    @SerializedName("circadian_mid_point")
+    val circadianMidPoint: CircadianMidPointData?,
+
+    @SerializedName("graph_data")
+    val graphData: CircadianGraphData?,
 )
 
 data class Activity(
@@ -26,12 +35,4 @@ data class ActivityMonitor(
 data class Chronotype(
     val description: String,
     val type: String
-)
-
-data class CircadianMidPoint(
-    val avg_before: String,
-    val circadian_midpoint: String,
-    val end_time: String,
-    val nudge: String,
-    val start_time: String
 )

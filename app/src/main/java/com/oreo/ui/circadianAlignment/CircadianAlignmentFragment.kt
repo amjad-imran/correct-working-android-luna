@@ -11,6 +11,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -22,6 +23,7 @@ import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.circadian.CircadianResponseModel
+import com.oreo.ui.chatGpt.AITopics
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -73,8 +75,8 @@ class CircadianAlignmentFragment :
         binding.graphView.graphStartTime = LocalTime.of(6,0)
         binding.graphView.graphEndTime = LocalTime.of(23,0)
 
-        binding.graphView.timeWindows = ArrayList<TimeWindow>()
-//        binding.graphView.redraw()
+        binding.graphView.timeWindows = ArrayList()
+        binding.graphView.redraw()
 
         val circadianResponse = CircadianResponse(
             "2025-07-22 23:39:00",
@@ -88,240 +90,270 @@ class CircadianAlignmentFragment :
     }
 
     private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse){
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+        try {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
-        val midStartDateTime = LocalDateTime.parse(circadianResponse.startTime, formatter)
-        val midEndDateTime = LocalDateTime.parse(circadianResponse.endTime, formatter)
-        val newStartDateTime = LocalDateTime
-            .parse(circadianResponse.startTime, formatter)
-            .minusHours(2)
-            .minusMinutes(midStartDateTime.minute.toLong())
-        val newEndDateTime = LocalDateTime
-            .parse(circadianResponse.endTime, formatter)
-            .plusHours(2)
-            .plusMinutes((60 - midEndDateTime.minute.toLong()))
-        val circadianMidPointDateTime =
-            LocalDateTime.parse(circadianResponse.circadianMidpoint, formatter)
-        val avgBeforeMidPointDateTime = LocalDateTime.parse(circadianResponse.avgBefore, formatter)
+            val midStartDateTime = LocalDateTime.parse(circadianResponse.startTime, formatter)
+            val midEndDateTime = LocalDateTime.parse(circadianResponse.endTime, formatter)
+            val newStartDateTime = LocalDateTime
+                .parse(circadianResponse.startTime, formatter)
+                .minusHours(2)
+                .minusMinutes(midStartDateTime.minute.toLong())
+            val newEndDateTime = LocalDateTime
+                .parse(circadianResponse.endTime, formatter)
+                .plusHours(2)
+                .plusMinutes((60 - midEndDateTime.minute.toLong()))
+            val circadianMidPointDateTime =
+                LocalDateTime.parse(circadianResponse.circadianMidpoint, formatter)
+            val avgBeforeMidPointDateTime =
+                LocalDateTime.parse(circadianResponse.avgBefore, formatter)
 
-        val isSameDay = newStartDateTime.toLocalDate() == LocalDate.now()
+            val isSameDay = newStartDateTime.toLocalDate() == LocalDate.now()
 
-        val totalHrs = if (!isSameDay) {
-            val hoursFromStartToMidnight = 24 - newStartDateTime.hour
-            val hoursFromMidnightToEnd = newEndDateTime.hour
-            hoursFromStartToMidnight + hoursFromMidnightToEnd
-        } else {
-            newEndDateTime.hour - newStartDateTime.hour
-        }
-
-        binding.lytSleepMidPoint.circadianGraph.updateTotalHours(totalHrs)
-        val totalBars = binding.lytSleepMidPoint.circadianGraph.totalBars()
-        val graphView = binding.lytSleepMidPoint.circadianGraph
-        val avgNowIndex = CircadianMidPointGraphUtils.getMidPointIndex(
-            newStartDateTime,
-            circadianMidPointDateTime
-        )
-        val avgBeforeIndex = CircadianMidPointGraphUtils.getMidPointIndex(
-            newStartDateTime,
-            avgBeforeMidPointDateTime
-        )
-
-
-        LOGS.d(
-            "sadhsadhkjksdahksdaksdak " +
-                    "avgNowIndex ${avgNowIndex} " +
-                    " avgBeforeIndex ${avgBeforeIndex} "
-        )
-
-        val midStartIndex =
-            CircadianMidPointGraphUtils.getMidPointIndex(newStartDateTime, midStartDateTime)
-        val midEndIndex =
-            CircadianMidPointGraphUtils.getMidPointIndex(newStartDateTime, midEndDateTime)
-
-
-        val circadianGraphModelList = ArrayList<CircadianGraphModel>()
-        for (index in 0..totalBars - 1) {
-            var xAxis: String? = null
-
-
-            when (index) {
-                0 -> {
-                    xAxis = newStartDateTime.format(timeFormatter)
-                }
-
-                midStartIndex -> {
-                    xAxis = midStartDateTime.format(timeFormatter)
-                }
-
-                midEndIndex -> {
-                    xAxis = midEndDateTime.format(timeFormatter)
-                }
-
-                totalBars - 1 -> {
-                    xAxis = newEndDateTime.format(timeFormatter)
-                }
+            val totalHrs = if (!isSameDay) {
+                val hoursFromStartToMidnight = 24 - newStartDateTime.hour
+                val hoursFromMidnightToEnd = newEndDateTime.hour
+                hoursFromStartToMidnight + hoursFromMidnightToEnd
+            } else {
+                newEndDateTime.hour - newStartDateTime.hour
             }
 
-            circadianGraphModelList.add(
-                CircadianGraphModel(
-                    xAxis = xAxis
-                )
+            binding.lytSleepMidPoint.circadianGraph.updateTotalHours(totalHrs)
+            val totalBars = binding.lytSleepMidPoint.circadianGraph.totalBars()
+            val graphView = binding.lytSleepMidPoint.circadianGraph
+            val avgNowIndex = CircadianMidPointGraphUtils.getMidPointIndex(
+                newStartDateTime,
+                circadianMidPointDateTime
             )
-        }
+            val avgBeforeIndex = CircadianMidPointGraphUtils.getMidPointIndex(
+                newStartDateTime,
+                avgBeforeMidPointDateTime
+            )
 
-        var avgNowMidPoint: CircadianMidPointModel? = null
-        val avgBeforeMidPoint: CircadianMidPointModel? =
-            CircadianMidPointGraphUtils.whiteMidPoint("Avg Before")
 
-        val bgRange = IntArray(totalBars) { it }
-        val phaseRange = (midStartIndex..midEndIndex).toList().toIntArray()
+            LOGS.d(
+                "sadhsadhkjksdahksdaksdak " +
+                        "avgNowIndex ${avgNowIndex} " +
+                        " avgBeforeIndex ${avgBeforeIndex} "
+            )
 
-        val phaseState =
-            CircadianMidPointGraphUtils.phaseState(bgRange, phaseRange, avgBeforeIndex, avgNowIndex)
-        setMidPointGraphState(phaseState.first)
-        when (phaseState.second) {
-            CircadianMidPointStatus.Locked -> {
-                avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
-            }
+            val midStartIndex =
+                CircadianMidPointGraphUtils.getMidPointIndex(newStartDateTime, midStartDateTime)
+            val midEndIndex =
+                CircadianMidPointGraphUtils.getMidPointIndex(newStartDateTime, midEndDateTime)
 
-            CircadianMidPointStatus.Maintained -> {
-                setMidPointGraphData(
-                    R.drawable.ic_maintained,
-                    "#FFB963",
-                    getString(R.string.text_maintained)
+
+            val circadianGraphModelList = ArrayList<CircadianGraphModel>()
+            for (index in 0..totalBars - 1) {
+                var xAxis: String? = null
+
+
+                when (index) {
+                    0 -> {
+                        xAxis = newStartDateTime.format(timeFormatter)
+                    }
+
+                    midStartIndex -> {
+                        xAxis = midStartDateTime.format(timeFormatter)
+                    }
+
+                    midEndIndex -> {
+                        xAxis = midEndDateTime.format(timeFormatter)
+                    }
+
+                    totalBars - 1 -> {
+                        xAxis = newEndDateTime.format(timeFormatter)
+                    }
+                }
+
+                circadianGraphModelList.add(
+                    CircadianGraphModel(
+                        xAxis = xAxis
+                    )
                 )
-                avgNowMidPoint = CircadianMidPointGraphUtils.orangeMidPoint("Avg Now")
             }
 
-            CircadianMidPointStatus.Worsening -> {
-                setMidPointGraphData(
-                    R.drawable.ic_worsening,
-                    "#FF8A8A",
-                    getString(R.string.text_worsening)
+            var avgNowMidPoint: CircadianMidPointModel? = null
+            val avgBeforeMidPoint: CircadianMidPointModel? =
+                CircadianMidPointGraphUtils.whiteMidPoint("Avg Before")
+
+            val bgRange = IntArray(totalBars) { it }
+            val phaseRange = (midStartIndex..midEndIndex).toList().toIntArray()
+
+            val phaseState =
+                CircadianMidPointGraphUtils.phaseState(
+                    bgRange,
+                    phaseRange,
+                    avgBeforeIndex,
+                    avgNowIndex
                 )
+            setMidPointGraphState(phaseState.first)
+            when (phaseState.second) {
+                CircadianMidPointStatus.Locked -> {
+                    avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
+                }
+
+                CircadianMidPointStatus.Maintained -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_maintained,
+                        "#FFB963",
+                        getString(R.string.text_maintained)
+                    )
+                    avgNowMidPoint = CircadianMidPointGraphUtils.orangeMidPoint("Avg Now")
+                }
+
+                CircadianMidPointStatus.Worsening -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_worsening,
+                        "#FF8A8A",
+                        getString(R.string.text_worsening)
+                    )
 
 
-                avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
-            }
+                    avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
+                }
 
-            CircadianMidPointStatus.Correcting -> {
-                setMidPointGraphData(
-                    R.drawable.ic_correcting,
-                    "#63FFB6",
-                    getString(R.string.text_correcting)
-                )
+                CircadianMidPointStatus.Correcting -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_correcting,
+                        "#63FFB6",
+                        getString(R.string.text_correcting)
+                    )
 
-                avgNowMidPoint = CircadianMidPointGraphUtils.greenMidPoint("Avg Now")
-            }
+                    avgNowMidPoint = CircadianMidPointGraphUtils.greenMidPoint("Avg Now")
+                }
 
-            CircadianMidPointStatus.SleepMissing -> {
-                setMidPointGraphData(
-                    R.drawable.ic_waiting_for_sleep,
-                    "#A7ACFF",
-                    getString(R.string.text_missing_sleep)
-                )
+                CircadianMidPointStatus.SleepMissing -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_waiting_for_sleep,
+                        "#A7ACFF",
+                        getString(R.string.text_missing_sleep)
+                    )
 
-                avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
-            }
+                    avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
+                }
 
-            CircadianMidPointStatus.AwaitingSync -> {
-                setMidPointGraphData(
-                    R.drawable.ic_waiting_for_sleep,
-                    "#A7ACFF",
-                    getString(R.string.text_awaiting_sync)
-                )
+                CircadianMidPointStatus.AwaitingSync -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_waiting_for_sleep,
+                        "#A7ACFF",
+                        getString(R.string.text_awaiting_sync)
+                    )
 
-                avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
-            }
-        }
-
-        //-4 -2
-
-        if (avgBeforeIndex < 0 && avgNowIndex < 0) {
-            // Use indices 0 and 1 for drawing since both are off-graph
-            binding.lytSleepMidPoint.leftCdArrow.visible()
-            graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
-            if (graphView.drawOnSameIndex) {
-                circadianGraphModelList.getOrNull(0)?.bothMidPoint =
-                    Pair(avgBeforeMidPoint, avgNowMidPoint)
-            } else {
-                val firstIndex = 0
-                val secondIndex = 1
-
-                if (avgNowIndex < avgBeforeIndex) {
-                    assignMidpoints(circadianGraphModelList, firstIndex, avgNowMidPoint, null)
-                    assignMidpoints(circadianGraphModelList, secondIndex, null, avgBeforeMidPoint)
-                } else {
-                    assignMidpoints(circadianGraphModelList, firstIndex, avgBeforeMidPoint, null)
-                    assignMidpoints(circadianGraphModelList, secondIndex, null, avgNowMidPoint)
+                    avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
                 }
             }
 
+            //-4 -2
 
-        } else if (avgBeforeIndex > bgRange.last() && avgNowIndex > bgRange.last()) {
-            binding.lytSleepMidPoint.rightCdArrow.visible()
-            // Use indices 0 and 1 for drawing since both are off-graph
-            graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
-            val secondIndex = totalBars - 1
-            if (graphView.drawOnSameIndex) {
-                circadianGraphModelList.getOrNull(secondIndex)?.bothMidPoint =
-                    Pair(avgBeforeMidPoint, avgNowMidPoint)
-            } else {
-                val firstIndex = totalBars - 2
+            if (avgBeforeIndex < 0 && avgNowIndex < 0) {
+                // Use indices 0 and 1 for drawing since both are off-graph
+                binding.lytSleepMidPoint.leftCdArrow.visible()
+                graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
+                if (graphView.drawOnSameIndex) {
+                    circadianGraphModelList.getOrNull(0)?.bothMidPoint =
+                        Pair(avgBeforeMidPoint, avgNowMidPoint)
+                } else {
+                    val firstIndex = 0
+                    val secondIndex = 1
+
+                    if (avgNowIndex < avgBeforeIndex) {
+                        assignMidpoints(circadianGraphModelList, firstIndex, avgNowMidPoint, null)
+                        assignMidpoints(
+                            circadianGraphModelList,
+                            secondIndex,
+                            null,
+                            avgBeforeMidPoint
+                        )
+                    } else {
+                        assignMidpoints(
+                            circadianGraphModelList,
+                            firstIndex,
+                            avgBeforeMidPoint,
+                            null
+                        )
+                        assignMidpoints(circadianGraphModelList, secondIndex, null, avgNowMidPoint)
+                    }
+                }
+
+
+            } else if (avgBeforeIndex > bgRange.last() && avgNowIndex > bgRange.last()) {
+                binding.lytSleepMidPoint.rightCdArrow.visible()
+                // Use indices 0 and 1 for drawing since both are off-graph
+                graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
                 val secondIndex = totalBars - 1
-
-                if (avgNowIndex < avgBeforeIndex) {
-                    assignMidpoints(circadianGraphModelList, firstIndex, avgNowMidPoint, null)
-                    assignMidpoints(circadianGraphModelList, secondIndex, null, avgBeforeMidPoint)
+                if (graphView.drawOnSameIndex) {
+                    circadianGraphModelList.getOrNull(secondIndex)?.bothMidPoint =
+                        Pair(avgBeforeMidPoint, avgNowMidPoint)
                 } else {
-                    assignMidpoints(circadianGraphModelList, firstIndex, avgBeforeMidPoint, null)
-                    assignMidpoints(circadianGraphModelList, secondIndex, null, avgNowMidPoint)
+                    val firstIndex = totalBars - 2
+                    val secondIndex = totalBars - 1
+
+                    if (avgNowIndex < avgBeforeIndex) {
+                        assignMidpoints(circadianGraphModelList, firstIndex, avgNowMidPoint, null)
+                        assignMidpoints(
+                            circadianGraphModelList,
+                            secondIndex,
+                            null,
+                            avgBeforeMidPoint
+                        )
+                    } else {
+                        assignMidpoints(
+                            circadianGraphModelList,
+                            firstIndex,
+                            avgBeforeMidPoint,
+                            null
+                        )
+                        assignMidpoints(circadianGraphModelList, secondIndex, null, avgNowMidPoint)
+                    }
                 }
-            }
 
 
-        } else {
-            graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
-            if (graphView.drawOnSameIndex) {
-                circadianGraphModelList.getOrNull(avgBeforeIndex)?.bothMidPoint =
-                    Pair(avgBeforeMidPoint, avgNowMidPoint)
             } else {
-                val firstIndex = minOf(avgBeforeIndex, avgNowIndex)
-                val secondIndex = maxOf(avgBeforeIndex, avgNowIndex)
+                graphView.drawOnSameIndex = (avgNowIndex == avgBeforeIndex)
+                if (graphView.drawOnSameIndex) {
+                    circadianGraphModelList.getOrNull(avgBeforeIndex)?.bothMidPoint =
+                        Pair(avgBeforeMidPoint, avgNowMidPoint)
+                } else {
+                    val firstIndex = minOf(avgBeforeIndex, avgNowIndex)
+                    val secondIndex = maxOf(avgBeforeIndex, avgNowIndex)
 
-                val firstMidPoint =
-                    if (avgBeforeIndex < avgNowIndex) avgBeforeMidPoint else avgNowMidPoint
-                val secondMidPoint =
-                    if (avgBeforeIndex < avgNowIndex) avgNowMidPoint else avgBeforeMidPoint
+                    val firstMidPoint =
+                        if (avgBeforeIndex < avgNowIndex) avgBeforeMidPoint else avgNowMidPoint
+                    val secondMidPoint =
+                        if (avgBeforeIndex < avgNowIndex) avgNowMidPoint else avgBeforeMidPoint
 
-                circadianGraphModelList.getOrNull(firstIndex)?.firstMidPoint = firstMidPoint
-                circadianGraphModelList.getOrNull(secondIndex)?.secondMidPoint = secondMidPoint
+                    circadianGraphModelList.getOrNull(firstIndex)?.firstMidPoint = firstMidPoint
+                    circadianGraphModelList.getOrNull(secondIndex)?.secondMidPoint = secondMidPoint
+                }
+
+
             }
 
 
-        }
+            LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk ${phaseState.first} ${phaseState.second}")
+            LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk midStartIndex ${midStartIndex} midEndIndex ${midEndIndex}")
 
 
-        LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk ${phaseState.first} ${phaseState.second}")
-        LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk midStartIndex ${midStartIndex} midEndIndex ${midEndIndex}")
+            val colors = List(totalBars) {
+                when (it) {
+                    midStartIndex -> {
+                        "#aa8866".toColorInt()
+                    }
 
+                    midEndIndex -> {
+                        "#7799cc".toColorInt()
+                    }
 
-        val colors = List(totalBars) {
-            when (it) {
-                midStartIndex -> {
-                    "#aa8866".toColorInt()
+                    else -> "#1CFFFFFF".toColorInt()
                 }
-
-                midEndIndex -> {
-                    "#7799cc".toColorInt()
-                }
-
-                else -> "#1CFFFFFF".toColorInt()
             }
-        }
 
-        graphView.updateBars(circadianGraphModelList, colors)
+            graphView.updateBars(circadianGraphModelList, colors)
+        }catch (e: Exception){
+            LOGS.d("circadian mid point exception: $e")
+        }
     }
 
     fun assignMidpoints(
@@ -373,7 +405,10 @@ class CircadianAlignmentFragment :
         }
     }
 
-    private fun updateGraph(graphData: CircadianGraphData){
+    private fun updateGraph(
+        graphData: CircadianGraphData,
+        circadianMidPoint: CircadianMidPointData?
+    ){
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
         binding.graphView.graphStartTime = LocalTime.of(6,0)
@@ -393,8 +428,7 @@ class CircadianAlignmentFragment :
             binding.graphView.redraw()
         }
 
-        val circadianMidpointData = graphData.circadianMidPointData
-        circadianMidpointData?.let {
+        circadianMidPoint?.let {
             val circadianMidPointResponse = CircadianResponse(
                 it.startTime?:"",
                 it.endTime?:"",
@@ -402,7 +436,7 @@ class CircadianAlignmentFragment :
                 it.avgBefore?:"",
                 it.nudge ?: "",
             )
-//            setCircadianMidPointGraph(circadianMidPointResponse)
+            setCircadianMidPointGraph(circadianMidPointResponse)
         }
     }
 
@@ -423,13 +457,24 @@ class CircadianAlignmentFragment :
         binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
             navigate(R.id.quizCircadianFragment)
         }
+
+        binding.lytFocusWindow.llLunaAi.setOnClickListener {
+            if (viewModel.isChatSplashShown()) {
+                navigate(
+                    R.id.aiTopQuestionsFragment,
+                    bundleOf("aiTopic" to AITopics.GENERAL)
+                )
+            } else {
+                navigate(R.id.aiChatOnboardFragment)
+            }
+        }
     }
 
     override fun subscribeObservers() {
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            it.graph_data?.let { it1 -> updateGraph(it1) }
+            it.graphData?.let { it1 -> updateGraph(it1, it.circadianMidPoint) }
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
@@ -482,9 +527,9 @@ class CircadianAlignmentFragment :
     fun setData(data: CircadianResponseModel) {
         LOGS.d("ansckaasc: $data")
         // activity monitor
-        val activityMonitorData = data.activity_monitor
+        val activityMonitorData = data.activityMonitor
         binding.lytActivityMonitor.apply {
-            activityMonitorData.forEach {
+            activityMonitorData?.forEach {
                 when (it.type) {
                     CircadianAlignmentViewModel.daily_steps_key -> {
                         ivStateSteps.setImageResource(
@@ -524,8 +569,8 @@ class CircadianAlignmentFragment :
         // your chronotype
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
-            tvType.text = chronotypeData.type
-            tvDescType.text = chronotypeData.description
+            tvType.text = chronotypeData?.type ?: "-"
+            tvDescType.text = chronotypeData?.description ?: "-"
         }
     }
 

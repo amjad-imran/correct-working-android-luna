@@ -11,6 +11,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
@@ -30,7 +31,8 @@ import javax.inject.Inject
 class CircadianAlignmentViewModel
 @Inject constructor(
     private val resourceProvider: ResourcesProvider,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val localDataStore: DataStoredInterface,
 ): BaseViewModel() {
 
     companion object{
@@ -82,7 +84,7 @@ class CircadianAlignmentViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             circadianResponseData.postValue(it)
-                            prepareCorrectiveActivitiesData(it.activities)
+                            it.activities?.let { it1 -> prepareCorrectiveActivitiesData(it1) }
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }
@@ -406,6 +408,10 @@ class CircadianAlignmentViewModel
         val timee =  LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"))
 //        timee.minute.toFloat()
         return timee.hour.toFloat()
+    }
+
+    fun isChatSplashShown(): Boolean {
+        return localDataStore.isAiChatSplashShown()
     }
 
 }
