@@ -88,14 +88,36 @@ class QuizCircadianViewModel @Inject constructor(
             reqObj.add("data", jsonArrayRes)
 
             userRepository.submitCircadianQuizData(reqObj).collect{ resource ->
-                when(resource){
-                    is Resource.GenericError -> {}
-                    is Resource.Loading -> {}
-                    is Resource.NetworkError -> {}
-                    is Resource.Success<*> -> {
-                        quizDataSubmitted.postValue(Event(true))
+
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            quizDataSubmitted.postValue(Event(true))
+                        }
                     }
                 }
+
             }
         }
     }
