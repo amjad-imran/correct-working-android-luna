@@ -2039,11 +2039,19 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_your_body_runs_on_a_clock">Your body runs on a clock</string>
     <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Aligning it well can help you sleep better, feel more energetic, and recover faster</string>
     <string name="text_onboarding_circadian_desc_1">Your body follows a 24-hour cycle called your circadian rhythm. It affects how you sleep, focus, and feel throughout the day.</string>
+    <string name="text_onboarding_circadian_desc_2">We analyze your sleep, activity, and food patterns to offer timely nudges - helping you make the most of your circadian windows today.</string>
+    <string name="text_onboarding_circadian_desc_3">Your circadian mid-point shows when your body is biologically in its lowest state of alertness. Tracking its shift helps you stay in sync.</string>
+    <string name="text_onboarding_circadian_desc_4">Here are time-sensitive actions like light exposure or movement to help guide your body back toward circadian balance.</string>
+    <string name="text_onboarding_circadian_desc_5">See how well you followed your optimal windows today — and how each activity contributed to your overall circadian health.</string>
     <string name="text_opens_today">Opens Today</string>
     <string name="text_opens_tomorrow">Opens Tomorrow</string>
     <string name="text_caffeine_open">caffeine open</string>
     <string name="text_dim_light_melatonin_onset">Dim-light melatonin onset</string>
     <string name="text_timezone_change_detected">Timezone change detected.</string>
     <string name="text_timezone_changed_desc_dash">You may notice minor data shifts during travel dates, but core metrics and long-term trends remain accurate</string>
+    <string name="text_what_is_circadian_mid_point">What is Circadian Mid-Point?</string>
+    <string name="text_what_is_circadian_alignment">What is Circadian Alignment?</string>
+    <string name="text_circadian_alignment_quesmark">Circadian Alignment?</string>
+    <string name="text_circadian_mid_point_quesmark">Circadian Mid-Point?</string>
 
 </resources>

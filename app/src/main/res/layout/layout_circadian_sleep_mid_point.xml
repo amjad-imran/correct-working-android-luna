@@ -92,7 +92,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="16dp"
         android:lineHeight="18sp"
-        android:text="@string/text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign"
+        android:text="-"
         android:textAlignment="center"
         android:textColor="#D3CFEE"
         app:layout_constraintBottom_toBottomOf="parent"

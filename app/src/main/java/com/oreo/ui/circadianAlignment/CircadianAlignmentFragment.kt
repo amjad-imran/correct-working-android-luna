@@ -90,6 +90,7 @@ class CircadianAlignmentFragment :
     }
 
     private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse){
+        binding.lytSleepMidPoint.textView173.text = circadianResponse.nudge
         try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
@@ -434,7 +435,7 @@ class CircadianAlignmentFragment :
                 it.endTime?:"",
                 it.circadianMidpoint?:"",
                 it.avgBefore?:"",
-                it.nudge ?: "",
+                it.nudge ?: "-",
             )
             setCircadianMidPointGraph(circadianMidPointResponse)
         }
