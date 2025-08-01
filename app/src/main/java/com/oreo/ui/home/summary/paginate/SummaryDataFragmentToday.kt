@@ -252,6 +252,7 @@ class SummaryDataFragmentToday :
         viewModel.initTodayData()
 
         binding.contentMain.lytTimezoneChanged.root.setVisibilityByCondition(viewModel.shouldShowTimezoneChangedAlert())
+        LOGS.d("acnosnca: ${viewModel.shouldShowTimezoneChangedAlert()}")
 
         val lunaManagedData = viewModel.localDataStore.getCustomHomeScreenItemsPriorityList()
         if (
@@ -902,12 +903,12 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytTimezoneChanged.ivClose.setOnClickListener {
-            viewModel.shouldShowTimezoneChangedAlert(true)
+            viewModel.localDataStore.isTimezoneChangedAlertCardDismissed(true)
             binding.contentMain.lytTimezoneChanged.root.gone()
         }
 
         binding.contentMain.lytTimezoneChanged.tvDismiss.setOnClickListener {
-            viewModel.shouldShowTimezoneChangedAlert(true)
+            viewModel.localDataStore.isTimezoneChangedAlertCardDismissed(true)
             binding.contentMain.lytTimezoneChanged.root.gone()
         }
 

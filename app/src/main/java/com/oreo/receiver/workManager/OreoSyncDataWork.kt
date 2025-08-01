@@ -61,6 +61,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.Calendar
+import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.concurrent.schedule
@@ -892,6 +893,23 @@ constructor(
                     sessionManager.saveLastSyncTime(DateFormats.getTimeStamp())
                     sessionManager.setSyncCompletedState(Event(SyncEvents.Success(100, 100)))
                     LOGS.d(TAG, "OreoSyncDataWork: Completedz")
+                    //
+                    val currentTimezone = TimeZone.getDefault().id
+                    val storedTimezone = localDataStore.getLastKnownTimezone()
+                    when{
+                        storedTimezone == null -> {
+                            localDataStore.setLastKnownTimezone(currentTimezone)
+                            localDataStore.isTimezoneChangedAlertCardDismissed(true)
+                        }
+
+                        storedTimezone != currentTimezone -> {
+                            localDataStore.setLastKnownTimezone(currentTimezone)
+                            localDataStore.isTimezoneChangedAlertCardDismissed(false)
+                        }
+
+                        else -> {}
+                    }
+                    //
                     mFuture!!.set(Result.success())
                     //  job.cancel()
                 },

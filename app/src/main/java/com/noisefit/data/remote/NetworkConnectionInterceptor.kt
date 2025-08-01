@@ -270,7 +270,8 @@ class NetworkConnectionInterceptor(
             }
             addHeader("wearable-type", "ring")
 
-            addHeader("timezone", TimeZone.getDefault().id)
+            val timeZone = localDataStore.getLastKnownTimezone() ?: TimeZone.getDefault().id
+            addHeader("timezone", timeZone)
             addHeader(
                 "offset",
                 TimeUnit.MILLISECONDS.toMinutes(

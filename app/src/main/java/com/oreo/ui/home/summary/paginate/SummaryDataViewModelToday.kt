@@ -3836,21 +3836,13 @@ class SummaryDataViewModelToday @Inject constructor(
         updateRepository.appRemindLater()
     }
 
-    fun shouldShowTimezoneChangedAlert(setTimezone: Boolean?=null): Boolean {
-        val currentTimezone = TimeZone.getDefault().id
-        val storedTimezone = if(setTimezone==true) null
-                            else localDataStore.getLastKnownTimezone()
-//        val alertDismissed = localDataStore.isTimezoneChangedAlertCardDismissed()
-        return when{
-            storedTimezone == null -> {
-                localDataStore.setLastKnownTimezone(currentTimezone)
-//                localDataStore.isTimezoneChangedAlertCardDismissed(false)
-                false
-            }
-
-            storedTimezone != currentTimezone /*&& !alertDismissed*/ -> true
-
-            else -> /*!alertDismissed*/ false
+    fun shouldShowTimezoneChangedAlert(): Boolean {
+        val storedTimezone = localDataStore.getLastKnownTimezone()
+        val alertDismissed = localDataStore.isTimezoneChangedAlertCardDismissed()
+        return if(storedTimezone==null){
+            return false
+        }else{
+            !alertDismissed
         }
     }
 
