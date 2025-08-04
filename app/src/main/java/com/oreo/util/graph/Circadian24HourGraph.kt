@@ -7,6 +7,7 @@ import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PointF
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
@@ -17,6 +18,7 @@ import android.view.ViewConfiguration
 import android.view.ViewTreeObserver
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.TimeWindow
 import java.time.Duration
@@ -35,10 +37,9 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     var isScrollLocked = false
 
-    private val hourWidthPx = 200f
+    private val hourWidthPx = 68f.dpToPixel()
 
-
-    private val bottomPaddingForLabels = 80f
+    private val bottomPaddingForLabels = 16f.dpToPixel()
     private val topPadding = 30f
 
     var graphStartTime: LocalTime = LocalTime.of(6, 0)
@@ -86,7 +87,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
 
     private val bottomAxisPaint = Paint().apply {
-        color = "#99FFFFFF".toColorInt()
+        color = "#19FFFFFF".toColorInt()
         strokeWidth = 4f
         style = Paint.Style.STROKE
         isAntiAlias = true
@@ -195,15 +196,15 @@ class Circadian24HourGraph @JvmOverloads constructor(
             val x = i * hourWidthPx
             hourLinePaint.shader = LinearGradient(
                 x, topPadding,
-                x, getGraphHeight() - bottomPaddingForLabels,
-                "#000000".toColorInt(), "#99FFFFFF".toColorInt(),
+                x, getGraphHeight() - bottomPaddingForLabels-8f.dpToPixel(),
+                "#19000000".toColorInt(), "#19FFFFFF".toColorInt(),
                 Shader.TileMode.CLAMP
             )
             canvas.drawLine(
                 x,
                 topPadding,
                 x,
-                getGraphHeight() - bottomPaddingForLabels,
+                getGraphHeight() - bottomPaddingForLabels-8f.dpToPixel(),
                 hourLinePaint
             )
         }
@@ -238,13 +239,14 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private fun drawEnergyCurve(canvas: Canvas) {
         energyPath.reset()
 
-        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding
+        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
 
         for (i in 0..totalHours) {
             val time = graphStartTime.plusHours(i.toLong() % 24)
             val x = i * hourWidthPx
 
             val energy = getEnergyForHour(time.hour)
+            LOGS.d("sdfjkhskdfj $energy")
             val y = usableHeight - (energy * usableHeight * 0.8f + usableHeight * 0.1f)
 
             if (i == 0) {
@@ -258,8 +260,16 @@ class Circadian24HourGraph @JvmOverloads constructor(
     }
 
 
-
     private fun getEnergyForHour(hour: Int): Float {
+
+        /*return if(hour==10){
+            1f
+        }else if(hour==12){
+            0.5f
+        }else{
+            0f
+        }*/
+
         val radians = (hour - 8) / 12f * Math.PI
         return (0.5 + 0.5 * sin(radians)).toFloat()
     }
@@ -327,7 +337,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private fun drawTopAndBottomAxis(canvas: Canvas) {
         val yTop = topPadding
-        val yBottom = getGraphHeight().toFloat() - bottomPaddingForLabels
+        val yBottom = getGraphHeight().toFloat() - bottomPaddingForLabels - 8f.dpToPixel()
 
         canvas.drawLine(0f, yTop, getTotalWidth(), yTop, topDottedAxisPaint)
         canvas.drawLine(0f, yBottom, getTotalWidth(), yBottom, bottomAxisPaint)
@@ -369,9 +379,9 @@ class Circadian24HourGraph @JvmOverloads constructor(
     }
 
     private fun drawTimeWindows(canvas: Canvas) {
-        val rowHeight = getGraphHeight() * 0.12f
-        val rowSpacing = 8f
-        val baseBottom = getGraphHeight() - bottomPaddingForLabels - 20f
+        val rowHeight = 22f.dpToPixel()//getGraphHeight() * 0.12f
+        val rowSpacing = 4f.dpToPixel()
+        val baseBottom = getGraphHeight() - bottomPaddingForLabels - 16f.dpToPixel()
         val cornerRadius = 16f
 
         for (window in timeWindows) {
