@@ -196,7 +196,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             val x = i * hourWidthPx
             hourLinePaint.shader = LinearGradient(
                 x, topPadding,
-                x, getGraphHeight() - bottomPaddingForLabels-8f.dpToPixel(),
+                x, getGraphHeight() - bottomPaddingForLabels - 8f.dpToPixel(),
                 "#19000000".toColorInt(), "#19FFFFFF".toColorInt(),
                 Shader.TileMode.CLAMP
             )
@@ -204,7 +204,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
                 x,
                 topPadding,
                 x,
-                getGraphHeight() - bottomPaddingForLabels-8f.dpToPixel(),
+                getGraphHeight() - bottomPaddingForLabels - 8f.dpToPixel(),
                 hourLinePaint
             )
         }
@@ -238,25 +238,90 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private fun drawEnergyCurve(canvas: Canvas) {
         energyPath.reset()
+        val usableHeight =
+            getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
 
-        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
+        val energyPoints = floatArrayOf(
+            0.3f, 0.32f, 0.35f, 0.4f, 1.0f, 0.5f, 0.58f, 0.65f, 0.72f, 0.78f,
+            0.83f, 0.87f, 0.89f, 0.88f, 0.86f, 0.83f, 0.79f, 0.75f, 0.7f, 0.64f,
+            0.58f, 0.52f, 0.46f, 0.41f, 0.37f, 0.33f, 0.3f, 0.28f, 0.27f, 0.28f
+        )
 
-        for (i in 0..totalHours) {
-            val time = graphStartTime.plusHours(i.toLong() % 24)
-            val x = i * hourWidthPx
+        // Convert energy points to screen coordinates
+        val points = mutableListOf<PointF>()
+        for (i in energyPoints.indices) {
+            val x = i * hourWidthPx/*(i / (energyPoints.size - 1f)) * width*/
+            val y =
+                usableHeight - (energyPoints[i] * usableHeight * 0.8f + usableHeight * 0.1f)//top + height * (1f - energyPoints[i])
+            points.add(PointF(x, y))
+        }
 
-            val energy = getEnergyForHour(time.hour)
-            LOGS.d("sdfjkhskdfj $energy")
-            val y = usableHeight - (energy * usableHeight * 0.8f + usableHeight * 0.1f)
+        // Create smooth curve using cubic bezier splines
+        energyPath.reset()
+        energyPath.moveTo(points[0].x, points[0].y)
 
-            if (i == 0) {
-                energyPath.moveTo(x, y)
+        // Calculate control points for smooth cubic bezier curves
+        for (i in 1 until points.size) {
+            val currentPoint = points[i]
+            val previousPoint = points[i - 1]
+
+            // Calculate control points for smooth transition
+            val cp1x: Float
+            val cp1y: Float
+            val cp2x: Float
+            val cp2y: Float
+
+            if (i == 1) {
+                // First curve
+                val nextPoint = if (i + 1 < points.size) points[i + 1] else currentPoint
+                cp1x = previousPoint.x + (currentPoint.x - previousPoint.x) * 0.3f
+                cp1y = previousPoint.y + (currentPoint.y - previousPoint.y) * 0.1f
+                cp2x = currentPoint.x - (nextPoint.x - previousPoint.x) * 0.1f
+                cp2y = currentPoint.y - (nextPoint.y - previousPoint.y) * 0.1f
+            } else if (i == points.size - 1) {
+                // Last curve
+                val prevPrevPoint = points[i - 2]
+                cp1x = previousPoint.x + (currentPoint.x - prevPrevPoint.x) * 0.1f
+                cp1y = previousPoint.y + (currentPoint.y - prevPrevPoint.y) * 0.1f
+                cp2x = currentPoint.x - (currentPoint.x - previousPoint.x) * 0.3f
+                cp2y = currentPoint.y - (currentPoint.y - previousPoint.y) * 0.1f
             } else {
-                energyPath.lineTo(x, y)
+                // Middle curves - use Catmull-Rom spline approach
+                val prevPoint = points[i - 2]
+                val nextPoint = points[i + 1]
+
+                val tension = 0.25f // Controls curve tightness (0.0 to 0.5)
+
+                cp1x = previousPoint.x + (currentPoint.x - prevPoint.x) * tension
+                cp1y = previousPoint.y + (currentPoint.y - prevPoint.y) * tension
+                cp2x = currentPoint.x - (nextPoint.x - previousPoint.x) * tension
+                cp2y = currentPoint.y - (nextPoint.y - previousPoint.y) * tension
             }
+
+            energyPath.cubicTo(cp1x, cp1y, cp2x, cp2y, currentPoint.x, currentPoint.y)
         }
 
         canvas.drawPath(energyPath, energyPaint)
+
+
+        /* val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
+
+         for (i in 0..totalHours) {
+             val time = graphStartTime.plusHours(i.toLong() % 24)
+             val x = i * hourWidthPx
+
+             val energy = getEnergyForHour(time.hour)
+             LOGS.d("sdfjkhskdfj $energy")
+             val y = usableHeight - (energy * usableHeight * 0.8f + usableHeight * 0.1f)
+
+             if (i == 0) {
+                 energyPath.moveTo(x, y)
+             } else {
+                 energyPath.lineTo(x, y)
+             }
+         }
+
+         canvas.drawPath(energyPath, energyPaint)*/
     }
 
 
