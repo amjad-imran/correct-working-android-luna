@@ -44,6 +44,7 @@
 
             <TextView
                 style="@style/S12"
+                android:fontFamily="@font/gilroy_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -67,6 +68,7 @@
 
             <TextView
                 style="@style/S12"
+                android:fontFamily="@font/gilroy_medium"
                 android:textColor="#4CBD88"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +83,7 @@
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_medium"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25" />
 
@@ -99,6 +102,7 @@
     <TextView
         android:id="@+id/tvDesc"
         style="@style/S10"
+        android:fontFamily="@font/gilroy_medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -123,6 +127,7 @@
         <TextView
             android:id="@+id/tvOpenCloseTag"
             style="@style/S12"
+            android:fontFamily="@font/gilroy_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -162,6 +167,7 @@
         <TextView
             android:id="@+id/tvTimerTag"
             style="@style/S12"
+            android:fontFamily="@font/gilroy_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"

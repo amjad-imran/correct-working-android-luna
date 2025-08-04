@@ -3,12 +3,14 @@ package com.oreo.ui.circadianAlignment
 import android.animation.ArgbEvaluator
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
@@ -16,6 +18,7 @@ import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -23,9 +26,10 @@ import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
-import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.stress.help.StressInfoCardAction
+import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -51,6 +55,14 @@ class CircadianAlignmentFragment :
                 )
             )
         }
+    }
+
+    private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
+        StressUnderstandingImageAdapter(object : StressInfoCardAction {
+            override fun onStressInfoCardClicked() {
+//                navigate(R.id.stressUnderstandingFragment)
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,14 +92,14 @@ class CircadianAlignmentFragment :
         binding.graphView.timeWindows = viewModel.dummyList()//ArrayList()
         binding.graphView.redraw()
 
-        val circadianResponse = CircadianResponse(
+        /*val circadianResponse = CircadianResponse(
             "2025-07-22 23:39:00",
             "2025-07-23 02:15:00",
             "2025-07-23 01:34:00",
             "2025-07-23 01:44:18",
             "You’re improving — staying active later and delaying sleep cues is helping."
         )
-        setCircadianMidPointGraph(circadianResponse)
+        setCircadianMidPointGraph(circadianResponse)*/
 
     }
 
@@ -455,13 +467,31 @@ class CircadianAlignmentFragment :
             binding.graphView.redraw()
         }
 
-        circadianMidPoint?.let {
+        if(circadianMidPoint == null){
+            binding.lytSleepMidPoint.apply {
+                lytLockView.visible()
+                circadianGraph.invisible()
+                rightCdArrow.invisible()
+                leftCdArrow.invisible()
+                imvStatus.invisible()
+                textView173.text =
+                    getString(R.string.text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights)
+            }
+
+        }else{
+            binding.lytSleepMidPoint.apply {
+                circadianGraph.visible()
+                rightCdArrow.visible()
+                leftCdArrow.visible()
+                imvStatus.visible()
+                lytLockView.gone()
+            }
             val circadianMidPointResponse = CircadianResponse(
-                it.startTime?:"",
-                it.endTime?:"",
-                it.circadianMidpoint?:"",
-                it.avgBefore?:"",
-                it.nudge ?: "-",
+                circadianMidPoint.startTime?:"",
+                circadianMidPoint.endTime?:"",
+                circadianMidPoint.circadianMidpoint?:"",
+                circadianMidPoint.avgBefore?:"",
+                circadianMidPoint.nudge ?: "-",
             )
             setCircadianMidPointGraph(circadianMidPointResponse)
         }
@@ -474,6 +504,12 @@ class CircadianAlignmentFragment :
     private fun setRecycler() {
         binding.lytCorrectiveActivities.recyclerV.layoutManager = LinearLayoutManager(context)
         binding.lytCorrectiveActivities.recyclerV.adapter = correctiveActivitiesAdapter
+
+        viewModel.initHowItWorksData()
+
+        binding.rvHowItWorks.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvHowItWorks.adapter = howItWorksAdapter
     }
 
     override fun initListener() {
@@ -495,6 +531,26 @@ class CircadianAlignmentFragment :
                 navigate(R.id.aiChatOnboardFragment)
             }
         }
+
+        binding.rvHowItWorks.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        binding.rvHowItWorks.parent?.requestDisallowInterceptTouchEvent(
+                            true
+                        )
+                    }
+                }
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
     }
 
     override fun subscribeObservers() {
@@ -548,6 +604,12 @@ class CircadianAlignmentFragment :
             } else {
                 binding.progressBar.root.gone()
             }
+        }
+
+        viewModel.howItWorksDataList.observe(viewLifecycleOwner) {
+            howItWorksAdapter.setDataSet(it)
+            binding.dividerHowItWorks.root.visible()
+            binding.lytHowItWorks.visible()
         }
     }
 

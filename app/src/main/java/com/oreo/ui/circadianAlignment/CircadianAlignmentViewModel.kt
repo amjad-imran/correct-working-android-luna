@@ -22,8 +22,11 @@ import com.oreo.data.model.ProgressBarLytData
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.circadian.Activity
 import com.oreo.data.model.circadian.CircadianResponseModel
+import com.oreo.ui.stress.help.StressImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -54,6 +57,8 @@ class CircadianAlignmentViewModel
     val circadianResponseData = MutableLiveData<CircadianResponseModel>()
 
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
+
+    val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
 
     private val timerMap = mutableMapOf<String, CountDownTimer>()
 
@@ -287,7 +292,7 @@ class CircadianAlignmentViewModel
         viewModelScope.launch {
             if (!key.isNullOrEmpty() && isLogged != null) {
                 val reqData = JsonObject().apply {
-                    addProperty("date", "")
+                    addProperty("date", LocalDate.now().toString())
                     addProperty(key, isLogged)
                 }
 
@@ -525,6 +530,32 @@ class CircadianAlignmentViewModel
                 label = "Avoid Caffeine"
             )
         )
+
+    fun initHowItWorksData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            howItWorksDataList.postValue(
+                arrayListOf(
+                    StressImageModel(
+                        resourceProvider.getString(R.string.text_what_is_circadian_alignment),
+                        resourceProvider.getString(R.string.text_circadian_hiw_desc_1),
+                        R.drawable.image_circadian_hiw_1
+                    ), StressImageModel(
+                        resourceProvider.getString(R.string.text_how_does_the_luna_ring),
+                        resourceProvider.getString(R.string.text_stress_2),
+                        R.drawable.image_s_hw_2
+                    ), StressImageModel(
+                        resourceProvider.getString(R.string.text_how_to_manage_acute_short_term_stress),
+                        resourceProvider.getString(R.string.text_stress_3),
+                        R.drawable.image_s_hw_3
+                    ), StressImageModel(
+                        resourceProvider.getString(R.string.text_how_to_manage_chronic),
+                        resourceProvider.getString(R.string.text_stress_4),
+                        R.drawable.image_s_hw_4
+                    )
+                )
+            )
+        }
+    }
 
 }
 

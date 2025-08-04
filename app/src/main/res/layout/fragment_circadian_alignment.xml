@@ -105,6 +105,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <include
+                android:id="@+id/dividerHowItWorks"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                android:layout_marginTop="24dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lytHowItWorks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/tvHow"
+                    style="@style/S16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:text="@string/text_how_it_works"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivHowItWorks"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_arrow_right_cal"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvHow"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvHow"
+                    tools:ignore="ContentDescription" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvHowItWorks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginBottom="50dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvHow"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_how_stress_list" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
