@@ -1,15 +1,14 @@
 package com.oreo.ui.circadianAlignment.onboarding
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianSplashScreenBinding
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CircadianSplashScreenFragment :
@@ -36,6 +35,10 @@ class CircadianSplashScreenFragment :
 
         binding.viewPager.isUserInputEnabled = false
 
+        val tvSkip = binding.tvSkip
+        tvSkip.paintFlags = tvSkip.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+        setUi(binding.viewPager.currentItem)
     }
 
     override fun initListener() {
@@ -46,6 +49,7 @@ class CircadianSplashScreenFragment :
             } else {
                 navigate(CircadianSplashScreenFragmentDirections.actionCircadianSplashScreenFragmentToQuizCircadianFragment())
             }
+            setUi(binding.viewPager.currentItem)
         }
 
         binding.tvSkip.setOnClickListener {
@@ -59,6 +63,28 @@ class CircadianSplashScreenFragment :
 
     override fun subscribeObservers() {
 
+    }
+
+    private fun setUi(pos: Int){
+        when(pos){
+            0 -> {
+                binding.btnNext.text = getString(R.string.text_learn_more_2)
+            }
+            1 -> {
+                binding.btnNext.text = getString(R.string.text_next)
+            }
+            2 -> {
+                binding.btnNext.text = getString(R.string.text_next)
+            }
+            3 -> {
+                binding.btnNext.text = getString(R.string.text_next)
+                binding.toolbar.tvTitle.text = getString(R.string.text_corrective_activities)
+            }
+            4 -> {
+                binding.btnNext.text = getString(R.string.text_take_the_quiz)
+            }
+            else -> {}
+        }
     }
 
 }
