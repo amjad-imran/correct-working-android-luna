@@ -89,7 +89,7 @@ class CircadianAlignmentFragment :
         binding.graphView.graphStartTime = LocalTime.of(6,0)
         binding.graphView.graphEndTime = LocalTime.of(23,0)
 
-        binding.graphView.timeWindows = ArrayList()
+        binding.graphView.timeWindows = viewModel.dummyList()//ArrayList()
         binding.graphView.redraw()
 
         /*val circadianResponse = CircadianResponse(
