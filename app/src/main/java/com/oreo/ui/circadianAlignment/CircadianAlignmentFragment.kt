@@ -1,5 +1,7 @@
 package com.oreo.ui.circadianAlignment
 
+import android.animation.ArgbEvaluator
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -348,15 +350,39 @@ class CircadianAlignmentFragment :
             LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk ${phaseState.first} ${phaseState.second}")
             LOGS.d("jasdlsajdljsadljsdaklsajdjsadlk midStartIndex ${midStartIndex} midEndIndex ${midEndIndex}")
 
+            val startColor = Color.parseColor("#795A54")
+            val endColor = Color.parseColor("#67809F")
 
+            val evaluator = ArgbEvaluator()
+            val barColors = mutableListOf<Int>()
+
+            val midBarCount = (midEndIndex - midStartIndex)+1
+            for (i in 0 until midBarCount) {
+                val fraction = i.toFloat() / (midBarCount - 1)
+                val color = evaluator.evaluate(fraction, startColor, endColor) as Int
+                barColors.add(color)
+            }
+
+
+
+            var current = 0
             val colors = List(totalBars) {
                 when (it) {
-                    midStartIndex -> {
+                    /*midStartIndex -> {
                         "#aa8866".toColorInt()
                     }
 
                     midEndIndex -> {
                         "#7799cc".toColorInt()
+                    }*/
+                    in midStartIndex..midEndIndex->{
+                        try {
+                            val pos = current
+                            current++
+                            barColors[pos]
+                        }catch (exp: Exception){
+                            "#67809F".toColorInt()
+                        }
                     }
 
                     else -> "#1CFFFFFF".toColorInt()

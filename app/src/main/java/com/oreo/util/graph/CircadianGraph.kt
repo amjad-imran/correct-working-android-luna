@@ -8,8 +8,10 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
+import com.noisefit_commans.ui.dpToPixel
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 
@@ -24,6 +26,9 @@ class CircadianGraph @JvmOverloads constructor(
     private val perHourInterval = 6 ///60/10 = 6 (10 minutes right now)
 
     var drawOnSameIndex = false
+
+    private val barHeightHalf = 26f.dpToPixel() / 2
+    private val avgBarHeightHalf = 34f.dpToPixel() / 2
 
     private var barData: List<CircadianGraphModel> = ArrayList()
     private var barColors: List<Int> = List(totalBars()) { Color.DKGRAY }
@@ -44,6 +49,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     private val textPaint = Paint().apply {
         color = "#555A5E".toColorInt()
+        val fontGilroy = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.gilroy_medium)
+        typeface = fontGilroy
         textSize = 24f
         textAlign = Paint.Align.CENTER
         isAntiAlias = true
@@ -82,11 +89,9 @@ class CircadianGraph @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
         val barWidth = width.toFloat() / totalBars()
         val centerY = height / 2f
-        val barHeight = 60f
-        val avgBarHeight = 70f
+
 
         var firstCircadianMidPointModel: CircadianMidPointModel? = null
         var secondCircadianMidPointModel: CircadianMidPointModel? = null
@@ -95,8 +100,8 @@ class CircadianGraph @JvmOverloads constructor(
         barData.forEachIndexed { index, value ->
             barPaint.color = barColors[index]
             val left = index * barWidth
-            val top = centerY - barHeight
-            val bottom = centerY + barHeight
+            val top = centerY - barHeightHalf
+            val bottom = centerY + barHeightHalf
 
             canvas.drawRoundRect(left, top, left + barWidth * 0.6f, bottom, 4f, 4f, barPaint)
 
@@ -104,8 +109,8 @@ class CircadianGraph @JvmOverloads constructor(
                 if (value.bothMidPoint != null) {
                     firstCircadianMidPointModel = value.bothMidPoint?.first
                     firstMidPointLeftStart = left
-                    val top = centerY - avgBarHeight
-                    val bottom = centerY + avgBarHeight
+                    val top = centerY - avgBarHeightHalf
+                    val bottom = centerY + avgBarHeightHalf
                     value.bothMidPoint?.first?.color?.let {
                         firstPaint.color = it
                     }
@@ -121,8 +126,8 @@ class CircadianGraph @JvmOverloads constructor(
 
                     secondCircadianMidPointModel = value.bothMidPoint?.second
                     secondMidPointLeftStart = left
-                    val top2 = centerY - avgBarHeight
-                    val bottom2 = centerY + avgBarHeight
+                    val top2 = centerY - avgBarHeightHalf
+                    val bottom2 = centerY + avgBarHeightHalf
                     value.bothMidPoint?.second?.color?.let {
                         secondPaint.color = it
                     }
@@ -141,8 +146,8 @@ class CircadianGraph @JvmOverloads constructor(
                 if (value.firstMidPoint != null) {
                     firstCircadianMidPointModel = value.firstMidPoint
                     firstMidPointLeftStart = left
-                    val top = centerY - avgBarHeight
-                    val bottom = centerY + avgBarHeight
+                    val top = centerY - avgBarHeightHalf
+                    val bottom = centerY + avgBarHeightHalf
                     value.firstMidPoint?.color?.let {
                         firstPaint.color = it
                     }
@@ -158,8 +163,8 @@ class CircadianGraph @JvmOverloads constructor(
                 } else if (value.secondMidPoint != null) {
                     secondCircadianMidPointModel = value.secondMidPoint
                     secondMidPointLeftStart = left
-                    val top = centerY - avgBarHeight
-                    val bottom = centerY + avgBarHeight
+                    val top = centerY - avgBarHeightHalf
+                    val bottom = centerY + avgBarHeightHalf
                     value.secondMidPoint?.color?.let {
                         secondPaint.color = it
                     }
@@ -274,14 +279,17 @@ class CircadianGraph @JvmOverloads constructor(
 
         val labelTop = 0f
 
+        val centerY = height / 2f
+        val spacing = 4f.dpToPixel()
 
 
         firstCircadianMidPointModel?.let {
+            val textBottom = centerY - avgBarHeightHalf - spacing
             val label1Rect = RectF(
                 label1Left,
-                labelTop,
+                textBottom - labelBoxHeight,
                 label1Left + label1BoxWidth,
-                labelTop + labelBoxHeight
+                textBottom
             )
 
             firstCircadianMidPointModel.bgColor?.let {
@@ -299,11 +307,13 @@ class CircadianGraph @JvmOverloads constructor(
         }
 
         secondCircadianMidPointModel?.let {
+            val text2Bottom = centerY - avgBarHeightHalf - spacing
+
             val label2Rect = RectF(
                 label2Left,
-                labelTop,
+                text2Bottom - labelBoxHeight,
                 label2Left + label2BoxWidth,
-                labelTop + labelBoxHeight
+                text2Bottom
             )
 
 
