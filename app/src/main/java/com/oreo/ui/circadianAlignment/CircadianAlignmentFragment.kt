@@ -2,6 +2,7 @@ package com.oreo.ui.circadianAlignment
 
 import android.animation.ArgbEvaluator
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -468,24 +469,11 @@ class CircadianAlignmentFragment :
         }
 
         if(circadianMidPoint == null){
-            binding.lytSleepMidPoint.apply {
-                lytLockView.visible()
-                circadianGraph.invisible()
-                rightCdArrow.invisible()
-                leftCdArrow.invisible()
-                imvStatus.invisible()
-                textView173.text =
-                    getString(R.string.text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights)
-            }
-
+            binding.lytSleepMidPoint.root.gone()
+            binding.lytLockedSleepMidPoint.root.visible()
         }else{
-            binding.lytSleepMidPoint.apply {
-                circadianGraph.visible()
-                rightCdArrow.visible()
-                leftCdArrow.visible()
-                imvStatus.visible()
-                lytLockView.gone()
-            }
+            binding.lytLockedSleepMidPoint.root.gone()
+            binding.lytSleepMidPoint.root.visible()
             val circadianMidPointResponse = CircadianResponse(
                 circadianMidPoint.startTime?:"",
                 circadianMidPoint.endTime?:"",
@@ -499,6 +487,9 @@ class CircadianAlignmentFragment :
 
     private fun setUi() {
         binding.toolbar.tvTitle.text = getString(R.string.text_circadian_alignment)
+
+        val tvReTakeQuiz = binding.lytYourChronotype.tvRetakeQuiz
+        tvReTakeQuiz.paintFlags = tvReTakeQuiz.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun setRecycler() {
@@ -627,7 +618,7 @@ class CircadianAlignmentFragment :
                     }
 
                     CircadianAlignmentViewModel.meal_window_key -> {
-                        ivStateLight.setImageResource(
+                        ivStateMeal.setImageResource(
                             getActMoniStatusIcon(it.status)
                         )
                     }
@@ -639,13 +630,13 @@ class CircadianAlignmentFragment :
                     }
 
                     CircadianAlignmentViewModel.caffeine_window_key -> {
-                        ivStateLight.setImageResource(
+                        ivStateCaffeine.setImageResource(
                             getActMoniStatusIcon(it.status)
                         )
                     }
 
                     CircadianAlignmentViewModel.workout_key -> {
-                        ivStateLight.setImageResource(
+                        ivStateWorkout.setImageResource(
                             getActMoniStatusIcon(it.status)
                         )
                     }

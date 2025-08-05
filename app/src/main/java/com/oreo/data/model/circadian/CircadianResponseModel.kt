@@ -22,7 +22,7 @@ data class CircadianResponseModel(
 data class Activity(
     val goal: String?,
     val progress: Int?,
-    val status: String?,
+    val status: Boolean?,
     val time: Int?,
     val type: String
 )

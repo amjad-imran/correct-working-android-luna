@@ -102,7 +102,7 @@ class CircadianAlignmentViewModel
     private fun prepareCorrectiveActivitiesData(activitiesData: List<Activity>) {
         activitiesData.forEach {
 
-            val isLogged = it.status?.let { ss -> ss == "Logged" }
+            val isLogged = it.status
             val timeLeft =
                 if (it.time == null || it.time == 0) {
                     null
@@ -120,13 +120,13 @@ class CircadianAlignmentViewModel
                         key = light_exposure_key,
                         bgMainImg = R.drawable.bg_light_exposure_corrective_activities,
                         title = resourceProvider.getString(R.string.text_light_exposure),
-                        desc = resourceProvider.getString(R.string.text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up),
+                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_1),
                         onlyImgWithText = OnlyImgWithText(
                             img = R.drawable.ic_sun_activity_monitor,
                             txt = "45\nmins"
                         ),
                         progressBarLytData = null,
-                        logStatus = isLogged,
+                        logStatus = isLogged ?: false,
                         time = timeLeft,
                         timeInSec = it.time
                     )
@@ -134,17 +134,18 @@ class CircadianAlignmentViewModel
 
                 daily_steps_key -> {
                     // Daily Steps Data
+                    val goal = it.goal?.toInt()
                     dailyStepsData.value = CorrectiveActivitiesModel(
                         key = daily_steps_key,
                         bgMainImg = R.drawable.bg_daily_steps_corrective_activities,
                         title = resourceProvider.getString(R.string.text_daily_steps),
-                        desc = resourceProvider.getString(R.string.text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up),
+                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_2),
                         onlyImgWithText = null,
                         progressBarLytData = ProgressBarLytData(
-                            totalProgress = 100,
-                            currentProgress = 60,
+                            totalProgress = goal ?: 0,
+                            currentProgress = goal?.let { 1000 } ?: 0,
                             img = R.drawable.ic_shoe_corrective_activities,
-                            txt = "2334"
+                            txt = it.goal ?: "-"
                         ),
                         logStatus = null,
                         time = timeLeft,
@@ -158,13 +159,13 @@ class CircadianAlignmentViewModel
                         key = meal_window_key,
                         bgMainImg = R.drawable.bg_meal_window_corrective_activities,
                         title = resourceProvider.getString(R.string.text_meal_window),
-                        desc = resourceProvider.getString(R.string.text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up),
+                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_3),
                         onlyImgWithText = OnlyImgWithText(
                             img = R.drawable.ic_meal_corrective_activities,
                             txt = null
                         ),
                         progressBarLytData = null,
-                        logStatus = isLogged,
+                        logStatus = isLogged ?: false,
                         time = timeLeft,
                         timeInSec = it.time
                     )
@@ -172,17 +173,18 @@ class CircadianAlignmentViewModel
 
                 workout_key -> {
                     // Workout Data
+                    val goal = it.goal?.toInt()?.div(60)
                     workoutData.value = CorrectiveActivitiesModel(
                         key = workout_key,
                         bgMainImg = R.drawable.bg_workout_corrective_activities,
                         title = resourceProvider.getString(R.string.text_workout),
-                        desc = resourceProvider.getString(R.string.text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up),
+                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_4),
                         onlyImgWithText = null,
                         progressBarLytData = ProgressBarLytData(
-                            totalProgress = 100,
-                            currentProgress = 60,
+                            totalProgress = goal ?: 0,
+                            currentProgress = goal?.let { 5 } ?: 0,
                             img = R.drawable.ic_workout_corrective_activities,
-                            txt = "23 mins"
+                            txt = goal?.let { "$it mins" } ?: "-"
                         ),
                         logStatus = null,
                         time = timeLeft,
@@ -196,13 +198,13 @@ class CircadianAlignmentViewModel
                         key = caffeine_window_key,
                         bgMainImg = R.drawable.bg_caffeine_window_corrective_activities,
                         title = resourceProvider.getString(R.string.text_caffeine_window2),
-                        desc = resourceProvider.getString(R.string.text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up),
+                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_5),
                         onlyImgWithText = OnlyImgWithText(
                             img = R.drawable.ic_caffeine_corrective_activities,
                             txt = null
                         ),
                         progressBarLytData = null,
-                        logStatus = isLogged,
+                        logStatus = isLogged ?: false,
                         time = timeLeft,
                         timeInSec = it.time
                     )

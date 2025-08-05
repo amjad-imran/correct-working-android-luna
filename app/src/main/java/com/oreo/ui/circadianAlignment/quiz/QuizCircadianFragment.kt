@@ -1,5 +1,6 @@
 package com.oreo.ui.circadianAlignment.quiz
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -30,8 +31,14 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUi()
         viewModel.getQuizData()
         setAdapter()
+    }
+
+    private fun setUi() {
+        val tvSkip = binding.tvSkip
+        tvSkip.paintFlags = tvSkip.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun setAdapter() {

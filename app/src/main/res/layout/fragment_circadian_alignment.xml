@@ -15,16 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView91"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_toolbar_btn_circadian"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toEndOf="@id/toolbar"
-        app:layout_constraintTop_toTopOf="@id/toolbar" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -63,6 +53,14 @@
             <include
                 android:id="@+id/lytSleepMidPoint"
                 layout="@layout/layout_circadian_sleep_mid_point"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/lytLockedSleepMidPoint"
+                layout="@layout/layout_circadian_sleep_mid_point_locked"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -3,6 +3,7 @@ package com.oreo.ui.circadianAlignment
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemCorrectiveActivitiesCircadianBinding
@@ -70,7 +71,16 @@ class CorrectiveActivitiesAdapter(
                 binding.imageView88.setImageResource(lytData.img)
                 binding.tvProgressTxt.text = lytData.txt
 
-                binding.lytWithProgressBar.visible()
+                binding.circularProgressBar.apply {
+                    max = lytData.totalProgress
+                    progress = lytData.currentProgress
+                    when(data.key){
+                        CircadianAlignmentViewModel.workout_key -> setIndicatorColor("#78C3F9".toColorInt())
+                        CircadianAlignmentViewModel.daily_steps_key -> setIndicatorColor("#98D76B".toColorInt())
+                        else -> {}
+                    }
+                    visible()
+                }
 
                 /*binding.lytWithProgressBar.apply {
                     //code

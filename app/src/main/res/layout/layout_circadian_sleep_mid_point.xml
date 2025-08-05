@@ -61,42 +61,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytLockView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvStatus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
-
-        <ImageView
-            android:id="@+id/imageView94"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_profile_lock" />
-
-        <TextView
-            android:id="@+id/textView178"
-            style="@style/S14"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/text_we_need_more_data_to_better_know_you"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView94" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <TextView
         android:id="@+id/tvStatus"
         style="@style/S10"
@@ -106,15 +70,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circadianGraph"
-        android:text="-"
-        android:textColor="#63FFB6" />
+        tools:text="@string/text_correcting" />
 
     <ImageView
         android:id="@+id/imvStatus"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="4dp"
-        android:visibility="invisible"
         android:src="@drawable/ic_waiting_for_sleep"
         app:layout_constraintBottom_toBottomOf="@+id/tvStatus"
         app:layout_constraintStart_toEndOf="@+id/tvStatus"

@@ -108,7 +108,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:lineHeight="12sp"
-        android:text="@string/text_soak_in_some_natural_light_it_s_a_powerful_cue_for_your_body_to_wake_up"
+        tools:text="@string/text_corrective_activities_circadian_desc_1"
         android:textColor="#C4CBD9"
         app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
@@ -224,10 +224,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.oreo.ui.custom.progress.CircularProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/circularProgressBar"
-                android:layout_width="54dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 app:archWidth="4dp"
@@ -239,8 +239,8 @@
 
             <ImageView
                 android:id="@+id/imageView88"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/circularProgressBar"
                 app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
                 app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
