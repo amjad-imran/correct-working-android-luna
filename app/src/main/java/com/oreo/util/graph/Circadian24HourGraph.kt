@@ -7,7 +7,6 @@ import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PointF
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
@@ -19,7 +18,6 @@ import android.view.ViewTreeObserver
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
 import com.noisefit_commans.ui.dpToPixel
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.TimeWindow
 import java.time.Duration
 import java.time.LocalTime
@@ -27,7 +25,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
-import kotlin.math.sin
 
 
 class Circadian24HourGraph @JvmOverloads constructor(
@@ -178,7 +175,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
         super.onDraw(canvas)
         canvas.withTranslation(-scrollOffsetX, 0f) {
             drawHourLines(this)
-            drawEnergyCurve(this)
+            //drawEnergyCurve(this)
+            drawEnergyCurve2(this)
             drawTopAndBottomAxis(this)
             drawTimeLabels(this)
             drawTimeWindows(this)
@@ -236,107 +234,123 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
     }
 
-    private fun drawEnergyCurve(canvas: Canvas) {
-        energyPath.reset()
-        val usableHeight =
-            getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
-
-        val energyPoints = floatArrayOf(
-            0.3f, 0.32f, 0.35f, 0.4f, 1.0f, 0.5f, 0.58f, 0.65f, 0.72f, 0.78f,
-            0.83f, 0.87f, 0.89f, 0.88f, 0.86f, 0.83f, 0.79f, 0.75f, 0.7f, 0.64f,
-            0.58f, 0.52f, 0.46f, 0.41f, 0.37f, 0.33f, 0.3f, 0.28f, 0.27f, 0.28f
+    private fun drawEnergyCurve2(canvas: Canvas){
+        var linePaint: Paint? = null
+        linePaint = Paint().apply {
+            strokeWidth = 5f
+            style = Paint.Style.STROKE
+            isAntiAlias = true
+        }
+        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
+        var values: FloatArray = floatArrayOf(
+            0.2f, 0.6f, 0.6f, 0.4f, 0.7f, 0.8f, 0.5f, 0.6f, 0.3f, 0.4f, 0.7f, 0.6f,
+            0.8f, 0.9f, 0.5f, 0.4f, 0.6f, 0.5f, 0.2f, 0.7f, 0.5f, 0.6f, 0.8f, 0.9f
         )
+        for (i in 0 until values.size - 1) {
+            val startX =  i * hourWidthPx
+            val stopX =  (i+1) * hourWidthPx
+            val startY = usableHeight - (values[i]  * usableHeight * 0.8f + usableHeight * 0.1f)
+            val stopY = usableHeight - (values[i+1]  * usableHeight * 0.8f + usableHeight * 0.1f)
 
-        // Convert energy points to screen coordinates
-        val points = mutableListOf<PointF>()
-        for (i in energyPoints.indices) {
-            val x = i * hourWidthPx/*(i / (energyPoints.size - 1f)) * width*/
-            val y =
-                usableHeight - (energyPoints[i] * usableHeight * 0.8f + usableHeight * 0.1f)//top + height * (1f - energyPoints[i])
-            points.add(PointF(x, y))
+            val controlX1 = startX + (stopX - startX) / 2
+            val controlY1 = startY
+            val controlX2 = stopX - (stopX - startX) / 2
+            val controlY2 = stopY
+
+            val colorStart = getColorForValue(values[i])
+            val colorEnd = getColorForValue(values[i + 1])
+
+            val segmentGradient = LinearGradient(
+                startX, startY, stopX, stopY,
+                colorStart, colorEnd,
+                Shader.TileMode.CLAMP
+            )
+
+            val segmentPath = Path()
+            segmentPath.moveTo(startX, startY)
+            segmentPath.cubicTo(controlX1, controlY1, controlX2, controlY2, stopX, stopY)
+            linePaint?.shader = segmentGradient
+            canvas.drawPath(segmentPath, linePaint!!)
         }
 
-        // Create smooth curve using cubic bezier splines
-        energyPath.reset()
-        energyPath.moveTo(points[0].x, points[0].y)
+        drawFilledSegments(canvas,values)
 
-        // Calculate control points for smooth cubic bezier curves
-        for (i in 1 until points.size) {
-            val currentPoint = points[i]
-            val previousPoint = points[i - 1]
-
-            // Calculate control points for smooth transition
-            val cp1x: Float
-            val cp1y: Float
-            val cp2x: Float
-            val cp2y: Float
-
-            if (i == 1) {
-                // First curve
-                val nextPoint = if (i + 1 < points.size) points[i + 1] else currentPoint
-                cp1x = previousPoint.x + (currentPoint.x - previousPoint.x) * 0.3f
-                cp1y = previousPoint.y + (currentPoint.y - previousPoint.y) * 0.1f
-                cp2x = currentPoint.x - (nextPoint.x - previousPoint.x) * 0.1f
-                cp2y = currentPoint.y - (nextPoint.y - previousPoint.y) * 0.1f
-            } else if (i == points.size - 1) {
-                // Last curve
-                val prevPrevPoint = points[i - 2]
-                cp1x = previousPoint.x + (currentPoint.x - prevPrevPoint.x) * 0.1f
-                cp1y = previousPoint.y + (currentPoint.y - prevPrevPoint.y) * 0.1f
-                cp2x = currentPoint.x - (currentPoint.x - previousPoint.x) * 0.3f
-                cp2y = currentPoint.y - (currentPoint.y - previousPoint.y) * 0.1f
-            } else {
-                // Middle curves - use Catmull-Rom spline approach
-                val prevPoint = points[i - 2]
-                val nextPoint = points[i + 1]
-
-                val tension = 0.25f // Controls curve tightness (0.0 to 0.5)
-
-                cp1x = previousPoint.x + (currentPoint.x - prevPoint.x) * tension
-                cp1y = previousPoint.y + (currentPoint.y - prevPoint.y) * tension
-                cp2x = currentPoint.x - (nextPoint.x - previousPoint.x) * tension
-                cp2y = currentPoint.y - (nextPoint.y - previousPoint.y) * tension
-            }
-
-            energyPath.cubicTo(cp1x, cp1y, cp2x, cp2y, currentPoint.x, currentPoint.y)
+    }
+    private fun drawFilledSegments(canvas: Canvas, values: FloatArray) {
+        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
+        val fillPaint =  Paint().apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
         }
+        for (i in 0 until values.size - 1) {
 
-        canvas.drawPath(energyPath, energyPaint)
+            val startX =  i * hourWidthPx
+            val stopX =  (i+1) * hourWidthPx
+            val startY = usableHeight - (values[i]  * usableHeight * 0.8f + usableHeight * 0.1f)
+            val stopY = usableHeight - (values[i+1]  * usableHeight * 0.8f + usableHeight * 0.1f)
 
+            val controlX1 = startX + (stopX - startX) / 2
+            val controlY1 = startY
+            val controlX2 = stopX - (stopX - startX) / 2
+            val controlY2 = stopY
 
-        /* val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 2 * 22f.dpToPixel()
+            val colorStart = getColorForValueFill(values[i])
+            val colorEnd = getColorForValueFill(values[i + 1])
 
-         for (i in 0..totalHours) {
-             val time = graphStartTime.plusHours(i.toLong() % 24)
-             val x = i * hourWidthPx
+            // Create gradient for this fill segment
+            val segmentGradient = LinearGradient(
+                startX, startY, stopX, stopY,
+                colorStart, colorEnd,
+                Shader.TileMode.CLAMP
+            )
 
-             val energy = getEnergyForHour(time.hour)
-             LOGS.d("sdfjkhskdfj $energy")
-             val y = usableHeight - (energy * usableHeight * 0.8f + usableHeight * 0.1f)
+            // Create fill path for this segment
+            val fillSegmentPath = Path()
+            fillSegmentPath.moveTo(startX, startY)
+            fillSegmentPath.cubicTo(controlX1, controlY1, controlX2, controlY2, stopX, stopY)
+            fillSegmentPath.lineTo(stopX, usableHeight)  // Line to bottom
+            fillSegmentPath.lineTo(startX, usableHeight) // Line to bottom left
+            fillSegmentPath.close() // Close the shape
 
-             if (i == 0) {
-                 energyPath.moveTo(x, y)
-             } else {
-                 energyPath.lineTo(x, y)
-             }
-         }
+            // Apply gradient and draw fill segment
+            fillPaint?.shader = segmentGradient
+            canvas.drawPath(fillSegmentPath, fillPaint!!)
+        }
+    }
+    private fun getColorForValue(value: Float): Int {
+        val normalizedValue = value.coerceIn(0f, 1f)
+        val red = Color.parseColor("#A66363")
+        val green = Color.parseColor("#84D56F")
 
-         canvas.drawPath(energyPath, energyPaint)*/
+        val redR = Color.red(red)
+        val redG = Color.green(red)
+        val redB = Color.blue(red)
+
+        val greenR = Color.red(green)
+        val greenG = Color.green(green)
+        val greenB = Color.blue(green)
+        val r = (redR + (greenR - redR) * normalizedValue).toInt()
+        val g = (redG + (greenG - redG) * normalizedValue).toInt()
+        val b = (redB + (greenB - redB) * normalizedValue).toInt()
+        return Color.rgb(r, g, b)
     }
 
+    private fun getColorForValueFill(value: Float): Int {
+        val normalizedValue = value.coerceIn(0f, 1f)
+        val red = Color.parseColor("#A66363")
+        val green = Color.parseColor("#84D56F")
 
-    private fun getEnergyForHour(hour: Int): Float {
+        val redR = Color.red(red)
+        val redG = Color.green(red)
+        val redB = Color.blue(red)
 
-        /*return if(hour==10){
-            1f
-        }else if(hour==12){
-            0.5f
-        }else{
-            0f
-        }*/
-
-        val radians = (hour - 8) / 12f * Math.PI
-        return (0.5 + 0.5 * sin(radians)).toFloat()
+        val greenR = Color.red(green)
+        val greenG = Color.green(green)
+        val greenB = Color.blue(green)
+        val r = (redR + (greenR - redR) * normalizedValue).toInt()
+        val g = (redG + (greenG - redG) * normalizedValue).toInt()
+        val b = (redB + (greenB - redB) * normalizedValue).toInt()
+        return Color.argb(10,r, g, b)
     }
 
     private fun drawCurrentTimeLine(canvas: Canvas) {
