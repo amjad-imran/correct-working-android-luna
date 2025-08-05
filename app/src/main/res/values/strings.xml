@@ -2018,13 +2018,13 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_acitivity_monitor">Acitivity Monitor</string>
     <string name="text_your_overall_circadian_is_well_aligned">Your Overall Circadian is well Aligned.</string>
     <string name="text_corrective_activities">Corrective Activities</string>
-    <string name="text_corrective_activities_desc">To shift your rhythm, complete these actions within your correction window — it opens early in the day if you\'re delayed, and later in the evening if you\'re advanced.</string>
+    <string name="text_corrective_activities_desc">Your internal clock follows a daily rhythm. These cues—light, movement, meals, and more—are aligned with your natural timing to help your body function at its best.</string>
     <string name="text_light_exposure">Light exposure</string>
     <string name="text_corrective_activities_circadian_desc_1">Soak in some natural light—it\'s a powerful cue for your body to wake up</string>
-    <string name="text_corrective_activities_circadian_desc_2">You’ve hit your step goal for the day—well done!</string>
+    <string name="text_corrective_activities_circadian_desc_2">Getting closer to your step goal will help improve circulation, balance blood sugar, and keep your energy up.</string>
     <string name="text_corrective_activities_circadian_desc_3">Time-restricted eating supports metabolic efficiency and hormone regulation.</string>
-    <string name="text_corrective_activities_circadian_desc_4">Time-restricted eating supports metabolic efficiency and hormone regulation.</string>
-    <string name="text_corrective_activities_circadian_desc_5">Time-restricted eating supports metabolic efficiency and hormone regulation.</string>
+    <string name="text_corrective_activities_circadian_desc_4">Physical activity in the morning jumpstarts your metabolism, sharpens focus, and improves mood.</string>
+    <string name="text_corrective_activities_circadian_desc_5">Having caffeine during this period helps boost alertness without disrupting your sleep later.</string>
     <string name="text_daily_steps">Daily Steps</string>
     <string name="text_meal_window">Meal Window</string>
     <string name="text_caffeine_window2">Caffeine Window</string>
@@ -2062,5 +2062,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_circadian_hiw_desc_1">Knowing your circadian alignment helps you maximize daily performance.</string>
     <string name="text_take_the_quiz">Take the Quiz!</string>
     <string name="text_learn_more_2">Learn More</string>
+    <string name="text_daily_rhythm_guide">Daily Rhythm Guide</string>
 
 </resources>
