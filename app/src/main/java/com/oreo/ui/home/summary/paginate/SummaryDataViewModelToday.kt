@@ -1290,9 +1290,10 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCircadianAlignmentCardData(): OHealthOverview? {
-        if (circadianGraphData == null) {
+        //todo remove
+        /*if (circadianGraphData == null) {
             return null
-        }
+        }*/
 
         val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         return if(isOnboardingDone){
