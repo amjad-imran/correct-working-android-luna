@@ -102,6 +102,14 @@ class CustomHomescreenViewModel @Inject constructor(
             }
         }
 
+        val circadianCard = card.find { it.key.equals("circadian_alignment",true) }
+        if(circadianCard==null){
+            val index = cardsToAdd.indexOfFirst { it.key.equals("circadian_alignment",true) }
+            if(index!=-1){
+                cardsToAdd[index].switchState = true
+            }
+        }
+
 
         return cardsToAdd
     }
@@ -216,12 +224,20 @@ class CustomHomescreenViewModel @Inject constructor(
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
 
+            this["circadian_alignment"] = CustomHomeScreenItem(
+                R.drawable.icon_circadian_alignment,
+                "circadian_alignment",
+                resourceProvider.getString(R.string.text_circadian_alignment),
+                true,
+                this.size+1
+            )
+
             this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
                 "caffeine_intake",
                 resourceProvider.getString(R.string.text_caffeine_window),
                 true,
-                1
+                this.size+1
             )
 
             this["sleep"] = CustomHomeScreenItem(
@@ -229,7 +245,7 @@ class CustomHomescreenViewModel @Inject constructor(
                 "sleep",
                 resourceProvider.getString(R.string.text_sleep),
                 true,
-                2
+                this.size+1
             )
 
             this["activity"] = CustomHomeScreenItem(
@@ -237,28 +253,28 @@ class CustomHomescreenViewModel @Inject constructor(
                 "activity",
                 resourceProvider.getString(R.string.text_activity_o),
                 true,
-                3
+                this.size+1
             )
             this["readiness"] = CustomHomeScreenItem(
                 R.drawable.icon_readiness,
                 "readiness",
                 resourceProvider.getString(R.string.text_readiness),
                 true,
-                4
+                this.size+1
             )
             this["sleep_planner"] = CustomHomeScreenItem(
                 R.drawable.icon_sleep_planner,
                 "sleep_planner",
                 resourceProvider.getString(R.string.text_sleep_planner),
                 true,
-                5
+                this.size+1
             )
             this["heart_rate"] = CustomHomeScreenItem(
                 R.drawable.icon_heart_rate,
                 "heart_rate",
                 resourceProvider.getString(R.string.text_heart_rate),
                 true,
-                6
+                this.size+1
             )
 
 //        this["health_monitor"] = CustomHomeScreenItem(
@@ -273,21 +289,21 @@ class CustomHomescreenViewModel @Inject constructor(
                 "daily_goals",
                 resourceProvider.getString(R.string.text_daily_goals),
                 true,
-                7
+                this.size+1
             )
             this["luna_ai"] = CustomHomeScreenItem(
                 R.drawable.icon_luna_ai,
                 "luna_ai",
                 resourceProvider.getString(R.string.text_luna_ai),
                 true,
-                8
+                this.size+1
             )
             this["stress"] = CustomHomeScreenItem(
                 R.drawable.icon_stress,
                 "stress",
                 resourceProvider.getString(R.string.text_stress),
                 true,
-                9
+                this.size+1
             )
 
             if (shouldShowFemaleHealth()) {
@@ -296,7 +312,7 @@ class CustomHomescreenViewModel @Inject constructor(
                     "cycle_tracker",
                     resourceProvider.getString(R.string.text_cycle_tracker),
                     true,
-                    10
+                    this.size+1
                 )
             }
             this["7_day_trends_card"] = CustomHomeScreenItem(
@@ -304,14 +320,14 @@ class CustomHomescreenViewModel @Inject constructor(
                 "7_day_trends_card",
                 resourceProvider.getString(R.string.text_7_day_trends_cards),
                 true,
-                11
+                this.size+1
             )
             this["workout_history"] = CustomHomeScreenItem(
                 R.drawable.icon_flexibility_training,
                 "workout_history",
                 resourceProvider.getString(R.string.text_workout_history),
                 true,
-                12
+                this.size+1
             )
 
         }
