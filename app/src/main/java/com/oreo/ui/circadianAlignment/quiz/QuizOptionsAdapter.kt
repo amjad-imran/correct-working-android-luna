@@ -30,7 +30,7 @@ class QuizOptionsAdapter(
             if (selectedOption==option.id) {
                 backgroundDrawable.setStroke(4.dpToPx(), "#99CFA6FF".toColorInt())
             } else {
-                backgroundDrawable.setStroke(1.dpToPx(), "#FFFFFF".toColorInt())
+                backgroundDrawable.setStroke(1.dpToPx(), "#0FFFFFFF".toColorInt())
             }
 
             binding.root.background = backgroundDrawable
