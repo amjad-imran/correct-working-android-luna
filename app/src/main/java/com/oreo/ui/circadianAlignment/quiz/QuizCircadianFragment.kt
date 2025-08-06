@@ -4,8 +4,7 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -64,40 +63,6 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
 
             }
         }*/
-
-        val layoutManager = SingleScrollLinearLayoutManager(requireContext())
-        binding.rvQuestions.layoutManager = layoutManager
-
-        // Calculate padding: (RecyclerView height / 2) - (approx item height / 2)
-        val screenHeight = resources.displayMetrics.heightPixels
-        val estimatedItemHeight = 300 // Adjust this if your item layout is taller/shorter
-        val padding = (screenHeight / 2) - (estimatedItemHeight / 2)
-
-        binding.rvQuestions.addItemDecoration(CenterPaddingItemDecoration(padding))
-
-        binding.rvQuestions.adapter = questionAdapter
-
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(binding.rvQuestions)
-
-        binding.rvQuestions.post {
-            val snapView = snapHelper.findSnapView(layoutManager)
-            snapView?.let {
-                val position = layoutManager.getPosition(it)
-                questionAdapter.setFocusedIndex(position)
-            }
-        }
-
-        binding.rvQuestions.addOnScrollListener(object: RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                    val snapView = snapHelper.findSnapView(layoutManager)
-                    val centerPos = layoutManager.getPosition(snapView!!)
-                    questionAdapter.setFocusedIndex(centerPos)
-                }
-            }
-        })
     }
 
     override fun initListener() {
@@ -113,7 +78,30 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
     override fun subscribeObservers() {
         viewModel.quizData.observe(this){
             val list:List<CircadianQuizResponseModel> = it
-            questionAdapter.updateDataSet(list)
+//            questionAdapter.updateDataSet(list)
+            val adapter = QuizFragmentAdapter(this, list){
+
+            }
+            binding.viewPager.adapter = adapter
+
+            // Enable vertical scrolling
+            binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+
+            // Apply the custom page transformer for positioning and scaling
+            binding.viewPager.setPageTransformer { page, position ->
+                val scaleFactor = Math.max(0.85f, 1 - Math.abs(position)) // Scale the page based on its position
+                val maxTranslationY = 100f // Move items up/down based on their position
+
+                // Adjust translation for vertical movement
+                page.translationY = position * maxTranslationY
+
+                // Apply scaling to pages as they move away from the center
+                page.scaleX = scaleFactor
+                page.scaleY = scaleFactor
+
+                // Adjust the opacity (fade out pages that are not centered)
+                page.alpha = 1 - Math.abs(position)
+            }
         }
 
         viewModel.quizDataSubmitted.observe(this){
