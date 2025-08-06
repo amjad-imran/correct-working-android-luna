@@ -37,6 +37,9 @@ data class CircadianGraphData(
     @SerializedName("circadian_mid_point")
     val circadianMidPointData: CircadianMidPointData?,
 
+    @SerializedName("energy_graph")
+    val energyGraph: List<EnergyGraph>?,
+
     @SerializedName("start_time")
     val startTime: String?,
 
@@ -45,6 +48,12 @@ data class CircadianGraphData(
 
     val title: String?,
     val description: String?,
+)
+
+data class EnergyGraph(
+    @SerializedName("start_time")
+    val startTime: String?,
+    val energy: Float?,
 )
 
 data class ItemCircadianGraphData(

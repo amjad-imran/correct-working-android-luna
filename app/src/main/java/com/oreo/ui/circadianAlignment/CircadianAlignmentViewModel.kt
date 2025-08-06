@@ -508,8 +508,8 @@ class CircadianAlignmentViewModel
                 startHour = 9.0f,
                 endHour = 12.0f,
                 rowIndex = 0,
-                startColor = "#2E2422CC".toColorInt(),
-                endColor = "#2E2422CC".toColorInt(),
+                startColor = "#CC2E2422".toColorInt(),
+                endColor = "#CC2E2422".toColorInt(),
                 textColor = "#D69B92B2".toColorInt(),
                 label = "Avoid Caffeine"
             ),
@@ -526,8 +526,8 @@ class CircadianAlignmentViewModel
                 startHour = 16.0f,
                 endHour = 18.0f,
                 rowIndex = 0,
-                startColor = "#2E2422CC".toColorInt(),
-                endColor = "#2E2422CC".toColorInt(),
+                startColor = "#CC2E2422".toColorInt(),
+                endColor = "#CC2E2422".toColorInt(),
                 textColor = "#D69B92B2".toColorInt(),
                 label = "Avoid Caffeine"
             )
