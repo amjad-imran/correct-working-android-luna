@@ -1161,7 +1161,6 @@ class SummaryDataViewModelToday @Inject constructor(
                             impactData,
                             sleepModel,
                             daySlot,
-                            isAfter12
                         )?.let { userActivities.add(it) }
 
                         if (!lunaManaged) {
@@ -1190,7 +1189,6 @@ class SummaryDataViewModelToday @Inject constructor(
                         getActivityDataCard(
                             healthData,
                             impactData,
-                            daySlot
                         )?.let { userActivities.add(it) }
                     }
 
@@ -1893,8 +1891,12 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun getActivityDataCard(
         healthData: ServerUserHealthData,
         impactData: ImpactData?,
-        daySlot: Int
     ): OHealthOverview? {
+
+        if ((healthData.activity?.activeCalories ?: 0) <= 0) {
+            return null
+        }
+
         val activityModal = ODashboardActivityModel(
             activityScore = healthData.activity?.activityScore?.value,
             activeCalories = healthData.activity?.activeCalories ?: 0,
@@ -1906,76 +1908,10 @@ class SummaryDataViewModelToday @Inject constructor(
             impact = impactData?.activityScore
         )
 
-        when (daySlot) {
-            0 -> {}
-
-            1 -> {
-                if ((healthData.activity?.activeCalories ?: 0) > 0) {
-                    val activeCalories = healthData.activity?.activeCalories ?: 0
-                    if (activeCalories in 1..49) {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.ActivityMinimal(
-                            activityModal, caloriesGoal
-                        )
-                    } else if (activeCalories >= 50) {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.Activity(
-                            activityModal, caloriesGoal
-                        )
-                    }
-                }
-            }
-
-            2 -> {
-                if ((healthData.activity?.activeCalories ?: 0) > 0) {
-                    val activeCalories = healthData.activity?.activeCalories ?: 0
-                    if (activeCalories in 0..49) {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.ActivityMinimal(
-                            activityModal, caloriesGoal
-                        )
-                    } else {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.Activity(
-                            activityModal, caloriesGoal
-                        )
-                    }
-                }
-            }
-
-            else -> {
-                if ((healthData.activity?.activeCalories ?: 0) > 0) {
-
-                    val activeCalories = healthData.activity?.activeCalories ?: 0
-                    if (activeCalories in 0..49) {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.ActivityMinimal(
-                            activityModal, caloriesGoal
-                        )
-                    } else {
-                        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                        return OHealthOverview.Activity(
-                            activityModal, caloriesGoal
-                        )
-                    }
-                }
-            }
-        }
-
-        return null
-
-//        return if ((healthData.activity?.activeCalories ?: 0) > 0) {
-//            val activeCalories = healthData.activity?.activeCalories ?: 0
-//            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-//
-//            if (activeCalories in 1..49) {
-//                OHealthOverview.ActivityMinimal(activityModal, caloriesGoal)
-//            } else {
-//                OHealthOverview.Activity(activityModal, caloriesGoal)
-//            }
-//        } else {
-//            null
-//        }
+        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+        return OHealthOverview.Activity(
+            activityModal, caloriesGoal
+        )
     }
 
     private fun getSleepDataCard(
@@ -1983,7 +1919,6 @@ class SummaryDataViewModelToday @Inject constructor(
         impactData: ImpactData?,
         sleepModel: ODashboardSleepModel,
         daySlot: Int,
-        isAfter12: Boolean
     ): OHealthOverview? {
         val newSleepArray = dataConverter.mergeSleepDataV2(
             healthData.sleep?.sleeps,
