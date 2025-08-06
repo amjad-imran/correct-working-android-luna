@@ -1865,7 +1865,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
         if (
             registerDate == 0 ||
-            (readiness?.readinessScore?.value ?: 0) > 0 ||
+            (readiness?.readinessScore?.value ?: 0) <= 0 ||
             healthData.readiness == null
         ) {
             return null
