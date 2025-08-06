@@ -1838,9 +1838,6 @@ class SummaryDataViewModelToday @Inject constructor(
         val currentDayHRV = healthData.readiness?.hrv?.value
         val previous14DayAvg = healthData.readiness?.prev14DayAvgHRV
 
-        /* val currentDayHRV = 39
-         val previous14DayAvg = 62*/
-
 
         if (currentDayHRV != null && previous14DayAvg != null && currentDayHRV != 0 && previous14DayAvg != 0) {
             val percentageDrop =
@@ -1866,6 +1863,13 @@ class SummaryDataViewModelToday @Inject constructor(
             1
         }
 
+        if (
+            registerDate == 0 ||
+            (readiness?.readinessScore?.value ?: 0) > 0 ||
+            healthData.readiness == null
+        ) {
+            return null
+        }
 
         val readinessModel = ODashboardReadinessModel(
             readinessScore = readiness?.readinessScore?.value,
@@ -1879,52 +1883,11 @@ class SummaryDataViewModelToday @Inject constructor(
             alertCount = alertCount
         )
 
-        when (daySlot) {
-            0, 1 -> {
-                if (healthData.sleep?.sleep_score != null) {
-                    if (registerDate != 0) {
-                        healthData.readiness?.let {
-                            if ((readinessModel.readinessScore ?: 0) > 0) {
-                                return OHealthOverview.Readiness(readinessModel)
-                            }
-                        }
-                    }
-                }
-            }
-
-            2 -> {
-                if (registerDate != 0) {
-                    healthData.readiness?.let {
-                        if ((readinessModel.readinessScore ?: 0) > 0) {
-                            return OHealthOverview.Readiness(readinessModel)
-                        }
-                    }
-                }
-            }
-
-            else -> {
-                if (registerDate != 0) {
-                    if (healthData.sleep?.sleep_score != null) {
-                        if ((readinessModel.readinessScore ?: 0) > 0) {
-
-                            healthData.readiness?.let {
-                                return OHealthOverview.ReadinessMinimal(
-                                    readinessModel
-                                )
-                            }
-                        }
-                    } else {
-                        if ((readinessModel.readinessScore ?: 0) > 0) {
-                            healthData.readiness?.let {
-                                return OHealthOverview.Readiness(readinessModel)
-                            }
-                        }
-                    }
-                }
-            }
+        return when(daySlot){
+            0,1 -> OHealthOverview.Readiness(readinessModel)
+            2 -> OHealthOverview.ReadinessMinimal(readinessModel)
+            else -> null
         }
-
-        return null
     }
 
     private fun getActivityDataCard(
@@ -2027,8 +1990,8 @@ class SummaryDataViewModelToday @Inject constructor(
             healthData.sleep?.naps?.filter { !it.isNextDayNap }
         )
 
-        when (daySlot) {
-            0, 1 -> {
+        when(daySlot){
+            0 -> {
                 if (healthData.sleep?.sleep_score != null) {
                     if (registerDate != 0) {
                         if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -2045,8 +2008,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     return OHealthOverview.SleepWaiting
                 }
             }
-
-            2 -> {
+            1 -> {
                 if (registerDate != 0) {
                     healthData.sleep?.let {
                         if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -2057,14 +2019,10 @@ class SummaryDataViewModelToday @Inject constructor(
                                 newSleepArray?.lastOrNull()?.end_time ?: "",
                                 impact = impactData?.sleepScore
                             )
-//                            if (isAfter12.not()) {
-//                                getHealthMonitorData(healthData.sleep)
-//                            }
                         }
                     }
                 }
             }
-
             else -> {
                 if (registerDate != 0) {
                     if (healthData.sleep?.sleep_score != null) {
@@ -2094,20 +2052,6 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return null
-
-//        return if ((sleepModel.totalSleep ?: 0) > 0) {
-//            OHealthOverview.Sleep(
-//                sleepModel,
-//                makeSleepArray(newSleepArray),
-//                newSleepArray?.firstOrNull()?.start_time ?: "",
-//                newSleepArray?.lastOrNull()?.end_time ?: "",
-//                impact = impactData?.sleepScore
-//            )
-//        } else if (healthData.sleep?.sleep_score == null) {
-//            OHealthOverview.SleepWaiting
-//        } else {
-//            null
-//        }
     }
 
     suspend fun updateStressCard(): OHealthOverview? {
@@ -2208,7 +2152,7 @@ class SummaryDataViewModelToday @Inject constructor(
         return list
     }
 
-    private fun getLunaManagedPriority(hasSleep: Boolean): List<CustomHomeScreenItem> {
+    /*private fun getLunaManagedPriority(hasSleep: Boolean): List<CustomHomeScreenItem> {
         val itemsMap = getItemsMap()
         val priorityList = mutableListOf<CustomHomeScreenItem>()
         val isAfter12 = checkIfIsAfter12()
@@ -2316,6 +2260,67 @@ class SummaryDataViewModelToday @Inject constructor(
             add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
         }
 
+        return priorityList
+    }*/
+
+    private fun getLunaManagedPriority(hasSleep: Boolean): List<CustomHomeScreenItem> {
+        val priorityList = mutableListOf<CustomHomeScreenItem>()
+
+        val itemsMap = getItemsMap()
+        val daySlot = getDaySlot()
+        priorityList.apply {
+            when(daySlot){
+                0 ->{
+                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                }
+
+                1 ->{
+                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                }
+
+                else ->{
+                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                }
+            }
+
+            if(priorityList.size > 2){
+                add(2, itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+            }else{
+                add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
+            }
+
+            add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
+        }
         return priorityList
     }
 
@@ -2640,24 +2645,22 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-
     /**
      * Return day slots
      * 1->00:00 - 08:00
      * 2->08:00 - 12:000
      * 3->12:00 - 24:00
      */
+
     private fun getDaySlot(): Int {
         val currentTime = DateFormats.getTimeFormat()
 
-        return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
+        return if (DateFormats.isTimeBetween(currentTime, "00:00", "09:59")) {
             0
-        } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
+        } else if (DateFormats.isTimeBetween(currentTime, "10:00", "19:59")) {
             1
-        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
-            2
         } else {
-            3
+            2
         }
     }
 
