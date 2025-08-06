@@ -1909,9 +1909,18 @@ class SummaryDataViewModelToday @Inject constructor(
         )
 
         val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-        return OHealthOverview.Activity(
-            activityModal, caloriesGoal
-        )
+        val activeCalories = healthData.activity?.activeCalories ?: 0
+        return if (activeCalories in 1..49) {
+            OHealthOverview.ActivityMinimal(
+                activityModal, caloriesGoal
+            )
+        }else if(activeCalories >= 50) {
+            OHealthOverview.Activity(
+                activityModal, caloriesGoal
+            )
+        }
+        else null
+
     }
 
     private fun getSleepDataCard(
