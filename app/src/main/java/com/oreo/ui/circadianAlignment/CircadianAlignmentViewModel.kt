@@ -545,15 +545,7 @@ class CircadianAlignmentViewModel
                         resourceProvider.getString(R.string.text_how_does_the_luna_ring),
                         resourceProvider.getString(R.string.text_stress_2),
                         R.drawable.image_s_hw_2
-                    ), StressImageModel(
-                        resourceProvider.getString(R.string.text_how_to_manage_acute_short_term_stress),
-                        resourceProvider.getString(R.string.text_stress_3),
-                        R.drawable.image_s_hw_3
-                    ), StressImageModel(
-                        resourceProvider.getString(R.string.text_how_to_manage_chronic),
-                        resourceProvider.getString(R.string.text_stress_4),
-                        R.drawable.image_s_hw_4
-                    )
+                    ),
                 )
             )
         }
