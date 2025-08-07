@@ -7,7 +7,7 @@ import com.oreo.data.model.circadian.CircadianQuizResponseModel
 class QuizFragmentAdapter(
     fragment: Fragment,
     private val questions: List<CircadianQuizResponseModel>,
-    private val onOptionSelected: (Pair<Int?, Int>) -> Unit
+    private val onOptionSelected: (Pair<Int, Int>) -> Unit
 ) :
     FragmentStateAdapter(fragment) {
 
@@ -16,6 +16,6 @@ class QuizFragmentAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return QuesVpFragment.newInstance(questions[position], onOptionSelected)
+        return QuesVpFragment(questions[position], onOptionSelected)
     }
 }

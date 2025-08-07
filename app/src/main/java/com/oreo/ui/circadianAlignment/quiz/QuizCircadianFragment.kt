@@ -79,8 +79,8 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
         viewModel.quizData.observe(this){
             val list:List<CircadianQuizResponseModel> = it
 //            questionAdapter.updateDataSet(list)
-            val adapter = QuizFragmentAdapter(this, list){
-
+            val adapter = QuizFragmentAdapter(this, list){ pair ->
+                handleQuizOptionClick(pair)
             }
             binding.viewPager.adapter = adapter
 
