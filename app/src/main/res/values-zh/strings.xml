@@ -2028,5 +2028,62 @@
     <string name="text_booster_foods">助力食物</string>
     <string name="text_menstrual_cycle_based">基于月经周期</string>
 
+    <string name="text_circadian_alignment">昼夜节律对齐</string>
+    <string name="text_focus_window">专注窗口</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">在睡觉时佩戴 Luna 环以跟踪您的睡眠。确保充电以免错失宝贵的见解。</string>
+    <string name="text_sleep_mid_point">睡眠中点</string>
+    <string name="text_phase_advance">阶段前进</string>
+    <string name="text_correcting">修正中</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">您的节律向后推迟——尝试在睡前调暗灯光并减少屏幕时间以重新对齐。</string>
+    <string name="text_acitivity_monitor">活动监测</string>
+    <string name="text_your_overall_circadian_is_well_aligned">您的整体昼夜节律对齐良好。</string>
+    <string name="text_corrective_activities">修正活动</string>
+    <string name="text_corrective_activities_desc">您的内钟遵循每天的节奏。这些信号——光线、运动、膳食等——与您的自然时间安排一致，帮助您的身体以最佳状态运行。</string>
+    <string name="text_light_exposure">光照暴露</string>
+    <string name="text_corrective_activities_circadian_desc_1">沐浴在自然光下——它是唤醒身体的强大信号</string>
+    <string name="text_corrective_activities_circadian_desc_2">接近您的步数目标有助于改善血液循环、平衡血糖并保持能量充沛。</string>
+    <string name="text_corrective_activities_circadian_desc_3">时间限制饮食有助于提高代谢效率和激素调节。</string>
+    <string name="text_corrective_activities_circadian_desc_4">早晨的身体活动可以启动您的新陈代谢、增强专注力并改善心情。</string>
+    <string name="text_corrective_activities_circadian_desc_5">在此期间摄入咖啡因有助于提高警觉性，而不会打乱晚上的睡眠。</string>
+    <string name="text_daily_steps">每日步数</string>
+    <string name="text_meal_window">餐食窗口</string>
+    <string name="text_caffeine_window2">咖啡因窗口</string>
+    <string name="text_your_chronotype">您的生物节律类型</string>
+    <string name="text_retake_chronotype_quiz">重新做生物节律类型测试</string>
+    <string name="text_skip2">跳过</string>
+    <string name="text_maintained">已维持</string>
+    <string name="text_worsening">正在恶化</string>
+    <string name="text_missing_sleep">缺失的睡眠</string>
+    <string name="text_awaiting_sync">等待同步</string>
+    <string name="text_phase_aligned">阶段对齐</string>
+    <string name="text_phase_delay">阶段延迟</string>
+    <string name="text_have_you_completed_this_task">你完成了这个任务吗？</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">确保您能够在修正窗口内完成此活动。</string>
+    <string name="text_timeval_left">%1$s 剩余</string>
+    <string name="text_your_body_runs_on_a_clock">您的身体按照时钟运作</string>
+
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">良好的调节有助于您睡得更好、感到更有活力，并且恢复得更快。</string>
+    <string name="text_onboarding_circadian_desc_1">您的身体遵循自然的24小时节奏。围绕这个节奏调节光线、咖啡因和睡眠，可以帮助您感到更加充满活力和集中。</string>
+    <string name="text_onboarding_circadian_desc_2">我们分析您的睡眠、活动和饮食模式，提供及时的建议，帮助您充分利用今天的生物节律窗口。</string>
+    <string name="text_onboarding_circadian_desc_3">您的生物节律中点显示了您的身体在生理上处于最低警觉状态的时刻。跟踪它的变化有助于保持同步。</string>
+    <string name="text_onboarding_circadian_desc_4">以下是一些时间敏感的行动，如光照或运动，帮助您的身体重新恢复到生物节律平衡状态。</string>
+    <string name="text_onboarding_circadian_desc_5">查看您今天遵循优化窗口的表现——以及每个活动如何促进了您的整体生物节律健康。</string>
+    <string name="text_opens_today">今天开放</string>
+    <string name="text_opens_tomorrow">明天开放</string>
+    <string name="text_caffeine_open">咖啡因开放</string>
+    <string name="text_dim_light_melatonin_onset">暗光下褪黑激素的开始</string>
+    <string name="text_timezone_change_detected">检测到时区变化。</string>
+    <string name="text_timezone_changed_desc_dash">您可能会在旅行日期期间注意到数据的轻微变化，但核心指标和长期趋势保持准确。</string>
+    <string name="text_what_is_circadian_mid_point">什么是生物节律中点？</string>
+    <string name="text_what_is_circadian_alignment">什么是生物节律对齐？</string>
+    <string name="text_circadian_alignment_quesmark">生物节律对齐？</string>
+    <string name="text_circadian_mid_point_quesmark">生物节律中点？</string>
+    <string name="text_we_need_more_data_to_better_know_you">我们需要更多数据来更好地了解您</string>
+    <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">我们没有看到足够的近期睡眠数据来显示您的生物节律。持续佩戴您的戒指将帮助解锁个性化的洞察。</string>
+    <string name="text_circadian_hiw_desc_1">了解您的生物节律对齐有助于最大化每日表现。</string>
+    <string name="text_take_the_quiz">做测验！</string>
+    <string name="text_learn_more_2">了解更多</string>
+    <string name="text_daily_rhythm_guide">每日节律指南</string>
+
 
 </resources>

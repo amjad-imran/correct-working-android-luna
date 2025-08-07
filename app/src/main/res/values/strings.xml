@@ -2008,6 +2008,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_just_now">Just now</string>
     <string name="text_booster_foods">Booster foods</string>
     <string name="text_menstrual_cycle_based">Menstrual cycle based</string>
+
     <string name="text_circadian_alignment">Circadian Alignment</string>
     <string name="text_focus_window">Focus Window</string>
     <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">Wear your luna ring when you go to bed to track your sleep. Make sure to charge your ring to avoid missing out valuable insights.</string>
@@ -2041,6 +2042,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Ensure that you were able to complete the activity in the corrective window.</string>
     <string name="text_timeval_left">%1$s left</string>
     <string name="text_your_body_runs_on_a_clock">Your body runs on a clock</string>
+
     <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Aligning it well can help you sleep better, feel more energetic, and recover faster</string>
     <string name="text_onboarding_circadian_desc_1">Your body follows a natural 24-hour rhythm. Timing your light, caffeine, and sleep around it can help you feel more energized and focused.</string>
     <string name="text_onboarding_circadian_desc_2">We analyze your sleep, activity, and food patterns to offer timely nudges - helping you make the most of your circadian windows today.</string>
