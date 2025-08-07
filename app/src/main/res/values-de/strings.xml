@@ -2034,5 +2034,62 @@
     <string name="text_booster_foods">Booster</string>
     <string name="text_menstrual_cycle_based">Zyklusbasiert</string>
 
+    <string name="text_circadian_alignment">Zirkadiane Ausrichtung</string>
+    <string name="text_focus_window">Fokusfenster</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">Tragen Sie Ihren Luna-Ring, wenn Sie ins Bett gehen, um Ihren Schlaf zu verfolgen. Achten Sie darauf, den Ring aufzuladen, um wertvolle Erkenntnisse nicht zu verpassen.</string>
+    <string name="text_sleep_mid_point">Schlaf-Mittelpunkt</string>
+    <string name="text_phase_advance">Phasen-Advanz</string>
+    <string name="text_correcting">Korrektur</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">Ihr Rhythmus hat sich verschoben — versuchen Sie, das Licht zu dimmen und die Bildschirmzeit vor dem Schlafengehen zu reduzieren, um sich neu auszurichten.</string>
+    <string name="text_acitivity_monitor">Aktivitätsmonitor</string>
+    <string name="text_your_overall_circadian_is_well_aligned">Ihr gesamter zirkadianer Rhythmus ist gut ausgerichtet.</string>
+    <string name="text_corrective_activities">Korrektive Aktivitäten</string>
+    <string name="text_corrective_activities_desc">Ihre innere Uhr folgt einem täglichen Rhythmus. Diese Hinweise—Licht, Bewegung, Mahlzeiten und mehr—sind mit Ihrer natürlichen Zeitplanung ausgerichtet, um Ihrem Körper zu helfen, optimal zu funktionieren.</string>
+    <string name="text_light_exposure">Lichtaussetzung</string>
+    <string name="text_corrective_activities_circadian_desc_1">Lassen Sie sich etwas Sonnenlicht — es ist ein starker Hinweis für Ihren Körper, um aufzuwachen.</string>
+    <string name="text_corrective_activities_circadian_desc_2">Nähern Sie sich Ihrem Schrittziel, um die Durchblutung zu verbessern, den Blutzucker zu regulieren und Ihre Energie aufrechtzuerhalten.</string>
+    <string name="text_corrective_activities_circadian_desc_3">Zeitlich begrenztes Essen unterstützt die Stoffwechselfunktion und die Hormonregulation.</string>
+    <string name="text_corrective_activities_circadian_desc_4">Körperliche Aktivität am Morgen kurbelt Ihren Stoffwechsel an, schärft den Fokus und verbessert die Stimmung.</string>
+    <string name="text_corrective_activities_circadian_desc_5">Koffein in dieser Zeit hilft, die Wachsamkeit zu steigern, ohne den Schlaf später zu stören.</string>
+    <string name="text_daily_steps">Tägliche Schritte</string>
+    <string name="text_meal_window">Mahlzeitenfenster</string>
+    <string name="text_caffeine_window2">Koffeinfenster</string>
+    <string name="text_your_chronotype">IHRE CHRONOTYP</string>
+    <string name="text_retake_chronotype_quiz">Chronotypen-Test wiederholen</string>
+    <string name="text_skip2">Überspringen</string>
+    <string name="text_maintained">Aufrechterhalten</string>
+    <string name="text_worsening">Verschlechterung</string>
+    <string name="text_missing_sleep">Schlaf fehlt</string>
+    <string name="text_awaiting_sync">Wartet auf Synchronisation</string>
+    <string name="text_phase_aligned">Phasen-Ausrichtung</string>
+    <string name="text_phase_delay">Phasen-Verzögerung</string>
+    <string name="text_have_you_completed_this_task">Haben Sie diese Aufgabe abgeschlossen?</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Stellen Sie sicher, dass Sie die Aktivität im richtigen Korrekturfenster abgeschlossen haben.</string>
+    <string name="text_timeval_left">%1$s übrig</string>
+    <string name="text_your_body_runs_on_a_clock">Ihr Körper läuft nach einer Uhr</string>
+
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Eine gute Ausrichtung kann Ihnen helfen, besser zu schlafen, mehr Energie zu haben und sich schneller zu erholen.</string>
+    <string name="text_onboarding_circadian_desc_1">Ihr Körper folgt einem natürlichen 24-Stunden-Rhythmus. Das Timing von Licht, Koffein und Schlaf rund um diesen Rhythmus kann Ihnen helfen, mehr Energie und Fokus zu haben.</string>
+    <string name="text_onboarding_circadian_desc_2">Wir analysieren Ihre Schlaf-, Aktivitäts- und Essgewohnheiten, um Ihnen rechtzeitige Hinweise zu geben - so können Sie das Beste aus Ihren zirkadianen Fenstern herausholen.</string>
+    <string name="text_onboarding_circadian_desc_3">Ihr zirkadianer Mittelpunkt zeigt an, wann Ihr Körper biologisch in seinem niedrigsten Wachheitszustand ist. Das Verfolgen seiner Verschiebung hilft Ihnen, synchron zu bleiben.</string>
+    <string name="text_onboarding_circadian_desc_4">Hier sind zeitsensitive Maßnahmen wie Lichtaussetzung oder Bewegung, die Ihrem Körper helfen, wieder ins zirkadiane Gleichgewicht zu kommen.</string>
+    <string name="text_onboarding_circadian_desc_5">Sehen Sie, wie gut Sie heute Ihre optimalen Fenster eingehalten haben – und wie jede Aktivität zu Ihrer gesamten zirkadianen Gesundheit beigetragen hat.</string>
+    <string name="text_opens_today">Öffnet heute</string>
+    <string name="text_opens_tomorrow">Öffnet morgen</string>
+    <string name="text_caffeine_open">Koffein offen</string>
+    <string name="text_dim_light_melatonin_onset">Dämmerlicht Melatonin-Einsetzen</string>
+    <string name="text_timezone_change_detected">Zeitzonenänderung erkannt.</string>
+    <string name="text_timezone_changed_desc_dash">Sie werden möglicherweise kleine Datenverschiebungen während der Reisezeiten bemerken, aber wichtige Kennzahlen und langfristige Trends bleiben genau.</string>
+    <string name="text_what_is_circadian_mid_point">Was ist der zirkadiane Mittelpunkt?</string>
+    <string name="text_what_is_circadian_alignment">Was ist zirkadiane Ausrichtung?</string>
+    <string name="text_circadian_alignment_quesmark">Zirkadiane Ausrichtung?</string>
+    <string name="text_circadian_mid_point_quesmark">Zirkadianer Mittelpunkt?</string>
+    <string name="text_we_need_more_data_to_better_know_you">Wir benötigen mehr Daten, um Sie besser kennenzulernen</string>
+    <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Wir haben nicht genügend aktuelle Schlafdaten gesehen, um Ihren zirkadianen Rhythmus anzuzeigen. Das konsequente Tragen Ihres Rings wird helfen, personalisierte Einblicke freizuschalten.</string>
+    <string name="text_circadian_hiw_desc_1">Das Wissen über Ihre zirkadiane Ausrichtung hilft Ihnen, die tägliche Leistung zu maximieren.</string>
+    <string name="text_take_the_quiz">Machen Sie den Test!</string>
+    <string name="text_learn_more_2">Mehr erfahren</string>
+    <string name="text_daily_rhythm_guide">Täglicher Rhythmus-Guide</string>
+
 
 </resources>

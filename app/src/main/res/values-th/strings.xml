@@ -2040,6 +2040,62 @@
     <string name="text_booster_foods">เพิ่มพลัง</string>
     <string name="text_menstrual_cycle_based">ตามรอบเดือน</string>
 
+    <string name="text_circadian_alignment">การจัดเรียงตามจังหวะชีวภาพ</string>
+    <string name="text_focus_window">หน้าต่างโฟกัส</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">สวมแหวน Luna เมื่อคุณเข้านอนเพื่อบันทึกการนอนของคุณ โปรดตรวจสอบให้แน่ใจว่าได้ชาร์จแหวนของคุณเพื่อหลีกเลี่ยงการพลาดข้อมูลที่มีค่า</string>
+    <string name="text_sleep_mid_point">จุดกึ่งกลางของการนอน</string>
+    <string name="text_phase_advance">การเร่งการเปลี่ยนแปลงของระยะเวลา</string>
+    <string name="text_correcting">การแก้ไข</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">จังหวะของคุณได้ยืดออกไปหลังจากนี้ ลองลดความสว่างของแสงและลดเวลาในการดูหน้าจอก่อนนอนเพื่อตั้งค่าใหม่</string>
+    <string name="text_acitivity_monitor">ตัวติดตามกิจกรรม</string>
+    <string name="text_your_overall_circadian_is_well_aligned">จังหวะชีวภาพของคุณอยู่ในระดับที่ดี</string>
+    <string name="text_corrective_activities">กิจกรรมที่แก้ไข</string>
+    <string name="text_corrective_activities_desc">นาฬิกาภายในของคุณทำตามจังหวะประจำวัน สัญญาณเหล่านี้—แสง, การเคลื่อนไหว, อาหาร และอื่นๆ—สอดคล้องกับเวลาธรรมชาติของคุณเพื่อช่วยให้ร่างกายของคุณทำงานได้อย่างดีที่สุด</string>
+    <string name="text_light_exposure">การรับแสง</string>
+    <string name="text_corrective_activities_circadian_desc_1">รับแสงธรรมชาติบ้าง—เป็นสัญญาณที่มีพลังให้ร่างกายของคุณตื่นตัว</string>
+    <string name="text_corrective_activities_circadian_desc_2">การไปถึงเป้าหมายการเดินของคุณจะช่วยให้การไหลเวียนของเลือดดีขึ้น, ควบคุมระดับน้ำตาลในเลือด และรักษาระดับพลังงาน</string>
+    <string name="text_corrective_activities_circadian_desc_3">การกินอาหารในช่วงเวลาที่จำกัดช่วยสนับสนุนประสิทธิภาพการเผาผลาญและการควบคุมฮอร์โมน</string>
+    <string name="text_corrective_activities_circadian_desc_4">การออกกำลังกายในตอนเช้าเป็นการกระตุ้นการเผาผลาญ, เพิ่มสมาธิ และปรับอารมณ์</string>
+    <string name="text_corrective_activities_circadian_desc_5">การดื่มคาเฟอีนในช่วงเวลานี้ช่วยเพิ่มการตื่นตัวโดยไม่รบกวนการนอนของคุณในภายหลัง</string>
+    <string name="text_daily_steps">ก้าวประจำวัน</string>
+    <string name="text_meal_window">หน้าต่างการกิน</string>
+    <string name="text_caffeine_window2">หน้าต่างคาเฟอีน</string>
+    <string name="text_your_chronotype">ประเภทของคุณ</string>
+    <string name="text_retake_chronotype_quiz">ทำแบบทดสอบประเภทใหม่อีกครั้ง</string>
+    <string name="text_skip2">ข้าม</string>
+    <string name="text_maintained">รักษาไว้</string>
+    <string name="text_worsening">แย่ลง</string>
+    <string name="text_missing_sleep">ขาดการนอน</string>
+    <string name="text_awaiting_sync">รอการซิงค์</string>
+    <string name="text_phase_aligned">การจัดเรียงของระยะ</string>
+    <string name="text_phase_delay">การชะลอระยะ</string>
+    <string name="text_have_you_completed_this_task">คุณได้ทำงานนี้เสร็จไหม?</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">ตรวจสอบให้แน่ใจว่าคุณได้ทำกิจกรรมนี้ในหน้าต่างการแก้ไขที่ถูกต้อง</string>
+    <string name="text_timeval_left">%1$s ที่เหลือ</string>
+    <string name="text_your_body_runs_on_a_clock">ร่างกายของคุณทำงานตามนาฬิกา</string>
+
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">การจัดเรียงให้ดีสามารถช่วยให้คุณนอนหลับได้ดีขึ้น รู้สึกมีพลังมากขึ้น และฟื้นตัวได้เร็วขึ้น</string>
+    <string name="text_onboarding_circadian_desc_1">ร่างกายของคุณมีจังหวะธรรมชาติที่ 24 ชั่วโมง การตั้งเวลาแสงสว่าง คาเฟอีน และการนอนให้ตรงกับจังหวะนี้จะช่วยให้คุณรู้สึกมีพลังและมีสมาธิมากขึ้น</string>
+    <string name="text_onboarding_circadian_desc_2">เราวิเคราะห์รูปแบบการนอน การเคลื่อนไหว และการทานอาหารของคุณเพื่อให้ข้อเสนอแนะที่เหมาะสม ช่วยให้คุณใช้ประโยชน์จากหน้าต่างจังหวะชีวภาพของคุณได้มากที่สุดในวันนี้</string>
+    <string name="text_onboarding_circadian_desc_3">จุดกึ่งกลางของจังหวะชีวภาพของคุณแสดงให้เห็นเมื่อร่างกายของคุณอยู่ในช่วงที่ตื่นตัวต่ำสุด การติดตามการเปลี่ยนแปลงช่วยให้คุณรักษาความสอดคล้องกัน</string>
+    <string name="text_onboarding_circadian_desc_4">นี่คือลักษณะการกระทำที่จำเป็นในเวลาที่เหมาะสม เช่น การสัมผัสแสงหรือการเคลื่อนไหวเพื่อช่วยให้ร่างกายของคุณกลับเข้าสู่สมดุลจังหวะชีวภาพ</string>
+    <string name="text_onboarding_circadian_desc_5">ดูว่าในวันนี้คุณปฏิบัติตามหน้าต่างที่เหมาะสมได้ดีแค่ไหน และแต่ละกิจกรรมได้ช่วยส่งเสริมสุขภาพจังหวะชีวภาพของคุณอย่างไรบ้าง</string>
+    <string name="text_opens_today">เปิดวันนี้</string>
+    <string name="text_opens_tomorrow">เปิดพรุ่งนี้</string>
+    <string name="text_caffeine_open">คาเฟอีนเปิด</string>
+    <string name="text_dim_light_melatonin_onset">การเริ่มต้นของเมลาโทนินในแสงน้อย</string>
+    <string name="text_timezone_change_detected">ตรวจพบการเปลี่ยนแปลงเขตเวลา</string>
+    <string name="text_timezone_changed_desc_dash">คุณอาจสังเกตเห็นการเปลี่ยนแปลงข้อมูลเล็กน้อยในวันที่เดินทาง แต่ตัวชี้วัดหลักและแนวโน้มระยะยาวยังคงแม่นยำ</string>
+    <string name="text_what_is_circadian_mid_point">จุดกลางของจังหวะชีวภาพคืออะไร?</string>
+    <string name="text_what_is_circadian_alignment">การจัดเรียงจังหวะชีวภาพคืออะไร?</string>
+    <string name="text_circadian_alignment_quesmark">การจัดเรียงจังหวะชีวภาพ?</string>
+    <string name="text_circadian_mid_point_quesmark">จุดกลางจังหวะชีวภาพ?</string>
+    <string name="text_we_need_more_data_to_better_know_you">เราต้องการข้อมูลเพิ่มเติมเพื่อรู้จักคุณให้ดีขึ้น</string>
+    <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">เรายังไม่ได้เห็นข้อมูลการนอนล่าสุดเพียงพอที่จะแสดงจังหวะชีวภาพของคุณ การสวมแหวนของคุณอย่างสม่ำเสมอจะช่วยปลดล็อกข้อมูลเชิงลึกที่ปรับให้เหมาะสม</string>
+    <string name="text_circadian_hiw_desc_1">การรู้จักการจัดเรียงจังหวะชีวภาพของคุณช่วยให้คุณเพิ่มประสิทธิภาพการทำงานในแต่ละวัน</string>
+    <string name="text_take_the_quiz">ทำแบบทดสอบ!</string>
+    <string name="text_learn_more_2">เรียนรู้เพิ่มเติม</string>
+    <string name="text_daily_rhythm_guide">คู่มือจังหวะประจำวัน</string>
 
 
 </resources>

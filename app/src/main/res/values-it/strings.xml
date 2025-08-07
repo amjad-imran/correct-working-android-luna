@@ -2035,5 +2035,62 @@
     <string name="text_booster_foods">Booster</string>
     <string name="text_menstrual_cycle_based">Secondo ciclo</string>
 
+    <string name="text_circadian_alignment">Allineamento Circadiano</string>
+    <string name="text_focus_window">Finestra di Focus</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">Indossa il tuo anello Luna quando vai a letto per tracciare il tuo sonno. Assicurati di caricare l\'anello per non perdere informazioni preziose.</string>
+    <string name="text_sleep_mid_point">Punto Medio del Sonno</string>
+    <string name="text_phase_advance">Avanzamento Fase</string>
+    <string name="text_correcting">Correzione</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">Il tuo ritmo si è spostato più tardi — prova a abbassare le luci e ridurre il tempo davanti allo schermo prima di dormire per riallinearti.</string>
+    <string name="text_acitivity_monitor">Monitor di Attività</string>
+    <string name="text_your_overall_circadian_is_well_aligned">Il tuo ritmo circadiano complessivo è ben allineato.</string>
+    <string name="text_corrective_activities">Attività Correttive</string>
+    <string name="text_corrective_activities_desc">Il tuo orologio interno segue un ritmo giornaliero. Questi segnali—luce, movimento, pasti e altro—sono allineati con il tuo orario naturale per aiutare il tuo corpo a funzionare al meglio.</string>
+    <string name="text_light_exposure">Esposizione alla Luce</string>
+    <string name="text_corrective_activities_circadian_desc_1">Prendi un po\' di luce naturale — è un potente segnale per svegliare il tuo corpo.</string>
+    <string name="text_corrective_activities_circadian_desc_2">Avvicinarti al tuo obiettivo di passi aiuterà a migliorare la circolazione, bilanciare la glicemia e mantenere alta l\'energia.</string>
+    <string name="text_corrective_activities_circadian_desc_3">Il digiuno a tempo ristretto supporta l\'efficienza metabolica e la regolazione ormonale.</string>
+    <string name="text_corrective_activities_circadian_desc_4">L\'attività fisica al mattino dà il via al metabolismo, affina la concentrazione e migliora l\'umore.</string>
+    <string name="text_corrective_activities_circadian_desc_5">Assumere caffeina in questo periodo aiuta a stimolare l\'attenzione senza compromettere il sonno successivo.</string>
+    <string name="text_daily_steps">Passi Giornalieri</string>
+    <string name="text_meal_window">Finestra di Pasti</string>
+    <string name="text_caffeine_window2">Finestra di Caffeina</string>
+    <string name="text_your_chronotype">IL TUO CRONOTIPO</string>
+    <string name="text_retake_chronotype_quiz">Ripeti il test del cronotipo</string>
+    <string name="text_skip2">Salta</string>
+    <string name="text_maintained">Mantenuto</string>
+    <string name="text_worsening">Peggioramento</string>
+    <string name="text_missing_sleep">Sonno mancante</string>
+    <string name="text_awaiting_sync">In attesa di sincronizzazione</string>
+    <string name="text_phase_aligned">Fase Allineata</string>
+    <string name="text_phase_delay">Ritardo Fase</string>
+    <string name="text_have_you_completed_this_task">Hai completato questa attività?</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Assicurati di aver completato l\'attività nella finestra correttiva.</string>
+    <string name="text_timeval_left">%1$s rimasti</string>
+    <string name="text_your_body_runs_on_a_clock">Il tuo corpo funziona con un orologio</string>
+
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Un buon allineamento può aiutarti a dormire meglio, sentirti più energetico e recuperare più velocemente.</string>
+    <string name="text_onboarding_circadian_desc_1">Il tuo corpo segue un ritmo naturale di 24 ore. Sincronizzare la luce, la caffeina e il sonno con questo ritmo ti aiuterà a sentirti più energico e concentrato.</string>
+    <string name="text_onboarding_circadian_desc_2">Analizziamo i tuoi schemi di sonno, attività e alimentazione per offrirti suggerimenti tempestivi, aiutandoti a sfruttare al meglio le tue finestre circadiane oggi.</string>
+    <string name="text_onboarding_circadian_desc_3">Il tuo punto medio circadiano mostra quando il tuo corpo è biologicamente nel suo stato di minima allerta. Tracciarne il cambiamento ti aiuta a rimanere sincronizzato.</string>
+    <string name="text_onboarding_circadian_desc_4">Ecco delle azioni sensibili al tempo come l\'esposizione alla luce o il movimento che aiuteranno a guidare il tuo corpo verso un nuovo equilibrio circadiano.</string>
+    <string name="text_onboarding_circadian_desc_5">Vedi quanto bene hai seguito le tue finestre ottimali oggi e come ogni attività ha contribuito alla tua salute circadiana complessiva.</string>
+    <string name="text_opens_today">Aperto oggi</string>
+    <string name="text_opens_tomorrow">Aperto domani</string>
+    <string name="text_caffeine_open">caffè aperto</string>
+    <string name="text_dim_light_melatonin_onset">Inizio della melatonina con luce soffusa</string>
+    <string name="text_timezone_change_detected">Cambio di fuso orario rilevato.</string>
+    <string name="text_timezone_changed_desc_dash">Potresti notare piccoli spostamenti dei dati durante i viaggi, ma le metriche principali e le tendenze a lungo termine rimarranno accurate.</string>
+    <string name="text_what_is_circadian_mid_point">Cos\'è il punto medio circadiano?</string>
+    <string name="text_what_is_circadian_alignment">Cos\'è l\'allineamento circadiano?</string>
+    <string name="text_circadian_alignment_quesmark">Allineamento circadiano?</string>
+    <string name="text_circadian_mid_point_quesmark">Punto medio circadiano?</string>
+    <string name="text_we_need_more_data_to_better_know_you">Abbiamo bisogno di più dati per conoscerti meglio</string>
+    <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Non abbiamo visto abbastanza dati recenti sul sonno per mostrarti il tuo ritmo circadiano. Indossare il tuo anello costantemente aiuterà a sbloccare approfondimenti personalizzati.</string>
+    <string name="text_circadian_hiw_desc_1">Conoscere il tuo allineamento circadiano ti aiuta a massimizzare le performance quotidiane.</string>
+    <string name="text_take_the_quiz">Fai il quiz!</string>
+    <string name="text_learn_more_2">Scopri di più</string>
+    <string name="text_daily_rhythm_guide">Guida al ritmo quotidiano</string>
+
 
 </resources>

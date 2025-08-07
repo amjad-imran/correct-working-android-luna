@@ -2034,5 +2034,62 @@
     <string name="text_booster_foods">Boosters</string>
     <string name="text_menstrual_cycle_based">Volgens cyclus</string>
 
+    <string name="text_circadian_alignment">Circadiaanse Afstemming</string>
+    <string name="text_focus_window">Focus Venster</string>
+    <string name="text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights">Draag je Luna-ring wanneer je naar bed gaat om je slaap te volgen. Zorg ervoor dat je je ring oplaadt om waardevolle inzichten niet te missen.</string>
+    <string name="text_sleep_mid_point">Slaap Midpunt</string>
+    <string name="text_phase_advance">Fase Vooruitgang</string>
+    <string name="text_correcting">Corrigeren</string>
+    <string name="text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign">Je ritme verschuift later — probeer de lichten te dimmen en schermtijd te verminderen voor het slapen om jezelf opnieuw af te stemmen.</string>
+    <string name="text_acitivity_monitor">Activiteit Monitor</string>
+    <string name="text_your_overall_circadian_is_well_aligned">Je algehele circadiaan is goed afgestemd.</string>
+    <string name="text_corrective_activities">Corrigerende Activiteiten</string>
+    <string name="text_corrective_activities_desc">Je interne klok volgt een dagelijks ritme. Deze aanwijzingen—licht, beweging, maaltijden en meer—zijn afgestemd op je natuurlijke timing om je lichaam optimaal te laten functioneren.</string>
+    <string name="text_light_exposure">Lichtblootstelling</string>
+    <string name="text_corrective_activities_circadian_desc_1">Maak gebruik van natuurlijk licht — het is een krachtig signaal om je lichaam wakker te maken.</string>
+    <string name="text_corrective_activities_circadian_desc_2">Dichter bij je stappendoel komen helpt de bloedsomloop te verbeteren, de bloedsuikerspiegel in balans te houden en je energie op peil te houden.</string>
+    <string name="text_corrective_activities_circadian_desc_3">Tijdgebonden eten ondersteunt de metabolische efficiëntie en hormonale regulatie.</string>
+    <string name="text_corrective_activities_circadian_desc_4">Lichamelijke activiteit in de ochtend zet je metabolisme in gang, scherp je focus aan en verbetert je humeur.</string>
+    <string name="text_corrective_activities_circadian_desc_5">Cafeïne tijdens deze periode helpt je alertheid te verhogen zonder je slaap later te verstoren.</string>
+    <string name="text_daily_steps">Dagelijkse Stappen</string>
+    <string name="text_meal_window">Maaltijdvenster</string>
+    <string name="text_caffeine_window2">Cafeïnevenster</string>
+    <string name="text_your_chronotype">JOUW CHRONOTYPE</string>
+    <string name="text_retake_chronotype_quiz">Herhaal de chronotype quiz</string>
+    <string name="text_skip2">Overslaan</string>
+    <string name="text_maintained">Behouden</string>
+    <string name="text_worsening">Verergering</string>
+    <string name="text_missing_sleep">Slaap ontbreekt</string>
+    <string name="text_awaiting_sync">Wachten op synchronisatie</string>
+    <string name="text_phase_aligned">Fase Afgestemd</string>
+    <string name="text_phase_delay">Fase Vertraging</string>
+    <string name="text_have_you_completed_this_task">Heb je deze taak voltooid?</string>
+    <string name="text_ensure_that_you_were_able_to_complete_the_activity_in_the_corrective_window">Zorg ervoor dat je de activiteit in het corrigerende venster hebt voltooid.</string>
+    <string name="text_timeval_left">%1$s over</string>
+    <string name="text_your_body_runs_on_a_clock">Je lichaam werkt op een klok</string>
+
+    <string name="text_aligning_it_well_can_help_you_sleep_better_feel_more_energetic_and_recover_faster">Het goed afstemmen kan je helpen beter te slapen, je energieker te voelen en sneller te herstellen.</string>
+    <string name="text_onboarding_circadian_desc_1">Je lichaam volgt een natuurlijk 24-urige ritme. Het timen van licht, cafeïne en slaap rondom dit ritme kan je helpen je energieker en meer gefocust te voelen.</string>
+    <string name="text_onboarding_circadian_desc_2">We analyseren je slaap-, activiteit- en eetpatronen om je tijdige tips te geven, zodat je vandaag het meeste uit je circadiaanse vensters haalt.</string>
+    <string name="text_onboarding_circadian_desc_3">Je circadiaanse middenpunt toont wanneer je lichaam biologisch in de laagste waaktoestand is. Het volgen van de verschuiving helpt je om synchroon te blijven.</string>
+    <string name="text_onboarding_circadian_desc_4">Hier zijn tijdgevoelige acties zoals lichtblootstelling of beweging die je lichaam helpen weer in circadiaans evenwicht te komen.</string>
+    <string name="text_onboarding_circadian_desc_5">Bekijk hoe goed je vandaag je optimale vensters hebt gevolgd en hoe elke activiteit heeft bijgedragen aan je algehele circadiaanse gezondheid.</string>
+    <string name="text_opens_today">Opent vandaag</string>
+    <string name="text_opens_tomorrow">Opent morgen</string>
+    <string name="text_caffeine_open">cafeïne open</string>
+    <string name="text_dim_light_melatonin_onset">Dimlicht melatonine-inzet</string>
+    <string name="text_timezone_change_detected">Tijdszone verandering gedetecteerd.</string>
+    <string name="text_timezone_changed_desc_dash">Je zult misschien kleine gegevensverschuivingen merken tijdens reisdata, maar kernmetrieken en lange termijntrends blijven nauwkeurig.</string>
+    <string name="text_what_is_circadian_mid_point">Wat is het circadiaanse middenpunt?</string>
+    <string name="text_what_is_circadian_alignment">Wat is circadiaanse afstemming?</string>
+    <string name="text_circadian_alignment_quesmark">Circadiaanse afstemming?</string>
+    <string name="text_circadian_mid_point_quesmark">Circadiaans middenpunt?</string>
+    <string name="text_we_need_more_data_to_better_know_you">We hebben meer gegevens nodig om je beter te leren kennen</string>
+    <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">We hebben niet genoeg recente slaapgegevens gezien om je circadiaanse ritme te tonen. Je ring consequent dragen helpt om gepersonaliseerde inzichten te ontgrendelen.</string>
+    <string name="text_circadian_hiw_desc_1">Je circadiaanse afstemming helpt je om dagelijks beter te presteren.</string>
+    <string name="text_take_the_quiz">Doe de quiz!</string>
+    <string name="text_learn_more_2">Meer leren</string>
+    <string name="text_daily_rhythm_guide">Gids voor dagelijks ritme</string>
+
 
 </resources>
