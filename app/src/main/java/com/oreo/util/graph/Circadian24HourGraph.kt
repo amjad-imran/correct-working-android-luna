@@ -17,6 +17,7 @@ import android.view.ViewConfiguration
 import android.view.ViewTreeObserver
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
+import com.noisefit_commans.data.model.circadian.EnergyGraph
 import com.noisefit_commans.ui.dpToPixel
 import com.oreo.data.model.TimeWindow
 import java.time.Duration
@@ -24,6 +25,8 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+import kotlin.FloatArray
+import kotlin.floatArrayOf
 import kotlin.math.abs
 
 
@@ -62,13 +65,22 @@ class Circadian24HourGraph @JvmOverloads constructor(
         return height.toFloat()
     }
 
-    private val energyPath = Path()
+    private val energyGraph = ArrayList<EnergyGraph>()
 
     var timeWindows: List<TimeWindow> = emptyList()
         set(value) {
             field = value
-            invalidate()
         }
+
+
+    fun setDataSet(timeWindows: List<TimeWindow>, energyGraph: List<EnergyGraph>?) {
+        this.timeWindows = timeWindows
+        this.energyGraph.clear()
+        energyGraph?.let {
+            this.energyGraph.addAll(it)
+        }
+        invalidate()
+    }
 
     private val labelTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
@@ -176,7 +188,14 @@ class Circadian24HourGraph @JvmOverloads constructor(
         canvas.withTranslation(-scrollOffsetX, 0f) {
             drawHourLines(this)
             //drawEnergyCurve(this)
-            drawEnergyCurve2(this)
+            drawEnergyCurve2(
+                this,
+                energyGraph.map { it.energy ?: 0f }
+                /*arrayListOf(
+                    0.2f, 0.6f, 0.6f, 0.4f, 0.7f, 0.8f, 0.5f, 0.6f, 0.3f, 0.4f, 0.7f, 0.6f,
+                    0.8f, 0.9f, 0.5f, 0.4f, 0.6f, 0.5f, 0.2f, 0.7f, 0.5f, 0.6f, 0.8f, 0.9f
+                )*/
+            )
             drawTopAndBottomAxis(this)
             drawTimeLabels(this)
             drawTimeWindows(this)
@@ -234,23 +253,21 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
     }
 
-    private fun drawEnergyCurve2(canvas: Canvas){
+    private fun drawEnergyCurve2(canvas: Canvas, values: List<Float>) {
         var linePaint: Paint? = null
         linePaint = Paint().apply {
             strokeWidth = 5f
             style = Paint.Style.STROKE
             isAntiAlias = true
         }
-        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
-        var values: FloatArray = floatArrayOf(
-            0.2f, 0.6f, 0.6f, 0.4f, 0.7f, 0.8f, 0.5f, 0.6f, 0.3f, 0.4f, 0.7f, 0.6f,
-            0.8f, 0.9f, 0.5f, 0.4f, 0.6f, 0.5f, 0.2f, 0.7f, 0.5f, 0.6f, 0.8f, 0.9f
-        )
+        val usableHeight =
+            getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
+
         for (i in 0 until values.size - 1) {
-            val startX =  i * hourWidthPx
-            val stopX =  (i+1) * hourWidthPx
-            val startY = usableHeight - (values[i]  * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i+1]  * usableHeight * 0.8f + usableHeight * 0.1f)
+            val startX = i * hourWidthPx
+            val stopX = (i + 1) * hourWidthPx
+            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
+            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
 
             val controlX1 = startX + (stopX - startX) / 2
             val controlY1 = startY
@@ -273,21 +290,23 @@ class Circadian24HourGraph @JvmOverloads constructor(
             canvas.drawPath(segmentPath, linePaint!!)
         }
 
-        drawFilledSegments(canvas,values)
+        drawFilledSegments(canvas, values)
 
     }
-    private fun drawFilledSegments(canvas: Canvas, values: FloatArray) {
-        val usableHeight = getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
-        val fillPaint =  Paint().apply {
+
+    private fun drawFilledSegments(canvas: Canvas, values: List<Float>) {
+        val usableHeight =
+            getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
+        val fillPaint = Paint().apply {
             style = Paint.Style.FILL
             isAntiAlias = true
         }
         for (i in 0 until values.size - 1) {
 
-            val startX =  i * hourWidthPx
-            val stopX =  (i+1) * hourWidthPx
-            val startY = usableHeight - (values[i]  * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i+1]  * usableHeight * 0.8f + usableHeight * 0.1f)
+            val startX = i * hourWidthPx
+            val stopX = (i + 1) * hourWidthPx
+            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
+            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
 
             val controlX1 = startX + (stopX - startX) / 2
             val controlY1 = startY
@@ -317,6 +336,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             canvas.drawPath(fillSegmentPath, fillPaint!!)
         }
     }
+
     private fun getColorForValue(value: Float): Int {
         val normalizedValue = value.coerceIn(0f, 1f)
         val red = Color.parseColor("#A66363")
@@ -350,7 +370,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val r = (redR + (greenR - redR) * normalizedValue).toInt()
         val g = (redG + (greenG - redG) * normalizedValue).toInt()
         val b = (redB + (greenB - redB) * normalizedValue).toInt()
-        return Color.argb(10,r, g, b)
+        return Color.argb(10, r, g, b)
     }
 
     private fun drawCurrentTimeLine(canvas: Canvas) {

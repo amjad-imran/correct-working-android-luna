@@ -19,7 +19,6 @@ import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -87,10 +86,10 @@ class CircadianAlignmentFragment :
     private fun setCircadianGraph() {
 
         binding.graphView.isScrollLocked = false
-        binding.graphView.graphStartTime = LocalTime.of(6,0)
-        binding.graphView.graphEndTime = LocalTime.of(23,0)
+        binding.graphView.graphStartTime = LocalTime.of(6, 0)
+        binding.graphView.graphEndTime = LocalTime.of(23, 0)
 
-        binding.graphView.timeWindows = viewModel.dummyList()//ArrayList()
+        binding.graphView.timeWindows = ArrayList()//viewModel.dummyList()//
         binding.graphView.redraw()
 
         /*val circadianResponse = CircadianResponse(
@@ -104,7 +103,7 @@ class CircadianAlignmentFragment :
 
     }
 
-    private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse){
+    private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse) {
         binding.lytSleepMidPoint.textView173.text = circadianResponse.nudge
         try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -357,13 +356,12 @@ class CircadianAlignmentFragment :
             val evaluator = ArgbEvaluator()
             val barColors = mutableListOf<Int>()
 
-            val midBarCount = (midEndIndex - midStartIndex)+1
+            val midBarCount = (midEndIndex - midStartIndex) + 1
             for (i in 0 until midBarCount) {
                 val fraction = i.toFloat() / (midBarCount - 1)
                 val color = evaluator.evaluate(fraction, startColor, endColor) as Int
                 barColors.add(color)
             }
-
 
 
             var current = 0
@@ -376,12 +374,12 @@ class CircadianAlignmentFragment :
                     midEndIndex -> {
                         "#7799cc".toColorInt()
                     }*/
-                    in midStartIndex..midEndIndex->{
+                    in midStartIndex..midEndIndex -> {
                         try {
                             val pos = current
                             current++
                             barColors[pos]
-                        }catch (exp: Exception){
+                        } catch (exp: Exception) {
                             "#67809F".toColorInt()
                         }
                     }
@@ -391,7 +389,7 @@ class CircadianAlignmentFragment :
             }
 
             graphView.updateBars(circadianGraphModelList, colors)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOGS.d("circadian mid point exception: $e")
         }
     }
@@ -448,12 +446,12 @@ class CircadianAlignmentFragment :
     private fun updateGraph(
         graphData: CircadianGraphData,
         circadianMidPoint: CircadianMidPointData?
-    ){
+    ) {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-        binding.graphView.graphStartTime = LocalTime.of(6,0)
-        binding.graphView.graphEndTime = LocalTime.of(23,0)
-        if(graphData.startTime != null && graphData.endTime != null){
+        binding.graphView.graphStartTime = LocalTime.of(6, 0)
+        binding.graphView.graphEndTime = LocalTime.of(23, 0)
+        if (graphData.startTime != null && graphData.endTime != null) {
 
             val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
             val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
@@ -464,21 +462,24 @@ class CircadianAlignmentFragment :
             binding.graphView.graphStartTime = startTime
             binding.graphView.graphEndTime = endTime
 
-            binding.graphView.timeWindows = viewModel.getScrollGraphList(graphData)
+            binding.graphView.setDataSet(
+                viewModel.getScrollGraphList(graphData),
+                graphData.energyGraph
+            )
             binding.graphView.redraw()
         }
 
-        if(circadianMidPoint == null){
+        if (circadianMidPoint == null) {
             binding.lytSleepMidPoint.root.gone()
             binding.lytLockedSleepMidPoint.root.visible()
-        }else{
+        } else {
             binding.lytLockedSleepMidPoint.root.gone()
             binding.lytSleepMidPoint.root.visible()
             val circadianMidPointResponse = CircadianResponse(
-                circadianMidPoint.startTime?:"",
-                circadianMidPoint.endTime?:"",
-                circadianMidPoint.circadianMidpoint?:"",
-                circadianMidPoint.avgBefore?:"",
+                circadianMidPoint.startTime ?: "",
+                circadianMidPoint.endTime ?: "",
+                circadianMidPoint.circadianMidpoint ?: "",
+                circadianMidPoint.avgBefore ?: "",
                 circadianMidPoint.nudge ?: "-",
             )
             setCircadianMidPointGraph(circadianMidPointResponse)
@@ -557,23 +558,23 @@ class CircadianAlignmentFragment :
             }
         }
 
-        viewModel.lightExposureData.observe(viewLifecycleOwner){
+        viewModel.lightExposureData.observe(viewLifecycleOwner) {
             correctiveActivitiesAdapter.updateSingleElement(it, 0)
         }
 
-        viewModel.dailyStepsData.observe(viewLifecycleOwner){
+        viewModel.dailyStepsData.observe(viewLifecycleOwner) {
             correctiveActivitiesAdapter.updateSingleElement(it, 1)
         }
 
-        viewModel.mealWindowData.observe(viewLifecycleOwner){
+        viewModel.mealWindowData.observe(viewLifecycleOwner) {
             correctiveActivitiesAdapter.updateSingleElement(it, 2)
         }
 
-        viewModel.workoutData.observe(viewLifecycleOwner){
+        viewModel.workoutData.observe(viewLifecycleOwner) {
             correctiveActivitiesAdapter.updateSingleElement(it, 3)
         }
 
-        viewModel.caffeineWindowData.observe(viewLifecycleOwner){
+        viewModel.caffeineWindowData.observe(viewLifecycleOwner) {
             correctiveActivitiesAdapter.updateSingleElement(it, 4)
         }
 

@@ -79,16 +79,20 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
         viewModel.quizData.observe(this){
             val list:List<CircadianQuizResponseModel> = it
 //            questionAdapter.updateDataSet(list)
-            val adapter = QuizFragmentAdapter(this, list){
-
+            val adapter = QuizFragmentAdapter(this, list){ pair ->
+                handleQuizOptionClick(pair)
             }
             binding.viewPager.adapter = adapter
 
             // Enable vertical scrolling
             binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+            //binding.viewPager.offscreenPageLimit = 2
+
+            binding.viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+
 
             // Apply the custom page transformer for positioning and scaling
-            binding.viewPager.setPageTransformer { page, position ->
+            /*binding.viewPager.setPageTransformer { page, position ->
                 val scaleFactor = Math.max(0.85f, 1 - Math.abs(position)) // Scale the page based on its position
                 val maxTranslationY = 100f // Move items up/down based on their position
 
@@ -101,6 +105,45 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
 
                 // Adjust the opacity (fade out pages that are not centered)
                 page.alpha = 1 - Math.abs(position)
+            }*/
+            binding.viewPager.setPageTransformer { page, position ->
+                when {
+                    position < -1 -> {
+                        // Page is way off-screen to the top
+                        page.alpha = 0f
+                        page.scaleX = 0.8f
+                        page.scaleY = 0.8f
+                    }
+                    position <= -0.1 -> {
+                        // Page is slightly off-screen (peek from top)
+                        page.alpha = 0.7f + (0.3f * (1 + position / 0.9f))
+                        val scaleFactor = 0.8f + (0.2f * (1 + position / 0.9f))
+                        page.scaleX = scaleFactor
+                        page.scaleY = scaleFactor
+                        page.translationY = -50 * (1 + position)
+                    }
+                    position <= 0.1 -> {
+                        // Current page (center)
+                        page.alpha = 1f
+                        page.scaleX = 1f
+                        page.scaleY = 1f
+                        page.translationY = 0f
+                    }
+                    position <= 1 -> {
+                        // Page is slightly off-screen (peek from bottom)
+                        page.alpha = 0.7f + (0.3f * (1 - position / 0.9f))
+                        val scaleFactor = 0.8f + (0.2f * (1 - position / 0.9f))
+                        page.scaleX = scaleFactor
+                        page.scaleY = scaleFactor
+                        page.translationY = 50 * position
+                    }
+                    else -> {
+                        // Page is way off-screen to the bottom
+                        page.alpha = 0f
+                        page.scaleX = 0.8f
+                        page.scaleY = 0.8f
+                    }
+                }
             }
         }
 

@@ -7,24 +7,13 @@ import com.noisefit.luna.databinding.FragmentQuesVpBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 
-class QuesVpFragment : BaseFragment<FragmentQuesVpBinding>(FragmentQuesVpBinding::inflate) {
-
-    companion object {
-
-        private lateinit var onOptionSelected: (Pair<Int?, Int>)-> Unit
-        private lateinit var question: CircadianQuizResponseModel
-
-        fun newInstance(question: CircadianQuizResponseModel, onOptionSelected: (Pair<Int?, Int>)->Unit): QuesVpFragment {
-            val fragment = QuesVpFragment()
-            val bundle = Bundle()
-            this.onOptionSelected = onOptionSelected
-            this.question = question
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+class QuesVpFragment(
+    private val question: CircadianQuizResponseModel,
+    private val onOptionSelected: (Pair<Int, Int>)->Unit,
+) : BaseFragment<FragmentQuesVpBinding>(FragmentQuesVpBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
