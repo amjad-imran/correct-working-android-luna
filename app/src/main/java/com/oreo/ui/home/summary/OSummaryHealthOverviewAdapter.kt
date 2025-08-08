@@ -90,9 +90,12 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
+import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
+import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
+import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -154,6 +157,8 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     object OnCircadianAlignmentCardClicked: OSummaryHealthOverviewClickEnum()
     object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
+
+    object OnTimelineCardClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -319,6 +324,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 
             R.layout.layout_circadian_onboarding_dash -> HomeRecyclerViewHolder.CircadianOnboardingViewHolder(
                 LayoutCircadianOnboardingDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
+            R.layout.layout_timeline_card_dash -> HomeRecyclerViewHolder.TimelineCardViewHolder(
+                LayoutTimelineCardDashBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
@@ -521,6 +532,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is HomeRecyclerViewHolder.CircadianOnboardingViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.CircadianAlignmentOnboarding)
             }
+
+            is HomeRecyclerViewHolder.TimelineCardViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.TimelineDash)
+            }
         }
     }
 
@@ -569,6 +584,8 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.CaffeineWindowCalibrating -> R.layout.layout_caffeine_calibrating
             is OHealthOverview.CircadianAlignment -> R.layout.layout_dash_circadian
             OHealthOverview.CircadianAlignmentOnboarding -> R.layout.layout_circadian_onboarding_dash
+
+            is OHealthOverview.TimelineDash -> R.layout.layout_timeline_card_dash
         }
     }
 
@@ -650,6 +667,60 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
+    class TimelineCardViewHolder(private val binding: LayoutTimelineCardDashBinding):
+    HomeRecyclerViewHolder(binding){
+
+        class TimelineAdapter(
+            private val listData: List<ItemTimelineModel>
+        ): RecyclerView.Adapter<TimelineAdapter.ItemTimelineViewHolder>()
+        {
+
+            inner class ItemTimelineViewHolder(private val binding: ItemTimelineDashBinding): RecyclerView.ViewHolder(binding.root){
+                fun bind(data: ItemTimelineModel, position: Int){
+                    binding.tvTitle.text = data.title
+                    binding.tvTitle.setTextColor(data.titleColor)
+
+                    binding.tvDesc.text = data.desc
+                    binding.tvTime.text = data.time
+
+                    binding.divider.root.setVisibilityByCondition(position != listData.size-1)
+                }
+            }
+
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): ItemTimelineViewHolder {
+                val binding = ItemTimelineDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                return ItemTimelineViewHolder(binding)
+            }
+
+            override fun getItemCount(): Int {
+                return listData.size
+            }
+
+            override fun onBindViewHolder(holder: ItemTimelineViewHolder, position: Int) {
+                holder.bind(listData[position], position)
+            }
+        }
+
+        fun bind(data: OHealthOverview.TimelineDash){
+
+            val adapter = TimelineAdapter(data.listData)
+            binding.rvActivities.apply {
+                this.layoutManager = LinearLayoutManager(binding.root.context)
+                this.adapter = adapter
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
+            }
+        }
+
+    }
+
     class CircadianOnboardingViewHolder(private val binding: LayoutCircadianOnboardingDashBinding):
         HomeRecyclerViewHolder(binding){
             

@@ -2065,5 +2065,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_take_the_quiz">Take the Quiz!</string>
     <string name="text_learn_more_2">Learn More</string>
     <string name="text_daily_rhythm_guide">Daily Rhythm Guide</string>
+    <string name="text_your_timeline">Your Timeline</string>
+    <string name="text_timeline">Timeline</string>
+    <string name="text_log_an_activity">Log an Activity</string>
 
 </resources>
