@@ -607,6 +607,18 @@ class CircadianAlignmentFragment :
 
     fun setData(data: CircadianResponseModel) {
         LOGS.d("ansckaasc: $data")
+        // focus window
+        val isCircularViewContainsData = true
+        binding.lytFocusWindow.apply {
+            if(isCircularViewContainsData){
+                tvTitle.text = getString(R.string.text_focus_window)
+                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+            }else{
+                tvTitle.text = getString(R.string.text_take_it_easy_today)
+                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+            }
+        }
+
         // activity monitor
         val activityMonitorData = data.activityMonitor
         binding.lytActivityMonitor.apply {

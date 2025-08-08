@@ -2068,5 +2068,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_your_timeline">Your Timeline</string>
     <string name="text_timeline">Timeline</string>
     <string name="text_log_an_activity">Log an Activity</string>
+    <string name="text_unable_to_show_your_data_for_today">Unable to show your data for today</string>
+    <string name="text_detailed_overview">Detailed Overview</string>
+    <string name="text_take_it_easy_today">Take it easy today</string>
+    <string name="text_circadian_body_status">Circadian Body Status</string>
+    <string name="text_view_all_logs">View all logs</string>
 
 </resources>
