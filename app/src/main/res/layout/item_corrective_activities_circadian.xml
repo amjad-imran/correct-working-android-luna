@@ -167,6 +167,7 @@
         <TextView
             android:id="@+id/tvTimerTag"
             style="@style/S12"
+            android:textColor="#E6E6E6"
             android:fontFamily="@font/gilroy_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
