@@ -1,8 +1,10 @@
 package com.oreo.ui.circadianAlignment
 
 import android.animation.ArgbEvaluator
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -28,6 +30,7 @@ import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.custom.ClockEvent
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,7 +74,20 @@ class CircadianAlignmentFragment :
         setRecycler()
         initListener()
         subscribeObservers()
-        viewModel.initData()
+        //viewModel.initData() TODO remove comment
+
+        showCircularScheduler()
+    }
+
+    private fun showCircularScheduler() {
+        val clockEvents = listOf(
+            ClockEvent(6f, 8f, Color.parseColor("#A7F3D0"), "Natural Light"),
+            ClockEvent(22f, 23f, Color.parseColor("#A259E6"), "Wind-Down"),
+            ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
+            ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
+            ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
+        )
+        binding.lytSchedulerDial.events = clockEvents
     }
 
     data class CircadianResponse(
