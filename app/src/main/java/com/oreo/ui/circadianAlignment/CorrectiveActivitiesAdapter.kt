@@ -107,17 +107,11 @@ class CorrectiveActivitiesAdapter(
             }
 
             when(data.logStatus){
-                true -> {
-                    binding.llLytDone.visible()
-                    binding.llLytLog.invisible()
-                }
-                false -> {
-                    binding.llLytLog.visible()
-                    binding.llLytDone.invisible()
-                }
                 null -> {
-                    binding.llLytDone.invisible()
                     binding.llLytLog.invisible()
+                }
+                else -> {
+                    binding.llLytLog.visible()
                 }
             }
 

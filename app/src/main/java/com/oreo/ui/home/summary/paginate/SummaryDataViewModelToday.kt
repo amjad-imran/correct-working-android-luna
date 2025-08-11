@@ -1412,8 +1412,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 startTime = startTime,
                 endTime = endTime,
                 timeWindow = timeWindowListData,
-                title = circadianGraphData?.title,
-                description = circadianGraphData?.description,
+                title = circadianGraphData?.circadianMidPointData?.nudge?.title,
+                description = circadianGraphData?.circadianMidPointData?.nudge?.description,
             )
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
