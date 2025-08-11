@@ -18,66 +18,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
-    <FrameLayout
-        android:id="@+id/llLytDoneLog"
+    <LinearLayout
+        android:id="@+id/llLytLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:background="@drawable/bg_log_45_perc_transparent_circadian"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:gravity="center_vertical"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/llLytLog"
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:srcCompat="@drawable/ic_add" />
+
+        <TextView
+            style="@style/S12"
+            android:fontFamily="@font/gilroy_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:background="@drawable/bg_log_45_perc_transparent_circadian"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
-            android:gravity="center_vertical">
+            android:layout_marginStart="4dp"
+            android:text="@string/text_log" />
 
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                app:srcCompat="@drawable/ic_add" />
-
-            <TextView
-                style="@style/S12"
-                android:fontFamily="@font/gilroy_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/text_log" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llLytDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:background="@drawable/bg_done_45_perc_green_circadian"
-            android:padding="6dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                app:srcCompat="@drawable/ic_check_circadian" />
-
-            <TextView
-                style="@style/S12"
-                android:fontFamily="@font/gilroy_medium"
-                android:textColor="#4CBD88"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/text_done" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
@@ -87,103 +55,119 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25" />
 
-    <TextView
-        android:id="@+id/tvTitile"
-        style="@style/S14"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
-        app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/text_light_exposure" />
-
-    <TextView
-        android:id="@+id/tvDesc"
-        style="@style/S10"
-        android:fontFamily="@font/gilroy_medium"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:lineHeight="12sp"
-        tools:text="@string/text_corrective_activities_circadian_desc_1"
-        android:textColor="#C4CBD9"
-        app:layout_constraintEnd_toStartOf="@+id/llLytDoneLog"
-        app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitile" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytOpenCloseTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/llLytLog"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/tvDesc">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <TextView
-            android:id="@+id/tvOpenCloseTag"
-            style="@style/S12"
-            android:fontFamily="@font/gilroy_medium"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTitile"
+            style="@style/S14"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginBottom="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/text_open" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/lytTimerTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_timer_6_perc_transparent_circadian"
-        android:layout_marginStart="4dp"
-        android:paddingHorizontal="6dp"
-        android:paddingVertical="3dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lytOpenCloseTag"
-        app:layout_constraintStart_toEndOf="@+id/lytOpenCloseTag"
-        app:layout_constraintTop_toTopOf="@+id/lytOpenCloseTag">
-
-        <ImageView
-            android:id="@+id/imageView86"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:src="@drawable/ic_hourglass_circadian"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            tools:text="@string/text_light_exposure" />
 
         <TextView
-            android:id="@+id/tvTimerTag"
-            style="@style/S12"
-            android:textColor="#E6E6E6"
+            android:id="@+id/tvDesc"
+            style="@style/S10"
             android:fontFamily="@font/gilroy_medium"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView86"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView86"
-            app:layout_constraintTop_toTopOf="@+id/imageView86"
-            tools:text="02:31 left" />
+            android:layout_marginTop="4dp"
+            android:lineHeight="12sp"
+            tools:text="@string/text_corrective_activities_circadian_desc_1"
+            android:textColor="#C4CBD9" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/lytFooter"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imageView99"
+                android:layout_width="24dp"
+                android:layout_height="20dp"
+                android:paddingEnd="4dp"
+                app:srcCompat="@drawable/ic_hm_check_mark" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lytOpenCloseTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvOpenCloseTag"
+                    style="@style/S12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/text_open" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lytTimerTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_timer_6_perc_transparent_circadian"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="3dp">
+
+                <ImageView
+                    android:id="@+id/imageView86"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@drawable/ic_hourglass_circadian"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5" />
+
+                <TextView
+                    android:id="@+id/tvTimerTag"
+                    style="@style/S12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:textColor="#E6E6E6"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView86"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView86"
+                    app:layout_constraintTop_toTopOf="@+id/imageView86"
+                    tools:text="02:31 left" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lytImageWithText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -213,7 +197,8 @@
     <LinearLayout
         android:id="@+id/lytWithProgressBar"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
         android:orientation="vertical"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
