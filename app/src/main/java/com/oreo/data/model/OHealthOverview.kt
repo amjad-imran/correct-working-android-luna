@@ -13,6 +13,7 @@ import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
@@ -200,6 +201,10 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     object CircadianAlignmentOnboarding : OHealthOverview()
+
+    data class TimelineDash(
+        val listData: List<ItemTimelineModel>
+    ): OHealthOverview()
 
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState

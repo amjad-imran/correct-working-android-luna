@@ -81,5 +81,10 @@ data class CircadianMidPointData(
     val avgBefore: String?,
 
     @SerializedName("nudge")
-    val nudge: String?
+    val nudge: nudgeCircadianGraph?
+)
+
+data class nudgeCircadianGraph(
+    val title: String?,
+    val description: String?,
 )

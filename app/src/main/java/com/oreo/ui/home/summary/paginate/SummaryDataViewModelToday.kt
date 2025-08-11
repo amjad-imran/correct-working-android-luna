@@ -92,6 +92,7 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -1268,6 +1269,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
+            getTimelineCard()?.let { userActivities.add(it) }
+
 
             // Add naps if any (this could also be moved to a separate function)
 //            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
@@ -1285,6 +1288,31 @@ class SummaryDataViewModelToday @Inject constructor(
             handleSleepAlert(healthData.sleep)
             handleGoogleFitCard()
         }
+    }
+
+    private fun getTimelineCard(): OHealthOverview?{
+        return OHealthOverview.TimelineDash(
+            listData = listOf(
+                ItemTimelineModel(
+                    title = "Caffeine intake",
+                    desc = "30 mg",
+                    time = "2:30 PM",
+                    titleColor = "#DCA58E".toColorInt(),
+                ),
+                ItemTimelineModel(
+                    title = "Meal intake",
+                    desc = "Meal 1",
+                    time = "2:30 PM",
+                    titleColor = "#FFE3B2".toColorInt(),
+                ),
+                ItemTimelineModel(
+                    title = "Exercise duration",
+                    desc = "30 minutes",
+                    time = "2:30 PM",
+                    titleColor = "#78C3F9".toColorInt(),
+                ),
+            )
+        )
     }
 
     private fun getCircadianAlignmentCardData(): OHealthOverview? {
@@ -1382,8 +1410,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 startTime = startTime,
                 endTime = endTime,
                 timeWindow = timeWindowListData,
-                title = circadianGraphData?.title,
-                description = circadianGraphData?.description,
+                title = circadianGraphData?.circadianMidPointData?.nudge?.title,
+                description = circadianGraphData?.circadianMidPointData?.nudge?.description,
             )
         }else{
             OHealthOverview.CircadianAlignmentOnboarding

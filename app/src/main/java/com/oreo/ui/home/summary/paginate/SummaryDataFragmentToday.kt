@@ -650,6 +650,9 @@ class SummaryDataFragmentToday :
                     navigate(R.id.fragmentHeartRateDetails)
                 }
                 //
+                OSummaryHealthOverviewClickEnum.OnTimelineCardClicked -> {
+                    navigate(R.id.timelineScreenFragment)
+                }
             }
         }
 

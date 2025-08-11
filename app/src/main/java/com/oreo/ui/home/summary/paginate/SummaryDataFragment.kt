@@ -182,6 +182,7 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnTimelineCardClicked -> {}
             }
         }
 

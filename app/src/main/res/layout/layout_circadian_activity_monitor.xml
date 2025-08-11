@@ -40,67 +40,84 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
+        <TextView
+            android:id="@+id/textView184"
+            style="@style/S12"
+            android:textColor="#C0FFFFFF"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="28dp"
+            android:text="@string/text_circadian_body_status"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/ivLightExposure"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/ic_sun_activity_monitor"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_sun_activity_monitor" />
+            app:layout_constraintTop_toBottomOf="@+id/textView184" />
 
         <ImageView
             android:id="@+id/ivDailySteps"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:src="@drawable/ic_steps_activity_monitor"
             app:layout_constraintBottom_toBottomOf="@+id/ivLightExposure"
             app:layout_constraintEnd_toStartOf="@id/ivWorkout"
             app:layout_constraintStart_toEndOf="@+id/ivLightExposure"
-            app:layout_constraintTop_toTopOf="@+id/ivLightExposure"
-            android:src="@drawable/ic_steps_activity_monitor" />
+            app:layout_constraintTop_toTopOf="@+id/ivLightExposure" />
 
         <ImageView
             android:id="@+id/ivWorkout"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:src="@drawable/ic_workout_activity_monitor"
             app:layout_constraintBottom_toBottomOf="@+id/ivLightExposure"
             app:layout_constraintEnd_toStartOf="@id/ivCaffeine"
             app:layout_constraintStart_toEndOf="@+id/ivDailySteps"
-            app:layout_constraintTop_toTopOf="@+id/ivLightExposure"
-            android:src="@drawable/ic_workout_activity_monitor" />
+            app:layout_constraintTop_toTopOf="@+id/ivLightExposure" />
 
         <ImageView
             android:id="@+id/ivCaffeine"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:src="@drawable/ic_caffeine_activity_monitor"
             app:layout_constraintBottom_toBottomOf="@+id/ivLightExposure"
             app:layout_constraintEnd_toStartOf="@id/ivMeal"
             app:layout_constraintStart_toEndOf="@+id/ivWorkout"
-            app:layout_constraintTop_toTopOf="@+id/ivLightExposure"
-            android:src="@drawable/ic_caffeine_activity_monitor" />
+            app:layout_constraintTop_toTopOf="@+id/ivLightExposure" />
 
         <ImageView
             android:id="@+id/ivMeal"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:src="@drawable/ic_meal_activity_monitor"
             app:layout_constraintBottom_toBottomOf="@+id/ivLightExposure"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivCaffeine"
-            app:layout_constraintTop_toTopOf="@+id/ivLightExposure"
-            android:src="@drawable/ic_meal_activity_monitor" />
+            app:layout_constraintTop_toTopOf="@+id/ivLightExposure" />
 
         <ImageView
             android:id="@+id/ivStateLight"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="12dp"
+            android:layout_marginBottom="20dp"
             android:src="@drawable/ic_hm_check_default_circadian"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/ivLightExposure"
             app:layout_constraintStart_toStartOf="@+id/ivLightExposure"
-            app:layout_constraintTop_toBottomOf="@+id/ivLightExposure"
-             />
+            app:layout_constraintTop_toBottomOf="@+id/ivLightExposure" />
 
         <ImageView
             android:id="@+id/ivStateSteps"
@@ -110,8 +127,7 @@
             android:src="@drawable/ic_hm_check_default_circadian"
             app:layout_constraintEnd_toEndOf="@+id/ivDailySteps"
             app:layout_constraintStart_toStartOf="@+id/ivDailySteps"
-            app:layout_constraintTop_toBottomOf="@+id/ivDailySteps"
-             />
+            app:layout_constraintTop_toBottomOf="@+id/ivDailySteps" />
 
         <ImageView
             android:id="@+id/ivStateWorkout"
@@ -121,8 +137,7 @@
             android:src="@drawable/ic_hm_check_default_circadian"
             app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
             app:layout_constraintStart_toStartOf="@+id/ivWorkout"
-            app:layout_constraintTop_toBottomOf="@+id/ivWorkout"
-             />
+            app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
 
         <ImageView
             android:id="@+id/ivStateCaffeine"
@@ -132,8 +147,7 @@
             android:src="@drawable/ic_hm_check_default_circadian"
             app:layout_constraintEnd_toEndOf="@+id/ivCaffeine"
             app:layout_constraintStart_toStartOf="@+id/ivCaffeine"
-            app:layout_constraintTop_toBottomOf="@+id/ivCaffeine"
-             />
+            app:layout_constraintTop_toBottomOf="@+id/ivCaffeine" />
 
         <ImageView
             android:id="@+id/ivStateMeal"
@@ -143,23 +157,7 @@
             android:src="@drawable/ic_hm_check_default_circadian"
             app:layout_constraintEnd_toEndOf="@+id/ivMeal"
             app:layout_constraintStart_toStartOf="@+id/ivMeal"
-            app:layout_constraintTop_toBottomOf="@+id/ivMeal"
-             />
-
-        <TextView
-            android:id="@+id/tvDesc"
-            style="@style/S12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="22dp"
-            android:text="@string/text_your_overall_circadian_is_well_aligned"
-            android:textColor="#8CFFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivStateLight" />
+            app:layout_constraintTop_toBottomOf="@+id/ivMeal" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

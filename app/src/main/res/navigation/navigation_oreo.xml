@@ -1434,4 +1434,9 @@
         android:name="com.oreo.ui.circadianAlignment.CircadianAlignmentFragment"
         android:label="fragment_circadian_alignment"
         tools:layout="@layout/fragment_circadian_alignment" />
+    <fragment
+        android:id="@+id/timelineScreenFragment"
+        android:name="com.oreo.ui.timelineScreen.TimelineScreenFragment"
+        android:label="fragment_timeline_screen"
+        tools:layout="@layout/fragment_timeline_screen" />
 </navigation>
