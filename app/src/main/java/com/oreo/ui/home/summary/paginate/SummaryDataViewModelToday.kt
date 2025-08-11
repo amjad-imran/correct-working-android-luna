@@ -1269,8 +1269,16 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
+            getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }
             getTimelineCard()?.let { userActivities.add(it) }
 
+            getLunaAiCard()?.let {
+                if(userActivities.size > 2){
+                    userActivities.add(2, it)
+                }else{
+                    userActivities.add(it)
+                }
+            }
 
             // Add naps if any (this could also be moved to a separate function)
 //            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
@@ -2285,13 +2293,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if(priorityList.size > 2){
-                add(2, itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
-            }else{
-                add(itemsMap["luna_ai"]!!.copy(priority = priorityList.size))
-            }
-
-            add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
+//            add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
         }
         return priorityList
     }
