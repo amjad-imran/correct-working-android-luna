@@ -2073,5 +2073,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_take_it_easy_today">Take it easy today</string>
     <string name="text_circadian_body_status">Circadian Body Status</string>
     <string name="text_view_all_logs">View all logs</string>
+    <string name="text_circadian_mid_point_desc_correcting">You’re improving — staying active later and delaying sleep cues is helping.</string>
 
 </resources>
