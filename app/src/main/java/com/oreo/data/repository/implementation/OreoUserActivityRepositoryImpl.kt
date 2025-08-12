@@ -2344,6 +2344,33 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun copyUserDataBeforeReset(): Flow<Boolean> {
+        return flow {
+
+            val todayDate = DateFormats.getTodaysDateString(10)
+            val todayData = safeCacheCall(dispatcher) {
+                stepsDataImpl.getTodayData(todayDate)
+            }
+            LOGS.d("copyUserData today data $todayDate")
+
+            todayData.collect {
+                when (it) {
+                    is CacheResult.Success -> {
+                        LOGS.d("copyUserData today success ${it.value?.totalSteps}")
+                        localDataStore.saveUserCopyTodayData(it.value)
+                        emit(true)
+                    }
+                    is CacheResult.GenericError -> {
+                        LOGS.d("copyUserData today error ")
+                        emit(false)
+                    }
+                }
+            }
+        }
+
+
+    }
+
     override suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)

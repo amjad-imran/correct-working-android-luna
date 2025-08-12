@@ -1,9 +1,9 @@
 package com.oreo.data.db.implementation
 
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.data.model.OreoStepsData
-import com.noisefit_commans.data.model.OreoStepsData.OreoStepDataBreakup
 import com.oreo.data.db.abstaction.OreoStepsDataSource
 import com.oreo.data.db.database.OreoStepsDao
 import javax.inject.Inject
@@ -11,7 +11,8 @@ import javax.inject.Inject
 class OreoStepsDataImpl
 @Inject
 constructor(
-    private val stepsDao: OreoStepsDao
+    private val stepsDao: OreoStepsDao,
+    private val localDataStore: DataStoredInterface,
 ) : OreoStepsDataSource {
 
 
@@ -45,8 +46,9 @@ constructor(
 
         val existingSteps = stepsDao.getTodayData(stepsData.date!!)
         if (existingSteps != null) {
-            if (existingSteps.totalSteps == stepsData.totalSteps && existingSteps.totalCalories == stepsData.totalCalories
-                && existingSteps.activeCalories == stepsData.activeCalories
+            if (existingSteps.totalSteps == stepsData.totalSteps &&
+                existingSteps.totalCalories == stepsData.totalCalories &&
+                existingSteps.activeCalories == stepsData.activeCalories
             ) {
                 LOGS.d("syncInsertOrUpdate Same steps please ignore this call")
                 return existingSteps//stepsDao.getTodayData(stepsData.date!!)
@@ -57,31 +59,29 @@ constructor(
                 DateFormats.getTimeFormat()
             )
 
-            val mergedData = getMergedData(existingSteps, stepsData)
-            val newStepsTotal = if (stepsData.totalSteps >= existingSteps.totalSteps) {
-                stepsData.totalSteps
-            } else {
-                existingSteps.totalSteps + stepsData.totalSteps
-            }
+            val userCopyData = localDataStore.getUserCopyTodayData()
+            var copiedSteps = 0
+            var copiedTotalCalories = 0
+            var copiedActiveCalories = 0
+            var copiedDistance = 0
+            LOGS.d("copyUserData userCopyData?.date ${userCopyData?.date} --> ${stepsData.date} ")
 
-            val newCaloriesTotal = if (stepsData.totalCalories >= existingSteps.totalCalories) {
-                stepsData.totalCalories
-            } else {
-                existingSteps.totalCalories + stepsData.totalCalories
-            }
+            if (userCopyData?.date?.equals(stepsData.date) == true) {
 
-            val newActiveCalories =
-                if ((stepsData.activeCalories ?: 0) >= (existingSteps.activeCalories ?: 0)) {
-                    stepsData.activeCalories
-                } else {
-                    (existingSteps.activeCalories ?: 0) + (stepsData.activeCalories ?: 0)
-                }
-
-            val newDistanceTotal = if (stepsData.totalDistance >= existingSteps.totalDistance) {
-                stepsData.totalDistance
-            } else {
-                existingSteps.totalDistance + stepsData.totalDistance
+                copiedSteps = userCopyData.totalSteps
+                copiedDistance = userCopyData.totalDistance
+                copiedActiveCalories = userCopyData.activeCalories ?: 0
+                copiedTotalCalories = userCopyData.totalCalories
             }
+            LOGS.d("copyUserData userCopyData ${copiedSteps} --> ${copiedTotalCalories} ")
+            //   val mergedData = getMergedData(existingSteps, stepsData)
+            val newStepsTotal = copiedSteps + stepsData.totalSteps
+
+            val newCaloriesTotal = copiedTotalCalories + stepsData.totalCalories
+
+            val newActiveCalories = copiedActiveCalories + (stepsData.activeCalories ?: 0)
+
+            val newDistanceTotal = copiedDistance + stepsData.totalDistance
 
             stepsDao.updateSteps(
                 date = stepsData.date!!,
@@ -109,33 +109,6 @@ constructor(
         return stepsDao.getTodayData(stepsData.date!!)
     }
 
-    private fun getMergedData(
-        existingStepsData: OreoStepsData,
-        newStepsData: OreoStepsData
-    ): List<OreoStepDataBreakup> {
-        val mergedList = ArrayList<OreoStepDataBreakup>()
-        val existingList = existingStepsData.stepArray ?: ArrayList()
-        val newList = newStepsData.stepArray ?: ArrayList()
-
-        newList.forEach { newData ->
-            val existingData = existingList.find { it.hourOfTheDay == newData.hourOfTheDay }
-            if (existingData != null) {
-
-                val mergedStep = existingData.steps + newData.steps
-                val mergedCalories = existingData.calories + newData.calories
-                val mergedDistance = existingData.distance + newData.distance
-
-                mergedList.add(newData.apply {
-                    steps = mergedStep
-                    calories = mergedCalories
-                    distance = mergedDistance
-                })
-            } else {
-                mergedList.add(newData)
-            }
-        }
-        return mergedList
-    }
 
     override suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoStepsData>? {
         rescueTables()

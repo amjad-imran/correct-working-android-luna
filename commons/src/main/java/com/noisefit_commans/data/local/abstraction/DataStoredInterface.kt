@@ -573,6 +573,9 @@ interface DataStoredInterface {
     fun getLastKnownTimezone(): String?
     fun setLastKnownTimezone(timeZone: String)
     fun isTimezoneChangedAlertCardDismissed(isChanged: Boolean?=null): Boolean
+
+    fun saveUserCopyTodayData(data: OreoStepsData?)
+    fun getUserCopyTodayData():OreoStepsData?
 }
 
 enum class AppTrackEvent {

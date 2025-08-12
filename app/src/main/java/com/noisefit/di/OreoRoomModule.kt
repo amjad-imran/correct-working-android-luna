@@ -289,8 +289,8 @@ class OreoRoomModule {
 
     @Singleton
     @Provides
-    fun provideStepsDataImpl(stepsDao: OreoStepsDao): OreoStepsDataImpl {
-        return OreoStepsDataImpl(stepsDao)
+    fun provideStepsDataImpl(stepsDao: OreoStepsDao,localDataSource: DataStoredInterface): OreoStepsDataImpl {
+        return OreoStepsDataImpl(stepsDao, localDataSource )
     }
 
 
