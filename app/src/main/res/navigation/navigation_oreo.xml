@@ -1439,4 +1439,19 @@
         android:name="com.oreo.ui.timelineScreen.TimelineScreenFragment"
         android:label="fragment_timeline_screen"
         tools:layout="@layout/fragment_timeline_screen" />
+    <dialog
+        android:id="@+id/addLogCircadianBottomSheetFragment"
+        android:name="com.oreo.ui.circadianAlignment.logBottomSheets.AddLogCircadianBottomSheetFragment"
+        android:label="fragment_add_log_circadian_bottom_sheet"
+        tools:layout="@layout/fragment_add_log_circadian_bottom_sheet" />
+    <dialog
+        android:id="@+id/mealIntakeCircadianBottomSheetFragment"
+        android:name="com.oreo.ui.circadianAlignment.logBottomSheets.MealIntakeCircadianBottomSheetFragment"
+        android:label="MealIntakeCircadianBottomSheetFragment"
+        tools:layout="@layout/fragment_meal_intake_circadian_bottom_sheet" />
+    <fragment
+        android:id="@+id/addActivityTimelineFragment"
+        android:name="com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineFragment"
+        android:label="fragment_add_activity_timeline"
+        tools:layout="@layout/fragment_add_activity_timeline" />
 </navigation>
