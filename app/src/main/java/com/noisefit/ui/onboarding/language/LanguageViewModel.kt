@@ -19,6 +19,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
@@ -36,6 +37,7 @@ class LanguageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val lastSyncProvider: LastSyncProvider,
     private val keyValueDataSource: KeyValueDataSource,
+    private val ringDataStore: RingDataStore,
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -69,6 +71,9 @@ class LanguageViewModel @Inject constructor(
             //Female health Data
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+
+            //Clear OTA Data
+            ringDataStore.cleaNewOtaVersion()
 
             userRepository.saveAppLanguage().collect { resource ->
                 when (resource) {
