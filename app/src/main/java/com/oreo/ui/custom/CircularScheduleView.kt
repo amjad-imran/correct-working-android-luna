@@ -4,8 +4,12 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.CornerPathEffect
+import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.Shader
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
@@ -19,7 +23,8 @@ class CircularScheduleView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val pointerBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_scheduler_time_pointer)
+    private val pointerBitmap =
+        BitmapFactory.decodeResource(resources, R.drawable.ic_scheduler_time_pointer)
 
     var events: List<ClockEvent> = emptyList()
         set(value) {
@@ -29,8 +34,7 @@ class CircularScheduleView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawClock(canvas)
-        //drawEvents(canvas)
-        // Draw labels, etc.
+        drawEvents(canvas)
 
         drawCurrentTimeMarker(canvas)
     }
@@ -38,28 +42,25 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun drawCurrentTimeMarker(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-        val radius = min(cx, cy) * 0.7f
+        val radius = min(cx, cy) - 100f.dpToPixel()
 
         val calendar = Calendar.getInstance()
-        val hour = 6//calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = 0//calendar.get(Calendar.MINUTE)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
         val currentHourFloat = hour + (minute / 60f)
 
-        // 1. Calculate the angle (0h at top, clockwise)
         val angle = ((hour / 24f) * 360f) - 90f
 
-        // 2. Where to draw the pointer (just outside the arc)
         val pointerRadius = radius + (pointerBitmap.height / 2)
 
-        // 3. Calculate position
         val rad = Math.toRadians(angle.toDouble())
         val px = (cx + pointerRadius * Math.cos(rad)).toFloat()
         val py = (cy + pointerRadius * Math.sin(rad)).toFloat()
 
-        // 4. Draw with rotation so tip points outward
         canvas.save()
         canvas.translate(px, py)
-        canvas.rotate(angle + 90f) // +90 so tip faces outwards
+        val imageOffset = 60f
+        canvas.rotate(angle - imageOffset) // +90 so tip faces outwards
         canvas.drawBitmap(
             pointerBitmap,
             -pointerBitmap.width / 2f, // Center it
@@ -73,7 +74,7 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun drawClock(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-        val radius = min(cx, cy) * 0.9f
+        val radius = min(cx, cy) - 12f.dpToPixel()
 
         val tickPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             strokeWidth = 2f.dpToPixel()
@@ -122,41 +123,85 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun drawEvents(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-        val radius = min(cx, cy) * 0.8f
-        val arcStrokeWidth = min(cx, cy) * 0.18f
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+        val radius = min(cx, cy) - 70f.dpToPixel()
+        canvas.drawCircle(cx, cy, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = "#000000".toColorInt()
             style = Paint.Style.STROKE
-            strokeWidth = arcStrokeWidth
-            strokeCap = Paint.Cap.BUTT
-        }
-        val rect = RectF(
-            cx - radius,
-            cy - radius,
-            cx + radius,
-            cy + radius
-        )
+            strokeWidth = 12f.dpToPixel()
+        })
+
 
         for (event in events) {
-            paint.color = event.color
-            val startAngle = (event.startHour / 24f) * 360f - 90f
-            val sweepAngle = ((event.endHour - event.startHour) / 24f) * 360f
-            canvas.drawArc(rect, startAngle, sweepAngle, false, paint)
-            // Optionally draw event labels here
 
-            //val startAngle = hourToAngle(event.startHour)
-            val endAngle = hourToAngle(event.endHour)
-            val midAngle = (startAngle + endAngle) / 2
+            when(event.eventType){
+                ClockEventType.LINE -> {
+                    val radius = min(cx, cy) - 68f.dpToPixel()
+                    val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        style = Paint.Style.STROKE
+                        strokeWidth = 6f.dpToPixel()
+                        strokeCap = Paint.Cap.BUTT
+                    }
+                    val rect = RectF(
+                        cx - radius,
+                        cy - radius,
+                        cx + radius,
+                        cy + radius
+                    )
+                    paint.color = event.color
+                    val startAngle = hourToAngle(event.startHour)
+                    val endAngle = hourToAngle(event.endHour)
+                    canvas.drawArc(rect, startAngle, endAngle - startAngle, false, paint)
+                }
+                ClockEventType.ARCH -> {
+                    val radius = min(cx, cy) - 50f.dpToPixel()
+                    val arcStrokeWidth = 24f.dpToPixel()
+                    val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        style = Paint.Style.STROKE
+                        strokeWidth = arcStrokeWidth
+                        strokeCap = Paint.Cap.ROUND
+                    }
+                    val rect = RectF(
+                        cx - radius,
+                        cy - radius,
+                        cx + radius,
+                        cy + radius
+                    )
+                    val linearGradient = LinearGradient(
+                        cx, cy - radius,
+                        cx, cy + radius,
+                        event.color , event.endColor,
+                        Shader.TileMode.CLAMP
+                    )
+                    paint.shader = linearGradient
 
-            drawEventLabel(
+
+                    val startAngle = (event.startHour / 24f) * 360f - 90f
+                    val sweepAngle = ((event.endHour - event.startHour) / 24f) * 360f
+                    canvas.drawArc(rect, startAngle, sweepAngle, false, paint)
+
+
+                    //val startAngle = hourToAngle(event.startHour)
+                    val endAngle = hourToAngle(event.endHour)
+                    val midAngle = (startAngle + endAngle) / 2
+                }
+                ClockEventType.GRAPH -> {
+
+
+                }
+            }
+
+            /*drawEventLabel(
                 canvas,
                 cx, cy,
                 midAngle,
                 radius + 40f, // push the label a bit outside the arc
                 event.label,
                 event.color
-            )
+            )*/
         }
     }
+
 
     private fun hourToAngle(hour: Float): Float {
         // 0 hour = -90deg (top), increases clockwise
@@ -211,7 +256,13 @@ class CircularScheduleView @JvmOverloads constructor(
 data class ClockEvent(
     val startHour: Float,
     val endHour: Float,
+    val eventType: ClockEventType,
     val color: Int,
+    val endColor: Int,
     val label: String
 )
+
+enum class ClockEventType {
+    LINE, ARCH, GRAPH
+}
 

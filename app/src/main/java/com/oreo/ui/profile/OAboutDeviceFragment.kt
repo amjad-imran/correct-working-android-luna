@@ -169,7 +169,7 @@ class OAboutDeviceFragment :
                 }
 
             } else {
-                context.showShortToast("Ring not connected")
+                context.showShortToast(getString(R.string.text_ring_not_connected))
 
             }
         }
