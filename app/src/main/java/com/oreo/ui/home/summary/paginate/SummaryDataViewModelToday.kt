@@ -2917,9 +2917,6 @@ class SummaryDataViewModelToday @Inject constructor(
     fun checkForNewAppVersion() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            checkAppVersionServer()
-
-
             val callApi = postOfflineAppUpdateData()
             if (callApi.not()) return@launch
 
