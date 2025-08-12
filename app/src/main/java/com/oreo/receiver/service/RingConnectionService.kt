@@ -31,8 +31,8 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.luna.R
 import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -414,11 +414,11 @@ constructor() : LifecycleService() {
         }
     }
 
-    private fun deleteDB() {
-        GlobalScope.launch(Dispatchers.IO) {
-            database.clearAllTables()//TODO delete oreo tables
-        }
-    }
+//    private fun deleteDB() {
+//        GlobalScope.launch(Dispatchers.IO) {
+//            database.clearAllTables()//TODO delete oreo tables
+//        }
+//    }
 
     private fun showNotification(title: String) {
         updateNotification()
@@ -532,6 +532,7 @@ constructor() : LifecycleService() {
 
         device?.let { colorFitDevice ->
             removeWatchTokenFromServer(colorFitDevice.address)
+            copyUserData()
             LOGS.i(TAG, "Stopping the foreground service - inside")
             applicationHandler.unInitSdks(colorFitDevice)
             connectionHandler.getConnectionActions(colorFitDevice)?.let { connectionDataActions ->
@@ -553,6 +554,19 @@ constructor() : LifecycleService() {
         ringDataStore.cleaNewOtaVersion()
         sessionManager.setConnectStateRing(ConnectState.UnPaired())
         stopSelf()
+    }
+
+    private fun copyUserData() {
+        LOGS.d("copyUserData inside")
+        GlobalScope.launch(Dispatchers.IO) {
+            userActivityRepository.copyUserDataBeforeReset().collect { status ->
+                if (status) {
+                    LOGS.d("copyUserData user data copied successfully")
+                } else {
+                    LOGS.d("copyUserData user data copied failed")
+                }
+            }
+        }
     }
 
     private fun removeWatchTokenFromServer(macAddress: String?) {
@@ -1826,29 +1840,25 @@ constructor() : LifecycleService() {
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    }
-                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BODY_TEMPERATURE){
+                    } else if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BODY_TEMPERATURE) {
                         ringDataStore.setManualMeasurementValueBodyTemp(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    }
-                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BLOOD_OXYGEN){
+                    } else if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.BLOOD_OXYGEN) {
                         ringDataStore.setManualMeasurementValueBloodOxygen(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    }
-                    else if(dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.HRV){
+                    } else if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.HRV) {
                         ringDataStore.setManualMeasurementValueHrv(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    }
-                    else {
+                    } else {
                         ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,
