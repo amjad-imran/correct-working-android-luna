@@ -725,7 +725,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
             }
-            binding.btnLogActivity.setOnClickListener {
+            binding.btnLogAnActivity.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
             }
         }
