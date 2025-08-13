@@ -197,7 +197,7 @@ interface OreoUserActivityRepository {
     suspend fun getNotificationGoals(): Flow<Resource<BaseApiResponse<NotificationGoals>>>
 
     suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
-
+    suspend fun copyUserDataBeforeReset():Flow<Boolean>
     suspend fun submitIrregularityEvents(
         request: JsonObject
     ): Flow<Resource<BaseApiResponse<Any>>>

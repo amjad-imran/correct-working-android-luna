@@ -531,6 +531,9 @@ class CircadianAlignmentFragment :
     }
 
     override fun initListener() {
+        binding.aisehiBtn.setOnClickListener {
+            navigate(R.id.addActivityTimelineFragment)
+        }
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }

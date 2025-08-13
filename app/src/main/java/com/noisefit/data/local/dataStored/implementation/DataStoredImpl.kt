@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.HrvAlerts
 import com.noisefit_commans.data.model.LocalUserData
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.NplQuizDataModel
+import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.RecentActivities
 import com.noisefit_commans.data.model.RoundUpResponse
 import com.noisefit_commans.data.model.Token
@@ -153,7 +154,7 @@ private const val ROUND_UP_DATA = "ROUND_UP_DATA"
 private const val IS_PREVIOUSLY_PAIRED = "IS_PREVIOUSLY_PAIRED"
 private const val USER_HEALTH_CACHE_V = "USER_HEALTH_CACHE_V"
 private const val WORKOUT_IMAGES = "WORKOUT_IMAGES"
-
+private const val SAVE_USER_COPY_TODAY_DATA = "SAVE_USER_COPY_TODAY_DATA"
 
 private const val CALL_ALERT = "CALL_ALERT"
 private const val SMS_ALERT = "SMS_ALERT"
@@ -2356,4 +2357,16 @@ class DataStoredImpl
         return output
     }
 
+    override fun saveUserCopyTodayData(data: OreoStepsData?) {
+        mPrefs.edit()?.putString(SAVE_USER_COPY_TODAY_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getUserCopyTodayData(): OreoStepsData? {
+        val data = mPrefs.getString(SAVE_USER_COPY_TODAY_DATA, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            gson.fromJson(data, OreoStepsData::class.java)
+        }
+    }
 }

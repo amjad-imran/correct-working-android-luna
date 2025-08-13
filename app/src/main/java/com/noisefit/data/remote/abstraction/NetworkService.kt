@@ -72,6 +72,7 @@ import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
+import com.oreo.data.model.timeline.TimelineScreenResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -788,6 +789,12 @@ interface NetworkService {
         @Url url: String,
         @Body req: JsonObject
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getCurrDayTimelineActivitiesData(
+        @Url url: String,
+        @Query("date") date: String,
+    ): BaseApiResponse<TimelineScreenResponse>
     //
 
     /**
