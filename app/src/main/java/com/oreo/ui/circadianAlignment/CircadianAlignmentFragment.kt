@@ -48,14 +48,10 @@ class CircadianAlignmentFragment :
 
     private val correctiveActivitiesAdapter by lazy {
         CorrectiveActivitiesAdapter() {
-            setFragmentResultListener(LOG_CIRCADIAN_BOTTOM_SHEET_KEY) { _, bundle ->
-                viewModel.postLogData(it.key, true)
-            }
             navigate(
-                R.id.logCircadianBottomSheetFragment,
+                R.id.addActivityTimelineFragment,
                 bundleOf(
                     "key" to it.key,
-                    "textKey" to it.onlyImgWithText?.txt
                 )
             )
         }
@@ -75,7 +71,7 @@ class CircadianAlignmentFragment :
         setRecycler()
         initListener()
         subscribeObservers()
-        //viewModel.initData() TODO remove comment
+        viewModel.initData()
 
         showCircularScheduler()
     }
