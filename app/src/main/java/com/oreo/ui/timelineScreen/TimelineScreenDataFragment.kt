@@ -40,6 +40,8 @@ class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBindin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val date = arguments?.getString(ARGS_DATE)
+        viewModel.date = date
         setRecycler()
     }
 
@@ -47,6 +49,17 @@ class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBindin
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this.context)
             adapter = activityListAdapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
+    }
+
+    private fun loadData() {
+        viewModel.date?.let {
+            viewModel.getCurrDayActivities(it)
         }
     }
 

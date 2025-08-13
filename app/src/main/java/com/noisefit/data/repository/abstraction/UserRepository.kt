@@ -18,6 +18,7 @@ import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
+import com.oreo.data.model.timeline.TimelineScreenResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -81,5 +82,7 @@ interface UserRepository {
     suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<List<CircadianQuizResponseModel>>>>
 
     suspend fun submitCircadianQuizData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getCurrDayTimelineActivitiesData(date: String): Flow<Resource<BaseApiResponse<TimelineScreenResponse>>>
 
 }
