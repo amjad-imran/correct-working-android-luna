@@ -1293,27 +1293,28 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getTimelineCard(): OHealthOverview?{
-        return OHealthOverview.TimelineDash(
-            listData = listOf(
-                ItemTimelineModel(
-                    title = "Caffeine intake",
-                    desc = "30 mg",
-                    time = "2:30 PM",
-                    titleColor = "#DCA58E".toColorInt(),
-                ),
-                ItemTimelineModel(
-                    title = "Meal intake",
-                    desc = "Meal 1",
-                    time = "2:30 PM",
-                    titleColor = "#FFE3B2".toColorInt(),
-                ),
-                ItemTimelineModel(
-                    title = "Exercise duration",
-                    desc = "30 minutes",
-                    time = "2:30 PM",
-                    titleColor = "#78C3F9".toColorInt(),
-                ),
+        val list = listOf(
+            ItemTimelineModel(
+                title = "Caffeine intake",
+                desc = "30 mg",
+                time = "2:30 PM",
+                titleColor = "#DCA58E".toColorInt(),
+            ),
+            ItemTimelineModel(
+                title = "Meal intake",
+                desc = "Meal 1",
+                time = "2:30 PM",
+                titleColor = "#FFE3B2".toColorInt(),
+            ),
+            ItemTimelineModel(
+                title = "Exercise duration",
+                desc = "30 minutes",
+                time = "2:30 PM",
+                titleColor = "#78C3F9".toColorInt(),
             )
+        )
+        return OHealthOverview.TimelineDash(
+            listData = list
         )
     }
 

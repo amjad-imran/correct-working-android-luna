@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_circadian_card_dash"
+        android:src="@drawable/back_timeline_card_dash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,23 +45,60 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogAnActivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView179" />
+        app:layout_constraintTop_toBottomOf="@+id/textView179">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout7"
+        android:id="@+id/lytNoData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_log_45_perc_transparent_circadian"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogAnActivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvActivities">
+        app:layout_constraintTop_toBottomOf="@+id/textView179">
+
+        <include
+            android:id="@+id/divider"
+            layout="@layout/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView192"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/text_no_data"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnLogAnActivity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_log_45_perc_transparent_circadian"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textView180"
