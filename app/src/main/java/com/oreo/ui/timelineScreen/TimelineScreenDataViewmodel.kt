@@ -16,6 +16,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -146,9 +147,9 @@ class TimelineScreenDataViewmodel @Inject constructor(
         return try{
             val originalFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val timeObj = LocalTime.parse(time, originalFormatter)
-            val newFormatter = DateTimeFormatter.ofPattern("HH:mm")
+            val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
-            timeObj.format(newFormatter)
+            timeObj.format(newFormatter).uppercase(Locale.getDefault())
         }catch (e: Exception){
             LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
             "-"
@@ -163,7 +164,6 @@ class TimelineScreenDataViewmodel @Inject constructor(
     ): String {
         return try {
             // Define the format for time
-            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
 
             // Parse the start and end dates into LocalDate objects
@@ -187,7 +187,8 @@ class TimelineScreenDataViewmodel @Inject constructor(
             val formattedEndTime = adjustedEndDateObj.format(timeFormatter12Hour)
 
             // Return the formatted result
-            "$hours hr $minutes m; $formattedStartTime - $formattedEndTime"
+            val formattedTime = "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
+            "$hours hr $minutes m; $formattedTime"
         }catch (e: Exception){
             LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
             "-"
