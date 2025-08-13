@@ -48,22 +48,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             navigateUpSafe()
         }
 
-        /* binding.tabLayout.tvDateLeft.setOnClickListener {
-             val currentItem = binding.viewPagerHeartRate.currentItem
-             if (currentItem == 0) return@setOnClickListener
-             binding.viewPagerHeartRate.setCurrentItem((currentItem - 1), true)
-
-         }
-
-         binding.tabLayout.tvDateRight.setOnClickListener {
-             if (pagerAdapter == null) return@setOnClickListener
-             val currentItem = binding.viewPagerHeartRate.currentItem
-             if (currentItem == (pagerAdapter!!.itemCount - 1)) {
-                 return@setOnClickListener
-             }
-             binding.viewPagerHeartRate.setCurrentItem((currentItem + 1), true)
-         }*/
-
         binding.lytToolbar.view1.setOnClickListener {
             showCalendar()
         }
@@ -80,12 +64,12 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             )*/
 
             mainViewModel.onCalendarDateSelected(selectedDate)
-//            mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+            mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
         }
 
         navigate(R.id.bottomSheetCalendar, Bundle().apply {
             this.putString("selectedDate", mainViewModel.selectedDate)
-            this.putString("launchedFrom", "readiness")
+            this.putString("launchedFrom", "timeline")
         })
     }
 
