@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.visible
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +51,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.WORKOUT -> {
-                        AddMealActivityTimelineFragment()
+                        AddWorkoutFragment()
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
