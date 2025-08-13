@@ -31,6 +31,7 @@ import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.ClockEvent
+import com.oreo.ui.custom.ClockEventType
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,14 +81,21 @@ class CircadianAlignmentFragment :
     }
 
     private fun showCircularScheduler() {
+        binding.lytCircularView.lockedGroup.gone()
+        binding.lytCircularView.circularView.visible()
         val clockEvents = listOf(
-            ClockEvent(6f, 8f, Color.parseColor("#A7F3D0"), "Natural Light"),
-            ClockEvent(22f, 23f, Color.parseColor("#A259E6"), "Wind-Down"),
-            ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
-            ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
-            ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
+            ClockEvent(6f, 12f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"), Color.parseColor("#FBE0BE"), "Natural Light"),
+            ClockEvent(17f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
+                Color.parseColor("#995CA0"), "Wind-Down"),
+            ClockEvent(19f, 22f, ClockEventType.ARCH, Color.parseColor("#8F5EBA"),
+                Color.parseColor("#443A7B"), "Dim-light"),
+            ClockEvent(6f, 23f, ClockEventType.GRAPH, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
+            ClockEvent(8f, 13f, ClockEventType.LINE, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
+            //ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
+            //ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
+            //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
         )
-        binding.lytSchedulerDial.events = clockEvents
+        binding.lytCircularView.circularView.events = clockEvents
     }
 
     data class CircadianResponse(
@@ -631,12 +639,14 @@ class CircadianAlignmentFragment :
         // focus window
         val isCircularViewContainsData = true
         binding.lytFocusWindow.apply {
-            if(isCircularViewContainsData){
+            if (isCircularViewContainsData) {
                 tvTitle.text = getString(R.string.text_focus_window)
-                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
-            }else{
+                tvDesc.text =
+                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+            } else {
                 tvTitle.text = getString(R.string.text_take_it_easy_today)
-                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+                tvDesc.text =
+                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
             }
         }
 

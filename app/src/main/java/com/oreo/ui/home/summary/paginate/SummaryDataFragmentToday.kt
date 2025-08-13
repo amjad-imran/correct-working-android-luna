@@ -653,6 +653,10 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.OnTimelineCardClicked -> {
                     navigate(R.id.timelineScreenFragment)
                 }
+
+                OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
+                    navigate(R.id.addActivityTimelineFragment)
+                }
             }
         }
 

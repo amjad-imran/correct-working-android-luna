@@ -44,14 +44,15 @@
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="imageView96,imageView97,textView181" />
 
-    <View
+    <com.oreo.ui.custom.CircularScheduleView
         android:id="@+id/circularView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:visibility="gone"
+        android:background="@drawable/back_circular_scheduler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:layout_width="300dp"
+        android:layout_height="300dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

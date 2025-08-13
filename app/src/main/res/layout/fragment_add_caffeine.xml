@@ -26,8 +26,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="@string/text_meal_intake"
-                android:textColor="#FFE3B2"
+                android:text="@string/text_caffeine_intake"
+                android:textColor="#DCA58E"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView100"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +44,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
-            android:id="@+id/lytAddMeal"
-            layout="@layout/layout_add_meal"
+            android:id="@+id/lytCard"
+            layout="@layout/layout_add_caffeine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"

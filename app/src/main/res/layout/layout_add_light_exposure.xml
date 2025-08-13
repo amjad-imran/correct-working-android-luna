@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/textView187"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/text_intake_1"
+        android:textColor="#B3FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView188"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_intake_time"
+        android:textColor="#80FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/textView187"
+        app:layout_constraintTop_toBottomOf="@+id/textView187" />
+
+    <View
+        android:id="@+id/divider1st"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:background="#24D9D9D9"
+        app:layout_constraintBottom_toBottomOf="@+id/textView188"
+        app:layout_constraintEnd_toEndOf="@+id/textView187"
+        app:layout_constraintStart_toEndOf="@+id/textView188"
+        app:layout_constraintTop_toTopOf="@+id/textView188" />
+
+
+    <TextView
+        android:id="@+id/textView192"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/text_today"
+        android:textColor="#CCCCCC"
+        app:layout_constraintStart_toStartOf="@+id/textView188"
+        app:layout_constraintTop_toBottomOf="@+id/textView188" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytTimePicker"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/back_time_picker"
+        app:layout_constraintBottom_toBottomOf="@+id/textView192"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView192"
+        app:layout_constraintTop_toTopOf="@+id/textView192">
+
+        <TextView
+            android:id="@+id/tvTime"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="72dp"
+            android:layout_marginVertical="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12 : 34 : PM" />
+
+        <ImageView
+            android:id="@+id/imageView104"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_picker_arrow_up"
+            app:layout_constraintBottom_toTopOf="@+id/imageView103"
+            app:layout_constraintEnd_toEndOf="@+id/imageView103"
+            app:layout_constraintStart_toStartOf="@+id/imageView103"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/imageView103"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_picker_arrow_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView104" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView1888"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_duration"
+        android:textColor="#80FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/textView187"
+        app:layout_constraintTop_toBottomOf="@+id/lytTimePicker" />
+
+    <View
+        android:id="@+id/divider2nd"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:background="#24D9D9D9"
+        app:layout_constraintBottom_toBottomOf="@+id/textView188"
+        app:layout_constraintEnd_toEndOf="@+id/textView187"
+        app:layout_constraintStart_toEndOf="@+id/textView188"
+        app:layout_constraintTop_toTopOf="@+id/textView188" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytDuration"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_time_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1888">
+
+        <TextView
+            android:id="@+id/tvDuration"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="72dp"
+            android:layout_marginVertical="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12 : 34 : PM" />
+
+        <ImageView
+            android:id="@+id/imageView105"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_picker_arrow_up"
+            app:layout_constraintBottom_toTopOf="@+id/imageView106"
+            app:layout_constraintEnd_toEndOf="@+id/imageView106"
+            app:layout_constraintStart_toStartOf="@+id/imageView106"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/imageView106"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_picker_arrow_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView105" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

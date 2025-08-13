@@ -2082,5 +2082,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_meal_intake">Meal intake</string>
     <string name="text_water_consumption">Water consumption</string>
     <string name="text_period_started">Period started</string>
+    <string name="text_add_logs">Add Logs</string>
+    <string name="text_meal_1">MEAL 1</string>
+    <string name="text_intake_1">INTAKE 1</string>
+    <string name="text_quantity_consumed">Quantity consumed</string>
 
 </resources>
