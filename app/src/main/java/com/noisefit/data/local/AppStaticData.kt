@@ -107,6 +107,10 @@ object AppStaticData {
         return arrayOf("Easy", "Moderate", "Hard")
     }
 
+    fun getLightExposureDurationValues(): Array<String> {
+        return Array(12) { "${((it + 1) * 5)} min" }
+    }
+
     fun getDurationValues(): Array<String> {
         return arrayOf("Today", "Yesterday", "This week", "Previous Week", "Monthly")
     }

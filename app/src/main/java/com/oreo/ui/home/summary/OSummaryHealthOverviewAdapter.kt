@@ -159,6 +159,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
 
     object OnTimelineCardClicked: OSummaryHealthOverviewClickEnum()
+    object OnLogActivityClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -716,6 +717,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
+            }
+            binding.btnLogActivity.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
             }
         }
 

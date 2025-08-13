@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView179" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout7"
+        android:id="@+id/btnLogActivity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_log_45_perc_transparent_circadian"
