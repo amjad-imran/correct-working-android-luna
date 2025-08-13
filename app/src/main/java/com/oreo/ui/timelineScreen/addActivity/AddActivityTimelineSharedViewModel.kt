@@ -27,43 +27,43 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
     fun getAllActivityListMap() = hashMapOf(
         AddActivityItemsEnum.MEAL_INTAKE to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_meal_intake),
-            key = "meal-intake",
+            key = "meal",
             type = AddActivityItemsEnum.MEAL_INTAKE,
             titleColor = "#FFE3B2".toColorInt()
         ),
         AddActivityItemsEnum.LIGHT_EXPOSURE to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_light_exposure),
-            key = "Light exposure",
+            key = "light-exposure",
             type = AddActivityItemsEnum.LIGHT_EXPOSURE,
             titleColor = "#FFE1CF".toColorInt()
         ),
         AddActivityItemsEnum.CAFFEINE_INTAKE to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_caffeine_intake),
-            key = "Caffeine intake",
+            key = "caffeine",
             type = AddActivityItemsEnum.CAFFEINE_INTAKE,
             titleColor = "#DCA58E".toColorInt()
         ),
         AddActivityItemsEnum.WORKOUT to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_workout),
-            key = "Workout",
+            key = "workout",
             type = AddActivityItemsEnum.WORKOUT,
             titleColor = "#78C3F9".toColorInt()
         ),
         AddActivityItemsEnum.WATER_CONSUMPTION to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_water_consumption),
-            key = "Water consumption",
+            key = "hydration",
             type = AddActivityItemsEnum.WATER_CONSUMPTION,
             titleColor = "#8EF1C3".toColorInt()
         ),
         AddActivityItemsEnum.PERIOD_STARTED to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_period_started),
-            key = "Period started",
+            key = "period",
             type = AddActivityItemsEnum.PERIOD_STARTED,
             titleColor = "#F18EBD".toColorInt()
         ),
         AddActivityItemsEnum.NAP to AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_nap),
-            key = "Nap",
+            key = "nap",
             type = AddActivityItemsEnum.NAP,
             titleColor = "#A8A8ED".toColorInt()
         )

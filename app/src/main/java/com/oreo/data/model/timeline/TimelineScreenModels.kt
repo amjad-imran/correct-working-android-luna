@@ -32,5 +32,12 @@ data class ItemTimelineResponseModel(
     val unit: String?,
 
     @SerializedName("date")
-    val date: String?
+    val date: String?,
+
+    val title: String?,
+
+    // for app
+    var titleColor: Int?=null,
+    var desc: String?="-",
+    var displayTime: String?
 )
