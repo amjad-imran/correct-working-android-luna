@@ -10,8 +10,10 @@ import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,11 +57,11 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
-                        AddMealActivityTimelineFragment()
+                        AddCaffeineFragment()
                     }
 
                     AddActivityItemsEnum.WATER -> {
-                        AddMealActivityTimelineFragment()
+                        AddWaterFragment()
                     }
 
                     AddActivityItemsEnum.CYCLE_LOG -> {
