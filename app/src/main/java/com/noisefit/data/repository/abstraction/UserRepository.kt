@@ -85,4 +85,10 @@ interface UserRepository {
 
     suspend fun getCurrDayTimelineActivitiesData(date: String): Flow<Resource<BaseApiResponse<TimelineScreenResponse>>>
 
+    suspend fun submitLogMealTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
 }
