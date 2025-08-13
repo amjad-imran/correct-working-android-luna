@@ -3090,8 +3090,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
             setCircadianGraph(data)
-            // Graph
 
+            binding.tvTitle.text = data.title ?: "-"
+            binding.tvDesc.text = data.description ?: "-"
+            // Graph
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
