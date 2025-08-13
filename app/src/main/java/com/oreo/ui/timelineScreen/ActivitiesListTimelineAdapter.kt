@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemTimelineScreenBinding
-import com.oreo.data.model.timeline.ItemTimelineModel
+import com.oreo.data.model.timeline.ItemTimelineResponseModel
 
 class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimelineAdapter.TimelineViewHolder>() {
 
-    private val mList: ArrayList<ItemTimelineModel> = ArrayList()
+    private val mList: ArrayList<ItemTimelineResponseModel> = ArrayList()
 
     inner class TimelineViewHolder(val binding: ItemTimelineScreenBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: ItemTimelineModel){
+        fun bind(data: ItemTimelineResponseModel){
             binding.tvTitle.text = data.title
-            binding.tvTitle.setTextColor(data.titleColor)
+            data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
             binding.tvDesc.text = data.desc
-            binding.tvTime.text = data.time
+            binding.tvTime.text = data.displayTime
         }
     }
 
@@ -36,7 +36,7 @@ class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimeline
         holder.bind(mList[position])
     }
 
-    fun updateDataSet(list: List<ItemTimelineModel>){
+    fun updateDataSet(list: List<ItemTimelineResponseModel>){
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
