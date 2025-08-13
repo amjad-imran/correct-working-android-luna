@@ -3089,11 +3089,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
-            setCircadianGraph(data)
-
-            binding.tvTitle.text = data.title ?: "-"
+            binding.tvWindow.text = data.title ?: "-"
             binding.tvDesc.text = data.description ?: "-"
+
             // Graph
+            setCircadianGraph(data)
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
@@ -3117,9 +3117,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.graphView.timeWindows = it
             }
             binding.graphView.redraw()
-
-            binding.tvWindow.text = data.title ?: "-"
-            binding.tvDesc.text = data.description ?: "-"
         }
 
     }
