@@ -30,7 +30,7 @@ class AddPeriodLogFragment :
     BaseFragment<FragmentAddPeriodBinding>(FragmentAddPeriodBinding::inflate) {
 
     private val sharedViewModel: AddActivityTimelineSharedViewModel by activityViewModels()
-    private val viewModel: AddCaffeineViewModel by viewModels()
+    private val viewModel: AddPeriodViewModel by viewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,11 +52,11 @@ class AddPeriodLogFragment :
             sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
         binding.btnSave.setOnClickListener {
-            viewModel.logCaffeineValue()
+
         }
 
         binding.lytCard.lytTimePicker.setOnClickListener {
-            parentFragment?.setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
+            /*parentFragment?.setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
                 val minute = bundle.getInt("minute")
 
@@ -82,7 +82,7 @@ class AddPeriodLogFragment :
                     "unitPosition" to 1,
                     "title" to getString(R.string.text_time)
                 )
-            )
+            )*/
         }
 
        /* binding.lytCard.lytDuration.setOnClickListener {
@@ -106,18 +106,7 @@ class AddPeriodLogFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.caffeineTime.observe(this) {
-            binding.lytCard.tvTime.text =
-                it.format(DateTimeFormatter.ofPattern("hh:mm:a")).uppercase()
-        }
-        viewModel.caffeineValue.observe(this) {
-            binding.lytCard.tvCaffeineValue.text = "$it mg"
-        }
-        viewModel.onAddSuccess.observe(this) {
-            it.getContent()?.let {
-                sharedViewModel.navigateUp()
-            }
-        }
+
 
     }
 
