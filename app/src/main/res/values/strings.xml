@@ -2087,5 +2087,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_intake_1">INTAKE 1</string>
     <string name="text_quantity_consumed">Quantity consumed</string>
     <string name="text_category">Category</string>
+    <string name="text_log_1">LOG 1</string>
 
 </resources>
