@@ -45,7 +45,7 @@ import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
-import com.oreo.data.model.timeline.TimelineScreenResponse
+import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

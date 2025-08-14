@@ -239,6 +239,7 @@ class SummaryDataFragmentToday :
                 viewModel.caffeineGraphData = mainViewModel.caffeineGraphData
                 viewModel.summaryAvailable = mainViewModel.summaryAvailable
                 viewModel.circadianGraphData = mainViewModel.circadianGraphData
+                viewModel.timeTrackerActivities = mainViewModel.timeTrackerActivities
                 setUi(dash.first, dash.second, dash.third)
             }
         }

@@ -45,6 +45,7 @@ import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -262,6 +263,8 @@ private const val IS_LOW_WORKOUT_PLAN_SETUP = "IS_LOW_WORKOUT_PLAN_SETUP"
 private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
 private const val BOOSTER_WOMEN = "BOOSTER_WOMEN"
+
+private const val TIMELINE_ACTIVITIES_DATA = "TIMELINE_ACTIVITIES_DATA"
 
 private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
 private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
@@ -853,6 +856,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
         mPrefs.edit()?.remove(CIRCADIAN_ONBOARD)?.apply()
+        mPrefs.edit()?.remove(TIMELINE_ACTIVITIES_DATA)?.apply()
 
         mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()
         mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
@@ -2369,4 +2373,15 @@ class DataStoredImpl
             gson.fromJson(data, OreoStepsData::class.java)
         }
     }
+
+    override fun setTimelineActivitiesData(data: List<ItemTimelineResponseModel>?) {
+        if(data != null){
+            mPrefs.edit()?.putString(TIMELINE_ACTIVITIES_DATA, gson.toJson(data))?.apply()
+        }
+    }
+
+    override fun getTimelineActivitiesData(): List<ItemTimelineResponseModel>? {
+        return mPrefs.getString(TIMELINE_ACTIVITIES_DATA, null)?.let { Gson().fromJson<List<ItemTimelineResponseModel>>(it) }
+    }
+
 }

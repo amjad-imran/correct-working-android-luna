@@ -9,7 +9,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
