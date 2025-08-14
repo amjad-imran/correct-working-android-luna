@@ -6,16 +6,18 @@ data class CorrectiveActivitiesModel(
     val bgMainImg: Int,
     val title: String,
     val desc: String,
-    val onlyImgWithText: OnlyImgWithText? = null,
-    val progressBarLytData: ProgressBarLytData? = null,
-    val logStatus: Boolean?,
-    val time: String?,
-    val timeInSec: Int?
+    var onlyImgWithText: OnlyImgWithText? = null,
+    var progressBarLytData: ProgressBarLytData? = null,
+    var onlyOnlyImgLytData: Int? = null,
+    var showFooter: Boolean? = false,
+    var logStatus: Boolean?=null,
+    var time: String?=null,
+    var timeInSec: Int?=null,
 )
 
 data class OnlyImgWithText(
     val img: Int,
-    val txt: String? = null
+    var txt: String? = null
 )
 
 data class ProgressBarLytData(

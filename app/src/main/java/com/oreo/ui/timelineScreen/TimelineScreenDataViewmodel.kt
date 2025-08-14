@@ -121,18 +121,20 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             MEAL_INTAKE_KEY_KEY -> {
                 data.titleColor = "#FFE3B2".toColorInt()
+                data.desc = "Meal 1"
             }
 
             LIGHT_EXPOSURE_KEY -> {
                 data.titleColor = "#FFE1CF".toColorInt()
                 data.value?.let {
-                    data.desc = it
-                    data.unit?.let { data.desc += " $it" }
+                    data.desc = "${it.toInt()/60} minutes"
+                    /*data.unit?.let { data.desc += " $it" }*/
                 }
             }
 
             PERIOD_STARTED_KEY -> {
                 data.titleColor = "#F18EBD".toColorInt()
+                data.desc = "Day 1"
             }
 
             ACTIVITY_KEY -> {

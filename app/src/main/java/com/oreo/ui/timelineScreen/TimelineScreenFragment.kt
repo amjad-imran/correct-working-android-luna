@@ -10,12 +10,14 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
@@ -41,6 +43,10 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
 
     override fun initListener() {
+
+        binding.ivAddLogFab.setOnClickListener {
+            navigate(R.id.addActivityTimelineFragment)
+        }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
@@ -155,6 +161,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 //setTabDates(position)
+                binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==LocalDate.now())
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
