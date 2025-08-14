@@ -32,8 +32,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvActivities"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian" />
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 

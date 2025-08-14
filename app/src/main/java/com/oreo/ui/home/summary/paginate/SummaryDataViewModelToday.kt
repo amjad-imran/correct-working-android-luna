@@ -1256,11 +1256,11 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
 
-                    "workout_history" -> {
+                    /*"workout_history" -> {
                         getWorkoutHistoryCard(healthData.activity)?.let {
                             userActivities.add(it)
                         }
-                    }
+                    }*/
 
                     "stress" -> {
                         getStressCard(healthData)?.let {
@@ -1305,7 +1305,6 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getTimelineCard(): OHealthOverview?{
-        if(timeTrackerActivities.isNullOrEmpty()) return null
         val dataList = timeTrackerActivities?.let { ArrayList(it) }
         dataList?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
