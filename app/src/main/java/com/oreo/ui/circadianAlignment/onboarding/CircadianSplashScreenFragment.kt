@@ -15,6 +15,7 @@ class CircadianSplashScreenFragment :
     BaseFragment<FragmentCircadianSplashScreenBinding>(FragmentCircadianSplashScreenBinding::inflate) {
 
     private val fragments = listOf(
+        OnboardingCarcadianFragment0(),
         OnboardingCarcadianFragment1(),
         OnboardingCarcadianFragment2(),
         OnboardingCarcadianFragment3(),
@@ -71,16 +72,19 @@ class CircadianSplashScreenFragment :
                 binding.btnNext.text = getString(R.string.text_learn_more_2)
             }
             1 -> {
-                binding.btnNext.text = getString(R.string.text_next)
+                binding.btnNext.text = getString(R.string.text_learn_more_2)
             }
             2 -> {
                 binding.btnNext.text = getString(R.string.text_next)
             }
             3 -> {
                 binding.btnNext.text = getString(R.string.text_next)
-                binding.toolbar.tvTitle.text = getString(R.string.text_corrective_activities)
             }
             4 -> {
+                binding.btnNext.text = getString(R.string.text_next)
+                binding.toolbar.tvTitle.text = getString(R.string.text_corrective_activities)
+            }
+            5 -> {
                 binding.btnNext.text = getString(R.string.text_take_the_quiz)
             }
             else -> {}

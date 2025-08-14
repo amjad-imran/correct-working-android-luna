@@ -2087,5 +2087,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_intake_1">INTAKE 1</string>
     <string name="text_quantity_consumed">Quantity consumed</string>
     <string name="text_category">Category</string>
+    <string name="text_message_circadian">Your body follows a natural 24-hour rhythm. Timing your light, caffeine, and sleep around it can help you feel more energized and focused.</string>
 
 </resources>

@@ -125,7 +125,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             return
         }
         mainViewModel.selectedDate = chartModel.date!!
-        mainViewModel.handleAddWorkoutVisibility()
+        //mainViewModel.handleAddWorkoutVisibility()
 
         val returnDate = mainViewModel.updateSelectedDate(mainViewModel.selectedDate)
         if (returnDate != null) {
