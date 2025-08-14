@@ -1453,5 +1453,10 @@
         android:id="@+id/addActivityTimelineFragment"
         android:name="com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineFragment"
         android:label="fragment_add_activity_timeline"
-        tools:layout="@layout/fragment_add_activity_timeline" />
+        tools:layout="@layout/fragment_add_activity_timeline" >
+        <argument
+            android:name="key"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

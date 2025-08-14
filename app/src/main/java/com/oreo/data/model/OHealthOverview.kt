@@ -203,7 +203,7 @@ sealed class OHealthOverview {
     object CircadianAlignmentOnboarding : OHealthOverview()
 
     data class TimelineDash(
-        val listData: List<ItemTimelineModel>
+        val listData: List<ItemTimelineModel>?
     ): OHealthOverview()
 
     class CardTrackFemaleHealth(

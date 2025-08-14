@@ -709,16 +709,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         fun bind(data: OHealthOverview.TimelineDash){
 
-            val adapter = TimelineAdapter(data.listData)
-            binding.rvActivities.apply {
-                this.layoutManager = LinearLayoutManager(binding.root.context)
-                this.adapter = adapter
+            if(data.listData.isNullOrEmpty()){
+                binding.rvActivities.gone()
+                binding.lytNoData.visible()
+            }else{
+                val adapter = TimelineAdapter(data.listData)
+                binding.rvActivities.apply {
+                    this.layoutManager = LinearLayoutManager(binding.root.context)
+                    this.adapter = adapter
+                    binding.lytNoData.gone()
+                    visible()
+                }
             }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
             }
-            binding.btnLogActivity.setOnClickListener {
+            binding.btnLogAnActivity.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
             }
         }
@@ -3082,9 +3089,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
-            setCircadianGraph(data)
-            // Graph
+            binding.tvWindow.text = data.title ?: "-"
+            binding.tvDesc.text = data.description ?: "-"
 
+            // Graph
+            setCircadianGraph(data)
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
@@ -3108,9 +3117,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.graphView.timeWindows = it
             }
             binding.graphView.redraw()
-
-            binding.tvWindow.text = data.title ?: "-"
-            binding.tvDesc.text = data.description ?: "-"
         }
 
     }

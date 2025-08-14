@@ -2,13 +2,11 @@ package com.oreo.ui.timelineScreen.addActivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.visible
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
@@ -27,7 +25,19 @@ class AddActivityTimelineFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+        val key = arguments?.getString("key")
+        when(key){
+            CircadianAlignmentViewModel.light_exposure_key ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE)
+
+            CircadianAlignmentViewModel.meal_window_key ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.MEAL)
+
+            CircadianAlignmentViewModel.caffeine_window_key ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CAFFEINE)
+
+            else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+        }
     }
 
 

@@ -10,15 +10,14 @@ import androidx.navigation.fragment.NavHostFragment
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddLightExposureBinding
-import com.noisefit.luna.databinding.FragmentAddMealActivityTimelineBinding
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.ui.visible
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
-import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -50,7 +49,12 @@ class AddLightExposureFragment :
             sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
         binding.btnSave.setOnClickListener {
-            viewModel.logLightExposure()
+            if(viewModel.lightTime.value != null && viewModel.lightDuration.value != null){
+                viewModel.logLightExposure(
+                    viewModel.lightTime.value!!,
+                    viewModel.lightDuration.value!!
+                )
+            }
         }
 
         binding.lytCard.lytTimePicker.setOnClickListener {
@@ -118,6 +122,25 @@ class AddLightExposureFragment :
             }
         }
 
+        //
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
     }
 
 }

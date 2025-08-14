@@ -464,4 +464,31 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun submitLogMealTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogMealTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal",
+                req
+            )
+        }
+    }
+
+    override suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogCaffeineTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-caffeine",
+                req
+            )
+        }
+    }
+
+    override suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-light",
+                req
+            )
+        }
+    }
+
 }

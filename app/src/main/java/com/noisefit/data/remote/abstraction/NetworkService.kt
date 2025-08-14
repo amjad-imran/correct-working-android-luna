@@ -795,6 +795,24 @@ interface NetworkService {
         @Url url: String,
         @Query("date") date: String,
     ): BaseApiResponse<TimelineScreenResponse>
+
+    @POST
+    suspend fun submitLogMealTimelineData(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
+
+    @POST
+    suspend fun submitLogCaffeineTimelineData(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
+
+    @POST
+    suspend fun submitLogLightExposureTimelineData(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     //
 
     /**
