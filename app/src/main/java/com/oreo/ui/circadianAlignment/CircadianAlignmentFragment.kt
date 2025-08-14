@@ -1,8 +1,10 @@
 package com.oreo.ui.circadianAlignment
 
 import android.animation.ArgbEvaluator
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -28,6 +30,8 @@ import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.custom.ClockEvent
+import com.oreo.ui.custom.ClockEventType
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,14 +48,10 @@ class CircadianAlignmentFragment :
 
     private val correctiveActivitiesAdapter by lazy {
         CorrectiveActivitiesAdapter() {
-            setFragmentResultListener(LOG_CIRCADIAN_BOTTOM_SHEET_KEY) { _, bundle ->
-                viewModel.postLogData(it.key, true)
-            }
             navigate(
-                R.id.logCircadianBottomSheetFragment,
+                R.id.addActivityTimelineFragment,
                 bundleOf(
                     "key" to it.key,
-                    "textKey" to it.onlyImgWithText?.txt
                 )
             )
         }
@@ -72,6 +72,26 @@ class CircadianAlignmentFragment :
         initListener()
         subscribeObservers()
         viewModel.initData()
+
+        showCircularScheduler()
+    }
+
+    private fun showCircularScheduler() {
+        binding.lytCircularView.lockedGroup.visible()
+        binding.lytCircularView.circularView.gone()
+        val clockEvents = listOf(
+            ClockEvent(6f, 12f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"), Color.parseColor("#FBE0BE"), "Natural Light"),
+            ClockEvent(17f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
+                Color.parseColor("#995CA0"), "Wind-Down"),
+            ClockEvent(19f, 22f, ClockEventType.ARCH, Color.parseColor("#8F5EBA"),
+                Color.parseColor("#443A7B"), "Dim-light"),
+            ClockEvent(6f, 23f, ClockEventType.GRAPH, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
+            ClockEvent(8f, 13f, ClockEventType.LINE, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
+            //ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
+            //ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
+            //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
+        )
+        binding.lytCircularView.circularView.events = clockEvents
     }
 
     data class CircadianResponse(
@@ -507,8 +527,13 @@ class CircadianAlignmentFragment :
     }
 
     override fun initListener() {
+
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
+        }
+
+        binding.lytCorrectiveActivities.viewAllLogs.setOnClickListener {
+            navigate(R.id.timelineScreenFragment)
         }
 
         binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
@@ -612,12 +637,14 @@ class CircadianAlignmentFragment :
         // focus window
         val isCircularViewContainsData = true
         binding.lytFocusWindow.apply {
-            if(isCircularViewContainsData){
+            if (isCircularViewContainsData) {
                 tvTitle.text = getString(R.string.text_focus_window)
-                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
-            }else{
+                tvDesc.text =
+                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+            } else {
                 tvTitle.text = getString(R.string.text_take_it_easy_today)
-                tvDesc.text = getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+                tvDesc.text =
+                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
             }
         }
 
@@ -665,6 +692,49 @@ class CircadianAlignmentFragment :
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
             tvType.text = chronotypeData?.type ?: "-"
+
+            when(chronotypeData?.type){
+                getString(R.string.text_definite_morning_type) -> {
+                    tvIntro.apply{
+                        text = getString(R.string.text_you_re_an_early_riser_by_nature)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_moderate_morning_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_feel_best_in_the_first_half_of_the_day)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_intermediate_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_follow_a_balanced_day_night_rhythm)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_moderate_evening_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_re_naturally_inclined_to_be_a_night_owl)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_definite_evening_type) -> {
+                    tvIntro.apply{
+                        text = getString(R.string.text_you_re_a_true_night_owl)
+                        visible()
+                    }
+                }
+
+                else -> tvIntro.gone()
+            }
+
             tvDescType.text = chronotypeData?.description ?: "-"
         }
     }

@@ -3,21 +3,21 @@ package com.oreo.ui.timelineScreen
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
+import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
-import com.oreo.ui.heartrate.HeartRatePagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
@@ -34,48 +34,49 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     }
 
     private fun setUi() {
-        binding.lytHeader.view1.visible()
-        binding.lytHeader.ivAddFriend.invisible()
-        binding.lytHeader.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
-        binding.lytHeader.tvTitle.text = getString(R.string.text_timeline)
+        binding.lytToolbar.tvTitle.text = getString(R.string.text_timeline)
+        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.ivAddFriend.visible()
+        binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
+        binding.lytToolbar.backBtn.visible()
     }
 
 
     override fun initListener() {
 
-        binding.tabLayout.setOnChartScrollChangedListener(this)
-
-        binding.lytHeader.view1.setOnClickListener {
-            mainViewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.info_clicked,
-                HashMap<String, Any>().apply {
-                    this["source"] = "homepage"
-                    this["section"] = "heart_rate"
-                }
-            )
-            navigate(R.id.fragmentHrInfo)
+        binding.ivAddLogFab.setOnClickListener {
+            navigate(R.id.addActivityTimelineFragment)
         }
 
-        binding.lytHeader.backBtn.setOnClickListener {
+        binding.tabLayout.setOnChartScrollChangedListener(this)
+
+        binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
 
-        /* binding.tabLayout.tvDateLeft.setOnClickListener {
-             val currentItem = binding.viewPagerHeartRate.currentItem
-             if (currentItem == 0) return@setOnClickListener
-             binding.viewPagerHeartRate.setCurrentItem((currentItem - 1), true)
+        binding.lytToolbar.view1.setOnClickListener {
+            showCalendar()
+        }
+    }
 
-         }
+    private fun showCalendar() {
+        setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
+            val selectedDate =
+                bundle.getString("selected_date") ?: return@setFragmentResultListener
 
-         binding.tabLayout.tvDateRight.setOnClickListener {
-             if (pagerAdapter == null) return@setOnClickListener
-             val currentItem = binding.viewPagerHeartRate.currentItem
-             if (currentItem == (pagerAdapter!!.itemCount - 1)) {
-                 return@setOnClickListener
-             }
-             binding.viewPagerHeartRate.setCurrentItem((currentItem + 1), true)
-         }*/
+            /*uiController.logAppEvent(
+                MoEngageLunaAppEvents.calender_day_selected,
+                hashMapOf("source" to "readiness")
+            )*/
 
+            mainViewModel.onCalendarDateSelected(selectedDate)
+            mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+        }
+
+        navigate(R.id.bottomSheetCalendar, Bundle().apply {
+            this.putString("selectedDate", mainViewModel.selectedDate)
+            this.putString("launchedFrom", "timeline")
+        })
     }
 
     fun setTopBar() {
@@ -124,7 +125,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             return
         }
         mainViewModel.selectedDate = chartModel.date!!
-        mainViewModel.handleAddWorkoutVisibility()
+        //mainViewModel.handleAddWorkoutVisibility()
 
         val returnDate = mainViewModel.updateSelectedDate(mainViewModel.selectedDate)
         if (returnDate != null) {
@@ -160,6 +161,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 //setTabDates(position)
+                binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==LocalDate.now())
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
@@ -172,61 +174,5 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         })
 
     }
-
-    /*private fun setTabDates(position: Int) {
-        var currentDayText = ""
-        val centerDate = pagerAdapter?.getDate(position)
-        if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
-            currentDayText = "Today, "
-        }
-        LocalDate.MAX
-        binding.tabLayout.tvSelectedDate.text = "$currentDayText${
-            if (currentDayText.isEmpty()) {
-                DateFormats.getOrdinalDate(
-                    centerDate,
-                    DateFormats.dateFormat3()
-                )
-            } else {
-                DateFormats.getOrdinalDateToday(
-                    centerDate,
-                    DateFormats.dateFormat3(),
-                )
-            }
-        }"
-        val leftDate = pagerAdapter?.getDate(position - 1)
-        if (leftDate == null) {
-            binding.tabLayout.tvDateLeft.gone()
-        } else {
-            binding.tabLayout.tvDateLeft.visible()
-            binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
-                leftDate,
-                DateFormats.dateFormat3(),
-            )
-        }
-        val rightDate = pagerAdapter?.getDate(position + 1)
-        if (rightDate == null) {
-            binding.tabLayout.tvDateRight.gone()
-        } else {
-            var rightTodayText = ""
-            if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
-                rightTodayText = "Today, "
-            }
-            binding.tabLayout.tvDateRight.visible()
-            binding.tabLayout.tvDateRight.text = "$rightTodayText${
-                if (rightTodayText.isEmpty()) {
-                    DateFormats.getOrdinalDate(
-                        rightDate,
-                        DateFormats.dateFormat3(),
-                    )
-                } else {
-
-                    DateFormats.getOrdinalDateToday(
-                        rightDate,
-                        DateFormats.dateFormat3(),
-                    )
-                }
-            }"
-        }
-    }*/
 
 }

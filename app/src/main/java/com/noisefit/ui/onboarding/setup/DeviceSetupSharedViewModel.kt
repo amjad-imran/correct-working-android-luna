@@ -105,6 +105,7 @@ class DeviceSetupSharedViewModel @Inject constructor(
                             if (it.firmwareVersion == null) {
                                 navigateToDeviceUpToDate.postValue(Event(true))
                             } else {
+                                updateRepository.saveNewOtaVersion(null,null)
                                 navigateToUpdateAvailable.postValue(Event(true))
                             }
                             //updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)

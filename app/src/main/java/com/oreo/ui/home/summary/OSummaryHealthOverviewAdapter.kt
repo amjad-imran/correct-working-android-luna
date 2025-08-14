@@ -95,7 +95,7 @@ import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
-import com.oreo.data.model.timeline.ItemTimelineModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -159,6 +159,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
 
     object OnTimelineCardClicked: OSummaryHealthOverviewClickEnum()
+    object OnLogActivityClicked: OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -671,17 +672,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     HomeRecyclerViewHolder(binding){
 
         class TimelineAdapter(
-            private val listData: List<ItemTimelineModel>
+            private val listData: List<ItemTimelineResponseModel>
         ): RecyclerView.Adapter<TimelineAdapter.ItemTimelineViewHolder>()
         {
 
             inner class ItemTimelineViewHolder(private val binding: ItemTimelineDashBinding): RecyclerView.ViewHolder(binding.root){
-                fun bind(data: ItemTimelineModel, position: Int){
+                fun bind(data: ItemTimelineResponseModel, position: Int){
                     binding.tvTitle.text = data.title
-                    binding.tvTitle.setTextColor(data.titleColor)
+                    data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
                     binding.tvDesc.text = data.desc
-                    binding.tvTime.text = data.time
+                    binding.tvTime.text = data.displayTime
 
                     binding.divider.root.setVisibilityByCondition(position != listData.size-1)
                 }
@@ -708,14 +709,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         fun bind(data: OHealthOverview.TimelineDash){
 
-            val adapter = TimelineAdapter(data.listData)
-            binding.rvActivities.apply {
-                this.layoutManager = LinearLayoutManager(binding.root.context)
-                this.adapter = adapter
+            if(data.listData.isNullOrEmpty()){
+                binding.rvActivities.gone()
+                binding.lytNoData.visible()
+            }else{
+                val adapter = TimelineAdapter(data.listData)
+                binding.rvActivities.apply {
+                    this.layoutManager = LinearLayoutManager(binding.root.context)
+                    this.adapter = adapter
+                    binding.lytNoData.gone()
+                    visible()
+                }
             }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
+            }
+            binding.btnLogAnActivity.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
             }
         }
 
@@ -3078,9 +3089,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
-            setCircadianGraph(data)
-            // Graph
+            binding.tvWindow.text = data.title ?: "-"
+            binding.tvDesc.text = data.description ?: "-"
 
+            // Graph
+            setCircadianGraph(data)
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
@@ -3104,9 +3117,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.graphView.timeWindows = it
             }
             binding.graphView.redraw()
-
-            binding.tvWindow.text = data.title ?: "-"
-            binding.tvDesc.text = data.description ?: "-"
         }
 
     }

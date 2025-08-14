@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
@@ -71,7 +72,11 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
         }
 
         binding.tvSkip.setOnClickListener {
-            viewModel.submitQuizQuesAndAnswers(false)
+            viewModel.submitQuizQuesAndAnswers()
+        }
+
+        binding.btnGetStarted.setOnClickListener {
+            viewModel.submitQuizQuesAndAnswers()
         }
     }
 
@@ -146,6 +151,15 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
                 }
             }
         }
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val lastPageIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
+                binding.btnGetStarted.setVisibilityByCondition(lastPageIndex >= 0 && position == lastPageIndex)
+            }
+        })
+
 
         viewModel.quizDataSubmitted.observe(this){
             it.getContent()?.let {

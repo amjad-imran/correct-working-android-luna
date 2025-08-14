@@ -37,6 +37,7 @@ import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.ItemCircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -99,6 +100,15 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.ACTIVITY_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.CAFFEINE_INTAKE_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.LIGHT_EXPOSURE_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INTAKE_KEY_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.NAP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.PERIOD_STARTED_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SLEEP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CONSUMPTION_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -114,6 +124,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
+import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -220,6 +231,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var userManagedSwitchState = false
     var caffeineGraphData: CaffeineGraphDataModel? = null
     var circadianGraphData: CircadianGraphData? = null
+    var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     var summaryAvailable: Boolean? = false
     //
 
@@ -1242,11 +1254,11 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                     }
 
-                    "workout_history" -> {
+                    /*"workout_history" -> {
                         getWorkoutHistoryCard(healthData.activity)?.let {
                             userActivities.add(it)
                         }
-                    }
+                    }*/
 
                     "stress" -> {
                         getStressCard(healthData)?.let {
@@ -1299,28 +1311,125 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getTimelineCard(): OHealthOverview?{
+        val dataList = timeTrackerActivities?.let { ArrayList(it) }
+        dataList?.forEach { data ->
+            data.displayTime = convertTimeFormat(data.startTime)
+            when(data.event){
+                SLEEP_KEY -> {
+                    data.titleColor = "#A8A8ED".toColorInt()
+                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                }
+
+                NAP_KEY -> {
+                    data.titleColor = "#A8A8ED".toColorInt()
+                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                }
+
+                WORKOUT_KEY -> {
+                    data.titleColor = "#78C3F9".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                WATER_CONSUMPTION_KEY -> {
+                    data.titleColor = "#8EF1C3".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                CAFFEINE_INTAKE_KEY -> {
+                    data.titleColor = "#DCA58E".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                MEAL_INTAKE_KEY_KEY -> {
+                    data.titleColor = "#FFE3B2".toColorInt()
+                    data.desc = "Meal 1"
+                }
+
+                LIGHT_EXPOSURE_KEY -> {
+                    data.titleColor = "#FFE1CF".toColorInt()
+                    data.value?.let {
+                        data.desc = "${it.toInt()/60} minutes"
+                        /*data.unit?.let { data.desc += " $it" }*/
+                    }
+                }
+
+                PERIOD_STARTED_KEY -> {
+                    data.titleColor = "#F18EBD".toColorInt()
+                    data.desc = "Day 1"
+                }
+
+                ACTIVITY_KEY -> {
+                    data.titleColor = "#FFFFFF".toColorInt()
+                }
+
+                else -> {}
+            }
+        }
+
         return OHealthOverview.TimelineDash(
-            listData = listOf(
-                ItemTimelineModel(
-                    title = "Caffeine intake",
-                    desc = "30 mg",
-                    time = "2:30 PM",
-                    titleColor = "#DCA58E".toColorInt(),
-                ),
-                ItemTimelineModel(
-                    title = "Meal intake",
-                    desc = "Meal 1",
-                    time = "2:30 PM",
-                    titleColor = "#FFE3B2".toColorInt(),
-                ),
-                ItemTimelineModel(
-                    title = "Exercise duration",
-                    desc = "30 minutes",
-                    time = "2:30 PM",
-                    titleColor = "#78C3F9".toColorInt(),
-                ),
-            )
+            listData = dataList
         )
+    }
+
+    private fun convertTimeFormat(time: String?): String {
+        return try{
+            val originalFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val timeObj = LocalTime.parse(time, originalFormatter)
+            val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
+
+            timeObj.format(newFormatter).uppercase(Locale.getDefault())
+        }catch (e: Exception){
+            LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
+            "-"
+        }
+    }
+
+    fun getSleepDuration(
+        startDate: String?,
+        startTime: String?,
+        endDate: String?,
+        endTime: String?
+    ): String {
+        return try {
+            // Define the format for time
+            val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
+
+            // Parse the start and end dates into LocalDate objects
+            val startDateObj = LocalDateTime.parse("$startDate $startTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val endDateObj = LocalDateTime.parse("$endDate $endTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
+            // If the end time is before the start time, adjust the end time to the next day
+            val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
+                endDateObj.plusDays(1)
+            } else {
+                endDateObj
+            }
+
+            // Calculate the duration between start and end times
+            val duration = Duration.between(startDateObj, adjustedEndDateObj)
+            val hours = duration.toHours()
+            val minutes = duration.toMinutes() % 60
+
+            // Format the start and end times into 12-hour AM/PM format
+            val formattedStartTime = startDateObj.format(timeFormatter12Hour)
+            val formattedEndTime = adjustedEndDateObj.format(timeFormatter12Hour)
+
+            // Return the formatted result
+            val formattedTime = "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
+            "$hours hr $minutes m; $formattedTime"
+        }catch (e: Exception){
+            LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
+            "-"
+        }
     }
 
     private fun getCircadianAlignmentCardData(): OHealthOverview? {
@@ -1418,8 +1527,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 startTime = startTime,
                 endTime = endTime,
                 timeWindow = timeWindowListData,
-                title = circadianGraphData?.circadianMidPointData?.nudge?.title,
-                description = circadianGraphData?.circadianMidPointData?.nudge?.description,
+                title = circadianGraphData?.title,
+                description = circadianGraphData?.description,
             )
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
@@ -2865,9 +2974,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun checkForNewAppVersion() {
         viewModelScope.launch(Dispatchers.IO) {
-
-            checkAppVersionServer()
-
 
             val callApi = postOfflineAppUpdateData()
             if (callApi.not()) return@launch

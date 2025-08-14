@@ -17,6 +17,7 @@ import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 
 
 interface DataStoredInterface {
@@ -570,9 +571,15 @@ interface DataStoredInterface {
     fun setCircadianGraphData(graphData: CircadianGraphData?)
     fun getCircadianGraphData(): CircadianGraphData?
 
+    fun setTimelineActivitiesData(data: List<ItemTimelineResponseModel>?)
+    fun getTimelineActivitiesData(): List<ItemTimelineResponseModel>?
+
     fun getLastKnownTimezone(): String?
     fun setLastKnownTimezone(timeZone: String)
     fun isTimezoneChangedAlertCardDismissed(isChanged: Boolean?=null): Boolean
+
+    fun saveUserCopyTodayData(data: OreoStepsData?)
+    fun getUserCopyTodayData():OreoStepsData?
 }
 
 enum class AppTrackEvent {

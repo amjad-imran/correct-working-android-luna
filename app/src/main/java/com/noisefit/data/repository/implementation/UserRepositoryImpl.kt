@@ -45,6 +45,7 @@ import com.oreo.data.model.CaffeineFoodItem
 import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
+import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -449,6 +450,42 @@ class UserRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.submitCircadianQuizData(
                 "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/onboarding",
+                req
+            )
+        }
+    }
+
+    override suspend fun getCurrDayTimelineActivitiesData(date: String): Flow<Resource<BaseApiResponse<TimelineScreenResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getCurrDayTimelineActivitiesData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker",
+                date
+            )
+        }
+    }
+
+    override suspend fun submitLogMealTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogMealTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal",
+                req
+            )
+        }
+    }
+
+    override suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogCaffeineTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-caffeine",
+                req
+            )
+        }
+    }
+
+    override suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-light",
                 req
             )
         }

@@ -2092,5 +2092,40 @@
     <string name="text_learn_more_2">Scopri di più</string>
     <string name="text_daily_rhythm_guide">Guida al ritmo quotidiano</string>
 
+    <string name="text_your_timeline">La tua timeline</string>
+    <string name="text_timeline">Timeline</string>
+    <string name="text_log_an_activity">Registra un’attività</string>
+    <string name="text_unable_to_show_your_data_for_today">Impossibile mostrare i tuoi dati per oggi</string>
+    <string name="text_detailed_overview">Panoramica dettagliata</string>
+    <string name="text_take_it_easy_today">Oggi prendila con calma</string>
+    <string name="text_circadian_body_status">Stato corporeo circadiano</string>
+    <string name="text_view_all_logs">Visualizza tutti i registri</string>
+    <string name="text_circadian_mid_point_desc_correcting">Stai migliorando — rimanere attivo più tardi e ritardare i segnali di sonno sta aiutando.</string>
+    <string name="text_add_log">Aggiungi registro</string>
+    <string name="text_select_activity">Seleziona attività</string>
+    <string name="text_intake_time">Ora di assunzione</string>
+    <string name="text_meal_val">Past %1$d</string>
+    <string name="text_add_meal_val">AGGIUNGI PASTO %1$d</string>
+    <string name="text_add_activity">Aggiungi attività</string>
+    <string name="text_meal_intake">Assunzione del pasto</string>
+    <string name="text_water_consumption">Consumo d’acqua</string>
+    <string name="text_period_started">Ciclo iniziato</string>
+    <string name="text_add_logs">Aggiungi registri</string>
+    <string name="text_meal_1">PASTO 1</string>
+    <string name="text_intake_1">ASSUNZIONE 1</string>
+    <string name="text_quantity_consumed">Quantità consumata</string>
+    <string name="text_category">Categoria</string>
+    <string name="text_message_circadian">Il tuo corpo segue un ritmo naturale di 24 ore. Sincronizzare luce, caffeina e sonno intorno a questo ritmo può aiutarti a sentirti più energico e concentrato.</string>
+    <string name="text_log_1">REGISTRO 1</string>
+    <string name="text_definite_morning_type">Tipo decisamente mattiniero</string>
+    <string name="text_you_re_an_early_riser_by_nature">Sei un mattiniero per natura.</string>
+    <string name="text_moderate_morning_type">Tipo mattiniero moderato</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">Ti senti meglio nella prima metà della giornata.</string>
+    <string name="text_intermediate_type">Tipo intermedio</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">Segui un ritmo giorno-notte equilibrato.</string>
+    <string name="text_moderate_evening_type">Tipo serale moderato</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">Tendi naturalmente a essere un animale notturno.</string>
+    <string name="text_definite_evening_type">Tipo decisamente serale</string>
+    <string name="text_you_re_a_true_night_owl">Sei un vero animale notturno.</string>
 
 </resources>

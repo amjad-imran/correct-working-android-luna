@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian">
+
+    <TextView
+        android:id="@+id/textView187"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/gilroy_bold"
+        android:text="@string/text_log_1"
+        android:textColor="#B3FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView188"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_flow"
+        android:textColor="#80FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/textView187"
+        app:layout_constraintTop_toBottomOf="@+id/textView187" />
+
+    <View
+        android:id="@+id/divider1st"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:background="#24D9D9D9"
+        app:layout_constraintBottom_toBottomOf="@+id/textView188"
+        app:layout_constraintEnd_toEndOf="@+id/textView187"
+        app:layout_constraintStart_toEndOf="@+id/textView188"
+        app:layout_constraintTop_toTopOf="@+id/textView188" />
+
+    <View
+        android:id="@+id/divider2nd"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:background="#24D9D9D9"
+        app:layout_constraintBottom_toBottomOf="@+id/textView188"
+        app:layout_constraintEnd_toEndOf="@+id/textView187"
+        app:layout_constraintStart_toEndOf="@+id/textView188"
+        app:layout_constraintTop_toTopOf="@+id/textView188" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFlow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView188"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_cycle_log" />
+
+    <TextView
+        android:id="@+id/tvSymptoms"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/text_symptoms"
+        android:textColor="#80FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvFlow" />
+
+    <View
+        android:id="@+id/divider2st"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="#24D9D9D9"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSymptoms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvSymptoms"
+        app:layout_constraintTop_toTopOf="@+id/tvSymptoms" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSymptoms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSymptoms"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_cycle_log" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

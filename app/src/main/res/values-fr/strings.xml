@@ -2211,5 +2211,40 @@ onjour, Luna"</string>
     <string name="text_learn_more_2">En savoir plus</string>
     <string name="text_daily_rhythm_guide">Guide du rythme quotidien</string>
 
+    <string name="text_your_timeline">Votre chronologie</string>
+    <string name="text_timeline">Chronologie</string>
+    <string name="text_log_an_activity">Enregistrer une activité</string>
+    <string name="text_unable_to_show_your_data_for_today">Impossible d’afficher vos données pour aujourd’hui</string>
+    <string name="text_detailed_overview">Vue détaillée</string>
+    <string name="text_take_it_easy_today">Reposez-vous aujourd’hui</string>
+    <string name="text_circadian_body_status">Statut corporel circadien</string>
+    <string name="text_view_all_logs">Voir tous les enregistrements</string>
+    <string name="text_circadian_mid_point_desc_correcting">Vous vous améliorez — être plus actif tardivement et retarder les signaux de sommeil aide.</string>
+    <string name="text_add_log">Ajouter un enregistrement</string>
+    <string name="text_select_activity">Sélectionner une activité</string>
+    <string name="text_intake_time">Heure de prise</string>
+    <string name="text_meal_val">Repas %1$d</string>
+    <string name="text_add_meal_val">AJOUTER REPAS %1$d</string>
+    <string name="text_add_activity">Ajouter une activité</string>
+    <string name="text_meal_intake">Prise alimentaire</string>
+    <string name="text_water_consumption">Consommation d’eau</string>
+    <string name="text_period_started">Début des règles</string>
+    <string name="text_add_logs">Ajouter des enregistrements</string>
+    <string name="text_meal_1">REPAS 1</string>
+    <string name="text_intake_1">PRISE 1</string>
+    <string name="text_quantity_consumed">Quantité consommée</string>
+    <string name="text_category">Catégorie</string>
+    <string name="text_message_circadian">Votre corps suit un rythme naturel de 24 heures. Synchroniser la lumière, la caféine et le sommeil autour de ce rythme peut vous aider à être plus énergique et concentré.</string>
+    <string name="text_log_1">ENREGISTREMENT 1</string>
+    <string name="text_definite_morning_type">Type définitivement matinal</string>
+    <string name="text_you_re_an_early_riser_by_nature">Vous êtes un lève-tôt par nature.</string>
+    <string name="text_moderate_morning_type">Type matinal modéré</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">Vous vous sentez mieux dans la première moitié de la journée.</string>
+    <string name="text_intermediate_type">Type intermédiaire</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">Vous suivez un rythme jour-nuit équilibré.</string>
+    <string name="text_moderate_evening_type">Type du soir modéré</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">Vous avez naturellement tendance à être un oiseau de nuit.</string>
+    <string name="text_definite_evening_type">Type définitivement nocturne</string>
+    <string name="text_you_re_a_true_night_owl">Vous êtes un véritable oiseau de nuit.</string>
 
 </resources>

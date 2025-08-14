@@ -2097,5 +2097,40 @@
     <string name="text_learn_more_2">เรียนรู้เพิ่มเติม</string>
     <string name="text_daily_rhythm_guide">คู่มือจังหวะประจำวัน</string>
 
+    <string name="text_your_timeline">ไทม์ไลน์ของคุณ</string>
+    <string name="text_timeline">ไทม์ไลน์</string>
+    <string name="text_log_an_activity">บันทึกกิจกรรม</string>
+    <string name="text_unable_to_show_your_data_for_today">ไม่สามารถแสดงข้อมูลของคุณสำหรับวันนี้ได้</string>
+    <string name="text_detailed_overview">ภาพรวมโดยละเอียด</string>
+    <string name="text_take_it_easy_today">วันนี้พักผ่อนให้เต็มที่</string>
+    <string name="text_circadian_body_status">สถานะร่างกายตามจังหวะวงจรวัน</string>
+    <string name="text_view_all_logs">ดูบันทึกทั้งหมด</string>
+    <string name="text_circadian_mid_point_desc_correcting">คุณกำลังพัฒนา — การเคลื่อนไหวช้าลงและเลื่อนสัญญาณการนอนช่วยได้</string>
+    <string name="text_add_log">เพิ่มบันทึก</string>
+    <string name="text_select_activity">เลือกกิจกรรม</string>
+    <string name="text_intake_time">เวลาที่บริโภค</string>
+    <string name="text_meal_val">มื้ออาหาร %1$d</string>
+    <string name="text_add_meal_val">เพิ่มมื้ออาหาร %1$d</string>
+    <string name="text_add_activity">เพิ่มกิจกรรม</string>
+    <string name="text_meal_intake">การบริโภคมื้ออาหาร</string>
+    <string name="text_water_consumption">การบริโภคน้ำ</string>
+    <string name="text_period_started">เริ่มรอบเดือน</string>
+    <string name="text_add_logs">เพิ่มบันทึก</string>
+    <string name="text_meal_1">มื้อ 1</string>
+    <string name="text_intake_1">การบริโภค 1</string>
+    <string name="text_quantity_consumed">ปริมาณที่บริโภค</string>
+    <string name="text_category">หมวดหมู่</string>
+    <string name="text_message_circadian">ร่างกายของคุณทำงานตามจังหวะธรรมชาติ 24 ชั่วโมง การปรับแสง คาเฟอีน และการนอนตามจังหวะนี้จะช่วยให้คุณรู้สึกกระปรี้กระเป่าและมีสมาธิมากขึ้น</string>
+    <string name="text_log_1">บันทึก 1</string>
+    <string name="text_definite_morning_type">แน่นอนว่าเป็นคนตื่นเช้า</string>
+    <string name="text_you_re_an_early_riser_by_nature">โดยธรรมชาติแล้วคุณเป็นคนตื่นเช้า</string>
+    <string name="text_moderate_morning_type">ประเภทเช้าแบบปานกลาง</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">คุณรู้สึกดีที่สุดในช่วงเช้า</string>
+    <string name="text_intermediate_type">ประเภทกลาง</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">คุณมีจังหวะวัน-คืนที่สมดุล</string>
+    <string name="text_moderate_evening_type">ประเภทเย็นแบบปานกลาง</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">คุณมีแนวโน้มโดยธรรมชาติเป็นคนกลางคืน</string>
+    <string name="text_definite_evening_type">แน่นอนว่าเป็นคนนอนดึก</string>
+    <string name="text_you_re_a_true_night_owl">คุณคือคนนอนดึกตัวจริง</string>
 
 </resources>

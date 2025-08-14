@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.HrvAlerts
 import com.noisefit_commans.data.model.LocalUserData
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.NplQuizDataModel
+import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.RecentActivities
 import com.noisefit_commans.data.model.RoundUpResponse
 import com.noisefit_commans.data.model.Token
@@ -44,6 +45,7 @@ import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -153,7 +155,7 @@ private const val ROUND_UP_DATA = "ROUND_UP_DATA"
 private const val IS_PREVIOUSLY_PAIRED = "IS_PREVIOUSLY_PAIRED"
 private const val USER_HEALTH_CACHE_V = "USER_HEALTH_CACHE_V"
 private const val WORKOUT_IMAGES = "WORKOUT_IMAGES"
-
+private const val SAVE_USER_COPY_TODAY_DATA = "SAVE_USER_COPY_TODAY_DATA"
 
 private const val CALL_ALERT = "CALL_ALERT"
 private const val SMS_ALERT = "SMS_ALERT"
@@ -261,6 +263,8 @@ private const val IS_LOW_WORKOUT_PLAN_SETUP = "IS_LOW_WORKOUT_PLAN_SETUP"
 private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
 private const val BOOSTER_WOMEN = "BOOSTER_WOMEN"
+
+private const val TIMELINE_ACTIVITIES_DATA = "TIMELINE_ACTIVITIES_DATA"
 
 private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
 private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
@@ -852,6 +856,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
         mPrefs.edit()?.remove(CIRCADIAN_ONBOARD)?.apply()
+        mPrefs.edit()?.remove(TIMELINE_ACTIVITIES_DATA)?.apply()
 
         mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()
         mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
@@ -2354,6 +2359,29 @@ class DataStoredImpl
             mPrefs.edit()?.putBoolean(TIMEZONE_CHANGED_CARD_DISMISSED, isChanged)?.commit()
         }
         return output
+    }
+
+    override fun saveUserCopyTodayData(data: OreoStepsData?) {
+        mPrefs.edit()?.putString(SAVE_USER_COPY_TODAY_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getUserCopyTodayData(): OreoStepsData? {
+        val data = mPrefs.getString(SAVE_USER_COPY_TODAY_DATA, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else {
+            gson.fromJson(data, OreoStepsData::class.java)
+        }
+    }
+
+    override fun setTimelineActivitiesData(data: List<ItemTimelineResponseModel>?) {
+        if(data != null){
+            mPrefs.edit()?.putString(TIMELINE_ACTIVITIES_DATA, gson.toJson(data))?.apply()
+        }
+    }
+
+    override fun getTimelineActivitiesData(): List<ItemTimelineResponseModel>? {
+        return mPrefs.getString(TIMELINE_ACTIVITIES_DATA, null)?.let { Gson().fromJson<List<ItemTimelineResponseModel>>(it) }
     }
 
 }

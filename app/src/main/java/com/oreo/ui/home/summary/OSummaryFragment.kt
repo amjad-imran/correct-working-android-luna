@@ -73,7 +73,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 super.onPageSelected(position)
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
-                mainViewModel.handleAddWorkoutVisibility()
+                //mainViewModel.handleAddWorkoutVisibility()
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
@@ -539,7 +539,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             return
         }
         mainViewModel.selectedDate = chartModel.date!!
-        mainViewModel.handleAddWorkoutVisibility()
+        //mainViewModel.handleAddWorkoutVisibility()
 
         val returnDate = mainViewModel.updateSelectedDate(mainViewModel.selectedDate)
         if (returnDate != null) {

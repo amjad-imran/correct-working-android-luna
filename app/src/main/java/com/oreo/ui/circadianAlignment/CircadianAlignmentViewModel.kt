@@ -90,7 +90,7 @@ class CircadianAlignmentViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             circadianResponseData.postValue(it)
-                            it.activities?.let { it1 -> prepareCorrectiveActivitiesData(it1) }
+                            it.activities?.let { it1 -> prepareCorrectiveActivitiesData(it1, it.graphData!=null) }
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }
@@ -99,115 +99,151 @@ class CircadianAlignmentViewModel
         }
     }
 
-    private fun prepareCorrectiveActivitiesData(activitiesData: List<Activity>) {
-        activitiesData.forEach {
+    private fun prepareCorrectiveActivitiesData(activitiesData: List<Activity>?, shouldShowFooter: Boolean) {
 
-            val isLogged = it.status
-            val timeLeft =
-                if (it.time == null || it.time == 0) {
-                    null
-                } else if (it.time <= 0) {
-                    "0"
-                } else {
-                    val calcTime = formatSecondsToHHMM(it.time)
-                    resourceProvider.getString(R.string.text_timeval_left, calcTime)
-                }
+        lightExposureData.value = CorrectiveActivitiesModel(
+            key = light_exposure_key,
+            bgMainImg = R.drawable.bg_light_exposure_corrective_activities,
+            title = resourceProvider.getString(R.string.text_light_exposure),
+            desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_1),
+            onlyImgWithText = OnlyImgWithText(
+                img = R.drawable.ic_sun_activity_monitor,
+                txt = "45\nmins"
+            ),
+        )
 
-            when (it.type) {
-                // Light Exposure Data
-                light_exposure_key -> {
-                    lightExposureData.value = CorrectiveActivitiesModel(
-                        key = light_exposure_key,
-                        bgMainImg = R.drawable.bg_light_exposure_corrective_activities,
-                        title = resourceProvider.getString(R.string.text_light_exposure),
-                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_1),
-                        onlyImgWithText = OnlyImgWithText(
-                            img = R.drawable.ic_sun_activity_monitor,
-                            txt = "45\nmins"
-                        ),
-                        progressBarLytData = null,
-                        logStatus = isLogged ?: false,
-                        time = timeLeft,
-                        timeInSec = it.time
-                    )
-                }
+        dailyStepsData.value = CorrectiveActivitiesModel(
+            key = daily_steps_key,
+            bgMainImg = R.drawable.bg_daily_steps_corrective_activities,
+            title = resourceProvider.getString(R.string.text_daily_steps),
+            desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_2),
+            progressBarLytData = ProgressBarLytData(
+                totalProgress = 2334,
+                currentProgress = 1634,
+                img = R.drawable.ic_shoe_corrective_activities,
+                txt = "2334"
+            ),
+            /*logStatus = null,
+            time = timeLeft,
+            timeInSec = it.time*/
+        )
 
-                daily_steps_key -> {
-                    // Daily Steps Data
-                    val goal = it.goal?.toInt()
-                    dailyStepsData.value = CorrectiveActivitiesModel(
-                        key = daily_steps_key,
-                        bgMainImg = R.drawable.bg_daily_steps_corrective_activities,
-                        title = resourceProvider.getString(R.string.text_daily_steps),
-                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_2),
-                        onlyImgWithText = null,
-                        progressBarLytData = ProgressBarLytData(
-                            totalProgress = goal ?: 0,
-                            currentProgress = goal?.let { 1000 } ?: 0,
-                            img = R.drawable.ic_shoe_corrective_activities,
-                            txt = it.goal ?: "-"
-                        ),
-                        logStatus = null,
-                        time = timeLeft,
-                        timeInSec = it.time
-                    )
-                }
+        mealWindowData.value = CorrectiveActivitiesModel(
+            key = meal_window_key,
+            bgMainImg = R.drawable.bg_meal_window_corrective_activities,
+            title = resourceProvider.getString(R.string.text_meal_window),
+            desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_3),
+            onlyOnlyImgLytData = R.drawable.ic_meal_corrective_activities,
+        )
 
-                meal_window_key -> {
-                    // Meal Window Data
-                    mealWindowData.value = CorrectiveActivitiesModel(
-                        key = meal_window_key,
-                        bgMainImg = R.drawable.bg_meal_window_corrective_activities,
-                        title = resourceProvider.getString(R.string.text_meal_window),
-                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_3),
-                        onlyImgWithText = OnlyImgWithText(
-                            img = R.drawable.ic_meal_corrective_activities,
-                            txt = null
-                        ),
-                        progressBarLytData = null,
-                        logStatus = isLogged ?: false,
-                        time = timeLeft,
-                        timeInSec = it.time
-                    )
-                }
+        workoutData.value = CorrectiveActivitiesModel(
+            key = workout_key,
+            bgMainImg = R.drawable.bg_workout_corrective_activities,
+            title = resourceProvider.getString(R.string.text_workout),
+            desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_4),
+            progressBarLytData = ProgressBarLytData(
+                totalProgress = 23,
+                currentProgress = 9,
+                img = R.drawable.ic_workout_corrective_activities,
+                txt = "23 mins"
+            )
+        )
 
-                workout_key -> {
-                    // Workout Data
-                    val goal = it.goal?.toInt()?.div(60)
-                    workoutData.value = CorrectiveActivitiesModel(
-                        key = workout_key,
-                        bgMainImg = R.drawable.bg_workout_corrective_activities,
-                        title = resourceProvider.getString(R.string.text_workout),
-                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_4),
-                        onlyImgWithText = null,
-                        progressBarLytData = ProgressBarLytData(
-                            totalProgress = goal ?: 0,
-                            currentProgress = goal?.let { 5 } ?: 0,
-                            img = R.drawable.ic_workout_corrective_activities,
-                            txt = goal?.let { "$it mins" } ?: "-"
-                        ),
-                        logStatus = null,
-                        time = timeLeft,
-                        timeInSec = it.time
-                    )
-                }
+        caffeineWindowData.value = CorrectiveActivitiesModel(
+            key = caffeine_window_key,
+            bgMainImg = R.drawable.bg_caffeine_window_corrective_activities,
+            title = resourceProvider.getString(R.string.text_caffeine_window2),
+            desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_5),
+            onlyOnlyImgLytData = R.drawable.ic_caffeine_corrective_activities,
+        )
 
-                caffeine_window_key -> {
-                    // Caffeine Window Data
-                    caffeineWindowData.value = CorrectiveActivitiesModel(
-                        key = caffeine_window_key,
-                        bgMainImg = R.drawable.bg_caffeine_window_corrective_activities,
-                        title = resourceProvider.getString(R.string.text_caffeine_window2),
-                        desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_5),
-                        onlyImgWithText = OnlyImgWithText(
-                            img = R.drawable.ic_caffeine_corrective_activities,
-                            txt = null
-                        ),
-                        progressBarLytData = null,
-                        logStatus = isLogged ?: false,
-                        time = timeLeft,
-                        timeInSec = it.time
-                    )
+        if(shouldShowFooter){
+            var isLogged: Boolean?
+            var timeLeft: String?
+
+            activitiesData?.forEach {
+
+                isLogged = it.status
+                timeLeft =
+                    if (it.time == null || it.time == 0) {
+                        null
+                    } else if (it.time <= 0) {
+                        "0"
+                    } else {
+                        val calcTime = formatSecondsToHHMM(it.time)
+                        resourceProvider.getString(R.string.text_timeval_left, calcTime)
+                    }
+
+                val curData = it
+                when (it.type) {
+                    // Light Exposure Data
+                    light_exposure_key -> {
+                        lightExposureData.value?.apply {
+                            onlyImgWithText = OnlyImgWithText(
+                                img = R.drawable.ic_sun_activity_monitor,
+                                txt = if((curData.time?:0) <= 0) "-" else "${curData.goal?:45}\nmins"
+                            )
+                            showFooter = true
+                            logStatus = isLogged
+                            time = timeLeft
+                            timeInSec = it.time
+                        }
+                    }
+
+                    daily_steps_key -> {
+                        // Daily Steps Data
+                        val goal = it.goal?.toInt()
+                        dailyStepsData.value?.apply {
+                            progressBarLytData = ProgressBarLytData(
+                                totalProgress = goal ?: 0,
+                                currentProgress = goal?.let { curData.progress?:0 } ?: 0,
+                                img = R.drawable.ic_shoe_corrective_activities,
+                                txt = it.goal ?: "-"
+                            )
+
+                            showFooter = true
+                            logStatus = isLogged
+                            time = timeLeft
+                            timeInSec = it.time
+                        }
+                    }
+
+                    meal_window_key -> {
+                        // Meal Window Data
+                        mealWindowData.value?.apply {
+                            showFooter = true
+                            logStatus = isLogged
+                            time = timeLeft
+                            timeInSec = it.time
+                        }
+                    }
+
+                    workout_key -> {
+                        // Workout Data
+                        val goal = it.goal?.toInt()?.div(60)
+                        workoutData.value?.apply {
+                            progressBarLytData = ProgressBarLytData(
+                                totalProgress = goal ?: 0,
+                                currentProgress = goal?.let { ((it /60)*0.1).toInt() } ?: 0,
+                                img = R.drawable.ic_workout_corrective_activities,
+                                txt = if((curData.time?:0) <= 0) "-" else "${goal?:23} mins" /* goal?.let { "$it mins" } ?: "-"*/
+                            )
+                            showFooter = true
+                            logStatus = isLogged
+                            time = timeLeft
+                            timeInSec = it.time
+                        }
+                    }
+
+                    caffeine_window_key -> {
+                        // Caffeine Window Data
+                        caffeineWindowData.value?.apply {
+                            showFooter = true
+                            logStatus = isLogged ?: false
+                            time = timeLeft
+                            timeInSec = it.time
+                        }
+                    }
                 }
             }
         }
@@ -217,27 +253,22 @@ class CircadianAlignmentViewModel
 
         lightExposureData.value?.let {
             correctiveActivitiesList.add(it)
-
         }
 
         dailyStepsData.value?.let {
             correctiveActivitiesList.add(it)
-
         }
 
         mealWindowData.value?.let {
             correctiveActivitiesList.add(it)
-
         }
 
         workoutData.value?.let {
             correctiveActivitiesList.add(it)
-
         }
 
         caffeineWindowData.value?.let {
             correctiveActivitiesList.add(it)
-
         }
 
         correctiveActivitiesListData.postValue(correctiveActivitiesList)
@@ -255,7 +286,7 @@ class CircadianAlignmentViewModel
 
             list.forEach { card ->
                 if (card.time != null && card.timeInSec != null) {
-                    val totalMillis = card.timeInSec * 1000L
+                    val totalMillis = card.timeInSec!! * 1000L
 
                     timerMap[card.key]?.cancel() // Cancel existing if any
 

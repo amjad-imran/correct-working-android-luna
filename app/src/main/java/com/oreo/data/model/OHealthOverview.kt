@@ -5,6 +5,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -203,7 +204,7 @@ sealed class OHealthOverview {
     object CircadianAlignmentOnboarding : OHealthOverview()
 
     data class TimelineDash(
-        val listData: List<ItemTimelineModel>
+        val listData: List<ItemTimelineResponseModel>?
     ): OHealthOverview()
 
     class CardTrackFemaleHealth(
