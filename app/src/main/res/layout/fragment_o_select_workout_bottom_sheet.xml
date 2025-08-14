@@ -10,7 +10,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
-            style="@style/ModalStyleDialog"
+            android:background="@drawable/back_modal_v2_28"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dimen_12dp"
@@ -36,7 +36,7 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="@dimen/side_margin"
-                android:background="@drawable/back_modal_dialog"
+                android:background="@drawable/back_modal_v2_10"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +44,10 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etSearch"
-                style="@style/EditTextStyleSearch"
+                style="@style/EditTextStyleSearchV2"
                 android:layout_width="0dp"
                 android:background="@android:color/transparent"
-                android:drawableEnd="@drawable/ic_search"
+                android:drawableEnd="@drawable/ic_search_white"
                 android:drawablePadding="16dp"
                 android:hint="@string/text_search_here"
                 android:inputType="textCapWords"

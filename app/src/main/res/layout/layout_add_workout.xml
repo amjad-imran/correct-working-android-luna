@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/lytCaloriesBurn"
+        layout="@layout/layout_workout_calories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytWorkoutSelection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_modal_transparent_oreo"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -95,14 +103,24 @@
         <TextView
             android:id="@+id/textView187"
             style="@style/S12"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_bold"
-            android:text="@string/text_intake_1"
+            android:text="@string/text_date"
             android:textColor="#B3FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView187"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView187"
+            tools:text="Today >" />
 
         <TextView
             android:id="@+id/textView188"
@@ -111,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/text_intake_time"
+            android:text="@string/text_start_time"
             android:textColor="#80FFFFFF"
             app:layout_constraintStart_toStartOf="@+id/textView187"
             app:layout_constraintTop_toBottomOf="@+id/textView187" />
@@ -128,30 +146,18 @@
             app:layout_constraintTop_toTopOf="@+id/textView188" />
 
 
-        <TextView
-            android:id="@+id/textView192"
-            style="@style/S14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/text_today"
-            android:textColor="#CCCCCC"
-            app:layout_constraintStart_toStartOf="@+id/textView188"
-            app:layout_constraintTop_toBottomOf="@+id/textView188" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lytTimePicker"
+            android:id="@+id/lytStartTime"
             android:layout_width="0dp"
             android:layout_height="32dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/back_time_picker"
-            app:layout_constraintBottom_toBottomOf="@+id/textView192"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView192"
-            app:layout_constraintTop_toTopOf="@+id/textView192">
+            app:layout_constraintStart_toStartOf="@+id/textView1888"
+            app:layout_constraintTop_toBottomOf="@+id/textView188">
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tvStartTime"
                 style="@style/S14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -193,10 +199,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/text_duration"
+            android:text="@string/text_end_time"
             android:textColor="#80FFFFFF"
             app:layout_constraintStart_toStartOf="@+id/textView187"
-            app:layout_constraintTop_toBottomOf="@+id/lytTimePicker" />
+            app:layout_constraintTop_toBottomOf="@+id/lytStartTime" />
 
         <View
             android:id="@+id/divider2nd"
@@ -210,7 +216,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView188" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lytDuration"
+            android:id="@+id/lytEndTime"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_marginTop="16dp"
@@ -220,7 +226,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView1888">
 
             <TextView
-                android:id="@+id/tvDuration"
+                android:id="@+id/tvEndTime"
                 style="@style/S14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -258,7 +264,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <View
+            android:id="@+id/viewIntensity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian"
+            app:layout_constraintBottom_toBottomOf="@+id/lytItem"
+            app:layout_constraintEnd_toEndOf="@+id/lytItem"
+            app:layout_constraintStart_toStartOf="@+id/lytItem"
+            app:layout_constraintTop_toTopOf="@+id/lytItem" />
+
+        <include
+            android:id="@+id/lytItem"
+            layout="@layout/layout_aw_start_end_time_sub_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
 
 
 
