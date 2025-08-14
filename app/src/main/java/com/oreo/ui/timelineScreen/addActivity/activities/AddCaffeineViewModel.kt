@@ -22,7 +22,7 @@ class AddCaffeineViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val caffeineTime = MutableLiveData<LocalTime>(LocalTime.now())
-    val caffeineValue = MutableLiveData<Int>(30)
+    val caffeineValue = MutableLiveData<Int>(75)
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
 
     fun logCaffeineValue(localTime: LocalTime, quantity: Int) {
@@ -74,5 +74,31 @@ class AddCaffeineViewModel @Inject constructor(
             }
         }
     }
+
+    //todo convert for multilanguage
+    fun mgToCups(mg: Int): String {
+        return when (mg) {
+            25 -> "¼ cup coffee"
+            50 -> "½ cup coffee"
+            75 -> "¾ cup coffee"
+            100 -> "1 cup coffee"
+            125 -> "1¼ cups coffee"
+            150 -> "1½ cups coffee"
+            175 -> "1¾ cups coffee"
+            200 -> "2 cups coffee"
+            225 -> "2¼ cups coffee"
+            250 -> "2½ cups coffee"
+            275 -> "2¾ cups coffee"
+            300 -> "3 cups coffee"
+            325 -> "3¼ cups coffee"
+            350 -> "3½ cups coffee"
+            375 -> "3¾ cups coffee"
+            400 -> "4 cups coffee"
+            else -> {
+                ""
+            }
+        }
+    }
+
 
 }

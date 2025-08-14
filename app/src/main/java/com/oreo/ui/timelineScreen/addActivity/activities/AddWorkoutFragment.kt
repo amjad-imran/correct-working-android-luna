@@ -30,6 +30,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
@@ -119,6 +120,9 @@ class AddWorkoutFragment :
         setToolbar()
         setDefaultUIValue()
 
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+        }
 
         binding.btnSave.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_save_click)

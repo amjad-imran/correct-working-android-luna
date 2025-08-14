@@ -138,14 +138,25 @@
     <TextView
         android:id="@+id/tvCaffeineValue"
         style="@style/S14"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/back_time_picker"
-        android:padding="12dp"
+        android:paddingVertical="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView1888"
-        tools:text="30 mg" />
+        tools:text="130 mg" />
+
+    <com.oreo.ui.custom.CustomSlider
+        android:id="@+id/lytSlider"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCaffeineValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCaffeineValue"
+        app:layout_constraintTop_toTopOf="@+id/tvCaffeineValue" />
 
 
     <TextView

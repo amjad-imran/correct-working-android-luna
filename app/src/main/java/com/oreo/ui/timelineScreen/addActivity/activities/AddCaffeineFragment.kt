@@ -18,13 +18,16 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.custom.CustomSlider
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class AddCaffeineFragment :
@@ -37,11 +40,20 @@ class AddCaffeineFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUi()
+        setSlider()
     }
 
-    private fun setUi() {
+    private fun setSlider() {
+        val customSlider = binding.lytCard.lytSlider
 
+        customSlider.setRange(min = 25f, max = 400f, step = 25f)
+        customSlider.setValue(75f)
+
+        customSlider.setOnValueChangeListener(object : CustomSlider.OnValueChangeListener {
+            override fun onValueChanged(value: Int) {
+                viewModel.caffeineValue.value = value
+            }
+        })
     }
 
 
@@ -118,6 +130,7 @@ class AddCaffeineFragment :
         }
         viewModel.caffeineValue.observe(this) {
             binding.lytCard.tvCaffeineValue.text = "$it mg"
+            binding.lytCard.tvMeasurement.text = "· ${viewModel.mgToCups(it)}"
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
