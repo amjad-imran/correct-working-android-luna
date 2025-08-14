@@ -50,7 +50,7 @@ class ActivityListingFragment :
             layoutManager = LinearLayoutManager(this.context)
             adapter = activitiesListAdapter
         }
-        activitiesListAdapter.updateDataSet(getAllActivityListMap())
+        activitiesListAdapter.updateDataSet(sharedViewModel.getAllActivityListMap())
     }
 
     override fun initListener() {
@@ -60,48 +60,5 @@ class ActivityListingFragment :
     override fun subscribeObservers() {
 
     }
-
-    private fun getAllActivityListMap() = arrayListOf(
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_meal_intake),
-            type = AddActivityItemsEnum.MEAL,
-            titleColor = "#FFE3B2".toColorInt()
-        ), AddActivityListTimelineModel(
-            name = getString(R.string.text_light_exposure),
-            type = AddActivityItemsEnum.LIGHT_EXPOSURE,
-            titleColor = "#FFE1CF".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_caffeine_intake),
-            type = AddActivityItemsEnum.CAFFEINE,
-            titleColor = "#DCA58E".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_workout),
-            type = AddActivityItemsEnum.WORKOUT,
-            titleColor = "#78C3F9".toColorInt()
-        ),
-        /*AddActivityListTimelineModel(
-            name = getString(R.string.text_water_consumption),
-            type = AddActivityItemsEnum.WATER,
-            titleColor = "#8EF1C3".toColorInt()
-        ),*/
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_period_started),
-            type = AddActivityItemsEnum.CYCLE_LOG,
-            titleColor = "#F18EBD".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_nap),
-            type = AddActivityItemsEnum.NAP,
-            titleColor = "#A8A8ED".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = getString(R.string.text_sleep),
-            type = AddActivityItemsEnum.SLEEP,
-            titleColor = "#C5A8ED".toColorInt()
-        ),
-    )
-
 
 }
