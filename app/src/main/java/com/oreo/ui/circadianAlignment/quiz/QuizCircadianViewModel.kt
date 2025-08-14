@@ -66,16 +66,18 @@ class QuizCircadianViewModel @Inject constructor(
 
     fun handleQuizOptionClick(pair: Pair<Int, Int>) {
         quesOptionMap[pair.first] = pair.second
-        if(quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size){
-            submitQuizQuesAndAnswers(true)
-        }
+        /*if(quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size){
+            submitQuizQuesAndAnswers()
+        }*/
     }
 
-    fun submitQuizQuesAndAnswers(isAllDone: Boolean){
+    fun submitQuizQuesAndAnswers(){
         viewModelScope.launch {
 
             val reqObj = JsonObject()
             val jsonArrayRes = JsonArray()
+
+            val isAllDone = quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size
             if(isAllDone){
                 quesOptionMap.forEach { (quesId, ansId) ->
                     jsonArrayRes.add(
