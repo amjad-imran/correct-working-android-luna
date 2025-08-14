@@ -13,6 +13,7 @@ import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.WelcomeData
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import kotlinx.parcelize.Parcelize
 
 
@@ -50,6 +51,9 @@ data class ServerUserHealthResponse(
 
     @SerializedName("circadian_graphs")
     val circadianGraph: CircadianGraphData?= null,
+
+    @SerializedName("time_tracker_activities")
+    val timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     //
 ) : ColorfitData()
 

@@ -1,11 +1,14 @@
-package com.oreo.data.model.timeline
+package com.noisefit_commans.data.model.timeline
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class TimelineScreenResponse(
     val timeTracker: List<ItemTimelineResponseModel>?
 )
 
+@Parcelize
 data class ItemTimelineResponseModel(
     @SerializedName("user_id")
     val userId: Int?,
@@ -40,4 +43,4 @@ data class ItemTimelineResponseModel(
     var titleColor: Int?=null,
     var desc: String?="-",
     var displayTime: String?
-)
+) : Parcelable

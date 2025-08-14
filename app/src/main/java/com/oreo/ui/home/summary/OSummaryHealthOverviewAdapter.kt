@@ -95,7 +95,7 @@ import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
-import com.oreo.data.model.timeline.ItemTimelineModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.oreo.ui.chatGpt.SummaryStates
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -672,17 +672,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     HomeRecyclerViewHolder(binding){
 
         class TimelineAdapter(
-            private val listData: List<ItemTimelineModel>
+            private val listData: List<ItemTimelineResponseModel>
         ): RecyclerView.Adapter<TimelineAdapter.ItemTimelineViewHolder>()
         {
 
             inner class ItemTimelineViewHolder(private val binding: ItemTimelineDashBinding): RecyclerView.ViewHolder(binding.root){
-                fun bind(data: ItemTimelineModel, position: Int){
+                fun bind(data: ItemTimelineResponseModel, position: Int){
                     binding.tvTitle.text = data.title
-                    binding.tvTitle.setTextColor(data.titleColor)
+                    data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
                     binding.tvDesc.text = data.desc
-                    binding.tvTime.text = data.time
+                    binding.tvTime.text = data.displayTime
 
                     binding.divider.root.setVisibilityByCondition(position != listData.size-1)
                 }
