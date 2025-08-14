@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemActivityListTimelineBinding
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.oreo.data.model.timeline.addActivityTimelineModels.AddActivityListTimelineModel
 
 class ActivitiesListAdapter(
@@ -18,7 +17,6 @@ class ActivitiesListAdapter(
         fun bind(item: AddActivityListTimelineModel, isLast: Boolean) {
             binding.tvItem.text = item.name
             binding.tvItem.setTextColor(item.titleColor)
-            binding.divider.root.setVisibilityByCondition(!isLast)
 
             binding.root.setOnClickListener {
                 onItemClick(item)
