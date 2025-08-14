@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemTimelineScreenBinding
-import com.oreo.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 
 class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimelineAdapter.TimelineViewHolder>() {
 
