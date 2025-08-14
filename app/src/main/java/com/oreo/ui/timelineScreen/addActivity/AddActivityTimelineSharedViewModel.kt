@@ -4,6 +4,7 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class AddActivityTimelineSharedViewModel @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
+    val localDataStore: DataStoredInterface,
 ) : BaseViewModel() {
 
     val loadFragment = MutableLiveData<Event<AddActivityItemsEnum>>()

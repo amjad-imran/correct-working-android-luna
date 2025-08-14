@@ -2,35 +2,24 @@ package com.oreo.ui.timelineScreen.addActivity.activities
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.noisefit.data.local.AppStaticData
-import com.noisefit.luna.R
-import com.noisefit.luna.databinding.FragmentAddCaffeineBinding
-import com.noisefit.luna.databinding.FragmentAddLightExposureBinding
-import com.noisefit.luna.databinding.FragmentAddMealActivityTimelineBinding
 import com.noisefit.luna.databinding.FragmentAddPeriodBinding
-import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
-import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
 import com.oreo.ui.femalehealth.cycletracker.CycleSymptomsAdapter
-import com.oreo.ui.femalehealth.cycletracker.CycleTrackerViewModel
 import com.oreo.ui.femalehealth.cycletracker.OnSymptomsItemClick
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogAdapter
 import com.oreo.ui.femalehealth.cycletracker.log.OnLogItemClick
+import com.oreo.ui.femalehealth.cycletracker.log.bottom.CYCLE_LOG_SAVE
 import com.oreo.ui.femalehealth.cycletracker.log.bottom.CalenderDayLogViewModel
-import com.oreo.ui.femalehealth.cycletracker.log.bottom.SymptomDayLogAdapter
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
-import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
@@ -41,7 +30,7 @@ class AddPeriodLogFragment :
     BaseFragment<FragmentAddPeriodBinding>(FragmentAddPeriodBinding::inflate) {
 
     private val sharedViewModel: AddActivityTimelineSharedViewModel by activityViewModels()
-    private val viewModel: AddPeriodViewModel by viewModels()
+//    private val viewModel: AddPeriodViewModel by viewModels()
 
     private val logViewModel: CalenderDayLogViewModel by viewModels()
 
@@ -97,7 +86,6 @@ class AddPeriodLogFragment :
             val flowType = flowAdapter.getSelectedValue()
             val symptoms = symptomsAdapter.getData()
             val date = logViewModel.selectedDate.value.toString()
-            logViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_cycle_log_period_click)
             logViewModel.saveSymptom(date, symptoms, flowType)
         }
     }
@@ -114,8 +102,35 @@ class AddPeriodLogFragment :
 //            setTitleDate()
             logViewModel.getPeriodDates()
             logViewModel.getFemaleHealthIcons(logViewModel.selectedDate.value.toString())
-
         }
+
+        logViewModel.serverSuccess.observe(this) {
+            it?.getContent()?.let {
+                sharedViewModel.clearTodayData()
+                sharedViewModel.navigateUp()
+            }
+        }
+
+        //
+        logViewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        logViewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        logViewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
     }
 
 }

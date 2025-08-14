@@ -50,7 +50,13 @@ class ActivityListingFragment :
             layoutManager = LinearLayoutManager(this.context)
             adapter = activitiesListAdapter
         }
-        activitiesListAdapter.updateDataSet(sharedViewModel.getAllActivityListMap())
+        activitiesListAdapter.updateDataSet(sharedViewModel.getAllActivityListMap().apply {
+            val user = sharedViewModel.localDataStore.getUser()
+            if (user?.userInfo?.gender.equals("female", true).not()) {
+                val cycleObj = this.find { it.type == AddActivityItemsEnum.CYCLE_LOG }
+                this.remove(cycleObj)
+            }
+        })
     }
 
     override fun initListener() {
