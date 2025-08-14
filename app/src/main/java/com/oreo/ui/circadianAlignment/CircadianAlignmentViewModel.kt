@@ -90,7 +90,7 @@ class CircadianAlignmentViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             circadianResponseData.postValue(it)
-                            it.activities?.let { it1 -> prepareCorrectiveActivitiesData(it1, it.graphData==null) }
+                            it.activities?.let { it1 -> prepareCorrectiveActivitiesData(it1, it.graphData!=null) }
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }

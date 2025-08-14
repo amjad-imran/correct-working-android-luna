@@ -2091,5 +2091,40 @@
     <string name="text_learn_more_2">Mehr erfahren</string>
     <string name="text_daily_rhythm_guide">Täglicher Rhythmus-Guide</string>
 
+    <string name="text_your_timeline">Dein Zeitstrahl</string>
+    <string name="text_timeline">Zeitstrahl</string>
+    <string name="text_log_an_activity">Aktivität protokollieren</string>
+    <string name="text_unable_to_show_your_data_for_today">Deine Daten für heute können nicht angezeigt werden</string>
+    <string name="text_detailed_overview">Detaillierte Übersicht</string>
+    <string name="text_take_it_easy_today">Mach’s dir heute einfach</string>
+    <string name="text_circadian_body_status">Zirkadianer Körperzustand</string>
+    <string name="text_view_all_logs">Alle Protokolle ansehen</string>
+    <string name="text_circadian_mid_point_desc_correcting">Du verbesserst dich — aktiver später zu sein und Schlafsignale zu verzögern hilft.</string>
+    <string name="text_add_log">Protokoll hinzufügen</string>
+    <string name="text_select_activity">Aktivität auswählen</string>
+    <string name="text_intake_time">Aufnahmezeit</string>
+    <string name="text_meal_val">Mahlzeit %1$d</string>
+    <string name="text_add_meal_val">MAHLZEIT HINZUFÜGEN %1$d</string>
+    <string name="text_add_activity">Aktivität hinzufügen</string>
+    <string name="text_meal_intake">Mahlzeitenaufnahme</string>
+    <string name="text_water_consumption">Wasserverbrauch</string>
+    <string name="text_period_started">Periode begonnen</string>
+    <string name="text_add_logs">Protokolle hinzufügen</string>
+    <string name="text_meal_1">MAHLZEIT 1</string>
+    <string name="text_intake_1">AUFNAHME 1</string>
+    <string name="text_quantity_consumed">Verbrauchte Menge</string>
+    <string name="text_category">Kategorie</string>
+    <string name="text_message_circadian">Dein Körper folgt einem natürlichen 24-Stunden-Rhythmus. Licht, Koffein und Schlaf danach zu timen, kann dir helfen, dich energiegeladener und fokussierter zu fühlen.</string>
+    <string name="text_log_1">PROTOKOLL 1</string>
+    <string name="text_definite_morning_type">Typischer Morgenmensch</string>
+    <string name="text_you_re_an_early_riser_by_nature">Du bist von Natur aus ein Frühaufsteher.</string>
+    <string name="text_moderate_morning_type">Gemäßigter Morgenmensch</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">Du fühlst dich in der ersten Tageshälfte am besten.</string>
+    <string name="text_intermediate_type">Zwischentyp</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">Du folgst einem ausgewogenen Tag-Nacht-Rhythmus.</string>
+    <string name="text_moderate_evening_type">Gemäßigter Abendtyp</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">Du neigst von Natur aus dazu, eine Nachteule zu sein.</string>
+    <string name="text_definite_evening_type">Typischer Abendmensch</string>
+    <string name="text_you_re_a_true_night_owl">Du bist eine echte Nachteule.</string>
 
 </resources>

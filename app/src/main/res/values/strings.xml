@@ -2064,6 +2064,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_take_the_quiz">Take the Quiz!</string>
     <string name="text_learn_more_2">Learn More</string>
     <string name="text_daily_rhythm_guide">Daily Rhythm Guide</string>
+
     <string name="text_your_timeline">Your Timeline</string>
     <string name="text_timeline">Timeline</string>
     <string name="text_log_an_activity">Log an Activity</string>
@@ -2089,5 +2090,15 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_category">Category</string>
     <string name="text_message_circadian">Your body follows a natural 24-hour rhythm. Timing your light, caffeine, and sleep around it can help you feel more energized and focused.</string>
     <string name="text_log_1">LOG 1</string>
+    <string name="text_definite_morning_type">Definite Morning Type</string>
+    <string name="text_you_re_an_early_riser_by_nature">You’re an early riser by nature.</string>
+    <string name="text_moderate_morning_type">Moderate Morning Type</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">You feel best in the first half of the day.</string>
+    <string name="text_intermediate_type">Intermediate Type</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">You follow a balanced day-night rhythm.</string>
+    <string name="text_moderate_evening_type">Moderate Evening Type</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">You’re naturally inclined to be a night owl.</string>
+    <string name="text_definite_evening_type">Definite Evening Type</string>
+    <string name="text_you_re_a_true_night_owl">You’re a true night owl.</string>
 
 </resources>

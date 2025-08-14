@@ -2091,5 +2091,40 @@
     <string name="text_learn_more_2">Meer leren</string>
     <string name="text_daily_rhythm_guide">Gids voor dagelijks ritme</string>
 
+    <string name="text_your_timeline">Je tijdlijn</string>
+    <string name="text_timeline">Tijdlijn</string>
+    <string name="text_log_an_activity">Een activiteit loggen</string>
+    <string name="text_unable_to_show_your_data_for_today">Kan je gegevens van vandaag niet weergeven</string>
+    <string name="text_detailed_overview">Gedetailleerd overzicht</string>
+    <string name="text_take_it_easy_today">Neem het vandaag rustig aan</string>
+    <string name="text_circadian_body_status">Circadiaanse lichaamstoestand</string>
+    <string name="text_view_all_logs">Bekijk alle logs</string>
+    <string name="text_circadian_mid_point_desc_correcting">Je verbetert — actiever blijven later en slaapprikkels vertragen helpt.</string>
+    <string name="text_add_log">Log toevoegen</string>
+    <string name="text_select_activity">Activiteit selecteren</string>
+    <string name="text_intake_time">Inname tijd</string>
+    <string name="text_meal_val">Maaltijd %1$d</string>
+    <string name="text_add_meal_val">MAALTIJD TOEVOEGEN %1$d</string>
+    <string name="text_add_activity">Activiteit toevoegen</string>
+    <string name="text_meal_intake">Maaltijdinname</string>
+    <string name="text_water_consumption">Waterinname</string>
+    <string name="text_period_started">Periode gestart</string>
+    <string name="text_add_logs">Logs toevoegen</string>
+    <string name="text_meal_1">MAALTIJD 1</string>
+    <string name="text_intake_1">INNAME 1</string>
+    <string name="text_quantity_consumed">Aantal geconsumeerd</string>
+    <string name="text_category">Categorie</string>
+    <string name="text_message_circadian">Je lichaam volgt een natuurlijk 24-uurs ritme. Licht, cafeïne en slaap erop afstemmen kan helpen om je energieker en gefocust te voelen.</string>
+    <string name="text_log_1">LOG 1</string>
+    <string name="text_definite_morning_type">Definitely ochtendmens</string>
+    <string name="text_you_re_an_early_riser_by_nature">Je bent van nature een vroege vogel.</string>
+    <string name="text_moderate_morning_type">Gematigd ochtendtype</string>
+    <string name="text_you_feel_best_in_the_first_half_of_the_day">Je voelt je het beste in de eerste helft van de dag.</string>
+    <string name="text_intermediate_type">Tussenpersoon</string>
+    <string name="text_you_follow_a_balanced_day_night_rhythm">Je volgt een gebalanceerd dag-nacht-ritme.</string>
+    <string name="text_moderate_evening_type">Gematigd avondtype</string>
+    <string name="text_you_re_naturally_inclined_to_be_a_night_owl">Je hebt van nature de neiging om een nachtbraker te zijn.</string>
+    <string name="text_definite_evening_type">Definitely avondmens</string>
+    <string name="text_you_re_a_true_night_owl">Je bent een echte nachtbraker.</string>
 
 </resources>

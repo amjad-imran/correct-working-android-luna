@@ -692,6 +692,49 @@ class CircadianAlignmentFragment :
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
             tvType.text = chronotypeData?.type ?: "-"
+
+            when(chronotypeData?.type){
+                getString(R.string.text_definite_morning_type) -> {
+                    tvIntro.apply{
+                        text = getString(R.string.text_you_re_an_early_riser_by_nature)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_moderate_morning_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_feel_best_in_the_first_half_of_the_day)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_intermediate_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_follow_a_balanced_day_night_rhythm)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_moderate_evening_type) -> {
+                    tvIntro.apply{
+                        text =
+                            getString(R.string.text_you_re_naturally_inclined_to_be_a_night_owl)
+                        visible()
+                    }
+                }
+
+                getString(R.string.text_definite_evening_type) -> {
+                    tvIntro.apply{
+                        text = getString(R.string.text_you_re_a_true_night_owl)
+                        visible()
+                    }
+                }
+
+                else -> tvIntro.gone()
+            }
+
             tvDescType.text = chronotypeData?.description ?: "-"
         }
     }

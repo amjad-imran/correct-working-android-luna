@@ -19,17 +19,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvType"
-        style="@style/S16"
+    <LinearLayout
+        android:id="@+id/lytHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        >
+
+        <TextView
+            android:id="@+id/tvType"
+            style="@style/S16"
+            tools:text="Moderate Morning Type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvIntro"
+            style="@style/S14"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            tools:text="You feel best in the first half of the day."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvDescType"
@@ -43,7 +62,7 @@
         android:textColor="#98FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvType" />
+        app:layout_constraintTop_toBottomOf="@+id/lytHeader" />
 
     <TextView
         android:id="@+id/tvRetakeQuiz"
