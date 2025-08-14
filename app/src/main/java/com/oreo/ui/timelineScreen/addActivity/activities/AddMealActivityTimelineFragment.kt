@@ -43,13 +43,13 @@ class AddMealActivityTimelineFragment :
     override fun initListener() {
         binding.lytSelected.setOnClickListener {
 
-            val location = IntArray(2)
+          /*  val location = IntArray(2)
             it.getLocationOnScreen(location)
             val dialog = ActivitySelectorDialog.newInstance(location[1])
-            dialog.show(parentFragmentManager, "ProfileDialog")
+            dialog.show(parentFragmentManager, "ProfileDialog")*/
 
 
-            //sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+            sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
 
         binding.btnSave.setOnClickListener {

@@ -11,7 +11,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
-            style="@style/ModalStyleDialog"
+            android:background="@drawable/back_modal_v2_28"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_12dp"
@@ -27,6 +27,7 @@
                 android:layout_height="2dp"
                 android:layout_marginTop="8dp"
                 android:alpha="0.2"
+                android:visibility="invisible"
                 android:background="@drawable/back_bottom_sheet_drag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +125,7 @@
                 android:layout_marginEnd="@dimen/dimen_24dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"
                 android:text="@string/text_done"
+                android:enabled="true"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

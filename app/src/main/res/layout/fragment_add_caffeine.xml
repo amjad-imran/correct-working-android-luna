@@ -28,7 +28,6 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian"
-            android:padding="18dp"
             app:layout_constraintTop_toBottomOf="@id/tvCategory"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -38,9 +37,10 @@
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:text="@string/text_caffeine_intake"
                 android:textColor="#DCA58E"
+                android:layout_marginVertical="18dp"
+                android:layout_marginHorizontal="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView100"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,10 +50,11 @@
                 android:id="@+id/imageView100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_page_arrow_right"
-                app:layout_constraintBottom_toBottomOf="@+id/tvSelected"
+                android:src="@drawable/ic_arrow_down_2"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvSelected" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
@@ -75,7 +76,6 @@
             android:layout_width="0dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
             android:text="@string/text_save"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"

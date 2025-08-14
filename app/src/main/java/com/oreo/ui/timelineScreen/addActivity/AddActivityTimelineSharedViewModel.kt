@@ -6,6 +6,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.addLogBottomSheetModels.AddLogBottomSheetDataModels
 import com.oreo.data.model.timeline.addActivityTimelineModels.AddActivityListTimelineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,23 +30,23 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
 
     fun getAllActivityListMap() = arrayListOf(
         AddActivityListTimelineModel(
+            name = resourcesProvider.getString(R.string.text_caffeine_intake),
+            type = AddActivityItemsEnum.CAFFEINE,
+            titleColor = "#EEB69F".toColorInt()
+        ),
+        AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_meal_intake),
             type = AddActivityItemsEnum.MEAL,
-            titleColor = "#FFE3B2".toColorInt()
+            titleColor = "#D8D3A3".toColorInt()
         ), AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_light_exposure),
             type = AddActivityItemsEnum.LIGHT_EXPOSURE,
-            titleColor = "#FFE1CF".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_caffeine_intake),
-            type = AddActivityItemsEnum.CAFFEINE,
-            titleColor = "#DCA58E".toColorInt()
+            titleColor = "#F1C48E".toColorInt()
         ),
         AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_workout),
             type = AddActivityItemsEnum.WORKOUT,
-            titleColor = "#78C3F9".toColorInt()
+            titleColor = "#8ED3F1".toColorInt()
         ),
         /*AddActivityListTimelineModel(
             name = getString(R.string.text_water_consumption),
@@ -53,15 +54,15 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
             titleColor = "#8EF1C3".toColorInt()
         ),*/
         AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_period_started),
+            name = resourcesProvider.getString(R.string.text_period).capitalizeWords(),
             type = AddActivityItemsEnum.CYCLE_LOG,
             titleColor = "#F18EBD".toColorInt()
         ),
-        AddActivityListTimelineModel(
+       /* AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_nap),
             type = AddActivityItemsEnum.NAP,
             titleColor = "#A8A8ED".toColorInt()
-        ),
+        ),*/
         AddActivityListTimelineModel(
             name = resourcesProvider.getString(R.string.text_sleep),
             type = AddActivityItemsEnum.SLEEP,

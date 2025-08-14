@@ -25,6 +25,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddSleep
 import com.oreo.ui.sleep2.add.OAddSleepFragmentDirections
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
+import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
@@ -40,6 +41,9 @@ class AddSleepFragment :
 
 
     override fun initListener() {
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+        }
         binding.btnSave.setOnClickListener {
             if (mainViewModel.isDeviceConnected().not()) {
                 context.showShortToast(getString(R.string.text_please_connect_your_ring_to_add_sleep))

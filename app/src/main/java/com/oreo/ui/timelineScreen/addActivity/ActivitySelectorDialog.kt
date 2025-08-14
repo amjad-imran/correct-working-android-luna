@@ -61,10 +61,10 @@ class ActivitySelectorDialog : DialogFragment(){
 
         setRecycler()
 
-        val recyclerParent = binding.rvActivities.parent as? ViewGroup
+        /*val recyclerParent = binding.rvActivities.parent as? ViewGroup
         recyclerParent?.post {
             animateDown()
-        }
+        }*/
 
     }
 
