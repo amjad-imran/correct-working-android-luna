@@ -22,7 +22,7 @@ class AddLightExposureViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
-    val defaultMinutes = 10L
+    val defaultMinutes = 30L
 
     val lightTime = MutableLiveData<LocalTime>(LocalTime.now().minusMinutes(defaultMinutes))
     val lightDuration = MutableLiveData<Long>(defaultMinutes)

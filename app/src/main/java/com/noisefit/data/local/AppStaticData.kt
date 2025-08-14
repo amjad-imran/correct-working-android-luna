@@ -108,7 +108,7 @@ object AppStaticData {
     }
 
     fun getLightExposureDurationValues(): Array<String> {
-        return Array(12) { "${((it + 1) * 5)} min" }
+        return Array(36) { "${((it + 1) * 5)} mins" }
     }
 
     fun getDurationValues(): Array<String> {

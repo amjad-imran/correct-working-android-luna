@@ -99,7 +99,7 @@ class AddLightExposureFragment :
             navController?.navigate(
                 R.id.valueSelectorBottomSheet,
                 bundleOf(
-                    "selectedValue" to "${viewModel.lightDuration.value} min",
+                    "selectedValue" to "${viewModel.lightDuration.value} mins",
                     "selectionList" to AppStaticData.getLightExposureDurationValues(),
                    "title" to getString(R.string.text_duration)
                 )
@@ -114,7 +114,7 @@ class AddLightExposureFragment :
         }
         viewModel.lightDuration.observe(this) {
             binding.lytCard.tvDuration.text =
-                "$it min"//todo change to hour minute if greater than 60 min
+                "$it mins"//todo change to hour minute if greater than 60 min
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
