@@ -159,7 +159,7 @@ class CircularScheduleView @JvmOverloads constructor(
                     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                         style = Paint.Style.STROKE
                         strokeWidth = arcStrokeWidth
-                        strokeCap = Paint.Cap.ROUND
+                        strokeCap = Paint.Cap.BUTT
                     }
                     val rect = RectF(
                         cx - radius,

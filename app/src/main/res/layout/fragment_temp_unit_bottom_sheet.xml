@@ -11,7 +11,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
-            style="@style/ModalStyleDialogNew"
+            android:background="@drawable/back_modal_v2_28"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_12dp"
@@ -27,6 +27,7 @@
                 android:layout_marginTop="8dp"
                 android:id="@+id/view1"
                 android:alpha="0.2"
+                android:visibility="invisible"
                 android:background="@drawable/back_bottom_sheet_drag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

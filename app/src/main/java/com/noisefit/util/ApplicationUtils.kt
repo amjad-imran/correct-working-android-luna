@@ -382,9 +382,6 @@ object ApplicationUtils {
     }
 
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
-
-        //todo remove after testing
-        return false
         val uniqueId = getUniqueRingSyncDataWorkName()
         val isWorkScheduled = isWorkScheduled(uniqueId, context)
         LOGS.w("SyncDataWork: inside startOreoSyncScheduler $uniqueId isWorkScheduled $isWorkScheduled")

@@ -38,9 +38,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="@string/text_light_exposure"
                 android:padding="18dp"
-                android:textColor="#FFE1CF"
+                android:text="@string/text_sleep"
+                android:textColor="#C5A8ED"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView100"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,8 +50,8 @@
                 android:id="@+id/imageView100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_down_2"
                 android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_arrow_down_2"
                 app:layout_constraintBottom_toBottomOf="@+id/tvSelected"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvSelected" />
@@ -59,7 +59,7 @@
 
         <include
             android:id="@+id/lytCard"
-            layout="@layout/layout_add_light_exposure"
+            layout="@layout/layout_card_add_sleep"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -72,7 +72,6 @@
         <Button
             android:id="@+id/btnSave"
             style="@style/SecondaryFMHButtonStyle"
-            android:background="@drawable/bg_save_btn_add_activity_timeline"
             android:layout_width="0dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"

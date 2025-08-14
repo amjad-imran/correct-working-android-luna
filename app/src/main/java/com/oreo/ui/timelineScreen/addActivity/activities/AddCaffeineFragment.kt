@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.custom.CustomSlider
@@ -134,6 +135,7 @@ class AddCaffeineFragment :
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
+                sharedViewModel.clearTodayData()
                 sharedViewModel.navigateUp()
             }
         }

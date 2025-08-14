@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.timelineScreen.addActivity.ActivitySelectorDialog
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +42,16 @@ class AddMealActivityTimelineFragment :
 
     override fun initListener() {
         binding.lytSelected.setOnClickListener {
+
+          /*  val location = IntArray(2)
+            it.getLocationOnScreen(location)
+            val dialog = ActivitySelectorDialog.newInstance(location[1])
+            dialog.show(parentFragmentManager, "ProfileDialog")*/
+
+
             sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
+
         binding.btnSave.setOnClickListener {
             viewModel.mealTime.value?.let { time ->
                 viewModel.logMeal(time)
@@ -89,6 +98,7 @@ class AddMealActivityTimelineFragment :
         }
         viewModel.onAddSuccess.observe(this){
             it.getContent()?.let {
+                sharedViewModel.clearTodayData()
                 sharedViewModel.navigateUp()
             }
         }
