@@ -81,11 +81,11 @@ class ActivityListingFragment :
             type = AddActivityItemsEnum.WORKOUT,
             titleColor = "#78C3F9".toColorInt()
         ),
-        AddActivityListTimelineModel(
+        /*AddActivityListTimelineModel(
             name = getString(R.string.text_water_consumption),
             type = AddActivityItemsEnum.WATER,
             titleColor = "#8EF1C3".toColorInt()
-        ),
+        ),*/
         AddActivityListTimelineModel(
             name = getString(R.string.text_period_started),
             type = AddActivityItemsEnum.CYCLE_LOG,
@@ -100,7 +100,7 @@ class ActivityListingFragment :
             name = getString(R.string.text_sleep),
             type = AddActivityItemsEnum.SLEEP,
             titleColor = "#C5A8ED".toColorInt()
-        )
+        ),
     )
 
 
