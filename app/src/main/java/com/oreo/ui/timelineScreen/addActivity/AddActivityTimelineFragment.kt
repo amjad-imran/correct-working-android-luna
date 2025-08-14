@@ -11,6 +11,7 @@ import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddPeriodLogFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,7 +76,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.CYCLE_LOG -> {
-                        AddMealActivityTimelineFragment()
+                        AddPeriodLogFragment()
                     }
 
                     AddActivityItemsEnum.NAP -> {
