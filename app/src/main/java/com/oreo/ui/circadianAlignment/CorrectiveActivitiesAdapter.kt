@@ -9,6 +9,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemCorrectiveActivitiesCircadianBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.CorrectiveActivitiesModel
 
@@ -32,42 +33,23 @@ class CorrectiveActivitiesAdapter(
             binding.tvTitile.text = data.title
             binding.tvDesc.text = data.desc
 
-            /*if(data.isOpen == true){
-                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.back_hm_optimal)
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
-
-                binding.tvTimerTag.text = data.time
-                binding.lytTimerTag.visible()
-            }else{
-                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.back_hm_warning)
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
-
-                binding.lytTimerTag.gone()
-            }*/
+            when(data.key){
+                CircadianAlignmentViewModel.light_exposure_key,
+                CircadianAlignmentViewModel.meal_window_key,
+                CircadianAlignmentViewModel.caffeine_window_key -> binding.llLytLog.visible()
+                else -> binding.llLytLog.invisible()
+            }
 
             data.onlyImgWithText?.let { lytData ->
-                binding.lytWithProgressBar.gone()
-
                 binding.ivOnlyImg.setImageResource(lytData.img)
-                if(lytData.txt.isNullOrEmpty()){
-                    binding.tvOnlyText.gone()
-                }else{
-                    binding.tvOnlyText.text = lytData.txt
-                }
-
+                binding.tvOnlyText.text = lytData.txt
                 binding.lytImageWithText.visible()
 
-                /*binding.lytImageWithText.apply {
-                    //code
-                    visible()
-                }*/
+                binding.lytWithProgressBar.gone()
+                binding.ivOnlyOnlyImg.gone()
             }
 
             data.progressBarLytData?.let { lytData ->
-                binding.lytImageWithText.gone()
-
-
-
                 binding.imageView88.setImageResource(lytData.img)
                 binding.tvProgressTxt.text = lytData.txt
 
@@ -79,40 +61,44 @@ class CorrectiveActivitiesAdapter(
                         CircadianAlignmentViewModel.daily_steps_key -> setIndicatorColor("#98D76B".toColorInt())
                         else -> {}
                     }
+                }
+                binding.lytWithProgressBar.visible()
+
+                binding.lytImageWithText.gone()
+                binding.ivOnlyOnlyImg.gone()
+            }
+
+            data.onlyOnlyImgLytData?.let {
+                binding.ivOnlyOnlyImg.apply {
+                    setBackgroundResource(it)
                     visible()
                 }
 
-                /*binding.lytWithProgressBar.apply {
-                    //code
-                    visible()
-                }*/
+                binding.lytWithProgressBar.gone()
+                binding.lytImageWithText.gone()
             }
 
-            if (data.time==null){
-                binding.lytTimerTag.gone()
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_today)
-                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
-            }
-            else if(data.time == "0"){
-                binding.lytTimerTag.gone()
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_tomorrow)
-                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
-            }
-            else{
-                binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
-                binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_open_tag_circadian)
-
-                binding.tvTimerTag.text = data.time
-                binding.lytTimerTag.visible()
-            }
-
-            when(data.logStatus){
-                null -> {
-                    binding.llLytLog.invisible()
+            if(data.showFooter==true){
+                if (data.time==null){
+                    binding.lytTimerTag.gone()
+                    binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_today)
+                    binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
                 }
-                else -> {
-                    binding.llLytLog.visible()
+                else if(data.time == "0"){
+                    binding.lytTimerTag.gone()
+                    binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_tomorrow)
+                    binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
                 }
+                else{
+                    binding.imageView99.setVisibilityByCondition(data.logStatus==true)
+                    binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
+                    binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_open_tag_circadian)
+
+                    binding.tvTimerTag.text = data.time
+                    binding.lytTimerTag.visible()
+                }
+
+                binding.lytFooter.visible()
             }
 
             binding.llLytLog.setOnClickListener {
