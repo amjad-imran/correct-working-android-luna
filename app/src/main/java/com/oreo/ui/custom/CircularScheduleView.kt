@@ -1,22 +1,28 @@
 package com.oreo.ui.custom
 
+import android.animation.ArgbEvaluator
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.BlendMode
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
 import com.noisefit.timepickerslider.utils.dpToPx
@@ -68,6 +74,7 @@ class CircularScheduleView @JvmOverloads constructor(
     var events = ArrayList<ClockEvent>()
 
     private var handler: Handler? = null
+
     init {
         CoroutineScope(Dispatchers.Main).launch {
             while (true) {
@@ -91,8 +98,8 @@ class CircularScheduleView @JvmOverloads constructor(
 
         drawCircularEnergyCurveWithFade(
             canvas, arrayListOf(
-                1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,
-                0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f
+                1f, 1f, 0.3f, 0.2f, 1f, 1f, 1f, 0.1f, 0.3f, 1f, 1f, 1f,
+                0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f
             )
         )
         showTimer(canvas)
@@ -102,7 +109,12 @@ class CircularScheduleView @JvmOverloads constructor(
         val timer = getCurrentWindowTimer() * 1000L
         if (timer == 0L) return
 
-        canvas.drawText("Window closes In", width / 2f, height / 2f - 12f.dpToPixel(), textPaintWindowMessage)
+        canvas.drawText(
+            "Window closes In",
+            width / 2f,
+            height / 2f - 12f.dpToPixel(),
+            textPaintWindowMessage
+        )
 
         val seconds = (timer / 1000) % 60
         val minutes = (timer / (1000 * 60)) % 60
@@ -160,9 +172,68 @@ class CircularScheduleView @JvmOverloads constructor(
     }
 
 
+    private fun getColorByValue(value: Float): Int {
+        return if (value >= 0.5f) {
+            "#806AAA5A".toColorInt()
+        } else {
+            "#80A66767".toColorInt()
+        }
+    }
+
     private fun drawCircularEnergyCurveWithFade(canvas: Canvas, values: List<Float>) {
 
+        val colors = ArrayList<Int>()
 
+        values.forEachIndexed { index, value ->
+            val startColor = getColorByValue(value)//Color.parseColor("#9E5959")
+            val endColor = try {
+                getColorByValue(values[index + 1])
+            } catch (exp: Exception) {
+                Color.parseColor("#00000000")
+            }//Color.parseColor("#6AAA5A")
+
+            val evaluator = ArgbEvaluator()
+            val barColors = mutableListOf<Int>()
+
+            val midBarCount = 12//values.size//(midEndIndex - midStartIndex) + 1
+            for (i in 0 until midBarCount) {
+                val fraction = i.toFloat() / (midBarCount - 1)
+                val color = evaluator.evaluate(fraction, startColor, endColor) as Int
+                barColors.add(color)
+            }
+            colors.addAll(barColors)
+        }
+
+        val cx = width / 2f
+        val cy = height / 2f
+        val radius = min(cx, cy) - 76f.dpToPixel()
+
+        val tickStart = radius
+        val tickEnd = radius - 40f.dpToPixel()
+
+        val paint = Paint()
+        paint.style = Paint.Style.FILL
+
+
+        val circumference = 2 * Math.PI * radius
+
+
+        //paint.strokeWidth = 2f.dpToPixel()
+        paint.strokeWidth = (circumference/colors.size).toFloat()
+
+        val multiplier = 360f/colors.size
+
+        for (i in 0 until colors.size) {
+
+            val angle = Math.toRadians((i * multiplier/*15.0*/) - 90.0)
+            val x1 = (cx + tickStart * Math.cos(angle)).toFloat()
+            val y1 = (cy + tickStart * Math.sin(angle)).toFloat()
+            val x2 = (cx + tickEnd * Math.cos(angle)).toFloat()
+            val y2 = (cy + tickEnd * Math.sin(angle)).toFloat()
+
+            paint.color = colors[i]
+            canvas.drawLine(x1, y1, x2, y2, paint)
+        }
     }
 
     private fun drawCurrentTimeMarker(canvas: Canvas) {
@@ -335,6 +406,23 @@ class CircularScheduleView @JvmOverloads constructor(
                 event.color
             )*/
         }
+
+        val startAngle =
+            hourToAngle(13f)
+
+        drawCircularTextCCW(
+            canvas,
+            radius - 20f.dpToPixel(),
+            PointF(cx, cy),
+            startAngle,
+            "Energy",
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL_AND_STROKE
+                typeface = fontGilroy
+                textSize = dpToPx(10f)
+                color = "#B2B2B2".toColorInt()
+            }
+        )
     }
 
 
@@ -358,53 +446,30 @@ class CircularScheduleView @JvmOverloads constructor(
         canvas.restore()
     }
 
+    private fun drawCircularTextCCW(
+        canvas: Canvas,
+        radius: Float,
+        middlePoint: PointF,
+        textAngle: Float,
+        text: String,
+        textPaint: Paint
+    ) {
+        val textBounds = Rect()
+        textPaint.getTextBounds(text, 0, text.length, textBounds)
+
+        val circlePath = Path()
+        circlePath.addCircle(middlePoint.x, middlePoint.y, radius, Path.Direction.CCW)
+
+        canvas.save()
+        canvas.rotate((textAngle + 2), middlePoint.x, middlePoint.y)
+        canvas.drawTextOnPath(text, circlePath, 0f, 0f, textPaint)
+        canvas.restore()
+    }
+
 
     private fun hourToAngle(hour: Float): Float {
         // 0 hour = -90deg (top), increases clockwise
         return (hour / 24f) * 360f - 90f
-    }
-
-    private fun drawEventLabel(
-        canvas: Canvas,
-        cx: Float, // center x
-        cy: Float, // center y
-        angle: Float, // angle in degrees where to place label
-        radius: Float, // distance from center
-        label: String,
-        color: Int
-    ) {
-        val rectWidth = 120f
-        val rectHeight = 36f
-        val cornerRadius = 18f
-
-        // Calculate position on the circle's edge
-        val rad = Math.toRadians(angle.toDouble())
-        val x = (cx + radius * Math.cos(rad)).toFloat()
-        val y = (cy + radius * Math.sin(rad)).toFloat()
-
-        // Center the rectangle at (x, y)
-        val left = x - rectWidth / 2
-        val top = y - rectHeight / 2
-        val right = x + rectWidth / 2
-        val bottom = y + rectHeight / 2
-
-        // Draw rounded rectangle
-        val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            this.color = color
-        }
-        canvas.drawRoundRect(left, top, right, bottom, cornerRadius, cornerRadius, rectPaint)
-
-        // Draw text centered in rectangle
-        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            textSize = 18f * resources.displayMetrics.density // for scale
-            textAlign = Paint.Align.CENTER
-            typeface = Typeface.DEFAULT_BOLD
-            setColor("#ffffff".toColorInt())
-        }
-
-        // Center text vertically
-        val textY = y - (textPaint.descent() + textPaint.ascent()) / 2
-        canvas.drawText(label, x, textY, textPaint)
     }
 
 }
