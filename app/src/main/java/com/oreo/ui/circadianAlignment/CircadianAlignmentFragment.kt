@@ -71,7 +71,7 @@ class CircadianAlignmentFragment :
         setRecycler()
         initListener()
         subscribeObservers()
-        viewModel.initData()
+        //viewModel.initData()//todo remove this
 
         showCircularScheduler()
     }
@@ -85,18 +85,52 @@ class CircadianAlignmentFragment :
 
 
         val clockEvents = listOf(
-            ClockEvent(6f, 12f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"), Color.parseColor("#FBE0BE"), "Natural Light"),
-            ClockEvent(17f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
-                Color.parseColor("#995CA0"), "Wind-Down"),
-            ClockEvent(19f, 22f, ClockEventType.ARCH, Color.parseColor("#8F5EBA"),
-                Color.parseColor("#443A7B"), "Dim-light"),
-            ClockEvent(6f, 23f, ClockEventType.GRAPH, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
-            ClockEvent(8f, 13f, ClockEventType.LINE, Color.parseColor("#B5845D"),Color.parseColor("#B5845D"), ""),
+            ClockEvent(
+                6f, 8f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"),
+                Color.parseColor("#FBE0BE"),
+                textColor = "#CC242424".toColorInt(),
+                "Natural Light"
+            ),
+            ClockEvent(
+                8f, 16f, ClockEventType.ARCH, Color.parseColor("#181A1F"),
+                Color.parseColor("#181A1F"),
+                textColor = "#858585".toColorInt(),
+                "Neutral Light"
+            ),
+            ClockEvent(
+                16f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
+                Color.parseColor("#995CA0"),
+                textColor = "#FC9CFF".toColorInt(), "Wind-Down"
+            ),
+            ClockEvent(
+                19f, 22f, ClockEventType.ARCH, Color.parseColor("#8F5EBA"),
+                Color.parseColor("#443A7B"),
+                textColor = "#E0BEFF".toColorInt(), "Dim-light"
+            ),
+            ClockEvent(
+                6f,
+                23f,
+                ClockEventType.GRAPH,
+                Color.parseColor("#B5845D"),
+                Color.parseColor("#B5845D"),
+                textColor = "#CC242424".toColorInt(),
+                ""
+            ),
+            ClockEvent(
+                8f,
+                13f,
+                ClockEventType.LINE,
+                Color.parseColor("#B5845D"),
+                Color.parseColor("#B5845D"),
+                textColor = "#CC242424".toColorInt(),
+                ""
+            ),
             //ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
             //ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
             //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
         )
-        binding.lytCircularView.circularView.events = clockEvents
+
+        binding.lytCircularView.circularView.setDataSet(clockEvents)
     }
 
     data class CircadianResponse(
@@ -698,16 +732,16 @@ class CircadianAlignmentFragment :
         binding.lytYourChronotype.apply {
             tvType.text = chronotypeData?.type ?: "-"
 
-            when(chronotypeData?.type){
+            when (chronotypeData?.type) {
                 getString(R.string.text_definite_morning_type) -> {
-                    tvIntro.apply{
+                    tvIntro.apply {
                         text = getString(R.string.text_you_re_an_early_riser_by_nature)
                         visible()
                     }
                 }
 
                 getString(R.string.text_moderate_morning_type) -> {
-                    tvIntro.apply{
+                    tvIntro.apply {
                         text =
                             getString(R.string.text_you_feel_best_in_the_first_half_of_the_day)
                         visible()
@@ -715,7 +749,7 @@ class CircadianAlignmentFragment :
                 }
 
                 getString(R.string.text_intermediate_type) -> {
-                    tvIntro.apply{
+                    tvIntro.apply {
                         text =
                             getString(R.string.text_you_follow_a_balanced_day_night_rhythm)
                         visible()
@@ -723,7 +757,7 @@ class CircadianAlignmentFragment :
                 }
 
                 getString(R.string.text_moderate_evening_type) -> {
-                    tvIntro.apply{
+                    tvIntro.apply {
                         text =
                             getString(R.string.text_you_re_naturally_inclined_to_be_a_night_owl)
                         visible()
@@ -731,7 +765,7 @@ class CircadianAlignmentFragment :
                 }
 
                 getString(R.string.text_definite_evening_type) -> {
-                    tvIntro.apply{
+                    tvIntro.apply {
                         text = getString(R.string.text_you_re_a_true_night_owl)
                         visible()
                     }

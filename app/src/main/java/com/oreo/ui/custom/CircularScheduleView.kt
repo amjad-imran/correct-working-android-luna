@@ -4,20 +4,34 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.CornerPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PointF
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
+import com.noisefit.timepickerslider.utils.dpToPx
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.utils.LOGS
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 class CircularScheduleView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -26,10 +40,47 @@ class CircularScheduleView @JvmOverloads constructor(
     private val pointerBitmap =
         BitmapFactory.decodeResource(resources, R.drawable.ic_scheduler_time_pointer)
 
-    var events: List<ClockEvent> = emptyList()
-        set(value) {
-            field = value; invalidate()
+    val fontGilroy =
+        ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+
+    val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.parseColor("#99FFFFFF")
+        typeface = fontGilroy
+        textSize = 16f.dpToPixel()
+        textAlign = Paint.Align.CENTER
+    }
+
+    private val textPaintWindowMessage = Paint().apply {
+        color = "#99FFFFFF".toColorInt()
+        textAlign = Paint.Align.CENTER
+        typeface = fontGilroy
+        textSize = 10f.dpToPixel()
+        isAntiAlias = true
+    }
+    private val textPaintWindowTimer = Paint().apply {
+        color = "#FFFFFF".toColorInt()
+        textAlign = Paint.Align.CENTER
+        textSize = 24f.dpToPixel()
+        typeface = fontGilroy
+        isAntiAlias = true
+    }
+
+    var events = ArrayList<ClockEvent>()
+
+    private var handler: Handler? = null
+    init {
+        CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                invalidate()
+                delay(1000)
+            }
         }
+    }
+
+    fun setDataSet(events: List<ClockEvent>) {
+        this.events.addAll(events)
+        invalidate()
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -37,6 +88,81 @@ class CircularScheduleView @JvmOverloads constructor(
         drawEvents(canvas)
 
         drawCurrentTimeMarker(canvas)
+
+        drawCircularEnergyCurveWithFade(
+            canvas, arrayListOf(
+                1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,
+                0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f
+            )
+        )
+        showTimer(canvas)
+    }
+
+    private fun showTimer(canvas: Canvas) {
+        val timer = getCurrentWindowTimer() * 1000L
+        if (timer == 0L) return
+
+        canvas.drawText("Window closes In", width / 2f, height / 2f - 12f.dpToPixel(), textPaintWindowMessage)
+
+        val seconds = (timer / 1000) % 60
+        val minutes = (timer / (1000 * 60)) % 60
+        val hours = (timer / (1000 * 60 * 60))
+
+        val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        canvas.drawText(timeString, width / 2f, height / 2f + 14f.dpToPixel(), textPaintWindowTimer)
+    }
+
+    private fun getCurrentWindowTimer(): Long {
+
+        val eventsPair = ArrayList<Pair<LocalTime, LocalTime>>()
+        events.forEach {
+            if (it.eventType.equals(ClockEventType.ARCH)) {
+                eventsPair.add(
+                    Pair(
+                        LocalTime.of(it.startHour.roundToInt(), 0),
+                        LocalTime.of(it.endHour.roundToInt(), 0)
+                    )
+                )
+            }
+        }
+
+        val currentPair = findCurrentPair(eventsPair)
+
+        if (currentPair == null) return 0L
+
+        val endTime = currentPair.second
+
+        val currentTime = LocalTime.now()
+        val diff = Duration.between(currentTime, endTime)
+
+        return diff.toSeconds()
+    }
+
+
+    private fun findCurrentPair(timePairs: List<Pair<LocalTime, LocalTime>>): Pair<LocalTime, LocalTime>? {
+        val now = LocalTime.now()
+
+        for ((startTime, endTime) in timePairs) {
+
+            // Handle ranges that don't cross midnight
+            if (startTime <= endTime) {
+                if (now >= startTime && now <= endTime) {
+                    return Pair(startTime, endTime)
+                }
+            } else {
+                // Handle ranges that cross midnight (e.g. 23:00–02:00)
+                if (now >= startTime || now <= endTime) {
+                    return Pair(startTime, endTime)
+                }
+            }
+        }
+        return null
+    }
+
+
+    private fun drawCircularEnergyCurveWithFade(canvas: Canvas, values: List<Float>) {
+
+
     }
 
     private fun drawCurrentTimeMarker(canvas: Canvas) {
@@ -49,7 +175,7 @@ class CircularScheduleView @JvmOverloads constructor(
         val minute = calendar.get(Calendar.MINUTE)
         val currentHourFloat = hour + (minute / 60f)
 
-        val angle = ((hour / 24f) * 360f) - 90f
+        val angle = ((currentHourFloat / 24f) * 360f) - 90f
 
         val pointerRadius = radius + (pointerBitmap.height / 2)
 
@@ -85,12 +211,6 @@ class CircularScheduleView @JvmOverloads constructor(
             color = Color.parseColor("#4DFFFFFF")
         }
 
-        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#CBCADA")
-            textSize = min(cx, cy) * 0.13f
-            textAlign = Paint.Align.CENTER
-            typeface = Typeface.DEFAULT_BOLD
-        }
 
         val tickStart = radius - min(cx, cy) * 0.07f
         val tickEnd = radius
@@ -134,7 +254,7 @@ class CircularScheduleView @JvmOverloads constructor(
 
         for (event in events) {
 
-            when(event.eventType){
+            when (event.eventType) {
                 ClockEventType.LINE -> {
                     val radius = min(cx, cy) - 67f.dpToPixel()
                     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -153,6 +273,7 @@ class CircularScheduleView @JvmOverloads constructor(
                     val endAngle = hourToAngle(event.endHour)
                     canvas.drawArc(rect, startAngle, endAngle - startAngle, false, paint)
                 }
+
                 ClockEventType.ARCH -> {
                     val radius = min(cx, cy) - 50f.dpToPixel()
                     val arcStrokeWidth = 24f.dpToPixel()
@@ -170,21 +291,35 @@ class CircularScheduleView @JvmOverloads constructor(
                     val linearGradient = LinearGradient(
                         cx, cy - radius,
                         cx, cy + radius,
-                        event.color , event.endColor,
+                        event.color, event.endColor,
                         Shader.TileMode.CLAMP
                     )
                     paint.shader = linearGradient
 
 
-                    val startAngle = (event.startHour / 24f) * 360f - 90f
-                    val sweepAngle = ((event.endHour - event.startHour) / 24f) * 360f
+                    val startAngle =
+                        hourToAngle(event.startHour) + 1//(event.startHour / 24f) * 360f - 90f
+                    val sweepAngle = (((event.endHour - event.startHour) / 24f) * 360f) - 1
                     canvas.drawArc(rect, startAngle, sweepAngle, false, paint)
 
 
-                    //val startAngle = hourToAngle(event.startHour)
-                    val endAngle = hourToAngle(event.endHour)
-                    val midAngle = (startAngle + endAngle) / 2
+                    drawCircularText(
+                        canvas,
+                        radius - 3f.dpToPixel(),
+                        PointF(cx, cy),
+                        startAngle,
+                        event.label,
+                        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                            style = Paint.Style.FILL_AND_STROKE
+                            typeface = fontGilroy
+                            textSize = dpToPx(10f)
+                            color = event.textColor
+                        }
+                    )
+
+
                 }
+
                 ClockEventType.GRAPH -> {
 
 
@@ -200,6 +335,27 @@ class CircularScheduleView @JvmOverloads constructor(
                 event.color
             )*/
         }
+    }
+
+
+    private fun drawCircularText(
+        canvas: Canvas,
+        radius: Float,
+        middlePoint: PointF,
+        textAngle: Float,
+        text: String,
+        textPaint: Paint
+    ) {
+        val textBounds = Rect()
+        textPaint.getTextBounds(text, 0, text.length, textBounds)
+
+        val circlePath = Path()
+        circlePath.addCircle(middlePoint.x, middlePoint.y, radius, Path.Direction.CW)
+
+        canvas.save()
+        canvas.rotate((textAngle + 2), middlePoint.x, middlePoint.y)
+        canvas.drawTextOnPath(text, circlePath, 0f, 0f, textPaint)
+        canvas.restore()
     }
 
 
@@ -259,6 +415,7 @@ data class ClockEvent(
     val eventType: ClockEventType,
     val color: Int,
     val endColor: Int,
+    val textColor: Int,
     val label: String
 )
 
