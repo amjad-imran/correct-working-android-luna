@@ -42,7 +42,7 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun drawCurrentTimeMarker(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-        val radius = min(cx, cy) - 100f.dpToPixel()
+        val radius = min(cx, cy) - 90f.dpToPixel()
 
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -124,11 +124,11 @@ class CircularScheduleView @JvmOverloads constructor(
         val cx = width / 2f
         val cy = height / 2f
 
-        val radius = min(cx, cy) - 70f.dpToPixel()
+        val radius = min(cx, cy) - 76f.dpToPixel()
         canvas.drawCircle(cx, cy, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = "#000000".toColorInt()
+            color = "#66000000".toColorInt()
             style = Paint.Style.STROKE
-            strokeWidth = 12f.dpToPixel()
+            strokeWidth = 4f.dpToPixel()
         })
 
 
@@ -136,11 +136,11 @@ class CircularScheduleView @JvmOverloads constructor(
 
             when(event.eventType){
                 ClockEventType.LINE -> {
-                    val radius = min(cx, cy) - 68f.dpToPixel()
+                    val radius = min(cx, cy) - 67f.dpToPixel()
                     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                         style = Paint.Style.STROKE
-                        strokeWidth = 6f.dpToPixel()
-                        strokeCap = Paint.Cap.BUTT
+                        strokeWidth = 4f.dpToPixel()
+                        strokeCap = Paint.Cap.ROUND
                     }
                     val rect = RectF(
                         cx - radius,

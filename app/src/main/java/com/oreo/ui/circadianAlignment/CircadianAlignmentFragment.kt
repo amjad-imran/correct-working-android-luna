@@ -77,8 +77,13 @@ class CircadianAlignmentFragment :
     }
 
     private fun showCircularScheduler() {
-        binding.lytCircularView.lockedGroup.visible()
-        binding.lytCircularView.circularView.gone()
+        /*binding.lytCircularView.lockedGroup.visible()
+        binding.lytCircularView.circularView.gone()*/
+
+        binding.lytCircularView.lockedGroup.gone()
+        binding.lytCircularView.circularView.visible()
+
+
         val clockEvents = listOf(
             ClockEvent(6f, 12f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"), Color.parseColor("#FBE0BE"), "Natural Light"),
             ClockEvent(17f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
