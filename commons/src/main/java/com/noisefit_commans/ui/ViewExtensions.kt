@@ -286,10 +286,10 @@ fun Long.checkDayDifferenceMore30Minutes(): Boolean {
     return false
 }
 
-fun Long.checkTimeDifferenceMoreNMinutes(value: Int, timeStamp: Long): Boolean {
+fun Long.checkTimeDifferenceMoreNMinutes(value: Int): Boolean {
     val currentTimeStamp = DateFormats.getTimeStamp()
     val cal = Calendar.getInstance()
-    cal.timeInMillis = timeStamp
+    cal.timeInMillis = this
     cal.add(Calendar.MINUTE, value)
     if (currentTimeStamp > cal.timeInMillis) {
         return true

@@ -46,6 +46,7 @@ import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
+import com.noisefit_commans.ui.checkTimeDifferenceMoreNMinutes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -387,7 +388,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun updateCaffeineItemsList(req: CaffeinePostApiModel): Flow<Resource<BaseApiResponse<Any>>> {
-        return safeApiCallFlow(dispatcher){
+        return safeApiCallFlow(dispatcher) {
             remoteDataSource.updateCaffeineItemsList(
                 "${BuildConfig.OREO_BASE_URL}/sleep/v3/favorite_caffeine_item",
                 req
@@ -431,10 +432,131 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getCircadianData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getCircadianData(
-                "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/logs",
-            )
+
+
+        return flow {
+            emit(Resource.Loading(true))
+
+            val type = KeyValueDataType.CIRCADIAN_DATA
+            var resultData: CircadianResponseModel? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkTimeDifferenceMoreNMinutes(10)
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", type)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<CircadianResponseModel>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(Resource.Loading(false))
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                remoteDataSource.getCircadianData(
+                    "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/logs",
+                )
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = type.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -466,6 +588,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogMealTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogMealTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal",
                 req
@@ -475,6 +598,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogCaffeineTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-caffeine",
                 req
@@ -484,6 +608,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogLightExposureTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-light",
                 req

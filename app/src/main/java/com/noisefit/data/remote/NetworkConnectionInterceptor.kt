@@ -121,6 +121,7 @@ class NetworkConnectionInterceptor(
         keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
         keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_TOGGLE)
         keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
+        keyValueDataSource.removeDataByType(KeyValueDataType.CIRCADIAN_DATA)
         keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
         keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
     }
