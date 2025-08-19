@@ -37,6 +37,9 @@ class AddActivityTimelineFragment :
             CircadianAlignmentViewModel.caffeine_window_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CAFFEINE)
 
+            CircadianAlignmentViewModel.sleep_key ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP)
+
             else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
     }

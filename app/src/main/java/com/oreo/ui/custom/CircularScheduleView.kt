@@ -76,6 +76,7 @@ class CircularScheduleView @JvmOverloads constructor(
 
     var events = ArrayList<ClockEvent>()
     var energyArray = ArrayList<Float>()
+    var isLocked = false
     private var sleepStart: LocalTime? = null
     private var sleepEnd: LocalTime? = null
 
@@ -106,10 +107,12 @@ class CircularScheduleView @JvmOverloads constructor(
         events: List<ClockEvent>,
         energyArray: List<Float>,
         sleepStart: String? = null,
-        sleepEnd: String? = null
+        sleepEnd: String? = null,
+        isLocked: Boolean
     ) {
         this.events.addAll(events)
         this.energyArray.addAll(energyArray)
+        this.isLocked = isLocked
 
 
         sleepStart?.let {
@@ -128,13 +131,14 @@ class CircularScheduleView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawClock(canvas)
-        drawEvents(canvas)
-
-        drawCircularEnergyCurveWithFade(
-            canvas, energyArray
-        )
-        showTimer(canvas)
-        drawCurrentTimeMarker(canvas)
+        if(isLocked.not()){
+            drawEvents(canvas)
+            drawCircularEnergyCurveWithFade(
+                canvas, energyArray
+            )
+            showTimer(canvas)
+            drawCurrentTimeMarker(canvas)
+        }
     }
 
     private fun showTimer(canvas: Canvas) {

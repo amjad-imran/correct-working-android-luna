@@ -49,6 +49,7 @@ class CircadianAlignmentViewModel
         const val meal_window_key = "meal_window"
         const val caffeine_window_key = "caffeine_window"
         const val workout_key = "workout"
+        const val sleep_key = "sleep"
         val actMonStatusList = listOf("partial", "done", "not-done")
     }
 

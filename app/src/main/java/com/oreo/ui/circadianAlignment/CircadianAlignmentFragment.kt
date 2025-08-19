@@ -69,18 +69,24 @@ class CircadianAlignmentFragment :
         viewModel.initData()
     }
 
-    private fun showCircularScheduler(graphData: CircadianGraphData?) {
+    private fun showCircularScheduler(graphData: CircadianGraphData?, isLocked: Boolean?) {
         /*binding.lytCircularView.lockedGroup.visible()
         binding.lytCircularView.circularView.gone()*/
 
-        binding.lytCircularView.lockedGroup.gone()
-        binding.lytCircularView.circularView.visible()
+        if(isLocked == true){
+            binding.lytCircularView.apply {
+                lytUnlockedState.root.gone()
+                lytLockedState.root.visible()
+            }
+        }else {
+            binding.lytCircularView.lytLockedState.root.gone()
+            binding.lytCircularView.lytUnlockedState.circularView.visible()
 
 
-        val clockEvents = viewModel.generateClockEvents(graphData)
+            val clockEvents = viewModel.generateClockEvents(graphData)
 
 
-        /*val clockEvents = listOf(
+            /*val clockEvents = listOf(
             ClockEvent(
                 6f, 8f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"),
                 Color.parseColor("#FBE0BE"),
@@ -131,19 +137,21 @@ class CircadianAlignmentFragment :
             //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
         )*/
 
-        val energyValues = /*arrayListOf(
+            val energyValues = /*arrayListOf(
             0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 1f, 1f, 1f,
             0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0.2f, 0.2f, 0.6f, 0.3f, 0f, 0f
         )*/graphData?.energyGraph?.map { it.energy ?: 0f }
 
-        val sleepStart = graphData?.sleepData?.bedTime
-        val sleepEnd = graphData?.sleepData?.wakeTime
+            val sleepStart = graphData?.sleepData?.bedTime
+            val sleepEnd = graphData?.sleepData?.wakeTime
 
-        val energyArray = viewModel.generateValuesData(energyValues)
-        binding.lytCircularView.circularView.setDataSet(
-            clockEvents, energyArray,sleepStart,sleepEnd
+            val energyArray = viewModel.generateValuesData(energyValues)
+            binding.lytCircularView.lytUnlockedState.circularView.setDataSet(
+                clockEvents, energyArray, sleepStart, sleepEnd,isLocked?:false
+            )
 
-        )
+            binding.lytCircularView.lytUnlockedState.lytNoSleepData.visible()
+        }
     }
 
     data class CircadianResponse(
@@ -592,6 +600,15 @@ class CircadianAlignmentFragment :
 
     override fun initListener() {
 
+        binding.lytCircularView.lytUnlockedState.lytNoSleepData.setOnClickListener {
+            navigate(
+                R.id.addActivityTimelineFragment,
+                bundleOf(
+                    "key" to "sleep",
+                )
+            )
+        }
+
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -643,7 +660,7 @@ class CircadianAlignmentFragment :
             setData(it)
             it.graphData?.let { it1 ->
                 updateGraph(it1, it.circadianMidPoint)
-                showCircularScheduler(it1)
+                showCircularScheduler(it1, it.isLockedCircularView)
             }
         }
 
