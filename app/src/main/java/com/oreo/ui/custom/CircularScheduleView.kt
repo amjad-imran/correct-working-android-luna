@@ -36,6 +36,7 @@ import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -131,8 +132,8 @@ class CircularScheduleView @JvmOverloads constructor(
             if (it.eventType.equals(ClockEventType.ARCH)) {
                 eventsPair.add(
                     Pair(
-                        LocalTime.of(it.startHour.roundToInt(), 0),
-                        LocalTime.of(it.endHour.roundToInt(), 0)
+                        fromFloatHour(it.startHour),
+                        fromFloatHour(it.endHour),
                     )
                 )
             }
@@ -452,6 +453,12 @@ class CircularScheduleView @JvmOverloads constructor(
         canvas.rotate((textAngle + 2), middlePoint.x, middlePoint.y)
         canvas.drawTextOnPath(text, circlePath, 0f, 0f, textPaint)
         canvas.restore()
+    }
+
+    fun fromFloatHour(value: Float): LocalTime {
+        val hour = floor(value).toInt()
+        val minute = ((value - hour) * 60).toInt()
+        return LocalTime.of(hour, minute)
     }
 
     private fun drawCircularTextCCW(
