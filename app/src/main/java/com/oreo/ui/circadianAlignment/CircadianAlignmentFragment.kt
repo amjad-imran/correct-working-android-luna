@@ -131,13 +131,18 @@ class CircadianAlignmentFragment :
             //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
         )*/
 
-        val energyValues = /*arrayListOf(
+        val energyValues = arrayListOf(
             1f, 1f, 0.3f, 0.2f, 1f, 1f, 1f, 0.1f, 0.3f, 1f, 1f, 1f,
             0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f
-        )*/graphData?.energyGraph?.map { it.energy ?: 0f }
+        )//graphData?.energyGraph?.map { it.energy ?: 0f }
+
+        val sleepStart = graphData?.sleepData?.bedTime
+        val sleepEnd = graphData?.sleepData?.wakeTime
+
         val energyArray = viewModel.generateValuesData(energyValues)
         binding.lytCircularView.circularView.setDataSet(
-            clockEvents, energyArray
+            clockEvents, energyArray,sleepStart,sleepEnd
+
         )
     }
 
