@@ -18,6 +18,7 @@ import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -80,7 +81,7 @@ class CircadianAlignmentFragment :
             }
         }else {
             binding.lytCircularView.lytLockedState.root.gone()
-            binding.lytCircularView.lytUnlockedState.circularView.visible()
+            binding.lytCircularView.lytUnlockedState.root.visible()
 
 
             val clockEvents = viewModel.generateClockEvents(graphData)
@@ -150,7 +151,8 @@ class CircadianAlignmentFragment :
                 clockEvents, energyArray, sleepStart, sleepEnd,isLocked?:false
             )
 
-            binding.lytCircularView.lytUnlockedState.lytNoSleepData.visible()
+            binding.lytCircularView.lytUnlockedState.lytNoSleepData
+                .setVisibilityByCondition(clockEvents.isEmpty() && energyArray.isEmpty())
         }
     }
 
@@ -591,7 +593,7 @@ class CircadianAlignmentFragment :
         binding.lytCorrectiveActivities.recyclerV.layoutManager = LinearLayoutManager(context)
         binding.lytCorrectiveActivities.recyclerV.adapter = correctiveActivitiesAdapter
 
-        viewModel.initHowItWorksData()
+//        viewModel.initHowItWorksData()
 
         binding.rvHowItWorks.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
