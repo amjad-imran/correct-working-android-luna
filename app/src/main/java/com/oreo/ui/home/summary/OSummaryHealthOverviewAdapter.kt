@@ -3138,8 +3138,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             data.timeWindow?.let {
-                binding.graphView.timeWindows = it
+                binding.graphView.setDataSet(
+                    it,
+                    data.energyGraph
+                )
             }
+
             binding.graphView.redraw()
         }
 
