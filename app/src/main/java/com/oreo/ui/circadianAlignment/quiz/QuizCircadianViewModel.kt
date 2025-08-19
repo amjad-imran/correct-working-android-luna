@@ -29,6 +29,8 @@ class QuizCircadianViewModel @Inject constructor(
 
     val quizDataSubmitted = MutableLiveData<Event<Boolean>>()
 
+    val optionSelectedLiveData = MutableLiveData<Boolean>()
+
     fun getQuizData(){
         viewModelScope.launch {
             userRepository.getCircadianQuizData().collect{ resource ->
@@ -66,6 +68,7 @@ class QuizCircadianViewModel @Inject constructor(
 
     fun handleQuizOptionClick(pair: Pair<Int, Int>) {
         quesOptionMap[pair.first] = pair.second
+        optionSelectedLiveData.postValue(true)
         /*if(quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size){
             submitQuizQuesAndAnswers()
         }*/
@@ -78,6 +81,10 @@ class QuizCircadianViewModel @Inject constructor(
             val jsonArrayRes = JsonArray()
 
             val isAllDone = quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size
+            if (isAllDone.not()) {
+                return@launch
+            }
+
             if(isAllDone){
                 quesOptionMap.forEach { (quesId, ansId) ->
                     jsonArrayRes.add(

@@ -1440,108 +1440,208 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         return if(isOnboardingDone){
-            val timeWindowListData = ArrayList<TimeWindow>()
-            circadianGraphData?.activityWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Activity")
+            val graphData = circadianGraphData
+            if(graphData != null) {
+                var sTime: LocalTime?=null
+                var eTime: LocalTime?=null
+                if (graphData.startTime != null && graphData.endTime != null) {
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+                    val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+                    val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+
+                    val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+                    var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+
+                    val endDateTimeSleep =
+                        LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+
+                    if (endDateTimeSleep != null) {
+                        val sleepWakeTime =
+                            LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                        endTime = sleepWakeTime
+                    }
+
+                    sTime = startTime
+                    eTime = endTime
+                }
+
+                OHealthOverview.CircadianAlignment(
+                    startTime = sTime,
+                    endTime = eTime,
+                    timeWindow = getCircadianScrollGraphList(graphData),
+                    title = circadianGraphData?.title,
+                    description = circadianGraphData?.description,
+                    energyGraph = graphData.energyGraph
                 )
             }
-
-            circadianGraphData?.caffeineWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_caffeine_open))
-                )
-            }
-
-            circadianGraphData?.cortisolPeakWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Cortisol Peak Window")
-                )
-            }
-
-            circadianGraphData?.dlmoPhaseWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_dim_light_melatonin_onset))
-                )
-            }
-
-            circadianGraphData?.firstFocusPeakWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "First Focus Peak")
-                )
-            }
-
-            circadianGraphData?.ghPulseWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "GH Pulse")
-                )
-            }
-
-            circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Light Anchoring")
-                )
-            }
-
-            circadianGraphData?.melatoninPrepPhaseWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "melatonin Phase")
-                )
-            }
-
-            circadianGraphData?.secondFocusPeakWindowGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = "Second Focus Peak")
-                )
-            }
-
-            circadianGraphData?.sleepWindowOpensGraph?.let {
-                if(it.startTime == null || it.endTime == null) return@let
-                timeWindowListData.add(
-                    TimeWindow(getCircadianTimeFloatValue(it.startTime), getCircadianTimeFloatValue(it.endTime), "#2E2422".toColorInt(),"#2E2422".toColorInt(),"#D69B92".toColorInt(), rowIndex = 0, label = resourceProvider.getString(R.string.text_sleep))
-                )
-            }
-
-            var startTime: LocalTime?= null
-            var endTime: LocalTime?= null
-            if(circadianGraphData?.startTime != null && circadianGraphData?.endTime != null){
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-                val startDateTime = LocalDateTime.parse(circadianGraphData?.startTime, formatter)
-                val endDateTime = LocalDateTime.parse(circadianGraphData?.endTime, formatter)
-
-                startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-                endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
-            }
-
-            OHealthOverview.CircadianAlignment(
-                startTime = startTime,
-                endTime = endTime,
-                timeWindow = timeWindowListData,
-                title = circadianGraphData?.title,
-                description = circadianGraphData?.description,
-            )
+            else
+                null
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
         }
     }
 
+    fun getCircadianScrollGraphList(
+        circadianGraphData: CircadianGraphData?,
+    ): List<TimeWindow> {
+        val data = ArrayList<TimeWindow>()
+        circadianGraphData?.caffeineWindowGraph?.let {
+            if (it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(it.endTime),
+                    "#A1734E".toColorInt(),
+                    "#D6A176".toColorInt(),
+                    "#FFFFFF".toColorInt(),
+                    rowIndex = 1,
+                    label = "Caffeine Window Open"//todo change to string
+                )
+            )
+            circadianGraphData?.sleepData?.let { sleepTime->
+                if (sleepTime.wakeTime == null || sleepTime.bedTime == null) return@let
+
+                val wakeTime = LocalDateTime.parse(
+                    sleepTime.wakeTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm"))
+                val bedTime = LocalDateTime.parse(
+                    sleepTime.bedTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).format(DateTimeFormatter.ofPattern("HH:mm"))
+
+                data.add(
+                    TimeWindow(
+                        getCircadianTimeFloatValue(wakeTime),
+                        getCircadianTimeFloatValue(it.startTime),
+                        "#CC2E2422".toColorInt(),
+                        "#CC2E2422".toColorInt(),
+                        "#B2D69B92".toColorInt(),
+                        rowIndex = 1,
+                        label = "Avoid Caffeine"
+                    )
+                )
+
+                data.add(
+                    TimeWindow(
+                        getCircadianTimeFloatValue(it.endTime),
+                        getCircadianTimeFloatValue(bedTime),
+                        "#CC2E2422".toColorInt(),
+                        "#CC2E2422".toColorInt(),
+                        "#B2D69B92".toColorInt(),
+                        rowIndex = 1,
+                        label = "Avoid Caffeine"
+                    )
+                )
+
+
+
+
+            }
+
+
+        }
+
+        circadianGraphData?.dlmoPhaseWindowGraph?.let {
+            if (it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(it.endTime),
+                    "#9E6FC7".toColorInt(),
+                    "#4C4192".toColorInt(),
+                    "#EBAFFF".toColorInt(),
+                    rowIndex = 0,
+                    label = "Dim-light Phase"
+                )
+            )
+        }
+
+        circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
+            if (it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(it.endTime),
+                    "#B2E6EE".toColorInt(),
+                    "#FFE0BC".toColorInt(),
+                    "#99000000".toColorInt(),
+                    rowIndex = 0,
+                    label = "Natural Light"
+                )
+            )
+        }
+        circadianGraphData?.sleepData?.let {
+            if (it.wakeTime == null || it.bedTime == null) return@let
+
+            //2025-08-18 01:05:00
+            val startTime = LocalDateTime.parse(
+                it.wakeTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+            val endTime = LocalDateTime.parse(
+                it.bedTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+
+
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(endTime),
+                    getCircadianTimeFloatValue(startTime),
+                    "#33296F".toColorInt(),
+                    "#634ED5".toColorInt(),
+                    "#9E91E8".toColorInt(),
+                    rowIndex = 0,
+                    label = "Sleep"
+                )
+            )
+        }
+
+        circadianGraphData?.melatoninPrepPhaseWindowGraph?.let {
+            if (it.startTime == null || it.endTime == null) return@let
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(it.endTime),
+                    "#613644".toColorInt(),
+                    "#BD6FC7".toColorInt(),
+                    "#FFAFF2".toColorInt(),
+                    rowIndex = 0,
+                    label = "Evening Wind-Down"
+                )
+            )
+
+            circadianGraphData?.lightAnchoringPhaseWindowGraph?.let { it1 ->
+
+                data.add(
+                    TimeWindow(
+                        getCircadianTimeFloatValue(it1.endTime),
+                        getCircadianTimeFloatValue(it.startTime),
+                        "#33646464".toColorInt(),
+                        "#33646464".toColorInt(),
+                        "#5A5A5A".toColorInt(),
+                        rowIndex = 0,
+                        label = "Neutral Light Zone"
+                    )
+                )
+            }
+
+
+        }
+
+        return data
+    }
+
     private fun getCircadianTimeFloatValue(time: String?): Float{
-        if(time == null){
+        if (time == null) {
             return -1f
         }
-        val timee =  LocalTime.parse(time,DateTimeFormatter.ofPattern("HH:mm"))
-//        timee.minute.toFloat()
-        return timee.hour.toFloat()
+
+
+        val timee = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"))
+        return timee.hour + timee.minute / 60f
     }
 
     private fun getCaffeineCardData(): OHealthOverview? {

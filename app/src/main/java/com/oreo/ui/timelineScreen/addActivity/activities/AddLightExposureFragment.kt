@@ -40,16 +40,39 @@ class AddLightExposureFragment :
 
     }
 
+    private fun showDropdownDialog(anchorView: View) {
+        val dropdownDialog = DropdownDialog(
+            context = anchorView.context,
+            anchorView = anchorView,
+            items = listOf(
+                "Meal intake",
+                "Light exposure",
+                "Caffeine intake",
+                "Workout",
+                "Water consumption",
+                "Period",
+                "Nap",
+                "Sleep"
+            )
+        ) { selectedItem ->
+
+
+        }
+
+        dropdownDialog.show()
+    }
+
 
     override fun initListener() {
         val navController =
             NavHostFragment.Companion.findNavController(this@AddLightExposureFragment)
 
         binding.lytSelected.setOnClickListener {
+            //showDropdownDialog(binding.lytSelected)
             sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
         binding.btnSave.setOnClickListener {
-            if(viewModel.lightTime.value != null && viewModel.lightDuration.value != null){
+            if (viewModel.lightTime.value != null && viewModel.lightDuration.value != null) {
                 viewModel.logLightExposure(
                     viewModel.lightTime.value!!,
                     viewModel.lightDuration.value!!
@@ -92,7 +115,9 @@ class AddLightExposureFragment :
                 val selectedValue = bundle.getString("selectedValue")
                 selectedValue?.let { it1 ->
                     val minString = it1.split(" ").firstOrNull()
-                    viewModel.lightDuration.postValue(minString?.toLongOrNull()?:viewModel.defaultMinutes)
+                    viewModel.lightDuration.postValue(
+                        minString?.toLongOrNull() ?: viewModel.defaultMinutes
+                    )
                 }
 
             }
@@ -101,7 +126,7 @@ class AddLightExposureFragment :
                 bundleOf(
                     "selectedValue" to "${viewModel.lightDuration.value} mins",
                     "selectionList" to AppStaticData.getLightExposureDurationValues(),
-                   "title" to getString(R.string.text_duration)
+                    "title" to getString(R.string.text_duration)
                 )
             )
         }

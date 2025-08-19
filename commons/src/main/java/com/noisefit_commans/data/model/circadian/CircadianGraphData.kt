@@ -3,6 +3,9 @@ package com.noisefit_commans.data.model.circadian
 import com.google.gson.annotations.SerializedName
 
 data class CircadianGraphData(
+    @SerializedName("sleep_data")
+    val sleepData: SleepData?,
+
     @SerializedName("activity_window_graph")
     val activityWindowGraph: ItemCircadianGraphData?,
 
@@ -50,6 +53,13 @@ data class CircadianGraphData(
     val description: String?,
 )
 
+data class SleepData(
+    @SerializedName("bed_time")
+    val bedTime: String?,
+    @SerializedName("wake_time")
+    val wakeTime: String?,
+)
+
 data class EnergyGraph(
     @SerializedName("start_time")
     val startTime: String?,
@@ -79,6 +89,8 @@ data class CircadianMidPointData(
 
     @SerializedName("avg_before")
     val avgBefore: String?,
+
+    val chronotype: String?,
 
     @SerializedName("nudge")
     val nudge: nudgeCircadianGraph?

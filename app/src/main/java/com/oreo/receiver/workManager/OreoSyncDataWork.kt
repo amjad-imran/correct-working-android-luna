@@ -226,7 +226,7 @@ constructor(
                                     handleAppVersion(context, it)
                                     datesToRemove = it.dates
                                     syncDataScope.launch {
-
+                                        keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
                                         keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
                                     }
                                 }

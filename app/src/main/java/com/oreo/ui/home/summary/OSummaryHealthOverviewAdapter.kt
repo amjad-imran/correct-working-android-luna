@@ -711,13 +711,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if(data.listData.isNullOrEmpty()){
                 binding.rvActivities.gone()
-                binding.lytNoData.visible()
+                binding.lytNoData.apply {
+                    imageView102.setBackgroundResource(R.drawable.ic_noactivity_timeline)
+                    root.visible()
+                }
             }else{
                 val adapter = TimelineAdapter(data.listData)
                 binding.rvActivities.apply {
                     this.layoutManager = LinearLayoutManager(binding.root.context)
                     this.adapter = adapter
-                    binding.lytNoData.gone()
+                    binding.lytNoData.root.gone()
                     visible()
                 }
             }
@@ -3089,8 +3092,29 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.CircadianAlignment) {
+            /*val context = binding.root.context
+
+            val tvWindow = binding.tvWindow
+            val tvDesc = binding.tvDesc*/
+
             binding.tvWindow.text = data.title ?: "-"
             binding.tvDesc.text = data.description ?: "-"
+
+            /*if(
+                data.title != null &&
+                data.description != null
+            ){
+                tvWindow.text = data.title
+                tvDesc.text = data.description
+            }else{
+                if(data.isLockedCircularView == true){
+                    tvWindow.text = context.getString(R.string.text_start_fresh_today)
+                    tvDesc.text = context.getString(R.string.text_focus_window_desc1)
+                }else{
+                    tvWindow.text = context.getString(R.string.text_guidance_resumes_soon)
+                    tvDesc.text = context.getString(R.string.text_focus_window_desc2)
+                }
+            }*/
 
             // Graph
             setCircadianGraph(data)
@@ -3114,8 +3138,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             data.timeWindow?.let {
-                binding.graphView.timeWindows = it
+                binding.graphView.setDataSet(
+                    it,
+                    data.energyGraph
+                )
             }
+
             binding.graphView.redraw()
         }
 

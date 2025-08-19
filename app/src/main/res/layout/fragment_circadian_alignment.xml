@@ -34,6 +34,14 @@
                 android:layout_height="wrap_content" />
 
             <include
+                android:id="@+id/lytCircularState"
+                layout="@layout/layout_circadian_state"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp" />
+
+            <include
                 android:id="@+id/divider24HourGraph"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
@@ -52,6 +60,7 @@
                 android:id="@+id/graphView"
                 android:layout_width="match_parent"
                 android:layout_height="176dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutToolbar" />

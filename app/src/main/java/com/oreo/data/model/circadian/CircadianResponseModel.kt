@@ -17,6 +17,9 @@ data class CircadianResponseModel(
 
     @SerializedName("graph_data")
     val graphData: CircadianGraphData?,
+
+    @SerializedName("is_locked")
+    val isLockedCircularView: Boolean?
 )
 
 data class Activity(
@@ -34,5 +37,6 @@ data class ActivityMonitor(
 
 data class Chronotype(
     val description: String,
-    val type: String
+    val type: String,
+    val introduction: String,
 )

@@ -21,7 +21,7 @@ data class OnlyImgWithText(
 )
 
 data class ProgressBarLytData(
-    val totalProgress: Int,
+    val totalProgress: Int?,
     val currentProgress: Int,
     val img: Int,
     val txt: String
