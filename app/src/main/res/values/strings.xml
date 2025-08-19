@@ -2102,7 +2102,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_you_re_a_true_night_owl">You’re a true night owl.</string>
     <string name="text_you_are_currently_in">You are currently in</string>
     <string name="text_caffeine_window_open">Caffeine Window Open</string>
-    <string name="text_caffeine_window_closed">Caffeine Window Closed</string>
+    <string name="text_caffeine_window_closed">Avoid Caffeine</string>
     <string name="text_no_activity_found">No activity found</string>
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">It looks like you have not logged any activities yet</string>
     <string name="text_start_fresh_today">Start Fresh Today</string>
