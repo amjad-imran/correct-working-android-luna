@@ -27,8 +27,6 @@ import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
-import com.oreo.ui.custom.ClockEvent
-import com.oreo.ui.custom.ClockEventType
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +75,6 @@ class CircadianAlignmentFragment :
 
         binding.lytCircularView.lockedGroup.gone()
         binding.lytCircularView.circularView.visible()
-
 
 
         val clockEvents = viewModel.generateClockEvents(graphData)
@@ -134,7 +131,14 @@ class CircadianAlignmentFragment :
             //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
         )*/
 
-        binding.lytCircularView.circularView.setDataSet(clockEvents)
+        val energyValues = /*arrayListOf(
+            1f, 1f, 0.3f, 0.2f, 1f, 1f, 1f, 0.1f, 0.3f, 1f, 1f, 1f,
+            0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f
+        )*/graphData?.energyGraph?.map { it.energy ?: 0f }
+        val energyArray = viewModel.generateValuesData(energyValues)
+        binding.lytCircularView.circularView.setDataSet(
+            clockEvents, energyArray
+        )
     }
 
     data class CircadianResponse(
@@ -522,7 +526,14 @@ class CircadianAlignmentFragment :
             val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
 
             val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-            val endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+            var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+
+            val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+
+            if(endDateTimeSleep!=null){
+                val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                endTime = sleepWakeTime
+            }
 
             binding.graphView.graphStartTime = startTime
             binding.graphView.graphEndTime = endTime
@@ -684,16 +695,20 @@ class CircadianAlignmentFragment :
         // focus window
         val isCircularViewContainsData = true
         binding.lytFocusWindow.apply {
-            if (isCircularViewContainsData) {
+            if (isCircularViewContainsData) {//todo change logic
                 tvTitle.text = getString(R.string.text_focus_window)
+                binding.lytCircularState.tvPhase.text = getString(R.string.text_focus_window)
                 tvDesc.text =
                     getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
             } else {
                 tvTitle.text = getString(R.string.text_take_it_easy_today)
                 tvDesc.text =
                     getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
+                binding.lytCircularState.tvPhase.text = getString(R.string.text_take_it_easy_today)
             }
         }
+
+        binding.lytCircularState.tvCaffeineState.text = viewModel.getCaffeineState(data)
 
         // activity monitor
         val activityMonitorData = data.activityMonitor

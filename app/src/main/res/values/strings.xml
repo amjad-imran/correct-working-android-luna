@@ -2100,5 +2100,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_you_re_naturally_inclined_to_be_a_night_owl">You’re naturally inclined to be a night owl.</string>
     <string name="text_definite_evening_type">Definite Evening Type</string>
     <string name="text_you_re_a_true_night_owl">You’re a true night owl.</string>
+    <string name="text_you_are_currently_in">You are currently in</string>
+    <string name="text_caffeine_window_open">Caffeine Window Open</string>
+    <string name="text_caffeine_window_closed">Caffeine Window Closed</string>
 
 </resources>

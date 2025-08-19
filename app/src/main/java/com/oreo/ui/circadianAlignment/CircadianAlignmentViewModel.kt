@@ -30,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -67,9 +68,14 @@ class CircadianAlignmentViewModel
 
     fun initData() {
 
-        val data = "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": -25364, \"status\": false }, { \"type\": \"meal_window\", \"time\": 7035, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": -7364, \"status\": false }, { \"type\": \"workout\", \"time\": 3435, \"goal\": 660, \"status\": false }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 3435, \"progress\": 4910 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"circadian_mid_point\": { \"start_time\": \"2025-08-18 05:30:00\", \"end_time\": \"2025-08-18 07:30:00\", \"circadian_midpoint\": \"2025-08-18 04:18:30\", \"avg_now\": \"2025-08-18 04:55:06\", \"avg_before\": \"2025-08-18 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"chronotype\": { \"type\": \"Definitely evening type\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you hav\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:32\", \"end_time\": \"15:32\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"19:32\", \"end_time\": \"22:32\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"22:32\", \"end_time\": \"23:32\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"08:02\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"08:32\", \"end_time\": \"10:32\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"10:32\", \"end_time\": \"13:32\", \"peak_time\": \"12:02\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"15:32\", \"end_time\": \"18:32\", \"peak_time\": \"17:02\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:32\" }, \"gh_pulse_window_graph\": { \"start_time\": \"05:32\" }, \"activity_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"18:32\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-18 05:30:00\", \"end_time\": \"2025-08-18 07:30:00\", \"circadian_midpoint\": \"2025-08-18 04:18:30\", \"avg_now\": \"2025-08-18 04:55:06\", \"avg_before\": \"2025-08-18 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"energy_graph\": [ { \"start_time\": \"07:32\", \"energy\": 0 }, { \"start_time\": \"08:32\", \"energy\": 0 }, { \"start_time\": \"09:32\", \"energy\": 0 }, { \"start_time\": \"10:32\", \"energy\": 0 }, { \"start_time\": \"11:32\", \"energy\": 0 }, { \"start_time\": \"12:32\", \"energy\": 0 }, { \"start_time\": \"13:32\", \"energy\": 0 }, { \"start_time\": \"14:32\", \"energy\": 0 }, { \"start_time\": \"15:32\", \"energy\": 0 }, { \"start_time\": \"16:32\", \"energy\": 0 }, { \"start_time\": \"17:32\", \"energy\": 0.029 }, { \"start_time\": \"18:32\", \"energy\": 0.411 }, { \"start_time\": \"19:32\", \"energy\": 1 }, { \"start_time\": \"20:32\", \"energy\": 0.425 }, { \"start_time\": \"21:32\", \"energy\": 0.109 }, { \"start_time\": \"22:32\", \"energy\": 0.098 }, { \"start_time\": \"23:32\", \"energy\": 0.26 } ], \"sleep_data\": { \"bed_time\": \"2025-08-18 01:05:00\", \"wake_time\": \"2025-08-18 07:32:00\" }, \"start_time\": \"2025-08-18 07:32:00\", \"end_time\": \"2025-08-18 23:32:00\" } }"
-        circadianResponseData.postValue(Gson().fromJson(data,
-            CircadianResponseModel::class.java))
+        val data =
+            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": -25364, \"status\": false }, { \"type\": \"meal_window\", \"time\": 7035, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": -7364, \"status\": false }, { \"type\": \"workout\", \"time\": 3435, \"goal\": 660, \"status\": false }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 3435, \"progress\": 4910 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"circadian_mid_point\": { \"start_time\": \"2025-08-18 05:30:00\", \"end_time\": \"2025-08-18 07:30:00\", \"circadian_midpoint\": \"2025-08-18 04:18:30\", \"avg_now\": \"2025-08-18 04:55:06\", \"avg_before\": \"2025-08-18 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"chronotype\": { \"type\": \"Definitely evening type\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you hav\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:32\", \"end_time\": \"15:32\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"19:32\", \"end_time\": \"22:32\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"22:32\", \"end_time\": \"23:32\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"08:02\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"08:32\", \"end_time\": \"10:32\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"10:32\", \"end_time\": \"13:32\", \"peak_time\": \"12:02\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"15:32\", \"end_time\": \"18:32\", \"peak_time\": \"17:02\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:32\" }, \"gh_pulse_window_graph\": { \"start_time\": \"05:32\" }, \"activity_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"18:32\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-18 05:30:00\", \"end_time\": \"2025-08-18 07:30:00\", \"circadian_midpoint\": \"2025-08-18 04:18:30\", \"avg_now\": \"2025-08-18 04:55:06\", \"avg_before\": \"2025-08-18 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"energy_graph\": [ { \"start_time\": \"07:32\", \"energy\": 0 }, { \"start_time\": \"08:32\", \"energy\": 0 }, { \"start_time\": \"09:32\", \"energy\": 0 }, { \"start_time\": \"10:32\", \"energy\": 0 }, { \"start_time\": \"11:32\", \"energy\": 0 }, { \"start_time\": \"12:32\", \"energy\": 0 }, { \"start_time\": \"13:32\", \"energy\": 0 }, { \"start_time\": \"14:32\", \"energy\": 0 }, { \"start_time\": \"15:32\", \"energy\": 0 }, { \"start_time\": \"16:32\", \"energy\": 0 }, { \"start_time\": \"17:32\", \"energy\": 0.029 }, { \"start_time\": \"18:32\", \"energy\": 0.411 }, { \"start_time\": \"19:32\", \"energy\": 1 }, { \"start_time\": \"20:32\", \"energy\": 0.425 }, { \"start_time\": \"21:32\", \"energy\": 0.109 }, { \"start_time\": \"22:32\", \"energy\": 0.098 }, { \"start_time\": \"23:32\", \"energy\": 0.26 } ], \"sleep_data\": { \"bed_time\": \"2025-08-18 01:05:00\", \"wake_time\": \"2025-08-18 07:32:00\" }, \"start_time\": \"2025-08-18 07:32:00\", \"end_time\": \"2025-08-18 23:32:00\" } }"
+        circadianResponseData.postValue(
+            Gson().fromJson(
+                data,
+                CircadianResponseModel::class.java
+            )
+        )
         return
 
         viewModelScope.launch {
@@ -386,7 +392,9 @@ class CircadianAlignmentViewModel
         timerMap.values.forEach { it.cancel() }
     }
 
-    fun getScrollGraphList(circadianGraphData: CircadianGraphData?): List<TimeWindow> {
+    fun getScrollGraphList(
+        circadianGraphData: CircadianGraphData?,
+    ): List<TimeWindow> {
         val data = ArrayList<TimeWindow>()
         circadianGraphData?.caffeineWindowGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
@@ -418,37 +426,6 @@ class CircadianAlignmentViewModel
             )
         }
 
-        /*circadianGraphData?.cortisolPeakWindowGraph?.let {
-            if (it.startTime == null || it.endTime == null) return@let
-            data.add(
-                TimeWindow(
-                    getCircadianTimeFloatValue(it.startTime),
-                    getCircadianTimeFloatValue(it.endTime),
-                    "#33296F".toColorInt(),
-                    "#634ED5".toColorInt(),
-                    "#D69B92".toColorInt(),
-                    rowIndex = 0,
-                    label = "Cortisol Peak Window"
-                )
-            )
-        }*/
-
-
-        /*circadianGraphData?.ghPulseWindowGraph?.let {
-            if (it.startTime == null || it.endTime == null) return@let
-            data.add(
-                TimeWindow(
-                    getCircadianTimeFloatValue(it.startTime),
-                    getCircadianTimeFloatValue(it.endTime),
-                    "#2E2422".toColorInt(),
-                    "#2E2422".toColorInt(),
-                    "#D69B92".toColorInt(),
-                    rowIndex = 0,
-                    label = "GH Pulse"
-                )
-            )
-        }*/
-
         circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
             data.add(
@@ -460,6 +437,32 @@ class CircadianAlignmentViewModel
                     "#99000000".toColorInt(),
                     rowIndex = 0,
                     label = "Natural Light"
+                )
+            )
+        }
+        circadianGraphData?.sleepData?.let {
+            if (it.wakeTime == null || it.bedTime == null) return@let
+
+            //2025-08-18 01:05:00
+            val startTime = LocalDateTime.parse(
+                it.wakeTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+            val endTime = LocalDateTime.parse(
+                it.bedTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+
+
+            data.add(
+                TimeWindow(
+                    getCircadianTimeFloatValue(endTime),
+                    getCircadianTimeFloatValue(startTime),
+                    "#33296F".toColorInt(),
+                    "#634ED5".toColorInt(),
+                    "#9E91E8".toColorInt(),
+                    rowIndex = 0,
+                    label = "Sleep"
                 )
             )
         }
@@ -583,6 +586,33 @@ class CircadianAlignmentViewModel
             )
         }
 
+        circadianGraphData?.sleepData?.let {
+            if (it.wakeTime == null || it.bedTime == null) return@let
+
+            //2025-08-18 01:05:00
+            val startTime = LocalDateTime.parse(
+                it.wakeTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+            val endTime = LocalDateTime.parse(
+                it.bedTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            ).format(DateTimeFormatter.ofPattern("HH:mm"))
+
+
+            response.add(
+                ClockEvent(
+                    getCircadianTimeFloatValue(endTime),
+                    getCircadianTimeFloatValue(startTime),
+                    ClockEventType.ARCH,
+                    "#33296F".toColorInt(),
+                    "#634ED5".toColorInt(),
+                    "#9E91E8".toColorInt(),
+                    label = "Sleep"
+                )
+            )
+        }
+
         circadianGraphData?.sleepWindowOpensGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
 
@@ -629,6 +659,20 @@ class CircadianAlignmentViewModel
                     "Wind-Down"
                 )
             )
+            circadianGraphData?.lightAnchoringPhaseWindowGraph?.let { it1 ->
+
+                response.add(
+                    ClockEvent(
+                        getCircadianTimeFloatValue(it1.endTime),
+                        getCircadianTimeFloatValue(it.startTime),
+                        ClockEventType.ARCH,
+                        "#181A1F".toColorInt(),
+                        "#181A1F".toColorInt(),
+                        "#858585".toColorInt(),
+                        label = "Neutral Light"
+                    )
+                )
+            }
         }
 
         circadianGraphData?.dlmoPhaseWindowGraph?.let {
@@ -648,6 +692,46 @@ class CircadianAlignmentViewModel
         }
 
         return response
+    }
+
+    fun generateValuesData(energyValues: kotlin.collections.List<Float>?): ArrayList<Float> {
+        val energyArray = ArrayList<Float>()
+        if (energyValues.isNullOrEmpty()) {
+            repeat(24, {
+                energyArray.add(0f)
+            })
+        } else if (energyValues.size < 24) {
+            val valuesToAdd = 24 - energyValues.size
+            repeat(valuesToAdd, {
+                energyArray.add(0f)
+            })
+        } else if (energyValues.size > 24) {
+            energyArray.addAll(energyValues.subList(0, 24))
+        } else {
+            energyArray.addAll(energyValues)
+        }
+        return energyArray
+    }
+
+    fun getCaffeineState(data: CircadianResponseModel): String {
+        var isOpen = false
+        data.graphData?.caffeineWindowGraph?.let {
+            val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+            val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+            val currentTime = LocalTime.now()
+
+
+            if (currentTime in startTime..endTime) {
+                isOpen = true
+            }
+        }
+
+        return if (isOpen) {
+            resourceProvider.getString(R.string.text_caffeine_window_open)
+        } else {
+            resourceProvider.getString(R.string.text_caffeine_window_closed)
+        }
     }
 
 }

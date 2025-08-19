@@ -536,7 +536,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     fun hoursFromStart(time: LocalTime): Int {
         var hours = Duration.between(graphStartTime, time).toHours().toInt()
-        if (hours < 0) hours += 24
+        if (hours <= 0) hours += 24
         return hours
     }
 

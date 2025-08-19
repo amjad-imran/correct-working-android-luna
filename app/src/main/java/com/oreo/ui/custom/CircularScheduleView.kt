@@ -73,8 +73,7 @@ class CircularScheduleView @JvmOverloads constructor(
     }
 
     var events = ArrayList<ClockEvent>()
-
-    private var handler: Handler? = null
+    var energyArray = ArrayList<Float>()
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
@@ -85,8 +84,9 @@ class CircularScheduleView @JvmOverloads constructor(
         }
     }
 
-    fun setDataSet(events: List<ClockEvent>) {
+    fun setDataSet(events: List<ClockEvent>, energyArray: List<Float>) {
         this.events.addAll(events)
+        this.energyArray.addAll(energyArray)
         invalidate()
     }
 
@@ -97,10 +97,7 @@ class CircularScheduleView @JvmOverloads constructor(
 
 
         drawCircularEnergyCurveWithFade(
-            canvas, arrayListOf(
-                1f, 1f, 0.3f, 0.2f, 1f, 1f, 1f, 0.1f, 0.3f, 1f, 1f, 1f,
-                0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f
-            )
+            canvas, energyArray
         )
         showTimer(canvas)
         drawCurrentTimeMarker(canvas)
@@ -130,6 +127,13 @@ class CircularScheduleView @JvmOverloads constructor(
         val eventsPair = ArrayList<Pair<LocalTime, LocalTime>>()
         events.forEach {
             if (it.eventType.equals(ClockEventType.ARCH)) {
+                eventsPair.add(
+                    Pair(
+                        fromFloatHour(it.startHour),
+                        fromFloatHour(it.endHour),
+                    )
+                )
+            } else if (it.eventType.equals(ClockEventType.LINE)) {
                 eventsPair.add(
                     Pair(
                         fromFloatHour(it.startHour),
@@ -372,9 +376,9 @@ class CircularScheduleView @JvmOverloads constructor(
                     val startAngle =
                         hourToAngle(event.startHour) + 1//(event.startHour / 24f) * 360f - 90f
 
-                    val sweepAngle =if (event.endHour < event.startHour) {//day change case
-                        ((((24f-event.startHour) / 24f) * 360f) + (((event.endHour) / 24f) * 360f)) - 1
-                    }else{
+                    val sweepAngle = if (event.endHour < event.startHour) {//day change case
+                        ((((24f - event.startHour) / 24f) * 360f) + (((event.endHour) / 24f) * 360f)) - 1
+                    } else {
                         (((event.endHour - event.startHour) / 24f) * 360f) - 1
                     }
 
