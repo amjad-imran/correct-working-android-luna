@@ -40,7 +40,7 @@ class CircadianAlignmentViewModel
 @Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
-    private val localDataStore: DataStoredInterface,
+    val localDataStore: DataStoredInterface,
 ) : BaseViewModel() {
 
     companion object {

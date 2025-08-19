@@ -777,6 +777,12 @@ class CircadianAlignmentFragment :
             }
 
             tvDescType.text = chronotypeData?.description ?: "-"
+
+            tvRetakeQuiz.text = if(viewModel.localDataStore.isCircadianOnboardShown()){
+                getString(R.string.text_retake_chronotype_quiz)
+            }else{
+                getString(R.string.text_take_quiz)
+            }
         }
     }
 
