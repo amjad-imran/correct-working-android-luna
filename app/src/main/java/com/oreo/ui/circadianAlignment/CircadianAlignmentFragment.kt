@@ -705,16 +705,20 @@ class CircadianAlignmentFragment :
         // focus window
         val isCircularViewContainsData = true
         binding.lytFocusWindow.apply {
-            if (isCircularViewContainsData) {//todo change logic
-                tvTitle.text = getString(R.string.text_focus_window)
-                binding.lytCircularState.tvPhase.text = getString(R.string.text_focus_window)
-                tvDesc.text =
-                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
-            } else {
-                tvTitle.text = getString(R.string.text_take_it_easy_today)
-                tvDesc.text =
-                    getString(R.string.text_wear_your_luna_ring_when_you_go_to_bed_to_track_your_sleep_make_sure_to_charge_your_ring_to_avoid_missing_out_valuable_insights)
-                binding.lytCircularState.tvPhase.text = getString(R.string.text_take_it_easy_today)
+            if(
+                data.circadianMidPoint?.nudge?.title != null &&
+                data.circadianMidPoint.nudge?.description != null
+            ){
+                tvTitle.text = data.circadianMidPoint.nudge?.title
+                tvDesc.text = data.circadianMidPoint.nudge?.description
+            }else{
+                if(data.isLockedCircularView == true){
+                    tvTitle.text = getString(R.string.text_start_fresh_today)
+                    tvDesc.text = getString(R.string.text_focus_window_desc1)
+                }else{
+                    tvTitle.text = getString(R.string.text_guidance_resumes_soon)
+                    tvDesc.text = getString(R.string.text_focus_window_desc2)
+                }
             }
         }
 
