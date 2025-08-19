@@ -182,6 +182,7 @@ class CircadianAlignmentFragment :
 
             val midStartDateTime = LocalDateTime.parse(circadianResponse.startTime, formatter)
             val midEndDateTime = LocalDateTime.parse(circadianResponse.endTime, formatter)
+
             val newStartDateTime = LocalDateTime
                 .parse(circadianResponse.startTime, formatter)
                 .minusHours(2)
@@ -190,6 +191,7 @@ class CircadianAlignmentFragment :
                 .parse(circadianResponse.endTime, formatter)
                 .plusHours(2)
                 .plusMinutes((60 - midEndDateTime.minute.toLong()))
+
             val circadianMidPointDateTime =
                 LocalDateTime.parse(circadianResponse.circadianMidpoint, formatter)
             val avgBeforeMidPointDateTime =
@@ -198,12 +200,15 @@ class CircadianAlignmentFragment :
             val isSameDay = newStartDateTime.toLocalDate() == LocalDate.now()
 
             val totalHrs = if (!isSameDay) {
+
                 val hoursFromStartToMidnight = 24 - newStartDateTime.hour
                 val hoursFromMidnightToEnd = newEndDateTime.hour
                 hoursFromStartToMidnight + hoursFromMidnightToEnd
             } else {
                 newEndDateTime.hour - newStartDateTime.hour
             }
+
+            LOGS.d("sdfjhsdkfj $totalHrs - $newStartDateTime - $newEndDateTime - $isSameDay")
 
             binding.lytSleepMidPoint.circadianGraph.updateTotalHours(totalHrs)
             val totalBars = binding.lytSleepMidPoint.circadianGraph.totalBars()
