@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
@@ -37,8 +37,13 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
     }
 
     private fun setUi() {
-        val tvSkip = binding.tvSkip
-        tvSkip.paintFlags = tvSkip.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        if(!viewModel.localDataStore.isCircadianOnboardShown()){
+            val tvSkip = binding.tvSkip
+            tvSkip.paintFlags = tvSkip.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            tvSkip.visible()
+        }else {
+            binding.tvSkip.gone()
+        }
     }
 
     private fun setAdapter() {
@@ -94,6 +99,8 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
             //binding.viewPager.offscreenPageLimit = 2
 
             binding.viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+
+            binding.viewPager.isUserInputEnabled = false
 
 
             // Apply the custom page transformer for positioning and scaling
@@ -152,11 +159,28 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
             }
         }
 
+        viewModel.optionSelectedLiveData.observe(this){
+            binding.viewPager.adapter?.let { adapter ->
+                val next =  binding.viewPager.currentItem + 1
+                if (next < adapter.itemCount) {
+                    binding.viewPager.setCurrentItem(next, true)
+                }
+            }
+        }
+
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val lastPageIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
-                binding.btnGetStarted.setVisibilityByCondition(lastPageIndex >= 0 && position == lastPageIndex)
+                if(lastPageIndex >= 0 && position == lastPageIndex){
+                    binding.btnGetStarted.apply {
+                        text = if(viewModel.localDataStore.isCircadianOnboardShown()) getString(R.string.text_done)
+                                else getString(R.string.text_get_started)
+                        visible()
+                    }
+                }else{
+                    binding.btnGetStarted.gone()
+                }
             }
         })
 
