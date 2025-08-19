@@ -94,7 +94,6 @@ class CircularScheduleView @JvmOverloads constructor(
         drawClock(canvas)
         drawEvents(canvas)
 
-        drawCurrentTimeMarker(canvas)
 
         drawCircularEnergyCurveWithFade(
             canvas, arrayListOf(
@@ -103,6 +102,7 @@ class CircularScheduleView @JvmOverloads constructor(
             )
         )
         showTimer(canvas)
+        drawCurrentTimeMarker(canvas)
     }
 
     private fun showTimer(canvas: Canvas) {
@@ -219,9 +219,9 @@ class CircularScheduleView @JvmOverloads constructor(
 
 
         //paint.strokeWidth = 2f.dpToPixel()
-        paint.strokeWidth = (circumference/colors.size).toFloat()
+        paint.strokeWidth = (circumference / colors.size).toFloat()
 
-        val multiplier = 360f/colors.size
+        val multiplier = 360f / colors.size
 
         for (i in 0 until colors.size) {
 
@@ -370,7 +370,15 @@ class CircularScheduleView @JvmOverloads constructor(
 
                     val startAngle =
                         hourToAngle(event.startHour) + 1//(event.startHour / 24f) * 360f - 90f
-                    val sweepAngle = (((event.endHour - event.startHour) / 24f) * 360f) - 1
+
+                    val sweepAngle =if (event.endHour < event.startHour) {//day change case
+                        ((((24f-event.startHour) / 24f) * 360f) + (((event.endHour) / 24f) * 360f)) - 1
+                    }else{
+                        (((event.endHour - event.startHour) / 24f) * 360f) - 1
+                    }
+
+
+                    //val sweepAngle = (((event.endHour - event.startHour) / 24f) * 360f) - 1
                     canvas.drawArc(rect, startAngle, sweepAngle, false, paint)
 
 

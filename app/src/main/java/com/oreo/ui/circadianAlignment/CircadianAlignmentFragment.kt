@@ -1,16 +1,13 @@
 package com.oreo.ui.circadianAlignment
 
 import android.animation.ArgbEvaluator
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,12 +68,10 @@ class CircadianAlignmentFragment :
         setRecycler()
         initListener()
         subscribeObservers()
-        //viewModel.initData()//todo remove this
-
-        showCircularScheduler()
+        viewModel.initData()
     }
 
-    private fun showCircularScheduler() {
+    private fun showCircularScheduler(graphData: CircadianGraphData?) {
         /*binding.lytCircularView.lockedGroup.visible()
         binding.lytCircularView.circularView.gone()*/
 
@@ -84,7 +79,11 @@ class CircadianAlignmentFragment :
         binding.lytCircularView.circularView.visible()
 
 
-        val clockEvents = listOf(
+
+        val clockEvents = viewModel.generateClockEvents(graphData)
+
+
+        /*val clockEvents = listOf(
             ClockEvent(
                 6f, 8f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"),
                 Color.parseColor("#FBE0BE"),
@@ -108,6 +107,11 @@ class CircadianAlignmentFragment :
                 textColor = "#E0BEFF".toColorInt(), "Dim-light"
             ),
             ClockEvent(
+                22f, 6f, ClockEventType.ARCH, Color.parseColor("#2E246E"),
+                Color.parseColor("#4E3ABC"),
+                textColor = "#CAC1FF".toColorInt(), "Sleep"
+            ),
+            ClockEvent(
                 6f,
                 23f,
                 ClockEventType.GRAPH,
@@ -128,7 +132,7 @@ class CircadianAlignmentFragment :
             //ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
             //ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
             //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
-        )
+        )*/
 
         binding.lytCircularView.circularView.setDataSet(clockEvents)
     }
@@ -612,10 +616,14 @@ class CircadianAlignmentFragment :
     }
 
     override fun subscribeObservers() {
+        //showCircularScheduler(null)
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            it.graphData?.let { it1 -> updateGraph(it1, it.circadianMidPoint) }
+            it.graphData?.let { it1 ->
+                updateGraph(it1, it.circadianMidPoint)
+                showCircularScheduler(it1)
+            }
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
