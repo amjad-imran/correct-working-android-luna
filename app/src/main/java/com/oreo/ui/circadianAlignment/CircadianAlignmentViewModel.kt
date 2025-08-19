@@ -129,7 +129,7 @@ class CircadianAlignmentViewModel
             desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_1),
             onlyImgWithText = OnlyImgWithText(
                 img = R.drawable.ic_sun_activity_monitor,
-                txt = "45\nmins"
+                txt = "-"
             ),
         )
 
@@ -139,10 +139,10 @@ class CircadianAlignmentViewModel
             title = resourceProvider.getString(R.string.text_daily_steps),
             desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_2),
             progressBarLytData = ProgressBarLytData(
-                totalProgress = 2334,
-                currentProgress = 1634,
+                totalProgress = null,
+                currentProgress = 0,
                 img = R.drawable.ic_shoe_corrective_activities,
-                txt = "2334"
+                txt = "-"
             ),
             /*logStatus = null,
             time = timeLeft,
@@ -163,10 +163,10 @@ class CircadianAlignmentViewModel
             title = resourceProvider.getString(R.string.text_workout),
             desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_4),
             progressBarLytData = ProgressBarLytData(
-                totalProgress = 23,
+                totalProgress = null,
                 currentProgress = 9,
                 img = R.drawable.ic_workout_corrective_activities,
-                txt = "23 mins"
+                txt = "-"
             )
         )
 
@@ -204,7 +204,7 @@ class CircadianAlignmentViewModel
                                 img = R.drawable.ic_sun_activity_monitor,
                                 txt = if ((curData.time
                                         ?: 0) <= 0
-                                ) "-" else "${curData.goal ?: 45}\nmins"
+                                ) "-" else curData.goal?.let { "$it\nmins" } ?: "-"
                             )
                             showFooter = true
                             logStatus = isLogged
@@ -218,7 +218,7 @@ class CircadianAlignmentViewModel
                         val goal = it.goal?.toInt()
                         dailyStepsData.value?.apply {
                             progressBarLytData = ProgressBarLytData(
-                                totalProgress = goal ?: 0,
+                                totalProgress = goal,
                                 currentProgress = goal?.let { curData.progress ?: 0 } ?: 0,
                                 img = R.drawable.ic_shoe_corrective_activities,
                                 txt = it.goal ?: "-"
@@ -246,12 +246,12 @@ class CircadianAlignmentViewModel
                         val goal = it.goal?.toInt()?.div(60)
                         workoutData.value?.apply {
                             progressBarLytData = ProgressBarLytData(
-                                totalProgress = goal ?: 0,
+                                totalProgress = goal,
                                 currentProgress = goal?.let { ((it / 60) * 0.1).toInt() } ?: 0,
                                 img = R.drawable.ic_workout_corrective_activities,
                                 txt = if ((curData.time
                                         ?: 0) <= 0
-                                ) "-" else "${goal ?: 23} mins" /* goal?.let { "$it mins" } ?: "-"*/
+                                ) "-" else  curData.goal?.let { "$it mins" } ?: "-"
                             )
                             showFooter = true
                             logStatus = isLogged

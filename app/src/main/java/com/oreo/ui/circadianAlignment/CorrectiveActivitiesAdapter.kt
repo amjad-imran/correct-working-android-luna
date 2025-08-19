@@ -54,12 +54,14 @@ class CorrectiveActivitiesAdapter(
                 binding.tvProgressTxt.text = lytData.txt
 
                 binding.circularProgressBar.apply {
-                    max = lytData.totalProgress
-                    progress = lytData.currentProgress
-                    when(data.key){
-                        CircadianAlignmentViewModel.workout_key -> setIndicatorColor("#78C3F9".toColorInt())
-                        CircadianAlignmentViewModel.daily_steps_key -> setIndicatorColor("#98D76B".toColorInt())
-                        else -> {}
+                    lytData.totalProgress?.let {
+                        max = it
+                        progress = lytData.currentProgress
+                        when(data.key){
+                            CircadianAlignmentViewModel.workout_key -> setIndicatorColor("#78C3F9".toColorInt())
+                            CircadianAlignmentViewModel.daily_steps_key -> setIndicatorColor("#98D76B".toColorInt())
+                            else -> {}
+                        }
                     }
                 }
                 binding.lytWithProgressBar.visible()
