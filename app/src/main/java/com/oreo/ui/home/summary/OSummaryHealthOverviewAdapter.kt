@@ -711,13 +711,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if(data.listData.isNullOrEmpty()){
                 binding.rvActivities.gone()
-                binding.lytNoData.visible()
+                binding.lytNoData.apply {
+                    imageView102.setBackgroundResource(R.drawable.ic_noactivity_timeline)
+                    root.visible()
+                }
             }else{
                 val adapter = TimelineAdapter(data.listData)
                 binding.rvActivities.apply {
                     this.layoutManager = LinearLayoutManager(binding.root.context)
                     this.adapter = adapter
-                    binding.lytNoData.gone()
+                    binding.lytNoData.root.gone()
                     visible()
                 }
             }

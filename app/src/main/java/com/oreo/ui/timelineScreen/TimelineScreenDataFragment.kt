@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenDataBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -36,7 +37,17 @@ class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBindin
 
     override fun subscribeObservers() {
         viewModel.activityListData.observe(this){
-            activityListAdapter.updateDataSet(it)
+            if(it.isEmpty()){
+                binding.recyclerView.gone()
+                binding.lytNoActivity.apply {
+                    imageView102.setBackgroundResource(R.drawable.ic_no_activity_timeline)
+                    root.visible()
+                }
+            }else{
+                binding.lytNoActivity.root.gone()
+                binding.recyclerView.visible()
+                activityListAdapter.updateDataSet(it)
+            }
         }
 
         //

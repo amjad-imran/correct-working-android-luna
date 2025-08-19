@@ -67,13 +67,17 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            it.timeTracker?.let { dataList ->
-                                dataList.map { obj ->
-                                    obj.event?.let {
-                                        getActivityTitleColorAndDesc(obj)
+                            if(it.timeTracker.isNullOrEmpty()){
+                                activityListData.postValue(ArrayList())
+                            }else{
+                                it.timeTracker?.let { dataList ->
+                                    dataList.map { obj ->
+                                        obj.event?.let {
+                                            getActivityTitleColorAndDesc(obj)
+                                        }
                                     }
+                                    activityListData.postValue(ArrayList(dataList))
                                 }
-                                activityListData.postValue(ArrayList(dataList))
                             }
                         }
                     }
