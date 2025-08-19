@@ -81,6 +81,10 @@ class QuizCircadianViewModel @Inject constructor(
             val jsonArrayRes = JsonArray()
 
             val isAllDone = quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size
+            if (isAllDone.not()) {
+                return@launch
+            }
+
             if(isAllDone){
                 quesOptionMap.forEach { (quesId, ansId) ->
                     jsonArrayRes.add(

@@ -28,7 +28,7 @@ class QuizOptionsAdapter(
 
             val backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.bg_option_quiz_circadian) as GradientDrawable
             if (selectedOption==option.id) {
-                backgroundDrawable.setStroke(4.dpToPx(), "#99CFA6FF".toColorInt())
+                backgroundDrawable.setStroke(2.dpToPx(), "#99CFA6FF".toColorInt())
             } else {
                 backgroundDrawable.setStroke(1.dpToPx(), "#0FFFFFFF".toColorInt())
             }
