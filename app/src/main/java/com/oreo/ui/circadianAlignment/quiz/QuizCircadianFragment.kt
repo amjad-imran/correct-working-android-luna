@@ -2,6 +2,8 @@ package com.oreo.ui.circadianAlignment.quiz
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -15,18 +17,21 @@ import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(FragmentQuizCircadianBinding::inflate) {
+class QuizCircadianFragment :
+    BaseFragment<FragmentQuizCircadianBinding>(FragmentQuizCircadianBinding::inflate) {
 
-    private val questionAdapter: QuizQuestionAdapter by lazy {
-        QuizQuestionAdapter(){
-            handleQuizOptionClick(it)
-        }
-    }
+    private val viewModel: QuizCircadianViewModel by viewModels()
 
-    private val viewModel : QuizCircadianViewModel by viewModels()
+    var isBlocked = false
 
     private fun handleQuizOptionClick(pair: Pair<Int, Int>) {
-        viewModel.handleQuizOptionClick(pair)
+        isBlocked = true
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                viewModel.handleQuizOptionClick(pair)
+                isBlocked = false
+            }, 400
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,38 +42,38 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
     }
 
     private fun setUi() {
-        if(!viewModel.localDataStore.isCircadianOnboardShown()){
+        if (!viewModel.localDataStore.isCircadianOnboardShown()) {
             val tvSkip = binding.tvSkip
             tvSkip.paintFlags = tvSkip.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             tvSkip.visible()
-        }else {
+        } else {
             binding.tvSkip.gone()
         }
     }
 
     private fun setAdapter() {
 
-       /*val layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, false) {
-            override fun smoothScrollToPosition(
-                recyclerView: RecyclerView,
-                state: RecyclerView.State,
-                position: Int
-            ) {
+        /*val layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, false) {
+             override fun smoothScrollToPosition(
+                 recyclerView: RecyclerView,
+                 state: RecyclerView.State,
+                 position: Int
+             ) {
 
-                val smoothScroller = object : LinearSmoothScroller(recyclerView.context){
-                    override fun getVerticalSnapPreference(): Int {
-                        return SNAP_TO_START
-                    }
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                        return 100f / displayMetrics.densityDpi
-                    }
-                }
+                 val smoothScroller = object : LinearSmoothScroller(recyclerView.context){
+                     override fun getVerticalSnapPreference(): Int {
+                         return SNAP_TO_START
+                     }
+                     override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                         return 100f / displayMetrics.densityDpi
+                     }
+                 }
 
-                smoothScroller.targetPosition = position
-                startSmoothScroll(smoothScroller)
+                 smoothScroller.targetPosition = position
+                 startSmoothScroll(smoothScroller)
 
-            }
-        }*/
+             }
+         }*/
     }
 
     override fun initListener() {
@@ -86,10 +91,10 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
     }
 
     override fun subscribeObservers() {
-        viewModel.quizData.observe(this){
-            val list:List<CircadianQuizResponseModel> = it
+        viewModel.quizData.observe(this) {
+            val list: List<CircadianQuizResponseModel> = it
 //            questionAdapter.updateDataSet(list)
-            val adapter = QuizFragmentAdapter(this, list){ pair ->
+            val adapter = QuizFragmentAdapter(this, list) { pair ->
                 handleQuizOptionClick(pair)
             }
             binding.viewPager.adapter = adapter
@@ -126,6 +131,7 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
                         page.scaleX = 0.8f
                         page.scaleY = 0.8f
                     }
+
                     position <= -0.1 -> {
                         // Page is slightly off-screen (peek from top)
                         page.alpha = 0.7f + (0.3f * (1 + position / 0.9f))
@@ -134,6 +140,7 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
                         page.scaleY = scaleFactor
                         page.translationY = -50 * (1 + position)
                     }
+
                     position <= 0.1 -> {
                         // Current page (center)
                         page.alpha = 1f
@@ -141,6 +148,7 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
                         page.scaleY = 1f
                         page.translationY = 0f
                     }
+
                     position <= 1 -> {
                         // Page is slightly off-screen (peek from bottom)
                         page.alpha = 0.7f + (0.3f * (1 - position / 0.9f))
@@ -149,6 +157,7 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
                         page.scaleY = scaleFactor
                         page.translationY = 50 * position
                     }
+
                     else -> {
                         // Page is way off-screen to the bottom
                         page.alpha = 0f
@@ -159,9 +168,9 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
             }
         }
 
-        viewModel.optionSelectedLiveData.observe(this){
+        viewModel.optionSelectedLiveData.observe(this) {
             binding.viewPager.adapter?.let { adapter ->
-                val next =  binding.viewPager.currentItem + 1
+                val next = binding.viewPager.currentItem + 1
                 if (next < adapter.itemCount) {
                     binding.viewPager.setCurrentItem(next, true)
                 }
@@ -172,24 +181,25 @@ class QuizCircadianFragment : BaseFragment<FragmentQuizCircadianBinding>(Fragmen
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val lastPageIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
-                if(lastPageIndex >= 0 && position == lastPageIndex){
+                if (lastPageIndex >= 0 && position == lastPageIndex) {
                     binding.btnGetStarted.apply {
-                        text = if(viewModel.localDataStore.isCircadianOnboardShown()) getString(R.string.text_done)
-                                else getString(R.string.text_get_started)
+                        text =
+                            if (viewModel.localDataStore.isCircadianOnboardShown()) getString(R.string.text_done)
+                            else getString(R.string.text_get_started)
                         visible()
                     }
-                }else{
+                } else {
                     binding.btnGetStarted.gone()
                 }
             }
         })
 
 
-        viewModel.quizDataSubmitted.observe(this){
+        viewModel.quizDataSubmitted.observe(this) {
             it.getContent()?.let {
-                if(viewModel.localDataStore.isCircadianOnboardShown()){
+                if (viewModel.localDataStore.isCircadianOnboardShown()) {
                     navigateUpSafe()
-                }else{
+                } else {
                     viewModel.localDataStore.setCircadianOnboardShown()
                     navigate(QuizCircadianFragmentDirections.actionQuizCircadianFragmentToCircadianAlignmentFragment())
                 }

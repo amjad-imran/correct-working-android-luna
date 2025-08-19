@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dropdownContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dropdown_dialog_bg"
+    android:elevation="8dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDropdownItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="300dp"
+        android:scrollbars="vertical"
+        android:overScrollMode="ifContentScrolls" />
+
+</LinearLayout>
