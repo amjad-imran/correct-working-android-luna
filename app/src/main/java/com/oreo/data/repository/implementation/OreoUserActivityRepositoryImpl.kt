@@ -1463,6 +1463,8 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<OActivityListModal>>> {
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
+
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"/* keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
              keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)*/
 
