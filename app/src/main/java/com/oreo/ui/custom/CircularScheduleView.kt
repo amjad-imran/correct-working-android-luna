@@ -2,6 +2,7 @@ package com.oreo.ui.custom
 
 import android.animation.ArgbEvaluator
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.BlendMode
 import android.graphics.Canvas
@@ -33,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -74,6 +76,22 @@ class CircularScheduleView @JvmOverloads constructor(
 
     var events = ArrayList<ClockEvent>()
     var energyArray = ArrayList<Float>()
+    private var sleepStart: LocalTime? = null
+    private var sleepEnd: LocalTime? = null
+
+    private var sleepWakeBitmap: Bitmap = Bitmap.createScaledBitmap(
+        BitmapFactory.decodeResource(resources, R.drawable.ic_circadian_wake_up),
+        15f.dpToPixel().toInt(),
+        15f.dpToPixel().toInt(),
+        true
+    )
+
+    private var sleepBedBitmap: Bitmap = Bitmap.createScaledBitmap(
+        BitmapFactory.decodeResource(resources, R.drawable.ic_circadian_bed_time),
+        15f.dpToPixel().toInt(),
+        15f.dpToPixel().toInt(),
+        true
+    )
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
@@ -84,9 +102,26 @@ class CircularScheduleView @JvmOverloads constructor(
         }
     }
 
-    fun setDataSet(events: List<ClockEvent>, energyArray: List<Float>) {
+    fun setDataSet(
+        events: List<ClockEvent>,
+        energyArray: List<Float>,
+        sleepStart: String? = null,
+        sleepEnd: String? = null
+    ) {
         this.events.addAll(events)
         this.energyArray.addAll(energyArray)
+
+
+        sleepStart?.let {
+            this.sleepStart =
+                LocalDateTime.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .toLocalTime()
+        }
+        sleepEnd?.let {
+            this.sleepEnd =
+                LocalDateTime.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .toLocalTime()
+        }
         invalidate()
     }
 
@@ -94,7 +129,6 @@ class CircularScheduleView @JvmOverloads constructor(
         super.onDraw(canvas)
         drawClock(canvas)
         drawEvents(canvas)
-
 
         drawCircularEnergyCurveWithFade(
             canvas, energyArray
@@ -178,10 +212,13 @@ class CircularScheduleView @JvmOverloads constructor(
 
 
     private fun getColorByValue(value: Float): Int {
+        if (value == 0.0f) {
+            return "#00000000".toColorInt()
+        }
         return if (value >= 0.5f) {
-            "#806AAA5A".toColorInt()
+            "#6AAA5A".toColorInt()
         } else {
-            "#80A66767".toColorInt()
+            "#A66767".toColorInt()
         }
     }
 
@@ -190,7 +227,12 @@ class CircularScheduleView @JvmOverloads constructor(
         val colors = ArrayList<Int>()
 
         values.forEachIndexed { index, value ->
-            val startColor = getColorByValue(value)//Color.parseColor("#9E5959")
+            val startColor =
+                if (index == 0) {
+                    Color.parseColor("#00000000")
+                } else {
+                    getColorByValue(value)//Color.parseColor("#9E5959")
+                }
             val endColor = try {
                 getColorByValue(values[index + 1])
             } catch (exp: Exception) {
@@ -230,7 +272,7 @@ class CircularScheduleView @JvmOverloads constructor(
 
         for (i in 0 until colors.size) {
 
-            val angle = Math.toRadians((i * multiplier/*15.0*/) - 90.0)
+            val angle = Math.toRadians((i * multiplier.toDouble()/*15.0*/))
             val x1 = (cx + tickStart * Math.cos(angle)).toFloat()
             val y1 = (cy + tickStart * Math.sin(angle)).toFloat()
             val x2 = (cx + tickEnd * Math.cos(angle)).toFloat()
@@ -239,6 +281,26 @@ class CircularScheduleView @JvmOverloads constructor(
             paint.color = colors[i]
             canvas.drawLine(x1, y1, x2, y2, paint)
         }
+
+
+        val imageRadius = radius- 10f.dpToPixel()
+        sleepStart?.let {
+            val hour = it.hour + it.minute / 60f
+            val startAngle = hourToAngle(hour).toDouble()
+            val angleRad = Math.toRadians(startAngle.toDouble())
+            val x1 = (cx + imageRadius * Math.cos(angleRad)).toFloat()
+            val y1 = (cy + imageRadius * Math.sin(angleRad)).toFloat()
+            canvas.drawBitmap(sleepBedBitmap, x1-sleepBedBitmap.width/2, y1-sleepBedBitmap.width/2, null)
+        }
+        sleepEnd?.let {
+            val hour = it.hour + it.minute / 60f
+            val startAngle = hourToAngle(hour).toDouble()
+            val angleRad = Math.toRadians(startAngle.toDouble())
+            val x1 = (cx + imageRadius * Math.cos(angleRad)).toFloat()
+            val y1 = (cy + imageRadius * Math.sin(angleRad)).toFloat()
+            canvas.drawBitmap(sleepWakeBitmap, x1-sleepWakeBitmap.width/2, y1-sleepWakeBitmap.width/2, null)
+        }
+
     }
 
     private fun drawCurrentTimeMarker(canvas: Canvas) {
