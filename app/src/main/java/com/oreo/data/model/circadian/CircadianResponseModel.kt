@@ -37,5 +37,6 @@ data class ActivityMonitor(
 
 data class Chronotype(
     val description: String,
-    val type: String
+    val type: String,
+    val introduction: String,
 )

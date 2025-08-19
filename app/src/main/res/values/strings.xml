@@ -2109,5 +2109,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_focus_window_desc1">We don’t have your sleep data from last night, but no worries. You can quickly log your sleep now to unlock today’s rhythm guide.</string>
     <string name="text_focus_window_desc2">our wake-up time today was outside your usual rhythm, so the Circadian Rhythm Guide is temporarily unavailable. Use Luna AI to learn how to build consistency that works for you.</string>
     <string name="text_guidance_resumes_soon">Guidance Resumes Soon</string>
+    <string name="text_take_quiz">Take quiz!</string>
 
 </resources>
