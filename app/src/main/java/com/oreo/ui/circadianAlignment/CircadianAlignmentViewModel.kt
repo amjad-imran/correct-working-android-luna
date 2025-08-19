@@ -485,7 +485,7 @@ class CircadianAlignmentViewModel
                         getCircadianTimeFloatValue(it.startTime),
                         "#33646464".toColorInt(),
                         "#33646464".toColorInt(),
-                        "#FFAFF2".toColorInt(),
+                        "#5A5A5A".toColorInt(),
                         rowIndex = 0,
                         label = "Neutral Light Zone"
                     )
