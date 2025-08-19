@@ -723,7 +723,9 @@ class CircadianAlignmentViewModel
         return energyArray
     }
 
-    fun getCaffeineState(data: CircadianResponseModel): String {
+    fun getCaffeineState(data: CircadianResponseModel): Pair<String, String> {
+        val title = data.circadianMidPoint?.nudge?.title ?: "-"
+
         var isOpen = false
         data.graphData?.caffeineWindowGraph?.let {
             val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
@@ -737,11 +739,13 @@ class CircadianAlignmentViewModel
             }
         }
 
-        return if (isOpen) {
+        val caffeineTxt = if (isOpen) {
             resourceProvider.getString(R.string.text_caffeine_window_open)
         } else {
             resourceProvider.getString(R.string.text_caffeine_window_closed)
         }
+
+        return Pair(title, caffeineTxt)
     }
 
 }

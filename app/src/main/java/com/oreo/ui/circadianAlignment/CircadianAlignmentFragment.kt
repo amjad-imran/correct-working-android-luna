@@ -739,7 +739,15 @@ class CircadianAlignmentFragment :
             }
         }
 
-        binding.lytCircularState.tvCaffeineState.text = viewModel.getCaffeineState(data)
+        // lyt Circular State
+        if(data.isLockedCircularView != true) {
+            val circularStateData = viewModel.getCaffeineState(data)
+            binding.lytCircularState.apply {
+                tvPhase.text = circularStateData.first
+                tvCaffeineState.text = circularStateData.second
+                root.visible()
+            }
+        }
 
         // activity monitor
         val activityMonitorData = data.activityMonitor
