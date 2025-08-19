@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewTreeObserver
+import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
@@ -497,14 +498,15 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val rowSpacing = 4f.dpToPixel()
         val baseBottom = getGraphHeight() - bottomPaddingForLabels - 16f.dpToPixel()
         val cornerRadius = 16f
+        val padding = 1.5f.dpToPixel()
 
         for (window in timeWindows) {
 
             val startOffset = hoursFromStart(fromFloatHour(window.startHour))
             val endOffset = hoursFromStart(fromFloatHour(window.endHour))
 
-            val left = startOffset * hourWidthPx
-            val right = endOffset * hourWidthPx
+            val left = startOffset * hourWidthPx +padding
+            val right = endOffset * hourWidthPx -padding
 
             val rowOffset = window.rowIndex * (rowHeight + rowSpacing)
             val bottom = baseBottom - rowOffset

@@ -88,8 +88,8 @@ class CircularScheduleView @JvmOverloads constructor(
 
     private var sleepBedBitmap: Bitmap = Bitmap.createScaledBitmap(
         BitmapFactory.decodeResource(resources, R.drawable.ic_circadian_bed_time),
-        15f.dpToPixel().toInt(),
-        15f.dpToPixel().toInt(),
+        12f.dpToPixel().toInt(),
+        12f.dpToPixel().toInt(),
         true
     )
 
@@ -216,33 +216,42 @@ class CircularScheduleView @JvmOverloads constructor(
             return "#00000000".toColorInt()
         }
         return if (value >= 0.5f) {
-            "#6AAA5A".toColorInt()
+            "#806AAA5A".toColorInt()
         } else {
-            "#A66767".toColorInt()
+            "#80A66767".toColorInt()
         }
     }
 
     private fun drawCircularEnergyCurveWithFade(canvas: Canvas, values: List<Float>) {
+        val cx = width / 2f
+        val cy = height / 2f
+        val radiusCircle = min(cx, cy) - 76f.dpToPixel()
+        canvas.drawCircle(cx, cy, radiusCircle, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = "#0AFFFFFF".toColorInt()
+            style = Paint.Style.STROKE
+            strokeWidth = 4f.dpToPixel()
+        })
 
         val colors = ArrayList<Int>()
+        val transparentColor = "#00000000".toColorInt()
 
         values.forEachIndexed { index, value ->
             val startColor =
                 if (index == 0) {
-                    Color.parseColor("#00000000")
+                    transparentColor
                 } else {
-                    getColorByValue(value)//Color.parseColor("#9E5959")
+                    getColorByValue(value)
                 }
             val endColor = try {
                 getColorByValue(values[index + 1])
             } catch (exp: Exception) {
-                Color.parseColor("#00000000")
-            }//Color.parseColor("#6AAA5A")
+                transparentColor
+            }
 
             val evaluator = ArgbEvaluator()
             val barColors = mutableListOf<Int>()
 
-            val midBarCount = 12//values.size//(midEndIndex - midStartIndex) + 1
+            val midBarCount = 30
             for (i in 0 until midBarCount) {
                 val fraction = i.toFloat() / (midBarCount - 1)
                 val color = evaluator.evaluate(fraction, startColor, endColor) as Int
@@ -251,9 +260,8 @@ class CircularScheduleView @JvmOverloads constructor(
             colors.addAll(barColors)
         }
 
-        val cx = width / 2f
-        val cy = height / 2f
-        val radius = min(cx, cy) - 76f.dpToPixel()
+
+        val radius = min(cx, cy) - 74f.dpToPixel()
 
         val tickStart = radius
         val tickEnd = radius - 40f.dpToPixel()
@@ -263,34 +271,46 @@ class CircularScheduleView @JvmOverloads constructor(
 
 
         val circumference = 2 * Math.PI * radius
-
-
-        //paint.strokeWidth = 2f.dpToPixel()
         paint.strokeWidth = (circumference / colors.size).toFloat()
 
         val multiplier = 360f / colors.size
 
         for (i in 0 until colors.size) {
 
-            val angle = Math.toRadians((i * multiplier.toDouble()/*15.0*/))
+            val angleDegree = (i * multiplier.toDouble()) - 90f
+            val angle = Math.toRadians(angleDegree)
             val x1 = (cx + tickStart * Math.cos(angle)).toFloat()
             val y1 = (cy + tickStart * Math.sin(angle)).toFloat()
             val x2 = (cx + tickEnd * Math.cos(angle)).toFloat()
             val y2 = (cy + tickEnd * Math.sin(angle)).toFloat()
 
-            paint.color = colors[i]
+
+            val shader = LinearGradient(
+                x1, y1, x2, y2,
+                intArrayOf(colors[i], colors[i], transparentColor, transparentColor),
+                floatArrayOf(0f, 0f, 0.50f, 1f),
+                Shader.TileMode.CLAMP
+            )
+            paint.shader = shader
+
             canvas.drawLine(x1, y1, x2, y2, paint)
+            paint.shader = null
         }
 
 
-        val imageRadius = radius- 10f.dpToPixel()
+        val imageRadius = radius - 14f.dpToPixel()
         sleepStart?.let {
             val hour = it.hour + it.minute / 60f
             val startAngle = hourToAngle(hour).toDouble()
             val angleRad = Math.toRadians(startAngle.toDouble())
             val x1 = (cx + imageRadius * Math.cos(angleRad)).toFloat()
             val y1 = (cy + imageRadius * Math.sin(angleRad)).toFloat()
-            canvas.drawBitmap(sleepBedBitmap, x1-sleepBedBitmap.width/2, y1-sleepBedBitmap.width/2, null)
+            canvas.drawBitmap(
+                sleepBedBitmap,
+                x1 - sleepBedBitmap.width / 2,
+                y1 - sleepBedBitmap.width / 2,
+                null
+            )
         }
         sleepEnd?.let {
             val hour = it.hour + it.minute / 60f
@@ -298,8 +318,30 @@ class CircularScheduleView @JvmOverloads constructor(
             val angleRad = Math.toRadians(startAngle.toDouble())
             val x1 = (cx + imageRadius * Math.cos(angleRad)).toFloat()
             val y1 = (cy + imageRadius * Math.sin(angleRad)).toFloat()
-            canvas.drawBitmap(sleepWakeBitmap, x1-sleepWakeBitmap.width/2, y1-sleepWakeBitmap.width/2, null)
+            canvas.drawBitmap(
+                sleepWakeBitmap,
+                x1 - sleepWakeBitmap.width / 2,
+                y1 - sleepWakeBitmap.width / 2,
+                null
+            )
         }
+
+        val startAngle =
+            hourToAngle(13f)
+
+        drawCircularTextCCW(
+            canvas,
+            radiusCircle - 20f.dpToPixel(),
+            PointF(cx, cy),
+            startAngle,
+            "Energy",
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL_AND_STROKE
+                typeface = fontGilroy
+                textSize = dpToPx(10f)
+                color = "#B2B2B2".toColorInt()
+            }
+        )
 
     }
 
@@ -381,13 +423,6 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun drawEvents(canvas: Canvas) {
         val cx = width / 2f
         val cy = height / 2f
-
-        val radius = min(cx, cy) - 76f.dpToPixel()
-        canvas.drawCircle(cx, cy, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = "#66000000".toColorInt()
-            style = Paint.Style.STROKE
-            strokeWidth = 4f.dpToPixel()
-        })
 
 
         for (event in events) {
@@ -482,7 +517,7 @@ class CircularScheduleView @JvmOverloads constructor(
             )*/
         }
 
-        val startAngle =
+       /* val startAngle =
             hourToAngle(13f)
 
         drawCircularTextCCW(
@@ -497,7 +532,7 @@ class CircularScheduleView @JvmOverloads constructor(
                 textSize = dpToPx(10f)
                 color = "#B2B2B2".toColorInt()
             }
-        )
+        )*/
     }
 
 
