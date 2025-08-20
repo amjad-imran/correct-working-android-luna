@@ -1,50 +1,65 @@
 package com.oreo.ui.timelineScreen.addActivity.activities
 
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
+import com.oreo.data.model.timeline.addActivityTimelineModels.AddActivityListTimelineModel
+import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
+import androidx.core.graphics.toColorInt
+import com.noisefit.luna.databinding.SpinnerItemAdddLogCircadianBinding
+import com.noisefit_commans.ui.setVisibilityByCondition
 
 class DropdownAdapter(
-    private val items: List<String>,
-    private val onItemClick: (String) -> Unit
+    private val items: List<AddActivityListTimelineModel>,
+    private val onItemClick: (AddActivityItemsEnum) -> Unit
 ) : RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
 
-    private val itemColors = mapOf(
-        "Meal intake" to "#FFEB3B",
-        "Light exposure" to "#FFA726",
-        "Caffeine intake" to "#FF8A65",
-        "Workout" to "#4FC3F7",
-        "Water consumption" to "#4CAF50",
-        "Period" to "#E91E63",
-        "Nap" to "#9C27B0",
-        "Sleep" to "#9575CD"
-    )
+    companion object{
+        private val itemColors = mapOf(
+            AddActivityItemsEnum.MEAL to "#FFEB3B",
+            AddActivityItemsEnum.LIGHT_EXPOSURE to "#FFA726",
+            AddActivityItemsEnum.CAFFEINE to "#FF8A65",
+            AddActivityItemsEnum.WORKOUT to "#4FC3F7",
+            AddActivityItemsEnum.WATER to "#4CAF50",
+            AddActivityItemsEnum.CYCLE_LOG to "#E91E63",
+            AddActivityItemsEnum.NAP to "#9C27B0",
+            AddActivityItemsEnum.SLEEP to "#9575CD"
+        )
+    }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.tvDropdownItem)
+    class ViewHolder(private val binding: SpinnerItemAdddLogCircadianBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(
+            data: AddActivityListTimelineModel,
+            showDivider: Boolean,
+            onItemClick: (AddActivityItemsEnum) -> Unit
+        ){
+            binding.tvTitle.text = data.name
+
+            // Set color based on item
+            val color = itemColors[data.type] ?: "#CCCCCC"
+            binding.tvTitle.setTextColor(color.toColorInt())
+
+            binding.divider.root.setVisibilityByCondition(showDivider)
+
+            binding.root.setOnClickListener {
+                onItemClick(data.type)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = SpinnerItemAdddLogCircadianBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_dropdown, parent, false)
-        return ViewHolder(view)
+            .inflate(R.layout.spinner_item_addd_log_circadian, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.textView.text = item
+        holder.bind(items[position], items.size-1 != position, onItemClick)
 
-        // Set color based on item
-        val color = itemColors[item] ?: "#CCCCCC"
-        holder.textView.setTextColor(Color.parseColor(color))
-
-        holder.itemView.setOnClickListener {
-            onItemClick(item)
-        }
     }
 
     override fun getItemCount() = items.size

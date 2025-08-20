@@ -40,36 +40,13 @@ class AddLightExposureFragment :
 
     }
 
-    private fun showDropdownDialog(anchorView: View) {
-        val dropdownDialog = DropdownDialog(
-            context = anchorView.context,
-            anchorView = anchorView,
-            items = listOf(
-                "Meal intake",
-                "Light exposure",
-                "Caffeine intake",
-                "Workout",
-                "Water consumption",
-                "Period",
-                "Nap",
-                "Sleep"
-            )
-        ) { selectedItem ->
-
-
-        }
-
-        dropdownDialog.show()
-    }
-
 
     override fun initListener() {
         val navController =
             NavHostFragment.Companion.findNavController(this@AddLightExposureFragment)
 
         binding.lytSelected.setOnClickListener {
-            //showDropdownDialog(binding.lytSelected)
-            sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.LIGHT_EXPOSURE)
         }
         binding.btnSave.setOnClickListener {
             if (viewModel.lightTime.value != null && viewModel.lightDuration.value != null) {

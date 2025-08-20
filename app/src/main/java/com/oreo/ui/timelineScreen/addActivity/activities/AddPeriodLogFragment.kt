@@ -88,6 +88,10 @@ class AddPeriodLogFragment :
             val date = logViewModel.selectedDate.value.toString()
             logViewModel.saveSymptom(date, symptoms, flowType)
         }
+
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.CYCLE_LOG)
+        }
     }
 
     override fun subscribeObservers() {

@@ -77,11 +77,10 @@
 
         <Button
             android:id="@+id/btnSave"
-            style="@style/SecondaryFMHButtonStyle"
+            style="@style/SecondaryLogButtonStyle2"
             android:layout_width="0dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_save_btn_add_activity_timeline"
             android:text="@string/text_save"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"

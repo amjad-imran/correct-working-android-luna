@@ -122,6 +122,10 @@ class AddCaffeineFragment :
                 )
             )
         }*/
+
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.CAFFEINE)
+        }
     }
 
     override fun subscribeObservers() {

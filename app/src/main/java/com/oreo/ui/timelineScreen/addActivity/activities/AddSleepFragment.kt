@@ -226,6 +226,10 @@ class AddSleepFragment :
 //        binding.tvDeleteSleep.setOnClickListener {
 //            //wrote code to delete sleep
 //        }
+
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.SLEEP)
+        }
     }
 
     private fun updateCalculatedData() {
