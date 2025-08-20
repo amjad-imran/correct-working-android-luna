@@ -1,5 +1,6 @@
 package com.oreo.ui.timelineScreen.addActivity
 
+import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import com.noisefit.data.base.ResourcesProvider
@@ -12,6 +13,7 @@ import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.addLogBottomSheetModels.AddLogBottomSheetDataModels
 import com.oreo.data.model.timeline.addActivityTimelineModels.AddActivityListTimelineModel
+import com.oreo.ui.timelineScreen.addActivity.activities.DropdownDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -83,8 +85,19 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
         ),
     )
 
+    fun showDropdownDialog(anchorView: View, currentItem: AddActivityItemsEnum) {
+        val dropdownDialog = DropdownDialog(
+            context = anchorView.context,
+            anchorView = anchorView,
+            items = getAllActivityListMap().apply {
+                remove(this.find { it.type == currentItem })
+            }
+        ) { selectedItem ->
+            loadFragmentByType(selectedItem)
+        }
 
-
+        dropdownDialog.show()
+    }
 
 }
 

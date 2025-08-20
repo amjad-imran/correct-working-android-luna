@@ -82,11 +82,13 @@ class CorrectiveActivitiesAdapter(
 
             if(data.showFooter==true){
                 if (data.time==null){
+                    binding.imageView99.gone()
                     binding.lytTimerTag.gone()
                     binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_today)
                     binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
                 }
                 else if(data.time == "0"){
+                    binding.imageView99.gone()
                     binding.lytTimerTag.gone()
                     binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_tomorrow)
                     binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)

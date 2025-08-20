@@ -422,6 +422,10 @@ class AddWorkoutFragment :
             )
         }
 
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.WORKOUT)
+        }
+
     }
 
     private fun updateCalculatedData() {

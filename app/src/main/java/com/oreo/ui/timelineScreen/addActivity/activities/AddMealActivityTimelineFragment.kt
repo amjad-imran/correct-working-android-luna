@@ -89,6 +89,10 @@ class AddMealActivityTimelineFragment :
                 )
             )
         }
+
+        binding.lytSelected.setOnClickListener {
+            sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.MEAL)
+        }
     }
 
     override fun subscribeObservers() {

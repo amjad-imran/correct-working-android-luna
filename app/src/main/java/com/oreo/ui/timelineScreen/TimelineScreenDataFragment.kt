@@ -11,6 +11,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBinding>(FragmentTimelineScreenDataBinding::inflate) {
@@ -40,6 +41,10 @@ class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBindin
             if(it.isEmpty()){
                 binding.recyclerView.gone()
                 binding.lytNoActivity.apply {
+                    textView195.text = if (viewModel.date.equals(LocalDate.now().toString(), true))
+                                            getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_yet)
+                                        else
+                                            getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_for_this_day)
                     imageView102.setBackgroundResource(R.drawable.ic_no_activity_timeline)
                     root.visible()
                 }

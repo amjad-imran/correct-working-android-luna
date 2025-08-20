@@ -1433,50 +1433,42 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getCircadianAlignmentCardData(): OHealthOverview? {
-        //todo remove
-        /*if (circadianGraphData == null) {
-            return null
-        }*/
 
-        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
-        return if(isOnboardingDone){
-            val graphData = circadianGraphData
-            if(graphData != null) {
-                var sTime: LocalTime?=null
-                var eTime: LocalTime?=null
-                if (graphData.startTime != null && graphData.endTime != null) {
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
+        val graphData = circadianGraphData
+        return if(graphData != null){
+            var sTime: LocalTime?=null
+            var eTime: LocalTime?=null
+            if (graphData.startTime != null && graphData.endTime != null) {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-                    val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
-                    val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+                val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+                val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
 
-                    val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-                    var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+                val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+                var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
 
-                    val endDateTimeSleep =
-                        LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+                val endDateTimeSleep =
+                    LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
 
-                    if (endDateTimeSleep != null) {
-                        val sleepWakeTime =
-                            LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
-                        endTime = sleepWakeTime
-                    }
-
-                    sTime = startTime
-                    eTime = endTime
+                if (endDateTimeSleep != null) {
+                    val sleepWakeTime =
+                        LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                    endTime = sleepWakeTime
                 }
 
-                OHealthOverview.CircadianAlignment(
-                    startTime = sTime,
-                    endTime = eTime,
-                    timeWindow = getCircadianScrollGraphList(graphData),
-                    title = circadianGraphData?.title,
-                    description = circadianGraphData?.description,
-                    energyGraph = graphData.energyGraph
-                )
+                sTime = startTime
+                eTime = endTime
             }
-            else
-                null
+
+            OHealthOverview.CircadianAlignment(
+                startTime = sTime,
+                endTime = eTime,
+                timeWindow = getCircadianScrollGraphList(graphData),
+                title = circadianGraphData?.title,
+                description = circadianGraphData?.description,
+                energyGraph = graphData.energyGraph
+            )
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
         }
