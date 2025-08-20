@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -10,25 +11,36 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
+import com.oreo.ui.home.summary.HomeRecyclerViewHolder.TimelineCardViewHolder.TimelineAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
-import com.oreo.ui.home.summary.OreoRWorkoutAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.ACTIVITY_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.CAFFEINE_INTAKE_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.LIGHT_EXPOSURE_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INTAKE_KEY_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.NAP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.PERIOD_STARTED_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SLEEP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CONSUMPTION_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class SummaryDataFragment :
@@ -199,6 +211,13 @@ class SummaryDataFragment :
         binding.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }
+
+        binding.lytTimeline.root.setOnClickListener {
+            navigate(R.id.timelineScreenFragment)
+        }
+        binding.lytTimeline.btnLogAnActivity.setOnClickListener {
+            navigate(R.id.addActivityTimelineFragment)
+        }
     }
 
     override fun subscribeObservers() {
@@ -264,12 +283,154 @@ class SummaryDataFragment :
         }
 
         viewModel.stateWorkouts.observe(this) {
-            setWorkoutUI(it)
+//            setWorkoutUI(it)
+        }
+
+        viewModel.stateTimeline.observe(this){
+            val timelineList = getTimelineList(it)
+            binding.lytTimeline.apply {
+                if (timelineList.isEmpty()) {
+                    rvActivities.gone()
+                    lytNoData.apply {
+                        textView195.text =
+                            getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_for_this_day)
+                        imageView102.setBackgroundResource(R.drawable.ic_noactivity_timeline)
+                        root.visible()
+                    }
+                } else {
+                    val adapter = TimelineAdapter(timelineList)
+                    rvActivities.apply {
+                        this.layoutManager = LinearLayoutManager(root.context)
+                        this.adapter = adapter
+                        lytNoData.root.gone()
+                        visible()
+                    }
+                }
+                root.visible()
+            }
         }
     }
 
+    private fun getTimelineList(dataList: List<ItemTimelineResponseModel>): List<ItemTimelineResponseModel>{
 
-    private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
+        dataList.forEach { data ->
+            data.displayTime = convertTimeFormat(data.startTime)
+            when(data.event){
+                SLEEP_KEY -> {
+                    data.titleColor = "#A8A8ED".toColorInt()
+                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                }
+
+                NAP_KEY -> {
+                    data.titleColor = "#A8A8ED".toColorInt()
+                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                }
+
+                WORKOUT_KEY -> {
+                    data.titleColor = "#78C3F9".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                WATER_CONSUMPTION_KEY -> {
+                    data.titleColor = "#8EF1C3".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                CAFFEINE_INTAKE_KEY -> {
+                    data.titleColor = "#DCA58E".toColorInt()
+                    data.value?.let {
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
+                }
+
+                MEAL_INTAKE_KEY_KEY -> {
+                    data.titleColor = "#FFE3B2".toColorInt()
+                    data.desc = "Meal 1"
+                }
+
+                LIGHT_EXPOSURE_KEY -> {
+                    data.titleColor = "#FFE1CF".toColorInt()
+                    data.value?.let {
+                        data.desc = "${it.toInt()/60} minutes"
+                        /*data.unit?.let { data.desc += " $it" }*/
+                    }
+                }
+
+                PERIOD_STARTED_KEY -> {
+                    data.titleColor = "#F18EBD".toColorInt()
+                    data.desc = "Day 1"
+                }
+
+                ACTIVITY_KEY -> {
+                    data.titleColor = "#FFFFFF".toColorInt()
+                }
+
+                else -> {}
+            }
+        }
+        return dataList
+    }
+
+    private fun convertTimeFormat(time: String?): String {
+        return try{
+            val originalFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val timeObj = LocalTime.parse(time, originalFormatter)
+            val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
+
+            timeObj.format(newFormatter).uppercase(Locale.getDefault())
+        }catch (e: Exception){
+            LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
+            "-"
+        }
+    }
+
+    fun getSleepDuration(
+        startDate: String?,
+        startTime: String?,
+        endDate: String?,
+        endTime: String?
+    ): String {
+        return try {
+            // Define the format for time
+            val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
+
+            // Parse the start and end dates into LocalDate objects
+            val startDateObj = LocalDateTime.parse("$startDate $startTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val endDateObj = LocalDateTime.parse("$endDate $endTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
+            // If the end time is before the start time, adjust the end time to the next day
+            val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
+                endDateObj.plusDays(1)
+            } else {
+                endDateObj
+            }
+
+            // Calculate the duration between start and end times
+            val duration = Duration.between(startDateObj, adjustedEndDateObj)
+            val hours = duration.toHours()
+            val minutes = duration.toMinutes() % 60
+
+            // Format the start and end times into 12-hour AM/PM format
+            val formattedStartTime = startDateObj.format(timeFormatter12Hour)
+            val formattedEndTime = adjustedEndDateObj.format(timeFormatter12Hour)
+
+            // Return the formatted result
+            val formattedTime = "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
+            "$hours hr $minutes m; $formattedTime"
+        }catch (e: Exception){
+            LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
+            "-"
+        }
+    }
+
+    /*private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
         val lytWorkouts = binding.lytWorkouts
         lytWorkouts.root.visible()
 
@@ -317,7 +478,7 @@ class SummaryDataFragment :
             navigate(R.id.oActivityListFragment)
         }
 
-    }
+    }*/
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.lytHeartRate

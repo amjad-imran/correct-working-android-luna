@@ -14,6 +14,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
@@ -66,7 +67,7 @@ class SummaryDataViewModel @Inject constructor(
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
-
+    val stateTimeline = MutableLiveData<List<ItemTimelineResponseModel>>()
 
     var contributorInfo: OContributorResponseModal? = null
     val hrInfo = MutableLiveData<Event<String>>()
@@ -200,7 +201,9 @@ class SummaryDataViewModel @Inject constructor(
 
             stateHeartRateCard.postValue(parseHrData(healthData))
 
+
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
+            stateTimeline.postValue(ArrayList())
 
         }
     }

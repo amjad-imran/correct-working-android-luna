@@ -25,14 +25,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp" />
 
-        <include
+        <!--<include
             android:id="@+id/lytWorkouts"
             layout="@layout/oreo_layout_recent_activity"
             android:visibility="gone"
             tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />-->
+
+        <include
+            android:id="@+id/lytTimeline"
+            layout="@layout/layout_timeline_card_dash"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp" />
+
         <include
             android:id="@+id/lytDummy"
             layout="@layout/oreo_dummy_view"
