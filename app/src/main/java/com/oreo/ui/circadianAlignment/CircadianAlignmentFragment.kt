@@ -4,6 +4,9 @@ import android.animation.ArgbEvaluator
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
@@ -302,6 +305,8 @@ class CircadianAlignmentFragment :
                         getString(R.string.text_maintained)
                     )
                     avgNowMidPoint = CircadianMidPointGraphUtils.orangeMidPoint("Avg Now")
+                    binding.lytSleepMidPoint.tvDesc.text =
+                        getString(R.string.text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned)
                 }
 
                 CircadianMidPointStatus.Worsening -> {
@@ -313,6 +318,7 @@ class CircadianAlignmentFragment :
 
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
+                    binding.lytSleepMidPoint.tvDesc.text = getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
                 }
 
                 CircadianMidPointStatus.Correcting -> {
@@ -324,7 +330,7 @@ class CircadianAlignmentFragment :
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.greenMidPoint("Avg Now")
 
-                    binding.lytSleepMidPoint.textView173.text =
+                    binding.lytSleepMidPoint.tvDesc.text =
                         getString(R.string.text_circadian_mid_point_desc_correcting)
                 }
 
@@ -336,6 +342,9 @@ class CircadianAlignmentFragment :
                     )
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
+
+                    binding.lytSleepMidPoint.tvDesc.text =
+                        getString(R.string.text_circadian_mid_point_desc_missing_sleep)
                 }
 
                 CircadianMidPointStatus.AwaitingSync -> {
@@ -346,6 +355,9 @@ class CircadianAlignmentFragment :
                     )
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
+
+                    binding.lytSleepMidPoint.tvDesc.text =
+                        getString(R.string.text_circadian_mid_point_desc_awaiting_sync)
                 }
             }
 
@@ -722,7 +734,6 @@ class CircadianAlignmentFragment :
     fun setData(data: CircadianResponseModel) {
         LOGS.d("ansckaasc: $data")
         // focus window
-        val isCircularViewContainsData = true
         binding.lytFocusWindow.apply {
             if(
                 data.circadianMidPoint?.nudge?.title != null &&
@@ -809,6 +820,21 @@ class CircadianAlignmentFragment :
                 getString(R.string.text_retake_chronotype_quiz)
             }else{
                 getString(R.string.text_take_quiz)
+            }
+        }
+
+        // Circadian Mid-Point
+        if(data.circadianMidPoint?.chronotype == null){
+            binding.lytSleepMidPoint.tvChorotype.gone()
+        }else{
+            val fullText = getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype)
+
+            val spannable = SpannableString(fullText)
+            spannable.setSpan(ForegroundColorSpan("#CCFFFFFF".toColorInt()), 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            binding.lytSleepMidPoint.tvChorotype.apply {
+                text = spannable
+                visible()
             }
         }
     }
