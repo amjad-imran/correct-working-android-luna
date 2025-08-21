@@ -84,7 +84,6 @@ class CircadianAlignmentFragment :
             }
         } else {
             binding.lytCircularView.lytLockedState.root.gone()
-            binding.lytCircularView.lytUnlockedState.root.visible()
 
 
             val clockEvents = viewModel.generateClockEvents(graphData)
@@ -98,8 +97,12 @@ class CircadianAlignmentFragment :
             )
 
             binding.lytCircularView.lytUnlockedState.lytNoSleepData
-                .setVisibilityByCondition(clockEvents.isEmpty() && energyValues.isEmpty())
+                .setVisibilityByCondition(graphData?.sleepData == null)
+            binding.lytCircularView.lytUnlockedState.ivEllipse.setVisibilityByCondition(graphData?.sleepData == null)
         }
+
+
+        binding.lytCircularView.lytUnlockedState.root.visible()
     }
 
     data class CircadianResponse(
@@ -480,39 +483,49 @@ class CircadianAlignmentFragment :
     }
 
     private fun updateGraph(
-        graphData: CircadianGraphData,
+        graphData: CircadianGraphData?,
         circadianMidPoint: CircadianMidPointData?
     ) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        if(graphData != null) {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-        binding.graphView.graphStartTime = LocalTime.of(6, 0)
-        binding.graphView.graphEndTime = LocalTime.of(23, 0)
-        if (graphData.startTime != null && graphData.endTime != null) {
+            binding.graphView.graphStartTime = LocalTime.of(6, 0)
+            binding.graphView.graphEndTime = LocalTime.of(23, 0)
 
-            val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
-            val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+            if (graphData.startTime != null && graphData.endTime != null) {
 
-            val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-            var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+                val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+                val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
 
-            val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+                val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+                var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
 
-            if (endDateTimeSleep != null) {
-                val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
-                endTime = sleepWakeTime
+                val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+
+                if (endDateTimeSleep != null) {
+                    val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                    endTime = sleepWakeTime
+                }
+
+                binding.graphView.graphStartTime = startTime
+                binding.graphView.graphEndTime = endTime
+
+                val energyValues = viewModel.getEnergyValues(graphData, true)
+
+
+                binding.graphView.setDataSet(
+                    viewModel.getScrollGraphList(graphData),
+                    energyValues/*graphData.energyGraph*/
+                )
             }
-
-            binding.graphView.graphStartTime = startTime
-            binding.graphView.graphEndTime = endTime
-
-            val energyValues = viewModel.getEnergyValues(graphData, true)
-
-
-            binding.graphView.setDataSet(
-                viewModel.getScrollGraphList(graphData),
-                energyValues/*graphData.energyGraph*/
-            )
+            binding.divider24HourGraph.root.visible()
+            binding.tvDetailedOverview.visible()
+            binding.graphView.visible()
             binding.graphView.redraw()
+        }else{
+            binding.divider24HourGraph.root.gone()
+            binding.tvDetailedOverview.gone()
+            binding.graphView.gone()
         }
 
         if (circadianMidPoint == null) {
@@ -610,10 +623,8 @@ class CircadianAlignmentFragment :
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            it.graphData?.let { it1 ->
-                updateGraph(it1, it.circadianMidPoint)
-                showCircularScheduler(it1, it.isLockedCircularView)
-            }
+            updateGraph(it.graphData, it.circadianMidPoint)
+            showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
