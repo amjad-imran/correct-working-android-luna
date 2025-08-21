@@ -322,13 +322,13 @@ class CustomHomescreenViewModel @Inject constructor(
                 true,
                 this.size+1
             )
-            this["workout_history"] = CustomHomeScreenItem(
+            /*this["workout_history"] = CustomHomeScreenItem(
                 R.drawable.icon_flexibility_training,
                 "workout_history",
                 resourceProvider.getString(R.string.text_workout_history),
                 true,
                 this.size+1
-            )
+            )*/
 
         }
 
