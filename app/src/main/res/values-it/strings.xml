@@ -2083,8 +2083,8 @@
     <string name="text_timezone_changed_desc_dash">Potresti notare piccoli spostamenti dei dati durante i viaggi, ma le metriche principali e le tendenze a lungo termine rimarranno accurate.</string>
     <string name="text_what_is_circadian_mid_point">Cos\'è il punto medio circadiano?</string>
     <string name="text_what_is_circadian_alignment">Cos\'è l\'allineamento circadiano?</string>
-    <string name="text_circadian_alignment_quesmark">Allineamento circadiano?</string>
-    <string name="text_circadian_mid_point_quesmark">Punto medio circadiano?</string>
+    <string name="text_circadian_alignment_quesmark">allineamento circadiano?</string>
+    <string name="text_circadian_mid_point_quesmark">punto medio circadiano?</string>
     <string name="text_we_need_more_data_to_better_know_you">Abbiamo bisogno di più dati per conoscerti meglio</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Non abbiamo visto abbastanza dati recenti sul sonno per mostrarti il tuo ritmo circadiano. Indossare il tuo anello costantemente aiuterà a sbloccare approfondimenti personalizzati.</string>
     <string name="text_circadian_hiw_desc_1">Conoscere il tuo allineamento circadiano ti aiuta a massimizzare le performance quotidiane.</string>

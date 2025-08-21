@@ -2074,10 +2074,10 @@
     <string name="text_dim_light_melatonin_onset">暗光下褪黑激素的开始</string>
     <string name="text_timezone_change_detected">检测到时区变化。</string>
     <string name="text_timezone_changed_desc_dash">您可能会在旅行日期期间注意到数据的轻微变化，但核心指标和长期趋势保持准确。</string>
-    <string name="text_what_is_circadian_mid_point">什么是生物节律中点？</string>
+    <string name="text_what_is_circadian_mid_point">什么是昼夜节律中点？</string>
     <string name="text_what_is_circadian_alignment">什么是生物节律对齐？</string>
     <string name="text_circadian_alignment_quesmark">生物节律对齐？</string>
-    <string name="text_circadian_mid_point_quesmark">生物节律中点？</string>
+    <string name="text_circadian_mid_point_quesmark">昼夜节律中点？</string>
     <string name="text_we_need_more_data_to_better_know_you">我们需要更多数据来更好地了解您</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">我们没有看到足够的近期睡眠数据来显示您的生物节律。持续佩戴您的戒指将帮助解锁个性化的洞察。</string>
     <string name="text_circadian_hiw_desc_1">了解您的生物节律对齐有助于最大化每日表现。</string>

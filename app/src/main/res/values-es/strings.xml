@@ -2053,8 +2053,8 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_timezone_changed_desc_dash">Es posible que notes pequeños cambios en los datos durante los viajes, pero los indicadores principales y las tendencias a largo plazo siguen siendo precisos.</string>
     <string name="text_what_is_circadian_mid_point">¿Qué es el punto medio circadiano?</string>
     <string name="text_what_is_circadian_alignment">¿Qué es la alineación circadiana?</string>
-    <string name="text_circadian_alignment_quesmark">¿Alineación circadiana?</string>
-    <string name="text_circadian_mid_point_quesmark">¿Punto medio circadiano?</string>
+    <string name="text_circadian_alignment_quesmark">alineación circadiana?</string>
+    <string name="text_circadian_mid_point_quesmark">punto medio circadiano?</string>
     <string name="text_we_need_more_data_to_better_know_you">Necesitamos más datos para conocerte mejor</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">No hemos visto suficientes datos recientes de sueño para mostrar tu ritmo circadiano. Usar tu anillo de manera consistente ayudará a desbloquear información personalizada.</string>
     <string name="text_circadian_hiw_desc_1">Conocer tu alineación circadiana te ayuda a maximizar el rendimiento diario.</string>

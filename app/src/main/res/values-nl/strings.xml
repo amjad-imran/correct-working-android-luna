@@ -2082,8 +2082,8 @@
     <string name="text_timezone_changed_desc_dash">Je zult misschien kleine gegevensverschuivingen merken tijdens reisdata, maar kernmetrieken en lange termijntrends blijven nauwkeurig.</string>
     <string name="text_what_is_circadian_mid_point">Wat is het circadiaanse middenpunt?</string>
     <string name="text_what_is_circadian_alignment">Wat is circadiaanse afstemming?</string>
-    <string name="text_circadian_alignment_quesmark">Circadiaanse afstemming?</string>
-    <string name="text_circadian_mid_point_quesmark">Circadiaans middenpunt?</string>
+    <string name="text_circadian_alignment_quesmark">circadiaanse afstemming?</string>
+    <string name="text_circadian_mid_point_quesmark">circadiaanse middenpunt?</string>
     <string name="text_we_need_more_data_to_better_know_you">We hebben meer gegevens nodig om je beter te leren kennen</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">We hebben niet genoeg recente slaapgegevens gezien om je circadiaanse ritme te tonen. Je ring consequent dragen helpt om gepersonaliseerde inzichten te ontgrendelen.</string>
     <string name="text_circadian_hiw_desc_1">Je circadiaanse afstemming helpt je om dagelijks beter te presteren.</string>

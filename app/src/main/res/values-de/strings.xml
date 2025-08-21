@@ -2082,8 +2082,8 @@
     <string name="text_timezone_changed_desc_dash">Sie werden möglicherweise kleine Datenverschiebungen während der Reisezeiten bemerken, aber wichtige Kennzahlen und langfristige Trends bleiben genau.</string>
     <string name="text_what_is_circadian_mid_point">Was ist der zirkadiane Mittelpunkt?</string>
     <string name="text_what_is_circadian_alignment">Was ist zirkadiane Ausrichtung?</string>
-    <string name="text_circadian_alignment_quesmark">Zirkadiane Ausrichtung?</string>
-    <string name="text_circadian_mid_point_quesmark">Zirkadianer Mittelpunkt?</string>
+    <string name="text_circadian_alignment_quesmark">zirkadiane Ausrichtung?</string>
+    <string name="text_circadian_mid_point_quesmark">zirkadiane Mittelpunkt?</string>
     <string name="text_we_need_more_data_to_better_know_you">Wir benötigen mehr Daten, um Sie besser kennenzulernen</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Wir haben nicht genügend aktuelle Schlafdaten gesehen, um Ihren zirkadianen Rhythmus anzuzeigen. Das konsequente Tragen Ihres Rings wird helfen, personalisierte Einblicke freizuschalten.</string>
     <string name="text_circadian_hiw_desc_1">Das Wissen über Ihre zirkadiane Ausrichtung hilft Ihnen, die tägliche Leistung zu maximieren.</string>
