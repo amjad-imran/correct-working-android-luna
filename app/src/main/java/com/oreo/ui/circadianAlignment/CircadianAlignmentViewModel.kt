@@ -29,11 +29,16 @@ import com.oreo.ui.stress.help.StressImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.exp
+import kotlin.math.pow
 
 @HiltViewModel
 class CircadianAlignmentViewModel
@@ -69,15 +74,15 @@ class CircadianAlignmentViewModel
 
     fun initData() {
 
-        /*val data =
-            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": -25364, \"status\": false }, { \"type\": \"meal_window\", \"time\": 7035, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": -7364, \"status\": false }, { \"type\": \"workout\", \"time\": 3435, \"goal\": 660, \"status\": false }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 3435, \"progress\": 4910 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"circadian_mid_point\": { \"start_time\": \"2025-08-19 05:30:00\", \"end_time\": \"2025-08-19 07:30:00\", \"circadian_midpoint\": \"2025-08-19 04:18:30\", \"avg_now\": \"2025-08-19 04:55:06\", \"avg_before\": \"2025-08-19 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"chronotype\": { \"type\": \"Definitely evening type\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you hav\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:32\", \"end_time\": \"15:32\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"19:32\", \"end_time\": \"22:32\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"22:32\", \"end_time\": \"23:32\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"08:02\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"08:32\", \"end_time\": \"10:32\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"10:32\", \"end_time\": \"13:32\", \"peak_time\": \"12:02\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"15:32\", \"end_time\": \"18:32\", \"peak_time\": \"17:02\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:32\" }, \"gh_pulse_window_graph\": { \"start_time\": \"05:32\" }, \"activity_window_graph\": { \"start_time\": \"07:32\", \"end_time\": \"18:32\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-18 05:30:00\", \"end_time\": \"2025-08-18 07:30:00\", \"circadian_midpoint\": \"2025-08-18 04:18:30\", \"avg_now\": \"2025-08-18 04:55:06\", \"avg_before\": \"2025-08-18 05:09:06\", \"nudge\": { \"title\": \"Embrace Morning Momentum: Tune Your Day with Your Natural Rhythm\", \"description\": \"You're in the morning window; use this calm peak to soak in light and plan small actions. If you haven’t logged your rhythm today, jot a sunlight moment or a 3-minute stretch now to honor your rhythm,\" } }, \"energy_graph\": [ { \"start_time\": \"07:32\", \"energy\": 0 }, { \"start_time\": \"08:32\", \"energy\": 0 }, { \"start_time\": \"09:32\", \"energy\": 0 }, { \"start_time\": \"10:32\", \"energy\": 0 }, { \"start_time\": \"11:32\", \"energy\": 0 }, { \"start_time\": \"12:32\", \"energy\": 0 }, { \"start_time\": \"13:32\", \"energy\": 0 }, { \"start_time\": \"14:32\", \"energy\": 0 }, { \"start_time\": \"15:32\", \"energy\": 0 }, { \"start_time\": \"16:32\", \"energy\": 0 }, { \"start_time\": \"17:32\", \"energy\": 0.029 }, { \"start_time\": \"18:32\", \"energy\": 0.411 }, { \"start_time\": \"19:32\", \"energy\": 1 }, { \"start_time\": \"20:32\", \"energy\": 0.425 }, { \"start_time\": \"21:32\", \"energy\": 0.109 }, { \"start_time\": \"22:32\", \"energy\": 0.098 }, { \"start_time\": \"23:32\", \"energy\": 0.26 } ], \"sleep_data\": { \"bed_time\": \"2025-08-19 01:05:00\", \"wake_time\": \"2025-08-19 07:32:00\" }, \"start_time\": \"2025-08-18 07:32:00\", \"end_time\": \"2025-08-18 23:32:00\" } }"
+        val data =
+            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 60, \"time\": 13426, \"status\": false }, { \"type\": \"meal_window\", \"time\": 53026, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": 38626, \"status\": false }, { \"type\": \"workout\", \"time\": 42226, \"goal\": 440, \"status\": false, \"progress\": 61, \"active_calories\": 61, \"total_calories\": 674 }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 42226, \"progress\": 2316 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"circadian_mid_point\": { \"start_time\": \"2025-08-20 23:45:00\", \"end_time\": \"2025-08-20 02:15:00\", \"circadian_midpoint\": \"2025-08-20 04:41:30\", \"avg_now\": \"2025-08-20 05:01:42\", \"avg_before\": \"2025-08-20 04:53:24\", \"chronotype\": \"Definitely morning type\" }, \"chronotype\": { \"type\": \"Definitely morning type\", \"introduction\": \"You’re an early riser by nature.\", \"description\": \"Your energy peaks in the early hours, and your body clock runs ahead of the typical schedule. Stick to early light, workouts, and meals to stay in sync—and avoid late-night stimulation.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:39\", \"end_time\": \"15:39\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"17:39\", \"end_time\": \"20:39\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"20:39\", \"end_time\": \"23:39\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:39\", \"end_time\": \"08:09\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"07:39\", \"end_time\": \"08:39\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"08:39\", \"end_time\": \"11:39\", \"peak_time\": \"10:09\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"13:39\", \"end_time\": \"16:39\", \"peak_time\": \"15:09\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:39\" }, \"gh_pulse_window_graph\": { \"start_time\": \"03:39\" }, \"activity_window_graph\": { \"start_time\": \"07:39\", \"end_time\": \"16:39\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-20 23:45:00\", \"end_time\": \"2025-08-20 02:15:00\", \"circadian_midpoint\": \"2025-08-20 04:41:30\", \"avg_now\": \"2025-08-20 05:01:42\", \"avg_before\": \"2025-08-20 04:53:24\", \"chronotype\": \"Definitely morning type\" }, \"energy_graph\": [ { \"start_time\": \"07:39\", \"energy\": 0.011 }, { \"start_time\": \"08:39\", \"energy\": 0.135 }, { \"start_time\": \"09:39\", \"energy\": 0.607 }, { \"start_time\": \"10:39\", \"energy\": 1.004 }, { \"start_time\": \"11:39\", \"energy\": 0.639 }, { \"start_time\": \"12:39\", \"energy\": 0.23 }, { \"start_time\": \"13:39\", \"energy\": 0.181 }, { \"start_time\": \"14:39\", \"energy\": 0.397 }, { \"start_time\": \"15:39\", \"energy\": 0.604 }, { \"start_time\": \"16:39\", \"energy\": 0.364 }, { \"start_time\": \"17:39\", \"energy\": 0.081 }, { \"start_time\": \"18:39\", \"energy\": 0.007 }, { \"start_time\": \"19:39\", \"energy\": 0 }, { \"start_time\": \"20:39\", \"energy\": 0 }, { \"start_time\": \"21:39\", \"energy\": 0 }, { \"start_time\": \"22:39\", \"energy\": 0 }, { \"start_time\": \"23:39\", \"energy\": 0 } ], \"sleep_data\": { \"bed_time\": \"2025-08-21 01:44:00\", \"wake_time\": \"2025-08-21 07:39:00\" }, \"start_time\": \"2025-08-21 07:39:00\", \"end_time\": \"2025-08-21 23:39:00\" }, \"is_locked\": false }"
         circadianResponseData.postValue(
             Gson().fromJson(
                 data,
                 CircadianResponseModel::class.java
             )
         )
-        return*/
+        return
 
         viewModelScope.launch {
             userRepository.getCircadianData().collect { resource ->
@@ -704,7 +709,7 @@ class CircadianAlignmentViewModel
         return response
     }
 
-    fun generateValuesData(energyValues: kotlin.collections.List<Float>?): ArrayList<Float> {
+    fun generateValuesData(energyValues: List<Float>?): ArrayList<Float> {
         val energyArray = ArrayList<Float>()
         if (energyValues.isNullOrEmpty()) {
             repeat(24, {
@@ -746,6 +751,80 @@ class CircadianAlignmentViewModel
         }
 
         return Pair(title, caffeineTxt)
+    }
+
+    fun getEnergyValues(graphData: CircadianGraphData?,rotate: Boolean): List<Float> {
+        if(graphData?.firstFocusPeakWindowGraph==null && graphData?.secondFocusPeakWindowGraph==null){
+            return ArrayList()
+        }
+
+        val graphStart = graphData.startTime
+        val graphEnd = graphData.sleepData?.wakeTime
+
+        if(graphStart==null || graphEnd==null) return ArrayList()
+
+
+        val totalMinutes = 24 * 60
+        val energyValues = MutableList(totalMinutes) { 0f }
+
+        val windows = listOfNotNull(
+            graphData.firstFocusPeakWindowGraph,
+            graphData.secondFocusPeakWindowGraph
+        )
+
+        for (window in windows) {
+            val startMin = timeToMinutes(window.startTime)
+            val endMin = timeToMinutes(window.endTime)
+            val peakMin = timeToMinutes(window.peakTime)
+
+            if (startMin != null && endMin != null && peakMin != null) {
+                for (minute in startMin..endMin) {
+                    val dist = (minute - peakMin).toFloat()
+                    // Gaussian-like curve: highest at peak, lower at edges
+                    val sigma = (endMin - startMin) / 6f // spread factor
+                    val energy = exp(-0.5f * (dist / sigma).pow(2))
+                    energyValues[minute % totalMinutes] += energy.toFloat()
+                }
+            }
+        }
+
+        val maxVal = energyValues.maxOrNull() ?: 1f
+        val values =  energyValues.map { it / maxVal }
+        if(rotate){
+            return trimArrayByTime(values, graphStart)
+        }else{
+            return values
+        }
+
+    }
+
+    fun trimArrayByTime(
+        array: List<Float>,
+        startTime: String
+    ): List<Float> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val start = LocalDateTime.parse(startTime, formatter)
+
+        val startIndex = start.hour * 60 + start.minute
+
+        if (array.size != 24 * 60) {
+            return ArrayList()
+        }
+
+        return array.drop(startIndex) + array.take(startIndex)
+    }
+
+    private fun timeToMinutes(time: String?): Int? {
+        if (time == null) return null
+        return try {
+            val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val date = sdf.parse(time)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+        } catch (e: Exception) {
+            null
+        }
     }
 
 }

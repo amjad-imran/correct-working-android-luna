@@ -72,7 +72,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         return height.toFloat()
     }
 
-    private val energyGraph = ArrayList<EnergyGraph>()
+    private val energyGraph = ArrayList<Float>()
 
     var timeWindows: List<TimeWindow> = emptyList()
         set(value) {
@@ -80,7 +80,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
 
 
-    fun setDataSet(timeWindows: List<TimeWindow>, energyGraph: List<EnergyGraph>?) {
+    fun setDataSet(timeWindows: List<TimeWindow>, energyGraph: List<Float>?) {
         this.timeWindows = timeWindows
         this.energyGraph.clear()
         energyGraph?.let {
@@ -199,7 +199,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             //drawEnergyCurve(this)
             drawEnergyCurve2(
                 this,
-                energyGraph.map { it.energy ?: 0f }
+                energyGraph
                 /*arrayListOf(
                     0.2f, 0.6f, 0.6f, 0.4f, 0.7f, 0.8f, 0.5f, 0.6f, 0.3f, 0.4f, 0.7f, 0.6f,
                     0.8f, 0.9f, 0.5f, 0.4f, 0.6f, 0.5f, 0.2f, 0.7f, 0.5f, 0.6f, 0.8f, 0.9f
@@ -272,9 +272,10 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val usableHeight =
             getGraphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
 
+        val minuteWidth = hourWidthPx/60f
         for (i in 0 until values.size - 1) {
-            val startX = i * hourWidthPx
-            val stopX = (i + 1) * hourWidthPx
+            val startX = i * minuteWidth
+            val stopX = (i + 1) * minuteWidth
             val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
             val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
 
@@ -294,7 +295,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
             val segmentPath = Path()
             segmentPath.moveTo(startX, startY)
-            segmentPath.cubicTo(controlX1, controlY1, controlX2, controlY2, stopX, stopY)
+            segmentPath.lineTo(stopX,stopY)
+            //segmentPath.cubicTo(controlX1, controlY1, controlX2, controlY2, stopX, stopY)
             linePaint?.shader = segmentGradient
             canvas.drawPath(segmentPath, linePaint!!)
         }

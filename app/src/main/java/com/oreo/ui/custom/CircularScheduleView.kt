@@ -38,6 +38,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -131,7 +132,7 @@ class CircularScheduleView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawClock(canvas)
-        if(isLocked.not()){
+        if (isLocked.not()) {
             drawEvents(canvas)
             drawCircularEnergyCurveWithFade(
                 canvas, energyArray
@@ -226,6 +227,49 @@ class CircularScheduleView @JvmOverloads constructor(
         }
     }
 
+   /* fun getEnergyColor(value: Float): Int {
+        val clamped = value.coerceIn(0f, 1f)
+
+        return if (clamped <= 0.5f) {
+            // RED section
+            val normalized = clamped / 0.5f // 0..1
+            // Create a "triangle" alpha curve: 0.1 → 1 → 0.1
+            val alpha = (1f - abs(normalized - 0.5f) * 2) * 0.9f + 0.1f
+            Color.argb((alpha * 255).toInt(), 166, 103, 103)
+
+        } else {
+            // GREEN section
+            val normalized = (clamped - 0.5f) / 0.5f // 0..1
+            val alpha = 0.1f + normalized * 0.9f // 0.1 → 1.0
+            Color.argb((alpha * 255).toInt(), 106, 170, 90)
+        }
+    }*/
+   fun getEnergyColor(value: Float): Int {
+       val clamped = value.coerceIn(0f, 1f)
+
+       return if (clamped <= 0.5f) {
+           // RED section
+           val normalized = clamped / 0.5f // 0..1
+           // Triangle: 0.3 → 0.5 → 0.3
+           val alpha = (1f - abs(normalized - 0.5f) * 2) * 0.2f + 0.3f
+           Color.argb((alpha * 255).toInt(), 166, 103, 103)
+
+       } else {
+           // GREEN section
+           val normalized = (clamped - 0.5f) / 0.5f // 0..1
+           // Keep flat at 0.3 until 0.6f, then increase linearly to 0.5
+           val alpha = if (clamped <= 0.6f) {
+               0.3f
+           } else {
+               0.3f + ((normalized - 0.2f) / 0.8f) * 0.2f
+           }
+           Color.argb((alpha * 255).toInt(), 106, 170, 90)
+       }
+   }
+
+    /**
+     * 24 * 60 - 1440 values
+     */
     private fun drawCircularEnergyCurveWithFade(canvas: Canvas, values: List<Float>) {
         val cx = width / 2f
         val cy = height / 2f
@@ -239,7 +283,7 @@ class CircularScheduleView @JvmOverloads constructor(
         val colors = ArrayList<Int>()
         val transparentColor = "#00000000".toColorInt()
 
-        values.forEachIndexed { index, value ->
+        /*values.forEachIndexed { index, value ->
             val startColor =
                 if (index == 0) {
                     transparentColor
@@ -262,6 +306,33 @@ class CircularScheduleView @JvmOverloads constructor(
                 barColors.add(color)
             }
             colors.addAll(barColors)
+        }*/
+
+        values.forEachIndexed { index, value ->
+            val startColor =
+                if (index == 0) {
+                    transparentColor
+                } else {
+                    getEnergyColor(value)
+                    //getColorByValue(value)
+                }
+
+            /*val endColor = try {
+                getColorByValue(values[index + 1])
+            } catch (exp: Exception) {
+                transparentColor
+            }*/
+
+            val evaluator = ArgbEvaluator()
+            /*val barColors = mutableListOf<Int>()
+
+            val midBarCount = 30
+            for (i in 0 until midBarCount) {
+                val fraction = i.toFloat() / (midBarCount - 1)
+                val color = evaluator.evaluate(fraction, startColor, endColor) as Int
+                barColors.add(color)
+            }*/
+            colors.add(startColor)
         }
 
 
@@ -521,22 +592,22 @@ class CircularScheduleView @JvmOverloads constructor(
             )*/
         }
 
-       /* val startAngle =
-            hourToAngle(13f)
+        /* val startAngle =
+             hourToAngle(13f)
 
-        drawCircularTextCCW(
-            canvas,
-            radius - 20f.dpToPixel(),
-            PointF(cx, cy),
-            startAngle,
-            "Energy",
-            Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL_AND_STROKE
-                typeface = fontGilroy
-                textSize = dpToPx(10f)
-                color = "#B2B2B2".toColorInt()
-            }
-        )*/
+         drawCircularTextCCW(
+             canvas,
+             radius - 20f.dpToPixel(),
+             PointF(cx, cy),
+             startAngle,
+             "Energy",
+             Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                 style = Paint.Style.FILL_AND_STROKE
+                 typeface = fontGilroy
+                 textSize = dpToPx(10f)
+                 color = "#B2B2B2".toColorInt()
+             }
+         )*/
     }
 
 
