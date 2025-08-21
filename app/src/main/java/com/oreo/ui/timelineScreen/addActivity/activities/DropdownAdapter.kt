@@ -17,14 +17,14 @@ class DropdownAdapter(
 
     companion object{
         private val itemColors = mapOf(
-            AddActivityItemsEnum.MEAL to "#FFEB3B",
-            AddActivityItemsEnum.LIGHT_EXPOSURE to "#FFA726",
-            AddActivityItemsEnum.CAFFEINE to "#FF8A65",
-            AddActivityItemsEnum.WORKOUT to "#4FC3F7",
+            AddActivityItemsEnum.MEAL to "#D8D3A3",
+            AddActivityItemsEnum.LIGHT_EXPOSURE to "#F1C48E",
+            AddActivityItemsEnum.CAFFEINE to "#EEB69F",
+            AddActivityItemsEnum.WORKOUT to "#8ED3F1",
             AddActivityItemsEnum.WATER to "#4CAF50",
-            AddActivityItemsEnum.CYCLE_LOG to "#E91E63",
-            AddActivityItemsEnum.NAP to "#9C27B0",
-            AddActivityItemsEnum.SLEEP to "#9575CD"
+            AddActivityItemsEnum.CYCLE_LOG to "#F18EBD",
+            AddActivityItemsEnum.NAP to "#A8A8ED",
+            AddActivityItemsEnum.SLEEP to "#C5A8ED"
         )
     }
 
