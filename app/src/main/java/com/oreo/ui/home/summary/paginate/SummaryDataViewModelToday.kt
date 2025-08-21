@@ -2099,7 +2099,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         if (
-            registerDate == 0 ||
+            /*registerDate == 0 ||*/
             (readiness?.readinessScore?.value ?: 0) <= 0 ||
             healthData.readiness == null
         ) {
@@ -2174,61 +2174,57 @@ class SummaryDataViewModelToday @Inject constructor(
         when(daySlot){
             0 -> {
                 if (healthData.sleep?.sleep_score != null) {
-                    if (registerDate != 0) {
-                        if ((sleepModel.totalSleep ?: 0) > 0) {
-                            return OHealthOverview.Sleep(
-                                sleepModel,
-                                makeSleepArray(newSleepArray),
-                                newSleepArray?.firstOrNull()?.start_time ?: "",
-                                newSleepArray?.lastOrNull()?.end_time ?: "",
-                                impact = impactData?.sleepScore
-                            )
-                        }
+                    if ((sleepModel.totalSleep ?: 0) > 0) {
+                        return OHealthOverview.Sleep(
+                            sleepModel,
+                            makeSleepArray(newSleepArray),
+                            newSleepArray?.firstOrNull()?.start_time ?: "",
+                            newSleepArray?.lastOrNull()?.end_time ?: "",
+                            impact = impactData?.sleepScore
+                        )
                     }
                 } else {
                     return OHealthOverview.SleepWaiting
                 }
             }
             1 -> {
-                if (registerDate != 0) {
-                    healthData.sleep?.let {
-                        if ((sleepModel.totalSleep ?: 0) > 0) {
-                            return OHealthOverview.Sleep(
-                                sleepModel,
-                                makeSleepArray(newSleepArray),
-                                newSleepArray?.firstOrNull()?.start_time ?: "",
-                                newSleepArray?.lastOrNull()?.end_time ?: "",
-                                impact = impactData?.sleepScore
-                            )
-                        }
+                healthData.sleep?.let {
+                    if ((sleepModel.totalSleep ?: 0) > 0) {
+                        return OHealthOverview.Sleep(
+                            sleepModel,
+                            makeSleepArray(newSleepArray),
+                            newSleepArray?.firstOrNull()?.start_time ?: "",
+                            newSleepArray?.lastOrNull()?.end_time ?: "",
+                            impact = impactData?.sleepScore
+                        )
                     }
                 }
             }
             else -> {
-                if (registerDate != 0) {
-                    if (healthData.sleep?.sleep_score != null) {
-                        if ((sleepModel.totalSleep ?: 0) > 0) {
-                            return OHealthOverview.SleepMinimal(
-                                sleepModel, makeSleepArray(newSleepArray),
+
+                if (healthData.sleep?.sleep_score != null) {
+                    if ((sleepModel.totalSleep ?: 0) > 0) {
+                        return OHealthOverview.SleepMinimal(
+                            sleepModel, makeSleepArray(newSleepArray),
+                            impact = impactData?.sleepScore
+                        )
+                    }
+                } else {
+                    if ((sleepModel.totalSleep ?: 0) > 0) {
+                        healthData.sleep?.let {
+                            return OHealthOverview.Sleep(
+                                sleepModel,
+                                makeSleepArray(healthData.sleep?.hourly_breakup),
+                                healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                    ?: "",
+                                healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                    ?: "",
                                 impact = impactData?.sleepScore
                             )
                         }
-                    } else {
-                        if ((sleepModel.totalSleep ?: 0) > 0) {
-                            healthData.sleep?.let {
-                                return OHealthOverview.Sleep(
-                                    sleepModel,
-                                    makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
-                                        ?: "",
-                                    healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
-                                        ?: "",
-                                    impact = impactData?.sleepScore
-                                )
-                            }
-                        }
                     }
                 }
+
             }
         }
 
