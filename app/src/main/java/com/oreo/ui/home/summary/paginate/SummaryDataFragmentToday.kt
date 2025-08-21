@@ -311,11 +311,7 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
-                    if(viewModel.localDataStore.isCircadianOnboardShown()){
-                        navigate(R.id.circadianAlignmentFragment)
-                    }else{
-                        navigate(R.id.circadianSplashScreenFragment)
-                    }
+                    navigate(R.id.circadianAlignmentFragment)
                 }
 
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {
