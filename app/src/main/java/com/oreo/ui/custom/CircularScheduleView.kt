@@ -227,46 +227,6 @@ class CircularScheduleView @JvmOverloads constructor(
         }
     }
 
-   /* fun getEnergyColor(value: Float): Int {
-        val clamped = value.coerceIn(0f, 1f)
-
-        return if (clamped <= 0.5f) {
-            // RED section
-            val normalized = clamped / 0.5f // 0..1
-            // Create a "triangle" alpha curve: 0.1 → 1 → 0.1
-            val alpha = (1f - abs(normalized - 0.5f) * 2) * 0.9f + 0.1f
-            Color.argb((alpha * 255).toInt(), 166, 103, 103)
-
-        } else {
-            // GREEN section
-            val normalized = (clamped - 0.5f) / 0.5f // 0..1
-            val alpha = 0.1f + normalized * 0.9f // 0.1 → 1.0
-            Color.argb((alpha * 255).toInt(), 106, 170, 90)
-        }
-    }*/
-   fun getEnergyColor(value: Float): Int {
-       val clamped = value.coerceIn(0f, 1f)
-
-       return if (clamped <= 0.5f) {
-           // RED section
-           val normalized = clamped / 0.5f // 0..1
-           // Triangle: 0.3 → 0.5 → 0.3
-           val alpha = (1f - abs(normalized - 0.5f) * 2) * 0.2f + 0.3f
-           Color.argb((alpha * 255).toInt(), 166, 103, 103)
-
-       } else {
-           // GREEN section
-           val normalized = (clamped - 0.5f) / 0.5f // 0..1
-           // Keep flat at 0.3 until 0.6f, then increase linearly to 0.5
-           val alpha = if (clamped <= 0.6f) {
-               0.3f
-           } else {
-               0.3f + ((normalized - 0.2f) / 0.8f) * 0.2f
-           }
-           Color.argb((alpha * 255).toInt(), 106, 170, 90)
-       }
-   }
-
     /**
      * 24 * 60 - 1440 values
      */
@@ -283,15 +243,19 @@ class CircularScheduleView @JvmOverloads constructor(
         val colors = ArrayList<Int>()
         val transparentColor = "#00000000".toColorInt()
 
-        /*values.forEachIndexed { index, value ->
+        val step = 30
+
+        for (i in 0 until values.size-1 step step){
             val startColor =
-                if (index == 0) {
+                if (i == 0) {
                     transparentColor
                 } else {
-                    getColorByValue(value)
+                    //getEnergyColor(values[i])
+                    getColorByValue(values[i])
                 }
+
             val endColor = try {
-                getColorByValue(values[index + 1])
+                getColorByValue(values[i + step])
             } catch (exp: Exception) {
                 transparentColor
             }
@@ -299,42 +263,14 @@ class CircularScheduleView @JvmOverloads constructor(
             val evaluator = ArgbEvaluator()
             val barColors = mutableListOf<Int>()
 
-            val midBarCount = 30
+            val midBarCount = 20
             for (i in 0 until midBarCount) {
                 val fraction = i.toFloat() / (midBarCount - 1)
                 val color = evaluator.evaluate(fraction, startColor, endColor) as Int
                 barColors.add(color)
             }
             colors.addAll(barColors)
-        }*/
-
-        values.forEachIndexed { index, value ->
-            val startColor =
-                if (index == 0) {
-                    transparentColor
-                } else {
-                    getEnergyColor(value)
-                    //getColorByValue(value)
-                }
-
-            /*val endColor = try {
-                getColorByValue(values[index + 1])
-            } catch (exp: Exception) {
-                transparentColor
-            }*/
-
-            val evaluator = ArgbEvaluator()
-            /*val barColors = mutableListOf<Int>()
-
-            val midBarCount = 30
-            for (i in 0 until midBarCount) {
-                val fraction = i.toFloat() / (midBarCount - 1)
-                val color = evaluator.evaluate(fraction, startColor, endColor) as Int
-                barColors.add(color)
-            }*/
-            colors.add(startColor)
         }
-
 
         val radius = min(cx, cy) - 74f.dpToPixel()
 
