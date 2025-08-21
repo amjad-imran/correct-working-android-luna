@@ -38,6 +38,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -131,7 +132,7 @@ class CircularScheduleView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawClock(canvas)
-        if(isLocked.not()){
+        if (isLocked.not()) {
             drawEvents(canvas)
             drawCircularEnergyCurveWithFade(
                 canvas, energyArray
@@ -226,6 +227,9 @@ class CircularScheduleView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 24 * 60 - 1440 values
+     */
     private fun drawCircularEnergyCurveWithFade(canvas: Canvas, values: List<Float>) {
         val cx = width / 2f
         val cy = height / 2f
@@ -239,15 +243,19 @@ class CircularScheduleView @JvmOverloads constructor(
         val colors = ArrayList<Int>()
         val transparentColor = "#00000000".toColorInt()
 
-        values.forEachIndexed { index, value ->
+        val step = 30
+
+        for (i in 0 until values.size-1 step step){
             val startColor =
-                if (index == 0) {
+                if (i == 0) {
                     transparentColor
                 } else {
-                    getColorByValue(value)
+                    //getEnergyColor(values[i])
+                    getColorByValue(values[i])
                 }
+
             val endColor = try {
-                getColorByValue(values[index + 1])
+                getColorByValue(values[i + step])
             } catch (exp: Exception) {
                 transparentColor
             }
@@ -255,7 +263,7 @@ class CircularScheduleView @JvmOverloads constructor(
             val evaluator = ArgbEvaluator()
             val barColors = mutableListOf<Int>()
 
-            val midBarCount = 30
+            val midBarCount = 20
             for (i in 0 until midBarCount) {
                 val fraction = i.toFloat() / (midBarCount - 1)
                 val color = evaluator.evaluate(fraction, startColor, endColor) as Int
@@ -263,7 +271,6 @@ class CircularScheduleView @JvmOverloads constructor(
             }
             colors.addAll(barColors)
         }
-
 
         val radius = min(cx, cy) - 74f.dpToPixel()
 
@@ -521,22 +528,22 @@ class CircularScheduleView @JvmOverloads constructor(
             )*/
         }
 
-       /* val startAngle =
-            hourToAngle(13f)
+        /* val startAngle =
+             hourToAngle(13f)
 
-        drawCircularTextCCW(
-            canvas,
-            radius - 20f.dpToPixel(),
-            PointF(cx, cy),
-            startAngle,
-            "Energy",
-            Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL_AND_STROKE
-                typeface = fontGilroy
-                textSize = dpToPx(10f)
-                color = "#B2B2B2".toColorInt()
-            }
-        )*/
+         drawCircularTextCCW(
+             canvas,
+             radius - 20f.dpToPixel(),
+             PointF(cx, cy),
+             startAngle,
+             "Energy",
+             Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                 style = Paint.Style.FILL_AND_STROKE
+                 typeface = fontGilroy
+                 textSize = dpToPx(10f)
+                 color = "#B2B2B2".toColorInt()
+             }
+         )*/
     }
 
 

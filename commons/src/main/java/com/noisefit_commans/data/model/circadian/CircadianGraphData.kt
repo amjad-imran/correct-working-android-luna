@@ -69,9 +69,10 @@ data class EnergyGraph(
 data class ItemCircadianGraphData(
     @SerializedName("start_time")
     val startTime: String?,
-
     @SerializedName("end_time")
-    val endTime: String?
+    val endTime: String?,
+    @SerializedName("peak_time")
+    val peakTime: String?
 )
 
 data class CircadianMidPointData(
