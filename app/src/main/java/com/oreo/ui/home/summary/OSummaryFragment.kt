@@ -73,7 +73,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 super.onPageSelected(position)
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
-                //mainViewModel.handleAddWorkoutVisibility()
+                mainViewModel.handleAddWorkoutVisibility()
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
