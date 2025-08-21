@@ -151,7 +151,7 @@ class CircadianAlignmentFragment :
 
             val energyArray = viewModel.generateValuesData(energyValues)
             binding.lytCircularView.lytUnlockedState.circularView.setDataSet(
-                clockEvents, energyArray, sleepStart, sleepEnd,isLocked?:false
+                clockEvents, energyArray, sleepStart, sleepEnd, graphData?.sleepData == null
             )
 
             binding.lytCircularView.lytUnlockedState.lytNoSleepData
@@ -753,10 +753,11 @@ class CircadianAlignmentFragment :
         }
 
         // lyt Circular State
-        if(data.isLockedCircularView != true) {
+        if (data.isLockedCircularView == true || data.graphData?.sleepData == null){
+            binding.lytCircularState.root.gone()
+        }else{
             val circularStateData = viewModel.getCaffeineState(data)
             binding.lytCircularState.apply {
-                tvPhase.text = circularStateData.first
                 tvCaffeineState.text = circularStateData.second
                 root.visible()
             }
