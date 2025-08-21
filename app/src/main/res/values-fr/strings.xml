@@ -2202,8 +2202,8 @@ onjour, Luna"</string>
     <string name="text_timezone_changed_desc_dash">Vous pourriez remarquer de légers changements de données pendant vos dates de voyage, mais les principales mesures et les tendances à long terme restent précises.</string>
     <string name="text_what_is_circadian_mid_point">Qu\'est-ce que le point médian circadien ?</string>
     <string name="text_what_is_circadian_alignment">Qu\'est-ce que l\'alignement circadien ?</string>
-    <string name="text_circadian_alignment_quesmark">Alignement circadien ?</string>
-    <string name="text_circadian_mid_point_quesmark">Point médian circadien ?</string>
+    <string name="text_circadian_alignment_quesmark">alignement circadien ?</string>
+    <string name="text_circadian_mid_point_quesmark">point médian circadien ?</string>
     <string name="text_we_need_more_data_to_better_know_you">Nous avons besoin de plus de données pour mieux vous connaître</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Nous n\'avons pas suffisamment de données récentes sur votre sommeil pour afficher votre rythme circadien. Porter régulièrement votre bague nous aidera à débloquer des informations personnalisées.</string>
     <string name="text_circadian_hiw_desc_1">Connaître votre alignement circadien vous aide à maximiser vos performances quotidiennes.</string>

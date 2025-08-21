@@ -82,7 +82,7 @@ class QuizCircadianFragment :
         }
 
         binding.tvSkip.setOnClickListener {
-            viewModel.submitQuizQuesAndAnswers()
+            viewModel.submitQuizQuesAndAnswers(true)
         }
 
         binding.btnGetStarted.setOnClickListener {

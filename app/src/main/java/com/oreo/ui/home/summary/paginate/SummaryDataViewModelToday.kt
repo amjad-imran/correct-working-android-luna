@@ -114,6 +114,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -127,6 +128,8 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
+import kotlin.math.exp
+import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -1467,10 +1470,84 @@ class SummaryDataViewModelToday @Inject constructor(
                 timeWindow = getCircadianScrollGraphList(graphData),
                 title = circadianGraphData?.title,
                 description = circadianGraphData?.description,
-                energyGraph = graphData.energyGraph
+                energyGraph = getEnergyValues(graphData,true)
             )
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
+        }
+    }
+
+    fun getEnergyValues(graphData: CircadianGraphData?,rotate: Boolean): List<Float> {
+        if(graphData?.firstFocusPeakWindowGraph==null && graphData?.secondFocusPeakWindowGraph==null){
+            return ArrayList()
+        }
+
+        val graphStart = graphData.startTime
+        val graphEnd = graphData.sleepData?.wakeTime
+
+        if(graphStart==null || graphEnd==null) return ArrayList()
+
+
+        val totalMinutes = 24 * 60
+        val energyValues = MutableList(totalMinutes) { 0f }
+
+        val windows = listOfNotNull(
+            graphData.firstFocusPeakWindowGraph,
+            graphData.secondFocusPeakWindowGraph
+        )
+
+        for (window in windows) {
+            val startMin = timeToMinutes(window.startTime)
+            val endMin = timeToMinutes(window.endTime)
+            val peakMin = timeToMinutes(window.peakTime)
+
+            if (startMin != null && endMin != null && peakMin != null) {
+                for (minute in startMin..endMin) {
+                    val dist = (minute - peakMin).toFloat()
+                    // Gaussian-like curve: highest at peak, lower at edges
+                    val sigma = (endMin - startMin) / 6f // spread factor
+                    val energy = exp(-0.5f * (dist / sigma).pow(2))
+                    energyValues[minute % totalMinutes] += energy.toFloat()
+                }
+            }
+        }
+
+        val maxVal = energyValues.maxOrNull() ?: 1f
+        val values =  energyValues.map { it / maxVal }
+        if(rotate){
+            return trimArrayByTime(values, graphStart)
+        }else{
+            return values
+        }
+
+    }
+
+    fun trimArrayByTime(
+        array: List<Float>,
+        startTime: String
+    ): List<Float> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val start = LocalDateTime.parse(startTime, formatter)
+
+        val startIndex = start.hour * 60 + start.minute
+
+        if (array.size != 24 * 60) {
+            return ArrayList()
+        }
+
+        return array.drop(startIndex) + array.take(startIndex)
+    }
+
+    private fun timeToMinutes(time: String?): Int? {
+        if (time == null) return null
+        return try {
+            val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val date = sdf.parse(time)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+        } catch (e: Exception) {
+            null
         }
     }
 

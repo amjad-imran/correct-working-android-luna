@@ -74,14 +74,14 @@ class QuizCircadianViewModel @Inject constructor(
         }*/
     }
 
-    fun submitQuizQuesAndAnswers(){
+    fun submitQuizQuesAndAnswers(isFromSkip:Boolean?=false){
         viewModelScope.launch {
 
             val reqObj = JsonObject()
             val jsonArrayRes = JsonArray()
 
             val isAllDone = quizData.value?.isNotEmpty() == true && quizData.value?.size == quesOptionMap.size
-            if (isAllDone.not()) {
+            if (isFromSkip!=true && isAllDone.not()) {
                 return@launch
             }
 

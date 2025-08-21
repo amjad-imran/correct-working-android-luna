@@ -77,86 +77,32 @@ class CircadianAlignmentFragment :
         /*binding.lytCircularView.lockedGroup.visible()
         binding.lytCircularView.circularView.gone()*/
 
-        if(isLocked == true){
+        if (isLocked == true) {
             binding.lytCircularView.apply {
                 lytUnlockedState.root.gone()
                 lytLockedState.root.visible()
             }
-        }else {
+        } else {
             binding.lytCircularView.lytLockedState.root.gone()
-            binding.lytCircularView.lytUnlockedState.root.visible()
 
 
             val clockEvents = viewModel.generateClockEvents(graphData)
-
-
-            /*val clockEvents = listOf(
-            ClockEvent(
-                6f, 8f, ClockEventType.ARCH, Color.parseColor("#B4E6EC"),
-                Color.parseColor("#FBE0BE"),
-                textColor = "#CC242424".toColorInt(),
-                "Natural Light"
-            ),
-            ClockEvent(
-                8f, 16f, ClockEventType.ARCH, Color.parseColor("#181A1F"),
-                Color.parseColor("#181A1F"),
-                textColor = "#858585".toColorInt(),
-                "Neutral Light"
-            ),
-            ClockEvent(
-                16f, 19f, ClockEventType.ARCH, Color.parseColor("#55313E"),
-                Color.parseColor("#995CA0"),
-                textColor = "#FC9CFF".toColorInt(), "Wind-Down"
-            ),
-            ClockEvent(
-                19f, 22f, ClockEventType.ARCH, Color.parseColor("#8F5EBA"),
-                Color.parseColor("#443A7B"),
-                textColor = "#E0BEFF".toColorInt(), "Dim-light"
-            ),
-            ClockEvent(
-                22f, 6f, ClockEventType.ARCH, Color.parseColor("#2E246E"),
-                Color.parseColor("#4E3ABC"),
-                textColor = "#CAC1FF".toColorInt(), "Sleep"
-            ),
-            ClockEvent(
-                6f,
-                23f,
-                ClockEventType.GRAPH,
-                Color.parseColor("#B5845D"),
-                Color.parseColor("#B5845D"),
-                textColor = "#CC242424".toColorInt(),
-                ""
-            ),
-            ClockEvent(
-                8f,
-                13f,
-                ClockEventType.LINE,
-                Color.parseColor("#B5845D"),
-                Color.parseColor("#B5845D"),
-                textColor = "#CC242424".toColorInt(),
-                ""
-            ),
-            //ClockEvent(23f, 24f, Color.parseColor("#7C3AED"), "Dim-Light"),
-            //ClockEvent(0f, 6f, Color.parseColor("#5B21B6"), "Sleep"),
-            //ClockEvent(8f, 18f, Color.parseColor("#FDE68A"), "Neutral Light"),
-        )*/
-
-            val energyValues = /*arrayListOf(
-            0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 1f, 1f, 1f,
-            0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 1f, 0.2f, 0.2f, 0.6f, 0.3f, 0f, 0f
-        )*/graphData?.energyGraph?.map { it.energy ?: 0f }
+            val energyValues = viewModel.getEnergyValues(graphData, false)
 
             val sleepStart = graphData?.sleepData?.bedTime
             val sleepEnd = graphData?.sleepData?.wakeTime
 
-            val energyArray = viewModel.generateValuesData(energyValues)
             binding.lytCircularView.lytUnlockedState.circularView.setDataSet(
-                clockEvents, energyArray, sleepStart, sleepEnd,isLocked?:false
+                clockEvents, energyValues, sleepStart, sleepEnd, graphData?.sleepData == null
             )
 
             binding.lytCircularView.lytUnlockedState.lytNoSleepData
-                .setVisibilityByCondition(clockEvents.isEmpty() && energyArray.isEmpty())
+                .setVisibilityByCondition(graphData?.sleepData == null)
+            binding.lytCircularView.lytUnlockedState.ivEllipse.setVisibilityByCondition(graphData?.sleepData == null)
         }
+
+
+        binding.lytCircularView.lytUnlockedState.root.visible()
     }
 
     data class CircadianResponse(
@@ -176,15 +122,6 @@ class CircadianAlignmentFragment :
 
         binding.graphView.timeWindows = ArrayList()//viewModel.dummyList()//
         binding.graphView.redraw()
-
-        /*val circadianResponse = CircadianResponse(
-            "2025-07-22 23:39:00",
-            "2025-07-23 02:15:00",
-            "2025-07-23 01:34:00",
-            "2025-07-23 01:44:18",
-            "You’re improving — staying active later and delaying sleep cues is helping."
-        )
-        setCircadianMidPointGraph(circadianResponse)*/
 
     }
 
@@ -318,7 +255,8 @@ class CircadianAlignmentFragment :
 
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
-                    binding.lytSleepMidPoint.tvDesc.text = getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
+                    binding.lytSleepMidPoint.tvDesc.text =
+                        getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
                 }
 
                 CircadianMidPointStatus.Correcting -> {
@@ -545,36 +483,49 @@ class CircadianAlignmentFragment :
     }
 
     private fun updateGraph(
-        graphData: CircadianGraphData,
+        graphData: CircadianGraphData?,
         circadianMidPoint: CircadianMidPointData?
     ) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        if(graphData != null) {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-        binding.graphView.graphStartTime = LocalTime.of(6, 0)
-        binding.graphView.graphEndTime = LocalTime.of(23, 0)
-        if (graphData.startTime != null && graphData.endTime != null) {
+            binding.graphView.graphStartTime = LocalTime.of(6, 0)
+            binding.graphView.graphEndTime = LocalTime.of(23, 0)
 
-            val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
-            val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+            if (graphData.startTime != null && graphData.endTime != null) {
 
-            val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-            var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+                val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+                val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
 
-            val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+                val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+                var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
 
-            if(endDateTimeSleep!=null){
-                val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
-                endTime = sleepWakeTime
+                val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
+
+                if (endDateTimeSleep != null) {
+                    val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                    endTime = sleepWakeTime
+                }
+
+                binding.graphView.graphStartTime = startTime
+                binding.graphView.graphEndTime = endTime
+
+                val energyValues = viewModel.getEnergyValues(graphData, true)
+
+
+                binding.graphView.setDataSet(
+                    viewModel.getScrollGraphList(graphData),
+                    energyValues/*graphData.energyGraph*/
+                )
             }
-
-            binding.graphView.graphStartTime = startTime
-            binding.graphView.graphEndTime = endTime
-
-            binding.graphView.setDataSet(
-                viewModel.getScrollGraphList(graphData),
-                graphData.energyGraph
-            )
+            binding.divider24HourGraph.root.visible()
+            binding.tvDetailedOverview.visible()
+            binding.graphView.visible()
             binding.graphView.redraw()
+        }else{
+            binding.divider24HourGraph.root.gone()
+            binding.tvDetailedOverview.gone()
+            binding.graphView.gone()
         }
 
         if (circadianMidPoint == null) {
@@ -672,10 +623,8 @@ class CircadianAlignmentFragment :
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            it.graphData?.let { it1 ->
-                updateGraph(it1, it.circadianMidPoint)
-                showCircularScheduler(it1, it.isLockedCircularView)
-            }
+            updateGraph(it.graphData, it.circadianMidPoint)
+            showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
@@ -735,17 +684,17 @@ class CircadianAlignmentFragment :
         LOGS.d("ansckaasc: $data")
         // focus window
         binding.lytFocusWindow.apply {
-            if(
+            if (
                 data.circadianMidPoint?.nudge?.title != null &&
                 data.circadianMidPoint.nudge?.description != null
-            ){
+            ) {
                 tvTitle.text = data.circadianMidPoint.nudge?.title
                 tvDesc.text = data.circadianMidPoint.nudge?.description
-            }else{
-                if(data.isLockedCircularView == true){
+            } else {
+                if (data.isLockedCircularView == true) {
                     tvTitle.text = getString(R.string.text_start_fresh_today)
                     tvDesc.text = getString(R.string.text_focus_window_desc1)
-                }else{
+                } else {
                     tvTitle.text = getString(R.string.text_guidance_resumes_soon)
                     tvDesc.text = getString(R.string.text_focus_window_desc2)
                 }
@@ -753,10 +702,11 @@ class CircadianAlignmentFragment :
         }
 
         // lyt Circular State
-        if(data.isLockedCircularView != true) {
+        if (data.isLockedCircularView == true || data.graphData?.sleepData == null){
+            binding.lytCircularState.root.gone()
+        }else{
             val circularStateData = viewModel.getCaffeineState(data)
             binding.lytCircularState.apply {
-                tvPhase.text = circularStateData.first
                 tvCaffeineState.text = circularStateData.second
                 root.visible()
             }
@@ -816,21 +766,27 @@ class CircadianAlignmentFragment :
 
             tvDescType.text = chronotypeData?.description ?: "-"
 
-            tvRetakeQuiz.text = if(viewModel.localDataStore.isCircadianOnboardShown()){
+            tvRetakeQuiz.text = if (viewModel.localDataStore.isCircadianOnboardShown()) {
                 getString(R.string.text_retake_chronotype_quiz)
-            }else{
+            } else {
                 getString(R.string.text_take_quiz)
             }
         }
 
         // Circadian Mid-Point
-        if(data.circadianMidPoint?.chronotype == null){
+        if (data.circadianMidPoint?.chronotype == null) {
             binding.lytSleepMidPoint.tvChorotype.gone()
-        }else{
-            val fullText = getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype)
+        } else {
+            val fullText =
+                getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype)
 
             val spannable = SpannableString(fullText)
-            spannable.setSpan(ForegroundColorSpan("#CCFFFFFF".toColorInt()), 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(
+                ForegroundColorSpan("#CCFFFFFF".toColorInt()),
+                0,
+                11,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
 
             binding.lytSleepMidPoint.tvChorotype.apply {
                 text = spannable

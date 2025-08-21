@@ -2086,10 +2086,10 @@
     <string name="text_dim_light_melatonin_onset">การเริ่มต้นของเมลาโทนินในแสงน้อย</string>
     <string name="text_timezone_change_detected">ตรวจพบการเปลี่ยนแปลงเขตเวลา</string>
     <string name="text_timezone_changed_desc_dash">คุณอาจสังเกตเห็นการเปลี่ยนแปลงข้อมูลเล็กน้อยในวันที่เดินทาง แต่ตัวชี้วัดหลักและแนวโน้มระยะยาวยังคงแม่นยำ</string>
-    <string name="text_what_is_circadian_mid_point">จุดกลางของจังหวะชีวภาพคืออะไร?</string>
+    <string name="text_what_is_circadian_mid_point">จุดกึ่งกลางของจังหวะชีวภาพคืออะไร?</string>
     <string name="text_what_is_circadian_alignment">การจัดเรียงจังหวะชีวภาพคืออะไร?</string>
-    <string name="text_circadian_alignment_quesmark">การจัดเรียงจังหวะชีวภาพ?</string>
-    <string name="text_circadian_mid_point_quesmark">จุดกลางจังหวะชีวภาพ?</string>
+    <string name="text_circadian_alignment_quesmark">การจัดเรียงจังหวะชีวภาพ</string>
+    <string name="text_circadian_mid_point_quesmark">จุดกึ่งกลางของจังหวะชีวภาพ</string>
     <string name="text_we_need_more_data_to_better_know_you">เราต้องการข้อมูลเพิ่มเติมเพื่อรู้จักคุณให้ดีขึ้น</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">เรายังไม่ได้เห็นข้อมูลการนอนล่าสุดเพียงพอที่จะแสดงจังหวะชีวภาพของคุณ การสวมแหวนของคุณอย่างสม่ำเสมอจะช่วยปลดล็อกข้อมูลเชิงลึกที่ปรับให้เหมาะสม</string>
     <string name="text_circadian_hiw_desc_1">การรู้จักการจัดเรียงจังหวะชีวภาพของคุณช่วยให้คุณเพิ่มประสิทธิภาพการทำงานในแต่ละวัน</string>

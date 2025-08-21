@@ -2104,8 +2104,8 @@
     <string name="text_timezone_changed_desc_dash">Вы можете заметить небольшие изменения в данных во время путешествий, но основные показатели и долгосрочные тенденции остаются точными.</string>
     <string name="text_what_is_circadian_mid_point">Что такое циркадный центр?</string>
     <string name="text_what_is_circadian_alignment">Что такое циркадное выравнивание?</string>
-    <string name="text_circadian_alignment_quesmark">Циркадное выравнивание?</string>
-    <string name="text_circadian_mid_point_quesmark">Циркадный центр?</string>
+    <string name="text_circadian_alignment_quesmark">циркадное выравнивание?</string>
+    <string name="text_circadian_mid_point_quesmark">циркадный центр?</string>
     <string name="text_we_need_more_data_to_better_know_you">Нам нужно больше данных, чтобы лучше вас узнать</string>
     <string name="text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights">Мы не видели достаточно свежих данных о сне, чтобы показать ваш циркадный ритм. Постоянное ношение кольца поможет раскрыть персонализированные инсайты.</string>
     <string name="text_circadian_hiw_desc_1">Знание вашего циркадного выравнивания помогает вам максимизировать ежедневную эффективность.</string>

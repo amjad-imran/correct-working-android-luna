@@ -856,6 +856,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
         mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
         mPrefs.edit()?.remove(CIRCADIAN_ONBOARD)?.apply()
+        mPrefs.edit()?.remove(CIRCADIAN_GRAPH_DATA)?.apply()
         mPrefs.edit()?.remove(TIMELINE_ACTIVITIES_DATA)?.apply()
 
         mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()

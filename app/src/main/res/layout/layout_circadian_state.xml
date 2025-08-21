@@ -30,7 +30,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView193"
-        tools:text="Focus Window" />
+        android:text="@string/text_focus_window" />
 
     <View
         android:id="@+id/view41"

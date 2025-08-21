@@ -200,7 +200,7 @@ sealed class OHealthOverview {
         val timeWindow: List<TimeWindow>?=null,
         val title: String?,
         val description: String?,
-        val energyGraph: List<EnergyGraph>?,
+        val energyGraph: List<Float>?,
     ) : OHealthOverview()
 
     object CircadianAlignmentOnboarding : OHealthOverview()

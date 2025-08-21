@@ -469,7 +469,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val lastDestination = navController?.currentDestination
 
-        if (lastDestination?.id == R.id.navigation_oreo_home) {
+        /*if (lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.tvAddSleep.visible()
             binding.lytAddWorkoutSelector.ivRecordSleep.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
@@ -477,7 +477,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         } else {
             binding.lytAddWorkoutSelector.tvAddSleep.gone()
             binding.lytAddWorkoutSelector.ivRecordSleep.gone()
-        }
+        }*/
 
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.ivLogPeriod.visible()
