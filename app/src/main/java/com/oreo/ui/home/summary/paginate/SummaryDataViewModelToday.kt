@@ -1287,11 +1287,13 @@ class SummaryDataViewModelToday @Inject constructor(
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
             getTimelineCard()?.let { userActivities.add(it) }
 
-            getLunaAiCard()?.let {
-                if(userActivities.size > 2){
-                    userActivities.add(2, it)
-                }else{
-                    userActivities.add(it)
+            if(lunaManaged) {
+                getLunaAiCard()?.let {
+                    if (userActivities.size > 2) {
+                        userActivities.add(2, it)
+                    } else {
+                        userActivities.add(it)
+                    }
                 }
             }
 
