@@ -94,6 +94,7 @@ import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
+import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
@@ -328,6 +329,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 )
             )
 
+            R.layout.layout_dash_no_sleep_states_circadian -> HomeRecyclerViewHolder.CircadianLockedNoSleepCardViewHolder(
+                LayoutDashNoSleepStatesCircadianBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_circadian_onboarding_dash -> HomeRecyclerViewHolder.CircadianOnboardingViewHolder(
                 LayoutCircadianOnboardingDashBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
@@ -523,6 +530,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
                 items[position] as OHealthOverview.CircadianAlignment,
             )
 
+            is HomeRecyclerViewHolder.CircadianLockedNoSleepCardViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CircadianLockedOrNoSleepCard,
+            )
+
             is HomeRecyclerViewHolder.AiCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.LunaAiCard)
             }
@@ -588,8 +599,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.StressCard -> R.layout.layout_stress_dash_measure
             //
             is OHealthOverview.CaffeineWindowCalibrating -> R.layout.layout_caffeine_calibrating
+
             is OHealthOverview.CircadianAlignment -> R.layout.layout_dash_circadian
             OHealthOverview.CircadianAlignmentOnboarding -> R.layout.layout_circadian_onboarding_dash
+            is OHealthOverview.CircadianLockedOrNoSleepCard -> R.layout.layout_dash_no_sleep_states_circadian
 
             is OHealthOverview.TimelineDash -> R.layout.layout_timeline_card_dash
         }
@@ -3091,6 +3104,30 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
 
 
+    }
+
+    class CircadianLockedNoSleepCardViewHolder(private val binding: LayoutDashNoSleepStatesCircadianBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.CircadianLockedOrNoSleepCard){
+            val context = binding.root.context
+            if(data.isLocked==false){
+                binding.lytLockedState.gone()
+                binding.lytNoSleepData.visible()
+                binding.textView182.text = context.getString(R.string.text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide)
+            }else{
+                binding.lytNoSleepData.gone()
+                binding.lytLockedState.visible()
+                binding.textView182.text = context.getString(R.string.text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active)
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked)
+            }
+
+            binding.llLytLog.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
+            }
+        }
     }
 
     class CircadianAlignmentViewHolder(private val binding: LayoutDashCircadianBinding) :

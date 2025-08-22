@@ -203,6 +203,7 @@ sealed class OHealthOverview {
         val energyGraph: List<Float>?,
     ) : OHealthOverview()
 
+    class CircadianLockedOrNoSleepCard(val isLocked:Boolean?=true) : OHealthOverview()
     object CircadianAlignmentOnboarding : OHealthOverview()
 
     data class TimelineDash(

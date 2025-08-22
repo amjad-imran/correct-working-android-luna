@@ -51,6 +51,9 @@ data class CircadianGraphData(
 
     val title: String?,
     val description: String?,
+
+    @SerializedName("is_locked")
+    val isLockedCircularView: Boolean?
 )
 
 data class SleepData(
