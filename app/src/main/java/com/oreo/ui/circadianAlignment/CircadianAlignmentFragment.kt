@@ -683,17 +683,16 @@ class CircadianAlignmentFragment :
         LOGS.d("ansckaasc: $data")
         // focus window
         binding.lytFocusWindow.apply {
-            if (
-                data.circadianMidPoint?.nudge?.title != null &&
-                data.circadianMidPoint.nudge?.description != null
-            ) {
-                tvTitle.text = data.circadianMidPoint.nudge?.title
-                tvDesc.text = data.circadianMidPoint.nudge?.description
-            } else {
-                if (data.isLockedCircularView == true) {
-                    tvTitle.text = getString(R.string.text_start_fresh_today)
-                    tvDesc.text = getString(R.string.text_focus_window_desc1)
-                } else {
+            if(data.isLockedCircularView == true){
+                tvTitle.text = getString(R.string.text_start_fresh_today)
+                tvDesc.text = getString(R.string.text_focus_window_desc1)
+            }else{
+                val graphData = data.graphData
+                if(graphData?.startTime != null && graphData.endTime != null &&
+                    graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null){
+                    tvTitle.text = data.circadianMidPoint?.nudge?.title ?: "-"
+                    tvDesc.text = data.circadianMidPoint?.nudge?.description ?: "-"
+                }else{
                     tvTitle.text = getString(R.string.text_guidance_resumes_soon)
                     tvDesc.text = getString(R.string.text_focus_window_desc2)
                 }
