@@ -1383,7 +1383,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return OHealthOverview.TimelineDash(
-            listData = dataList
+            listData = data
         )
     }
 
