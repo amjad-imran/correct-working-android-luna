@@ -31,6 +31,8 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
     val activityListData = MutableLiveData<List<ItemTimelineResponseModel>>()
 
+    private var mealCount = 0
+
     companion object {
         val SLEEP_KEY = "sleep"
         val NAP_KEY = "nap"
@@ -75,10 +77,9 @@ class TimelineScreenDataViewmodel @Inject constructor(
                             } else {
                                 it.timeTracker?.let { dataList ->
                                     val data = mergeHydrationEvents(dataList)
-                                    var mealCount = 0
                                     data.map { obj ->
                                         obj.event?.let {
-                                            getActivityTitleColorAndDesc(obj, ++mealCount)
+                                            getActivityTitleColorAndDesc(obj)
                                         }
                                     }
                                     activityListData.postValue(data)
@@ -91,7 +92,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         }
     }
 
-    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel, mealCount: Int) {
+    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel) {
         data.displayTime = convertTimeFormat(data.startTime)
         when (data.event) {
             SLEEP_KEY -> {
@@ -138,7 +139,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             MEAL_INTAKE_KEY_KEY -> {
                 data.titleColor = "#FFE3B2".toColorInt()
-                data.desc = "Meal $mealCount"
+                data.desc = "Meal ${++mealCount}"
             }
 
             LIGHT_EXPOSURE_KEY -> {
