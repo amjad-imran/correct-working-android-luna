@@ -113,7 +113,7 @@ class CircadianAlignmentViewModel
                             circadianResponseData.postValue(it)
                             prepareCorrectiveActivitiesData(
                                 it.activities,
-                                it.graphData != null
+                                it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
@@ -170,7 +170,7 @@ class CircadianAlignmentViewModel
             desc = resourceProvider.getString(R.string.text_corrective_activities_circadian_desc_4),
             progressBarLytData = ProgressBarLytData(
                 totalProgress = null,
-                currentProgress = 9,
+                currentProgress = 0,
                 img = R.drawable.ic_workout_corrective_activities,
                 txt = "-"
             )

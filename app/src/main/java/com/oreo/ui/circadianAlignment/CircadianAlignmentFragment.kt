@@ -776,7 +776,7 @@ class CircadianAlignmentFragment :
             binding.lytSleepMidPoint.tvChorotype.gone()
         } else {
             val fullText =
-                getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype)
+                getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype).uppercase()
 
             val spannable = SpannableString(fullText)
             spannable.setSpan(
