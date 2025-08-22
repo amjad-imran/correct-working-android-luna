@@ -86,6 +86,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         energyGraph?.let {
             this.energyGraph.addAll(it)
         }
+        scrollOffsetX = calculateInitialScrollOffset()
         invalidate()
     }
 
