@@ -14,10 +14,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBinding>(FragmentTimelineScreenDataBinding::inflate) {
+class TimelineScreenDataFragment :
+    BaseFragment<FragmentTimelineScreenDataBinding>(FragmentTimelineScreenDataBinding::inflate) {
     private val ARGS_DATE = "ARGS_DATE"
 
-    private val viewModel : TimelineScreenDataViewmodel by viewModels()
+    private val viewModel: TimelineScreenDataViewmodel by viewModels()
 
     private val activityListAdapter by lazy {
         ActivitiesListTimelineAdapter()
@@ -37,18 +38,18 @@ class TimelineScreenDataFragment : BaseFragment<FragmentTimelineScreenDataBindin
     }
 
     override fun subscribeObservers() {
-        viewModel.activityListData.observe(this){
-            if(it.isEmpty()){
+        viewModel.activityListData.observe(this) {
+            if (it.isEmpty()) {
                 binding.recyclerView.gone()
                 binding.lytNoActivity.apply {
                     textView195.text = if (viewModel.date.equals(LocalDate.now().toString(), true))
-                                            getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_yet)
-                                        else
-                                            getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_for_this_day)
+                        getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_yet)
+                    else
+                        getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_for_this_day)
                     imageView102.setBackgroundResource(R.drawable.ic_no_activity_timeline)
                     root.visible()
                 }
-            }else{
+            } else {
                 binding.lytNoActivity.root.gone()
                 binding.recyclerView.visible()
                 activityListAdapter.updateDataSet(it)

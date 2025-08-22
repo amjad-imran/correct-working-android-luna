@@ -1308,8 +1308,12 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun getTimelineCard(): OHealthOverview?{
-        val dataList = timeTrackerActivities?.let { ArrayList(it) }
-        dataList?.forEach { data ->
+        val dataList = timeTrackerActivities?: ArrayList()
+        val data = mergeHydrationEvents(dataList)
+
+
+
+        data?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
             when(data.event){
                 SLEEP_KEY -> {
@@ -1333,8 +1337,14 @@ class SummaryDataViewModelToday @Inject constructor(
                 WATER_CONSUMPTION_KEY -> {
                     data.titleColor = "#8EF1C3".toColorInt()
                     data.value?.let {
-                        data.desc = it
-                        data.unit?.let { data.desc += " $it" }
+                        try {
+                            val value = formatMlToLitersOrMl(it.toIntOrNull()?:0)
+                            data.desc = value
+                        }catch (exp: Exception){
+                            exp.printStackTrace()
+                            data.desc = it
+                            data.unit?.let { data.desc += " $it" }
+                        }
                     }
                 }
 
@@ -1376,6 +1386,83 @@ class SummaryDataViewModelToday @Inject constructor(
             listData = dataList
         )
     }
+
+    fun formatMlToLitersOrMl(ml: Int): String {
+        return if (ml >= 1000) {
+            String.format("%.1f liter", ml.toFloat() / 1000)
+        } else {
+            "$ml ml"
+        }
+    }
+
+    private val DATE_FMT = DateTimeFormatter.ISO_LOCAL_DATE
+    private val TIME_FMT = DateTimeFormatter.ISO_LOCAL_TIME
+    private fun startDateTime(startDate: String?, startTime: String?): LocalDateTime =
+        LocalDate.parse(startDate, DATE_FMT).atTime(LocalTime.parse(startTime, TIME_FMT))
+
+
+    fun mergeHydrationEvents(
+        events: List<ItemTimelineResponseModel>,
+        windowMinutes: Long = 30
+    ): List<ItemTimelineResponseModel> {
+        val hydration = events
+            .asSequence()
+            .filter { it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .sortedByDescending { startDateTime(it.startDate, it.startTime) }
+            .toList()
+
+        val nonHydration = events
+            .asSequence()
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .toList()
+
+
+        val merged = mutableListOf<ItemTimelineResponseModel>()
+        var i = 0
+
+        while (i < hydration.size) {
+            val first = hydration[i]
+            val anchor = startDateTime(first.startDate, first.startTime)
+            var j = i
+            var last = first
+            var total = 0.0
+
+            while (j < hydration.size) {
+                val ev = hydration[j]
+                val dt = startDateTime(ev.startDate, ev.startTime)
+
+                if (dt.isAfter(anchor.minusMinutes(windowMinutes))) {
+                    total += ev.value?.toDoubleOrNull() ?: 0.0
+                    last = ev
+                    j++
+                } else {
+                    break
+                }
+            }
+
+
+            val summedValue =
+                if (total % 1.0 == 0.0) total.toLong().toString() else total.toString()
+
+
+            merged.add(
+                first.copy(
+                    startDate = first.startDate,
+                    startTime = first.startTime,
+                    endDate = last.endDate,
+                    endTime = last.endTime,
+                    value = summedValue
+                )
+            )
+
+            i = j
+        }
+
+        merged.addAll(nonHydration)
+
+        return merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }
+    }
+
 
     private fun convertTimeFormat(time: String?): String {
         return try{

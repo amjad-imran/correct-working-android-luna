@@ -3,6 +3,10 @@ package com.noisefit_commans.data.model.timeline
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 data class TimelineScreenResponse(
     val timeTracker: List<ItemTimelineResponseModel>?
