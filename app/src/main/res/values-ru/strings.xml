@@ -2149,4 +2149,23 @@
     <string name="text_definite_evening_type">Определённая «сова»</string>
     <string name="text_you_re_a_true_night_owl">Вы настоящая сова.</string>
 
+    <string name="text_you_are_currently_in">Вы сейчас находитесь в</string>
+    <string name="text_caffeine_window_open">Окно кофеина открыто</string>
+    <string name="text_caffeine_window_closed">Избегайте кофеина</string>
+    <string name="text_no_activity_found">Действия не найдены</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Похоже, вы еще не записали никаких действий</string>
+    <string name="text_start_fresh_today">Начните заново сегодня</string>
+    <string name="text_focus_window_desc1">У нас нет ваших данных о сне за прошлую ночь, но не волнуйтесь. Вы можете быстро записать свой сон сейчас, чтобы разблокировать сегодняшний ритмический гид.</string>
+    <string name="text_focus_window_desc2">Ваше время пробуждения сегодня было вне вашего обычного ритма, поэтому гид по циркадным ритмам временно недоступен. Используйте Luna AI, чтобы узнать, как построить последовательность, которая подходит вам.</string>
+    <string name="text_guidance_resumes_soon">Руководство скоро возобновится</string>
+    <string name="text_take_quiz">Пройдите тест!</string>
+    <string name="text_no_sleep_data">Нет данных о сне</string>
+    <string name="text_chronotype_type_val">ХРОНОТИП: %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Вы в ритме — сохраняйте хорошие привычки сна, чтобы оставаться в гармонии.</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">Последовательное отслеживание сна помогает Luna настраивать ваш циркадный ритм. Носите кольцо ночью, чтобы со временем увидеть значительные улучшения.</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">Подождите – мы ожидаем получения ваших последних данных о сне с кольца. Держите приложение открытым и устройство рядом, чтобы завершить синхронизацию.</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">Похоже, вы не записали никаких действий за этот день</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">У нас нет ваших данных о сне за прошлую ночь, но не волнуйтесь. Вы можете быстро записать свой сон сейчас, чтобы разблокировать сегодняшний ритмический гид.</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Ваш сон за вчера не был записан. Пожалуйста, внесите данные о сне, чтобы увидеть эту карточку активной.</string>
+
 </resources>
