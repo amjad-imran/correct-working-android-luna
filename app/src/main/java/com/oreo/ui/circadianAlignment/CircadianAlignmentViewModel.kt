@@ -257,7 +257,7 @@ class CircadianAlignmentViewModel
                                 img = R.drawable.ic_workout_corrective_activities,
                                 txt = if ((curData.time
                                         ?: 0) <= 0
-                                ) "-" else  curData.goal?.let { "$it mins" } ?: "-"
+                                ) "-" else  curData.goal?.let { "$it kcal" } ?: "-"
                             )
                             showFooter = true
                             logStatus = isLogged

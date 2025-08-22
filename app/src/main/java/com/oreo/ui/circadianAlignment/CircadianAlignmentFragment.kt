@@ -486,38 +486,38 @@ class CircadianAlignmentFragment :
         graphData: CircadianGraphData?,
         circadianMidPoint: CircadianMidPointData?
     ) {
-        if(graphData != null) {
+        if(
+            graphData?.startTime != null && graphData.endTime != null &&
+            graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null
+        ) {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
             binding.graphView.graphStartTime = LocalTime.of(6, 0)
             binding.graphView.graphEndTime = LocalTime.of(23, 0)
 
-            if (graphData.startTime != null && graphData.endTime != null) {
+            val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
+            val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
 
-                val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
-                val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
+            val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
+            var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
 
-                val startTime = LocalTime.of(startDateTime.hour, startDateTime.minute)
-                var endTime = LocalTime.of(endDateTime.hour, endDateTime.minute)
+            val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
 
-                val endDateTimeSleep = LocalDateTime.parse(graphData.sleepData?.wakeTime, formatter)
-
-                if (endDateTimeSleep != null) {
-                    val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
-                    endTime = sleepWakeTime
-                }
-
-                binding.graphView.graphStartTime = startTime
-                binding.graphView.graphEndTime = endTime
-
-                val energyValues = viewModel.getEnergyValues(graphData, true)
-
-
-                binding.graphView.setDataSet(
-                    viewModel.getScrollGraphList(graphData),
-                    energyValues/*graphData.energyGraph*/
-                )
+            if (endDateTimeSleep != null) {
+                val sleepWakeTime = LocalTime.of(endDateTimeSleep.hour, endDateTimeSleep.minute)
+                endTime = sleepWakeTime
             }
+
+            binding.graphView.graphStartTime = startTime
+            binding.graphView.graphEndTime = endTime
+
+            val energyValues = viewModel.getEnergyValues(graphData, true)
+
+
+            binding.graphView.setDataSet(
+                viewModel.getScrollGraphList(graphData),
+                energyValues/*graphData.energyGraph*/
+            )
             binding.divider24HourGraph.root.visible()
             binding.tvDetailedOverview.visible()
             binding.graphView.visible()
