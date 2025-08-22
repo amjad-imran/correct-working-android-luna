@@ -203,7 +203,7 @@ class SummaryDataViewModel @Inject constructor(
 
 
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
-            stateTimeline.postValue(ArrayList())
+//            stateTimeline.postValue(ArrayList())
 
         }
     }
