@@ -76,11 +76,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
                                 it.timeTracker?.let { dataList ->
                                     val data = mergeHydrationEvents(dataList)
                                     var mealCount = 0
-                                    data.sortedByDescending { item ->
-                                    val dateTimeStr = "${item.startDate} ${item.startTime}"
-                                    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                                    dateFormat.parse(dateTimeStr) ?: Date()
-                                    }.map { obj ->
+                                    data.map { obj ->
                                         obj.event?.let {
                                             getActivityTitleColorAndDesc(obj, ++mealCount)
                                         }

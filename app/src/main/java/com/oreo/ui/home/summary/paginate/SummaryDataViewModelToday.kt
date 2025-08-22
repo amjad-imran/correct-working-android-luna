@@ -1311,7 +1311,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val dataList = timeTrackerActivities?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
-
+        var mealCount = 0
 
         data?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
@@ -1358,7 +1358,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 MEAL_INTAKE_KEY_KEY -> {
                     data.titleColor = "#FFE3B2".toColorInt()
-                    data.desc = "Meal 1"
+                    data.desc = "Meal ${++mealCount}"
                 }
 
                 LIGHT_EXPOSURE_KEY -> {
