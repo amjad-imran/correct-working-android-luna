@@ -506,7 +506,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         for (window in timeWindows) {
 
             val startOffset = hoursFromStart(fromFloatHour(window.startHour))
-            val endOffset = hoursFromStart(fromFloatHour(window.endHour))
+            val endOffset = hoursFromEnd(fromFloatHour(window.endHour))
 
             val left = startOffset * hourWidthPx + padding
             val right = endOffset * hourWidthPx - padding
@@ -540,6 +540,13 @@ class Circadian24HourGraph @JvmOverloads constructor(
     }
 
     fun hoursFromStart(time: LocalTime): Float {
+        val minutes = Duration.between(graphStartTime, time).toMinutes()
+        var hours = minutes / 60f
+        if (hours < 0f) hours += 24f
+        return hours
+    }
+
+    fun hoursFromEnd(time: LocalTime): Float {
         val minutes = Duration.between(graphStartTime, time).toMinutes()
         var hours = minutes / 60f
         if (hours <= 0f) hours += 24f
