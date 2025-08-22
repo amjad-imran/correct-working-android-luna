@@ -37,6 +37,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField
+import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
 import java.util.Locale
 
@@ -62,6 +63,12 @@ class BottomSheetCalendar :
 
         viewModel.launchedFrom = arguments?.getString("launchedFrom")
 
+        viewModel.startDate = viewModel.endDate.minusMonths(2).with(TemporalAdjusters.firstDayOfMonth())
+        if(viewModel.launchedFrom.equals("timeline")){
+            hideLegends()
+        }else {
+            viewModel.getCalendarData(viewModel.startDate.toString(), viewModel.endDate.toString())
+        }
         initCalendar()
 
     }
@@ -88,6 +95,15 @@ class BottomSheetCalendar :
                 }
             }
         }
+    }
+
+    private fun hideLegends(){
+        binding.shapeableImageView5.invisible()
+        binding.textView123.invisible()
+        binding.shapeableImageView6.invisible()
+        binding.textView124.invisible()
+        binding.shapeableImageView9.invisible()
+        binding.textView126.invisible()
     }
 
     private fun initCalendar() {

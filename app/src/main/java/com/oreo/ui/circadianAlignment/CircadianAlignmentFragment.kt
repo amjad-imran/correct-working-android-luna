@@ -109,6 +109,7 @@ class CircadianAlignmentFragment :
         val endTime: String,
         val circadianMidpoint: String,
         val avgBefore: String,
+        val avgNow: String,
         /*var nudge: String?*/
     )
 
@@ -142,7 +143,7 @@ class CircadianAlignmentFragment :
                 .plusMinutes((60 - midEndDateTime.minute.toLong()))
 
             val circadianMidPointDateTime =
-                LocalDateTime.parse(circadianResponse.circadianMidpoint, formatter)
+                LocalDateTime.parse(circadianResponse.avgNow, formatter)
             val avgBeforeMidPointDateTime =
                 LocalDateTime.parse(circadianResponse.avgBefore, formatter)
 
@@ -538,6 +539,7 @@ class CircadianAlignmentFragment :
                 circadianMidPoint.endTime ?: "",
                 circadianMidPoint.circadianMidpoint ?: "",
                 circadianMidPoint.avgBefore ?: "",
+                circadianMidPoint.avgNow ?: "",
                 /*null,*/
             )
             setCircadianMidPointGraph(circadianMidPointResponse)
@@ -776,7 +778,7 @@ class CircadianAlignmentFragment :
             binding.lytSleepMidPoint.tvChorotype.gone()
         } else {
             val fullText =
-                getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype)
+                getString(R.string.text_chronotype_type_val, data.circadianMidPoint.chronotype).uppercase()
 
             val spannable = SpannableString(fullText)
             spannable.setSpan(
