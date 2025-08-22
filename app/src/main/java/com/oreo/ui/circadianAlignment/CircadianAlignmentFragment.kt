@@ -99,10 +99,9 @@ class CircadianAlignmentFragment :
             binding.lytCircularView.lytUnlockedState.lytNoSleepData
                 .setVisibilityByCondition(graphData?.sleepData == null)
             binding.lytCircularView.lytUnlockedState.ivEllipse.setVisibilityByCondition(graphData?.sleepData == null)
+
+            binding.lytCircularView.lytUnlockedState.root.visible()
         }
-
-
-        binding.lytCircularView.lytUnlockedState.root.visible()
     }
 
     data class CircadianResponse(

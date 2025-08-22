@@ -12,10 +12,12 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -71,9 +73,14 @@ class TimelineScreenDataViewmodel @Inject constructor(
                                 activityListData.postValue(ArrayList())
                             }else{
                                 it.timeTracker?.let { dataList ->
-                                    dataList.map { obj ->
+                                var mealCount = 0
+                                dataList.sortedByDescending { item ->
+                                    val dateTimeStr = "${item.startDate} ${item.startTime}"
+                                    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                                    dateFormat.parse(dateTimeStr) ?: Date()
+                                }.map { obj ->
                                         obj.event?.let {
-                                            getActivityTitleColorAndDesc(obj)
+                                            getActivityTitleColorAndDesc(obj, ++mealCount)
                                         }
                                     }
                                     activityListData.postValue(ArrayList(dataList))
@@ -86,7 +93,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         }
     }
 
-    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel) {
+    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel, mealCount: Int) {
         data.displayTime = convertTimeFormat(data.startTime)
         when(data.event){
             SLEEP_KEY -> {
@@ -125,7 +132,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             MEAL_INTAKE_KEY_KEY -> {
                 data.titleColor = "#FFE3B2".toColorInt()
-                data.desc = "Meal 1"
+                data.desc = "Meal $mealCount"
             }
 
             LIGHT_EXPOSURE_KEY -> {
