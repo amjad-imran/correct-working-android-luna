@@ -2247,4 +2247,23 @@ onjour, Luna"</string>
     <string name="text_definite_evening_type">Type définitivement nocturne</string>
     <string name="text_you_re_a_true_night_owl">Vous êtes un véritable oiseau de nuit.</string>
 
+    <string name="text_you_are_currently_in">Vous êtes actuellement dans</string>
+    <string name="text_caffeine_window_open">Fenêtre de caféine ouverte</string>
+    <string name="text_caffeine_window_closed">Évitez la caféine</string>
+    <string name="text_no_activity_found">Aucune activité trouvée</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Il semble que vous n’ayez pas encore enregistré d’activités</string>
+    <string name="text_start_fresh_today">Repartir à zéro aujourd’hui</string>
+    <string name="text_focus_window_desc1">Nous n’avons pas vos données de sommeil de la nuit dernière, mais pas d’inquiétude. Vous pouvez rapidement enregistrer votre sommeil maintenant pour débloquer le guide du rythme d’aujourd’hui.</string>
+    <string name="text_focus_window_desc2">Votre heure de réveil aujourd’hui était en dehors de votre rythme habituel, donc le guide du rythme circadien est temporairement indisponible. Utilisez Luna AI pour apprendre à construire une constance qui vous convient.</string>
+    <string name="text_guidance_resumes_soon">Les conseils reprennent bientôt</string>
+    <string name="text_take_quiz">Faites le quiz !</string>
+    <string name="text_no_sleep_data">Pas de données de sommeil</string>
+    <string name="text_chronotype_type_val">CHRONOTYPE : %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Vous êtes en phase — maintenez de bonnes habitudes de sommeil pour rester aligné.</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">Suivre votre sommeil régulièrement aide Luna à affiner votre rythme circadien. Portez votre bague pendant la nuit pour constater des améliorations significatives au fil du temps.</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">Patientez – nous attendons vos dernières données de sommeil de la bague. Gardez l’application ouverte et votre appareil à proximité pour terminer la synchronisation.</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">Il semble que vous n’ayez pas enregistré d’activités pour ce jour</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">Nous n’avons pas vos données de sommeil de la nuit dernière, mais pas d’inquiétude. Vous pouvez rapidement enregistrer votre sommeil maintenant pour débloquer le guide du rythme d’aujourd’hui.</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Votre sommeil d’hier n’a pas été enregistré. Veuillez enregistrer vos données de sommeil pour activer cette carte.</string>
+
 </resources>

@@ -2127,4 +2127,23 @@
     <string name="text_definite_evening_type">Definitely avondmens</string>
     <string name="text_you_re_a_true_night_owl">Je bent een echte nachtbraker.</string>
 
+    <string name="text_you_are_currently_in">Je bevindt je momenteel in</string>
+    <string name="text_caffeine_window_open">Cafeïnevenster geopend</string>
+    <string name="text_caffeine_window_closed">Vermijd cafeïne</string>
+    <string name="text_no_activity_found">Geen activiteit gevonden</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Het lijkt erop dat je nog geen activiteiten hebt geregistreerd</string>
+    <string name="text_start_fresh_today">Begin vandaag opnieuw</string>
+    <string name="text_focus_window_desc1">We hebben je slaapgegevens van gisteravond niet, maar geen zorgen. Je kunt je slaap nu snel registreren om de ritmegids van vandaag te ontgrendelen.</string>
+    <string name="text_focus_window_desc2">Je ontwaaktijd van vandaag viel buiten je gebruikelijke ritme, dus de Circadiane Ritmegids is tijdelijk niet beschikbaar. Gebruik Luna AI om te leren hoe je consistentie kunt opbouwen die bij je past.</string>
+    <string name="text_guidance_resumes_soon">Begeleiding hervat binnenkort</string>
+    <string name="text_take_quiz">Doe de quiz!</string>
+    <string name="text_no_sleep_data">Geen slaapgegevens</string>
+    <string name="text_chronotype_type_val">CHRONOTYPE: %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Je bent in sync — houd je goede slaapgewoonten vol om afgestemd te blijven.</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">Door je slaap consequent bij te houden, helpt Luna je circadiane ritme te verfijnen. Draag je ring ’s nachts om na verloop van tijd betekenisvolle verbeteringen te zien.</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">Even geduld – we wachten op je nieuwste slaapgegevens van de ring. Houd de app open en je apparaat in de buurt om de synchronisatie te voltooien.</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">Het lijkt erop dat je voor deze dag geen activiteiten hebt geregistreerd</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">We hebben je slaapgegevens van gisteravond niet, maar geen zorgen. Je kunt je slaap nu snel registreren om de ritmegids van vandaag te ontgrendelen.</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Je slaap van gisteren is niet geregistreerd. Registreer je slaapgegevens om deze kaart actief te zien.</string>
+
 </resources>

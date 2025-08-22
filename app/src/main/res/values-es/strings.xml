@@ -2098,4 +2098,23 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_definite_evening_type">Definitivamente nocturno</string>
     <string name="text_you_re_a_true_night_owl">Eres un verdadero noctámbulo.</string>
 
+    <string name="text_you_are_currently_in">Actualmente estás en</string>
+    <string name="text_caffeine_window_open">Ventana de cafeína abierta</string>
+    <string name="text_caffeine_window_closed">Evita la cafeína</string>
+    <string name="text_no_activity_found">No se encontró actividad</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Parece que aún no has registrado ninguna actividad</string>
+    <string name="text_start_fresh_today">Comienza de nuevo hoy</string>
+    <string name="text_focus_window_desc1">No tenemos tus datos de sueño de anoche, pero no te preocupes. Puedes registrar rápidamente tu sueño ahora para desbloquear la guía de ritmo de hoy.</string>
+    <string name="text_focus_window_desc2">Tu hora de despertar de hoy estuvo fuera de tu ritmo habitual, por lo que la Guía de Ritmo Circadiano no está disponible temporalmente. Usa Luna AI para aprender a construir consistencia que funcione para ti.</string>
+    <string name="text_guidance_resumes_soon">La orientación se reanudará pronto</string>
+    <string name="text_take_quiz">¡Haz el cuestionario!</string>
+    <string name="text_no_sleep_data">Sin datos de sueño</string>
+    <string name="text_chronotype_type_val">CRONOTIPO: %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Estás en sintonía — mantén los buenos hábitos de sueño para seguir alineado.</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">Registrar tu sueño de manera consistente ayuda a Luna a afinar tu ritmo circadiano. Usa tu anillo durante la noche para ver mejoras significativas con el tiempo.</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">Espera un momento: estamos esperando tus últimos datos de sueño del anillo. Mantén la aplicación abierta y tu dispositivo cerca para completar la sincronización.</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">Parece que no has registrado ninguna actividad para este día</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">No tenemos tus datos de sueño de anoche, pero no te preocupes. Puedes registrar rápidamente tu sueño ahora para desbloquear la guía de ritmo de hoy.</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Tu sueño de ayer no ha sido registrado. Por favor, registra tus datos de sueño para ver esta tarjeta activa.</string>
+
 </resources>
