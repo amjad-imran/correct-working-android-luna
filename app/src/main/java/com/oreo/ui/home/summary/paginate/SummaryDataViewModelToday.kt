@@ -2286,7 +2286,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             impact = impactData?.sleepScore
                         )
                     }
-                } else {
+                }
+                /*else {
                     if ((sleepModel.totalSleep ?: 0) > 0) {
                         healthData.sleep?.let {
                             return OHealthOverview.Sleep(
@@ -2300,7 +2301,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             )
                         }
                     }
-                }
+                }*/
 
             }
         }
