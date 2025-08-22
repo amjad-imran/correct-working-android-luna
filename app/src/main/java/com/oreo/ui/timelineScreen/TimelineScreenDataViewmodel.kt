@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -24,13 +25,13 @@ import javax.inject.Inject
 @HiltViewModel
 class TimelineScreenDataViewmodel @Inject constructor(
     private val userRepository: UserRepository,
-): BaseViewModel() {
+) : BaseViewModel() {
 
     var date: String? = null
 
-    val activityListData = MutableLiveData<ArrayList<ItemTimelineResponseModel>>()
+    val activityListData = MutableLiveData<List<ItemTimelineResponseModel>>()
 
-    companion object{
+    companion object {
         val SLEEP_KEY = "sleep"
         val NAP_KEY = "nap"
         val WORKOUT_KEY = "workout"
@@ -42,9 +43,9 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val ACTIVITY_KEY = "activity"
     }
 
-    fun getCurrDayActivities(date: String){
+    fun getCurrDayActivities(date: String) {
         viewModelScope.launch {
-            userRepository.getCurrDayTimelineActivitiesData(date).collect{ resource ->
+            userRepository.getCurrDayTimelineActivitiesData(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -69,21 +70,22 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if(it.timeTracker.isNullOrEmpty()){
+                            if (it.timeTracker.isNullOrEmpty()) {
                                 activityListData.postValue(ArrayList())
-                            }else{
+                            } else {
                                 it.timeTracker?.let { dataList ->
-                                var mealCount = 0
-                                dataList.sortedByDescending { item ->
+                                    val data = mergeHydrationEvents(dataList)
+                                    var mealCount = 0
+                                    data.sortedByDescending { item ->
                                     val dateTimeStr = "${item.startDate} ${item.startTime}"
                                     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                                     dateFormat.parse(dateTimeStr) ?: Date()
-                                }.map { obj ->
+                                    }.map { obj ->
                                         obj.event?.let {
                                             getActivityTitleColorAndDesc(obj, ++mealCount)
                                         }
                                     }
-                                    activityListData.postValue(ArrayList(dataList))
+                                    activityListData.postValue(data)
                                 }
                             }
                         }
@@ -95,15 +97,17 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
     private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel, mealCount: Int) {
         data.displayTime = convertTimeFormat(data.startTime)
-        when(data.event){
+        when (data.event) {
             SLEEP_KEY -> {
                 data.titleColor = "#A8A8ED".toColorInt()
-                data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                data.desc =
+                    getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
             }
 
             NAP_KEY -> {
                 data.titleColor = "#A8A8ED".toColorInt()
-                data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                data.desc =
+                    getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
             }
 
             WORKOUT_KEY -> {
@@ -117,8 +121,14 @@ class TimelineScreenDataViewmodel @Inject constructor(
             WATER_CONSUMPTION_KEY -> {
                 data.titleColor = "#8EF1C3".toColorInt()
                 data.value?.let {
-                    data.desc = it
-                    data.unit?.let { data.desc += " $it" }
+                    try {
+                        val value = formatMlToLitersOrMl(it.toIntOrNull()?:0)
+                        data.desc = value
+                    }catch (exp: Exception){
+                        exp.printStackTrace()
+                        data.desc = it
+                        data.unit?.let { data.desc += " $it" }
+                    }
                 }
             }
 
@@ -138,7 +148,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
             LIGHT_EXPOSURE_KEY -> {
                 data.titleColor = "#FFE1CF".toColorInt()
                 data.value?.let {
-                    data.desc = "${it.toInt()/60} minutes"
+                    data.desc = "${it.toInt() / 60} minutes"
                     /*data.unit?.let { data.desc += " $it" }*/
                 }
             }
@@ -156,14 +166,22 @@ class TimelineScreenDataViewmodel @Inject constructor(
         }
     }
 
+    fun formatMlToLitersOrMl(ml: Int): String {
+        return if (ml >= 1000) {
+            String.format("%.1f liter", ml.toFloat() / 1000)
+        } else {
+            "$ml ml"
+        }
+    }
+
     private fun convertTimeFormat(time: String?): String {
-        return try{
+        return try {
             val originalFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val timeObj = LocalTime.parse(time, originalFormatter)
             val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
             timeObj.format(newFormatter).uppercase(Locale.getDefault())
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
             "-"
         }
@@ -180,8 +198,14 @@ class TimelineScreenDataViewmodel @Inject constructor(
             val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
 
             // Parse the start and end dates into LocalDate objects
-            val startDateObj = LocalDateTime.parse("$startDate $startTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val endDateObj = LocalDateTime.parse("$endDate $endTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val startDateObj = LocalDateTime.parse(
+                "$startDate $startTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            val endDateObj = LocalDateTime.parse(
+                "$endDate $endTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
 
             // If the end time is before the start time, adjust the end time to the next day
             val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
@@ -200,12 +224,80 @@ class TimelineScreenDataViewmodel @Inject constructor(
             val formattedEndTime = adjustedEndDateObj.format(timeFormatter12Hour)
 
             // Return the formatted result
-            val formattedTime = "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
+            val formattedTime =
+                "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
             "$hours hr $minutes m; $formattedTime"
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
             "-"
         }
     }
 
+    private val DATE_FMT = DateTimeFormatter.ISO_LOCAL_DATE
+    private val TIME_FMT = DateTimeFormatter.ISO_LOCAL_TIME
+    private fun startDateTime(startDate: String?, startTime: String?): LocalDateTime =
+        LocalDate.parse(startDate, DATE_FMT).atTime(LocalTime.parse(startTime, TIME_FMT))
+
+
+    fun mergeHydrationEvents(
+        events: List<ItemTimelineResponseModel>,
+        windowMinutes: Long = 30
+    ): List<ItemTimelineResponseModel> {
+        val hydration = events
+            .asSequence()
+            .filter { it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .sortedByDescending { startDateTime(it.startDate, it.startTime) }
+            .toList()
+
+        val nonHydration = events
+            .asSequence()
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .toList()
+
+
+        val merged = mutableListOf<ItemTimelineResponseModel>()
+        var i = 0
+
+        while (i < hydration.size) {
+            val first = hydration[i]
+            val anchor = startDateTime(first.startDate, first.startTime)
+            var j = i
+            var last = first
+            var total = 0.0
+
+            while (j < hydration.size) {
+                val ev = hydration[j]
+                val dt = startDateTime(ev.startDate, ev.startTime)
+
+                if (dt.isAfter(anchor.minusMinutes(windowMinutes))) {
+                    total += ev.value?.toDoubleOrNull() ?: 0.0
+                    last = ev
+                    j++
+                } else {
+                    break
+                }
+            }
+
+
+            val summedValue =
+                if (total % 1.0 == 0.0) total.toLong().toString() else total.toString()
+
+
+            merged.add(
+                first.copy(
+                    startDate = first.startDate,
+                    startTime = first.startTime,
+                    endDate = last.endDate,
+                    endTime = last.endTime,
+                    value = summedValue
+                )
+            )
+
+            i = j
+        }
+
+        merged.addAll(nonHydration)
+
+        return merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }
+    }
 }
