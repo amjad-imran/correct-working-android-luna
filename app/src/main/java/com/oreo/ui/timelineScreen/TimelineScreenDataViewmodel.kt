@@ -74,12 +74,15 @@ class TimelineScreenDataViewmodel @Inject constructor(
                                 activityListData.postValue(ArrayList())
                             } else {
                                 it.timeTracker?.let { dataList ->
-                                    var mealCount = 0
                                     val data = mergeHydrationEvents(dataList)
+                                    var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
+
                                     data.map { obj ->
                                         obj.event?.let {
-                                            if(it.equals(MEAL_INTAKE_KEY_KEY)) mealCount++
                                             getActivityTitleColorAndDesc(obj, mealCount)
+                                            if (it.equals(MEAL_INTAKE_KEY_KEY)) {
+                                                mealCount--
+                                            }
                                         }
                                     }
                                     activityListData.postValue(data)

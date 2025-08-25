@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.remove
 
 @HiltViewModel
 class AddActivityTimelineSharedViewModel @Inject constructor(
@@ -38,55 +39,83 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
         navigateUp.postValue(Event(true))
     }
 
-    fun getAllActivityListMap() = arrayListOf(
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_caffeine_intake),
-            type = AddActivityItemsEnum.CAFFEINE,
-            titleColor = "#EEB69F".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_meal_intake),
-            type = AddActivityItemsEnum.MEAL,
-            titleColor = "#D8D3A3".toColorInt()
-        ), AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_light_exposure),
-            type = AddActivityItemsEnum.LIGHT_EXPOSURE,
-            titleColor = "#F1C48E".toColorInt()
-        ),
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_workout),
-            type = AddActivityItemsEnum.WORKOUT,
-            titleColor = "#8ED3F1".toColorInt()
-        ),
+    fun getAllActivityListMap(): List<AddActivityListTimelineModel> {
+        val list = ArrayList<AddActivityListTimelineModel>()
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_caffeine_intake),
+                type = AddActivityItemsEnum.CAFFEINE,
+                titleColor = "#EEB69F".toColorInt()
+            )
+        )
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_meal_intake),
+                type = AddActivityItemsEnum.MEAL,
+                titleColor = "#D8D3A3".toColorInt()
+            )
+        )
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_light_exposure),
+                type = AddActivityItemsEnum.LIGHT_EXPOSURE,
+                titleColor = "#F1C48E".toColorInt()
+            )
+        )
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_workout),
+                type = AddActivityItemsEnum.WORKOUT,
+                titleColor = "#8ED3F1".toColorInt()
+            )
+        )
+
         /*AddActivityListTimelineModel(
             name = getString(R.string.text_water_consumption),
             type = AddActivityItemsEnum.WATER,
             titleColor = "#8EF1C3".toColorInt()
         ),*/
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_period).capitalizeWords(),
-            type = AddActivityItemsEnum.CYCLE_LOG,
-            titleColor = "#F18EBD".toColorInt()
-        ),
-       /* AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_nap),
-            type = AddActivityItemsEnum.NAP,
-            titleColor = "#A8A8ED".toColorInt()
-        ),*/
-        AddActivityListTimelineModel(
-            name = resourcesProvider.getString(R.string.text_sleep),
-            type = AddActivityItemsEnum.SLEEP,
-            titleColor = "#C5A8ED".toColorInt()
-        ),
-    )
+        val user = localDataStore.getUser()
+        if (user?.userInfo?.gender.equals("female", true)) {
+            list.add(
+                AddActivityListTimelineModel(
+                    name = resourcesProvider.getString(R.string.text_period_symptom),
+                    type = AddActivityItemsEnum.CYCLE_LOG,
+                    titleColor = "#F18EBD".toColorInt()
+                )
+            )
+        }
+
+        /* AddActivityListTimelineModel(
+             name = resourcesProvider.getString(R.string.text_nap),
+             type = AddActivityItemsEnum.NAP,
+             titleColor = "#A8A8ED".toColorInt()
+         ),*/
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_sleep),
+                type = AddActivityItemsEnum.SLEEP,
+                titleColor = "#C5A8ED".toColorInt()
+            )
+        )
+        return list
+
+    }
 
     fun showDropdownDialog(anchorView: View, currentItem: AddActivityItemsEnum) {
+
+        val filteredList = (getAllActivityListMap() as ArrayList).apply {
+            remove(this.find { it.type == currentItem })
+        }
+
         val dropdownDialog = DropdownDialog(
             context = anchorView.context,
             anchorView = anchorView,
-            items = getAllActivityListMap().apply {
-                remove(this.find { it.type == currentItem })
-            }
+            items = filteredList
         ) { selectedItem ->
             loadFragmentByType(selectedItem)
         }

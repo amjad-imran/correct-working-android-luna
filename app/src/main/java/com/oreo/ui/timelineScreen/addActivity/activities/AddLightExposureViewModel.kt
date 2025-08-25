@@ -62,7 +62,7 @@ class AddLightExposureViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-
+                                        logLightExposure(startTime, duration)
                                     }
 
                                     override fun no() {}

@@ -42,7 +42,7 @@ class AddCaffeineViewModel @Inject constructor(
                     this.add(caffeineObject)
                 })
             }
-            userRepository.submitLogCaffeineTimelineData(reqData).collect{ resource ->
+            userRepository.submitLogCaffeineTimelineData(reqData).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -57,7 +57,7 @@ class AddCaffeineViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-
+                                        logCaffeineValue(localTime, quantity)
                                     }
 
                                     override fun no() {}
