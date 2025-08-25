@@ -625,7 +625,7 @@ class CircadianAlignmentFragment :
             binding.mainScrollView.visible()
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            updateGraph(it.graphData, it.circadianMidPoint)
+            updateGraph(it.graphData, it.graphData?.circadianMidPointData)
             showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 
@@ -706,10 +706,11 @@ class CircadianAlignmentFragment :
         if (data.isLockedCircularView == true || data.graphData?.sleepData == null){
             binding.lytCircularState.root.gone()
         }else{
-            val circularStateData = viewModel.getCaffeineState(data)
-            binding.lytCircularState.apply {
-                tvCaffeineState.text = circularStateData.second
-                root.visible()
+            viewModel.getCaffeineState(data)?.let {
+                binding.lytCircularState.apply {
+                    tvCaffeineState.text = it
+                    root.visible()
+                }
             }
         }
 
