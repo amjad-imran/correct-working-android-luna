@@ -41,7 +41,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     var isScrollLocked = false
 
-    private val hourWidthPx = 68f.dpToPixel()
+    private val hourWidthPx = 80f.dpToPixel()
 
     private val bottomPaddingForLabels = 16f.dpToPixel()
     private val topPadding = 30f
