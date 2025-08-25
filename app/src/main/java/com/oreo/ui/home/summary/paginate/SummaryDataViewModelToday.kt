@@ -1724,9 +1724,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
         circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
+
+            val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                .plusMinutes(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm"))
+
             data.add(
                 TimeWindow(
-                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(startTime),
                     getCircadianTimeFloatValue(it.endTime),
                     "#B2E6EE".toColorInt(),
                     "#FFE0BC".toColorInt(),

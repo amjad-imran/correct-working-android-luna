@@ -74,15 +74,15 @@ class CircadianAlignmentViewModel
 
     fun initData() {
 
-       /* val data =
-            "{ \"activities\": [{ \"type\": \"light_exposure\", \"goal\": 120, \"time\": -14651, \"status\": false }, { \"type\": \"meal_window\", \"time\": 19548, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": 5148, \"status\": false }, { \"type\": \"workout\", \"time\": 14148, \"goal\": 390, \"status\": false, \"progress\": 28, \"active_calories\": 28, \"total_calories\": 775 }, { \"type\": \"daily_steps\", \"goal\": 5000, \"time\": 14148, \"progress\": 0 }], \"activity_monitor\": [{ \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" }], \"circadian_mid_point\": { \"start_time\": \"2025-08-22 04:00:00\", \"end_time\": \"2025-08-22 06:00:00\", \"circadian_midpoint\": \"2025-08-22 23:58:30\", \"avg_now\": \"2025-08-22 04:27:48\", \"avg_before\": \"2025-08-22 05:35:07\", \"chronotype\": \"Moderately evening type\" }, \"chronotype\": { \"type\": \"Moderately evening type\", \"introduction\": \"You’re naturally inclined to be a night owl.\", \"description\": \"Your creativity and focus peak in the afternoon or early evening. Plan for a gentler start and build momentum into your afternoon routines.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"04:20\", \"end_time\": \"10:20\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"13:50\", \"end_time\": \"16:50\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"16:50\", \"end_time\": \"18:20\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"02:20\", \"end_time\": \"02:50\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"02:50\", \"end_time\": \"04:50\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"04:50\", \"end_time\": \"07:50\", \"peak_time\": \"06:20\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"09:50\", \"end_time\": \"12:50\", \"peak_time\": \"11:20\" }, \"sleep_window_opens_graph\": { \"start_time\": \"18:20\" }, \"gh_pulse_window_graph\": { \"start_time\": \"23:50\" }, \"activity_window_graph\": { \"start_time\": \"02:20\", \"end_time\": \"12:50\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-22 04:00:00\", \"end_time\": \"2025-08-22 06:00:00\", \"circadian_midpoint\": \"2025-08-22 23:58:30\", \"avg_now\": \"2025-08-22 04:27:48\", \"avg_before\": \"2025-08-22 05:35:07\", \"chronotype\": \"Moderately evening type\" }, \"energy_graph\": [{ \"start_time\": \"02:20\", \"energy\": 0 }, { \"start_time\": \"03:20\", \"energy\": 0.011 }, { \"start_time\": \"04:20\", \"energy\": 0.135 }, { \"start_time\": \"05:20\", \"energy\": 0.607 }, { \"start_time\": \"06:20\", \"energy\": 1.004 }, { \"start_time\": \"07:20\", \"energy\": 0.639 }, { \"start_time\": \"08:20\", \"energy\": 0.23 }, { \"start_time\": \"09:20\", \"energy\": 0.181 }, { \"start_time\": \"10:20\", \"energy\": 0.397 }, { \"start_time\": \"11:20\", \"energy\": 0.604 }, { \"start_time\": \"12:20\", \"energy\": 0.364 }, { \"start_time\": \"13:20\", \"energy\": 0.081 }, { \"start_time\": \"14:20\", \"energy\": 0.007 }, { \"start_time\": \"15:20\", \"energy\": 0 }, { \"start_time\": \"16:20\", \"energy\": 0 }, { \"start_time\": \"17:20\", \"energy\": 0 }, { \"start_time\": \"18:20\", \"energy\": 0 }], \"sleep_data\": { \"bed_time\": \"2025-08-21 21:37:00\", \"wake_time\": \"2025-08-22 02:20:00\" }, \"start_time\": \"2025-08-22 02:20:00\", \"end_time\": \"2025-08-22 18:20:00\" }, \"is_locked\": true }"
+        val data =
+            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": 7267, \"status\": true }, { \"type\": \"meal_window\", \"time\": 41467, \"status\": true }, { \"type\": \"caffeine_window\", \"time\": 27067, \"status\": true }, { \"type\": \"workout\", \"time\": 36067, \"goal\": 440, \"status\": false, \"progress\": 836, \"active_calories\": 836, \"total_calories\": 1632 }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 36067, \"progress\": 1641 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"done\" }, { \"type\": \"caffeine_window\", \"status\": \"done\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"chronotype\": { \"type\": \"Moderately evening type\", \"introduction\": \"You’re naturally inclined to be a night owl.\", \"description\": \"Your creativity and focus peak in the afternoon or early evening. Plan for a gentler start and build momentum into your afternoon routines.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:40\", \"end_time\": \"15:40\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"18:10\", \"end_time\": \"21:10\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"21:10\", \"end_time\": \"23:40\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"08:10\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"09:10\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"09:10\", \"end_time\": \"12:10\", \"peak_time\": \"10:40\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"14:10\", \"end_time\": \"17:10\", \"peak_time\": \"15:40\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:40\" }, \"gh_pulse_window_graph\": { \"start_time\": \"04:10\" }, \"activity_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"17:10\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-25 00:45:00\", \"end_time\": \"2025-08-25 03:15:00\", \"circadian_midpoint\": \"2025-08-25 04:27:00\", \"avg_now\": \"2025-08-25 04:21:42\", \"avg_before\": \"2025-08-25 04:20:22\", \"chronotype\": \"Moderately morning type\", \"nudge\": { \"title\": \"Stay Active During Your Focus Window\", \"description\": \"Incorporate light physical activities like walking or stretching during your focus window to boost a\" } }, \"energy_graph\": [ { \"start_time\": \"07:40\", \"energy\": 0.011 }, { \"start_time\": \"08:40\", \"energy\": 0.135 }, { \"start_time\": \"09:40\", \"energy\": 0.607 }, { \"start_time\": \"10:40\", \"energy\": 1.004 }, { \"start_time\": \"11:40\", \"energy\": 0.639 }, { \"start_time\": \"12:40\", \"energy\": 0.23 }, { \"start_time\": \"13:40\", \"energy\": 0.181 }, { \"start_time\": \"14:40\", \"energy\": 0.397 }, { \"start_time\": \"15:40\", \"energy\": 0.604 }, { \"start_time\": \"16:40\", \"energy\": 0.364 }, { \"start_time\": \"17:40\", \"energy\": 0.081 }, { \"start_time\": \"18:40\", \"energy\": 0.007 }, { \"start_time\": \"19:40\", \"energy\": 0 }, { \"start_time\": \"20:40\", \"energy\": 0 }, { \"start_time\": \"21:40\", \"energy\": 0 }, { \"start_time\": \"22:40\", \"energy\": 0 }, { \"start_time\": \"23:40\", \"energy\": 0 } ], \"sleep_data\": { \"bed_time\": \"2025-08-25 23:40:00\", \"wake_time\": \"2025-08-25 07:40:00\" }, \"start_time\": \"2025-08-25 07:40:00\", \"end_time\": \"2025-08-25 23:40:00\" }, \"is_locked\": false }"
         circadianResponseData.postValue(
             Gson().fromJson(
                 data,
                 CircadianResponseModel::class.java
             )
         )
-        return*/
+        return
 
         viewModelScope.launch {
             userRepository.getCircadianData().collect { resource ->
@@ -410,7 +410,7 @@ class CircadianAlignmentViewModel
                     "#D6A176".toColorInt(),
                     "#FFFFFF".toColorInt(),
                     rowIndex = 1,
-                    label = resourceProvider.getString(R.string.text_caffeine_window_open)//todo change to string
+                    label = resourceProvider.getString(R.string.text_caffeine_window_open)
                 )
             )
             circadianGraphData?.sleepData?.let { sleepTime->
@@ -474,9 +474,15 @@ class CircadianAlignmentViewModel
 
         circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
+
+
+            val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                .plusMinutes(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm"))
+
             data.add(
                 TimeWindow(
-                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(startTime),
                     getCircadianTimeFloatValue(it.endTime),
                     "#B2E6EE".toColorInt(),
                     "#FFE0BC".toColorInt(),
