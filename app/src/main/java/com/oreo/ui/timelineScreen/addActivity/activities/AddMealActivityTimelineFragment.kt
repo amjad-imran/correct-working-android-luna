@@ -102,7 +102,6 @@ class AddMealActivityTimelineFragment :
         }
         viewModel.onAddSuccess.observe(this){
             it.getContent()?.let {
-                sharedViewModel.clearTodayData()
                 sharedViewModel.navigateUp()
             }
         }

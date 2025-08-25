@@ -8,7 +8,7 @@ data class BaseApiResponse<T>(
     @SerializedName("data")
     var data: T? = null,
     @SerializedName("error")
-    val error:ErrorMessage? = null
+    val error:ErrorMessage? = null,
 )
 
 data class ErrorMessage(
