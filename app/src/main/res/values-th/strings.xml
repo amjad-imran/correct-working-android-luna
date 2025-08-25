@@ -2116,12 +2116,12 @@
     <string name="text_water_consumption">การบริโภคน้ำ</string>
     <string name="text_period_started">เริ่มรอบเดือน</string>
     <string name="text_add_logs">เพิ่มบันทึก</string>
-    <string name="text_meal_1">มื้อ 1</string>
-    <string name="text_intake_1">การบริโภค 1</string>
+    <string name="text_meal_1">มื้อ</string>
+    <string name="text_intake_1">การบริโภค</string>
     <string name="text_quantity_consumed">ปริมาณที่บริโภค</string>
     <string name="text_category">หมวดหมู่</string>
     <string name="text_message_circadian">ร่างกายของคุณทำงานตามจังหวะธรรมชาติ 24 ชั่วโมง การปรับแสง คาเฟอีน และการนอนตามจังหวะนี้จะช่วยให้คุณรู้สึกกระปรี้กระเป่าและมีสมาธิมากขึ้น</string>
-    <string name="text_log_1">บันทึก 1</string>
+    <string name="text_log_1">บันทึก</string>
     <string name="text_definite_morning_type">แน่นอนว่าเป็นคนตื่นเช้า</string>
     <string name="text_you_re_an_early_riser_by_nature">โดยธรรมชาติแล้วคุณเป็นคนตื่นเช้า</string>
     <string name="text_moderate_morning_type">ประเภทเช้าแบบปานกลาง</string>

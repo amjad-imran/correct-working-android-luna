@@ -216,7 +216,7 @@ class SummaryDataFragment :
             navigate(R.id.timelineScreenFragment)
         }
         binding.lytTimeline.btnLogAnActivity.setOnClickListener {
-            navigate(R.id.addActivityTimelineFragment)
+            navigate(R.id.addActivityTimelineFragment,bundleOf("showTimeline" to true, "key" to null))
         }
     }
 

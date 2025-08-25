@@ -2132,12 +2132,12 @@
     <string name="text_water_consumption">Потребление воды</string>
     <string name="text_period_started">Начало цикла</string>
     <string name="text_add_logs">Добавить записи</string>
-    <string name="text_meal_1">ПРИЁМ ПИЩИ 1</string>
-    <string name="text_intake_1">ПРИЁМ 1</string>
+    <string name="text_meal_1">ПРИЁМ ПИЩИ</string>
+    <string name="text_intake_1">ПРИЁМ</string>
     <string name="text_quantity_consumed">Количество потреблено</string>
     <string name="text_category">Категория</string>
     <string name="text_message_circadian">Ваше тело следует естественному 24-часовому ритму. Синхронизация света, кофеина и сна в соответствии с ним может помочь вам чувствовать себя более энергичным и сосредоточенным.</string>
-    <string name="text_log_1">ЗАПИСЬ 1</string>
+    <string name="text_log_1">ЗАПИСЬ</string>
     <string name="text_definite_morning_type">Определённый «жаворонок»</string>
     <string name="text_you_re_an_early_riser_by_nature">Вы по натуре — жаворонок.</string>
     <string name="text_moderate_morning_type">Умеренный утренний тип</string>

@@ -2081,12 +2081,12 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_water_consumption">Consumo de agua</string>
     <string name="text_period_started">Comenzó el período</string>
     <string name="text_add_logs">Agregar registros</string>
-    <string name="text_meal_1">COMIDA 1</string>
-    <string name="text_intake_1">INGESTA 1</string>
+    <string name="text_meal_1">COMIDA</string>
+    <string name="text_intake_1">INGESTA</string>
     <string name="text_quantity_consumed">Cantidad consumida</string>
     <string name="text_category">Categoría</string>
     <string name="text_message_circadian">Tu cuerpo sigue un ritmo natural de 24 horas. Sincronizar la luz, la cafeína y el sueño en torno a ese ritmo puede ayudarte a sentirte más energizado y enfocado.</string>
-    <string name="text_log_1">REGISTRO 1</string>
+    <string name="text_log_1">REGISTRO</string>
     <string name="text_definite_morning_type">Definitivamente madrugador</string>
     <string name="text_you_re_an_early_riser_by_nature">Eres madrugador por naturaleza.</string>
     <string name="text_moderate_morning_type">Moderado madrugador</string>
