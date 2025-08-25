@@ -47,6 +47,8 @@ import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.noisefit_commans.ui.checkTimeDifferenceMoreNMinutes
+import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -65,6 +67,7 @@ class UserRepositoryImpl(
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val dataUnitConverter: DataUnitConverter,
     private val keyValueDataSource: KeyValueDataSource,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserRepository {
@@ -588,6 +591,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogMealTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogMealTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal",
@@ -598,6 +602,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogCaffeineTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-caffeine",
@@ -608,6 +613,7 @@ class UserRepositoryImpl(
 
     override suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.submitLogLightExposureTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-light",

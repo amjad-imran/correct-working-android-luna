@@ -34,11 +34,6 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
         loadFragment.postValue(Event(type))
     }
 
-    fun clearTodayData(){
-        GlobalScope.launch(Dispatchers.IO) {
-            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
-        }
-    }
     fun navigateUp() {
         navigateUp.postValue(Event(true))
     }
