@@ -235,6 +235,7 @@ object AppModule {
         googleFitDataObservers: GoogleFitDataObservers,
         dataUnitConverter: DataUnitConverter,
         keyValueDataSource: KeyValueDataSource,
+        userHealthDataDataSource: OreoUserHealthDataDataSource,
         gson: Gson,
         offlineDataMapper: OfflineDataMapper
     ): UserRepository =
@@ -246,6 +247,7 @@ object AppModule {
             googleFitDataObservers,
             dataUnitConverter,
             keyValueDataSource,
+            userHealthDataDataSource,
             gson,
         )
 
@@ -406,12 +408,14 @@ object AppModule {
         remoteDataSource: NetworkService,
         localDataSource: DataStoredInterface,
         keyValueDataSource: KeyValueDataSource,
+        userHealthDataDataSource: OreoUserHealthDataDataSource,
         gson: Gson,
     ): FemaleHealthRepository {
         return FemaleHealthRepositoryImpl(
             remoteDataSource,
             localDataSource,
             keyValueDataSource,
+            userHealthDataDataSource,
             gson
         )
     }

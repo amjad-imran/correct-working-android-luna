@@ -3,6 +3,7 @@ package com.oreo.ui.timelineScreen.addActivity
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
 import com.noisefit_commans.ui.BaseFragment
@@ -22,6 +23,7 @@ class AddActivityTimelineFragment :
     BaseFragment<FragmentAddActivityTimelineBinding>(FragmentAddActivityTimelineBinding::inflate) {
 
     private val sharedViewModel: AddActivityTimelineSharedViewModel by activityViewModels()
+    val args: AddActivityTimelineFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -100,7 +102,12 @@ class AddActivityTimelineFragment :
         }
         sharedViewModel.navigateUp.observe(this){
             it.getContent()?.let {
-                navigateUpSafe()
+                if(args.showTimeline){
+                    navigateUpSafe()
+                    navigate(R.id.timelineScreenFragment)
+                }else{
+                    navigateUpSafe()
+                }
             }
         }
     }

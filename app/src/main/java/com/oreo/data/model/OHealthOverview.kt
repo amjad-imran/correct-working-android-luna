@@ -198,8 +198,8 @@ sealed class OHealthOverview {
         val startTime: LocalTime?,
         val endTime: LocalTime?,
         val timeWindow: List<TimeWindow>?=null,
-        val title: String?,
-        val description: String?,
+        var title: String?,
+        var description: String?,
         val energyGraph: List<Float>?,
     ) : OHealthOverview()
 

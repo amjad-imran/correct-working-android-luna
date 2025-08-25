@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -45,7 +46,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun initListener() {
 
         binding.ivAddLogFab.setOnClickListener {
-            navigate(R.id.addActivityTimelineFragment)
+            navigate(R.id.addActivityTimelineFragment,bundleOf("showTimeline" to false, "key" to null))
         }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)

@@ -11,6 +11,7 @@ import com.noisefit_commans.data.model.*
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.*
 import com.noisefit_commans.data.model.Interest
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.models.*
 import com.oreo.data.model.NotificationToggleModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
@@ -78,6 +79,7 @@ interface UserRepository {
     suspend fun submitLogCircadianData(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getCircadianData(): Flow<Resource<BaseApiResponse<CircadianResponseModel>>>
+    suspend fun getNudgeCircadianData(reqObj: JsonObject): Flow<Resource<BaseApiResponse<NudgeCircadianGraph>>>
 
     suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<List<CircadianQuizResponseModel>>>>
 

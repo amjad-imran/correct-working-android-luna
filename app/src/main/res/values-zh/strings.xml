@@ -2104,8 +2104,8 @@
     <string name="text_water_consumption">饮水量</string>
     <string name="text_period_started">来经了</string>
     <string name="text_add_logs">添加日志</string>
-    <string name="text_meal_1">餐 1</string>
-    <string name="text_intake_1">摄入 1</string>
+    <string name="text_meal_1">餐</string>
+    <string name="text_intake_1">摄入</string>
     <string name="text_quantity_consumed">消费数量</string>
     <string name="text_category">类别</string>
     <string name="text_message_circadian">你的身体遵循自然的 24 小时节律。围绕它安排光照、咖啡因和睡眠，可以帮助你感觉更有活力、更专注。</string>

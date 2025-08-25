@@ -40,6 +40,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val MEAL_INTAKE_KEY_KEY = "meal"
         val LIGHT_EXPOSURE_KEY = "light-exposure"
         val PERIOD_STARTED_KEY = "period"
+        val SYMPTOM_KEY = "symptom"
         val ACTIVITY_KEY = "activity"
     }
 
@@ -74,12 +75,15 @@ class TimelineScreenDataViewmodel @Inject constructor(
                                 activityListData.postValue(ArrayList())
                             } else {
                                 it.timeTracker?.let { dataList ->
-                                    var mealCount = 0
                                     val data = mergeHydrationEvents(dataList)
+                                    var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
+
                                     data.map { obj ->
                                         obj.event?.let {
-                                            if(it.equals(MEAL_INTAKE_KEY_KEY)) mealCount++
                                             getActivityTitleColorAndDesc(obj, mealCount)
+                                            if (it.equals(MEAL_INTAKE_KEY_KEY)) {
+                                                mealCount--
+                                            }
                                         }
                                     }
                                     activityListData.postValue(data)
@@ -248,7 +252,8 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
         val nonHydration = events
             .asSequence()
-            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true)
+                    && !it.event.equals(SYMPTOM_KEY, true) } // TODO: Remove Symptom
             .toList()
 
 

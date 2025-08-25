@@ -2230,12 +2230,12 @@ onjour, Luna"</string>
     <string name="text_water_consumption">Consommation d’eau</string>
     <string name="text_period_started">Début des règles</string>
     <string name="text_add_logs">Ajouter des enregistrements</string>
-    <string name="text_meal_1">REPAS 1</string>
-    <string name="text_intake_1">PRISE 1</string>
+    <string name="text_meal_1">REPAS</string>
+    <string name="text_intake_1">PRISE</string>
     <string name="text_quantity_consumed">Quantité consommée</string>
     <string name="text_category">Catégorie</string>
     <string name="text_message_circadian">Votre corps suit un rythme naturel de 24 heures. Synchroniser la lumière, la caféine et le sommeil autour de ce rythme peut vous aider à être plus énergique et concentré.</string>
-    <string name="text_log_1">ENREGISTREMENT 1</string>
+    <string name="text_log_1">ENREGISTREMENT</string>
     <string name="text_definite_morning_type">Type définitivement matinal</string>
     <string name="text_you_re_an_early_riser_by_nature">Vous êtes un lève-tôt par nature.</string>
     <string name="text_moderate_morning_type">Type matinal modéré</string>

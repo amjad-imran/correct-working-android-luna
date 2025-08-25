@@ -2134,12 +2134,12 @@
     <string name="text_water_consumption">Consumo de água</string>
     <string name="text_period_started">Período iniciado</string>
     <string name="text_add_logs">Adicionar registros</string>
-    <string name="text_meal_1">REFEIÇÃO 1</string>
-    <string name="text_intake_1">INGESTÃO 1</string>
+    <string name="text_meal_1">REFEIÇÃO</string>
+    <string name="text_intake_1">INGESTÃO</string>
     <string name="text_quantity_consumed">Quantidade consumida</string>
     <string name="text_category">Categoria</string>
     <string name="text_message_circadian">Seu corpo segue um ritmo natural de 24 horas. Sincronizar luz, cafeína e sono em torno desse ritmo pode ajudar você a se sentir mais energizado e focado.</string>
-    <string name="text_log_1">REGISTRO 1</string>
+    <string name="text_log_1">REGISTRO</string>
     <string name="text_definite_morning_type">Tipo definitivamente matutino</string>
     <string name="text_you_re_an_early_riser_by_nature">Você é um madrugador por natureza.</string>
     <string name="text_moderate_morning_type">Tipo matutino moderado</string>

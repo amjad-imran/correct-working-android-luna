@@ -21,6 +21,7 @@ import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
 import com.noisefit_commans.data.model.circadian.EnergyGraph
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.TimeWindow
 import java.time.Duration
 import java.time.LocalTime
@@ -40,7 +41,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     var isScrollLocked = false
 
-    private val hourWidthPx = 68f.dpToPixel()
+    private val hourWidthPx = 80f.dpToPixel()
 
     private val bottomPaddingForLabels = 16f.dpToPixel()
     private val topPadding = 30f
@@ -508,6 +509,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             val startOffset = hoursFromStart(fromFloatHour(window.startHour))
             val endOffset = hoursFromEnd(fromFloatHour(window.endHour))
 
+
             val left = startOffset * hourWidthPx + padding
             val right = endOffset * hourWidthPx - padding
 
@@ -542,6 +544,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     fun hoursFromStart(time: LocalTime): Float {
         val minutes = Duration.between(graphStartTime, time).toMinutes()
         var hours = minutes / 60f
+
         if (hours < 0f) hours += 24f
         return hours
     }

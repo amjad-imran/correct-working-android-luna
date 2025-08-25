@@ -5,7 +5,6 @@ import android.os.CountDownTimer
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
@@ -15,6 +14,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CorrectiveActivitiesModel
@@ -70,12 +70,14 @@ class CircadianAlignmentViewModel
 
     val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
 
+    val nudgeData = MutableLiveData<Pair<NudgeCircadianGraph?, Boolean>>()
+
     private val timerMap = mutableMapOf<String, CountDownTimer>()
 
     fun initData() {
 
         /*val data =
-            "{ \"activities\": [{ \"type\": \"light_exposure\", \"goal\": 120, \"time\": -14651, \"status\": false }, { \"type\": \"meal_window\", \"time\": 19548, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": 5148, \"status\": false }, { \"type\": \"workout\", \"time\": 14148, \"goal\": 390, \"status\": false, \"progress\": 28, \"active_calories\": 28, \"total_calories\": 775 }, { \"type\": \"daily_steps\", \"goal\": 5000, \"time\": 14148, \"progress\": 0 }], \"activity_monitor\": [{ \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"partial\" }, { \"type\": \"workout\", \"status\": \"partial\" }], \"circadian_mid_point\": { \"start_time\": \"2025-08-22 04:00:00\", \"end_time\": \"2025-08-22 06:00:00\", \"circadian_midpoint\": \"2025-08-22 23:58:30\", \"avg_now\": \"2025-08-22 04:27:48\", \"avg_before\": \"2025-08-22 05:35:07\", \"chronotype\": \"Moderately evening type\" }, \"chronotype\": { \"type\": \"Moderately evening type\", \"introduction\": \"You’re naturally inclined to be a night owl.\", \"description\": \"Your creativity and focus peak in the afternoon or early evening. Plan for a gentler start and build momentum into your afternoon routines.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"04:20\", \"end_time\": \"10:20\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"13:50\", \"end_time\": \"16:50\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"16:50\", \"end_time\": \"18:20\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"02:20\", \"end_time\": \"02:50\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"02:50\", \"end_time\": \"04:50\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"04:50\", \"end_time\": \"07:50\", \"peak_time\": \"06:20\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"09:50\", \"end_time\": \"12:50\", \"peak_time\": \"11:20\" }, \"sleep_window_opens_graph\": { \"start_time\": \"18:20\" }, \"gh_pulse_window_graph\": { \"start_time\": \"23:50\" }, \"activity_window_graph\": { \"start_time\": \"02:20\", \"end_time\": \"12:50\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-22 04:00:00\", \"end_time\": \"2025-08-22 06:00:00\", \"circadian_midpoint\": \"2025-08-22 23:58:30\", \"avg_now\": \"2025-08-22 04:27:48\", \"avg_before\": \"2025-08-22 05:35:07\", \"chronotype\": \"Moderately evening type\" }, \"energy_graph\": [{ \"start_time\": \"02:20\", \"energy\": 0 }, { \"start_time\": \"03:20\", \"energy\": 0.011 }, { \"start_time\": \"04:20\", \"energy\": 0.135 }, { \"start_time\": \"05:20\", \"energy\": 0.607 }, { \"start_time\": \"06:20\", \"energy\": 1.004 }, { \"start_time\": \"07:20\", \"energy\": 0.639 }, { \"start_time\": \"08:20\", \"energy\": 0.23 }, { \"start_time\": \"09:20\", \"energy\": 0.181 }, { \"start_time\": \"10:20\", \"energy\": 0.397 }, { \"start_time\": \"11:20\", \"energy\": 0.604 }, { \"start_time\": \"12:20\", \"energy\": 0.364 }, { \"start_time\": \"13:20\", \"energy\": 0.081 }, { \"start_time\": \"14:20\", \"energy\": 0.007 }, { \"start_time\": \"15:20\", \"energy\": 0 }, { \"start_time\": \"16:20\", \"energy\": 0 }, { \"start_time\": \"17:20\", \"energy\": 0 }, { \"start_time\": \"18:20\", \"energy\": 0 }], \"sleep_data\": { \"bed_time\": \"2025-08-21 21:37:00\", \"wake_time\": \"2025-08-22 02:20:00\" }, \"start_time\": \"2025-08-22 02:20:00\", \"end_time\": \"2025-08-22 18:20:00\" }, \"is_locked\": true }"
+            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": 7267, \"status\": true }, { \"type\": \"meal_window\", \"time\": 41467, \"status\": true }, { \"type\": \"caffeine_window\", \"time\": 27067, \"status\": true }, { \"type\": \"workout\", \"time\": 36067, \"goal\": 440, \"status\": false, \"progress\": 836, \"active_calories\": 836, \"total_calories\": 1632 }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 36067, \"progress\": 1641 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"done\" }, { \"type\": \"caffeine_window\", \"status\": \"done\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"chronotype\": { \"type\": \"Moderately evening type\", \"introduction\": \"You’re naturally inclined to be a night owl.\", \"description\": \"Your creativity and focus peak in the afternoon or early evening. Plan for a gentler start and build momentum into your afternoon routines.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:40\", \"end_time\": \"15:40\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"18:10\", \"end_time\": \"21:10\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"21:10\", \"end_time\": \"23:40\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"08:10\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"09:10\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"09:10\", \"end_time\": \"12:10\", \"peak_time\": \"10:40\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"14:10\", \"end_time\": \"17:10\", \"peak_time\": \"15:40\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:40\" }, \"gh_pulse_window_graph\": { \"start_time\": \"04:10\" }, \"activity_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"17:10\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-25 00:45:00\", \"end_time\": \"2025-08-25 03:15:00\", \"circadian_midpoint\": \"2025-08-25 04:27:00\", \"avg_now\": \"2025-08-25 04:21:42\", \"avg_before\": \"2025-08-25 04:20:22\", \"chronotype\": \"Moderately morning type\", \"nudge\": { \"title\": \"Stay Active During Your Focus Window\", \"description\": \"Incorporate light physical activities like walking or stretching during your focus window to boost a\" } }, \"energy_graph\": [ { \"start_time\": \"07:40\", \"energy\": 0.011 }, { \"start_time\": \"08:40\", \"energy\": 0.135 }, { \"start_time\": \"09:40\", \"energy\": 0.607 }, { \"start_time\": \"10:40\", \"energy\": 1.004 }, { \"start_time\": \"11:40\", \"energy\": 0.639 }, { \"start_time\": \"12:40\", \"energy\": 0.23 }, { \"start_time\": \"13:40\", \"energy\": 0.181 }, { \"start_time\": \"14:40\", \"energy\": 0.397 }, { \"start_time\": \"15:40\", \"energy\": 0.604 }, { \"start_time\": \"16:40\", \"energy\": 0.364 }, { \"start_time\": \"17:40\", \"energy\": 0.081 }, { \"start_time\": \"18:40\", \"energy\": 0.007 }, { \"start_time\": \"19:40\", \"energy\": 0 }, { \"start_time\": \"20:40\", \"energy\": 0 }, { \"start_time\": \"21:40\", \"energy\": 0 }, { \"start_time\": \"22:40\", \"energy\": 0 }, { \"start_time\": \"23:40\", \"energy\": 0 } ], \"sleep_data\": { \"bed_time\": \"2025-08-25 23:40:00\", \"wake_time\": \"2025-08-25 07:40:00\" }, \"start_time\": \"2025-08-25 07:40:00\", \"end_time\": \"2025-08-25 23:40:00\" }, \"is_locked\": false }"
         circadianResponseData.postValue(
             Gson().fromJson(
                 data,
@@ -115,7 +117,78 @@ class CircadianAlignmentViewModel
                                 it.activities,
                                 it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
+                            getNudgeCircadianData(it)
                             LOGS.d("abcjacjcab Posting data: $it")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getNudgeCircadianData(data: CircadianResponseModel) {
+        viewModelScope.launch {
+            nudgeData.postValue(
+                Pair(
+                    null,
+                    true
+                )
+            )
+            if(data.isLockedCircularView == true){
+                nudgeData.postValue(
+                    Pair(
+                        NudgeCircadianGraph(
+                            title = resourceProvider.getString(R.string.text_start_fresh_today),
+                            description = resourceProvider.getString(R.string.text_focus_window_desc1)
+                        ),
+                        false
+                    )
+                )
+            }else{
+                val graphData = data.graphData
+                if(graphData?.startTime == null || graphData.endTime == null ||
+                    graphData.sleepData?.wakeTime == null || graphData.sleepData?.bedTime == null){
+                    nudgeData.postValue(
+                        Pair(
+                            NudgeCircadianGraph(
+                                title = resourceProvider.getString(R.string.text_guidance_resumes_soon),
+                                description = resourceProvider.getString(R.string.text_focus_window_desc2)
+                            ),
+                            false
+                        )
+                    )
+                }else{
+                    val reqObj = JsonObject().apply {
+                        this.addProperty("type", "circadian")
+                    }
+                    userRepository.getNudgeCircadianData(reqObj).collect{resource ->
+                        when (resource) {
+                            is Resource.GenericError -> {
+                                /*sendMessage(resource.message)*/
+                            }
+
+                            is Resource.Loading -> {
+                                /*setLoading(resource.loading)*/
+                            }
+
+                            is Resource.NetworkError -> {
+                                /*setApiErrors(resource.response.apply {
+                                    (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                        object : BinaryActionCallback {
+                                            override fun yes() {
+                                                getNudgeCircadianData(data)
+                                            }
+
+                                            override fun no() {}
+                                        }
+                                })*/
+                            }
+
+                            is Resource.Success -> {
+                                resource.data?.data?.let {
+                                    nudgeData.postValue(Pair(it, false))
+                                }
+                            }
                         }
                     }
                 }
@@ -410,7 +483,7 @@ class CircadianAlignmentViewModel
                     "#D6A176".toColorInt(),
                     "#FFFFFF".toColorInt(),
                     rowIndex = 1,
-                    label = "Caffeine Window Open"//todo change to string
+                    label = resourceProvider.getString(R.string.text_caffeine_window_open)
                 )
             )
             circadianGraphData?.sleepData?.let { sleepTime->
@@ -433,7 +506,7 @@ class CircadianAlignmentViewModel
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
 
@@ -445,7 +518,7 @@ class CircadianAlignmentViewModel
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
 
@@ -467,22 +540,28 @@ class CircadianAlignmentViewModel
                     "#4C4192".toColorInt(),
                     "#EBAFFF".toColorInt(),
                     rowIndex = 0,
-                    label = "Dim-light Phase"
+                    label = resourceProvider.getString(R.string.text_dim_light_phase)
                 )
             )
         }
 
         circadianGraphData?.lightAnchoringPhaseWindowGraph?.let {
             if (it.startTime == null || it.endTime == null) return@let
+
+
+            val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                .plusMinutes(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm"))
+
             data.add(
                 TimeWindow(
-                    getCircadianTimeFloatValue(it.startTime),
+                    getCircadianTimeFloatValue(startTime),
                     getCircadianTimeFloatValue(it.endTime),
                     "#B2E6EE".toColorInt(),
                     "#FFE0BC".toColorInt(),
                     "#99000000".toColorInt(),
                     rowIndex = 0,
-                    label = "Natural Light"
+                    label = resourceProvider.getString(R.string.text_natural_light)
                 )
             )
         }
@@ -508,7 +587,7 @@ class CircadianAlignmentViewModel
                     "#634ED5".toColorInt(),
                     "#9E91E8".toColorInt(),
                     rowIndex = 0,
-                    label = "Sleep"
+                    label = resourceProvider.getString(R.string.text_sleep)
                 )
             )
         }
@@ -523,7 +602,7 @@ class CircadianAlignmentViewModel
                     "#BD6FC7".toColorInt(),
                     "#FFAFF2".toColorInt(),
                     rowIndex = 0,
-                    label = "Evening Wind-Down"
+                    label = resourceProvider.getString(R.string.text_evening_wind_down)
                 )
             )
 
@@ -537,7 +616,7 @@ class CircadianAlignmentViewModel
                         "#33646464".toColorInt(),
                         "#5A5A5A".toColorInt(),
                         rowIndex = 0,
-                        label = "Neutral Light Zone"
+                        label = resourceProvider.getString(R.string.text_neutral_light_zone)
                     )
                 )
             }
@@ -623,7 +702,7 @@ class CircadianAlignmentViewModel
                     "#33296F".toColorInt(),
                     "#634ED5".toColorInt(),
                     "#9E91E8".toColorInt(),
-                    label = "Sleep"
+                    label = resourceProvider.getString(R.string.text_sleep)
                 )
             )
         }
@@ -655,7 +734,7 @@ class CircadianAlignmentViewModel
                     Color.parseColor("#B4E6EC"),
                     Color.parseColor("#FBE0BE"),
                     textColor = "#CC242424".toColorInt(),
-                    "Natural Light"/*resourceProvider.getString(R.string.text_sleep)*/
+                    resourceProvider.getString(R.string.text_natural_light)/*resourceProvider.getString(R.string.text_sleep)*/
                 )
             )
         }
@@ -671,7 +750,7 @@ class CircadianAlignmentViewModel
                     Color.parseColor("#55313E"),
                     Color.parseColor("#995CA0"),
                     textColor = "#FC9CFF".toColorInt(),
-                    "Wind-Down"
+                    resourceProvider.getString(R.string.text_wind_down)
                 )
             )
             circadianGraphData?.lightAnchoringPhaseWindowGraph?.let { it1 ->
@@ -684,7 +763,7 @@ class CircadianAlignmentViewModel
                         "#181A1F".toColorInt(),
                         "#181A1F".toColorInt(),
                         "#858585".toColorInt(),
-                        label = "Neutral Light"
+                        label = resourceProvider.getString(R.string.text_neutral_light)
                     )
                 )
             }
@@ -701,7 +780,7 @@ class CircadianAlignmentViewModel
                     Color.parseColor("#8F5EBA"),
                     Color.parseColor("#443A7B"),
                     textColor = "#E0BEFF".toColorInt(),
-                    "Dim-light"
+                    resourceProvider.getString(R.string.text_dim_light)
                 )
             )
         }
@@ -728,29 +807,85 @@ class CircadianAlignmentViewModel
         return energyArray
     }
 
-    fun getCaffeineState(data: CircadianResponseModel): Pair<String, String> {
-        val title = data.circadianMidPoint?.nudge?.title ?: "-"
+    fun getCaffeineState(data: CircadianResponseModel): String? {
+        val currentTime = LocalTime.now()
+        try {
+            data.graphData?.let {
 
-        var isOpen = false
-        data.graphData?.caffeineWindowGraph?.let {
-            val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
-            val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+                it.firstFocusPeakWindowGraph?.let {
+                    val startTime =
+                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
 
-            val currentTime = LocalTime.now()
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_high_focus_peak)
+                    }
+                }
 
+                it.secondFocusPeakWindowGraph?.let {
+                    val startTime =
+                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
 
-            if (currentTime in startTime..endTime) {
-                isOpen = true
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_moderate_focus_peak)
+                    }
+                }
+
+                it.caffeineWindowGraph?.let {
+                    val startTime = LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_caffeine_window2)
+                    }
+                }
+
+                it.lightAnchoringPhaseWindowGraph?.let {
+                    val startTime =
+                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_neutral_light_zone)
+                    }
+                }
+
+                it.melatoninPrepPhaseWindowGraph?.let {
+                    val startTime =
+                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_evening_wind_down)
+                    }
+                }
+
+                it.dlmoPhaseWindowGraph?.let {
+                    val startTime =
+                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_dim_light_phase)
+                    }
+                }
+
+                it.sleepWindowOpensGraph?.let { sleepWindowOpensData ->
+                    val startTime =
+                        LocalTime.parse(sleepWindowOpensData.startTime, DateTimeFormatter.ofPattern("HH:mm"))
+                    val endTime = (LocalDateTime.parse(it.sleepData?.wakeTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).toLocalTime()
+                    if (currentTime in startTime..endTime) {
+                        return resourceProvider.getString(R.string.text_sleep_window)
+                    }
+                }
+
             }
+        }catch (e: Exception){
+            LOGS.d("CIRCADIAN_CURRENT_WINDOW_EXP: $e")
         }
 
-        val caffeineTxt = if (isOpen) {
-            resourceProvider.getString(R.string.text_caffeine_window_open)
-        } else {
-            resourceProvider.getString(R.string.text_caffeine_window_closed)
-        }
-
-        return Pair(title, caffeineTxt)
+        return null
     }
 
     fun getEnergyValues(graphData: CircadianGraphData?,rotate: Boolean): List<Float> {

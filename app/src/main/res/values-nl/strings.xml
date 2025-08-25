@@ -2110,12 +2110,12 @@
     <string name="text_water_consumption">Waterinname</string>
     <string name="text_period_started">Periode gestart</string>
     <string name="text_add_logs">Logs toevoegen</string>
-    <string name="text_meal_1">MAALTIJD 1</string>
-    <string name="text_intake_1">INNAME 1</string>
+    <string name="text_meal_1">MAALTIJD</string>
+    <string name="text_intake_1">INNAME</string>
     <string name="text_quantity_consumed">Aantal geconsumeerd</string>
     <string name="text_category">Categorie</string>
     <string name="text_message_circadian">Je lichaam volgt een natuurlijk 24-uurs ritme. Licht, cafeïne en slaap erop afstemmen kan helpen om je energieker en gefocust te voelen.</string>
-    <string name="text_log_1">LOG 1</string>
+    <string name="text_log_1">LOG</string>
     <string name="text_definite_morning_type">Definitely ochtendmens</string>
     <string name="text_you_re_an_early_riser_by_nature">Je bent van nature een vroege vogel.</string>
     <string name="text_moderate_morning_type">Gematigd ochtendtype</string>

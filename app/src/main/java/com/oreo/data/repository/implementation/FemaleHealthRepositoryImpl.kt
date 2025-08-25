@@ -15,7 +15,9 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
@@ -33,12 +35,14 @@ class FemaleHealthRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val localDataStore: DataStoredInterface,
     private val keyValueDataSource: KeyValueDataSource,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : FemaleHealthRepository {
     override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/symptom"
             remoteDataSource.saveLogSymptom(url, jsonObject)
 
