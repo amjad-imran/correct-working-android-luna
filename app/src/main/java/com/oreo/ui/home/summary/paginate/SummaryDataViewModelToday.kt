@@ -234,6 +234,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var userManagedSwitchState = false
     var caffeineGraphData: CaffeineGraphDataModel? = null
     var circadianGraphData: CircadianGraphData? = null
+    val stateCircadianCard = MutableLiveData<Pair<OHealthOverview.CircadianAlignment?, Boolean>>()
     var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     var summaryAvailable: Boolean? = false
     //
@@ -1514,7 +1515,10 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private fun getCircadianAlignmentCardData(): OHealthOverview? {
+    suspend fun getCircadianAlignmentCardData(
+        title: String? = null,
+        desc: String? = null
+    ): OHealthOverview? {
 
 //        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         val graphData = circadianGraphData
@@ -1552,14 +1556,22 @@ class SummaryDataViewModelToday @Inject constructor(
                     sTime = startTime
                     eTime = endTime
 
-                    OHealthOverview.CircadianAlignment(
+
+                    val circData = OHealthOverview.CircadianAlignment(
                         startTime = sTime,
                         endTime = eTime,
                         timeWindow = getCircadianScrollGraphList(graphData),
-                        title = circadianGraphData?.title,
-                        description = circadianGraphData?.description,
+                        title = title,
+                        description = desc,
                         energyGraph = getEnergyValues(graphData,true)
                     )
+                    withContext(Dispatchers.Main) {
+                        stateCircadianCard.value = Pair(
+                            circData,
+                            false
+                        )
+                    }
+                    circData
                 }else{
                     OHealthOverview.CircadianLockedOrNoSleepCard(
                         isLocked = false
@@ -1568,6 +1580,56 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }else{
             OHealthOverview.CircadianAlignmentOnboarding
+        }
+    }
+
+    private fun getNudgeCircadianData() {
+        viewModelScope.launch {
+            val reqObj = JsonObject().apply {
+                this.addProperty("type", "circadian")
+            }
+            userRepositoryOld.getNudgeCircadianData(reqObj).collect{resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            val data  =  stateCircadianCard.value?.copy()
+
+                            if(data==null){
+                               /* stateCircadianCard.postValue(
+
+                                )*/
+                            }else{
+                                stateCircadianCard.postValue(
+                                    data.apply {
+                                        Pair(
+                                            this?.first.apply {
+                                                this?.title = it.title
+                                                this?.description = it.description
+                                            },
+                                            true
+                                        )
+                                    }
+                                )
+                            }
+
+
+                        }
+                    }
+                }
+            }
         }
     }
 

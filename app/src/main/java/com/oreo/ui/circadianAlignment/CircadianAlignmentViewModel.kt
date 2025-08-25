@@ -172,7 +172,7 @@ class CircadianAlignmentViewModel
                             }
 
                             is Resource.NetworkError -> {
-                                setApiErrors(resource.response.apply {
+                                /*setApiErrors(resource.response.apply {
                                     (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                         object : BinaryActionCallback {
                                             override fun yes() {
@@ -181,7 +181,7 @@ class CircadianAlignmentViewModel
 
                                             override fun no() {}
                                         }
-                                })
+                                })*/
                             }
 
                             is Resource.Success -> {

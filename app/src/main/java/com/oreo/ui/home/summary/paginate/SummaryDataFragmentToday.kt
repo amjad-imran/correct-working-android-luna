@@ -997,6 +997,20 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        /*viewModel.nudgeCircadianData.observe(this){
+            val nudge = it.first
+            healthOverviewAdapter.updateData(
+                viewModel.getCircadianAlignmentCardData(nudge?.title, nudge?.description)
+            )
+        }*/
+
+        viewModel.stateCircadianCard.observe(this){
+            LOGS.d("cjkacbaskc : $it")
+            if(it.second){
+                healthOverviewAdapter.updateData(it.first)
+            }
+        }
+
         mainViewModel.syncTextState.observe(this){
             if(!it.isNullOrEmpty()) {
                 viewModel.summaryStates.postValue(SummaryStates.GENERATING)

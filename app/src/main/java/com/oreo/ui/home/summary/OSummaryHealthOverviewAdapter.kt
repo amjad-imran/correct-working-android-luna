@@ -651,6 +651,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             items[index] = heathOverViewData
             notifyItemChanged(index)
         }
+        else if (heathOverViewData is OHealthOverview.CircadianAlignment){
+            val index = items.indexOfFirst { it is OHealthOverview.CircadianAlignment }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        }
     }
 
     fun updateDailyToggle(goal: NotificationGoal) {

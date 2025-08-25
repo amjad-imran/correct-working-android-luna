@@ -780,7 +780,7 @@ interface NetworkService {
         @Url url: String,
     ): BaseApiResponse<CircadianResponseModel>
 
-    @GET
+    @POST
     suspend fun getNudgeCircadianData(
         @Url url: String,
         @Body req: JsonObject

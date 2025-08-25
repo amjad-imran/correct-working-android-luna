@@ -630,17 +630,17 @@ class CircadianAlignmentFragment :
         }
 
         viewModel.nudgeData.observe(viewLifecycleOwner){
-            /*val showShimmer = it.second
+            val showShimmer = it.second
             if(showShimmer){
-                binding.lytFocusWindow.shimmerLayout.startShimmer()
+                /*binding.lytFocusWindow.shimmerLayout.startShimmer()*/
             }else{
-                binding.lytFocusWindow.shimmerLayout.stopShimmer()
-                binding.lytFocusWindow.shimmerLayout.gone()
+                /*binding.lytFocusWindow.shimmerLayout.stopShimmer()
+                binding.lytFocusWindow.shimmerLayout.gone()*/
                 binding.lytFocusWindow.apply {
                     tvTitle.text = it.first?.title ?: "-"
                     tvDesc.text = it.first?.description ?: "-"
                 }
-            }*/
+            }
         }
 
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
