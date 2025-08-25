@@ -629,6 +629,20 @@ class CircadianAlignmentFragment :
             showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 
+        viewModel.nudgeData.observe(viewLifecycleOwner){
+            /*val showShimmer = it.second
+            if(showShimmer){
+                binding.lytFocusWindow.shimmerLayout.startShimmer()
+            }else{
+                binding.lytFocusWindow.shimmerLayout.stopShimmer()
+                binding.lytFocusWindow.shimmerLayout.gone()
+                binding.lytFocusWindow.apply {
+                    tvTitle.text = it.first?.title ?: "-"
+                    tvDesc.text = it.first?.description ?: "-"
+                }
+            }*/
+        }
+
         viewModel.correctiveActivitiesListData.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 correctiveActivitiesAdapter.updateDataSet(it)
@@ -684,24 +698,6 @@ class CircadianAlignmentFragment :
 
     fun setData(data: CircadianResponseModel) {
         LOGS.d("ansckaasc: $data")
-        // focus window
-        binding.lytFocusWindow.apply {
-            if(data.isLockedCircularView == true){
-                tvTitle.text = getString(R.string.text_start_fresh_today)
-                tvDesc.text = getString(R.string.text_focus_window_desc1)
-            }else{
-                val graphData = data.graphData
-                if(graphData?.startTime != null && graphData.endTime != null &&
-                    graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null){
-                    tvTitle.text = data.circadianMidPoint?.nudge?.title ?: "-"
-                    tvDesc.text = data.circadianMidPoint?.nudge?.description ?: "-"
-                }else{
-                    tvTitle.text = getString(R.string.text_guidance_resumes_soon)
-                    tvDesc.text = getString(R.string.text_focus_window_desc2)
-                }
-            }
-        }
-
         // lyt Circular State
         if (data.isLockedCircularView == true || data.graphData?.sleepData == null){
             binding.lytCircularState.root.gone()

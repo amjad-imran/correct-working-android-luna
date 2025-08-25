@@ -1518,15 +1518,16 @@ class SummaryDataViewModelToday @Inject constructor(
 
 //        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         val graphData = circadianGraphData
-        return if(graphData != null){
-            val isLocked = graphData.isLockedCircularView?:false
+        val isOnboard = graphData?.onboarding ?: false
+        return if(isOnboard){
+            val isLocked = graphData?.isLockedCircularView?:false
             if (isLocked) {
                 OHealthOverview.CircadianLockedOrNoSleepCard(
                     isLocked = true
                 )
             }else{
                 if(
-                    graphData.startTime != null && graphData.endTime != null &&
+                    graphData?.startTime != null && graphData.endTime != null &&
                     graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null
                 ){
                     var sTime: LocalTime?
