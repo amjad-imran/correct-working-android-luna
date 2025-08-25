@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.RecentActivities
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.data.response.MessageResponse
@@ -557,6 +558,15 @@ class UserRepositoryImpl(
                     }
                 }
             }
+        }
+    }
+
+    override suspend fun getNudgeCircadianData(reqObj: JsonObject): Flow<Resource<BaseApiResponse<NudgeCircadianGraph>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getNudgeCircadianData(
+                "${BuildConfig.OREO_BASE_URL}/ai/v2/generate/nudge/new",
+                reqObj
+            )
         }
     }
 

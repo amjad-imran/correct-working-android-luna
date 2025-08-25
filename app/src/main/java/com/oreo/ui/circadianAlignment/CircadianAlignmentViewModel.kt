@@ -5,7 +5,6 @@ import android.os.CountDownTimer
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
@@ -15,6 +14,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CorrectiveActivitiesModel
@@ -70,6 +70,8 @@ class CircadianAlignmentViewModel
 
     val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
 
+    val nudgeData = MutableLiveData<Pair<NudgeCircadianGraph?, Boolean>>()
+
     private val timerMap = mutableMapOf<String, CountDownTimer>()
 
     fun initData() {
@@ -115,7 +117,78 @@ class CircadianAlignmentViewModel
                                 it.activities,
                                 it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
+                            getNudgeCircadianData(it)
                             LOGS.d("abcjacjcab Posting data: $it")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getNudgeCircadianData(data: CircadianResponseModel) {
+        viewModelScope.launch {
+            nudgeData.postValue(
+                Pair(
+                    null,
+                    true
+                )
+            )
+            if(data.isLockedCircularView == true){
+                nudgeData.postValue(
+                    Pair(
+                        NudgeCircadianGraph(
+                            title = resourceProvider.getString(R.string.text_start_fresh_today),
+                            description = resourceProvider.getString(R.string.text_focus_window_desc1)
+                        ),
+                        false
+                    )
+                )
+            }else{
+                val graphData = data.graphData
+                if(graphData?.startTime == null || graphData.endTime == null ||
+                    graphData.sleepData?.wakeTime == null || graphData.sleepData?.bedTime == null){
+                    nudgeData.postValue(
+                        Pair(
+                            NudgeCircadianGraph(
+                                title = resourceProvider.getString(R.string.text_guidance_resumes_soon),
+                                description = resourceProvider.getString(R.string.text_focus_window_desc2)
+                            ),
+                            false
+                        )
+                    )
+                }else{
+                    val reqObj = JsonObject().apply {
+                        this.addProperty("type", "circadian")
+                    }
+                    userRepository.getNudgeCircadianData(reqObj).collect{resource ->
+                        when (resource) {
+                            is Resource.GenericError -> {
+                                /*sendMessage(resource.message)*/
+                            }
+
+                            is Resource.Loading -> {
+                                /*setLoading(resource.loading)*/
+                            }
+
+                            is Resource.NetworkError -> {
+                                setApiErrors(resource.response.apply {
+                                    (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                        object : BinaryActionCallback {
+                                            override fun yes() {
+                                                getNudgeCircadianData(data)
+                                            }
+
+                                            override fun no() {}
+                                        }
+                                })
+                            }
+
+                            is Resource.Success -> {
+                                resource.data?.data?.let {
+                                    nudgeData.postValue(Pair(it, false))
+                                }
+                            }
                         }
                     }
                 }

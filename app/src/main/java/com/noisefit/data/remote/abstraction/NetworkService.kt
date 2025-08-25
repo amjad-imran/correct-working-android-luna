@@ -54,6 +54,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
@@ -778,6 +779,12 @@ interface NetworkService {
     suspend fun getCircadianData(
         @Url url: String,
     ): BaseApiResponse<CircadianResponseModel>
+
+    @GET
+    suspend fun getNudgeCircadianData(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<NudgeCircadianGraph>
 
     @GET
     suspend fun getCircadianQuizData(
