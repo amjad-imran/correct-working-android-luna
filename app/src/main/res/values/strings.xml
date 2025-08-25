@@ -2084,12 +2084,12 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_water_consumption">Water consumption</string>
     <string name="text_period_started">Period started</string>
     <string name="text_add_logs">Add Logs</string>
-    <string name="text_meal_1">MEAL 1</string>
-    <string name="text_intake_1">INTAKE 1</string>
+    <string name="text_meal_1">MEAL</string>
+    <string name="text_intake_1">INTAKE</string>
     <string name="text_quantity_consumed">Quantity consumed</string>
     <string name="text_category">Category</string>
     <string name="text_message_circadian">Your body follows a natural 24-hour rhythm. Timing your light, caffeine, and sleep around it can help you feel more energized and focused.</string>
-    <string name="text_log_1">LOG 1</string>
+    <string name="text_log_1">LOG</string>
     <string name="text_definite_morning_type">Definite Morning Type</string>
     <string name="text_you_re_an_early_riser_by_nature">You’re an early riser by nature.</string>
     <string name="text_moderate_morning_type">Moderate Morning Type</string>

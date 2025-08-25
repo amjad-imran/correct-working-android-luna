@@ -222,7 +222,7 @@ class SummaryDataFragmentToday :
 
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.getNotificationToggle()
-        },500)
+        }, 500)
 
 
     }
@@ -652,7 +652,10 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
-                    navigate(R.id.addActivityTimelineFragment)
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf("showTimeline" to true, "key" to null)
+                    )
                 }
             }
         }
@@ -957,7 +960,7 @@ class SummaryDataFragmentToday :
 
     private fun syncData() {
         viewModel.sessionManager.forceSyncDataWithServer = true
-        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.SYNC,true)
+        viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.SYNC, true)
         scope.launch {
             val status = ApplicationUtils.startOreoSyncScheduler(requireContext())
             withContext(Dispatchers.Main) {
@@ -997,8 +1000,8 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        mainViewModel.syncTextState.observe(this){
-            if(!it.isNullOrEmpty()) {
+        mainViewModel.syncTextState.observe(this) {
+            if (!it.isNullOrEmpty()) {
                 viewModel.summaryStates.postValue(SummaryStates.GENERATING)
             }
         }
@@ -1008,7 +1011,9 @@ class SummaryDataFragmentToday :
             var state = it
 
             if (mainViewModel.syncTextState.value.isNullOrEmpty().not()
-                && mainViewModel.syncTextState.value.equals(context?.getString(R.string.text_all_set)).not()) {
+                && mainViewModel.syncTextState.value.equals(context?.getString(R.string.text_all_set))
+                    .not()
+            ) {
                 state = SummaryStates.GENERATING
             }
 
@@ -1207,8 +1212,9 @@ class SummaryDataFragmentToday :
                         }else{
                             descText
                         }*/
-                        var descTxt = if(descText.length > 60) descText.trim().substring(0, 61) + "..."
-                                    else descText.trim()
+                        var descTxt =
+                            if (descText.length > 60) descText.trim().substring(0, 61) + "..."
+                            else descText.trim()
 
                         val readMoreText = getString(R.string.text_read_more)
                         descTxt += " $readMoreText"
@@ -1247,7 +1253,12 @@ class SummaryDataFragmentToday :
                             }
                         }
 
-                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        spannable.setSpan(
+                            clickableSpan,
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
                         this.tvMessage.apply {
                             text = spannable
                             movementMethod = LinkMovementMethod.getInstance()
@@ -1279,7 +1290,7 @@ class SummaryDataFragmentToday :
                             descText
                         }*/
                         var descTxt =
-                            if(descText.length > 60) descText.trim().substring(0, 61) + "..."
+                            if (descText.length > 60) descText.trim().substring(0, 61) + "..."
                             else descText.trim()
 
                         val readMoreText = getString(R.string.text_read_more)
@@ -1311,7 +1322,10 @@ class SummaryDataFragmentToday :
                                     context.showShortToast("Ring not connected")
                                     return
                                 }
-                                navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+                                navigate(
+                                    R.id.appUpdateDetailFragment,
+                                    bundleOf("launchMode" to UpdateLaunchMode.OTA)
+                                )
                             }
 
                             override fun updateDrawState(ds: TextPaint) {
@@ -1321,7 +1335,12 @@ class SummaryDataFragmentToday :
                             }
                         }
 
-                        spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        spannable.setSpan(
+                            clickableSpan,
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
                         this.tvMessage.apply {
                             text = spannable
                             movementMethod = LinkMovementMethod.getInstance()
