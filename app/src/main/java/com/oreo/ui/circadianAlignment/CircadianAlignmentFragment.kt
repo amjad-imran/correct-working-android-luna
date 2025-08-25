@@ -622,6 +622,7 @@ class CircadianAlignmentFragment :
     override fun subscribeObservers() {
         //showCircularScheduler(null)
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
+            binding.mainScrollView.visible()
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
             updateGraph(it.graphData, it.circadianMidPoint)
