@@ -33,14 +33,14 @@ class HealthCalendarViewModel @Inject constructor(
 
     val datesToUpdate = MutableLiveData<Event<List<LocalDate>>>()
 
-    var startDate: LocalDate
+    var startDate: LocalDate ?= null
     var endDate = LocalDate.now()
 
 
     init {
-        startDate = endDate.minusMonths(2).with(TemporalAdjusters.firstDayOfMonth())
+        /*startDate = endDate.minusMonths(2).with(TemporalAdjusters.firstDayOfMonth())
 
-        getCalendarData(startDate.toString(), endDate.toString())
+        getCalendarData(startDate.toString(), endDate.toString())*/
     }
 
 
@@ -112,7 +112,7 @@ class HealthCalendarViewModel @Inject constructor(
     fun checkAndLoadMoreData(month: CalendarMonth) {
         val date = LocalDate.of(month.yearMonth.year, month.yearMonth.monthValue, 1)
         if (date < startDate) {
-            endDate = startDate.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
+            endDate = startDate?.minusMonths(1)?.with(TemporalAdjusters.lastDayOfMonth())
             startDate = endDate.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
             getCalendarData(startDate.toString(), endDate.toString())
         }

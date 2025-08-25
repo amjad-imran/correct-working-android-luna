@@ -2133,4 +2133,23 @@
     <string name="text_definite_evening_type">แน่นอนว่าเป็นคนนอนดึก</string>
     <string name="text_you_re_a_true_night_owl">คุณคือคนนอนดึกตัวจริง</string>
 
+    <string name="text_you_are_currently_in">คุณอยู่ในขณะนี้</string>
+    <string name="text_caffeine_window_open">ช่วงเวลาการดื่มคาเฟอีนเปิด</string>
+    <string name="text_caffeine_window_closed">หลีกเลี่ยงคาเฟอีน</string>
+    <string name="text_no_activity_found">ไม่พบกิจกรรม</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">ดูเหมือนว่าคุณยังไม่ได้บันทึกกิจกรรมใด ๆ</string>
+    <string name="text_start_fresh_today">เริ่มต้นใหม่วันนี้</string>
+    <string name="text_focus_window_desc1">เราไม่มีข้อมูลการนอนของคุณเมื่อคืนนี้ แต่ไม่ต้องกังวล คุณสามารถบันทึกการนอนของคุณได้อย่างรวดเร็วตอนนี้เพื่อปลดล็อกคู่มือจังหวะของวันนี้</string>
+    <string name="text_focus_window_desc2">เวลาตื่นของคุณวันนี้อยู่นอกจังหวะปกติ ดังนั้นคู่มือจังหวะชีวภาพจึงไม่สามารถใช้งานได้ชั่วคราว ใช้ Luna AI เพื่อเรียนรู้วิธีสร้างความสม่ำเสมอที่เหมาะกับคุณ</string>
+    <string name="text_guidance_resumes_soon">คำแนะนำจะกลับมาเร็ว ๆ นี้</string>
+    <string name="text_take_quiz">ทำแบบทดสอบ!</string>
+    <string name="text_no_sleep_data">ไม่มีข้อมูลการนอน</string>
+    <string name="text_chronotype_type_val">โครโนไทป์: %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">คุณอยู่ในจังหวะที่ถูกต้อง — รักษานิสัยการนอนที่ดีเพื่อให้สอดคล้องกันต่อไป</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">การติดตามการนอนอย่างสม่ำเสมอช่วยให้ Luna ปรับจังหวะชีวภาพของคุณได้ดีขึ้น สวมแหวนของคุณในตอนกลางคืนเพื่อเห็นการพัฒนาอย่างมีนัยสำคัญเมื่อเวลาผ่านไป</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">กรุณารอสักครู่ — เรากำลังรอข้อมูลการนอนล่าสุดจากแหวนของคุณ เก็บแอปไว้เปิดและวางอุปกรณ์ไว้ใกล้เพื่อให้การซิงค์เสร็จสิ้น</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">ดูเหมือนว่าคุณยังไม่ได้บันทึกกิจกรรมใด ๆ สำหรับวันนี้</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">เราไม่มีข้อมูลการนอนของคุณเมื่อคืนนี้ แต่ไม่ต้องกังวล คุณสามารถบันทึกการนอนของคุณได้อย่างรวดเร็วตอนนี้เพื่อปลดล็อกคู่มือจังหวะของวันนี้</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">การนอนของคุณเมื่อวานนี้ยังไม่ได้ถูกบันทึก กรุณาบันทึกข้อมูลการนอนเพื่อดูบัตรนี้ทำงาน</string>
+
 </resources>

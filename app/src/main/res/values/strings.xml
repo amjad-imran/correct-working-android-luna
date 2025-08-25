@@ -2100,6 +2100,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_you_re_naturally_inclined_to_be_a_night_owl">You’re naturally inclined to be a night owl.</string>
     <string name="text_definite_evening_type">Definite Evening Type</string>
     <string name="text_you_re_a_true_night_owl">You’re a true night owl.</string>
+
     <string name="text_you_are_currently_in">You are currently in</string>
     <string name="text_caffeine_window_open">Caffeine Window Open</string>
     <string name="text_caffeine_window_closed">Avoid Caffeine</string>
@@ -2118,5 +2119,16 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">It looks like you have not logged any activities for this day</string>
     <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">We don’t have your sleep data from last night, but no worries. You can quickly log your sleep now to unlock today’s rhythm guide.</string>
     <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Your sleep for yesterday has not been recorded. Please log your sleep data to see this card active.</string>
+    <string name="text_high_focus_peak">High Focus Peak</string>
+    <string name="text_moderate_focus_peak">Moderate Focus Peak</string>
+    <string name="text_dim_light_phase">Dim Light Phase</string>
+    <string name="text_sleep_window">Sleep Window</string>
+    <string name="text_avoid_caffeine">Avoid Caffeine</string>
+    <string name="text_natural_light">Natural Light</string>
+    <string name="text_evening_wind_down">Evening Wind-Down</string>
+    <string name="text_neutral_light_zone">Neutral Light Zone</string>
+    <string name="text_wind_down">Wind-Down</string>
+    <string name="text_neutral_light">Neutral Light</string>
+    <string name="text_dim_light">Dim-light</string>
 
 </resources>

@@ -2127,4 +2127,23 @@
     <string name="text_definite_evening_type">Typischer Abendmensch</string>
     <string name="text_you_re_a_true_night_owl">Du bist eine echte Nachteule.</string>
 
+    <string name="text_you_are_currently_in">Sie befinden sich derzeit in</string>
+    <string name="text_caffeine_window_open">Koffeinfenster geöffnet</string>
+    <string name="text_caffeine_window_closed">Koffein vermeiden</string>
+    <string name="text_no_activity_found">Keine Aktivität gefunden</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Es sieht so aus, als hätten Sie noch keine Aktivitäten protokolliert</string>
+    <string name="text_start_fresh_today">Heute neu beginnen</string>
+    <string name="text_focus_window_desc1">Wir haben keine Schlafdaten von letzter Nacht, aber keine Sorge. Sie können Ihren Schlaf jetzt schnell protokollieren, um den heutigen Rhythmusleitfaden freizuschalten.</string>
+    <string name="text_focus_window_desc2">Ihre Aufwachzeit heute lag außerhalb Ihres üblichen Rhythmus, daher ist der zirkadiane Rhythmusleitfaden vorübergehend nicht verfügbar. Nutzen Sie Luna AI, um zu lernen, wie Sie Konsistenz aufbauen können, die zu Ihnen passt.</string>
+    <string name="text_guidance_resumes_soon">Anleitung wird bald fortgesetzt</string>
+    <string name="text_take_quiz">Quiz machen!</string>
+    <string name="text_no_sleep_data">Keine Schlafdaten</string>
+    <string name="text_chronotype_type_val">CHRONOTYP: %1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Sie sind im Einklang — behalten Sie gute Schlafgewohnheiten bei, um ausgerichtet zu bleiben.</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">Das konsequente Verfolgen Ihres Schlafs hilft Luna, Ihren zirkadianen Rhythmus zu verfeinern. Tragen Sie Ihren Ring über Nacht, um im Laufe der Zeit bedeutende Verbesserungen zu sehen.</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">Bitte warten – wir warten auf Ihre neuesten Schlafdaten vom Ring. Lassen Sie die App geöffnet und Ihr Gerät in der Nähe, um die Synchronisierung abzuschließen.</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">Es sieht so aus, als hätten Sie für diesen Tag keine Aktivitäten protokolliert</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">Wir haben keine Schlafdaten von letzter Nacht, aber keine Sorge. Sie können Ihren Schlaf jetzt schnell protokollieren, um den heutigen Rhythmusleitfaden freizuschalten.</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Ihr Schlaf von gestern wurde nicht aufgezeichnet. Bitte protokollieren Sie Ihre Schlafdaten, um diese Karte zu aktivieren.</string>
+
 </resources>

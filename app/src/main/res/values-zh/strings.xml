@@ -2121,4 +2121,23 @@
     <string name="text_definite_evening_type">绝对的“夜猫子”</string>
     <string name="text_you_re_a_true_night_owl">你是真正的夜猫子。</string>
 
+    <string name="text_you_are_currently_in">您当前在</string>
+    <string name="text_caffeine_window_open">咖啡因窗口开启</string>
+    <string name="text_caffeine_window_closed">避免咖啡因</string>
+    <string name="text_no_activity_found">未找到活动</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">看起来您还没有记录任何活动</string>
+    <string name="text_start_fresh_today">从今天重新开始</string>
+    <string name="text_focus_window_desc1">我们没有您昨晚的睡眠数据，但不用担心。您现在可以快速记录睡眠，以解锁今天的节律指南。</string>
+    <string name="text_focus_window_desc2">您今天的起床时间超出了平常的节律，因此昼夜节律指南暂时不可用。使用 Luna AI 学习如何建立适合您的稳定性。</string>
+    <string name="text_guidance_resumes_soon">指导将很快恢复</string>
+    <string name="text_take_quiz">参加测验！</string>
+    <string name="text_no_sleep_data">无睡眠数据</string>
+    <string name="text_chronotype_type_val">时间类型：%1$s</string>
+    <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">您已保持同步 — 继续保持良好的睡眠习惯以维持一致。</string>
+    <string name="text_circadian_mid_point_desc_missing_sleep">持续跟踪您的睡眠有助于 Luna 微调您的昼夜节律。夜间佩戴戒指，随着时间推移将看到显著改善。</string>
+    <string name="text_circadian_mid_point_desc_awaiting_sync">请稍候 — 我们正在等待接收您戒指的最新睡眠数据。请保持应用程序打开并将设备放在附近以完成同步。</string>
+    <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">看起来您今天还没有记录任何活动</string>
+    <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">我们没有您昨晚的睡眠数据，但不用担心。您现在可以快速记录睡眠，以解锁今天的节律指南。</string>
+    <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">您昨天的睡眠尚未记录。请记录睡眠数据以激活此卡片。</string>
+
 </resources>
