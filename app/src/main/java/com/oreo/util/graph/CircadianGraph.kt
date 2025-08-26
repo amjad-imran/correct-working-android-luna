@@ -186,7 +186,7 @@ class CircadianGraph @JvmOverloads constructor(
             if (index == 0 && !value.xAxis.isNullOrEmpty()) {
                 textPaint.color = "#555A5E".toColorInt()
                 val textStartX = iconBitmapStart.width.toFloat() + 60f
-                canvas.drawBitmap(iconBitmapStart, left, bottom + 40, null)
+                /*canvas.drawBitmap(iconBitmapStart, left, bottom + 40, null)*/
                 canvas.drawText(
                     value.xAxis,
                     textStartX,
@@ -198,12 +198,12 @@ class CircadianGraph @JvmOverloads constructor(
             } else if (index == barData.size - 1 && !value.xAxis.isNullOrEmpty()) {
                 textPaint.color = "#555A5E".toColorInt()
                 val textStartX = left - iconBitmapEnd.width.toFloat() - 40f
-                canvas.drawBitmap(
+               /* canvas.drawBitmap(
                     iconBitmapEnd,
                     left - iconBitmapEnd.width / 2,
                     bottom + 40,
                     null
-                )
+                )*/
                 canvas.drawText(
                     value.xAxis,
                     textStartX,
