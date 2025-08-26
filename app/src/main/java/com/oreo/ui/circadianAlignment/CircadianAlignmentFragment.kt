@@ -58,8 +58,13 @@ class CircadianAlignmentFragment :
 
     private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
         StressUnderstandingImageAdapter(object : StressInfoCardAction {
-            override fun onStressInfoCardClicked() {
-//                navigate(R.id.stressUnderstandingFragment)
+            override fun onStressInfoCardClicked() {}
+
+            override fun onCircadianCardClicked(pos: Int) {
+                navigate(
+                    R.id.circadianHowItWorksDetailFragment,
+                    bundleOf("position" to pos)
+                )
             }
         })
     }
@@ -116,12 +121,12 @@ class CircadianAlignmentFragment :
 
     private fun setCircadianGraph() {
 
-        binding.graphView.isScrollLocked = false
-        binding.graphView.graphStartTime = LocalTime.of(6, 0)
-        binding.graphView.graphEndTime = LocalTime.of(23, 0)
+        binding.lytGraphView.graphView.isScrollLocked = false
+        binding.lytGraphView.graphView.graphStartTime = LocalTime.of(6, 0)
+        binding.lytGraphView.graphView.graphEndTime = LocalTime.of(23, 0)
 
-        binding.graphView.timeWindows = ArrayList()//viewModel.dummyList()//
-        binding.graphView.redraw()
+        binding.lytGraphView.graphView.timeWindows = ArrayList()//viewModel.dummyList()//
+        binding.lytGraphView.graphView.redraw()
 
     }
 
@@ -492,8 +497,8 @@ class CircadianAlignmentFragment :
         ) {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-            binding.graphView.graphStartTime = LocalTime.of(6, 0)
-            binding.graphView.graphEndTime = LocalTime.of(23, 0)
+            binding.lytGraphView.graphView.graphStartTime = LocalTime.of(6, 0)
+            binding.lytGraphView.graphView.graphEndTime = LocalTime.of(23, 0)
 
             val startDateTime = LocalDateTime.parse(graphData.startTime, formatter)
             val endDateTime = LocalDateTime.parse(graphData.endTime, formatter)
@@ -508,24 +513,24 @@ class CircadianAlignmentFragment :
                 endTime = sleepWakeTime
             }
 
-            binding.graphView.graphStartTime = startTime
-            binding.graphView.graphEndTime = endTime
+            binding.lytGraphView.graphView.graphStartTime = startTime
+            binding.lytGraphView.graphView.graphEndTime = endTime
 
             val energyValues = viewModel.getEnergyValues(graphData, true)
 
 
-            binding.graphView.setDataSet(
+            binding.lytGraphView.graphView.setDataSet(
                 viewModel.getScrollGraphList(graphData),
                 energyValues/*graphData.energyGraph*/
             )
             binding.divider24HourGraph.root.visible()
             binding.tvDetailedOverview.visible()
-            binding.graphView.visible()
-            binding.graphView.redraw()
+            binding.lytGraphView.root.visible()
+            binding.lytGraphView.graphView.redraw()
         }else{
             binding.divider24HourGraph.root.gone()
             binding.tvDetailedOverview.gone()
-            binding.graphView.gone()
+            binding.lytGraphView.root.gone()
         }
 
         if (circadianMidPoint == null) {
@@ -557,7 +562,7 @@ class CircadianAlignmentFragment :
         binding.lytCorrectiveActivities.recyclerV.layoutManager = LinearLayoutManager(context)
         binding.lytCorrectiveActivities.recyclerV.adapter = correctiveActivitiesAdapter
 
-//        viewModel.initHowItWorksData()
+        viewModel.initHowItWorksData()
 
         binding.rvHowItWorks.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -632,8 +637,10 @@ class CircadianAlignmentFragment :
         viewModel.nudgeData.observe(viewLifecycleOwner){
             val showShimmer = it.second
             if(showShimmer){
+                binding.lytFocusWindow.progressBarFocusWindow.root.visible()
                 /*binding.lytFocusWindow.shimmerLayout.startShimmer()*/
             }else{
+                binding.lytFocusWindow.progressBarFocusWindow.root.gone()
                 /*binding.lytFocusWindow.shimmerLayout.stopShimmer()
                 binding.lytFocusWindow.shimmerLayout.gone()*/
                 binding.lytFocusWindow.apply {

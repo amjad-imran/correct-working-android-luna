@@ -1493,6 +1493,7 @@ class OreoUserActivityRepositoryImpl(
 
         return safeApiCallFlow(dispatcher) {
             userHealthDataSource.clearDataByDates(arrayListOf(date))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             delay(200)//time for clearing the data from local db
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/add/manual"
             val requestObject = JsonObject().apply {
@@ -1974,6 +1975,7 @@ class OreoUserActivityRepositoryImpl(
     ): Flow<Resource<BaseApiResponseData<Any>>> {
         return safeApiCallFlow(dispatcher) {
             userHealthDataSource.clearDataByDates(arrayListOf(date))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             delay(200)//time for clearing the data from local db
             val url = "${BuildConfig.OREO_BASE_URL}/sleep/v2/nap"
             val requestObject = JsonObject().apply {

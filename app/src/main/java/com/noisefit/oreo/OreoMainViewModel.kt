@@ -43,6 +43,7 @@ import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -145,7 +146,10 @@ constructor(
     var ldwReadiness: Boolean ?= null
     var ldwCycleTracker: Boolean ?= null
     var boosterWomen: Boolean ?= null
+
     var circadianGraphData: CircadianGraphData ?= null
+    var nudgeCircadianData: NudgeCircadianGraph?= null
+
     var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     var errorCode: String = ""
     //

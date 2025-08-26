@@ -131,7 +131,7 @@ class AddCaffeineFragment :
     override fun subscribeObservers() {
         viewModel.caffeineTime.observe(this) {
             binding.lytCard.tvTime.text =
-                it.format(DateTimeFormatter.ofPattern("hh:mm:a")).uppercase()
+                it.format(DateTimeFormatter.ofPattern("h:mm a")).uppercase()
         }
         viewModel.caffeineValue.observe(this) {
             binding.lytCard.tvCaffeineValue.text = "$it mg"

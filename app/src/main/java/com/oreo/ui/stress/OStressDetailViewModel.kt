@@ -16,7 +16,7 @@ import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
-import com.oreo.ui.stress.help.StressImageModel
+import com.oreo.ui.stress.help.HowItWorksModel.StressImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -112,7 +112,7 @@ class AddLightExposureFragment :
     override fun subscribeObservers() {
         viewModel.lightTime.observe(this) {
             binding.lytCard.tvTime.text =
-                it.format(DateTimeFormatter.ofPattern("hh:mm:a")).uppercase()
+                it.format(DateTimeFormatter.ofPattern("h:mm a")).uppercase()
         }
         viewModel.lightDuration.observe(this) {
             binding.lytCard.tvDuration.text =

@@ -111,7 +111,7 @@ class AddWaterFragment :
     override fun subscribeObservers() {
         viewModel.waterIntakeTime.observe(this) {
             binding.lytCard.tvTime.text =
-                it.format(DateTimeFormatter.ofPattern("hh:mm:a")).uppercase()
+                it.format(DateTimeFormatter.ofPattern("h:mm a")).uppercase()
         }
         viewModel.waterIntakeValue.observe(this) {
             binding.lytCard.tvCaffeineValue.text = "$it ml"

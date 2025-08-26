@@ -68,6 +68,8 @@ class OStressDataMovementFragment :
             override fun onStressInfoCardClicked() {
                 navigate(R.id.stressUnderstandingFragment)
             }
+
+            override fun onCircadianCardClicked(pos: Int) {}
         })
     }
 

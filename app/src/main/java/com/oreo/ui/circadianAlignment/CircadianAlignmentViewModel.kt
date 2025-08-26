@@ -25,7 +25,7 @@ import com.oreo.data.model.circadian.Activity
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.custom.ClockEvent
 import com.oreo.ui.custom.ClockEventType
-import com.oreo.ui.stress.help.StressImageModel
+import com.oreo.ui.stress.help.HowItWorksModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,7 +68,7 @@ class CircadianAlignmentViewModel
 
     val correctiveActivitiesListData = MutableLiveData<ArrayList<CorrectiveActivitiesModel>>()
 
-    val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
+    val howItWorksDataList = MutableLiveData<List<HowItWorksModel.CircadianHowItWorksModel>>()
 
     val nudgeData = MutableLiveData<Pair<NudgeCircadianGraph?, Boolean>>()
 
@@ -645,15 +645,21 @@ class CircadianAlignmentViewModel
         viewModelScope.launch(Dispatchers.IO) {
             howItWorksDataList.postValue(
                 arrayListOf(
-                    StressImageModel(
-                        resourceProvider.getString(R.string.text_what_is_circadian_alignment),
-                        resourceProvider.getString(R.string.text_circadian_hiw_desc_1),
-                        R.drawable.image_circadian_hiw_1
+                    HowItWorksModel.CircadianHowItWorksModel(
+                        title = resourceProvider.getString(R.string.text_what_is_circadian_alignment),
+                        image = R.drawable.image_circadian_hiw_1,
                     ),
-                    StressImageModel(
-                        resourceProvider.getString(R.string.text_how_does_the_luna_ring),
-                        resourceProvider.getString(R.string.text_stress_2),
-                        R.drawable.image_s_hw_2
+                    HowItWorksModel.CircadianHowItWorksModel(
+                        title = resourceProvider.getString(R.string.text_how_does_the_luna_ring),
+                        image = R.drawable.image_circadian_hiw_2,
+                    ),
+                    HowItWorksModel.CircadianHowItWorksModel(
+                        title = resourceProvider.getString(R.string.text_what_is_circadian_alignment),
+                        image = R.drawable.image_circadian_hiw_1,
+                    ),
+                    HowItWorksModel.CircadianHowItWorksModel(
+                        title = resourceProvider.getString(R.string.text_what_is_circadian_alignment),
+                        image = R.drawable.image_circadian_hiw_1,
                     ),
                 )
             )

@@ -3173,26 +3173,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
 
         private fun setCircadianGraph(data: OHealthOverview.CircadianAlignment) {
-            binding.graphView.isScrollLocked = true
-            binding.graphView.graphStartTime = LocalTime.of(6,0)
-            binding.graphView.graphEndTime = LocalTime.of(23,0)
+            binding.lytGraphView.graphView.isScrollLocked = true
+            binding.lytGraphView.graphView.graphStartTime = LocalTime.of(6,0)
+            binding.lytGraphView.graphView.graphEndTime = LocalTime.of(23,0)
 
             data.startTime?.let {
-                binding.graphView.graphStartTime = it
+                binding.lytGraphView.graphView.graphStartTime = it
             }
 
             data.endTime?.let {
-                binding.graphView.graphEndTime = it
+                binding.lytGraphView.graphView.graphEndTime = it
             }
 
             data.timeWindow?.let {
-                binding.graphView.setDataSet(
+                binding.lytGraphView.graphView.setDataSet(
                     it,
                     data.energyGraph
                 )
             }
 
-            binding.graphView.redraw()
+            binding.lytGraphView.graphView.redraw()
         }
 
     }

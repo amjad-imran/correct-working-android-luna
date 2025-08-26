@@ -2131,5 +2131,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_neutral_light">Neutral Light</string>
     <string name="text_dim_light">Dim-light</string>
     <string name="text_period_symptom">Period symptom</string>
+    <string name="energy">Energy</string>
+    <string name="text_circadian_how_it_works_intro_1">How does your Circadian rhythm affect you?</string>
 
 </resources>
