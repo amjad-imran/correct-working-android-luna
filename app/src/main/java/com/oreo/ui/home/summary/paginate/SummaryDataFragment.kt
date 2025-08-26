@@ -18,11 +18,13 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder.TimelineCardViewHolder.TimelineAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
+import com.oreo.ui.home.summary.OreoRWorkoutAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -283,7 +285,7 @@ class SummaryDataFragment :
         }
 
         viewModel.stateWorkouts.observe(this) {
-//            setWorkoutUI(it)
+            setWorkoutUI(it)
         }
 
         viewModel.stateTimeline.observe(this){
@@ -430,7 +432,7 @@ class SummaryDataFragment :
         }
     }
 
-    /*private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
+    private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
         val lytWorkouts = binding.lytWorkouts
         lytWorkouts.root.visible()
 
@@ -478,7 +480,7 @@ class SummaryDataFragment :
             navigate(R.id.oActivityListFragment)
         }
 
-    }*/
+    }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.lytHeartRate
