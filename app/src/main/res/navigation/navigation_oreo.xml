@@ -1463,4 +1463,15 @@
             app:argType="boolean"
             android:defaultValue="false" />
     </fragment>
+    <fragment
+        android:id="@+id/circadianHowItWorksDetailFragment"
+        android:name="com.oreo.ui.circadianAlignment.CircadianHowItWorksDetailFragment"
+        android:label="fragment_circadian_how_it_works_detail"
+        tools:layout="@layout/fragment_circadian_how_it_works_detail" >
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
+
+    </fragment>
 </navigation>

@@ -58,8 +58,13 @@ class CircadianAlignmentFragment :
 
     private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
         StressUnderstandingImageAdapter(object : StressInfoCardAction {
-            override fun onStressInfoCardClicked() {
-//                navigate(R.id.stressUnderstandingFragment)
+            override fun onStressInfoCardClicked() {}
+
+            override fun onCircadianCardClicked(pos: Int) {
+                navigate(
+                    R.id.circadianHowItWorksDetailFragment,
+                    bundleOf("position" to pos)
+                )
             }
         })
     }

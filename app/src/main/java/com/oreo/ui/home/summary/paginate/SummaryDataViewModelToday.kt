@@ -108,6 +108,7 @@ import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INT
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.NAP_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.PERIOD_STARTED_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SLEEP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CONSUMPTION_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -1418,7 +1419,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val nonHydration = events
             .asSequence()
-            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true)
+                    && !it.event.equals(SYMPTOM_KEY, true) } // TODO: Remove Symptom
             .toList()
 
 
