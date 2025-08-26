@@ -84,6 +84,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setWalkReminderPro3(walkReminderData: WalkReminderData) {}
 
     open fun setRestartDevice() {}
+    open fun setShutDownDevice() {}
     open fun setCallBacks() {}
 
     open fun setSportModeInfo(data: SportsModeList) {}

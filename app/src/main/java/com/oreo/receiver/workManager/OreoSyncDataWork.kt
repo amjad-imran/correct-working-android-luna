@@ -277,6 +277,9 @@ constructor(
 
                 AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
+                sessionManager.sendQueryAction(QueryAction.GetSleepException)
+
+
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))

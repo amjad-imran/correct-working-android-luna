@@ -209,7 +209,7 @@ constructor(
 
 
             override fun onRequestState(p0: AgpsInfoBean?) {
-            //    testQueryDeviceDataCallback?.onQueryDataReceived(QueryCallback.AgpsRequestState(p0))
+                //    testQueryDeviceDataCallback?.onQueryDataReceived(QueryCallback.AgpsRequestState(p0))
             }
         }
 
@@ -349,6 +349,15 @@ constructor(
             } catch (exp: Exception) {
                 null
             }
+
+
+            if(p0.nfcSleepErr==1){
+                AppLogs.sendAppLogs("RealTimeBean NFC Sleep Err ${p0.nfcSleepErr}")
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.NfcSleepErr()
+                )
+            }
+
 
             var isCharging = false
             if (chargeStatus == 1) {
@@ -1012,8 +1021,14 @@ constructor(
 
             }
 
-            override fun onNfcSleepErr(p0: Int) {
-
+            override fun onNfcSleepErr(p0: Int) {//1 exception, 0 Normal
+                LOGS.i("onNfcSleepErr $p0")
+                AppLogs.sendAppLogs("onNfcSleepErr $p0")
+                if (p0 == 1) {
+                    testQueryDeviceDataCallback?.onQueryDataReceived(
+                        QueryCallback.NfcSleepErr()
+                    )
+                }
             }
         })
 
@@ -1049,6 +1064,28 @@ constructor(
         }
 
 
+    }
+
+    override fun getSleepException() {
+        LOGS.i("onNfcSleepErr getSleepException")
+
+        ControlBleTools.getInstance().getRingNFCSleepErr(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {
+                        LOGS.i("onNfcSleepErr getSleepException success")
+
+                        //context.showShortToast("Firmware logs generated")
+                    }
+
+                    else -> {
+                        LOGS.i("onNfcSleepErr getSleepException failed")
+
+                        //context.showShortToast("Firmware logs generation failed")
+                    }
+                }
+            }
+        })
     }
 
     override fun getFirmwareLogs() {

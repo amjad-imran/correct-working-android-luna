@@ -49,6 +49,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -69,7 +70,7 @@ class SessionManager
         val TAG = "SessionManager"
 
     }
-
+    val nfcSleepErr = MutableLiveData<Boolean>()
     val updateRingLocation = MutableLiveData<Event<Boolean>>()
     val forceUpdateApp = MutableLiveData<Event<Boolean>>()
 
@@ -765,6 +766,19 @@ class SessionManager
 
     fun setGoogleFitSync() {
         googleFitSyncCompleted.postValue(Event(true))
+    }
+
+    fun checkSleepException(){
+        GlobalScope.launch(Dispatchers.IO) {
+            nfcSleepErr.postValue(ringDataStore.getSleepException())
+        }
+    }
+
+    fun resetSleepException() {
+        GlobalScope.launch(Dispatchers.IO) {
+            ringDataStore.saveSleepException(false)
+            nfcSleepErr.postValue(false)
+        }
     }
 }
 
