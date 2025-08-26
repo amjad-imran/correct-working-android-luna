@@ -240,6 +240,7 @@ class SummaryDataFragmentToday :
                 viewModel.summaryAvailable = mainViewModel.summaryAvailable
                 viewModel.circadianGraphData = mainViewModel.circadianGraphData
                 viewModel.timeTrackerActivities = mainViewModel.timeTrackerActivities
+                viewModel.nudgeCircadianData = mainViewModel.nudgeCircadianData
                 setUi(dash.first, dash.second, dash.third)
             }
         }
@@ -1006,12 +1007,15 @@ class SummaryDataFragmentToday :
                 viewModel.getCircadianAlignmentCardData(nudge?.title, nudge?.description)
             )
         }*/
+        viewModel.updateNudgeInMainViewModel.observe(this){
+            it.getContent()?.let {
+                mainViewModel.nudgeCircadianData = it
+            }
+        }
 
         viewModel.stateCircadianCard.observe(this){
             LOGS.d("cjkacbaskc : $it")
-            if(it.second){
-                healthOverviewAdapter.updateData(it.first)
-            }
+            healthOverviewAdapter.updateData(it.first)
         }
 
         mainViewModel.syncTextState.observe(this){

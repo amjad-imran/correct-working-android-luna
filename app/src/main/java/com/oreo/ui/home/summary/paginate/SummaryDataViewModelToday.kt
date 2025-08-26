@@ -36,6 +36,7 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.ItemCircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.interfaces.QueryAction
@@ -233,8 +234,13 @@ class SummaryDataViewModelToday @Inject constructor(
     //
     var userManagedSwitchState = false
     var caffeineGraphData: CaffeineGraphDataModel? = null
+
     var circadianGraphData: CircadianGraphData? = null
     val stateCircadianCard = MutableLiveData<Pair<OHealthOverview.CircadianAlignment?, Boolean>>()
+//    var isNudgeCircadianApiCalled: Boolean ?= false
+    var nudgeCircadianData: NudgeCircadianGraph ?= null
+    var updateNudgeInMainViewModel = MutableLiveData<Event<NudgeCircadianGraph>>()
+
     var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     var summaryAvailable: Boolean? = false
     //
@@ -1515,10 +1521,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    suspend fun getCircadianAlignmentCardData(
-        title: String? = null,
-        desc: String? = null
-    ): OHealthOverview? {
+    suspend fun getCircadianAlignmentCardData(): OHealthOverview? {
 
 //        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         val graphData = circadianGraphData
@@ -1561,8 +1564,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         startTime = sTime,
                         endTime = eTime,
                         timeWindow = getCircadianScrollGraphList(graphData),
-                        title = title,
-                        description = desc,
+                        title = nudgeCircadianData?.title,
+                        description = nudgeCircadianData?.description,
                         energyGraph = getEnergyValues(graphData,true)
                     )
                     withContext(Dispatchers.Main) {
@@ -1570,6 +1573,9 @@ class SummaryDataViewModelToday @Inject constructor(
                             circData,
                             false
                         )
+                    }
+                    if(nudgeCircadianData == null) {
+                        getNudgeCircadianData()
                     }
                     circData
                 }else{
@@ -1604,24 +1610,18 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
-                            val data  =  stateCircadianCard.value?.copy()
-
-                            if(data==null){
-                               /* stateCircadianCard.postValue(
-
-                                )*/
-                            }else{
+                            val data  = stateCircadianCard.value?.copy()?.first
+                            nudgeCircadianData = it
+                            updateNudgeInMainViewModel.postValue(Event(it))
+                            if(data!=null){
                                 stateCircadianCard.postValue(
-                                    data.apply {
-                                        Pair(
-                                            this?.first.apply {
-                                                this?.title = it.title
-                                                this?.description = it.description
-                                            },
-                                            true
-                                        )
-                                    }
+                                    Pair(
+                                        data.apply {
+                                            this.title = it.title
+                                            this.description = it.description
+                                        },
+                                        true
+                                    )
                                 )
                             }
 
