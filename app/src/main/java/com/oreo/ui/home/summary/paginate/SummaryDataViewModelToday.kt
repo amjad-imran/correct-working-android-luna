@@ -1102,7 +1102,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 hasDetectedWorkout = false
             }
 
-            //handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
+            handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
             var totalSleep: Int? = null
             healthData.sleep?.sleeps?.forEach {
@@ -3086,7 +3086,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
             }
 
-            trendsData?.welcome?.sleep_media?.let {
+            /*trendsData?.welcome?.sleep_media?.let {
                 if (cardClickState[DashInfoCard.SLEEP] == false) {
                     userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
                 } else {
@@ -3108,7 +3108,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 } else {
                     viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
                 }
-            }
+            }*/
 
         }
     }
