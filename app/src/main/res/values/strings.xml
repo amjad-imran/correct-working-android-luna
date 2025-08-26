@@ -2119,6 +2119,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">It looks like you have not logged any activities for this day</string>
     <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">We don’t have your sleep data from last night, but no worries. You can quickly log your sleep now to unlock today’s rhythm guide.</string>
     <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">Your sleep for yesterday has not been recorded. Please log your sleep data to see this card active.</string>
+
     <string name="text_high_focus_peak">High Focus Peak</string>
     <string name="text_moderate_focus_peak">Moderate Focus Peak</string>
     <string name="text_dim_light_phase">Dim Light Phase</string>
@@ -2132,7 +2133,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_dim_light">Dim-light</string>
     <string name="text_period_symptom">Period symptom</string>
     <string name="energy">Energy</string>
-
     <string name="text_circadian_how_it_works_intro_1">How does your Circadian rhythm affect you?</string>
     <string name="text_circadian_how_it_works_intro_2">Anchor your body clock with well-timed daily actions</string>
     <string name="text_circadian_how_it_works_intro_3">Unified timeline of circadian cues and key health metrics tracked by Luna Ring</string>
