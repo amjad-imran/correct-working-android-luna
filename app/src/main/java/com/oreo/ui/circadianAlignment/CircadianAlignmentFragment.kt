@@ -557,7 +557,7 @@ class CircadianAlignmentFragment :
         binding.lytCorrectiveActivities.recyclerV.layoutManager = LinearLayoutManager(context)
         binding.lytCorrectiveActivities.recyclerV.adapter = correctiveActivitiesAdapter
 
-//        viewModel.initHowItWorksData()
+        viewModel.initHowItWorksData()
 
         binding.rvHowItWorks.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
