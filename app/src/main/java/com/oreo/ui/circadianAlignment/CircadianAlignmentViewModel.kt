@@ -650,16 +650,16 @@ class CircadianAlignmentViewModel
                         image = R.drawable.image_circadian_hiw_1,
                     ),
                     HowItWorksModel.CircadianHowItWorksModel(
-                        title = resourceProvider.getString(R.string.text_how_does_the_luna_ring),
+                        title = resourceProvider.getString(R.string.text_hiw_circadian_card_title_2),
                         image = R.drawable.image_circadian_hiw_2,
                     ),
                     HowItWorksModel.CircadianHowItWorksModel(
-                        title = resourceProvider.getString(R.string.text_what_is_circadian_alignment),
-                        image = R.drawable.image_circadian_hiw_1,
+                        title = resourceProvider.getString(R.string.text_hiw_circadian_card_title_3),
+                        image = R.drawable.image_circadian_hiw_3,
                     ),
                     HowItWorksModel.CircadianHowItWorksModel(
-                        title = resourceProvider.getString(R.string.text_what_is_circadian_alignment),
-                        image = R.drawable.image_circadian_hiw_1,
+                        title = resourceProvider.getString(R.string.text_hiw_circadian_card_title_4),
+                        image = R.drawable.image_circadian_hiw_4,
                     ),
                 )
             )
