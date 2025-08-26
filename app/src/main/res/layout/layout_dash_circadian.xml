@@ -40,14 +40,15 @@
         app:layout_constraintTop_toTopOf="@+id/tvTitle"
         app:srcCompat="@drawable/ic_arrow_right_circadian" />
 
-    <com.oreo.util.graph.Circadian24HourGraph
-        android:id="@+id/graphView"
+    <include
+        android:id="@+id/lytGraphView"
+        layout="@layout/layout_horizontal_24_hour_160"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
 
     <TextView
         android:id="@+id/tvWindow"
@@ -61,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/graphView"
+        app:layout_constraintTop_toBottomOf="@+id/lytGraphView"
         tools:text="Performance Window" />
 
     <TextView
