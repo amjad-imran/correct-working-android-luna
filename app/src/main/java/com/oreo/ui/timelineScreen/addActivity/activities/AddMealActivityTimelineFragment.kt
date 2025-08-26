@@ -98,7 +98,7 @@ class AddMealActivityTimelineFragment :
     override fun subscribeObservers() {
         viewModel.mealTime.observe(this) {
             binding.lytAddMeal.tvTime.text =
-                it.format(DateTimeFormatter.ofPattern("hh:mm:a")).uppercase()
+                it.format(DateTimeFormatter.ofPattern("h:mm a")).uppercase()
         }
         viewModel.onAddSuccess.observe(this){
             it.getContent()?.let {
