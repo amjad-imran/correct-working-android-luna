@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--<com.facebook.shimmer.ShimmerFrameLayout
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         app:layout_constraintBottom_toBottomOf="@id/tvDesc"
-        app:shimmer_angle="0"
+        app:shimmer_direction="left_to_right"
         app:shimmer_auto_start="true"
         app:shimmer_duration="1000">
 
@@ -25,7 +27,7 @@
             <TextView
                 android:id="@+id/tvShimmerTitle"
                 style="@style/S22"
-                android:layout_width="0dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:background="@color/shimmer_color"
                 android:textAlignment="center"
@@ -38,9 +40,8 @@
                 android:id="@+id/tvShimmerDesc"
                 style="@style/S14"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:background="@color/shimmer_color"
-                android:layout_marginHorizontal="36dp"
                 android:layout_marginTop="14dp"
                 android:lineHeight="20sp"
                 android:textAlignment="center"
@@ -53,7 +54,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>-->
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <TextView
         android:id="@+id/tvTitle"

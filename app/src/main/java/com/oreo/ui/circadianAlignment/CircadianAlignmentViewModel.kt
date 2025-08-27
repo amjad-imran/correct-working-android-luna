@@ -120,9 +120,9 @@ class CircadianAlignmentViewModel
                                 it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
 
-                            delay(5000,{
+                            //delay(5000,{
                                 getNudgeCircadianData(it)
-                            })
+                            /*})*/
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }

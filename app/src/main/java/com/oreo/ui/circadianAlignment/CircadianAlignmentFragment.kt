@@ -638,11 +638,11 @@ class CircadianAlignmentFragment :
             val showShimmer = it.second
             if(showShimmer){
                 binding.lytFocusWindow.progressBarFocusWindow.root.visible()
-                /*binding.lytFocusWindow.shimmerLayout.startShimmer()*/
+                binding.lytFocusWindow.shimmerLayout.startShimmer()
             }else{
                 binding.lytFocusWindow.progressBarFocusWindow.root.gone()
-                /*binding.lytFocusWindow.shimmerLayout.stopShimmer()
-                binding.lytFocusWindow.shimmerLayout.gone()*/
+                binding.lytFocusWindow.shimmerLayout.stopShimmer()
+                binding.lytFocusWindow.shimmerLayout.gone()
                 binding.lytFocusWindow.apply {
                     tvTitle.text = it.first?.title ?: "-"
                     tvDesc.text = it.first?.description ?: "-"
