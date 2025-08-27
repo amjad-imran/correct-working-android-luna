@@ -2158,7 +2158,6 @@
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Parece que você ainda não registrou nenhuma atividade</string>
     <string name="text_start_fresh_today">Comece do zero hoje</string>
     <string name="text_focus_window_desc1">Não temos seus dados de sono da noite passada, mas não se preocupe. Você pode registrar rapidamente seu sono agora para desbloquear o guia de ritmo de hoje.</string>
-    <string name="text_focus_window_desc2">Seu horário de despertar hoje foi fora do seu ritmo habitual, portanto o Guia de Ritmo Circadiano está temporariamente indisponível. Use o Luna AI para aprender a criar uma consistência que funcione para você.</string>
     <string name="text_guidance_resumes_soon">A orientação será retomada em breve</string>
     <string name="text_take_quiz">Faça o quiz!</string>
     <string name="text_no_sleep_data">Nenhum dado de sono</string>
@@ -2194,5 +2193,6 @@
     <string name="text_hiw_circadian_card_title_2">Ancore seu relógio biológico com ações diárias bem cronometradas</string>
     <string name="text_hiw_circadian_card_title_3">Veja como cada fator modela seu dia—todos juntos na Linha do Tempo</string>
     <string name="text_hiw_circadian_card_title_4">Alinhe-se com o seu meio circadiano para melhorar a recuperação.</string>
+    <string name="text_focus_window_desc2">O seu horário de despertar hoje estava fora do seu ritmo habitual, por isso o Guia do Ritmo Circadiano está temporariamente indisponível. Use o Luna AI para aprender como criar uma consistência que funcione para você.</string>
 
 </resources>

@@ -2254,7 +2254,6 @@ onjour, Luna"</string>
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Il semble que vous n’ayez pas encore enregistré d’activités</string>
     <string name="text_start_fresh_today">Repartir à zéro aujourd’hui</string>
     <string name="text_focus_window_desc1">Nous n’avons pas vos données de sommeil de la nuit dernière, mais pas d’inquiétude. Vous pouvez rapidement enregistrer votre sommeil maintenant pour débloquer le guide du rythme d’aujourd’hui.</string>
-    <string name="text_focus_window_desc2">Votre heure de réveil aujourd’hui était en dehors de votre rythme habituel, donc le guide du rythme circadien est temporairement indisponible. Utilisez Luna AI pour apprendre à construire une constance qui vous convient.</string>
     <string name="text_guidance_resumes_soon">Les conseils reprennent bientôt</string>
     <string name="text_take_quiz">Faites le quiz !</string>
     <string name="text_no_sleep_data">Pas de données de sommeil</string>
@@ -2290,5 +2289,6 @@ onjour, Luna"</string>
     <string name="text_hiw_circadian_card_title_2">Ancre ton horloge biologique avec des actions quotidiennes bien chronométrées</string>
     <string name="text_hiw_circadian_card_title_3">Vois comment chaque facteur façonne ta journée—ensemble dans la Chronologie</string>
     <string name="text_hiw_circadian_card_title_4">Aligne-toi avec ton point médian circadien pour améliorer la récupération.</string>
+    <string name="text_focus_window_desc2">Votre heure de réveil aujourd\'hui était en dehors de votre rythme habituel, donc le Guide du Rythme Circadien est temporairement indisponible. Utilisez Luna AI pour apprendre à créer une routine qui fonctionne pour vous.</string>
 
 </resources>

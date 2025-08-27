@@ -2134,7 +2134,6 @@
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Het lijkt erop dat je nog geen activiteiten hebt geregistreerd</string>
     <string name="text_start_fresh_today">Begin vandaag opnieuw</string>
     <string name="text_focus_window_desc1">We hebben je slaapgegevens van gisteravond niet, maar geen zorgen. Je kunt je slaap nu snel registreren om de ritmegids van vandaag te ontgrendelen.</string>
-    <string name="text_focus_window_desc2">Je ontwaaktijd van vandaag viel buiten je gebruikelijke ritme, dus de Circadiane Ritmegids is tijdelijk niet beschikbaar. Gebruik Luna AI om te leren hoe je consistentie kunt opbouwen die bij je past.</string>
     <string name="text_guidance_resumes_soon">Begeleiding hervat binnenkort</string>
     <string name="text_take_quiz">Doe de quiz!</string>
     <string name="text_no_sleep_data">Geen slaapgegevens</string>
@@ -2170,5 +2169,6 @@
     <string name="text_hiw_circadian_card_title_2">Veranker je biologische klok met goed getimede dagelijkse acties</string>
     <string name="text_hiw_circadian_card_title_3">Zie hoe elk factor je dag vormt—samen in de Tijdlijn</string>
     <string name="text_hiw_circadian_card_title_4">Verbind je met je circadiane midpoint om herstel te verbeteren.</string>
+    <string name="text_focus_window_desc2">Je wektijd vandaag was buiten je gebruikelijke ritme, daarom is de Circadian Rhythm Guide tijdelijk niet beschikbaar. Gebruik Luna AI om te leren hoe je een consistentie kunt opbouwen die voor jou werkt.</string>
 
 </resources>

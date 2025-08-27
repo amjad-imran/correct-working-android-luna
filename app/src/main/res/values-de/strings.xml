@@ -2134,7 +2134,6 @@
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">Es sieht so aus, als hätten Sie noch keine Aktivitäten protokolliert</string>
     <string name="text_start_fresh_today">Heute neu beginnen</string>
     <string name="text_focus_window_desc1">Wir haben keine Schlafdaten von letzter Nacht, aber keine Sorge. Sie können Ihren Schlaf jetzt schnell protokollieren, um den heutigen Rhythmusleitfaden freizuschalten.</string>
-    <string name="text_focus_window_desc2">Ihre Aufwachzeit heute lag außerhalb Ihres üblichen Rhythmus, daher ist der zirkadiane Rhythmusleitfaden vorübergehend nicht verfügbar. Nutzen Sie Luna AI, um zu lernen, wie Sie Konsistenz aufbauen können, die zu Ihnen passt.</string>
     <string name="text_guidance_resumes_soon">Anleitung wird bald fortgesetzt</string>
     <string name="text_take_quiz">Quiz machen!</string>
     <string name="text_no_sleep_data">Keine Schlafdaten</string>
@@ -2170,5 +2169,6 @@
     <string name="text_hiw_circadian_card_title_2">Verankere deine innere Uhr mit gut getimten täglichen Aktivitäten</string>
     <string name="text_hiw_circadian_card_title_3">Sieh, wie jeder Faktor deinen Tag formt—gemeinsam in der Zeitleiste</string>
     <string name="text_hiw_circadian_card_title_4">Richte dich nach deinem zirkadianen Mittelpunkt aus, um die Erholung zu verbessern.</string>
+    <string name="text_focus_window_desc2">Ihre heutige Aufwachzeit lag außerhalb Ihres gewohnten Rhythmus, daher ist der Circadian Rhythm Guide vorübergehend nicht verfügbar. Verwenden Sie Luna AI, um zu erfahren, wie Sie eine für Sie funktionierende Konsistenz aufbauen können.</string>
 
 </resources>
