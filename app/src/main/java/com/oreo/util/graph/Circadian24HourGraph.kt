@@ -392,18 +392,15 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
         val x = (offsetHours * hourWidthPx) + (width / 2f) - scrollOffsetX
 
+        val xLine = width / 2f
+
         val yTop = topPadding
         val yBottom = getGraphHeight() - bottomPaddingForLabels
 
+        canvas.drawLine(xLine, yTop, xLine, yBottom, currentTimeLinePaint)
 
-        canvas.drawLine(x, yTop, x, yBottom, currentTimeLinePaint)
 
         val circleRadius = 10f
-
-        val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = "#3D4A3F".toColorInt()
-            style = Paint.Style.FILL
-        }
 
         val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
@@ -411,11 +408,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
             strokeWidth = 4f
         }
 
-        // Top circle marker
-        canvas.drawCircle(x, 20f, circleRadius, circlePaint)
-        canvas.drawCircle(x, 20f, circleRadius, strokePaint)
+        canvas.drawCircle(xLine, 20f, circleRadius, strokePaint)
 
-        // Rounded box with time label at bottom
         val textPadding = 12f
         val textHeight = textPaint.descent() - textPaint.ascent()
         val textWidth = textPaint.measureText(label)
@@ -434,7 +428,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
         canvas.drawRoundRect(rect, 16f, 16f, boxPaint)
 
-        // Draw time text inside rounded box
         val textY = boxTop + textPadding - textPaint.ascent()
         canvas.drawText(label, x - textWidth / 2f, textY, textPaint)
     }
