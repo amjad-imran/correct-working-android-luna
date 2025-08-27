@@ -2141,5 +2141,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_hiw_circadian_card_title_3">Mira cómo cada factor da forma a tu día—todos juntos en la Línea de Tiempo</string>
     <string name="text_hiw_circadian_card_title_4">Alinéate con tu punto medio circadiano para mejorar la recuperación.</string>
     <string name="text_focus_window_desc2">Tu hora de despertar hoy estuvo fuera de tu ritmo habitual, por lo que la Guía del Ritmo Circadiano está temporalmente no disponible. Usa Luna AI para aprender cómo crear una rutina que funcione para ti.</string>
+    <string name="text_let_s_identify_your_chronotype">¡Vamos a identificar tu cronotipo!</string>
 
 </resources>

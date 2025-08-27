@@ -2176,5 +2176,6 @@
     <string name="text_hiw_circadian_card_title_3">ดูว่าแต่ละปัจจัยมีผลต่อวันของคุณอย่างไร — ทุกอย่างในไทม์ไลน์</string>
     <string name="text_hiw_circadian_card_title_4">ปรับสภาพกับวงจรชีวภาพของคุณเพื่อช่วยการฟื้นฟู</string>
     <string name="text_focus_window_desc2">เวลาตื่นของคุณในวันนี้อยู่นอกจังหวะปกติของคุณ ดังนั้นคู่มือจังหวะปกติจึงไม่สามารถใช้งานได้ชั่วคราว ใช้ Luna AI เพื่อเรียนรู้วิธีสร้างความสม่ำเสมอที่เหมาะกับคุณ</string>
+    <string name="text_let_s_identify_your_chronotype">มาหาโครโนไทป์ของคุณกันเถอะ!</string>
 
 </resources>

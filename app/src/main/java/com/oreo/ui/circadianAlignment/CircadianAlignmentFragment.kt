@@ -802,9 +802,9 @@ class CircadianAlignmentFragment :
 
     private fun getActMoniStatusIcon(status: String?): Int {
         return when (status) {
-            CircadianAlignmentViewModel.actMonStatusList[0] -> R.drawable.ic_partially_done_circadian
-            CircadianAlignmentViewModel.actMonStatusList[1] -> R.drawable.ic_hm_check_mark
-            CircadianAlignmentViewModel.actMonStatusList[2] -> R.drawable.ic_not_done_circadian
+            "partial" -> R.drawable.ic_partially_done_circadian
+            "done" -> R.drawable.ic_hm_check_mark
+            "not-done" -> R.drawable.ic_not_done_circadian
             else -> R.drawable.ic_hm_check_default_circadian
         }
     }

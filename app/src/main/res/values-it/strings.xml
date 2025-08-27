@@ -2171,5 +2171,6 @@
     <string name="text_hiw_circadian_card_title_3">Vedi come ogni fattore modella la tua giornata—insieme nella Timeline</string>
     <string name="text_hiw_circadian_card_title_4">Allineati con il tuo punto medio circadiano per migliorare il recupero.</string>
     <string name="text_focus_window_desc2">Il tuo orario di sveglia oggi è stato fuori dal tuo ritmo abituale, quindi la Guida del Ritmo Circadiano è temporaneamente non disponibile. Usa Luna AI per imparare a costruire una routine che funzioni per te.</string>
+    <string name="text_let_s_identify_your_chronotype">Identifichiamo il tuo cronotipo!</string>
 
 </resources>

@@ -2164,6 +2164,7 @@
     <string name="text_hiw_circadian_card_title_3">查看每个因素如何共同塑造你的一天—都在时间线上</string>
     <string name="text_hiw_circadian_card_title_4">与生物节律中点同步来增强恢复效果。</string>
     <string name="text_focus_window_desc2">今天您的起床时间超出了您通常的节奏，因此生物节律指南暂时无法使用。使用Luna AI学习如何建立适合您的规律。</string>
+    <string name="text_let_s_identify_your_chronotype">让我们识别你的生物钟类型！</string>
 
 
 </resources>

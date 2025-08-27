@@ -2290,5 +2290,6 @@ onjour, Luna"</string>
     <string name="text_hiw_circadian_card_title_3">Vois comment chaque facteur façonne ta journée—ensemble dans la Chronologie</string>
     <string name="text_hiw_circadian_card_title_4">Aligne-toi avec ton point médian circadien pour améliorer la récupération.</string>
     <string name="text_focus_window_desc2">Votre heure de réveil aujourd\'hui était en dehors de votre rythme habituel, donc le Guide du Rythme Circadien est temporairement indisponible. Utilisez Luna AI pour apprendre à créer une routine qui fonctionne pour vous.</string>
+    <string name="text_let_s_identify_your_chronotype">Identifions votre chronotype !</string>
 
 </resources>
