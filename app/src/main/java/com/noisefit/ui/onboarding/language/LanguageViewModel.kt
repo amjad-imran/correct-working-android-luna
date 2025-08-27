@@ -71,6 +71,7 @@ class LanguageViewModel @Inject constructor(
             //Female health Data
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_SYMPTOMS_ICON)
 
             //Clear OTA Data
             ringDataStore.cleaNewOtaVersion()

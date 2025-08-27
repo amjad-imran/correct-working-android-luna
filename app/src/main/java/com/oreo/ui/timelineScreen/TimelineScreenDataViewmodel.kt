@@ -158,6 +158,10 @@ class TimelineScreenDataViewmodel @Inject constructor(
                 data.titleColor = "#F18EBD".toColorInt()
                 data.desc = "Day 1"
             }
+            SYMPTOM_KEY -> {
+                data.titleColor = "#F18EBD".toColorInt()
+                data.desc = data.value
+            }
 
             ACTIVITY_KEY -> {
                 data.titleColor = "#FFFFFF".toColorInt()
@@ -244,16 +248,23 @@ class TimelineScreenDataViewmodel @Inject constructor(
         events: List<ItemTimelineResponseModel>,
         windowMinutes: Long = 30
     ): List<ItemTimelineResponseModel> {
-        val hydration = events
+
+        val periodStartedEvent = events.find { it.event.equals(SYMPTOM_KEY, ignoreCase = true) }
+
+        val eventsWithoutPeriod = events.toMutableList()
+        periodStartedEvent?.let {
+            eventsWithoutPeriod.remove(it)
+        }
+
+        val hydration = eventsWithoutPeriod
             .asSequence()
             .filter { it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
             .sortedByDescending { startDateTime(it.startDate, it.startTime) }
             .toList()
 
-        val nonHydration = events
+        val nonHydration = eventsWithoutPeriod
             .asSequence()
-            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true)
-                    && !it.event.equals(SYMPTOM_KEY, true) } // TODO: Remove Symptom
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true)}
             .toList()
 
 
@@ -299,7 +310,15 @@ class TimelineScreenDataViewmodel @Inject constructor(
         }
 
         merged.addAll(nonHydration)
+        var sortedList = merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }.toMutableList()
+        periodStartedEvent?.let {
+            if(sortedList.isEmpty()){
+                sortedList = arrayListOf(it)
+            }else{
+                sortedList.add(it)
+            }
+        }
 
-        return merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }
+        return sortedList
     }
 }

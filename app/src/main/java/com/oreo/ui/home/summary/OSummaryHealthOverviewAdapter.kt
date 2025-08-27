@@ -99,6 +99,7 @@ import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.oreo.ui.chatGpt.SummaryStates
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -165,7 +166,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
 
     object OnTimelineCardClicked: OSummaryHealthOverviewClickEnum()
-    object OnLogActivityClicked: OSummaryHealthOverviewClickEnum()
+    class OnLogActivityClicked(val key: String?): OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -753,7 +754,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
             }
             binding.btnLogAnActivity.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
             }
         }
 
@@ -3131,7 +3132,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.llLytLog.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(CircadianAlignmentViewModel.sleep_key))
             }
         }
     }

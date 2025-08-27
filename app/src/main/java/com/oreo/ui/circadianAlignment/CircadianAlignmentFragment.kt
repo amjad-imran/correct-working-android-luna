@@ -596,7 +596,7 @@ class CircadianAlignmentFragment :
             if (viewModel.isChatSplashShown()) {
                 navigate(
                     R.id.aiTopQuestionsFragment,
-                    bundleOf("aiTopic" to AITopics.GENERAL)
+                    bundleOf("aiTopic" to AITopics.CIRCADIAN)
                 )
             } else {
                 navigate(R.id.aiChatOnboardFragment)
