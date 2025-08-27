@@ -17,6 +17,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.delay
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CorrectiveActivitiesModel
 import com.oreo.data.model.OnlyImgWithText
@@ -118,7 +119,10 @@ class CircadianAlignmentViewModel
                                 it.activities,
                                 it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
-                            getNudgeCircadianData(it)
+
+                            delay(5000,{
+                                getNudgeCircadianData(it)
+                            })
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }
