@@ -84,18 +84,27 @@ class CorrectiveActivitiesAdapter(
                 if (data.time==null){
                     binding.imageView99.gone()
                     binding.lytTimerTag.gone()
-                    binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_today)
+                    binding.tvOpenCloseTag.apply {
+                        text = context.getString(R.string.text_opens_today)
+                        setTextColor("#FFB0B0".toColorInt())
+                    }
                     binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
                 }
                 else if(data.time == "0"){
                     binding.imageView99.gone()
                     binding.lytTimerTag.gone()
-                    binding.tvOpenCloseTag.text = context.getString(R.string.text_opens_tomorrow)
+                    binding.tvOpenCloseTag.apply {
+                        text = context.getString(R.string.text_opens_tomorrow)
+                        setTextColor("#FFB0B0".toColorInt())
+                    }
                     binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_opens_today_circadian)
                 }
                 else{
                     binding.imageView99.setVisibilityByCondition(data.logStatus==true)
-                    binding.tvOpenCloseTag.text = context.getString(R.string.text_open)
+                    binding.tvOpenCloseTag.apply {
+                        text = context.getString(R.string.text_open)
+                        setTextColor("#63FFB6".toColorInt())
+                    }
                     binding.lytOpenCloseTag.setBackgroundResource(R.drawable.bg_open_tag_circadian)
 
                     binding.tvTimerTag.text = data.time
