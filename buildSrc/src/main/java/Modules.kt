@@ -2,6 +2,7 @@ object Modules {
     const val app = ":app"
 
     const val commons = ":commons"
+    const val shimmerTextView = ":ShimmerTextView"
     const val mpChartLib = ":MPChartLib"
     const val oreo = ":oreo"
     const val timePickerSlider = ":timePickerSlider"

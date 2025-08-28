@@ -25,11 +25,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:shimmer_base_color="#99E1F4FF"
-            app:shimmer_colored="true"
-            app:shimmer_duration="2000"
-            app:shimmer_highlight_color="@color/white"
-            app:shimmer_repeat_mode="restart" />
+            app:text_shimmer_base_color="#99E1F4FF"
+            app:text_shimmer_colored="true"
+            app:text_shimmer_duration="2000"
+            app:text_shimmer_highlight_color="@color/white"
+            app:text_shimmer_repeat_mode="restart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

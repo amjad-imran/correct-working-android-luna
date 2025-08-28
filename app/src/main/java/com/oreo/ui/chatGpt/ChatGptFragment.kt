@@ -499,7 +499,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 }
 
 enum class AITopics {
-    SLEEP, READINESS, ACTIVITY, STRESS, MENSTRUAL_HEALTH, WORKOUT, GENERAL
+    SLEEP, READINESS, ACTIVITY, STRESS, MENSTRUAL_HEALTH, WORKOUT, GENERAL, CIRCADIAN
 }
 
 enum class PlanType {

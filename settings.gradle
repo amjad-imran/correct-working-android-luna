@@ -27,6 +27,7 @@ dependencyResolutionManagement {
 rootProject.name = "LunaRing"
 include ':app'
 include ':commons'
+include ':ShimmerTextView'
 include ':noisefit_libraries_zh'
 include ':MPChartLib'
 include(":noisefit_zh_sdk")

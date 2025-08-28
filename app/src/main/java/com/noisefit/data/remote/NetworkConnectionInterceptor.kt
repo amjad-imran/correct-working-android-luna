@@ -289,7 +289,7 @@ class NetworkConnectionInterceptor(
         return safeApiCallFlow(Dispatchers.IO) {
             tokenRefreshApi.refreshAccessToken(
                 "${BuildConfig.BASE_URL_NEW}/auth_v2/refresh-token",
-                "Bearer $refreshToken", "ring"
+                "Bearer $refreshToken", "ring",getUserAgent()
             )
         }
     }

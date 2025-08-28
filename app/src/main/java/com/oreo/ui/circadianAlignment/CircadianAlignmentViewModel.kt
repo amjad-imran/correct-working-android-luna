@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
@@ -16,6 +17,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.delay
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CorrectiveActivitiesModel
 import com.oreo.data.model.OnlyImgWithText
@@ -76,13 +78,18 @@ class CircadianAlignmentViewModel
 
     fun initData() {
 
-        /*val data =
-            "{ \"activities\": [ { \"type\": \"light_exposure\", \"goal\": 120, \"time\": 7267, \"status\": true }, { \"type\": \"meal_window\", \"time\": 41467, \"status\": true }, { \"type\": \"caffeine_window\", \"time\": 27067, \"status\": true }, { \"type\": \"workout\", \"time\": 36067, \"goal\": 440, \"status\": false, \"progress\": 836, \"active_calories\": 836, \"total_calories\": 1632 }, { \"type\": \"daily_steps\", \"goal\": 10000, \"time\": 36067, \"progress\": 1641 } ], \"activity_monitor\": [ { \"type\": \"light_exposure\", \"status\": \"partial\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"done\" }, { \"type\": \"caffeine_window\", \"status\": \"done\" }, { \"type\": \"workout\", \"status\": \"partial\" } ], \"chronotype\": { \"type\": \"Moderately evening type\", \"introduction\": \"You’re naturally inclined to be a night owl.\", \"description\": \"Your creativity and focus peak in the afternoon or early evening. Plan for a gentler start and build momentum into your afternoon routines.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"09:40\", \"end_time\": \"15:40\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"18:10\", \"end_time\": \"21:10\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"21:10\", \"end_time\": \"23:40\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"08:10\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"09:10\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"09:10\", \"end_time\": \"12:10\", \"peak_time\": \"10:40\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"14:10\", \"end_time\": \"17:10\", \"peak_time\": \"15:40\" }, \"sleep_window_opens_graph\": { \"start_time\": \"23:40\" }, \"gh_pulse_window_graph\": { \"start_time\": \"04:10\" }, \"activity_window_graph\": { \"start_time\": \"07:40\", \"end_time\": \"17:10\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-25 00:45:00\", \"end_time\": \"2025-08-25 03:15:00\", \"circadian_midpoint\": \"2025-08-25 04:27:00\", \"avg_now\": \"2025-08-25 04:21:42\", \"avg_before\": \"2025-08-25 04:20:22\", \"chronotype\": \"Moderately morning type\", \"nudge\": { \"title\": \"Stay Active During Your Focus Window\", \"description\": \"Incorporate light physical activities like walking or stretching during your focus window to boost a\" } }, \"energy_graph\": [ { \"start_time\": \"07:40\", \"energy\": 0.011 }, { \"start_time\": \"08:40\", \"energy\": 0.135 }, { \"start_time\": \"09:40\", \"energy\": 0.607 }, { \"start_time\": \"10:40\", \"energy\": 1.004 }, { \"start_time\": \"11:40\", \"energy\": 0.639 }, { \"start_time\": \"12:40\", \"energy\": 0.23 }, { \"start_time\": \"13:40\", \"energy\": 0.181 }, { \"start_time\": \"14:40\", \"energy\": 0.397 }, { \"start_time\": \"15:40\", \"energy\": 0.604 }, { \"start_time\": \"16:40\", \"energy\": 0.364 }, { \"start_time\": \"17:40\", \"energy\": 0.081 }, { \"start_time\": \"18:40\", \"energy\": 0.007 }, { \"start_time\": \"19:40\", \"energy\": 0 }, { \"start_time\": \"20:40\", \"energy\": 0 }, { \"start_time\": \"21:40\", \"energy\": 0 }, { \"start_time\": \"22:40\", \"energy\": 0 }, { \"start_time\": \"23:40\", \"energy\": 0 } ], \"sleep_data\": { \"bed_time\": \"2025-08-25 23:40:00\", \"wake_time\": \"2025-08-25 07:40:00\" }, \"start_time\": \"2025-08-25 07:40:00\", \"end_time\": \"2025-08-25 23:40:00\" }, \"is_locked\": false }"
+       /* val data =
+            "{ \"activities\": [{ \"type\": \"light_exposure\", \"goal\": 120, \"time\": -27001, \"status\": true }, { \"type\": \"meal_window\", \"time\": 8999, \"status\": false }, { \"type\": \"caffeine_window\", \"time\": -5401, \"status\": true }, { \"type\": \"workout\", \"time\": 1799, \"goal\": 430, \"status\": false, \"progress\": 326, \"active_calories\": 326, \"total_calories\": 1353 }, { \"type\": \"daily_steps\", \"goal\": 3000, \"time\": 1799, \"progress\": 2683 }], \"activity_monitor\": [{ \"type\": \"light_exposure\", \"status\": \"done\" }, { \"type\": \"daily_steps\", \"status\": \"partial\" }, { \"type\": \"meal_window\", \"status\": \"partial\" }, { \"type\": \"caffeine_window\", \"status\": \"done\" }, { \"type\": \"workout\", \"status\": \"partial\" }], \"chronotype\": { \"type\": \"Intermediate type\", \"introduction\": \"You follow a balanced day-night rhythm.\", \"description\": \"Your energy levels match the average population. Use consistent timing and exposure to cues like light and meals to stay aligned and adapt to shifting demands.\" }, \"graph_data\": { \"caffeine_window_graph\": { \"start_time\": \"10:06\", \"end_time\": \"16:06\" }, \"melatonin_prep_phase_window_graph\": { \"start_time\": \"19:06\", \"end_time\": \"22:06\" }, \"dlmo_phase_window_graph\": { \"start_time\": \"22:06\", \"end_time\": \"00:06\" }, \"cortisol_peak_window_graph\": { \"start_time\": \"08:06\", \"end_time\": \"08:36\" }, \"light_anchoring_phase_window_graph\": { \"start_time\": \"08:06\", \"end_time\": \"10:06\" }, \"first_focus_peak_window_graph\": { \"start_time\": \"10:06\", \"end_time\": \"13:06\", \"peak_time\": \"11:36\" }, \"second_focus_peak_window_graph\": { \"start_time\": \"15:06\", \"end_time\": \"18:06\", \"peak_time\": \"16:36\" }, \"sleep_window_opens_graph\": { \"start_time\": \"00:06\" }, \"gh_pulse_window_graph\": { \"start_time\": \"05:06\" }, \"activity_window_graph\": { \"start_time\": \"08:06\", \"end_time\": \"18:06\" }, \"circadian_mid_point\": { \"start_time\": \"2025-08-26 02:15:00\", \"end_time\": \"2025-08-26 04:45:00\", \"circadian_midpoint\": \"2025-08-26 04:38:00\", \"avg_now\": \"2025-08-26 05:03:42\", \"avg_before\": \"2025-08-26 05:00:12\", \"chronotype\": \"Intermediate type\" }, \"energy_graph\": [{ \"start_time\": \"08:06\", \"energy\": 0.011 }, { \"start_time\": \"09:06\", \"energy\": 0.135 }, { \"start_time\": \"10:06\", \"energy\": 0.607 }, { \"start_time\": \"11:06\", \"energy\": 1.004 }, { \"start_time\": \"12:06\", \"energy\": 0.639 }, { \"start_time\": \"13:06\", \"energy\": 0.23 }, { \"start_time\": \"14:06\", \"energy\": 0.181 }, { \"start_time\": \"15:06\", \"energy\": 0.397 }, { \"start_time\": \"16:06\", \"energy\": 0.604 }, { \"start_time\": \"17:06\", \"energy\": 0.364 }, { \"start_time\": \"18:06\", \"energy\": 0.081 }, { \"start_time\": \"19:06\", \"energy\": 0.007 }, { \"start_time\": \"20:06\", \"energy\": 0 }, { \"start_time\": \"21:06\", \"energy\": 0 }, { \"start_time\": \"22:06\", \"energy\": 0 }, { \"start_time\": \"23:06\", \"energy\": 0 }, { \"start_time\": \"00:06\", \"energy\": 0 }], \"sleep_data\": { \"bed_time\": \"2025-08-27 00:06:00\", \"wake_time\": \"2025-08-26 08:06:00\" }, \"start_time\": \"2025-08-26 08:06:00\", \"end_time\": \"2025-08-27 00:06:00\" }, \"is_locked\": false }"
+        val dataObj = Gson().fromJson(
+            data,
+            CircadianResponseModel::class.java
+        )
         circadianResponseData.postValue(
-            Gson().fromJson(
-                data,
-                CircadianResponseModel::class.java
-            )
+            dataObj
+        )
+        prepareCorrectiveActivitiesData(
+            dataObj.activities,
+            dataObj.isLockedCircularView!=true && dataObj.graphData?.sleepData != null
         )
         return*/
 
@@ -117,7 +124,10 @@ class CircadianAlignmentViewModel
                                 it.activities,
                                 it.isLockedCircularView!=true && it.graphData?.sleepData != null
                             )
-                            getNudgeCircadianData(it)
+
+                            //delay(5000,{
+                                getNudgeCircadianData(it)
+                            /*})*/
                             LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }
@@ -138,8 +148,8 @@ class CircadianAlignmentViewModel
                 nudgeData.postValue(
                     Pair(
                         NudgeCircadianGraph(
-                            title = resourceProvider.getString(R.string.text_start_fresh_today),
-                            description = resourceProvider.getString(R.string.text_focus_window_desc1)
+                            title = resourceProvider.getString(R.string.text_guidance_resumes_soon),
+                            description = resourceProvider.getString(R.string.text_focus_window_desc2)
                         ),
                         false
                     )
@@ -151,8 +161,8 @@ class CircadianAlignmentViewModel
                     nudgeData.postValue(
                         Pair(
                             NudgeCircadianGraph(
-                                title = resourceProvider.getString(R.string.text_guidance_resumes_soon),
-                                description = resourceProvider.getString(R.string.text_focus_window_desc2)
+                                title = resourceProvider.getString(R.string.text_start_fresh_today),
+                                description = resourceProvider.getString(R.string.text_focus_window_desc1)
                             ),
                             false
                         )
@@ -294,7 +304,7 @@ class CircadianAlignmentViewModel
 
                     daily_steps_key -> {
                         // Daily Steps Data
-                        val goal = it.goal?.toInt()
+                        val goal = it.goal?.toIntOrNull()
                         dailyStepsData.value?.apply {
                             progressBarLytData = ProgressBarLytData(
                                 totalProgress = goal,
@@ -322,11 +332,11 @@ class CircadianAlignmentViewModel
 
                     workout_key -> {
                         // Workout Data
-                        val goal = it.goal?.toInt()?.div(60)
+                        val goal = it.goal?.toIntOrNull()
                         workoutData.value?.apply {
                             progressBarLytData = ProgressBarLytData(
                                 totalProgress = goal,
-                                currentProgress = goal?.let { ((it / 60) * 0.1).toInt() } ?: 0,
+                                currentProgress =  goal?.let { curData.progress ?: 0 } ?: 0,
                                 img = R.drawable.ic_workout_corrective_activities,
                                 txt = if ((curData.time
                                         ?: 0) <= 0

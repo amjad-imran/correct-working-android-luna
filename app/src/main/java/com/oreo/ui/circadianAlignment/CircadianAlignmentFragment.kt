@@ -596,7 +596,7 @@ class CircadianAlignmentFragment :
             if (viewModel.isChatSplashShown()) {
                 navigate(
                     R.id.aiTopQuestionsFragment,
-                    bundleOf("aiTopic" to AITopics.GENERAL)
+                    bundleOf("aiTopic" to AITopics.CIRCADIAN)
                 )
             } else {
                 navigate(R.id.aiChatOnboardFragment)
@@ -638,11 +638,11 @@ class CircadianAlignmentFragment :
             val showShimmer = it.second
             if(showShimmer){
                 binding.lytFocusWindow.progressBarFocusWindow.root.visible()
-                /*binding.lytFocusWindow.shimmerLayout.startShimmer()*/
+                binding.lytFocusWindow.shimmerLayout.startShimmer()
             }else{
                 binding.lytFocusWindow.progressBarFocusWindow.root.gone()
-                /*binding.lytFocusWindow.shimmerLayout.stopShimmer()
-                binding.lytFocusWindow.shimmerLayout.gone()*/
+                binding.lytFocusWindow.shimmerLayout.stopShimmer()
+                binding.lytFocusWindow.shimmerLayout.gone()
                 binding.lytFocusWindow.apply {
                     tvTitle.text = it.first?.title ?: "-"
                     tvDesc.text = it.first?.description ?: "-"
@@ -802,9 +802,9 @@ class CircadianAlignmentFragment :
 
     private fun getActMoniStatusIcon(status: String?): Int {
         return when (status) {
-            CircadianAlignmentViewModel.actMonStatusList[0] -> R.drawable.ic_partially_done_circadian
-            CircadianAlignmentViewModel.actMonStatusList[1] -> R.drawable.ic_hm_check_mark
-            CircadianAlignmentViewModel.actMonStatusList[2] -> R.drawable.ic_not_done_circadian
+            "partial" -> R.drawable.ic_partially_done_circadian
+            "done" -> R.drawable.ic_hm_check_mark
+            "not-done" -> R.drawable.ic_not_done_circadian
             else -> R.drawable.ic_hm_check_default_circadian
         }
     }

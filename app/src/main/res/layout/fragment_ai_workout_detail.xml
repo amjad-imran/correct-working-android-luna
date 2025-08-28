@@ -78,11 +78,11 @@
         app:layout_constraintBottom_toTopOf="@+id/ivMic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shimmer_base_color="#7095AF"
-        app:shimmer_colored="true"
-        app:shimmer_duration="3000"
-        app:shimmer_highlight_color="#C2D9E6"
-        app:shimmer_repeat_mode="restart"
+        app:text_shimmer_base_color="#7095AF"
+        app:text_shimmer_colored="true"
+        app:text_shimmer_duration="3000"
+        app:text_shimmer_highlight_color="#C2D9E6"
+        app:text_shimmer_repeat_mode="restart"
         tools:text="@string/text_generating_your_daily_health_digest" />
 
     <com.airbnb.lottie.LottieAnimationView

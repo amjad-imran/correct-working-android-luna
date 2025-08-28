@@ -212,7 +212,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.paging.runtime)
 
-    implementation(libs.mindinventory.shimmertextview)
+    //implementation(libs.mindinventory.shimmertextview)
+
+    implementation(project(Modules.shimmerTextView))
+
 
 
 //    implementation(CalenderView.calendarView)
@@ -348,6 +351,6 @@ dependencies {
     implementation(libs.freshchat.android)
     implementation(libs.jjwt)
 
-    //implementation(libs.shimmer)
+    implementation(libs.shimmer)
 
 }

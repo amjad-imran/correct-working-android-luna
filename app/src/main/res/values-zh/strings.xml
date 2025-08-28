@@ -2128,7 +2128,6 @@
     <string name="text_it_looks_like_you_have_not_logged_any_activities_yet">看起来您还没有记录任何活动</string>
     <string name="text_start_fresh_today">从今天重新开始</string>
     <string name="text_focus_window_desc1">我们没有您昨晚的睡眠数据，但不用担心。您现在可以快速记录睡眠，以解锁今天的节律指南。</string>
-    <string name="text_focus_window_desc2">您今天的起床时间超出了平常的节律，因此昼夜节律指南暂时不可用。使用 Luna AI 学习如何建立适合您的稳定性。</string>
     <string name="text_guidance_resumes_soon">指导将很快恢复</string>
     <string name="text_take_quiz">参加测验！</string>
     <string name="text_no_sleep_data">无睡眠数据</string>
@@ -2139,5 +2138,33 @@
     <string name="text_it_looks_like_you_have_not_logged_any_activities_for_this_day">看起来您今天还没有记录任何活动</string>
     <string name="text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide">我们没有您昨晚的睡眠数据，但不用担心。您现在可以快速记录睡眠，以解锁今天的节律指南。</string>
     <string name="text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active">您昨天的睡眠尚未记录。请记录睡眠数据以激活此卡片。</string>
+    <string name="text_high_focus_peak">高专注峰值</string>
+    <string name="text_moderate_focus_peak">中等专注峰值</string>
+    <string name="text_dim_light_phase">昏暗光照阶段</string>
+    <string name="text_sleep_window">睡眠窗口</string>
+    <string name="text_avoid_caffeine">避免咖啡因</string>
+    <string name="text_natural_light">自然光</string>
+    <string name="text_evening_wind_down">晚上放松</string>
+    <string name="text_neutral_light_zone">中性光照区</string>
+    <string name="text_wind_down">放松</string>
+    <string name="text_neutral_light">中性光照</string>
+    <string name="text_dim_light">昏暗光照</string>
+    <string name="text_period_symptom">月经症状</string>
+    <string name="energy">能量</string>
+    <string name="text_circadian_how_it_works_intro_1">你的生物节律如何影响你？</string>
+    <string name="text_circadian_how_it_works_intro_2">通过合理安排每天的活动来锚定你的生物钟</string>
+    <string name="text_circadian_how_it_works_intro_3">Luna Ring 跟踪的生物节律信号和关键健康指标的统一时间线</string>
+    <string name="text_circadian_how_it_works_intro_4">你个人的生物节律位置和方向标记</string>
+    <string name="text_circadian_how_it_works_desc_1"><![CDATA[身体通过 24 小时的周期来掌控时间，这个周期安排了警觉、恢复和睡眠。当这一节奏与日常生活同步时，能量更具可预测性，休息也会准时到来。生物节律调整清晰地展示了这些时刻，从而可以围绕它们安排一天的活动<br><br>该页面展示了你个人的日程图。一目了然的实时视图展示了当前哪个窗口正在激活，它将持续多长时间，以及接下来发生的事情。专注窗口和其他状态直接显示在屏幕上，咖啡因指南与之并排显示。圆形时钟和水平时间线使得一天的结构一目了然<br><br>个性化从 Chronotype（生物节律类型）开始。一个简短的入职调查会根据你的自然习惯设置你是更早还是更晚的类型，直到你决定重新测试为止。然后，根据这个基准，你的生物节律中点被读取，显示你的节律是否已对齐、提前或延迟<br><br>每个元素都与该地图相连接。时间线记录发生的信号和测量数据，按顺序排列。日常节奏指南显示帮助保持时钟稳定的操作，并显示窗口何时打开。生物节律中点和相位状态显示你的节律与 Chronotype 基准的关系，以及是否向前或向后移动。它们共同构成一个反馈回路，在这个回路中，完整的记录提高了准确性，使得能量、恢复和睡眠模式更容易识别。]]></string>
+    <string name="text_circadian_how_it_works_desc_2"><![CDATA[虽然你可能已经在追踪步数、锻炼或咖啡因来达成其他健康目标，但它们与生物钟的时间同步同样重要。将这些信号与自然窗口对齐，可以提高能量一致性，增强专注力，并促进更深的、恢复性的睡眠<br><br><b>光照暴露</b>是调整生物钟的最强重置。明亮的晨光提高警觉并锚定你的睡眠-清醒周期，而昏暗的晚光则提示你的身体为休息做准备<br><br><b>运动</b>和 <b>锻炼</b> 白天会强化“白天”信号，提高情绪、代谢率和表现准备度。然而，深夜剧烈运动会将你的生物钟推迟<br><br><b>进餐时间</b> 会影响生物节律激素和消化。白天较早进餐有助于代谢效率，而深夜进餐可能会延迟你的生物钟<br><br><b>咖啡因</b> 在个人窗口内摄入可以提高专注力，而不干扰夜间褪黑素分泌。而在这个窗口之外摄入则可能延迟入睡，并减少恢复质量]]></string>
+    <string name="text_circadian_how_it_works_desc_3"><![CDATA[时间线将塑造你一天的所有因素整合在一个连续的视图中。它记录了活动、行为和生理信号的顺序，这些都被 Luna 捕捉到，并按照发生的顺序排列。睡眠、锻炼、心率、血氧、压力和温度会与您选择记录的信号一起显示。这样，您就可以在一个地方查看完整的画面<br><br>日志记录可以通过屏幕右下角的加号图标进行。从这里，您可以添加餐饮、光照暴露和咖啡因，这些新输入会增强生物节律功能，以及您希望跟踪的其他日常活动。每条记录会捕获精确的细节，如开始时间、数量（或强度）和持续时间，从而帮助 Luna 创建您一天的更精确的地图<br><br>时间线设计得不仅仅是一个简单的历史记录。通过保持记录完整和准确，您可以查看光照、餐饮和咖啡因与专注窗口、夜间放松和睡眠的时间对比。模式变得更容易识别——例如，早晨的光照如何与稳定的能量对接，或者深夜的咖啡因如何影响您的睡眠。随着时间的推移，这个视图将成为一个可靠的参考，以便识别你做了什么，何时做以及你感觉如何之间的关系]]></string>
+    <string name="text_circadian_how_it_works_desc_4"><![CDATA[生物节律中点标记了你生物夜晚的中心。它是根据在入职时设置的 Chronotype 基准来读取的，除非你重新测试，否则它不会改变。这样，功能可以确定你在一天中的时间并将阶段标记为对齐、提前或延迟<br><br>使用平均值来判断趋势。<b>当前平均值</b> 显示最近的七个夜晚，<b>之前的平均值</b> 显示之前的七个夜晚。当“当前平均值”比“之前的平均值”更接近 Chronotype 基准时，趋势正在 <b>修正</b>；而当它偏离时，趋势则是 <b>恶化</b>。将这两条柱状图一起阅读，可以帮助你知道你的时间是否在正确的方向上，或者保持稳定<br><br>目标很简单。不论你开始时处于哪个阶段，都要力争达到 <b>修正</b> 并在接下来的几天内保持，直到阶段被标记为 <b>对齐</b>。一旦对齐，就要努力保持状态，以便时间保持稳定。将 <b>恶化</b> 视为一个预警信号，表明你的中点正在远离基准，可能需要关注。这些状态会与阶段标签一起显示，因此位置和方向一目了然<br><br>将状态与您的每日记录相关联。如果看到 <b>修正</b>，请在接下来的几天里保持这一模式。如果看到 <b>恶化</b>，请检查时间线，查看是否有可能导致时钟变化的变动，然后根据每日节奏提示恢复一致的时间设置。Chronotype 标签位于中点视图旁边，以帮助你在读取状态时牢记基准]]></string>
+    <string name="text_the_timeline">时间线</string>
+    <string name="text_hiw_circadian_card_title_2">通过合理安排每天的活动来锚定你的生物钟</string>
+    <string name="text_hiw_circadian_card_title_3">查看每个因素如何共同塑造你的一天—都在时间线上</string>
+    <string name="text_hiw_circadian_card_title_4">与生物节律中点同步来增强恢复效果。</string>
+    <string name="text_focus_window_desc2">今天您的起床时间超出了您通常的节奏，因此生物节律指南暂时无法使用。使用Luna AI学习如何建立适合您的规律。</string>
+    <string name="text_let_s_identify_your_chronotype">让我们识别你的生物钟类型！</string>
+
 
 </resources>

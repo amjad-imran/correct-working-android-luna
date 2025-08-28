@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tvPhase"
         style="@style/S16"
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tvCaffeineState"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvPhase"
-        app:layout_constraintTop_toTopOf="@+id/tvPhase" />
+        app:layout_constraintTop_toTopOf="@+id/tvPhase" />-->
 
     <TextView
         android:id="@+id/tvCaffeineState"
@@ -50,11 +50,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:textColor="#B98861"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/view41"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView193"
         tools:text="Caffeine Window Open" />
 

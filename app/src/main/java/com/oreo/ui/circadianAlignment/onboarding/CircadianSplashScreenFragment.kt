@@ -85,7 +85,7 @@ class CircadianSplashScreenFragment :
                 binding.toolbar.tvTitle.text = getString(R.string.text_corrective_activities)
             }
             5 -> {
-                binding.btnNext.text = getString(R.string.text_take_the_quiz)
+                binding.btnNext.text = getString(R.string.text_let_s_identify_your_chronotype)
             }
             else -> {}
         }

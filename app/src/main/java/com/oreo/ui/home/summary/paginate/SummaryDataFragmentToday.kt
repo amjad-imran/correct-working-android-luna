@@ -652,10 +652,10 @@ class SummaryDataFragmentToday :
                     navigate(R.id.timelineScreenFragment)
                 }
 
-                OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
+                is OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
                     navigate(
                         R.id.addActivityTimelineFragment,
-                        bundleOf("showTimeline" to true, "key" to null)
+                        bundleOf("showTimeline" to true, "key" to type.key)
                     )
                 }
             }

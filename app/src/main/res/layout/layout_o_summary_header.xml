@@ -59,11 +59,11 @@
         app:layout_constraintEnd_toStartOf="@+id/oreoStatus"
         app:layout_constraintStart_toEndOf="@+id/profileView1"
         app:layout_constraintTop_toTopOf="@+id/profileView1"
-        app:shimmer_base_color="#7095AF"
-        app:shimmer_colored="true"
-        app:shimmer_duration="1000"
-        app:shimmer_highlight_color="#C2D9E6"
-        app:shimmer_repeat_mode="restart"
+        app:text_shimmer_base_color="#7095AF"
+        app:text_shimmer_colored="true"
+        app:text_shimmer_duration="1000"
+        app:text_shimmer_highlight_color="#C2D9E6"
+        app:text_shimmer_repeat_mode="restart"
         tools:text="Connecting.."
         tools:visibility="visible" />
 
