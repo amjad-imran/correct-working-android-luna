@@ -41,7 +41,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     var isScrollLocked = false
 
-    private val hourWidthPx = 80f.dpToPixel()
+    private val hourWidthPx = 100f.dpToPixel()
 
     private val bottomPaddingForLabels = 16f.dpToPixel()
     private val topPadding = 30f
@@ -62,7 +62,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
 
     fun getTotalWidth(): Float {
-        return (totalHours * hourWidthPx) + width
+        return (totalHours * hourWidthPx)
     }
 
     fun getHourAt(index: Int): LocalTime {
@@ -195,7 +195,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.withTranslation(-scrollOffsetX + (width / 2f), 0f) {
+        canvas.withTranslation(-scrollOffsetX, 0f) {
             drawHourLines(this)
             drawEnergyCurve2(
                 this,
@@ -247,11 +247,11 @@ class Circadian24HourGraph @JvmOverloads constructor(
             val label = formatTo12Hour(LocalTime.of(hour.hour, hour.minute))
             val textWidth = bottomXPaint.measureText(label)
 
-            val textX = (x - textWidth / 2)/*when (i) {
+            val textX = when (i) {
                 0 -> (x + labelPadding)
                 totalHours -> (x - textWidth - labelPadding)
                 else -> (x - textWidth / 2)
-            }*/
+            }
 
             canvas.drawText(label, textX, labelY, bottomXPaint)
         }
@@ -390,7 +390,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         var offsetHours = Duration.between(graphStartTime, currentTime).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24  // Wrap around for next day
 
-        val x = (offsetHours * hourWidthPx) + (width / 2f) - scrollOffsetX
+        val x = (offsetHours * hourWidthPx) - scrollOffsetX
 
         val xLine = width / 2f
 
@@ -437,8 +437,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val yTop = topPadding
         val yBottom = getGraphHeight().toFloat() - bottomPaddingForLabels - 8f.dpToPixel()
 
-        canvas.drawLine(0f, yTop, getTotalWidth() - width, yTop, topDottedAxisPaint) 
-        canvas.drawLine(0f, yBottom, getTotalWidth() - width, yBottom, bottomAxisPaint) 
+        canvas.drawLine(0f, yTop, getTotalWidth(), yTop, topDottedAxisPaint)
+        canvas.drawLine(0f, yBottom, getTotalWidth(), yBottom, bottomAxisPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
