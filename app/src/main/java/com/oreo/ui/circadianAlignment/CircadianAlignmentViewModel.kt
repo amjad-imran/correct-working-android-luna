@@ -520,10 +520,14 @@ class CircadianAlignmentViewModel
                     )
                 )
 
+                val wakeTimeEnd = LocalDateTime.parse(
+                    sleepTime.wakeTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).minusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm"))
                 data.add(
                     TimeWindow(
                         getCircadianTimeFloatValue(it.endTime),
-                        getCircadianTimeFloatValue(bedTime),
+                        getCircadianTimeFloatValue(wakeTimeEnd),
                         "#CC2E2422".toColorInt(),
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),

@@ -1744,7 +1744,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#D6A176".toColorInt(),
                     "#FFFFFF".toColorInt(),
                     rowIndex = 1,
-                    label = "Caffeine Window Open"//todo change to string
+                    label = resourceProvider.getString(R.string.text_caffeine_window_open)
                 )
             )
             circadianGraphData?.sleepData?.let { sleepTime->
@@ -1767,19 +1767,24 @@ class SummaryDataViewModelToday @Inject constructor(
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
+
+                val wakeTimeEnd = LocalDateTime.parse(
+                    sleepTime.wakeTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).minusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm"))
 
                 data.add(
                     TimeWindow(
                         getCircadianTimeFloatValue(it.endTime),
-                        getCircadianTimeFloatValue(bedTime),
+                        getCircadianTimeFloatValue(wakeTimeEnd),
                         "#CC2E2422".toColorInt(),
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
 
