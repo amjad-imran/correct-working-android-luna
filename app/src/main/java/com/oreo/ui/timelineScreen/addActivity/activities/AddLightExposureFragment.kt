@@ -138,9 +138,9 @@ class AddLightExposureFragment :
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                binding.progressBar.root.visible()
+                uiController.displayProgressBar(true,"")
             } else {
-                binding.progressBar.root.gone()
+                uiController.displayProgressBar(false,"")
             }
         }
     }
