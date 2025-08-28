@@ -1320,6 +1320,8 @@ class SummaryDataViewModelToday @Inject constructor(
         val dataList = timeTrackerActivities?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
+        var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
+
         data?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
             when(data.event){
@@ -1365,7 +1367,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 MEAL_INTAKE_KEY_KEY -> {
                     data.titleColor = "#FFE3B2".toColorInt()
-                    data.desc = "Meal"
+                    data.desc = "Meal ${mealCount--}"
                 }
 
                 LIGHT_EXPOSURE_KEY -> {
@@ -1394,7 +1396,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return OHealthOverview.TimelineDash(
-            listData = data
+            listData = data.take(3)
         )
     }
 
