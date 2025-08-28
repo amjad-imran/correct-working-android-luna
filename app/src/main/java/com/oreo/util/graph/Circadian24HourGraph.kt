@@ -158,13 +158,27 @@ class Circadian24HourGraph @JvmOverloads constructor(
         })
     }
 
-    private fun calculateInitialScrollOffset(): Float {
+    /*private fun calculateInitialScrollOffset(): Float {
         val now = LocalTime.now()
         var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24
         val hourPosition = (offsetHours * hourWidthPx) + (width / 2f)
         val centerX = width / 2f
         return (hourPosition - centerX).coerceIn(0f, max(0f, totalWidth() - width.toFloat()))
+    }*/
+
+    private fun calculateInitialScrollOffset(): Float {
+        val now = LocalTime.now()
+
+        var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
+        if (offsetHours < 0) offsetHours += 24f  // wrap around
+
+        val contentX = offsetHours * hourWidthPx
+        val centerX = width / 2f
+        val maxOffset = (totalWidth() - width.toFloat()).coerceAtLeast(0f)
+
+        // Center "now" in the viewport
+        return (contentX - centerX).coerceIn(0f, maxOffset)
     }
 
     // ---- Drawing ----
@@ -430,6 +444,13 @@ class Circadian24HourGraph @JvmOverloads constructor(
             }
         }
         return true
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        scrollOffsetX = calculateInitialScrollOffset()
+        requestRebuildContent()    // if you’re using the cached bitmap approach
+        invalidate()
     }
 
     private fun startFling(velocityX: Int) {
