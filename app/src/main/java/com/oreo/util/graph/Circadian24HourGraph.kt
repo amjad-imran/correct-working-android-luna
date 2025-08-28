@@ -247,11 +247,11 @@ class Circadian24HourGraph @JvmOverloads constructor(
             val label = formatTo12Hour(LocalTime.of(hour.hour, hour.minute))
             val textWidth = bottomXPaint.measureText(label)
 
-            val textX = when (i) {
+            val textX = (x - textWidth / 2)/*when (i) {
                 0 -> (x + labelPadding)
                 totalHours -> (x - textWidth - labelPadding)
                 else -> (x - textWidth / 2)
-            }
+            }*/
 
             canvas.drawText(label, textX, labelY, bottomXPaint)
         }
