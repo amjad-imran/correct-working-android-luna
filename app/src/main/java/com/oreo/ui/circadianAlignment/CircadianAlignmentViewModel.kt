@@ -804,25 +804,6 @@ class CircadianAlignmentViewModel
         return response
     }
 
-    fun generateValuesData(energyValues: List<Float>?): ArrayList<Float> {
-        val energyArray = ArrayList<Float>()
-        if (energyValues.isNullOrEmpty()) {
-            repeat(24, {
-                energyArray.add(0f)
-            })
-        } else if (energyValues.size < 24) {
-            val valuesToAdd = 24 - energyValues.size
-            repeat(valuesToAdd, {
-                energyArray.add(0f)
-            })
-        } else if (energyValues.size > 24) {
-            energyArray.addAll(energyValues.subList(0, 24))
-        } else {
-            energyArray.addAll(energyValues)
-        }
-        return energyArray
-    }
-
     fun getCaffeineState(data: CircadianResponseModel): String? {
         val currentTime = LocalTime.now()
         try {
