@@ -637,10 +637,10 @@ class CircadianAlignmentFragment :
         viewModel.nudgeData.observe(viewLifecycleOwner){
             val showShimmer = it.second
             if(showShimmer){
-                binding.lytFocusWindow.progressBarFocusWindow.root.visible()
+                //binding.lytFocusWindow.progressBarFocusWindow.root.visible()
                 binding.lytFocusWindow.shimmerLayout.startShimmer()
             }else{
-                binding.lytFocusWindow.progressBarFocusWindow.root.gone()
+               // binding.lytFocusWindow.progressBarFocusWindow.root.gone()
                 binding.lytFocusWindow.shimmerLayout.stopShimmer()
                 binding.lytFocusWindow.shimmerLayout.gone()
                 binding.lytFocusWindow.apply {
