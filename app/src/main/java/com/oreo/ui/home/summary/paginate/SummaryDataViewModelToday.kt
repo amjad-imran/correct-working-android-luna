@@ -1808,7 +1808,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#4C4192".toColorInt(),
                     "#EBAFFF".toColorInt(),
                     rowIndex = 0,
-                    label = "Dim-light Phase"
+                    label = resourceProvider.getString(R.string.text_dim_light_phase)
                 )
             )
         }
@@ -1828,7 +1828,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#FFE0BC".toColorInt(),
                     "#99000000".toColorInt(),
                     rowIndex = 0,
-                    label = "Natural Light"
+                    label = resourceProvider.getString(R.string.text_natural_light)
                 )
             )
         }
@@ -1854,7 +1854,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#634ED5".toColorInt(),
                     "#9E91E8".toColorInt(),
                     rowIndex = 0,
-                    label = "Sleep"
+                    label = resourceProvider.getString(R.string.text_sleep)
                 )
             )
         }
@@ -1869,7 +1869,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#BD6FC7".toColorInt(),
                     "#FFAFF2".toColorInt(),
                     rowIndex = 0,
-                    label = "Evening Wind-Down"
+                    label = resourceProvider.getString(R.string.text_evening_wind_down)
                 )
             )
 
@@ -1883,7 +1883,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         "#33646464".toColorInt(),
                         "#5A5A5A".toColorInt(),
                         rowIndex = 0,
-                        label = "Neutral Light Zone"
+                        label = resourceProvider.getString(R.string.text_neutral_light_zone)
                     )
                 )
             }
