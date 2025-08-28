@@ -79,6 +79,8 @@ class OAddWorkoutViewModel
     var isStartTimeSelected = false
     var isEndTimeSelected = false
 
+    var workoutListResponse: ArrayList<OWorkoutListModal> ?= null
+
     fun isAutoWorkout(): Boolean {
         return autoSport.value != null
     }
@@ -476,7 +478,12 @@ class OAddWorkoutViewModel
 
     fun getWorkoutList(postValue: Boolean) {
         viewModelScope.launch {
-
+            workoutListResponse?.let {
+                if(it.isNotEmpty()){
+                    processWorkoutListData(it, postValue)
+                    return@launch
+                }
+            }
             userActivityRepository.getWorkoutList().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -505,22 +512,8 @@ class OAddWorkoutViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if (postValue) {
-                                _oWorkoutListModalResponse.postValue(it)
-                            } else {
-                                val walkingWorkout =
-                                    it.find { it.activityType.equals("walking", true) }
-                                if (autoSport.value == null) {
-
-                                    walkingWorkout?.let { walk ->
-                                        updateDefaultWorkout.postValue(Event(walk))
-                                    }
-                                } else {
-                                    workoutListModal = walkingWorkout
-                                    updateCalculatedData.postValue(Event(true))
-                                }
-
-                            }
+                            workoutListResponse = ArrayList(it)
+                            processWorkoutListData(it, postValue)
                         }
                     }
                 }
@@ -528,6 +521,25 @@ class OAddWorkoutViewModel
         }
 
 
+    }
+
+    private fun processWorkoutListData(list: List<OWorkoutListModal>, postValue: Boolean){
+        if (postValue) {
+            _oWorkoutListModalResponse.postValue(list)
+        } else {
+            val walkingWorkout =
+                list.find { it.activityType.equals("walking", true) }
+            if (autoSport.value == null) {
+
+                walkingWorkout?.let { walk ->
+                    updateDefaultWorkout.postValue(Event(walk))
+                }
+            } else {
+                workoutListModal = walkingWorkout
+                updateCalculatedData.postValue(Event(true))
+            }
+
+        }
     }
 
     fun getCombinedMovementData(

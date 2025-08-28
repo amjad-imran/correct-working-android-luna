@@ -245,7 +245,7 @@ class CircularScheduleView @JvmOverloads constructor(
 
         val step = 30
 
-        for (i in 0 until values.size-1 step step){
+        for (i in 0 until values.size - 1 step step) {
             val startColor =
                 if (i == 0) {
                     transparentColor
@@ -494,20 +494,42 @@ class CircularScheduleView @JvmOverloads constructor(
                     //val sweepAngle = (((event.endHour - event.startHour) / 24f) * 360f) - 1
                     canvas.drawArc(rect, startAngle, sweepAngle, false, paint)
 
+                    val diff = event.endHour - event.startHour
+                    if (diff < 2 && diff > 0 && event.image != null) {
+                        val archBitmap: Bitmap = Bitmap.createScaledBitmap(
+                            BitmapFactory.decodeResource(resources, event.image),
+                            15f.dpToPixel().toInt(),
+                            15f.dpToPixel().toInt(),
+                            true
+                        )
 
-                    drawCircularText(
-                        canvas,
-                        radius - 3f.dpToPixel(),
-                        PointF(cx, cy),
-                        startAngle,
-                        event.label,
-                        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                            style = Paint.Style.FILL_AND_STROKE
-                            typeface = fontGilroy
-                            textSize = dpToPx(10f)
-                            color = event.textColor
-                        }
-                    )
+                        val hour = event.startHour + (event.endHour - event.startHour) / 2
+                        val startAngle = hourToAngle(hour).toDouble()
+                        val angleRad = Math.toRadians(startAngle.toDouble())
+                        val x1 = (cx + radius * Math.cos(angleRad)).toFloat()
+                        val y1 = (cy + radius * Math.sin(angleRad)).toFloat()
+                        canvas.drawBitmap(
+                            archBitmap,
+                            x1 - archBitmap.width / 2,
+                            y1 - archBitmap.width / 2,
+                            null
+                        )
+
+                    } else {
+                        drawCircularText(
+                            canvas,
+                            radius - 3f.dpToPixel(),
+                            PointF(cx, cy),
+                            startAngle,
+                            event.label,
+                            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                                style = Paint.Style.FILL_AND_STROKE
+                                typeface = fontGilroy
+                                textSize = dpToPx(10f)
+                                color = event.textColor
+                            }
+                        )
+                    }
 
 
                 }
@@ -608,7 +630,8 @@ data class ClockEvent(
     val color: Int,
     val endColor: Int,
     val textColor: Int,
-    val label: String
+    val label: String,
+    val image: Int? = null
 )
 
 enum class ClockEventType {

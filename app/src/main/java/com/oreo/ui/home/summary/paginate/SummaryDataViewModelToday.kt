@@ -1328,6 +1328,8 @@ class SummaryDataViewModelToday @Inject constructor(
         val dataList = timeTrackerActivities?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
+        var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
+
         data?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
             when(data.event){
@@ -1373,7 +1375,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 MEAL_INTAKE_KEY_KEY -> {
                     data.titleColor = "#FFE3B2".toColorInt()
-                    data.desc = "Meal"
+                    data.desc = "Meal ${mealCount--}"
                 }
 
                 LIGHT_EXPOSURE_KEY -> {
@@ -1402,7 +1404,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         return OHealthOverview.TimelineDash(
-            listData = data
+            listData = data.take(3)
         )
     }
 
@@ -1752,7 +1754,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#D6A176".toColorInt(),
                     "#FFFFFF".toColorInt(),
                     rowIndex = 1,
-                    label = "Caffeine Window Open"//todo change to string
+                    label = resourceProvider.getString(R.string.text_caffeine_window_open)
                 )
             )
             circadianGraphData?.sleepData?.let { sleepTime->
@@ -1775,19 +1777,24 @@ class SummaryDataViewModelToday @Inject constructor(
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
+
+                val wakeTimeEnd = LocalDateTime.parse(
+                    sleepTime.wakeTime,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                ).minusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm"))
 
                 data.add(
                     TimeWindow(
                         getCircadianTimeFloatValue(it.endTime),
-                        getCircadianTimeFloatValue(bedTime),
+                        getCircadianTimeFloatValue(wakeTimeEnd),
                         "#CC2E2422".toColorInt(),
                         "#CC2E2422".toColorInt(),
                         "#B2D69B92".toColorInt(),
                         rowIndex = 1,
-                        label = "Avoid Caffeine"
+                        label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
 
@@ -1809,7 +1816,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#4C4192".toColorInt(),
                     "#EBAFFF".toColorInt(),
                     rowIndex = 0,
-                    label = "Dim-light Phase"
+                    label = resourceProvider.getString(R.string.text_dim_light_phase)
                 )
             )
         }
@@ -1829,7 +1836,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#FFE0BC".toColorInt(),
                     "#99000000".toColorInt(),
                     rowIndex = 0,
-                    label = "Natural Light"
+                    label = resourceProvider.getString(R.string.text_natural_light)
                 )
             )
         }
@@ -1855,7 +1862,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#634ED5".toColorInt(),
                     "#9E91E8".toColorInt(),
                     rowIndex = 0,
-                    label = "Sleep"
+                    label = resourceProvider.getString(R.string.text_sleep)
                 )
             )
         }
@@ -1870,7 +1877,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     "#BD6FC7".toColorInt(),
                     "#FFAFF2".toColorInt(),
                     rowIndex = 0,
-                    label = "Evening Wind-Down"
+                    label = resourceProvider.getString(R.string.text_evening_wind_down)
                 )
             )
 
@@ -1884,7 +1891,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         "#33646464".toColorInt(),
                         "#5A5A5A".toColorInt(),
                         rowIndex = 0,
-                        label = "Neutral Light Zone"
+                        label = resourceProvider.getString(R.string.text_neutral_light_zone)
                     )
                 )
             }
