@@ -224,6 +224,8 @@ class TimelineScreenDataViewmodel @Inject constructor(
             val hours = duration.toHours()
             val minutes = duration.toMinutes() % 60
 
+            "$hours hr $minutes m"
+            /*
             // Format the start and end times into 12-hour AM/PM format
             val formattedStartTime = startDateObj.format(timeFormatter12Hour)
             val formattedEndTime = adjustedEndDateObj.format(timeFormatter12Hour)
@@ -232,6 +234,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
             val formattedTime =
                 "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
             "$hours hr $minutes m; $formattedTime"
+            */
         } catch (e: Exception) {
             LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
             "-"
