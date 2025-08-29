@@ -60,10 +60,10 @@
 
         <ImageView
             android:id="@+id/imageView85"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            app:srcCompat="@drawable/ic_arrow_planner_right" />
+            app:srcCompat="@drawable/ic_arrow_right_onboarding_circadian" />
     </LinearLayout>
 
     <ImageView
