@@ -905,9 +905,7 @@ class CircadianAlignmentViewModel
 
         val graphStart = graphData.startTime
         val graphEnd = graphData.sleepData?.wakeTime
-
-        if (graphStart == null || graphEnd == null) return ArrayList()
-
+        if (graphStart == null || graphEnd == null) return emptyList()
 
         val totalMinutes = 24 * 60
         val energyValues = MutableList(totalMinutes) { 0f }
@@ -917,32 +915,27 @@ class CircadianAlignmentViewModel
             graphData.secondFocusPeakWindowGraph
         )
 
-        for (window in windows) {
+        for ((idx, window) in windows.withIndex()) {
             val startMin = timeToMinutes(window.startTime)
             val endMin = timeToMinutes(window.endTime)
             val peakMin = timeToMinutes(window.peakTime)
 
-            if (startMin != null && endMin != null && peakMin != null) {
+            if (startMin != null && endMin != null && peakMin != null && endMin >= startMin) {
+                val sigma = (endMin - startMin) / 6f
+                val amplitude = if (idx == 0) 1.0f else 0.6f
+
                 for (minute in startMin..endMin) {
                     val dist = (minute - peakMin).toFloat()
-                    // Gaussian-like curve: highest at peak, lower at edges
-                    val sigma = (endMin - startMin) / 6f // spread factor
-                    val energy = exp(-0.5f * (dist / sigma).pow(2))
-                    energyValues[minute % totalMinutes] += energy.toFloat()
+                    val energy = amplitude * exp(-0.5f * (dist / sigma).pow(2))
+                    energyValues[minute % totalMinutes] += energy
                 }
             }
         }
 
         val maxVal = energyValues.maxOrNull() ?: 1f
-        val values = energyValues.map { it / maxVal }
-        if (rotate) {
-            return trimArrayByTime(values, graphStart)
-        } else {
-            return values
-        }
-
+        val values = if (maxVal > 0f) energyValues.map { it / maxVal } else energyValues
+        return if (rotate) trimArrayByTime(values, graphStart) else values
     }
-
     fun trimArrayByTime(
         array: List<Float>,
         startTime: String

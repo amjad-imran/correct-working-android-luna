@@ -28,7 +28,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private val hourWidthPx = 100f.dpToPixel()
     private val bottomPaddingForLabels = 16f.dpToPixel()
-    private val topPadding = 30f
+    private val topPadding = 10f.dpToPixel()
 
     private val fontGilroy =
         androidx.core.content.res.ResourcesCompat.getFont(
@@ -46,7 +46,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
             requestRebuildContent()
         }
 
-    // ---- Dimensions & helpers ----
     val totalHours: Int
         get() {
             var hours = Duration.between(graphStartTime, graphEndTime).toHours().toInt()
@@ -58,7 +57,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private fun hourAt(index: Int): LocalTime = graphStartTime.plusHours(index.toLong() % 24)
     private fun graphHeight(): Float = height.toFloat()
 
-    // ---- Paints (no per-frame allocations) ----
     private val labelTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         textSize = 10f.dpToPixel()
@@ -117,7 +115,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val tmpPath = Path()
     private val tmpRect = RectF()
 
-    // ---- Smooth scrolling infra ----
     private var scrollOffsetX = 0f
     private var lastX = 0f
     private var lastY = 0f
@@ -128,7 +125,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
     private val minFlingVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity
 
-    // ---- Cached content layer to avoid re-drawing heavy stuff while scrolling ----
     private var contentBitmap: Bitmap? = null
     private var contentCanvas: Canvas? = null
     private var contentValid = false
@@ -144,7 +140,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     init {
         setWillNotDraw(false)
-        // Keep HW accelerated
         setLayerType(LAYER_TYPE_HARDWARE, null)
 
         viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -158,15 +153,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
         })
     }
 
-    /*private fun calculateInitialScrollOffset(): Float {
-        val now = LocalTime.now()
-        var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
-        if (offsetHours < 0) offsetHours += 24
-        val hourPosition = (offsetHours * hourWidthPx) + (width / 2f)
-        val centerX = width / 2f
-        return (hourPosition - centerX).coerceIn(0f, max(0f, totalWidth() - width.toFloat()))
-    }*/
-
     private fun calculateInitialScrollOffset(): Float {
         val now = LocalTime.now()
 
@@ -177,27 +163,22 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val centerX = width / 2f
         val maxOffset = (totalWidth() - width.toFloat()).coerceAtLeast(0f)
 
-        // Center "now" in the viewport
         return (contentX - centerX).coerceIn(0f, maxOffset)
     }
 
-    // ---- Drawing ----
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // Build (or rebuild) offscreen content if invalid
         if (!contentValid) {
             rebuildContentLayer()
         }
 
-        // Draw cached, scrollable content
         contentBitmap?.let { bmp ->
             canvas.withTranslation(-scrollOffsetX, 0f) {
                 drawBitmap(bmp, 0f, 0f, null)
             }
         }
 
-        // Draw non-cached, per-frame elements (current time line overlay)
         drawCurrentTimeLine(canvas)
     }
 
@@ -206,7 +187,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val w = max(totalWidth().toInt(), 1)
         val h = height
 
-        // (Re)allocate bitmap only if size changed or null
         if (contentBitmap?.width != w || contentBitmap?.height != h) {
             contentBitmap?.recycle()
             contentBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
@@ -265,58 +245,60 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
     }
 
-    // Combined, allocation-free draw for curve + fill
+    private val curvePath = Path()
+    private val fillPath = Path()
+    private val tmpPos = ArrayList<Float>(512)
+
+    private fun Int.withAlphaFraction(f: Float): Int {
+        val a = ((f.coerceIn(0f, 1f) * 255f) + 0.5f).toInt()
+        return (this and 0x00FFFFFF) or (a shl 24)
+    }
+
     private fun drawEnergyCurveAndFill(canvas: Canvas, values: List<Float>) {
         if (values.size < 2) return
 
         val usableHeight =
             graphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
-
         val minuteWidth = hourWidthPx / 60f
+        val lastX = (values.lastIndex) * minuteWidth
 
-        // Stroke segments
-        for (i in 0 until values.size - 1) {
-            val startX = i * minuteWidth
-            val stopX = (i + 1) * minuteWidth
-            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
+        fun yAt(v: Float) = usableHeight * (0.9f - 0.75f * v)
 
-            val colorStart = getColorForValue(values[i])
-            val colorEnd = getColorForValue(values[i + 1])
-            linePaint.shader = LinearGradient(
-                startX, startY, stopX, stopY,
-                colorStart, colorEnd, Shader.TileMode.CLAMP
-            )
+        curvePath.reset()
+        fillPath.reset()
+        tmpPos.clear()
 
-            tmpPath.reset()
-            tmpPath.moveTo(startX, startY)
-            tmpPath.lineTo(stopX, stopY)
-            canvas.drawPath(tmpPath, linePaint)
+        var x = 0f
+        var y = yAt(values[0])
+        curvePath.moveTo(x, y)
+        tmpPos.add(0f)
+
+        for (i in 1 until values.size) {
+            x = i * minuteWidth
+            y = yAt(values[i])
+            curvePath.lineTo(x, y)
+            tmpPos.add(x / lastX.coerceAtLeast(1f))
         }
 
-        // Fill segments
-        for (i in 0 until values.size - 1) {
-            val startX = i * minuteWidth
-            val stopX = (i + 1) * minuteWidth
-            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
+        fillPath.set(curvePath)
+        fillPath.lineTo(lastX, usableHeight)
+        fillPath.lineTo(0f, usableHeight)
+        fillPath.close()
 
-            val colorStart = getColorForValueFill(values[i])
-            val colorEnd = getColorForValueFill(values[i + 1])
-            fillPaint.shader = LinearGradient(
-                startX, startY, stopX, stopY,
-                colorStart, colorEnd, Shader.TileMode.CLAMP
-            )
+        val positions = FloatArray(tmpPos.size) { idx -> tmpPos[idx].coerceIn(0f, 1f) }
+        val strokeColors = IntArray(values.size) { idx -> getColorForValue(values[idx]) }
+        val fillColors = IntArray(values.size) { idx -> getColorForValueFill(values[idx]).withAlphaFraction(0.10f) }
 
-            tmpPath.reset()
-            tmpPath.moveTo(startX, startY)
-            // simple straight edge looks crisp and is cheaper than cubic
-            tmpPath.lineTo(stopX, stopY)
-            tmpPath.lineTo(stopX, usableHeight)
-            tmpPath.lineTo(startX, usableHeight)
-            tmpPath.close()
-            canvas.drawPath(tmpPath, fillPaint)
-        }
+        val lastXSafe = lastX.coerceAtLeast(1f)
+        val strokeGradient = LinearGradient(0f, 0f, lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
+        val fillGradient = LinearGradient(0f, 0f, lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
+
+        linePaint.shader = strokeGradient
+        fillPaint.shader = fillGradient
+        fillPaint.alpha = 255
+
+        canvas.drawPath(fillPath, fillPaint)
+        canvas.drawPath(curvePath, linePaint)
     }
 
     private fun getColorForValue(value: Float): Int {
@@ -356,13 +338,10 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val yTop = topPadding
         val yBottom = graphHeight() - bottomPaddingForLabels
 
-        // fixed center line
         canvas.drawLine(xLine, yTop, xLine, yBottom, currentTimeLinePaint)
 
-        // small circle at top
         canvas.drawCircle(xLine, 20f, 10f, strokePaint)
 
-        // time bubble near bottom aligned to content x
         val textPadding = 12f
         val textHeight = textPaint.descent() - textPaint.ascent()
         val textWidth = textPaint.measureText(label)
@@ -386,7 +365,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
         canvas.drawLine(0f, yBottom, totalWidth(), yBottom, bottomAxisPaint)
     }
 
-    // ---- Touch + fling ----
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (isScrollLocked) return false
 
@@ -418,7 +396,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
                 }
 
                 if (isBeingDragged) {
-                    // Content moves opposite to finger
                     val newOffset = (scrollOffsetX - dx)
                         .coerceIn(0f, max(0f, totalWidth() - width.toFloat()))
                     if (newOffset != scrollOffsetX) {
@@ -435,7 +412,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
                     velocityTracker?.computeCurrentVelocity(1000, maxFlingVelocity.toFloat())
                     val vx = velocityTracker?.xVelocity ?: 0f
                     if (abs(vx) > minFlingVelocity) {
-                        startFling(-vx.toInt()) // negative because content direction
+                        startFling(-vx.toInt())
                     }
                 }
                 isBeingDragged = false
@@ -449,7 +426,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         scrollOffsetX = calculateInitialScrollOffset()
-        requestRebuildContent()    // if you’re using the cached bitmap approach
+        requestRebuildContent()
         invalidate()
     }
 
@@ -472,7 +449,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
                 scrollOffsetX = clamped
                 ViewCompat.postInvalidateOnAnimation(this)
             } else if (!scroller.isFinished) {
-                // Stop if we hit bounds
                 scroller.abortAnimation()
             }
         }
@@ -486,7 +462,6 @@ class Circadian24HourGraph @JvmOverloads constructor(
         velocityTracker = null
     }
 
-    // ---- Public helpers ----
     fun redraw() {
         requestRebuildContent()
         invalidate()
