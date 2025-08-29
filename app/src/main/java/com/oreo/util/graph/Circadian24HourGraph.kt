@@ -30,6 +30,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val bottomPaddingForLabels = 16f.dpToPixel()
     private val topPadding = 10f.dpToPixel()
 
+    private val horizontalPadding = 16f.dpToPixel()
+
     private val fontGilroy =
         androidx.core.content.res.ResourcesCompat.getFont(
             context,
@@ -53,7 +55,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             return hours
         }
 
-    private fun totalWidth(): Float = (totalHours * hourWidthPx)
+    private fun totalWidth(): Float = (totalHours * hourWidthPx) + 2 * horizontalPadding
     private fun hourAt(index: Int): LocalTime = graphStartTime.plusHours(index.toLong() % 24)
     private fun graphHeight(): Float = height.toFloat()
 
@@ -159,7 +161,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24f  // wrap around
 
-        val contentX = offsetHours * hourWidthPx
+        val contentX = offsetHours * hourWidthPx + horizontalPadding
         val centerX = width / 2f
         val maxOffset = (totalWidth() - width.toFloat()).coerceAtLeast(0f)
 
@@ -174,7 +176,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
 
         contentBitmap?.let { bmp ->
-            canvas.withTranslation(-scrollOffsetX, 0f) {
+            canvas.withTranslation(-scrollOffsetX + horizontalPadding, 0f) {
                 drawBitmap(bmp, 0f, 0f, null)
             }
         }
@@ -287,11 +289,14 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
         val positions = FloatArray(tmpPos.size) { idx -> tmpPos[idx].coerceIn(0f, 1f) }
         val strokeColors = IntArray(values.size) { idx -> getColorForValue(values[idx]) }
-        val fillColors = IntArray(values.size) { idx -> getColorForValueFill(values[idx]).withAlphaFraction(0.10f) }
+        val fillColors =
+            IntArray(values.size) { idx -> getColorForValueFill(values[idx]).withAlphaFraction(0.10f) }
 
         val lastXSafe = lastX.coerceAtLeast(1f)
-        val strokeGradient = LinearGradient(0f, 0f, lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
-        val fillGradient = LinearGradient(0f, 0f, lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
+        val strokeGradient =
+            LinearGradient(0f, 0f, lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
+        val fillGradient =
+            LinearGradient(0f, 0f, lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
 
         linePaint.shader = strokeGradient
         fillPaint.shader = fillGradient
@@ -331,7 +336,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         var offsetHours = Duration.between(graphStartTime, currentTime).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24f
 
-        val xInContent = (offsetHours * hourWidthPx)
+        val xInContent = (offsetHours * hourWidthPx) + horizontalPadding
         val xOnScreen = xInContent - scrollOffsetX
         val xLine = width / 2f
 
@@ -361,8 +366,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private fun drawTopAndBottomAxis(canvas: Canvas) {
         val yTop = topPadding
         val yBottom = graphHeight() - bottomPaddingForLabels - 8f.dpToPixel()
-        canvas.drawLine(0f, yTop, totalWidth(), yTop, topDottedAxisPaint)
-        canvas.drawLine(0f, yBottom, totalWidth(), yBottom, bottomAxisPaint)
+        canvas.drawLine(0f, yTop, totalWidth() - (horizontalPadding *2), yTop, topDottedAxisPaint)
+        canvas.drawLine(0f, yBottom, totalWidth()- (horizontalPadding *2), yBottom, bottomAxisPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -457,6 +462,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private fun ensureVelocityTracker() {
         if (velocityTracker == null) velocityTracker = VelocityTracker.obtain()
     }
+
     private fun recycleVelocityTracker() {
         velocityTracker?.recycle()
         velocityTracker = null
@@ -499,7 +505,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
             canvas.drawRoundRect(tmpRect, cornerRadius, cornerRadius, windowPaint)
 
             labelTextPaint.color = window.textColor
-            val labelY = top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
+            val labelY =
+                top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
             val labelX = left + labelTextPaint.measureText(window.label) / 2 + 4f.dpToPixel()
             canvas.drawText(window.label, labelX, labelY, labelTextPaint)
         }
