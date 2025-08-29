@@ -2196,4 +2196,7 @@
     <string name="text_focus_window_desc2">O seu horário de despertar hoje estava fora do seu ritmo habitual, por isso o Guia do Ritmo Circadiano está temporariamente indisponível. Use o Luna AI para aprender como criar uma consistência que funcione para você.</string>
     <string name="text_let_s_identify_your_chronotype">Vamos identificar o seu cronótipo!</string>
 
+    <string name="text_getting_more_insights">Obtendo mais insights</string>
+    <string name="text_and_how_is_it_helpful">E como isso é útil?</string>
+
 </resources>

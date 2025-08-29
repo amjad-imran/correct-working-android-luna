@@ -2178,4 +2178,7 @@
     <string name="text_focus_window_desc2">เวลาตื่นของคุณในวันนี้อยู่นอกจังหวะปกติของคุณ ดังนั้นคู่มือจังหวะปกติจึงไม่สามารถใช้งานได้ชั่วคราว ใช้ Luna AI เพื่อเรียนรู้วิธีสร้างความสม่ำเสมอที่เหมาะกับคุณ</string>
     <string name="text_let_s_identify_your_chronotype">มาหาโครโนไทป์ของคุณกันเถอะ!</string>
 
+    <string name="text_getting_more_insights">รับข้อมูลเชิงลึกเพิ่มเติม</string>
+    <string name="text_and_how_is_it_helpful">และมันมีประโยชน์อย่างไร?</string>
+
 </resources>

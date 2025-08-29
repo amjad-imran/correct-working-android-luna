@@ -2143,4 +2143,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_focus_window_desc2">Tu hora de despertar hoy estuvo fuera de tu ritmo habitual, por lo que la Guía del Ritmo Circadiano está temporalmente no disponible. Usa Luna AI para aprender cómo crear una rutina que funcione para ti.</string>
     <string name="text_let_s_identify_your_chronotype">¡Vamos a identificar tu cronotipo!</string>
 
+    <string name="text_getting_more_insights">Obtener más información</string>
+    <string name="text_and_how_is_it_helpful">¿Y cómo es útil?</string>
+
 </resources>
