@@ -50,6 +50,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
 
+    <com.app.shimmertextview.ShimmerTextView
+        android:id="@+id/tvGeneratingNudge"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/lytGraphView"
+        android:text="@string/text_getting_more_insights"
+        app:text_shimmer_base_color="#cccccc"
+        app:text_shimmer_colored="true"
+        app:text_shimmer_duration="2000"
+        app:text_shimmer_highlight_color="#FFFFFF"
+        app:text_shimmer_repeat_mode="restart"/>
+
     <TextView
         android:id="@+id/tvWindow"
         style="@style/S16"

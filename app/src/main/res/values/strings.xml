@@ -2146,5 +2146,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_hiw_circadian_card_title_3">See how every factor shapes your day—together in Timeline</string>
     <string name="text_hiw_circadian_card_title_4">Align with your circadian midpoint to enhance recovery.</string>
     <string name="text_let_s_identify_your_chronotype">Let’s identify your chronotype!</string>
+    <string name="text_getting_more_insights">Getting more insights</string>
 
 </resources>

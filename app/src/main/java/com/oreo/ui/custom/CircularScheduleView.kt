@@ -396,7 +396,7 @@ class CircularScheduleView @JvmOverloads constructor(
                     canvas.drawArc(rect, startAngle, sweepAngle, false, arcPaint)
 
                     val diff = event.endHour - event.startHour
-                    if (diff < 2 && diff > 0 && event.image != null) {
+                    if (diff < 3 && diff > 0 && event.image != null) {
                         val icon = BitmapFactory.decodeResource(resources, event.image)
                         val archBitmap = Bitmap.createScaledBitmap(icon, 15f.dpToPixel().toInt(), 15f.dpToPixel().toInt(), true)
                         val hour = event.startHour + (event.endHour - event.startHour) / 2f

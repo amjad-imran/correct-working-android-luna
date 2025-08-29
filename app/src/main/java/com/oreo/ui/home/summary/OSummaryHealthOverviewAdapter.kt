@@ -160,13 +160,13 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class OnCaffeineDashCardClicked(val data: CaffeineWindowData) :
         OSummaryHealthOverviewClickEnum()
 
-    object OnDailyDigestMainCardClicked: OSummaryHealthOverviewClickEnum()
+    object OnDailyDigestMainCardClicked : OSummaryHealthOverviewClickEnum()
 
-    object OnCircadianAlignmentCardClicked: OSummaryHealthOverviewClickEnum()
-    object OnGetStartedCircadianOnboardingClicked: OSummaryHealthOverviewClickEnum()
+    object OnCircadianAlignmentCardClicked : OSummaryHealthOverviewClickEnum()
+    object OnGetStartedCircadianOnboardingClicked : OSummaryHealthOverviewClickEnum()
 
-    object OnTimelineCardClicked: OSummaryHealthOverviewClickEnum()
-    class OnLogActivityClicked(val key: String?): OSummaryHealthOverviewClickEnum()
+    object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
+    class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
 
 }
@@ -640,19 +640,17 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
-        }else if (heathOverViewData is OHealthOverview.StressCard){
+        } else if (heathOverViewData is OHealthOverview.StressCard) {
             val index = items.indexOfFirst { it is OHealthOverview.StressCard }
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
-        }
-        else if (heathOverViewData is OHealthOverview.LunaAiCard){
+        } else if (heathOverViewData is OHealthOverview.LunaAiCard) {
             val index = items.indexOfFirst { it is OHealthOverview.LunaAiCard }
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
-        }
-        else if (heathOverViewData is OHealthOverview.CircadianAlignment){
+        } else if (heathOverViewData is OHealthOverview.CircadianAlignment) {
             val index = items.indexOfFirst { it is OHealthOverview.CircadianAlignment }
             if (index == -1) return
             items[index] = heathOverViewData
@@ -693,23 +691,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
-    class TimelineCardViewHolder(private val binding: LayoutTimelineCardDashBinding):
-    HomeRecyclerViewHolder(binding){
+    class TimelineCardViewHolder(private val binding: LayoutTimelineCardDashBinding) :
+        HomeRecyclerViewHolder(binding) {
 
         class TimelineAdapter(
             private val listData: List<ItemTimelineResponseModel>
-        ): RecyclerView.Adapter<TimelineAdapter.ItemTimelineViewHolder>()
-        {
+        ) : RecyclerView.Adapter<TimelineAdapter.ItemTimelineViewHolder>() {
 
-            inner class ItemTimelineViewHolder(private val binding: ItemTimelineDashBinding): RecyclerView.ViewHolder(binding.root){
-                fun bind(data: ItemTimelineResponseModel, position: Int){
+            inner class ItemTimelineViewHolder(private val binding: ItemTimelineDashBinding) :
+                RecyclerView.ViewHolder(binding.root) {
+                fun bind(data: ItemTimelineResponseModel, position: Int) {
                     binding.tvTitle.text = data.title
                     data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
                     binding.tvDesc.text = data.desc
                     binding.tvTime.text = data.displayTime
 
-                    binding.divider.root.setVisibilityByCondition(position != listData.size-1)
+                    binding.divider.root.setVisibilityByCondition(position != listData.size - 1)
                 }
             }
 
@@ -732,15 +730,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
         }
 
-        fun bind(data: OHealthOverview.TimelineDash){
+        fun bind(data: OHealthOverview.TimelineDash) {
 
-            if(data.listData.isNullOrEmpty()){
+            if (data.listData.isNullOrEmpty()) {
                 binding.rvActivities.gone()
                 binding.lytNoData.apply {
                     imageView102.setBackgroundResource(R.drawable.ic_noactivity_timeline)
                     root.visible()
                 }
-            }else{
+            } else {
                 val adapter = TimelineAdapter(data.listData)
                 binding.rvActivities.apply {
                     this.layoutManager = LinearLayoutManager(binding.root.context)
@@ -760,18 +758,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     }
 
-    class CircadianOnboardingViewHolder(private val binding: LayoutCircadianOnboardingDashBinding):
-        HomeRecyclerViewHolder(binding){
-            
-        fun bind(data: OHealthOverview.CircadianAlignmentOnboarding){
+    class CircadianOnboardingViewHolder(private val binding: LayoutCircadianOnboardingDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        fun bind(data: OHealthOverview.CircadianAlignmentOnboarding) {
 
             binding.btnGetStarted.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked)
             }
         }
-            
+
     }
-    
+
     class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(allData: OHealthOverview.StressCard) {
@@ -787,114 +785,114 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lytStress.root.visible()
             lytStress.graphStress.updateData(data?.data)
 
-            val isGen2 = allData.ringGeneration==2
+            val isGen2 = allData.ringGeneration == 2
             val context = binding.root.context
 
             if (isGen2) {
 
-            when (data?.measureState) {
-                TapMeasureState.NO_DEVICE -> {
-                    lytStress.lottieAnimView.invisible()
-                    lytStress.imvHrMeasure.visible()
-                    lytStress.tvUnableToMeasure.gone()
+                when (data?.measureState) {
+                    TapMeasureState.NO_DEVICE -> {
+                        lytStress.lottieAnimView.invisible()
+                        lytStress.imvHrMeasure.visible()
+                        lytStress.tvUnableToMeasure.gone()
 
-                    lytStress.groupValue.gone()
-                    lytStress.tvEmptyConnect.visible()
-                    lytStress.tvEmptyConnect.text =
-                        lytStress.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+                        lytStress.groupValue.gone()
+                        lytStress.tvEmptyConnect.visible()
+                        lytStress.tvEmptyConnect.text =
+                            lytStress.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
 
-                }
-
-                TapMeasureState.LAST_MEASURED -> {
-                    lytStress.lottieAnimView.invisible()
-                    lytStress.imvHrMeasure.visible()
-                    lytStress.tvUnableToMeasure.gone()
-
-                    lytStress.groupValue.visible()
-                    lytStress.tvEmptyConnect.apply {
-                        visible()
-                        setTextColor(Color.parseColor("#ffffff"))
-                        text = context.getString(R.string.text_tap_to_measure)
                     }
 
-                    lytStress.tvHeartValue.text = if (data.value != null) "${data.value}" else ""
-                    val (displayValue, displayColor) = allData.stressStatus
-                    /*lytStress.tvHeartUnit.text = displayValue*/
+                    TapMeasureState.LAST_MEASURED -> {
+                        lytStress.lottieAnimView.invisible()
+                        lytStress.imvHrMeasure.visible()
+                        lytStress.tvUnableToMeasure.gone()
 
-                    lytStress.tvLastMeasure.apply {
-                        setTextColor(Color.parseColor("#a3ffffff"))
-                        text = data.lastTime
+                        lytStress.groupValue.visible()
+                        lytStress.tvEmptyConnect.apply {
+                            visible()
+                            setTextColor(Color.parseColor("#ffffff"))
+                            text = context.getString(R.string.text_tap_to_measure)
+                        }
+
+                        lytStress.tvHeartValue.text =
+                            if (data.value != null) "${data.value}" else ""
+                        val (displayValue, displayColor) = allData.stressStatus
+                        /*lytStress.tvHeartUnit.text = displayValue*/
+
+                        lytStress.tvLastMeasure.apply {
+                            setTextColor(Color.parseColor("#a3ffffff"))
+                            text = data.lastTime
+                        }
                     }
-                }
 
-                TapMeasureState.MEASURING -> {
-                    lytStress.lottieAnimView.visible()
-                    lytStress.imvHrMeasure.invisible()
-                    lytStress.tvUnableToMeasure.gone()
+                    TapMeasureState.MEASURING -> {
+                        lytStress.lottieAnimView.visible()
+                        lytStress.imvHrMeasure.invisible()
+                        lytStress.tvUnableToMeasure.gone()
 
-                    lytStress.groupValue.gone()
-                    lytStress.tvEmptyConnect.visible()
+                        lytStress.groupValue.gone()
+                        lytStress.tvEmptyConnect.visible()
 
-                    lytStress.tvEmptyConnect.apply {
-                        setTextColor(resources.getColor(R.color.white))
-                        text = context.getString(R.string.text_measuring_dots)
+                        lytStress.tvEmptyConnect.apply {
+                            setTextColor(resources.getColor(R.color.white))
+                            text = context.getString(R.string.text_measuring_dots)
+                        }
                     }
-                }
 
-                TapMeasureState.DEFAULT -> {
-                    lytStress.lottieAnimView.invisible()
-                    lytStress.imvHrMeasure.visible()
-                    lytStress.tvUnableToMeasure.gone()
+                    TapMeasureState.DEFAULT -> {
+                        lytStress.lottieAnimView.invisible()
+                        lytStress.imvHrMeasure.visible()
+                        lytStress.tvUnableToMeasure.gone()
 
-                    lytStress.groupValue.gone()
-                    lytStress.tvEmptyConnect.visible()
-                    lytStress.tvEmptyConnect.apply {
-                        setTextColor(Color.parseColor("#ffffff"))
-                        text = context.getString(R.string.text_tap_to_measure)
+                        lytStress.groupValue.gone()
+                        lytStress.tvEmptyConnect.visible()
+                        lytStress.tvEmptyConnect.apply {
+                            setTextColor(Color.parseColor("#ffffff"))
+                            text = context.getString(R.string.text_tap_to_measure)
+                        }
                     }
-                }
 
-                TapMeasureState.ERROR -> {
-                    lytStress.lottieAnimView.invisible()
-                    lytStress.imvHrMeasure.visible()
+                    TapMeasureState.ERROR -> {
+                        lytStress.lottieAnimView.invisible()
+                        lytStress.imvHrMeasure.visible()
 
-                    lytStress.groupValue.visible()
-                    lytStress.tvEmptyConnect.gone()
-                    lytStress.tvHeartValue.gone()
+                        lytStress.groupValue.visible()
+                        lytStress.tvEmptyConnect.gone()
+                        lytStress.tvHeartValue.gone()
 
-                    lytStress.tvLastMeasure.apply {
-                        setTextColor(Color.parseColor("#88b0ff"))
-                        text = context.getString(R.string.text_try_again)
+                        lytStress.tvLastMeasure.apply {
+                            setTextColor(Color.parseColor("#88b0ff"))
+                            text = context.getString(R.string.text_try_again)
+                        }
+                        /*lytStress.tvHeartUnit.text = context.getString(R.string.text_unable_to_measure)*/
+                        lytStress.tvUnableToMeasure.visible()
+
                     }
-                    /*lytStress.tvHeartUnit.text = context.getString(R.string.text_unable_to_measure)*/
-                    lytStress.tvUnableToMeasure.visible()
 
+                    TapMeasureState.HIDE -> {
+                        lytStress.lottieAnimView.invisible()
+                        lytStress.imvHrMeasure.invisible()
+
+                        lytStress.groupValue.invisible()
+                        lytStress.tvEmptyConnect.gone()
+                        lytStress.tvHeartValue.gone()
+                        lytStress.tvUnableToMeasure.gone()
+                    }
+
+                    null -> {}
                 }
-
-                TapMeasureState.HIDE -> {
-                    lytStress.lottieAnimView.invisible()
-                    lytStress.imvHrMeasure.invisible()
-
-                    lytStress.groupValue.invisible()
-                    lytStress.tvEmptyConnect.gone()
-                    lytStress.tvHeartValue.gone()
-                    lytStress.tvUnableToMeasure.gone()
+                lytStress.imvHrMeasure.setOnClickListener {
+                    itemClickListener?.invoke(
+                        OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked(allData)
+                    )
                 }
-
-                null -> {}
-            }
-            lytStress.imvHrMeasure.setOnClickListener {
-                itemClickListener?.invoke(
-                    OSummaryHealthOverviewClickEnum.OnStressMeasureImvClicked(allData)
-                )
-            }
 
 
                 /*binding.graphStress.updateData(data.data)
             binding.tvBeta.setVisibilityByCondition(data.isBeta)
             binding.ivBackBeta.setVisibilityByCondition(data.isBeta)*/
-            }
-        else {
+            } else {
                 lytStress.tvUnableToMeasure.gone()
                 lytStress.lottieAnimView.gone()
                 lytStress.imvHrMeasure.gone()
@@ -908,10 +906,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
                 if (lastMeasuredValue == 0) {
-                /*if (lastMeasuredValue == 0 || allData.isRingPaired!=true) {
-                    lytStress.tvStressValue.gone()
-                    lytStress.tvStressStatus.gone()
-                    lytStress.tvLastUpdate.gone()*/
+                    /*if (lastMeasuredValue == 0 || allData.isRingPaired!=true) {
+                        lytStress.tvStressValue.gone()
+                        lytStress.tvStressStatus.gone()
+                        lytStress.tvLastUpdate.gone()*/
                     lytStress.lytTrend.root.gone()
                 } else {
                     /*lytStress.tvStressValue.visible()
@@ -1918,39 +1916,47 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnAiCardClicked)
             }
 
-            if (data.dailyHealthDigestCardState == SummaryStates.DATA_AVAILABLE){
+            if (data.dailyHealthDigestCardState == SummaryStates.DATA_AVAILABLE) {
                 binding.lytDailyHealthDigest.mainCard.setBackgroundResource(R.drawable.bg_daily_health_digest_main_dash)
                 binding.lytDailyHealthDigest.root.isClickable = true
-            }else{
+            } else {
                 binding.lytDailyHealthDigest.mainCard.setBackgroundResource(R.drawable.bg_daily_health_digest_other_dash)
                 binding.lytDailyHealthDigest.root.isClickable = false
             }
 
-            when(data.dailyHealthDigestCardState){
+            when (data.dailyHealthDigestCardState) {
                 SummaryStates.NO_DEVICE -> {
                     binding.lytDailyHealthDigest.imageView11.gone()
                     binding.lytDailyHealthDigest.tvTitle.text =
                         context.getString(R.string.text_ring_not_connected)
                 }
+
                 SummaryStates.NO_DATA -> {
                     binding.lytDailyHealthDigest.imageView11.gone()
-                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
+                    binding.lytDailyHealthDigest.tvTitle.text =
+                        context.getString(R.string.text_no_data_found)
                 }
+
                 SummaryStates.GENERATING -> {
                     binding.lytDailyHealthDigest.imageView11.gone()
-                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_generating)
+                    binding.lytDailyHealthDigest.tvTitle.text =
+                        context.getString(R.string.text_generating)
                 }
+
                 SummaryStates.DATA_AVAILABLE -> {
                     binding.lytDailyHealthDigest.imageView11.visible()
-                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_daily_nhealth_digest)
+                    binding.lytDailyHealthDigest.tvTitle.text =
+                        context.getString(R.string.text_daily_nhealth_digest)
                     binding.lytDailyHealthDigest.root.setOnClickListener {
                         itemClickListener?.invoke(
                             OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked
                         )
                     }
                 }
+
                 SummaryStates.NONE, null -> {
-                    binding.lytDailyHealthDigest.tvTitle.text = context.getString(R.string.text_no_data_found)
+                    binding.lytDailyHealthDigest.tvTitle.text =
+                        context.getString(R.string.text_no_data_found)
                 }
             }
 
@@ -3115,16 +3121,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class CircadianLockedNoSleepCardViewHolder(private val binding: LayoutDashNoSleepStatesCircadianBinding) :
         HomeRecyclerViewHolder(binding) {
-        fun bind(data: OHealthOverview.CircadianLockedOrNoSleepCard){
+        fun bind(data: OHealthOverview.CircadianLockedOrNoSleepCard) {
             val context = binding.root.context
-            if(data.isLocked==false){
+            if (data.isLocked == false) {
                 binding.lytLockedState.gone()
                 binding.lytNoSleepData.visible()
-                binding.textView182.text = context.getString(R.string.text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide)
-            }else{
+                binding.textView182.text =
+                    context.getString(R.string.text_we_don_t_have_your_sleep_data_from_last_night_but_no_worries_you_can_quickly_log_your_sleep_now_to_unlock_today_s_rhythm_guide)
+            } else {
                 binding.lytNoSleepData.gone()
                 binding.lytLockedState.visible()
-                binding.textView182.text = context.getString(R.string.text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active)
+                binding.textView182.text =
+                    context.getString(R.string.text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active)
             }
 
             binding.root.setOnClickListener {
@@ -3132,7 +3140,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.llLytLog.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(CircadianAlignmentViewModel.sleep_key))
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.OnLogActivityClicked(
+                        CircadianAlignmentViewModel.sleep_key
+                    )
+                )
             }
         }
     }
@@ -3146,8 +3158,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvWindow = binding.tvWindow
             val tvDesc = binding.tvDesc*/
 
-            binding.tvWindow.text = data.title ?: "-"
-            binding.tvDesc.text = data.description ?: "-"
+            LOGS.d("CircadianAlignmentViewHolder ${data.title}")
+
+            if (data.title.isNullOrEmpty()) {
+                binding.tvGeneratingNudge.visible()
+                binding.tvWindow.gone()
+                binding.tvDesc.gone()
+            } else {
+                binding.tvGeneratingNudge.gone()
+                binding.tvWindow.visible()
+                binding.tvDesc.visible()
+                binding.tvWindow.text = data.title ?: "-"
+                binding.tvDesc.text = data.description ?: "-"
+            }
 
             /*if(
                 data.title != null &&
@@ -3175,8 +3198,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         private fun setCircadianGraph(data: OHealthOverview.CircadianAlignment) {
             binding.lytGraphView.graphView.isScrollLocked = true
-            binding.lytGraphView.graphView.graphStartTime = LocalTime.of(6,0)
-            binding.lytGraphView.graphView.graphEndTime = LocalTime.of(23,0)
+            binding.lytGraphView.graphView.graphStartTime = LocalTime.of(6, 0)
+            binding.lytGraphView.graphView.graphEndTime = LocalTime.of(23, 0)
 
             data.startTime?.let {
                 binding.lytGraphView.graphView.graphStartTime = it
