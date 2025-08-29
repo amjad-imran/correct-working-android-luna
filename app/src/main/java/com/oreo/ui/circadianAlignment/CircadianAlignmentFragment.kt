@@ -609,14 +609,14 @@ class CircadianAlignmentFragment :
         }
 
         binding.lytFocusWindow.llLunaAi.setOnClickListener {
-            if (viewModel.isChatSplashShown()) {
+           /* if (viewModel.isChatSplashShown()) {*/
                 navigate(
                     R.id.aiTopQuestionsFragment,
                     bundleOf("aiTopic" to AITopics.CIRCADIAN)
                 )
-            } else {
+           /* } else {
                 navigate(R.id.aiChatOnboardFragment)
-            }
+            }*/
         }
 
         binding.rvHowItWorks.addOnItemTouchListener(object :
