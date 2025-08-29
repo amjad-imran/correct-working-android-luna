@@ -9,7 +9,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
@@ -31,27 +30,26 @@ class DropdownDialog(
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setContentView(R.layout.dialog_dropdown)
             window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+            window?.setDimAmount(0f)
+
+            // ⬇️ Kill the default bottom-to-top window animation
+            window?.setWindowAnimations(0)
 
             val location = IntArray(2)
             anchorView.getLocationOnScreen(location)
 
-            window?.attributes?.apply {
-                // Adjust position of the dialog to be aligned with the anchor view
+            window?.attributes = window?.attributes?.apply {
                 x = location[0]
-                y = location[1] + anchorView.height
+                val gapInPx = (28 * context.resources.displayMetrics.density).toInt()
+                y = location[1] + anchorView.height - gapInPx
                 gravity = Gravity.TOP or Gravity.START
-
-                // Set dialog size to wrap content and take up only necessary space
                 width = anchorView.width
                 height = WindowManager.LayoutParams.WRAP_CONTENT
             }
 
-            // Adjusting the background of the fragment to be transparent
-            window?.setDimAmount(0f)  // This ensures the background is transparent
-
             setupRecyclerView()
-            animateSliderIn() // Change to slider animation
-            show()
+            show()                // ✅ show FIRST
+            animateDropdownIn()   // ✅ then animate the content
         }
     }
 
@@ -67,30 +65,29 @@ class DropdownDialog(
         recyclerView.adapter = adapter
     }
 
-    private fun animateSliderIn() {
-        val container = dialog?.findViewById<LinearLayout>(R.id.dropdownContainer)
-        container?.apply {
+    private fun animateDropdownIn() {
+        val container = dialog?.findViewById<View>(R.id.dropdownContainer) ?: return
+        container.apply {
             alpha = 0f
-            translationY = 100f  // Start the container below the screen
+            scaleY = 0f
+            pivotY = 0f // expand from top edge like a dropdown
             animate()
                 .alpha(1f)
-                .translationY(0f) // Slide up to its normal position
-                .setDuration(300)
+                .scaleY(1f)
+                .setDuration(220)
                 .setInterpolator(DecelerateInterpolator())
                 .start()
         }
     }
 
     private fun animateSliderOut() {
-        val container = dialog?.findViewById<LinearLayout>(R.id.dropdownContainer)
-        container?.animate()
-            ?.alpha(0f)
-            ?.translationY(100f) // Slide down the container out of view
-            ?.setDuration(250)
-            ?.setInterpolator(AccelerateInterpolator())
-            ?.withEndAction {
-                dialog?.dismiss()
-            }
-            ?.start()
+        val container = dialog?.findViewById<View>(R.id.dropdownContainer) ?: return
+        container.animate()
+            .alpha(0f)
+            .scaleY(0f)
+            .setDuration(180)
+            .setInterpolator(AccelerateInterpolator())
+            .withEndAction { dialog?.dismiss() }
+            .start()
     }
 }
