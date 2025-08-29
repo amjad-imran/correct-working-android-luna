@@ -28,7 +28,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private val hourWidthPx = 100f.dpToPixel()
     private val bottomPaddingForLabels = 16f.dpToPixel()
-    private val topPadding = 30f
+    private val topPadding = 10f.dpToPixel()
 
     private val fontGilroy =
         androidx.core.content.res.ResourcesCompat.getFont(
@@ -245,54 +245,60 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
     }
 
+    private val curvePath = Path()
+    private val fillPath = Path()
+    private val tmpPos = ArrayList<Float>(512)
+
+    private fun Int.withAlphaFraction(f: Float): Int {
+        val a = ((f.coerceIn(0f, 1f) * 255f) + 0.5f).toInt()
+        return (this and 0x00FFFFFF) or (a shl 24)
+    }
+
     private fun drawEnergyCurveAndFill(canvas: Canvas, values: List<Float>) {
         if (values.size < 2) return
 
         val usableHeight =
             graphHeight() - bottomPaddingForLabels - topPadding - 3 * 22f.dpToPixel()
-
         val minuteWidth = hourWidthPx / 60f
+        val lastX = (values.lastIndex) * minuteWidth
 
-        for (i in 0 until values.size - 1) {
-            val startX = i * minuteWidth
-            val stopX = (i + 1) * minuteWidth
-            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
+        fun yAt(v: Float) = usableHeight * (0.9f - 0.75f * v)
 
-            val colorStart = getColorForValue(values[i])
-            val colorEnd = getColorForValue(values[i + 1])
-            linePaint.shader = LinearGradient(
-                startX, startY, stopX, stopY,
-                colorStart, colorEnd, Shader.TileMode.CLAMP
-            )
+        curvePath.reset()
+        fillPath.reset()
+        tmpPos.clear()
 
-            tmpPath.reset()
-            tmpPath.moveTo(startX, startY)
-            tmpPath.lineTo(stopX, stopY)
-            canvas.drawPath(tmpPath, linePaint)
+        var x = 0f
+        var y = yAt(values[0])
+        curvePath.moveTo(x, y)
+        tmpPos.add(0f)
+
+        for (i in 1 until values.size) {
+            x = i * minuteWidth
+            y = yAt(values[i])
+            curvePath.lineTo(x, y)
+            tmpPos.add(x / lastX.coerceAtLeast(1f))
         }
 
-        for (i in 0 until values.size - 1) {
-            val startX = i * minuteWidth
-            val stopX = (i + 1) * minuteWidth
-            val startY = usableHeight - (values[i] * usableHeight * 0.8f + usableHeight * 0.1f)
-            val stopY = usableHeight - (values[i + 1] * usableHeight * 0.8f + usableHeight * 0.1f)
+        fillPath.set(curvePath)
+        fillPath.lineTo(lastX, usableHeight)
+        fillPath.lineTo(0f, usableHeight)
+        fillPath.close()
 
-            val colorStart = getColorForValueFill(values[i])
-            val colorEnd = getColorForValueFill(values[i + 1])
-            fillPaint.shader = LinearGradient(
-                startX, startY, stopX, stopY,
-                colorStart, colorEnd, Shader.TileMode.CLAMP
-            )
+        val positions = FloatArray(tmpPos.size) { idx -> tmpPos[idx].coerceIn(0f, 1f) }
+        val strokeColors = IntArray(values.size) { idx -> getColorForValue(values[idx]) }
+        val fillColors = IntArray(values.size) { idx -> getColorForValueFill(values[idx]).withAlphaFraction(0.10f) }
 
-            tmpPath.reset()
-            tmpPath.moveTo(startX, startY)
-            tmpPath.lineTo(stopX, stopY)
-            tmpPath.lineTo(stopX, usableHeight)
-            tmpPath.lineTo(startX, usableHeight)
-            tmpPath.close()
-            canvas.drawPath(tmpPath, fillPaint)
-        }
+        val lastXSafe = lastX.coerceAtLeast(1f)
+        val strokeGradient = LinearGradient(0f, 0f, lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
+        val fillGradient = LinearGradient(0f, 0f, lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
+
+        linePaint.shader = strokeGradient
+        fillPaint.shader = fillGradient
+        fillPaint.alpha = 255
+
+        canvas.drawPath(fillPath, fillPaint)
+        canvas.drawPath(curvePath, linePaint)
     }
 
     private fun getColorForValue(value: Float): Int {
