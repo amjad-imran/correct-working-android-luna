@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentQuizCircadianBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -21,6 +23,8 @@ class QuizCircadianFragment :
     BaseFragment<FragmentQuizCircadianBinding>(FragmentQuizCircadianBinding::inflate) {
 
     private val viewModel: QuizCircadianViewModel by viewModels()
+
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     var isBlocked = false
 
@@ -197,6 +201,7 @@ class QuizCircadianFragment :
 
         viewModel.quizDataSubmitted.observe(this) {
             it.getContent()?.let {
+                mainViewModel.reloadTodaysData()
                 if (viewModel.localDataStore.isCircadianOnboardShown()) {
                     navigateUpSafe()
                 } else {

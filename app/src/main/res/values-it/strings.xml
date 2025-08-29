@@ -2173,4 +2173,7 @@
     <string name="text_focus_window_desc2">Il tuo orario di sveglia oggi è stato fuori dal tuo ritmo abituale, quindi la Guida del Ritmo Circadiano è temporaneamente non disponibile. Usa Luna AI per imparare a costruire una routine che funzioni per te.</string>
     <string name="text_let_s_identify_your_chronotype">Identifichiamo il tuo cronotipo!</string>
 
+    <string name="text_getting_more_insights">Ottenere maggiori informazioni</string>
+    <string name="text_and_how_is_it_helpful">E come è utile?</string>
+
 </resources>

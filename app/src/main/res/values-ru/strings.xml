@@ -2194,5 +2194,7 @@
     <string name="text_focus_window_desc2">Время вашего пробуждения сегодня было вне привычного ритма, поэтому руководство по циркадному ритму временно недоступно. Используйте Luna AI, чтобы научиться строить последовательность, которая работает для вас.</string>
     <string name="text_let_s_identify_your_chronotype">Давайте определим ваш хронотип!</string>
 
+    <string name="text_getting_more_insights">Получение дополнительных сведений</string>
+    <string name="text_and_how_is_it_helpful">И чем это полезно?</string>
 
 </resources>

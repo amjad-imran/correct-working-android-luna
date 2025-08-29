@@ -2172,4 +2172,7 @@
     <string name="text_focus_window_desc2">Ihre heutige Aufwachzeit lag außerhalb Ihres gewohnten Rhythmus, daher ist der Circadian Rhythm Guide vorübergehend nicht verfügbar. Verwenden Sie Luna AI, um zu erfahren, wie Sie eine für Sie funktionierende Konsistenz aufbauen können.</string>
     <string name="text_let_s_identify_your_chronotype">Lassen Sie uns Ihren Chronotyp bestimmen!</string>
 
+    <string name="text_getting_more_insights">Mehr Einblicke erhalten</string>
+    <string name="text_and_how_is_it_helpful">Und wie ist das hilfreich?</string>
+
 </resources>

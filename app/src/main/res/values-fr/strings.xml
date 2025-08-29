@@ -2292,4 +2292,7 @@ onjour, Luna"</string>
     <string name="text_focus_window_desc2">Votre heure de réveil aujourd\'hui était en dehors de votre rythme habituel, donc le Guide du Rythme Circadien est temporairement indisponible. Utilisez Luna AI pour apprendre à créer une routine qui fonctionne pour vous.</string>
     <string name="text_let_s_identify_your_chronotype">Identifions votre chronotype !</string>
 
+    <string name="text_getting_more_insights">Obtenir plus d\'informations</string>
+    <string name="text_and_how_is_it_helpful">Et en quoi est-ce utile?</string>
+
 </resources>
