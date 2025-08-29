@@ -845,13 +845,16 @@ class CircadianAlignmentViewModel
                     }
                 }
 
-                it.lightAnchoringPhaseWindowGraph?.let {
-                    val startTime =
-                        LocalTime.parse(it.startTime, DateTimeFormatter.ofPattern("HH:mm"))
-                    val endTime = LocalTime.parse(it.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+                it.melatoninPrepPhaseWindowGraph?.let { mppWinGraph ->
+                    if (mppWinGraph.startTime == null || mppWinGraph.endTime == null) return@let
+                    it.lightAnchoringPhaseWindowGraph?.let { it1 ->
+                        val startTime =
+                            LocalTime.parse(it1.endTime, DateTimeFormatter.ofPattern("HH:mm"))
+                        val endTime = LocalTime.parse(mppWinGraph.startTime, DateTimeFormatter.ofPattern("HH:mm"))
 
-                    if (currentTime in startTime..endTime) {
-                        return resourceProvider.getString(R.string.text_neutral_light_zone)
+                        if (currentTime in startTime..endTime) {
+                            return resourceProvider.getString(R.string.text_neutral_light_zone)
+                        }
                     }
                 }
 
