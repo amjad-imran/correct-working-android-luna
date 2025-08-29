@@ -795,13 +795,14 @@ class CircadianAlignmentFragment :
         }
 
         // Circadian Mid-Point
-        if (data.circadianMidPoint?.chronotype == null) {
+        val personChronotype = data.graphData?.circadianMidPointData?.chronotype
+        if (personChronotype == null) {
             binding.lytSleepMidPoint.tvChorotype.gone()
         } else {
             val fullText =
                 getString(
                     R.string.text_chronotype_type_val,
-                    data.circadianMidPoint.chronotype
+                    personChronotype
                 ).uppercase()
 
             val spannable = SpannableString(fullText)
