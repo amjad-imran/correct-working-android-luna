@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddCaffeineBinding
 import com.noisefit.luna.databinding.FragmentAddLightExposureBinding
 import com.noisefit.luna.databinding.FragmentAddMealActivityTimelineBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
@@ -36,6 +37,8 @@ class AddCaffeineFragment :
 
     private val sharedViewModel: AddActivityTimelineSharedViewModel by activityViewModels()
     private val viewModel: AddCaffeineViewModel by viewModels()
+
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,6 +142,7 @@ class AddCaffeineFragment :
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
+                mainViewModel.reloadTodaysData()
                 sharedViewModel.navigateUp()
             }
         }

@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.noisefit.luna.databinding.FragmentAddPeriodBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -33,6 +34,8 @@ class AddPeriodLogFragment :
 //    private val viewModel: AddPeriodViewModel by viewModels()
 
     private val logViewModel: CalenderDayLogViewModel by viewModels()
+
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val flowAdapter: CycleLogAdapter by lazy {
         CycleLogAdapter(object : OnLogItemClick {
@@ -110,6 +113,7 @@ class AddPeriodLogFragment :
 
         logViewModel.serverSuccess.observe(this) {
             it?.getContent()?.let {
+                mainViewModel.reloadTodaysData()
                 sharedViewModel.navigateUp()
             }
         }
