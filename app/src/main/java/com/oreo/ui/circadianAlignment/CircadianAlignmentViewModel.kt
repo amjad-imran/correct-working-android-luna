@@ -292,9 +292,9 @@ class CircadianAlignmentViewModel
                         lightExposureData.value?.apply {
                             onlyImgWithText = OnlyImgWithText(
                                 img = R.drawable.ic_sun_activity_monitor,
-                                txt = if ((curData.time
+                                txt = /*if ((curData.time
                                         ?: 0) <= 0
-                                ) "-" else curData.goal?.let { "$it\nmins" } ?: "-"
+                                ) "-" else */curData.goal?.let { "$it\nmins" } ?: "-"
                             )
                             showFooter = true
                             logStatus = isLogged
@@ -339,9 +339,7 @@ class CircadianAlignmentViewModel
                                 totalProgress = goal,
                                 currentProgress = goal?.let { curData.progress ?: 0 } ?: 0,
                                 img = R.drawable.ic_workout_corrective_activities,
-                                txt = if ((curData.time
-                                        ?: 0) <= 0
-                                ) "-" else curData.goal?.let { "$it kcal" } ?: "-"
+                                txt =  curData.goal?.let { "$it kcal" } ?: "-"
                             )
                             showFooter = true
                             logStatus = isLogged
