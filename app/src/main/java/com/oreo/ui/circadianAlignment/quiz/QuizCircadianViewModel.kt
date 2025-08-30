@@ -97,7 +97,7 @@ class QuizCircadianViewModel @Inject constructor(
             }
             reqObj.add("data", jsonArrayRes)
 
-            userRepository.submitCircadianQuizData(reqObj).collect{ resource ->
+            userRepository.submitCircadianQuizData(reqObj, isAllDone).collect{ resource ->
 
                 when (resource) {
                     is Resource.GenericError -> {

@@ -142,6 +142,28 @@ class CircadianAlignmentFragment :
     }
 
     private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse) {
+        if (viewModel.personChronotype == null) {
+            binding.lytSleepMidPoint.tvChorotype.gone()
+        } else {
+            val fullText =
+                getString(
+                    R.string.text_chronotype_type_val,
+                    viewModel.personChronotype
+                ).uppercase()
+
+            val spannable = SpannableString(fullText)
+            spannable.setSpan(
+                ForegroundColorSpan("#CCFFFFFF".toColorInt()),
+                0,
+                11,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            binding.lytSleepMidPoint.tvChorotype.apply {
+                text = spannable
+                visible()
+            }
+        }
         try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
@@ -578,11 +600,13 @@ class CircadianAlignmentFragment :
         binding.lytCorrectiveActivities.recyclerV.layoutManager = LinearLayoutManager(context)
         binding.lytCorrectiveActivities.recyclerV.adapter = correctiveActivitiesAdapter
 
-        viewModel.initHowItWorksData()
-
         binding.rvHowItWorks.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvHowItWorks.adapter = howItWorksAdapter
+
+        howItWorksAdapter.setDataSet(viewModel.getHowItWorksData())
+        binding.dividerHowItWorks.root.visible()
+        binding.lytHowItWorks.visible()
     }
 
     override fun initListener() {
@@ -711,12 +735,6 @@ class CircadianAlignmentFragment :
                 binding.progressBar.root.gone()
             }
         }
-
-        viewModel.howItWorksDataList.observe(viewLifecycleOwner) {
-            howItWorksAdapter.setDataSet(it)
-            binding.dividerHowItWorks.root.visible()
-            binding.lytHowItWorks.visible()
-        }
     }
 
     fun setData(data: CircadianResponseModel) {
@@ -776,7 +794,7 @@ class CircadianAlignmentFragment :
         // your chronotype
         val chronotypeData = data.chronotype
         binding.lytYourChronotype.apply {
-            tvType.text = chronotypeData?.type ?: "-"
+            tvType.text = viewModel.personChronotype ?: "-"
 
             chronotypeData?.introduction?.let {
                 tvIntro.apply {
@@ -791,31 +809,6 @@ class CircadianAlignmentFragment :
                 getString(R.string.text_retake_chronotype_quiz)
             } else {
                 getString(R.string.text_take_quiz)
-            }
-        }
-
-        // Circadian Mid-Point
-        val personChronotype = data.graphData?.circadianMidPointData?.chronotype
-        if (personChronotype == null) {
-            binding.lytSleepMidPoint.tvChorotype.gone()
-        } else {
-            val fullText =
-                getString(
-                    R.string.text_chronotype_type_val,
-                    personChronotype
-                ).uppercase()
-
-            val spannable = SpannableString(fullText)
-            spannable.setSpan(
-                ForegroundColorSpan("#CCFFFFFF".toColorInt()),
-                0,
-                11,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-            binding.lytSleepMidPoint.tvChorotype.apply {
-                text = spannable
-                visible()
             }
         }
     }

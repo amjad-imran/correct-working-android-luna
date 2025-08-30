@@ -581,8 +581,14 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun submitCircadianQuizData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+    override suspend fun submitCircadianQuizData(
+        req: JsonObject,
+        isAllSkipAttempted: Boolean
+    ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            if(isAllSkipAttempted){
+                keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
+            }
             remoteDataSource.submitCircadianQuizData(
                 "${BuildConfig.OREO_BASE_URL}/sleep/v3/circadian/onboarding",
                 req
