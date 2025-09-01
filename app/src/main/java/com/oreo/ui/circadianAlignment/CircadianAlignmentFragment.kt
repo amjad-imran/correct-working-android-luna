@@ -145,17 +145,16 @@ class CircadianAlignmentFragment :
         if (viewModel.personChronotype == null) {
             binding.lytSleepMidPoint.tvChorotype.gone()
         } else {
-            val fullText =
-                getString(
-                    R.string.text_chronotype_type_val,
+            val fullText = (
+                    getString(R.string.text_chronotype) +
                     viewModel.personChronotype
-                ).uppercase()
+            ).uppercase()
 
             val spannable = SpannableString(fullText)
             spannable.setSpan(
                 ForegroundColorSpan("#CCFFFFFF".toColorInt()),
                 0,
-                11,
+                getString(R.string.text_chronotype).length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
@@ -521,11 +520,12 @@ class CircadianAlignmentFragment :
     }
 
     private fun updateGraph(
+        isLockedCircularView: Boolean?,
         graphData: CircadianGraphData?,
         circadianMidPoint: CircadianMidPointData?
     ) {
         if (
-            graphData?.startTime != null && graphData.endTime != null &&
+            isLockedCircularView != true && graphData?.startTime != null && graphData.endTime != null &&
             graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null
         ) {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -670,7 +670,7 @@ class CircadianAlignmentFragment :
             binding.mainScrollView.visible()
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            updateGraph(it.graphData, it.graphData?.circadianMidPointData)
+            updateGraph(it.isLockedCircularView, it.graphData, it.graphData?.circadianMidPointData)
             showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 

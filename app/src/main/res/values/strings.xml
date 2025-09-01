@@ -2149,5 +2149,6 @@ These insights help you understand how your heart rate changes during different 
 
     <string name="text_getting_more_insights">Getting more insights</string>
     <string name="text_and_how_is_it_helpful">And how is it helpful?</string>
+    <string name="text_chronotype">"CHRONOTYPE: "</string>
 
 </resources>

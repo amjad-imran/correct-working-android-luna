@@ -2175,5 +2175,6 @@
 
     <string name="text_getting_more_insights">Ottenere maggiori informazioni</string>
     <string name="text_and_how_is_it_helpful">E come è utile?</string>
+    <string name="text_chronotype">CRONOTIPO: </string>
 
 </resources>

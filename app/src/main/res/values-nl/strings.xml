@@ -2174,5 +2174,6 @@
 
     <string name="text_getting_more_insights">Meer inzicht krijgen</string>
     <string name="text_and_how_is_it_helpful">En hoe is het nuttig?</string>
+    <string name="text_chronotype">CHRONOTYPE: </string>
 
 </resources>

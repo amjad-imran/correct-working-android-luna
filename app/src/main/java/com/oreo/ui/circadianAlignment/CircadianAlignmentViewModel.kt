@@ -122,7 +122,7 @@ class CircadianAlignmentViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             it.chronotype?.type?.let {prsnChronotype ->
-                                setPrsnChronotype(prsnChronotype)
+                                personChronotype= prsnChronotype.trim()
                             }
                             circadianResponseData.postValue(it)
                             prepareCorrectiveActivitiesData(
@@ -962,17 +962,6 @@ class CircadianAlignmentViewModel
             cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
         } catch (e: Exception) {
             null
-        }
-    }
-
-    private fun setPrsnChronotype(data: String){
-        personChronotype = when(data){
-            "Definite Morning Type" -> resourceProvider.getString(R.string.text_definite_morning_type)
-            "Moderate Morning Type" -> resourceProvider.getString(R.string.text_moderate_morning_type)
-            "Intermediate Type" -> resourceProvider.getString(R.string.text_intermediate_type)
-            "Moderate Evening Type" -> resourceProvider.getString(R.string.text_moderate_evening_type)
-            "Definite Evening Type" -> resourceProvider.getString(R.string.text_definite_evening_type)
-            else -> null
         }
     }
 

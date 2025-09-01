@@ -2294,5 +2294,7 @@ onjour, Luna"</string>
 
     <string name="text_getting_more_insights">Obtenir plus d\'informations</string>
     <string name="text_and_how_is_it_helpful">Et en quoi est-ce utile?</string>
+    <string name="text_chronotype">CHRONOTYPE : </string>
+
 
 </resources>

@@ -2145,5 +2145,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
 
     <string name="text_getting_more_insights">Obtener más información</string>
     <string name="text_and_how_is_it_helpful">¿Y cómo es útil?</string>
+    <string name="text_chronotype">CRONOTIPO: </string>
 
 </resources>

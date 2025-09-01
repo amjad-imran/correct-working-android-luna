@@ -2168,5 +2168,6 @@
 
     <string name="text_getting_more_insights">获取更多洞察</string>
     <string name="text_and_how_is_it_helpful">这有什么帮助？</string>
+    <string name="text_chronotype">生理类型: </string>
 
 </resources>
