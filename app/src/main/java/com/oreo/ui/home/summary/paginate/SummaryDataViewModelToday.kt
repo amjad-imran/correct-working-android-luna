@@ -3048,11 +3048,11 @@ class SummaryDataViewModelToday @Inject constructor(
 
         if (registerDays < 7) {
 
-            if (registerDays == 0) {
+            /*if (registerDays == 0) {*/
                 trendsData?.welcome?.welcome?.let {
                     userActivities.add(OHealthOverview.InfoRingWelcome(it))
                 }
-            }
+            /*}*/
 
             val cardClickState = localDataStore.getDashCardClickState()
 
