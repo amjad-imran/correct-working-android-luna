@@ -2180,5 +2180,7 @@
 
     <string name="text_getting_more_insights">รับข้อมูลเชิงลึกเพิ่มเติม</string>
     <string name="text_and_how_is_it_helpful">และมันมีประโยชน์อย่างไร?</string>
+    <string name="text_chronotype">โครโนไทป์: </string>
+    <string name="text_end_time_must_be_later_than_the_start_time">เวลาสิ้นสุดต้องช้ากว่าเวลาเริ่มต้น</string>
 
 </resources>

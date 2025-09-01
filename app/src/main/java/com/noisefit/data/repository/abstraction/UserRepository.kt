@@ -83,7 +83,7 @@ interface UserRepository {
 
     suspend fun getCircadianQuizData(): Flow<Resource<BaseApiResponse<List<CircadianQuizResponseModel>>>>
 
-    suspend fun submitCircadianQuizData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+    suspend fun submitCircadianQuizData(req: JsonObject, isAllSkipAttempted: Boolean): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getCurrDayTimelineActivitiesData(date: String): Flow<Resource<BaseApiResponse<TimelineScreenResponse>>>
 

@@ -176,7 +176,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -193,7 +193,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -206,6 +206,9 @@ class AddSleepFragment :
                         uiController.onDisplayError("Please check end time")
                     }
 
+                    if(binding.lytCard.tvEndTime.text == getString(R.string.text_enter)){
+                        viewModel.endTimeSleep = OAddSleep()
+                    }
                 }
 
 

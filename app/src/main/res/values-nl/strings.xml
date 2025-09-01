@@ -2174,5 +2174,7 @@
 
     <string name="text_getting_more_insights">Meer inzicht krijgen</string>
     <string name="text_and_how_is_it_helpful">En hoe is het nuttig?</string>
+    <string name="text_chronotype">CHRONOTYPE: </string>
+    <string name="text_end_time_must_be_later_than_the_start_time">De eindtijd moet later zijn dan de starttijd.</string>
 
 </resources>
