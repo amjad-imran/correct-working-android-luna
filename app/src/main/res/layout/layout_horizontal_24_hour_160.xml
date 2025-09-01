@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="24dp"
-        android:text="@string/energy"
+        android:text="@string/text_energy"
         android:textColor="#C5BABA"
         android:textSize="8sp"
         app:layout_constraintStart_toStartOf="parent"
