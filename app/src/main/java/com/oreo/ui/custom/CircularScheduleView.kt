@@ -374,6 +374,37 @@ class CircularScheduleView @JvmOverloads constructor(
         }
 
         canvas.drawCircle(cx, cy, circleRadius, ringPaint)
+
+        val imageRadius = energyTickStart - 14f.dpToPixel()
+        sleepStart?.let {
+            val hour = it.hour + it.minute / 60f
+            val a = Math.toRadians(hourToAngle(hour).toDouble())
+            val x = (cx + imageRadius * cos(a)).toFloat()
+            val y = (cy + imageRadius * sin(a)).toFloat()
+            canvas.drawBitmap(sleepBedBitmap, x - sleepBedBitmap.width / 2f, y - sleepBedBitmap.height / 2f, null)
+        }
+        sleepEnd?.let {
+            val hour = it.hour + it.minute / 60f
+            val a = Math.toRadians(hourToAngle(hour).toDouble())
+            val x = (cx + imageRadius * cos(a)).toFloat()
+            val y = (cy + imageRadius * sin(a)).toFloat()
+            canvas.drawBitmap(sleepWakeBitmap, x - sleepWakeBitmap.width / 2f, y - sleepWakeBitmap.height / 2f, null)
+        }
+
+        val startAngle = hourToAngle(13f)
+        drawCircularTextCCW(
+            canvas,
+            energyRingOuter - 20f.dpToPixel(),
+            PointF(cx, cy),
+            startAngle,
+            context.getString(R.string.text_energy),
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL_AND_STROKE
+                typeface = fontGilroy
+                textSize = dpToPx(10f)
+                color = "#B2B2B2".toColorInt()
+            }
+        )
     }
 
     private fun drawEvents(canvas: Canvas) {
