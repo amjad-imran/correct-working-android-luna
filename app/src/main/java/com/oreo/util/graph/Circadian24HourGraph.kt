@@ -8,6 +8,7 @@ import android.widget.OverScroller
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withTranslation
 import androidx.core.view.ViewCompat
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.dpToPixel
 import com.oreo.data.model.TimeWindow
 import java.time.Duration
@@ -17,7 +18,6 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.max
-import kotlin.math.min
 
 class Circadian24HourGraph @JvmOverloads constructor(
     context: Context,
@@ -55,7 +55,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
             return hours
         }
 
-    private fun totalWidth(): Float = (totalHours * hourWidthPx) + 2 * horizontalPadding
+    private fun totalWidth(): Float = leadingPadPx + (totalHours * hourWidthPx) + horizontalPadding
     private fun hourAt(index: Int): LocalTime = graphStartTime.plusHours(index.toLong() % 24)
     private fun graphHeight(): Float = height.toFloat()
 
@@ -130,6 +130,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private var contentBitmap: Bitmap? = null
     private var contentCanvas: Canvas? = null
     private var contentValid = false
+    private var leadingPadPx: Float = 0f
 
     fun setDataSet(timeWindows: List<TimeWindow>, energyGraph: List<Float>?) {
         this.timeWindows = timeWindows
@@ -156,12 +157,13 @@ class Circadian24HourGraph @JvmOverloads constructor(
     }
 
     private fun calculateInitialScrollOffset(): Float {
+        leadingPadPx = width / 2f
         val now = LocalTime.now()
 
         var offsetHours = Duration.between(graphStartTime, now).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24f  // wrap around
 
-        val contentX = offsetHours * hourWidthPx + horizontalPadding
+        val contentX = leadingPadPx + (offsetHours * hourWidthPx)
         val centerX = width / 2f
         val maxOffset = (totalWidth() - width.toFloat()).coerceAtLeast(0f)
 
@@ -176,7 +178,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         }
 
         contentBitmap?.let { bmp ->
-            canvas.withTranslation(-scrollOffsetX + horizontalPadding, 0f) {
+            canvas.withTranslation(-scrollOffsetX, 0f) {
                 drawBitmap(bmp, 0f, 0f, null)
             }
         }
@@ -186,6 +188,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private fun rebuildContentLayer() {
         if (width == 0 || height == 0) return
+        leadingPadPx = width / 2f
         val w = max(totalWidth().toInt(), 1)
         val h = height
 
@@ -215,7 +218,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val top = topPadding
         val bottom = graphHeight() - bottomPaddingForLabels - 8f.dpToPixel()
         for (i in 0..totalHours) {
-            val x = i * hourWidthPx
+            val x = leadingPadPx + (i * hourWidthPx)
             hourLinePaint.shader = LinearGradient(
                 x, top, x, bottom,
                 "#19000000".toColorInt(), "#19FFFFFF".toColorInt(),
@@ -235,7 +238,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         val labelPadding = 10f
         for (i in 0..totalHours) {
             val hour = hourAt(i)
-            val x = i * hourWidthPx
+            val x = leadingPadPx + (i * hourWidthPx)
             val label = formatTo12Hour(LocalTime.of(hour.hour, hour.minute))
             val textWidth = bottomXPaint.measureText(label)
             val textX = when (i) {
@@ -270,21 +273,21 @@ class Circadian24HourGraph @JvmOverloads constructor(
         fillPath.reset()
         tmpPos.clear()
 
-        var x = 0f
+        var x = leadingPadPx
         var y = yAt(values[0])
         curvePath.moveTo(x, y)
         tmpPos.add(0f)
 
         for (i in 1 until values.size) {
-            x = i * minuteWidth
+            x = leadingPadPx + (i * minuteWidth)
             y = yAt(values[i])
             curvePath.lineTo(x, y)
-            tmpPos.add(x / lastX.coerceAtLeast(1f))
+            tmpPos.add(((x - leadingPadPx) / lastX.coerceAtLeast(1f)).coerceIn(0f, 1f))
         }
 
         fillPath.set(curvePath)
-        fillPath.lineTo(lastX, usableHeight)
-        fillPath.lineTo(0f, usableHeight)
+        fillPath.lineTo(leadingPadPx + lastX, usableHeight)
+        fillPath.lineTo(leadingPadPx, usableHeight)
         fillPath.close()
 
         val positions = FloatArray(tmpPos.size) { idx -> tmpPos[idx].coerceIn(0f, 1f) }
@@ -294,9 +297,9 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
         val lastXSafe = lastX.coerceAtLeast(1f)
         val strokeGradient =
-            LinearGradient(0f, 0f, lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
+            LinearGradient(leadingPadPx, 0f, leadingPadPx + lastXSafe, 0f, strokeColors, positions, Shader.TileMode.CLAMP)
         val fillGradient =
-            LinearGradient(0f, 0f, lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
+            LinearGradient(leadingPadPx, 0f, leadingPadPx + lastXSafe, 0f, fillColors, positions, Shader.TileMode.CLAMP)
 
         linePaint.shader = strokeGradient
         fillPaint.shader = fillGradient
@@ -336,7 +339,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
         var offsetHours = Duration.between(graphStartTime, currentTime).toMinutes() / 60f
         if (offsetHours < 0) offsetHours += 24f
 
-        val xInContent = (offsetHours * hourWidthPx) + horizontalPadding
+        val xInContent = leadingPadPx + (offsetHours * hourWidthPx)
         val xOnScreen = xInContent - scrollOffsetX
         val xLine = width / 2f
 
@@ -366,8 +369,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private fun drawTopAndBottomAxis(canvas: Canvas) {
         val yTop = topPadding
         val yBottom = graphHeight() - bottomPaddingForLabels - 8f.dpToPixel()
-        canvas.drawLine(0f, yTop, totalWidth() - (horizontalPadding *2), yTop, topDottedAxisPaint)
-        canvas.drawLine(0f, yBottom, totalWidth()- (horizontalPadding *2), yBottom, bottomAxisPaint)
+        canvas.drawLine(0f, yTop, totalWidth() - horizontalPadding, yTop, topDottedAxisPaint)
+        canvas.drawLine(0f, yBottom, totalWidth()- horizontalPadding, yBottom, bottomAxisPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -430,6 +433,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        leadingPadPx = w / 2f
         scrollOffsetX = calculateInitialScrollOffset()
         requestRebuildContent()
         invalidate()
@@ -489,8 +493,8 @@ class Circadian24HourGraph @JvmOverloads constructor(
         for (window in timeWindows) {
             val startOffset = hoursFromStart(fromFloatHour(window.startHour))
             val endOffset = hoursFromEnd(fromFloatHour(window.endHour))
-            val left = (startOffset * hourWidthPx) + padding
-            val right = (endOffset * hourWidthPx) - padding
+            val left = leadingPadPx + (startOffset * hourWidthPx) + padding
+            val right = leadingPadPx + (endOffset * hourWidthPx) - padding
             val rowOffset = window.rowIndex * (rowHeight + rowSpacing)
             val bottom = baseBottom - rowOffset
             val top = bottom - rowHeight
@@ -509,6 +513,31 @@ class Circadian24HourGraph @JvmOverloads constructor(
                 top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
             val labelX = left + labelTextPaint.measureText(window.label) / 2 + 4f.dpToPixel()
             canvas.drawText(window.label, labelX, labelY, labelTextPaint)
+        }
+
+        if (leadingPadPx > 0f) {
+            val rowIndex = 0
+            val rowOffset = rowIndex * (rowHeight + rowSpacing)
+            val bottom = baseBottom - rowOffset
+            val top = bottom - rowHeight
+            val left = 0f + 1.5f.dpToPixel()
+            val right = leadingPadPx - 1.5f.dpToPixel()
+            if (right > left) {
+                tmpRect.set(left, top, right, bottom)
+                windowPaint.shader = LinearGradient(
+                    tmpRect.left, tmpRect.top,
+                    tmpRect.right, tmpRect.top,
+                    Color.parseColor("#33296F"), Color.parseColor("#634ED5"),
+                    Shader.TileMode.CLAMP
+                )
+                canvas.drawRoundRect(tmpRect, cornerRadius, cornerRadius, windowPaint)
+
+                labelTextPaint.color = Color.parseColor("#9E91E8")
+                val label = context.getString(R.string.text_sleep)
+                val labelY = top + (rowHeight / 2f) - (labelTextPaint.descent() + labelTextPaint.ascent()) / 2f
+                val labelX = left + labelTextPaint.measureText(label) / 2 + 4f.dpToPixel()
+                canvas.drawText(label, labelX, labelY, labelTextPaint)
+            }
         }
     }
 
