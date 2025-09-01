@@ -2151,5 +2151,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_and_how_is_it_helpful">And how is it helpful?</string>
     <string name="text_chronotype">"CHRONOTYPE: "</string>
     <string name="text_end_time_must_be_later_than_the_start_time">End time must be later than the start time.</string>
+    <string name="text_energy">Energy</string>
 
 </resources>

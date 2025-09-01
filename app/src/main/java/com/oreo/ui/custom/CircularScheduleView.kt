@@ -184,7 +184,8 @@ class CircularScheduleView @JvmOverloads constructor(
         drawClock(sc)
 
         if (!isLocked) {
-            drawCircularEnergyCurveWithFade(sc, precomputedEnergyColors)
+            // drawCircularEnergyCurveWithFade(sc, precomputedEnergyColors) // replaced with a single circle border based on energy
+            drawEnergyRingCircle(sc)
             drawEvents(sc)
         }
     }
@@ -344,7 +345,7 @@ class CircularScheduleView @JvmOverloads constructor(
             energyRingOuter - 20f.dpToPixel(),
             PointF(cx, cy),
             startAngle,
-            "Energy",
+            context.getString(R.string.text_energy),
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.FILL_AND_STROKE
                 typeface = fontGilroy
@@ -352,6 +353,27 @@ class CircularScheduleView @JvmOverloads constructor(
                 color = "#B2B2B2".toColorInt()
             }
         )
+    }
+
+    private fun drawEnergyRingCircle(canvas: Canvas) {
+        val circleRadius = energyRingOuter
+        val ringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE
+            strokeWidth = 4f.dpToPixel()
+        }
+
+        if (precomputedEnergyColors.isNotEmpty()) {
+            val colors = precomputedEnergyColors
+            val sweep = SweepGradient(cx, cy, colors, null)
+            val matrix = Matrix()
+            matrix.preRotate(-90f, cx, cy)
+            sweep.setLocalMatrix(matrix)
+            ringPaint.shader = sweep
+        } else {
+            ringPaint.color = "#19FFFFFF".toColorInt()
+        }
+
+        canvas.drawCircle(cx, cy, circleRadius, ringPaint)
     }
 
     private fun drawEvents(canvas: Canvas) {
@@ -439,7 +461,7 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun buildEnergyColors(values: List<Float>): IntArray {
         if (values.isEmpty()) return IntArray(0)
         val colors = ArrayList<Int>()
-        val transparent = "#00000000".toColorInt()
+        val transparent = "#19FFFFFF".toColorInt()//"#00000000".toColorInt()
         val step = 30
         val evaluator = ArgbEvaluator()
         for (i in 0 until values.size - 1 step step) {
@@ -456,7 +478,7 @@ class CircularScheduleView @JvmOverloads constructor(
     }
 
     private fun getColorByValue(value: Float): Int {
-        if (value == 0.0f) return "#00000000".toColorInt()
+        if (value == 0.0f) return "#19FFFFFF".toColorInt()//"#00000000".toColorInt()
         return if (value >= 0.5f) "#806AAA5A".toColorInt() else "#80A66767".toColorInt()
     }
 
