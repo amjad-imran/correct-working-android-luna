@@ -173,8 +173,8 @@ class CircularScheduleView @JvmOverloads constructor(
 
         if (!isLocked) {
             showTimer(canvas)
+            drawCurrentTimeMarker(canvas)
         }
-        drawCurrentTimeMarker(canvas)
     }
 
     private fun rebuildStaticLayer() {
