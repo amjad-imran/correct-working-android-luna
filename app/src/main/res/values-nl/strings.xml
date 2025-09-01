@@ -2178,5 +2178,6 @@
     <string name="text_end_time_must_be_later_than_the_start_time">De eindtijd moet later zijn dan de starttijd.</string>
     <string name="text_tuning_in_to_your_body_s_clock">Afstemmen op de klok van je lichaam...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">We leren jouw unieke circadiane ritme kennen. Blijf slapen met je Luna-ring om het natuurlijke ritme van je lichaam te ontgrendelen.</string>
+    <string name="text_energy">Energie</string>
 
 </resources>
