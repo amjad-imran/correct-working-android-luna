@@ -462,8 +462,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
-        animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
-        animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
+        if(navController?.currentDestination?.id == R.id.navigation_oreo_workouts){
+            binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
+            binding.lytAddWorkoutSelector.tvAddWorkout.visible()
+            animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
+            animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
+        }else{
+            binding.lytAddWorkoutSelector.ivAddWorkoutManual.gone()
+            binding.lytAddWorkoutSelector.tvAddWorkout.gone()
+        }
         /*animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)*/
 
