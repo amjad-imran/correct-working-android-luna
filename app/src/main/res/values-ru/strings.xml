@@ -2198,5 +2198,7 @@
     <string name="text_and_how_is_it_helpful">И чем это полезно?</string>
     <string name="text_chronotype">ХРОНОТИП: </string>
     <string name="text_end_time_must_be_later_than_the_start_time">Время окончания должно быть позже времени начала.</string>
+    <string name="text_tuning_in_to_your_body_s_clock">Настраиваемся на внутренние часы вашего тела...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Мы изучаем ваш уникальный циркадный ритм. Продолжайте спать с кольцом Luna, чтобы раскрыть естественный ритм вашего организма.</string>
 
 </resources>

@@ -571,21 +571,40 @@ class CircadianAlignmentFragment :
             binding.lytGraphView.root.gone()
         }
 
-        if (circadianMidPoint == null) {
-            binding.lytSleepMidPoint.root.gone()
-            binding.lytLockedSleepMidPoint.root.visible()
-        } else {
-            binding.lytLockedSleepMidPoint.root.gone()
-            binding.lytSleepMidPoint.root.visible()
-            val circadianMidPointResponse = CircadianResponse(
-                circadianMidPoint.startTime ?: "",
-                circadianMidPoint.endTime ?: "",
-                circadianMidPoint.circadianMidpoint ?: "",
-                circadianMidPoint.avgBefore ?: "",
-                circadianMidPoint.avgNow ?: "",
-                /*null,*/
-            )
-            setCircadianMidPointGraph(circadianMidPointResponse)
+        // Circadian Mid - Point
+        when {
+            circadianMidPoint == null -> {
+                binding.lytSleepMidPoint.root.gone()
+                binding.lytLockedSleepMidPoint.apply {
+                    textView178.text = getString(R.string.text_we_need_more_data_to_better_know_you)
+                    textView173.text = getString(R.string.text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights)
+                    root.visible()
+                }
+            }
+
+            circadianMidPoint.avgBefore == null -> {
+                binding.lytSleepMidPoint.root.gone()
+                binding.lytLockedSleepMidPoint.apply {
+                    textView178.text = getString(R.string.text_tuning_in_to_your_body_s_clock)
+                    textView173.text =
+                        getString(R.string.text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing)
+                    root.visible()
+                }
+            }
+
+            else -> {
+                binding.lytLockedSleepMidPoint.root.gone()
+                binding.lytSleepMidPoint.root.visible()
+                val circadianMidPointResponse = CircadianResponse(
+                    circadianMidPoint.startTime ?: "",
+                    circadianMidPoint.endTime ?: "",
+                    circadianMidPoint.circadianMidpoint ?: "",
+                    circadianMidPoint.avgBefore ?: "",
+                    circadianMidPoint.avgNow ?: "",
+                    /*null,*/
+                )
+                setCircadianMidPointGraph(circadianMidPointResponse)
+            }
         }
     }
 

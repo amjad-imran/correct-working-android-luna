@@ -2177,5 +2177,7 @@
     <string name="text_and_how_is_it_helpful">E come è utile?</string>
     <string name="text_chronotype">CRONOTIPO: </string>
     <string name="text_end_time_must_be_later_than_the_start_time">L\'orario di fine deve essere successivo all\'orario di inizio.</string>
+    <string name="text_tuning_in_to_your_body_s_clock">Sintonizzandosi con l’orologio del tuo corpo...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Stiamo imparando il tuo ritmo circadiano unico. Continua a dormire con il tuo anello Luna per sbloccare il ritmo naturale del tuo corpo.</string>
 
 </resources>

@@ -2176,5 +2176,7 @@
     <string name="text_and_how_is_it_helpful">Und wie ist das hilfreich?</string>
     <string name="text_chronotype">CHRONOTYP: </string>
     <string name="text_end_time_must_be_later_than_the_start_time">Die Endzeit muss nach der Startzeit liegen.</string>
+    <string name="text_tuning_in_to_your_body_s_clock">Wir stimmen uns auf die innere Uhr Ihres Körpers ein...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Wir lernen Ihren einzigartigen zirkadianen Rhythmus kennen. Schlafen Sie weiterhin mit Ihrem Luna-Ring, um das natürliche Timing Ihres Körpers freizuschalten.</string>
 
 </resources>

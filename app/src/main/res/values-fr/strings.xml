@@ -2296,5 +2296,7 @@ onjour, Luna"</string>
     <string name="text_and_how_is_it_helpful">Et en quoi est-ce utile?</string>
     <string name="text_chronotype">CHRONOTYPE : </string>
     <string name="text_end_time_must_be_later_than_the_start_time">L’heure de fin doit être postérieure à l’heure de début.</string>
+    <string name="text_tuning_in_to_your_body_s_clock">À l’écoute de l’horloge de votre corps...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Nous apprenons votre rythme circadien unique. Continuez à dormir avec votre bague Luna pour libérer le rythme naturel de votre corps.</string>
 
 </resources>
