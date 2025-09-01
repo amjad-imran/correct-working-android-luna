@@ -2170,5 +2170,7 @@
     <string name="text_and_how_is_it_helpful">这有什么帮助？</string>
     <string name="text_chronotype">生理类型: </string>
     <string name="text_end_time_must_be_later_than_the_start_time">结束时间必须晚于开始时间。</string>
+    <string name="text_tuning_in_to_your_body_s_clock">调谐到你身体的生物钟...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">我们正在学习你独特的昼夜节律。继续佩戴 Luna 戒指睡觉，以解锁你身体的自然节奏。</string>
 
 </resources>

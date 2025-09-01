@@ -2151,5 +2151,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_and_how_is_it_helpful">And how is it helpful?</string>
     <string name="text_chronotype">"CHRONOTYPE: "</string>
     <string name="text_end_time_must_be_later_than_the_start_time">End time must be later than the start time.</string>
+    <string name="text_tuning_in_to_your_body_s_clock">Tuning in to your body\'s clock...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">We’re learning your unique circadian rhythm. Keep sleeping with your Luna Ring to unlock your body’s natural timing.</string>
 
 </resources>

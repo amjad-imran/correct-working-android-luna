@@ -2182,5 +2182,7 @@
     <string name="text_and_how_is_it_helpful">และมันมีประโยชน์อย่างไร?</string>
     <string name="text_chronotype">โครโนไทป์: </string>
     <string name="text_end_time_must_be_later_than_the_start_time">เวลาสิ้นสุดต้องช้ากว่าเวลาเริ่มต้น</string>
+    <string name="text_tuning_in_to_your_body_s_clock">ปรับจูนเข้ากับนาฬิการ่างกายของคุณ...</string>
+    <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">เรากำลังเรียนรู้จังหวะชีวภาพเฉพาะของคุณ นอนกับแหวน Luna ต่อไปเพื่อปลดล็อกจังหวะตามธรรมชาติของร่างกายคุณ</string>
 
 </resources>
