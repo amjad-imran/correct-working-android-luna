@@ -37,7 +37,7 @@ class StressUnderstandingImageAdapter(val listener: StressInfoCardAction) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: HowItWorksModel.CircadianHowItWorksModel, position: Int) {
 
-            binding.imv.loadImage(binding.imv.context, data.image)
+            binding.imv.setImageResource(data.image)
 
             binding.tvTitle.text = data.title
 
