@@ -68,6 +68,9 @@ class LanguageViewModel @Inject constructor(
             keyValueDataSource.removeDataByKey("", KeyValueDataType.LEARN)
             keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP_PLANNER)
 
+            // Circadian Data
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
+
             //Female health Data
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
