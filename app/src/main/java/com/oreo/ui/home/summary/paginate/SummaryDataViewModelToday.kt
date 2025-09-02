@@ -3057,15 +3057,15 @@ class SummaryDataViewModelToday @Inject constructor(
             val cardClickState = localDataStore.getDashCardClickState()
 
             trendsData?.welcome?.care?.let {
-                if (registerDays > 0) {
+                /*if (registerDays > 0) {
                     viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                } else {
+                } else {*/
                     if (cardClickState[DashInfoCard.CARE] == false) {
                         userActivities.add(OHealthOverview.InfoRingCare(it))
                     } else {
                         viewedCardsData.add(OHealthOverview.InfoRingCare(it))
                     }
-                }
+                /*}*/
 
             }
 
