@@ -163,7 +163,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -180,7 +180,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -191,6 +191,10 @@ class OAddSleepFragment :
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
                         uiController.onDisplayError("Please check end time")
+                    }
+
+                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
+                        viewModel.endTimeSleep = OAddSleep()
                     }
 
                 }
