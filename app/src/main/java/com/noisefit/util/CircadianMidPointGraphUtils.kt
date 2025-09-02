@@ -144,7 +144,7 @@ object CircadianMidPointGraphUtils {
         }
 
         // Fallback
-        return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
+        return Pair(CircadianMidPointState.None, CircadianMidPointStatus.FAILED)
     }
 
 

@@ -272,6 +272,17 @@ class CircadianAlignmentFragment :
                     avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
                 }
 
+                CircadianMidPointStatus.FAILED -> {
+                    setMidPointGraphData(
+                        R.drawable.ic_waiting_for_sleep,
+                        "#A7ACFF",
+                        "-"
+                    )
+                    avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
+                    binding.lytSleepMidPoint.tvDesc.text =
+                        "-"
+                }
+
                 CircadianMidPointStatus.Maintained -> {
                     setMidPointGraphData(
                         R.drawable.ic_maintained,
