@@ -492,7 +492,7 @@ class CircularScheduleView @JvmOverloads constructor(
     private fun buildEnergyColors(values: List<Float>): IntArray {
         if (values.isEmpty()) return IntArray(0)
         val colors = ArrayList<Int>()
-        val transparent = "#19FFFFFF".toColorInt()//"#00000000".toColorInt()
+        val transparent = "#80A66767".toColorInt()//"#00000000".toColorInt()
         val step = 30
         val evaluator = ArgbEvaluator()
         for (i in 0 until values.size - 1 step step) {
@@ -509,7 +509,7 @@ class CircularScheduleView @JvmOverloads constructor(
     }
 
     private fun getColorByValue(value: Float): Int {
-        if (value == 0.0f) return "#19FFFFFF".toColorInt()//"#00000000".toColorInt()
+        if (value == 0.0f) return "#80A66767".toColorInt()//"#00000000".toColorInt()
         return if (value >= 0.5f) "#806AAA5A".toColorInt() else "#80A66767".toColorInt()
     }
 
