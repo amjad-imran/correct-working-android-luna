@@ -10,6 +10,7 @@ import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
 import com.noisefit.timepickerslider.utils.dpToPx
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.*
 import java.time.Duration
 import java.time.LocalDateTime
@@ -448,15 +449,23 @@ class CircularScheduleView @JvmOverloads constructor(
                     }
                     canvas.drawArc(rect, startAngle, sweepAngle, false, arcPaint)
 
-                    val diff = event.endHour - event.startHour
+                    val diff = calculateTimeDifference(event)//event.endHour - event.startHour
                     if (diff < 3 && diff > 0 && event.image != null) {
                         val icon = BitmapFactory.decodeResource(resources, event.image)
                         val archBitmap = Bitmap.createScaledBitmap(icon, 15f.dpToPixel().toInt(), 15f.dpToPixel().toInt(), true)
-                        val hour = event.startHour + (event.endHour - event.startHour) / 2f
+
+                        val hour = if (event.endHour < event.startHour) {
+                            val adjustedStartToMidnight = (24 - event.startHour) // Time from startHour to 23:59
+                            val adjustedMidnightToEnd = event.endHour // Time from 00:00 to endHour
+                            (adjustedStartToMidnight + adjustedMidnightToEnd) / 2f + event.startHour
+                        } else {
+                            event.startHour + (event.endHour - event.startHour) / 2f
+                        }
                         val a = Math.toRadians(hourToAngle(hour).toDouble())
                         val x = (cx + baseCenterRadiusArc * cos(a)).toFloat()
                         val y = (cy + baseCenterRadiusArc * sin(a)).toFloat()
                         canvas.drawBitmap(archBitmap, x - archBitmap.width / 2f, y - archBitmap.height / 2f, null)
+
                     } else {
                         drawCircularText(
                             canvas,
@@ -477,6 +486,18 @@ class CircularScheduleView @JvmOverloads constructor(
                 ClockEventType.GRAPH -> Unit
             }
         }
+    }
+
+    fun calculateTimeDifference(event: ClockEvent): Float {
+        var diff = event.endHour - event.startHour
+
+        if (event.endHour < event.startHour) {
+            val startToMidnight = (24 - event.startHour) // Time from startHour to 23:59
+            val midnightToEnd = event.endHour // Time from 00:00 to endHour
+            diff = startToMidnight + midnightToEnd
+        }
+
+        return diff
     }
 
     private fun buildEventPairs(list: List<ClockEvent>): List<Pair<LocalTime, LocalTime>> {
