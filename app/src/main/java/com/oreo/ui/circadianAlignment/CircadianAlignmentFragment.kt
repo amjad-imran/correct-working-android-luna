@@ -95,8 +95,8 @@ class CircadianAlignmentFragment :
             binding.lytCircularView.lytLockedState.root.gone()
 
 
-            val clockEvents = viewModel.generateClockEvents(graphData)
             viewModel.viewModelScope.launch(Dispatchers.IO) {
+                val clockEvents = viewModel.generateClockEvents(graphData)
                 val energyValues = viewModel.getEnergyValues(graphData, false)
                 val sleepStart = graphData?.sleepData?.bedTime
                 val sleepEnd = graphData?.sleepData?.wakeTime
