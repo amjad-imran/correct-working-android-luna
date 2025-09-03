@@ -1011,10 +1011,6 @@ constructor(
 
 
             }
-
-            override fun onNfcSleepErr(p0: Int) {
-
-            }
         })
 
         /**
