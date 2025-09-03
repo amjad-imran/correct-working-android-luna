@@ -145,9 +145,16 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
+                var updateTimeDur = true
+
                 addSleep?.let {
                     viewModel.endTimeSleep = addSleep
 
+                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
+                        viewModel.endTimeSleep = OAddSleep()
+                        updateTimeDur = false
+                        return@let
+                    }
 
                     if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
@@ -200,7 +207,7 @@ class OAddSleepFragment :
                 }
 
 
-                updateCalculatedData()
+                if(updateTimeDur) updateCalculatedData()
             }
 
             viewModel.endTimeSleep.title = getString(R.string.text_end_time)
