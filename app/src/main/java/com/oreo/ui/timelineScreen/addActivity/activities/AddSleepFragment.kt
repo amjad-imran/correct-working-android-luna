@@ -84,7 +84,7 @@ class AddSleepFragment :
                         }
                     }
 
-                    if (viewModel.endTimeSleep.day.isEmpty()) {
+                    if (!viewModel.isEndTimeSelected) {
                         setStartTimeBetween()
                     } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
