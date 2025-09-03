@@ -264,23 +264,13 @@ class CircadianAlignmentFragment :
                     bgRange,
                     phaseRange,
                     avgBeforeIndex,
-                    avgNowIndex
+                    avgNowIndex,
+                    binding.root.context
                 )
             setMidPointGraphState(phaseState.first)
             when (phaseState.second) {
                 CircadianMidPointStatus.Locked -> {
                     avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
-                }
-
-                CircadianMidPointStatus.FAILED -> {
-                    setMidPointGraphData(
-                        R.drawable.ic_waiting_for_sleep,
-                        "#A7ACFF",
-                        "-"
-                    )
-                    avgNowMidPoint = CircadianMidPointGraphUtils.whiteMidPoint("Avg Now")
-                    binding.lytSleepMidPoint.tvDesc.text =
-                        "-"
                 }
 
                 CircadianMidPointStatus.Maintained -> {
@@ -303,8 +293,8 @@ class CircadianAlignmentFragment :
 
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
-                    binding.lytSleepMidPoint.tvDesc.text =
-                        getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
+                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third ?:
+                            getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
                 }
 
                 CircadianMidPointStatus.Correcting -> {
@@ -316,7 +306,7 @@ class CircadianAlignmentFragment :
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.greenMidPoint("Avg Now")
 
-                    binding.lytSleepMidPoint.tvDesc.text =
+                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third ?:
                         getString(R.string.text_circadian_mid_point_desc_correcting)
                 }
 

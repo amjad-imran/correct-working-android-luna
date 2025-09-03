@@ -2154,5 +2154,12 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_energy">Energy</string>
     <string name="text_tuning_in_to_your_body_s_clock">Tuning in to your body\'s clock...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">We’re learning your unique circadian rhythm. Keep sleeping with your Luna Ring to unlock your body’s natural timing.</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Your rhythm is significantly early — try extending your evening routine and getting light later to shift gently.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Your rhythm is highly delayed — begin winding down earlier and seek morning light to nudge it earlier.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">You’re improving — staying active later and delaying sleep cues is helping.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">You\'re shifting earlier — keep supporting it with morning sunlight and earlier wind-downs.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">You’ve returned to alignment — maintain the rhythm with regular sleep and morning light.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">You’ve returned to ideal alignment — keep reinforcing it with regular sleep and morning light.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">You’re drifting earlier — try delaying your evening routine and getting light later in the day.</string>
 
 </resources>

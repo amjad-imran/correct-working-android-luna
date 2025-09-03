@@ -1,6 +1,8 @@
 package com.noisefit.util
 
+import android.content.Context
 import androidx.core.graphics.toColorInt
+import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
@@ -70,15 +72,18 @@ object CircadianMidPointGraphUtils {
         bgRange: IntArray,
         phaseRange: IntArray,
         avgBeforeIndex: Int,
-        avgNowIndex: Int
-    ): Pair<CircadianMidPointState, CircadianMidPointStatus> {
+        avgNowIndex: Int,
+        context: Context
+    ): Triple<CircadianMidPointState, CircadianMidPointStatus, String?> {
+
+        LOGS.d("sajcbjkac : bgRange : ${bgRange.contentToString()}\nphaseRange : ${phaseRange.contentToString()}\navgBeforeIndex : $avgBeforeIndex\navgNowIndex : $avgNowIndex")
 
         if (avgBeforeIndex == Int.MIN_VALUE) {
-            return Pair(CircadianMidPointState.None, CircadianMidPointStatus.Locked)
+            return Triple(CircadianMidPointState.None, CircadianMidPointStatus.Locked, null)
         }
 
         if (avgNowIndex == Int.MIN_VALUE) {
-            return Pair(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync)
+            return Triple(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync, null)
         }
 
         val beforeInPhase = avgBeforeIndex in phaseRange
@@ -87,8 +92,29 @@ object CircadianMidPointGraphUtils {
         val nowInBg = avgNowIndex in bgRange
 
         // Fully aligned
-        if (avgBeforeIndex == avgNowIndex && beforeInPhase && nowInPhase) {
-            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
+        if (avgBeforeIndex == avgNowIndex) {
+            return when {
+                beforeInPhase && nowInPhase ->
+                    Triple(
+                        CircadianMidPointState.PhaseAligned,
+                        CircadianMidPointStatus.Maintained,
+                        null
+                    )
+
+                avgBeforeIndex < phaseRange.first() ->
+                    Triple(
+                        CircadianMidPointState.PhaseAdvance,
+                        CircadianMidPointStatus.Worsening,
+                        context.getString(R.string.text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently)
+                    )
+
+                else ->
+                    Triple(
+                    CircadianMidPointState.PhaseDelay,
+                    CircadianMidPointStatus.Worsening,
+                        context.getString(R.string.text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier)
+                )
+            }
         }
 
         // Outside both phase and bg ranges
@@ -96,55 +122,95 @@ object CircadianMidPointGraphUtils {
             val isBeforeAndNowLeft = avgBeforeIndex < phaseRange.first() && avgNowIndex < phaseRange.first()
             return if (isBeforeAndNowLeft) {
                 if (avgNowIndex < avgBeforeIndex) {
-                    Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
+                    Triple(
+                        CircadianMidPointState.PhaseAdvance,
+                        CircadianMidPointStatus.Worsening,
+                        context.getString(R.string.text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently)
+                    )
                 } else {
-                    Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Correcting)
+                    Triple(
+                        CircadianMidPointState.PhaseAdvance,
+                        CircadianMidPointStatus.Correcting,
+                        context.getString(R.string.text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping)
+                    )
                 }
             } else {
                 if (avgNowIndex < avgBeforeIndex) {
-                    Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Correcting)
+                    Triple(
+                        CircadianMidPointState.PhaseDelay,
+                        CircadianMidPointStatus.Correcting,
+                        null
+                    )
                 } else {
-                    Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+                    Triple(
+                        CircadianMidPointState.PhaseDelay,
+                        CircadianMidPointStatus.Worsening,
+                        null
+                    )
                 }
             }
         }
 
         // Both in phase range
         if (beforeInPhase && nowInPhase) {
-            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained)
+            return Triple(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained, null)
         }
 
         // Both after phase range
         if (avgBeforeIndex > phaseRange.last() && avgNowIndex > phaseRange.last()) {
             return if (avgNowIndex < avgBeforeIndex) {
-                Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Correcting)
+                Triple(
+                    CircadianMidPointState.PhaseDelay,
+                    CircadianMidPointStatus.Correcting,
+                    context.getString(R.string.text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs)
+                )
             } else {
-                Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+                Triple(
+                    CircadianMidPointState.PhaseDelay,
+                    CircadianMidPointStatus.Worsening,
+                    context.getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
+                )
             }
         }
 
         // Moved from after to inside phase
         if (nowInPhase && avgBeforeIndex > phaseRange.last()) {
-            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
+            return Triple(
+                CircadianMidPointState.PhaseAligned,
+                CircadianMidPointStatus.Correcting,
+                context.getString(R.string.text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light)
+            )
         }
 
         // Moved from inside to after phase
         if (beforeInPhase && avgNowIndex > phaseRange.last()) {
-            return Pair(CircadianMidPointState.PhaseDelay, CircadianMidPointStatus.Worsening)
+            return Triple(
+                CircadianMidPointState.PhaseDelay,
+                CircadianMidPointStatus.Worsening,
+                context.getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
+            )
         }
 
         // Moved from inside to before phase
         if (beforeInPhase && avgNowIndex < phaseRange.first()) {
-            return Pair(CircadianMidPointState.PhaseAdvance, CircadianMidPointStatus.Worsening)
+            return Triple(
+                CircadianMidPointState.PhaseAdvance,
+                CircadianMidPointStatus.Worsening,
+                context.getString(R.string.text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day)
+            )
         }
 
         // Moved from before to inside phase
         if (nowInPhase && avgBeforeIndex < phaseRange.first()) {
-            return Pair(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Correcting)
+            return Triple(
+                CircadianMidPointState.PhaseAligned,
+                CircadianMidPointStatus.Correcting,
+                context.getString(R.string.text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light)
+            )
         }
 
         // Fallback
-        return Pair(CircadianMidPointState.None, CircadianMidPointStatus.FAILED)
+        return Triple(CircadianMidPointState.None, CircadianMidPointStatus.AwaitingSync, null)
     }
 
 

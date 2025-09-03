@@ -2150,5 +2150,12 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_tuning_in_to_your_body_s_clock">Sintonizando con el reloj de tu cuerpo...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Estamos aprendiendo tu ritmo circadiano único. Sigue durmiendo con tu anillo Luna para desbloquear el tiempo natural de tu cuerpo.</string>
     <string name="text_energy">Energía</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Tu ritmo es significativamente temprano: intenta extender tu rutina nocturna y recibir luz más tarde para cambiar suavemente.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Tu ritmo está muy retrasado: comienza a relajarte antes y busca luz por la mañana para adelantarlo.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">Estás mejorando: mantenerse activo más tarde y retrasar las señales de sueño está ayudando.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">Estás cambiando más temprano: sigue apoyándolo con luz solar por la mañana y relajándote más temprano.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Has vuelto a estar alineado: mantén el ritmo con sueño regular y luz por la mañana.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Has vuelto a la alineación ideal: sigue reforzándolo con sueño regular y luz por la mañana.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Te estás desviando más temprano: intenta retrasar tu rutina nocturna y recibir luz más tarde en el día.</string>
 
 </resources>

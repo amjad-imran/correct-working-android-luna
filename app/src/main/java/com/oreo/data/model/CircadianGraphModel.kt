@@ -39,5 +39,4 @@ enum class CircadianMidPointStatus {
     Correcting,
     SleepMissing,
     AwaitingSync,
-    FAILED
 }
