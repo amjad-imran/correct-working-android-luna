@@ -184,7 +184,7 @@ class CircadianAlignmentFragment :
             val avgBeforeMidPointDateTime =
                 LocalDateTime.parse(circadianResponse.avgBefore, formatter)
 
-            val isSameDay = newStartDateTime.toLocalDate() == LocalDate.now()
+            val isSameDay = newStartDateTime.toLocalDate() == newEndDateTime.toLocalDate()
 
             val totalHrs = if (!isSameDay) {
 
