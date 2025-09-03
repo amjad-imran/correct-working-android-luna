@@ -91,6 +91,11 @@ object CircadianMidPointGraphUtils {
         val beforeInBg = avgBeforeIndex in bgRange
         val nowInBg = avgNowIndex in bgRange
 
+        // Both in phase range
+        if (beforeInPhase && nowInPhase) {
+            return Triple(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained, null)
+        }
+
         // Fully aligned
         if (avgBeforeIndex == avgNowIndex) {
             return when {
@@ -149,11 +154,6 @@ object CircadianMidPointGraphUtils {
                     )
                 }
             }
-        }
-
-        // Both in phase range
-        if (beforeInPhase && nowInPhase) {
-            return Triple(CircadianMidPointState.PhaseAligned, CircadianMidPointStatus.Maintained, null)
         }
 
         // Both after phase range
