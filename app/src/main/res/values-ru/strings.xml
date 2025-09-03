@@ -2201,5 +2201,12 @@
     <string name="text_tuning_in_to_your_body_s_clock">Настраиваемся на внутренние часы вашего тела...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Мы изучаем ваш уникальный циркадный ритм. Продолжайте спать с кольцом Luna, чтобы раскрыть естественный ритм вашего организма.</string>
     <string name="text_energy">Энергия</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Ваш ритм значительно опережает — попробуйте продлить вечернюю рутину и получать свет позже, чтобы плавно изменить его.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Ваш ритм сильно задерживается — начните расслабляться раньше и ищите утренний свет, чтобы немного ускорить его.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">Вы улучшаетесь — оставаться активным позже и задерживать сигналы сна помогает.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">Вы переходите на более ранний график — продолжайте поддерживать его утренним солнечным светом и более ранним расслаблением.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Вы вернулись в норму — поддерживайте ритм с регулярным сном и утренним светом.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Вы вернулись в идеальное состояние — продолжайте поддерживать его регулярным сном и утренним светом.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Вы уходите раньше — попробуйте задержать вечернюю рутину и получать свет позже в течение дня.</string>
 
 </resources>

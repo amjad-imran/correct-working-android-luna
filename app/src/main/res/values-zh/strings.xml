@@ -2173,5 +2173,12 @@
     <string name="text_tuning_in_to_your_body_s_clock">调谐到你身体的生物钟...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">我们正在学习你独特的昼夜节律。继续佩戴 Luna 戒指睡觉，以解锁你身体的自然节奏。</string>
     <string name="text_energy">能源</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">你的生物节奏明显偏早——试着延长晚上的例行程序，并在晚上稍晚一些获取光照，以便温和地调整。</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">你的生物节奏严重滞后——开始提前放松，寻找晨光以帮助提前调整。</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">你正在改善——保持较晚活动并延迟睡眠信号正在起作用。</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">你正在提前调整——继续通过晨光和更早的放松时间来支持它。</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">你已经恢复正常——通过规律的睡眠和晨光保持节奏。</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">你已恢复理想状态——继续通过规律的睡眠和晨光来增强它。</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">你开始提前入睡——试着延迟晚上的例行程序，并在白天晚些时候获取光照。</string>
 
 </resources>

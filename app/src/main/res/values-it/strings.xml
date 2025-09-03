@@ -2180,5 +2180,12 @@
     <string name="text_tuning_in_to_your_body_s_clock">Sintonizzandosi con l’orologio del tuo corpo...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Stiamo imparando il tuo ritmo circadiano unico. Continua a dormire con il tuo anello Luna per sbloccare il ritmo naturale del tuo corpo.</string>
     <string name="text_energy">Energia</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Il tuo ritmo è significativamente in anticipo — prova ad estendere la tua routine serale e ricevere luce più tardi per spostarti delicatamente.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Il tuo ritmo è molto ritardato — inizia a rilassarti prima e cerca la luce del mattino per anticiparlo.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">Stai migliorando — rimanere attivo più a lungo e ritardare i segnali di sonno sta aiutando.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">Ti stai spostando prima — continua a supportarlo con la luce del mattino e rilassamenti anticipati.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Sei tornato in allineamento — mantieni il ritmo con sonno regolare e luce del mattino.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Sei tornato nell\'allineamento ideale — continua a rinforzarlo con sonno regolare e luce del mattino.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Ti stai spostando prima — prova a ritardare la tua routine serale e ricevere luce più tardi durante il giorno.</string>
 
 </resources>

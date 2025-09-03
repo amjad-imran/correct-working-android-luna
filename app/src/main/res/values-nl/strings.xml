@@ -2179,5 +2179,12 @@
     <string name="text_tuning_in_to_your_body_s_clock">Afstemmen op de klok van je lichaam...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">We leren jouw unieke circadiane ritme kennen. Blijf slapen met je Luna-ring om het natuurlijke ritme van je lichaam te ontgrendelen.</string>
     <string name="text_energy">Energie</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Je ritme is aanzienlijk vroeg — probeer je avondroutine te verlengen en later licht te krijgen om het zachtjes te verschuiven.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Je ritme is sterk vertraagd — begin eerder te ontspannen en zoek ochtendlicht om het eerder te verschuiven.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">Je verbetert — actiever blijven en slaap-signalen uitstellen helpt.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">Je verschuift eerder — blijf het ondersteunen met ochtendzonlicht en eerder ontspannen.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Je bent terug in lijn — behoud het ritme met regelmatig slapen en ochtendlicht.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Je bent terug in ideale afstemming — blijf het versterken met regelmatig slapen en ochtendlicht.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Je drijft eerder af — probeer je avondroutine te vertragen en later op de dag licht te krijgen.</string>
 
 </resources>

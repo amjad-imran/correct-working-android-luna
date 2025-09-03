@@ -145,9 +145,16 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
+                var updateTimeDur = true
+
                 addSleep?.let {
                     viewModel.endTimeSleep = addSleep
 
+                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
+                        viewModel.endTimeSleep = OAddSleep()
+                        updateTimeDur = false
+                        return@let
+                    }
 
                     if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
@@ -163,7 +170,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -180,7 +187,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
-                            uiController.onDisplayError(getString(R.string.text_end_time_greater_then_current_time))
+                            uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -193,10 +200,14 @@ class OAddSleepFragment :
                         uiController.onDisplayError("Please check end time")
                     }
 
+                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
+                        viewModel.endTimeSleep = OAddSleep()
+                    }
+
                 }
 
 
-                updateCalculatedData()
+                if(updateTimeDur) updateCalculatedData()
             }
 
             viewModel.endTimeSleep.title = getString(R.string.text_end_time)

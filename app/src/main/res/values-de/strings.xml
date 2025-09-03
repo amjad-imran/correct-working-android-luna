@@ -2179,5 +2179,12 @@
     <string name="text_tuning_in_to_your_body_s_clock">Wir stimmen uns auf die innere Uhr Ihres Körpers ein...</string>
     <string name="text_we_re_learning_your_unique_circadian_rhythm_keep_sleeping_with_your_luna_ring_to_unlock_your_body_s_natural_timing">Wir lernen Ihren einzigartigen zirkadianen Rhythmus kennen. Schlafen Sie weiterhin mit Ihrem Luna-Ring, um das natürliche Timing Ihres Körpers freizuschalten.</string>
     <string name="text_energy">Energie</string>
+    <string name="text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently">Dein Rhythmus ist deutlich zu früh – versuche, deine Abendroutine zu verlängern und später Licht zu bekommen, um sanft zu verschieben.</string>
+    <string name="text_your_rhythm_is_highly_delayed_begin_winding_down_earlier_and_seek_morning_light_to_nudge_it_earlier">Dein Rhythmus ist stark verzögert – beginne früher, dich zu entspannen, und suche morgendliches Licht, um ihn früher zu verschieben.</string>
+    <string name="text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping">Du verbesserst dich – später aktiv zu bleiben und die Schlafsignale zu verzögern hilft.</string>
+    <string name="text_you_re_shifting_earlier_keep_supporting_it_with_morning_sunlight_and_earlier_wind_downs">Du verschiebst dich früher – unterstütze es weiter mit morgendlichem Sonnenlicht und früheren Entspannungszeiten.</string>
+    <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Du bist wieder im Einklang – halte den Rhythmus mit regelmäßigem Schlaf und morgendlichem Licht aufrecht.</string>
+    <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Du bist wieder im idealen Einklang – halte ihn aufrecht, indem du regelmäßig schläfst und morgendliches Licht bekommst.</string>
+    <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Du driftest früher ab – versuche, deine Abendroutine zu verzögern und später am Tag Licht zu bekommen.</string>
 
 </resources>
