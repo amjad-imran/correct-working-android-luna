@@ -73,9 +73,8 @@ class AddSleepFragment :
             parentFragment?.setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
-
                 addSleep?.let {
-
+                    val oldData = viewModel.startTimeSleep.copy()
                     viewModel.startTimeSleep = addSleep
 
                     if (addSleep.hour.toInt() == 0) {
@@ -103,6 +102,7 @@ class AddSleepFragment :
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
+                            viewModel.startTimeSleep = oldData
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -121,6 +121,7 @@ class AddSleepFragment :
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
+                            viewModel.startTimeSleep = oldData
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -134,6 +135,7 @@ class AddSleepFragment :
                     ) {
 
                         uiController.onDisplayError("Please check end time")
+                        viewModel.startTimeSleep = oldData
                     }
 
                     updateCalculatedData()
@@ -147,7 +149,7 @@ class AddSleepFragment :
                 NavHostFragment.Companion.findNavController(this@AddSleepFragment)
 
             navController.navigate(R.id.sleepTimeBottomSheet, bundleOf(
-                "addSleep" to viewModel.startTimeSleep,
+                "addSleep" to viewModel.startTimeSleep.copy(),
                 "isStartDateToday" to false))
         }
         binding.lytCard.lytEndTime.setOnClickListener {
@@ -159,8 +161,8 @@ class AddSleepFragment :
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
                 addSleep?.let {
+                    val oldData = viewModel.endTimeSleep.copy()
                     viewModel.endTimeSleep = addSleep
-
 
                     if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
@@ -176,6 +178,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
+                            viewModel.endTimeSleep = oldData
                             uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
@@ -193,6 +196,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
+                            viewModel.endTimeSleep = oldData
                             uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
@@ -203,11 +207,8 @@ class AddSleepFragment :
                     } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
+                        viewModel.endTimeSleep = oldData
                         uiController.onDisplayError("Please check end time")
-                    }
-
-                    if(binding.lytCard.tvEndTime.text == getString(R.string.text_enter)){
-                        viewModel.endTimeSleep = OAddSleep()
                     }
                 }
 
@@ -222,7 +223,7 @@ class AddSleepFragment :
                 NavHostFragment.Companion.findNavController(this@AddSleepFragment)
 
             navController.navigate(R.id.sleepTimeBottomSheet, bundleOf(
-                "addSleep" to viewModel.endTimeSleep,
+                "addSleep" to viewModel.endTimeSleep.copy(),
                 "isStartDateToday" to viewModel.isStartDateToday()))
 
         }

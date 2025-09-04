@@ -62,9 +62,8 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
-
                 addSleep?.let {
-
+                    val oldData = viewModel.startTimeSleep.copy()
                     viewModel.startTimeSleep = addSleep
 
                     if (addSleep.hour.toInt() == 0) {
@@ -92,6 +91,7 @@ class OAddSleepFragment :
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
+                            viewModel.startTimeSleep = oldData
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -110,6 +110,7 @@ class OAddSleepFragment :
                             setStartTimeBetween()
                         } else {
                             uiController.onDisplayError("Start time should be less than end time")
+                            viewModel.startTimeSleep = oldData
                         }
 
                     } else if (viewModel.startTimeSleep.day.equals("Yesterday", true) &&
@@ -123,6 +124,7 @@ class OAddSleepFragment :
                     ) {
 
                         uiController.onDisplayError("Please check end time")
+                        viewModel.startTimeSleep = oldData
                     }
 
                     updateCalculatedData()
@@ -132,7 +134,7 @@ class OAddSleepFragment :
             viewModel.startTimeSleep.title = getString(R.string.text_start_time)
             navigate(
                 OAddSleepFragmentDirections.actionAddSleepFragmentToSleepTimeBottomSheet(
-                    viewModel.startTimeSleep,
+                    viewModel.startTimeSleep.copy(),
                     false
                 )
             )
@@ -145,16 +147,9 @@ class OAddSleepFragment :
             setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
-                var updateTimeDur = true
-
                 addSleep?.let {
+                    val oldData = viewModel.endTimeSleep.copy()
                     viewModel.endTimeSleep = addSleep
-
-                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
-                        viewModel.endTimeSleep = OAddSleep()
-                        updateTimeDur = false
-                        return@let
-                    }
 
                     if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Today", true)
@@ -170,6 +165,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
+                            viewModel.endTimeSleep = oldData
                             uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
@@ -187,6 +183,7 @@ class OAddSleepFragment :
                         if (startTime < endTime) {
                             setEndTimeBetween()
                         } else {
+                            viewModel.endTimeSleep = oldData
                             uiController.onDisplayError(getString(R.string.text_end_time_must_be_later_than_the_start_time))
                         }
 
@@ -197,23 +194,20 @@ class OAddSleepFragment :
                     } else if (viewModel.startTimeSleep.day.equals("Today", true) &&
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
+                        viewModel.endTimeSleep = oldData
                         uiController.onDisplayError("Please check end time")
                     }
-
-                    if(binding.lytAddTime.lytEndTime.tvTimeValue.text == getString(R.string.text_enter)){
-                        viewModel.endTimeSleep = OAddSleep()
-                    }
-
                 }
 
 
-                if(updateTimeDur) updateCalculatedData()
+
+                updateCalculatedData()
             }
 
             viewModel.endTimeSleep.title = getString(R.string.text_end_time)
             navigate(
                 OAddSleepFragmentDirections.actionAddSleepFragmentToSleepTimeBottomSheet(
-                    viewModel.endTimeSleep,
+                    viewModel.endTimeSleep.copy(),
                     viewModel.isStartDateToday()
                 )
             )
