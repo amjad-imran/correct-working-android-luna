@@ -41,7 +41,7 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
 
         arguments?.let {
             val args = SleepTimeBottomSheetArgs.fromBundle(it)
-            addSleep = args.addSleep
+            addSleep = args.addSleep.copy()
             isStartDateToday = args.isStartDateToday
             dayData()
             initUi()
