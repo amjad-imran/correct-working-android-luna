@@ -100,6 +100,7 @@ import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -705,7 +706,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
                     binding.tvDesc.text = data.desc
-                    binding.tvTime.text = data.displayTime
+
+                    if(data.event.equals(SYMPTOM_KEY , true)){
+                        binding.tvTime.invisible()
+                    }else{
+                        binding.tvTime.apply {
+                            text = data.displayTime
+                            visible()
+                        }
+                    }
 
                     binding.divider.root.setVisibilityByCondition(position != listData.size - 1)
                 }
