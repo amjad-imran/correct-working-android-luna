@@ -1315,7 +1315,7 @@ class SummaryDataViewModelToday @Inject constructor(
             healthOverviewData.postValue(userActivities)
 
             //viewedCardsData.postValue(viewedCardsData)
-            //this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
+            this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
 
             // Handle other operations
             loadNapsToConfirm()
