@@ -22,6 +22,17 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.ui.chatGpt.functions.SubMealAdapter
 import io.noties.markwon.Markwon
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.core.CorePlugin
+import io.noties.markwon.core.CoreProps
+import org.commonmark.node.Heading
+import android.graphics.Typeface
+import android.text.style.StyleSpan
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.TypefaceSpan
+import android.graphics.Color
 
 
 class ChatGptAdapter :
@@ -268,8 +279,10 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             binding.apply {
                 tvMessage.visible()
 
+                val ctx = this.tvMessage.context
+                val markwon = ChatMarkwonProvider.get(ctx)
 
-                val markwon = Markwon.create(this.tvMessage.context)
+                //val markwon = Markwon.create(this.tvMessage.context)
 
                 /*  val markwon = Markwon.builder(this.tvMessage.context)
                       .usePlugin(SoftBreakAddsNewLinePlugin.create())
@@ -300,4 +313,54 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     }
 
 
+}
+
+private object ChatMarkwonProvider {
+    @Volatile
+    private var instance: Markwon? = null
+
+    fun get(context: android.content.Context): Markwon {
+        val cached = instance
+        if (cached != null) return cached
+        return synchronized(this) {
+            instance ?: build(context).also { instance = it }
+        }
+    }
+
+    private fun build(ctx: android.content.Context): Markwon {
+        return Markwon.builder(ctx)
+            .usePlugin(CorePlugin.create())
+            .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                    builder.setFactory(Heading::class.java) { _, props ->
+                        val level = CoreProps.HEADING_LEVEL.require(props)
+                        when (level) {
+                            1 -> arrayOf(
+                                StyleSpan(Typeface.BOLD),
+                                AbsoluteSizeSpan(spToPx(ctx, 18), false)
+                            )
+                            2 -> arrayOf(
+                                StyleSpan(Typeface.BOLD),
+                                AbsoluteSizeSpan(spToPx(ctx, 16), false)
+                            )
+                            3 -> arrayOf(
+                                AbsoluteSizeSpan(spToPx(ctx, 14), false)
+                            )
+                            in 4..Int.MAX_VALUE -> arrayOf(
+                                AbsoluteSizeSpan(spToPx(ctx, 14), false),
+                                ForegroundColorSpan(
+                                    Color.argb((0.7f * 255).toInt(), 255, 255, 255)
+                                )
+                            )
+                            else -> emptyArray()
+                        }
+                    }
+                }
+            })
+            .build()
+    }
+}
+private fun spToPx(context: android.content.Context, sp: Int): Int {
+    val scaledDensity = context.resources.displayMetrics.scaledDensity
+    return (sp * scaledDensity).toInt()
 }
