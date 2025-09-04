@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemTimelineScreenBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 
 class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimelineAdapter.TimelineViewHolder>() {
 
@@ -16,7 +19,15 @@ class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimeline
             data.titleColor?.let { binding.tvTitle.setTextColor(it) }
 
             binding.tvDesc.text = data.desc
-            binding.tvTime.text = data.displayTime
+            if(data.event.equals(SYMPTOM_KEY , true)){
+                binding.tvTime.invisible()
+            }else{
+                binding.tvTime.apply {
+                    text = data.displayTime
+                    visible()
+                }
+            }
+
         }
     }
 
