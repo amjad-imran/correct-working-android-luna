@@ -126,7 +126,7 @@ class ChatGptViewModel
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
             }
             if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
-                messages.removeLast()
+                messages.removeAt(messages.lastIndex)
             }
             messages.add(ChatGptOverview.ReceivedMessage(message).apply {
                 id = uuid

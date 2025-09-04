@@ -332,7 +332,7 @@ class WaveRecorder {
                 }
                 lastSkippedData.addLast(data.copyOf())
                 if (lastSkippedData.sumOf { it.size } > bufferSizeToKeep) {
-                    lastSkippedData.removeFirst()
+                    lastSkippedData.removeAt(0)
                 }
             }
         } else {
@@ -357,7 +357,7 @@ class WaveRecorder {
                 }
                 lastSkippedData.addLast(data.copyOf())
                 if (lastSkippedData.sumOf { it.size } > bufferSizeToKeep) {
-                    lastSkippedData.removeFirst()
+                    lastSkippedData.removeAt(0)
                 }
             }
         } else {

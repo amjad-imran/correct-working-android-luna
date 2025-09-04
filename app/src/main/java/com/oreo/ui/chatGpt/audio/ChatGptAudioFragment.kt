@@ -66,7 +66,7 @@ class ChatGptAudioFragment :
 
     private fun repeatFun(): Job {
         return scope.launch {
-            while (isActive) {
+            /*while (isActive) {
                 //do your network request here
                 val command = listOfCommands.removeFirst()
                 viewModel.speakText(command)
@@ -75,7 +75,7 @@ class ChatGptAudioFragment :
                     repeatFun().cancel()
                 }
                 delay(200)
-            }
+            }*/
         }
     }
 

@@ -100,7 +100,7 @@ class SleepPlannerViewModel @Inject constructor(
             val days = models.map { it.first } as ArrayList
             if(days.size>1){
                 if (days.first()==1) {
-                    days.removeFirst()
+                    days.removeAt(0)
                     days.add(1)
                 }
             }
