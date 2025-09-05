@@ -897,19 +897,27 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             measuringRoot.visibility = View.GONE
 
             // Smooth width expansion using ChangeBounds
-            val transition = AutoTransition().apply { duration = 220 }
+
+            for (i in 0 until tile.childCount) {
+                val child = tile.getChildAt(i)
+                if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
+            }
+
+            val transition = AutoTransition().apply { duration = 200 }
+
+            measuringRoot.alpha = 0f
+            measuringRoot.visibility = View.VISIBLE
+            measuringRoot.animate().alpha(1f).setDuration(600).start()
+
             transition.addListener(object : Transition.TransitionListener {
                 override fun onTransitionStart(transition: Transition) {}
                 override fun onTransitionEnd(transition: Transition) {
                     transition.removeListener(this)
                     // After tile expanded, swap content to measuring with fade
-                    for (i in 0 until tile.childCount) {
-                        val child = tile.getChildAt(i)
-                        if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
-                    }
-                    measuringRoot.alpha = 0f
+
+                   /* measuringRoot.alpha = 0f
                     measuringRoot.visibility = View.VISIBLE
-                    measuringRoot.animate().alpha(1f).setDuration(160).start()
+                    measuringRoot.animate().alpha(1f).setDuration(60).start()*/
                 }
                 override fun onTransitionCancel(transition: Transition) {}
                 override fun onTransitionPause(transition: Transition) {}
@@ -959,8 +967,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.itemSpO2.visibility = View.VISIBLE
                 binding.itemSkinTemp.visibility = View.VISIBLE
 
+                measuring.visibility = View.GONE
                 measuring?.animate()?.alpha(0f)?.setDuration(220)?.withEndAction {
-                    measuring.visibility = View.GONE
                     for (i in 0 until t.childCount) {
                         val child = t.getChildAt(i)
                         if (child.id != R.id.tileMeasuringRoot) child.visibility = View.VISIBLE
