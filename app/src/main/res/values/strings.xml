@@ -775,6 +775,12 @@
     <string name="text_hr_variability">HR variability</string>
     <string name="text_body_tempreature">Body temperature</string>
     <string name="text_skin_temperature">Skin temperature</string>
+    <string name="text_one_tap_vitals">One Tap Vitals</string>
+    <string name="text_measuring_may_take_30_sec">This may take up to 30 seconds</string>
+    <string name="text_measuring_heart_rate">Measuring Heart rate...</string>
+    <string name="text_measuring_stress">Measuring Stress...</string>
+    <string name="text_measuring_skin_temp">Measuring Skin temp...</string>
+    <string name="text_measure">Measure</string>
     <string name="text_respiratory_rate">Respiratory rate</string>
     <string name="text_heart_rate_variability">Heart rate variability</string>
     <string name="text_average_hrv">Average HRV</string>

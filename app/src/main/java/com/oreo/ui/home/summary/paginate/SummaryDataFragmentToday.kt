@@ -658,6 +658,12 @@ class SummaryDataFragmentToday :
                         bundleOf("showTimeline" to true, "key" to type.key)
                     )
                 }
+
+                OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
+                is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {
+
+                }
+                is OSummaryHealthOverviewClickEnum.OnOneTapVitalsMeasureClicked -> {}
             }
         }
 

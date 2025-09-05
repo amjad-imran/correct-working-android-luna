@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:background="@drawable/back_modal_transparent_oreo"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/text_one_tap_vitals"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/ivArrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="8dp"
+        tools:text="One Tap Vitals" />
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        tools:ignore="ContentDescription" />
+
+    <FrameLayout
+        android:id="@+id/lytContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <LinearLayout
+            android:id="@+id/lytCollapsed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/itemHR"
+                android:layout_width="0dp"
+                android:layout_height="142dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_modal_v2_10"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvHrTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_heart_rate"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvHrValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    tools:text="54" />
+
+                <TextView
+                    android:id="@+id/tvHrAgo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="10sp"
+                    tools:text="3 min ago" />
+
+                <ImageView
+                    android:id="@+id/ivHrIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/icon_heart_rate"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvHrMeasure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/text_measure"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="12sp" />
+
+                <include layout="@layout/include_one_tap_measuring_tile" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/itemStress"
+                android:layout_width="0dp"
+                android:layout_height="142dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_modal_v2_10"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvStressTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_stress"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvStressValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    tools:text="65" />
+
+                <TextView
+                    android:id="@+id/tvStressAgo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="10sp"
+                    tools:text="3 min ago" />
+
+                <ImageView
+                    android:id="@+id/ivStressIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/icon_stress"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvStressMeasure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/text_measure"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="12sp" />
+
+                <include layout="@layout/include_one_tap_measuring_tile" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/itemSpO2"
+                android:layout_width="0dp"
+                android:layout_height="142dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_modal_v2_10"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvSpO2Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SpO2"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvSpO2Value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    tools:text="95%" />
+
+                <TextView
+                    android:id="@+id/tvSpO2Ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="10sp"
+                    tools:text="3 min ago" />
+
+                <ImageView
+                    android:id="@+id/ivSpO2Icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_sp_o_2"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSpO2Measure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/text_measure"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="12sp" />
+
+                <include layout="@layout/include_one_tap_measuring_tile" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/itemSkinTemp"
+                android:layout_width="0dp"
+                android:layout_height="142dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/back_modal_v2_10"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvSkinTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_skin_temperature"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvSkinValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    tools:text="33.5°C" />
+
+                <TextView
+                    android:id="@+id/tvSkinAgo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="10sp"
+                    tools:text="3 min ago" />
+
+                <ImageView
+                    android:id="@+id/ivSkinIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_body_temp"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvSkinMeasure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/text_measure"
+                    android:textColor="#A0FFFFFF"
+                    android:textSize="12sp" />
+
+                <include layout="@layout/include_one_tap_measuring_tile" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
