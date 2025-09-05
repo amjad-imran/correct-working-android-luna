@@ -586,6 +586,8 @@ class UserRepositoryImpl(
         isAllSkipAttempted: Boolean
     ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             if(isAllSkipAttempted){
                 keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             }
