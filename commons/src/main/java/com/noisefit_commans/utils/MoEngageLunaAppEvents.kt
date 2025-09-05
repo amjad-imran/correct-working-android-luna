@@ -264,5 +264,9 @@ object MoEngageLunaAppEvents {
     const val luna_ai_page_visit = "luna_ai_page_visit"
     const val luna_ai_message_submit = "luna_ai_message_submit"
 
+    // circadian
+    const val quiz_started = "quiz_started"
+    const val quiz_restarted = "quiz_restarted"
+    const val insight_logged = "insight_logged"
 
 }

@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
@@ -51,6 +52,18 @@ class CircadianAlignmentFragment :
 
     private val correctiveActivitiesAdapter by lazy {
         CorrectiveActivitiesAdapter() {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = when {
+                        it.key.equals(CircadianAlignmentViewModel.light_exposure_key) -> "light"
+                        it.key.equals(CircadianAlignmentViewModel.meal_window_key) -> "meal"
+                        it.key.equals(CircadianAlignmentViewModel.caffeine_window_key) -> "caffeine"
+                        else -> ""
+                    }
+                }
+            )
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
@@ -649,6 +662,12 @@ class CircadianAlignmentFragment :
         }
 
         binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.quiz_restarted,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                }
+            )
             navigate(R.id.quizCircadianFragment)
         }
 

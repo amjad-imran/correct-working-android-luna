@@ -7,12 +7,18 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianSplashScreenBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CircadianSplashScreenFragment :
     BaseFragment<FragmentCircadianSplashScreenBinding>(FragmentCircadianSplashScreenBinding::inflate) {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     private val fragments = listOf(
         OnboardingCarcadianFragment0(),
@@ -48,6 +54,12 @@ class CircadianSplashScreenFragment :
             if (nextItem < fragments.size) {
                 binding.viewPager.setCurrentItem(nextItem, true)
             } else {
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.quiz_started,
+                    HashMap<String, Any>().apply {
+                        this["source"] = "circadian_onboarding"
+                    }
+                )
                 navigate(CircadianSplashScreenFragmentDirections.actionCircadianSplashScreenFragmentToQuizCircadianFragment())
             }
             setUi(binding.viewPager.currentItem)

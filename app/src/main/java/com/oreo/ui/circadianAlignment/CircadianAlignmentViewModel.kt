@@ -11,6 +11,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -50,6 +51,7 @@ class CircadianAlignmentViewModel
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
     val localDataStore: DataStoredInterface,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     companion object {
