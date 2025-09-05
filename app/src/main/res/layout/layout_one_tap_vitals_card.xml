@@ -81,10 +81,10 @@
 
             <ImageView
                 android:id="@+id/ivHrIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
-                android:src="@drawable/icon_heart_rate"
+                android:src="@drawable/ic_hr_measure"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -136,10 +136,10 @@
 
             <ImageView
                 android:id="@+id/ivStressIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
-                android:src="@drawable/icon_stress"
+                android:src="@drawable/ic_stress_measure"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -191,10 +191,10 @@
 
             <ImageView
                 android:id="@+id/ivSpO2Icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
-                android:src="@drawable/ic_sp_o_2"
+                android:src="@drawable/ic_spo2_measure"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -246,10 +246,10 @@
 
             <ImageView
                 android:id="@+id/ivSkinIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="6dp"
-                android:src="@drawable/ic_body_temp"
+                android:src="@drawable/ic_temp_measure"
                 tools:ignore="ContentDescription" />
 
             <TextView

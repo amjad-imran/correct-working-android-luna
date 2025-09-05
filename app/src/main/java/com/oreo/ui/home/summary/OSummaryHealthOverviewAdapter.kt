@@ -816,10 +816,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         fun bind(data: OHealthOverview.OneTapVitals) {
             binding.tvTitle.text = data.title
 
-            binding.itemHR.visibility = if (data.featureConfig.showHR) View.VISIBLE else View.GONE
-            binding.itemStress.visibility = if (data.featureConfig.showStress) View.VISIBLE else View.GONE
-            binding.itemSpO2.visibility = if (data.featureConfig.showSpO2) View.VISIBLE else View.GONE
-            binding.itemSkinTemp.visibility = if (data.featureConfig.showSkinTemp) View.VISIBLE else View.GONE
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
 
             binding.tvHrValue.text = data.hrValue?.let { "$it" } ?: "--"
             binding.tvHrAgo.text = data.hrLastTime ?: ""
@@ -839,7 +839,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 collapseTiles(data)
             }
 
-            // Clicks: expand per item (tile grows and shows measuring inside itself)
             binding.itemHR.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.HR, data, binding.itemHR) }
             binding.itemStress.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.STRESS, data, binding.itemStress) }
             binding.itemSpO2.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SPO2, data, binding.itemSpO2) }
@@ -855,14 +854,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         private fun collapseTiles(data: OHealthOverview.OneTapVitals) {
             stopHeartAnimation()
-            // reset any measuring views to gone
             expandedTile = null
 
-            // show all tiles
-            binding.itemHR.visibility = if (data.featureConfig.showHR) View.VISIBLE else View.GONE
-            binding.itemStress.visibility = if (data.featureConfig.showStress) View.VISIBLE else View.GONE
-            binding.itemSpO2.visibility = if (data.featureConfig.showSpO2) View.VISIBLE else View.GONE
-            binding.itemSkinTemp.visibility = if (data.featureConfig.showSkinTemp) View.VISIBLE else View.GONE
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
 
             // ensure all children of tiles are visible and measuring hidden
             listOf(binding.itemHR, binding.itemStress, binding.itemSpO2, binding.itemSkinTemp).forEach { t ->
@@ -876,7 +873,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             }
 
-            // collapsed group visible
             binding.lytCollapsed.visibility = View.VISIBLE
             binding.lytCollapsed.alpha = 1f
         }

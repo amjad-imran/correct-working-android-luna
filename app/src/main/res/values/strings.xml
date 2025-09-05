@@ -2167,5 +2167,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">You’ve returned to alignment — maintain the rhythm with regular sleep and morning light.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">You’ve returned to ideal alignment — keep reinforcing it with regular sleep and morning light.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">You’re drifting earlier — try delaying your evening routine and getting light later in the day.</string>
+    <string name="text_this_may_take_up_to_30_seconds">This may take up to 30 seconds</string>
 
 </resources>

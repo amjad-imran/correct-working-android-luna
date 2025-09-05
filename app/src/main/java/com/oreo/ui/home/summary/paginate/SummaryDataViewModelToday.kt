@@ -1365,7 +1365,7 @@ class SummaryDataViewModelToday @Inject constructor(
             showHR = true,
             showStress = true,
             showSpO2 = true,
-            showSkinTemp = false
+            showSkinTemp = true
         )
 
         if (!features.showHR && !features.showStress && !features.showSpO2 && !features.showSkinTemp) {
