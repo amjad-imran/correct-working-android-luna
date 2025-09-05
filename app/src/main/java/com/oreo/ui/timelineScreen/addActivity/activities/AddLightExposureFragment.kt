@@ -17,6 +17,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +55,21 @@ class AddLightExposureFragment :
         }
         binding.btnSave.setOnClickListener {
             if (viewModel.lightTime.value != null && viewModel.lightDuration.value != null) {
+                //
+                sharedViewModel.sourceKey?.let { sourceKey ->
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = sourceKey
+                            if(sourceKey.equals("circadian")){
+                                this["target"] = "light"
+                            }else {
+                                this["log_category"] = "light"
+                            }
+                        }
+                    )
+                }
+                //
                 viewModel.logLightExposure(
                     viewModel.lightTime.value!!,
                     viewModel.lightDuration.value!!

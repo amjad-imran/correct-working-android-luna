@@ -126,7 +126,7 @@ class AddWorkoutFragment :
 
         binding.btnSave.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_save_click)
-            viewModel.addWorkout()
+            viewModel.addWorkout(sharedViewModel.sourceKey)
         }
 
         parentFragment?.setFragmentResultListener(SELECT_REQUEST_KEY) { _, bundle ->

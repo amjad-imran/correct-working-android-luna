@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.CircadianGraphModel
 import com.oreo.data.model.CircadianMidPointModel
 import com.oreo.data.model.CircadianMidPointState
@@ -51,10 +52,23 @@ class CircadianAlignmentFragment :
 
     private val correctiveActivitiesAdapter by lazy {
         CorrectiveActivitiesAdapter() {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = when {
+                        it.key.equals(CircadianAlignmentViewModel.light_exposure_key) -> "light"
+                        it.key.equals(CircadianAlignmentViewModel.meal_window_key) -> "meal"
+                        it.key.equals(CircadianAlignmentViewModel.caffeine_window_key) -> "caffeine"
+                        else -> ""
+                    }
+                }
+            )
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
                     "key" to it.key,
+                    "srcKey" to "circadian",
                 )
             )
         }
@@ -632,6 +646,13 @@ class CircadianAlignmentFragment :
     override fun initListener() {
 
         binding.lytCircularView.lytUnlockedState.lytNoSleepData.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = "sleep"
+                    }
+            )
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
@@ -645,15 +666,37 @@ class CircadianAlignmentFragment :
         }
 
         binding.lytCorrectiveActivities.viewAllLogs.setOnClickListener {
-            navigate(R.id.timelineScreenFragment)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = "timeline"
+                }
+            )
+            navigate(
+                R.id.timelineScreenFragment,
+                bundleOf("srcKey" to "circadian")
+            )
         }
 
         binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.quiz_restarted,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                }
+            )
             navigate(R.id.quizCircadianFragment)
         }
 
         binding.lytFocusWindow.llLunaAi.setOnClickListener {
            /* if (viewModel.isChatSplashShown()) {*/
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.aichat_initiated_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                }
+            )
                 navigate(
                     R.id.aiTopQuestionsFragment,
                     bundleOf("aiTopic" to AITopics.CIRCADIAN)

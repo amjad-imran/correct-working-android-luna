@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
@@ -46,7 +47,20 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun initListener() {
 
         binding.ivAddLogFab.setOnClickListener {
-            navigate(R.id.addActivityTimelineFragment,bundleOf("showTimeline" to false, "key" to null))
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "timeline"
+                }
+            )
+            navigate(
+                R.id.addActivityTimelineFragment,
+                bundleOf(
+                    "showTimeline" to false,
+                    "key" to null,
+                    "srcKey" to "timeline"
+                )
+            )
         }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
@@ -56,6 +70,12 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         }
 
         binding.lytToolbar.view1.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.calendar_day_selected,
+                HashMap<String, Any>().apply {
+                    this["source"] = "timeline"
+                }
+            )
             showCalendar()
         }
     }

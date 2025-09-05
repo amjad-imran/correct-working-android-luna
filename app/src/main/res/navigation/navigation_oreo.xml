@@ -1438,7 +1438,12 @@
         android:id="@+id/timelineScreenFragment"
         android:name="com.oreo.ui.timelineScreen.TimelineScreenFragment"
         android:label="fragment_timeline_screen"
-        tools:layout="@layout/fragment_timeline_screen" />
+        tools:layout="@layout/fragment_timeline_screen" >
+        <argument
+            android:name="srcKey"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
     <dialog
         android:id="@+id/addLogCircadianBottomSheetFragment"
         android:name="com.oreo.ui.circadianAlignment.logBottomSheets.AddLogCircadianBottomSheetFragment"
@@ -1456,6 +1461,10 @@
         tools:layout="@layout/fragment_add_activity_timeline" >
         <argument
             android:name="key"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="srcKey"
             app:argType="string"
             app:nullable="true" />
         <argument
