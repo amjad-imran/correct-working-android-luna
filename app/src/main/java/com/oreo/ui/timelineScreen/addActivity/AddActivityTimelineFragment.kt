@@ -29,6 +29,7 @@ class AddActivityTimelineFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val key = arguments?.getString("key")
+        arguments?.getString("srcKey")?.let { sharedViewModel.sourceKey= it }
         when(key){
             CircadianAlignmentViewModel.light_exposure_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE)
@@ -112,5 +113,9 @@ class AddActivityTimelineFragment :
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sharedViewModel.sourceKey = null
+    }
 
 }

@@ -68,6 +68,7 @@ class CircadianAlignmentFragment :
                 R.id.addActivityTimelineFragment,
                 bundleOf(
                     "key" to it.key,
+                    "srcKey" to "circadian",
                 )
             )
         }
@@ -645,6 +646,13 @@ class CircadianAlignmentFragment :
     override fun initListener() {
 
         binding.lytCircularView.lytUnlockedState.lytNoSleepData.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_log,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = "sleep"
+                    }
+            )
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
@@ -658,7 +666,17 @@ class CircadianAlignmentFragment :
         }
 
         binding.lytCorrectiveActivities.viewAllLogs.setOnClickListener {
-            navigate(R.id.timelineScreenFragment)
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                    this["target"] = "timeline"
+                }
+            )
+            navigate(
+                R.id.timelineScreenFragment,
+                bundleOf("srcKey" to "circadian")
+            )
         }
 
         binding.lytYourChronotype.tvRetakeQuiz.setOnClickListener {
@@ -673,6 +691,12 @@ class CircadianAlignmentFragment :
 
         binding.lytFocusWindow.llLunaAi.setOnClickListener {
            /* if (viewModel.isChatSplashShown()) {*/
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.aichat_initiated_clicked,
+                HashMap<String, Any>().apply {
+                    this["source"] = "circadian"
+                }
+            )
                 navigate(
                     R.id.aiTopQuestionsFragment,
                     bundleOf("aiTopic" to AITopics.CIRCADIAN)

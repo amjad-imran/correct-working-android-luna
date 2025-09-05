@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.timelineScreen.addActivity.ActivitySelectorDialog
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -57,6 +58,21 @@ class AddMealActivityTimelineFragment :
 
         binding.btnSave.setOnClickListener {
             viewModel.mealTime.value?.let { time ->
+                //
+                sharedViewModel.sourceKey?.let { sourceKey ->
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = sourceKey
+                            if(sourceKey.equals("circadian")){
+                                this["target"] = "meal"
+                            }else {
+                                this["log_category"] = "meal"
+                            }
+                        }
+                    )
+                }
+                //
                 viewModel.logMeal(time)
             }
         }

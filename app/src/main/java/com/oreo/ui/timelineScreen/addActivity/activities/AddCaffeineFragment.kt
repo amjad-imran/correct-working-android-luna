@@ -70,6 +70,22 @@ class AddCaffeineFragment :
         }
         binding.btnSave.setOnClickListener {
             if(viewModel.caffeineTime.value != null && viewModel.caffeineValue.value != null){
+                //
+                sharedViewModel.sourceKey?.let { sourceKey ->
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = sourceKey
+                            if(sourceKey.equals("circadian")){
+                                this["target"] = "caffeine"
+                            }else {
+                                this["log_category"] = "caffeine"
+                                this["caffeine_quantity"] = "${viewModel.caffeineValue.value}"
+                            }
+                        }
+                    )
+                }
+                //
                 viewModel.logCaffeineValue(
                     viewModel.caffeineTime.value!!,
                     viewModel.caffeineValue.value!!

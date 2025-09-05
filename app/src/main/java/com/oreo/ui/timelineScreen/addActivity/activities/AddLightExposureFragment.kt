@@ -54,14 +54,22 @@ class AddLightExposureFragment :
             sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.LIGHT_EXPOSURE)
         }
         binding.btnSave.setOnClickListener {
-            sharedViewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.insight_logged,
-                HashMap<String, Any>().apply {
-                    this["source"] = "circadian"
-                    this["target"] = "light"
-                }
-            )
             if (viewModel.lightTime.value != null && viewModel.lightDuration.value != null) {
+                //
+                sharedViewModel.sourceKey?.let { sourceKey ->
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = sourceKey
+                            if(sourceKey.equals("circadian")){
+                                this["target"] = "light"
+                            }else {
+                                this["log_category"] = "light"
+                            }
+                        }
+                    )
+                }
+                //
                 viewModel.logLightExposure(
                     viewModel.lightTime.value!!,
                     viewModel.lightDuration.value!!

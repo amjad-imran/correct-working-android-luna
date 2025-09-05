@@ -269,4 +269,8 @@ object MoEngageLunaAppEvents {
     const val quiz_restarted = "quiz_restarted"
     const val insight_logged = "insight_logged"
 
+    // Timeline
+    const val calendar_day_selected = "calendar_day_selected"
+    const val page_scrolled = "page_scrolled"
+
 }

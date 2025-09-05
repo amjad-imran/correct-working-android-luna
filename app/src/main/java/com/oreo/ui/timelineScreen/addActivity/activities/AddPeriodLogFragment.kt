@@ -11,6 +11,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
 import com.oreo.ui.femalehealth.cycletracker.CycleSymptomsAdapter
@@ -90,6 +91,19 @@ class AddPeriodLogFragment :
             val symptoms = symptomsAdapter.getData()
             val date = logViewModel.selectedDate.value.toString()
             logViewModel.saveSymptom(date, symptoms, flowType)
+            //
+            //
+            sharedViewModel.sourceKey?.let { sourceKey ->
+                sharedViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.insight_logged,
+                    HashMap<String, Any>().apply {
+                        this["source"] = sourceKey
+                        this["log_category"] = "period_symptom"
+                        this["period_flow_type"] = "$flowType"
+                        this["period_symptoms"] = "$symptoms"
+                    }
+                )
+            }
         }
 
         binding.lytSelected.setOnClickListener {

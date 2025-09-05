@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.model.ServerUserHealthData
@@ -257,7 +258,7 @@ class OAddWorkoutViewModel
         return null
     }
 
-    fun addWorkout() {
+    fun addWorkout(srcKey: String?) {
 
         val type = if (workoutListModal?.activityType?.isNotEmpty() == true) {
             workoutListModal?.activityType
@@ -271,6 +272,18 @@ class OAddWorkoutViewModel
         if (existMessage.isNullOrEmpty().not()) {
             sendMessage(existMessage)
             return
+        }
+
+        if(srcKey.isNullOrEmpty().not()) {
+            sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.insight_logged,
+                HashMap<String, Any>().apply {
+                    this["source"] = srcKey
+                    this["log_category"] = "workout"
+                    this["workout_type"] = "$type"
+                    this["workout_intensity"] = addWorkout.intensity
+                }
+            )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -318,7 +331,7 @@ class OAddWorkoutViewModel
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        addWorkout()
+                                        addWorkout(srcKey)
                                     }
 
                                     override fun no() {
