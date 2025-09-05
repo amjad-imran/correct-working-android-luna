@@ -836,7 +836,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.expandedType != null) {
                 expandTile(data, null)
             } else {
-                collapseTiles()
+                collapseTiles(data)
             }
 
             // Clicks: expand per item (tile grows and shows measuring inside itself)
@@ -853,16 +853,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             expandTile(data, tile)
         }
 
-        private fun collapseTiles() {
+        private fun collapseTiles(data: OHealthOverview.OneTapVitals) {
             stopHeartAnimation()
             // reset any measuring views to gone
             expandedTile = null
 
             // show all tiles
-            binding.itemHR.visibility = View.VISIBLE
-            binding.itemStress.visibility = View.VISIBLE
-            binding.itemSpO2.visibility = View.VISIBLE
-            binding.itemSkinTemp.visibility = View.VISIBLE
+            binding.itemHR.visibility = if (data.featureConfig.showHR) View.VISIBLE else View.GONE
+            binding.itemStress.visibility = if (data.featureConfig.showStress) View.VISIBLE else View.GONE
+            binding.itemSpO2.visibility = if (data.featureConfig.showSpO2) View.VISIBLE else View.GONE
+            binding.itemSkinTemp.visibility = if (data.featureConfig.showSkinTemp) View.VISIBLE else View.GONE
 
             // ensure all children of tiles are visible and measuring hidden
             listOf(binding.itemHR, binding.itemStress, binding.itemSpO2, binding.itemSkinTemp).forEach { t ->
@@ -962,10 +962,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 // Begin width shrink via ChangeBounds while fading out measuring
                 val transition = AutoTransition().apply { duration = 220 }
                 TransitionManager.beginDelayedTransition(parent, transition)
-                binding.itemHR.visibility = View.VISIBLE
-                binding.itemStress.visibility = View.VISIBLE
-                binding.itemSpO2.visibility = View.VISIBLE
-                binding.itemSkinTemp.visibility = View.VISIBLE
+                binding.itemHR.visibility = if (data.featureConfig.showHR) View.VISIBLE else View.GONE
+                binding.itemStress.visibility = if (data.featureConfig.showStress) View.VISIBLE else View.GONE
+                binding.itemSpO2.visibility = if (data.featureConfig.showSpO2) View.VISIBLE else View.GONE
+                binding.itemSkinTemp.visibility = if (data.featureConfig.showSkinTemp) View.VISIBLE else View.GONE
 
                 measuring.visibility = View.GONE
                 measuring?.animate()?.alpha(0f)?.setDuration(220)?.withEndAction {

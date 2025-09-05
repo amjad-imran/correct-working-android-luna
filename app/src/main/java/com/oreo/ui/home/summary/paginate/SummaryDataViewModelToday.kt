@@ -1364,7 +1364,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val features = OHealthOverview.OneTapVitalsFeatureConfig(
             showHR = true,
             showStress = true,
-            showSpO2 = false,
+            showSpO2 = true,
             showSkinTemp = false
         )
 
