@@ -51,11 +51,11 @@ class AddSleepFragment :
             }
 
             if (viewModel.startTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError("Please select start time")
+                uiController.onDisplayError(getString(R.string.text_please_select_start_time))
                 return@setOnClickListener
             }
             if (viewModel.endTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError("Please select end time")
+                uiController.onDisplayError(getString(R.string.text_please_select_end_time))
                 return@setOnClickListener
             }
             /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
@@ -101,7 +101,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setStartTimeBetween()
                         } else {
-                            uiController.onDisplayError("Start time should be less than end time")
+                            uiController.onDisplayError(getString(R.string.text_start_time_should_be_less_than_end_time))
                             viewModel.startTimeSleep = oldData
                         }
 
@@ -120,7 +120,7 @@ class AddSleepFragment :
                         if (startTime < endTime) {
                             setStartTimeBetween()
                         } else {
-                            uiController.onDisplayError("Start time should be less than end time")
+                            uiController.onDisplayError(getString(R.string.text_start_time_should_be_less_than_end_time))
                             viewModel.startTimeSleep = oldData
                         }
 
@@ -134,7 +134,7 @@ class AddSleepFragment :
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
 
-                        uiController.onDisplayError("Please check end time")
+                        uiController.onDisplayError(getString(R.string.text_please_check_end_time))
                         viewModel.startTimeSleep = oldData
                     }
 
@@ -208,7 +208,7 @@ class AddSleepFragment :
                         viewModel.endTimeSleep.day.equals("Yesterday", true)
                     ) {
                         viewModel.endTimeSleep = oldData
-                        uiController.onDisplayError("Please check end time")
+                        uiController.onDisplayError(getString(R.string.text_please_check_end_time))
                     }
                 }
 

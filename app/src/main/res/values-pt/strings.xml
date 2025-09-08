@@ -2210,5 +2210,9 @@
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Você voltou ao alinhamento — mantenha o ritmo com sono regular e luz pela manhã.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Você voltou ao alinhamento ideal — continue a reforçar com sono regular e luz pela manhã.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Você está se afastando mais cedo — tente adiar sua rotina noturna e receber luz mais tarde durante o dia.</string>
+    <string name="text_start_time_should_be_less_than_end_time">A hora de início deve ser anterior à hora de término</string>
+    <string name="text_please_select_start_time">Por favor, selecione a hora de início</string>
+    <string name="text_please_select_end_time">Por favor, selecione a hora de término</string>
+    <string name="text_please_check_end_time">Por favor, verifique a hora de término</string>
 
 </resources>

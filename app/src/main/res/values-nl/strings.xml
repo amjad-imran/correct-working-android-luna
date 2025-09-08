@@ -2186,5 +2186,9 @@
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Je bent terug in lijn — behoud het ritme met regelmatig slapen en ochtendlicht.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Je bent terug in ideale afstemming — blijf het versterken met regelmatig slapen en ochtendlicht.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Je drijft eerder af — probeer je avondroutine te vertragen en later op de dag licht te krijgen.</string>
+    <string name="text_start_time_should_be_less_than_end_time">De starttijd moet vóór de eindtijd liggen</string>
+    <string name="text_please_select_start_time">Selecteer de starttijd</string>
+    <string name="text_please_select_end_time">Selecteer de eindtijd</string>
+    <string name="text_please_check_end_time">Controleer de eindtijd</string>
 
 </resources>

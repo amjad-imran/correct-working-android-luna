@@ -2306,5 +2306,9 @@ onjour, Luna"</string>
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Vous êtes de nouveau en harmonie — maintenez le rythme avec un sommeil régulier et de la lumière du matin.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Vous êtes de retour dans l\'alignement idéal — continuez à le renforcer avec un sommeil régulier et de la lumière du matin.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Vous dérivez plus tôt — essayez de retarder votre routine du soir et de recevoir de la lumière plus tard dans la journée.</string>
+    <string name="text_start_time_should_be_less_than_end_time">L\'heure de début doit être antérieure à l\'heure de fin</string>
+    <string name="text_please_select_start_time">Veuillez sélectionner l\'heure de début</string>
+    <string name="text_please_select_end_time">Veuillez sélectionner l\'heure de fin</string>
+    <string name="text_please_check_end_time">Veuillez vérifier l\'heure de fin</string>
 
 </resources>

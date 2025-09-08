@@ -2208,5 +2208,9 @@
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Вы вернулись в норму — поддерживайте ритм с регулярным сном и утренним светом.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Вы вернулись в идеальное состояние — продолжайте поддерживать его регулярным сном и утренним светом.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Вы уходите раньше — попробуйте задержать вечернюю рутину и получать свет позже в течение дня.</string>
+    <string name="text_start_time_should_be_less_than_end_time">Время начала должно быть меньше времени окончания</string>
+    <string name="text_please_select_start_time">Пожалуйста, выберите время начала</string>
+    <string name="text_please_select_end_time">Пожалуйста, выберите время окончания</string>
+    <string name="text_please_check_end_time">Пожалуйста, проверьте время окончания</string>
 
 </resources>

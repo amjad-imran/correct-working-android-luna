@@ -2157,5 +2157,9 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">Has vuelto a estar alineado: mantén el ritmo con sueño regular y luz por la mañana.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">Has vuelto a la alineación ideal: sigue reforzándolo con sueño regular y luz por la mañana.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">Te estás desviando más temprano: intenta retrasar tu rutina nocturna y recibir luz más tarde en el día.</string>
+    <string name="text_start_time_should_be_less_than_end_time">La hora de inicio debe ser anterior a la hora de finalización</string>
+    <string name="text_please_select_start_time">Por favor, seleccione la hora de inicio</string>
+    <string name="text_please_select_end_time">Por favor, seleccione la hora de finalización</string>
+    <string name="text_please_check_end_time">Por favor, verifique la hora de finalización</string>
 
 </resources>
