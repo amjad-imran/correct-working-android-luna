@@ -116,6 +116,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.oreo.util.DateTimeUtil
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -1180,6 +1181,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (item.switchState.not()) return@forEach
 
                 when (item.key) {
+                    "one_tap_vitals" -> {
+                        getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                    }
                     "sleep" -> {
                         getSleepDataCard(
                             healthData,
@@ -1322,6 +1326,66 @@ class SummaryDataViewModelToday @Inject constructor(
             handleSleepAlert(healthData.sleep)
             handleGoogleFitCard()
         }
+    }
+
+    private suspend fun getOneTapVitalsCard(healthData: ServerUserHealthData): OHealthOverview.OneTapVitals? {
+        // HR
+        val hrModel = userRepository.getSummaryHRHealthOverview()
+        val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
+        val hrLastTime: String? = try {
+            if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
+                val lastUpdatedTimestamp =
+                    DateTimeUtil.getTodayMidnightTimestamp() + (hrModel.lastMeasuredIndex + 1) * 5 * 60 * 1000
+                val currentTimeStamp = DateFormats.getTimeStamp()
+                val diff = currentTimeStamp - lastUpdatedTimestamp
+                when {
+                    diff < 60_000 -> "just now"
+                    diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                    else -> "${diff / (60 * 60_000)} hr ago"
+                }
+            } else null
+        } catch (e: Exception) { null }
+
+        // Stress
+        val stressValue = healthData.stress?.stressValue?.value
+        val stressLastTime: String? = healthData.stress?.stressValue?.lastUpdated?.let { ts ->
+            val diff = DateFormats.getTimeStamp() - ts
+            when {
+                diff < 60_000 -> "just now"
+                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                else -> "${diff / (60 * 60_000)} hr ago"
+            }
+        }
+
+        // SpO2 and Skin Temp from HealthTrend (typically from last sleep)
+        val spo2Value = healthData.sleep?.healthTrend?.bloodOxy?.value?.toInt()
+        val skinTempValue = healthData.sleep?.healthTrend?.skinTemp?.value?.toFloat()
+
+        val features = OHealthOverview.OneTapVitalsFeatureConfig(
+            showHR = true,
+            showStress = true,
+            showSpO2 = true,
+            showSkinTemp = true
+        )
+
+        if (!features.showHR && !features.showStress && !features.showSpO2 && !features.showSkinTemp) {
+            return null
+        }
+
+        return OHealthOverview.OneTapVitals(
+            title = resourceProvider.getString(R.string.text_one_tap_vitals),
+            hrValue = hrValue,
+            hrLastTime = hrLastTime,
+            stressValue = stressValue,
+            stressLastTime = stressLastTime,
+            spo2Value = spo2Value,
+            spo2LastTime = null,
+            skinTempValue = skinTempValue,
+            skinTempLastTime = null,
+            featureConfig = features,
+            expandedType = null,
+            measuring = false
+        )
     }
 
     private fun getTimelineCard(): OHealthOverview?{
@@ -2729,6 +2793,7 @@ class SummaryDataViewModelToday @Inject constructor(
             when(daySlot){
                 0 ->{
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
@@ -2743,6 +2808,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 1 ->{
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
@@ -2758,6 +2824,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 else ->{
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
@@ -2777,6 +2844,13 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
+            this["one_tap_vitals"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_monitor,
+                "one_tap_vitals",
+                resourceProvider.getString(R.string.text_one_tap_vitals),
+                true,
+                0
+            )
             this["sleep"] = CustomHomeScreenItem(
                 R.drawable.icon_sleep,
                 "sleep",

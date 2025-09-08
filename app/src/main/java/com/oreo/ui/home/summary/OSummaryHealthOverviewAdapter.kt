@@ -17,6 +17,10 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.ImageView
+import android.transition.AutoTransition
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -96,6 +100,7 @@ import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
+import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.oreo.ui.chatGpt.SummaryStates
@@ -169,6 +174,13 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
+
+    // One Tap Vitals
+    data class OnOneTapVitalsItemClicked(val type: OHealthOverview.VitalsType) :
+        OSummaryHealthOverviewClickEnum()
+    data class OnOneTapVitalsMeasureClicked(val type: OHealthOverview.VitalsType) :
+        OSummaryHealthOverviewClickEnum()
+    object OnOneTapVitalsCollapsed : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -345,6 +357,12 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
 
             R.layout.layout_timeline_card_dash -> HomeRecyclerViewHolder.TimelineCardViewHolder(
                 LayoutTimelineCardDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
+            R.layout.layout_one_tap_vitals_card -> HomeRecyclerViewHolder.OneTapVitalsViewHolder(
+                LayoutOneTapVitalsCardBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
@@ -555,6 +573,10 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is HomeRecyclerViewHolder.TimelineCardViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.TimelineDash)
             }
+
+            is HomeRecyclerViewHolder.OneTapVitalsViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.OneTapVitals)
+            }
         }
     }
 
@@ -607,6 +629,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             is OHealthOverview.CircadianLockedOrNoSleepCard -> R.layout.layout_dash_no_sleep_states_circadian
 
             is OHealthOverview.TimelineDash -> R.layout.layout_timeline_card_dash
+            is OHealthOverview.OneTapVitals -> R.layout.layout_one_tap_vitals_card
         }
     }
 
@@ -653,6 +676,11 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             notifyItemChanged(index)
         } else if (heathOverViewData is OHealthOverview.CircadianAlignment) {
             val index = items.indexOfFirst { it is OHealthOverview.CircadianAlignment }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.OneTapVitals) {
+            val index = items.indexOfFirst { it is OHealthOverview.OneTapVitals }
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
@@ -777,6 +805,218 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
         }
 
+    }
+
+    class OneTapVitalsViewHolder(private val binding: LayoutOneTapVitalsCardBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        private var currentAnimator: android.animation.ValueAnimator? = null
+        private var expandedTile: ViewGroup? = null
+
+        fun bind(data: OHealthOverview.OneTapVitals) {
+            binding.tvTitle.text = data.title
+
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+
+            binding.tvHrValue.text = data.hrValue?.let { "$it" } ?: "--"
+            binding.tvHrAgo.text = data.hrLastTime ?: ""
+
+            binding.tvStressValue.text = data.stressValue?.let { "$it" } ?: "--"
+            binding.tvStressAgo.text = data.stressLastTime ?: ""
+
+            binding.tvSpO2Value.text = data.spo2Value?.let { "$it%" } ?: "--"
+            binding.tvSpO2Ago.text = data.spo2LastTime ?: ""
+
+            binding.tvSkinValue.text = data.skinTempValue?.let { String.format("%.1f°C", it) } ?: "--"
+            binding.tvSkinAgo.text = data.skinTempLastTime ?: ""
+
+            if (data.expandedType != null) {
+                expandTile(data, null)
+            } else {
+                collapseTiles(data)
+            }
+
+            binding.itemHR.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.HR, data, binding.itemHR) }
+            binding.itemStress.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.STRESS, data, binding.itemStress) }
+            binding.itemSpO2.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SPO2, data, binding.itemSpO2) }
+            binding.itemSkinTemp.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SKIN_TEMP, data, binding.itemSkinTemp) }
+        }
+
+        private fun onItemClicked(type: OHealthOverview.VitalsType, data: OHealthOverview.OneTapVitals, tile: ViewGroup) {
+            itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked(type))
+            data.expandedType = type
+            data.measuring = true
+            expandTile(data, tile)
+        }
+
+        private fun collapseTiles(data: OHealthOverview.OneTapVitals) {
+            stopHeartAnimation()
+            expandedTile = null
+
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+
+            // ensure all children of tiles are visible and measuring hidden
+            listOf(binding.itemHR, binding.itemStress, binding.itemSpO2, binding.itemSkinTemp).forEach { t ->
+                for (i in 0 until t.childCount) {
+                    val child = t.getChildAt(i)
+                    if (child.id == R.id.tileMeasuringRoot) {
+                        child.visibility = View.GONE
+                    } else {
+                        child.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            binding.lytCollapsed.visibility = View.VISIBLE
+            binding.lytCollapsed.alpha = 1f
+        }
+
+        private fun expandTile(data: OHealthOverview.OneTapVitals, targetTile: ViewGroup?) {
+            val tile = targetTile ?: when (data.expandedType) {
+                OHealthOverview.VitalsType.HR -> binding.itemHR
+                OHealthOverview.VitalsType.STRESS -> binding.itemStress
+                OHealthOverview.VitalsType.SPO2 -> binding.itemSpO2
+                OHealthOverview.VitalsType.SKIN_TEMP -> binding.itemSkinTemp
+                else -> binding.itemHR
+            }
+
+            val context = binding.root.context
+            val parent = binding.lytCollapsed
+            val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
+            // ensure measuring is hidden during the width expansion
+            measuringRoot.visibility = View.GONE
+
+            // Smooth width expansion using ChangeBounds
+
+            for (i in 0 until tile.childCount) {
+                val child = tile.getChildAt(i)
+                if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
+            }
+
+            val transition = AutoTransition().apply { duration = 200 }
+
+            measuringRoot.alpha = 0f
+            measuringRoot.visibility = View.VISIBLE
+            measuringRoot.animate().alpha(1f).setDuration(600).start()
+
+            transition.addListener(object : Transition.TransitionListener {
+                override fun onTransitionStart(transition: Transition) {}
+                override fun onTransitionEnd(transition: Transition) {
+                    transition.removeListener(this)
+                    // After tile expanded, swap content to measuring with fade
+
+                   /* measuringRoot.alpha = 0f
+                    measuringRoot.visibility = View.VISIBLE
+                    measuringRoot.animate().alpha(1f).setDuration(60).start()*/
+                }
+                override fun onTransitionCancel(transition: Transition) {}
+                override fun onTransitionPause(transition: Transition) {}
+                override fun onTransitionResume(transition: Transition) {}
+            })
+            TransitionManager.beginDelayedTransition(parent, transition)
+            listOf(binding.itemHR, binding.itemStress, binding.itemSpO2, binding.itemSkinTemp).forEach {
+                it.visibility = if (it == tile) View.VISIBLE else View.GONE
+            }
+
+            expandedTile = tile
+
+            val title = when (data.expandedType) {
+                OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
+                OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
+                OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
+                OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
+                else -> "Measuring..."
+            }
+            measuringRoot.findViewById<TextView>(R.id.tvMeasuringTitle).text = title
+            measuringRoot.findViewById<TextView>(R.id.tvMeasuringHint).text = context.getString(R.string.text_measuring_may_take_30_sec)
+
+            // HR icon animation only for HR inside overlay
+            val ivHeart = measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
+            if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                ivHeart.visibility = View.VISIBLE
+                startHeartAnimation(ivHeart, data.hrValue ?: 60)
+            } else {
+                ivHeart.visibility = View.GONE
+                stopHeartAnimation(ivHeart)
+            }
+
+            // Animate only the tapped tile for smoother focus
+            animateTileExpand(tile)
+
+            // Collapse on tap of expanded tile
+            tile.setOnClickListener {
+                val t = expandedTile ?: tile
+                val parent = binding.lytCollapsed
+                val measuring = t.findViewById<View>(R.id.tileMeasuringRoot)
+
+                // Begin width shrink via ChangeBounds while fading out measuring
+                val transition = AutoTransition().apply { duration = 220 }
+                TransitionManager.beginDelayedTransition(parent, transition)
+                binding.itemHR.visibility = if (data.featureConfig.showHR) View.VISIBLE else View.GONE
+                binding.itemStress.visibility = if (data.featureConfig.showStress) View.VISIBLE else View.GONE
+                binding.itemSpO2.visibility = if (data.featureConfig.showSpO2) View.VISIBLE else View.GONE
+                binding.itemSkinTemp.visibility = if (data.featureConfig.showSkinTemp) View.VISIBLE else View.GONE
+
+                measuring.visibility = View.GONE
+                measuring?.animate()?.alpha(0f)?.setDuration(220)?.withEndAction {
+                    for (i in 0 until t.childCount) {
+                        val child = t.getChildAt(i)
+                        if (child.id != R.id.tileMeasuringRoot) child.visibility = View.VISIBLE
+                    }
+                }?.start()
+
+                data.expandedType = null
+                data.measuring = false
+                expandedTile = null
+
+                // restore expansion listeners immediately
+                binding.itemHR.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.HR, data, binding.itemHR) }
+                binding.itemStress.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.STRESS, data, binding.itemStress) }
+                binding.itemSpO2.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SPO2, data, binding.itemSpO2) }
+                binding.itemSkinTemp.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SKIN_TEMP, data, binding.itemSkinTemp) }
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
+            }
+        }
+
+        private fun animateTileExpand(source: View) {
+            source.animate().cancel()
+            source.animate().scaleX(1f).scaleY(1f).setDuration(1000)
+                .withEndAction {
+                    source.animate().scaleX(1f).scaleY(1f).setDuration(1000).start()
+                }.start()
+        }
+
+        private fun startHeartAnimation(target: ImageView, bpm: Int) {
+            stopHeartAnimation(target)
+            val safeBpm = bpm.coerceIn(40, 180)
+            val beatDurationMs = (60000f / safeBpm).toLong()
+            val animator = android.animation.ValueAnimator.ofFloat(1f, 1.2f)
+            animator.duration = beatDurationMs / 2
+            animator.repeatCount = android.animation.ValueAnimator.INFINITE
+            animator.repeatMode = android.animation.ValueAnimator.REVERSE
+            animator.addUpdateListener {
+                val scale = it.animatedValue as Float
+                target.scaleX = scale
+                target.scaleY = scale
+            }
+            animator.start()
+            currentAnimator = animator
+        }
+
+        private fun stopHeartAnimation(target: ImageView? = null) {
+            currentAnimator?.cancel()
+            currentAnimator = null
+            target?.let {
+                it.scaleX = 1f
+                it.scaleY = 1f
+            }
+        }
     }
 
     class StressCardViewHolder(private val binding: LayoutStressDashMeasureBinding) :
@@ -3368,6 +3608,3 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 interface AlertClickListener {
     fun onAlertClicked(alertType: AlertType)
 }
-
-
-

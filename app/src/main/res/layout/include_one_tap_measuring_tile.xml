@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tileMeasuringRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:visibility="visible"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tvMeasuringTitle"
+        style="@style/S12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"
+        tools:text="Measuring..." />
+
+    <TextView
+        android:id="@+id/tvMeasuringHint"
+        style="@style/S12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/text_this_may_take_up_to_30_seconds"
+        android:textColor="#B2BFBFBF"
+        android:textSize="8sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/pbMeasuring"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:indeterminate="true" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/ivHeartAnim"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="40dp"
+            android:src="@drawable/ic_hr_measure"
+            tools:visibility="visible"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>
+

@@ -258,7 +258,7 @@ class OAddWorkoutViewModel
         return null
     }
 
-    fun addWorkout(srcKey: String?) {
+    fun addWorkout(srcKey: String?=null) {
 
         val type = if (workoutListModal?.activityType?.isNotEmpty() == true) {
             workoutListModal?.activityType

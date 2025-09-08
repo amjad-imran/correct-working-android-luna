@@ -198,6 +198,9 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.OnGetStartedCircadianOnboardingClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnTimelineCardClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnOneTapVitalsMeasureClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
             }
         }
 
