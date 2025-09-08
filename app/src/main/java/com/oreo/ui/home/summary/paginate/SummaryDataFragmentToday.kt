@@ -99,6 +99,7 @@ import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.http2.Http2Reader
@@ -661,12 +662,74 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {
-
+                    viewModel.stateOneTapVitalsCard.value?.let {
+                        performOneTapVitalsOp(type.type)
+                    }
                 }
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsMeasureClicked -> {}
+
+                is OSummaryHealthOverviewClickEnum.UpdateOneTapVitalsCardState -> {
+                    viewModel.stateOneTapVitalsCard.value?.let {
+                        viewModel.viewModelScope.launch {
+                            delay(3000L)
+                            viewModel.stateOneTapVitalsCard.postValue(
+                                it.apply {
+                                    this.measureState = type.measureState
+                                    if(type.measureState == null){
+                                        this.expandedType = null
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
             }
         }
 
+    }
+
+    private fun performOneTapVitalsOp(type: OHealthOverview.VitalsType) {
+        if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            return
+        }
+        if(viewModel.stateOneTapVitalsCard.value?.measuring==true){
+            return
+        }
+        viewModel.stateOneTapVitalsCard.value?.apply {
+            this.expandedType = type
+        }
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            context?.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                if (isWorkerRunning) {
+                    viewModel.stateOneTapVitalsCard.postValue(viewModel.stateOneTapVitalsCard.value?.apply {
+                        this.measureState = TapMeasureState.ERROR
+                    })
+                    return@launch
+                }
+                when (type) {
+                    OHealthOverview.VitalsType.HR -> {
+                        viewModel.performOneTapVitalsOp(ManualMeasureType.HEART_RATE, true)
+                    }
+
+                    OHealthOverview.VitalsType.STRESS -> {
+                        viewModel.performOneTapVitalsOp(ManualMeasureType.STRESS, true)
+                    }
+
+                    OHealthOverview.VitalsType.SPO2 -> {
+                        viewModel.performOneTapVitalsOp(ManualMeasureType.BLOOD_OXYGEN, true)
+                    }
+
+                    OHealthOverview.VitalsType.SKIN_TEMP -> {
+                        viewModel.performOneTapVitalsOp(ManualMeasureType.BODY_TEMPERATURE, true)
+                    }
+
+                }
+                viewModel.stateOneTapVitalsCard.value?.apply {
+                    this.measuring = true
+                }
+            }
+        }
     }
 
     private fun performOnHeartMeasureImvClicked(data: OHealthOverview.HeartRateDataModel) {
@@ -1467,6 +1530,22 @@ class SummaryDataFragmentToday :
             }
         }
 
+        viewModel.sessionManager.manualMeasurementBodyTemp.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                if (it) {
+                    viewModel.updateManualValue(ManualMeasureType.BODY_TEMPERATURE)
+                }
+            }
+        }
+
+        viewModel.sessionManager.manualMeasurementBloodOxygen.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                if (it) {
+                    viewModel.updateManualValue(ManualMeasureType.BLOOD_OXYGEN)
+                }
+            }
+        }
+
         viewModel.sessionManager.bluetoothStateDash.observe(viewLifecycleOwner) {
             viewModel.updateAlerts()
             //viewModel.updateBluetoothStateInList(it)
@@ -1595,6 +1674,14 @@ class SummaryDataFragmentToday :
 //            } else {
 //                binding.contentMain.lytSleepAvg.root.gone()
 //            }
+        }
+
+        viewModel.stateOneTapVitalsCard.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.viewModelScope.launch {
+                    healthOverviewAdapter.updateData(it)
+                }
+            }
         }
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {

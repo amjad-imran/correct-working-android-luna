@@ -246,6 +246,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
     var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
     var summaryAvailable: Boolean? = false
+
+    var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
     //
 
     fun getStressWalkthroughShownStatus(): Boolean {
@@ -1372,7 +1374,7 @@ class SummaryDataViewModelToday @Inject constructor(
             return null
         }
 
-        return OHealthOverview.OneTapVitals(
+        val oneTapVitals = OHealthOverview.OneTapVitals(
             title = resourceProvider.getString(R.string.text_one_tap_vitals),
             hrValue = hrValue,
             hrLastTime = hrLastTime,
@@ -1386,6 +1388,12 @@ class SummaryDataViewModelToday @Inject constructor(
             expandedType = null,
             measuring = false
         )
+
+        withContext(Dispatchers.Main) {
+            stateOneTapVitalsCard.value = oneTapVitals
+        }
+
+        return oneTapVitals
     }
 
     private fun getTimelineCard(): OHealthOverview?{
@@ -3310,6 +3318,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
+    fun performOneTapVitalsOp(type: ManualMeasureType, status: Boolean){
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetManualMeasurement(
+                type, status
+            )
+        )
+    }
+
     fun updateManualValue(type: ManualMeasureType) {
 
         if (type == ManualMeasureType.STRESS) {
@@ -3318,6 +3334,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 if (manualMeasurement.isError) {
                     stateStressCard.value?.measureState = TapMeasureState.ERROR
+                    stateOneTapVitalsCard.value?.let {
+                        stateOneTapVitalsCard.postValue(it.apply {
+                            this.measureState = TapMeasureState.ERROR
+                            this.measuring = false
+                        })
+                    }
                 } else {
                     if (manualMeasurement.isMeasuring) {
                         stateStressCard.value?.measureState = TapMeasureState.MEASURING
@@ -3325,6 +3347,17 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateStressCard.value?.measureState = TapMeasureState.LAST_MEASURED
                         stateStressCard.value?.lastTime =
                             resourceProvider.getString(R.string.text_just_now)
+
+                        //
+                        stateOneTapVitalsCard.value?.let {
+                            stateOneTapVitalsCard.postValue(it.apply {
+                                this.measureState = TapMeasureState.LAST_MEASURED
+                                this.stressValue = manualMeasurement.value
+                                this.stressLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.measuring = false
+                            })
+                        }
+                        //
                     }
                     stateStressCard.value?.value = manualMeasurement.value
                 }
@@ -3336,6 +3369,12 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 if (manualMeasurement.isError) {
                     stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
+                    stateOneTapVitalsCard.value?.let {
+                        stateOneTapVitalsCard.postValue(it.apply {
+                            this.measureState = TapMeasureState.ERROR
+                            this.measuring = false
+                        })
+                    }
                 } else {
                     if (manualMeasurement.isMeasuring) {
                         stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
@@ -3343,10 +3382,79 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
                         stateHeartRateCard.value?.lastTime =
                             resourceProvider.getString(R.string.text_just_now)
+
+                        //
+                        stateOneTapVitalsCard.value?.let {
+                            stateOneTapVitalsCard.postValue(it.apply {
+                                this.measureState = TapMeasureState.LAST_MEASURED
+                                this.hrValue = manualMeasurement.value
+                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.measuring = false
+                            })
+                        }
+                        //
                     }
                     stateHeartRateCard.value?.value = manualMeasurement.value.toString()
                 }
                 stateHeartRateCard.postValue(stateHeartRateCard.value)
+            }
+        }
+        else if (type == ManualMeasureType.BLOOD_OXYGEN) {
+            val manualMeasurement = ringDataStore.getManualMeasurementValueBodyTemp()
+            if (manualMeasurement != null) {
+
+                if (manualMeasurement.isError) {
+                    stateOneTapVitalsCard.value?.let {
+                        stateOneTapVitalsCard.postValue(it.apply {
+                            this.measureState = TapMeasureState.ERROR
+                            this.measuring = false
+                        })
+                    }
+                } else {
+                    if (manualMeasurement.isMeasuring) {
+
+                    } else {
+                        //
+                        stateOneTapVitalsCard.value?.let {
+                            stateOneTapVitalsCard.postValue(it.apply {
+                                this.measureState = TapMeasureState.LAST_MEASURED
+                                this.hrValue = manualMeasurement.value
+                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.measuring = false
+                            })
+                        }
+                        //
+                    }
+                }
+            }
+        }
+        else if (type == ManualMeasureType.BODY_TEMPERATURE) {
+            val manualMeasurement = ringDataStore.getManualMeasurementValueBloodOxygen()
+            if (manualMeasurement != null) {
+
+                if (manualMeasurement.isError) {
+                    stateOneTapVitalsCard.value?.let {
+                        stateOneTapVitalsCard.postValue(it.apply {
+                            this.measureState = TapMeasureState.ERROR
+                            this.measuring = false
+                        })
+                    }
+                } else {
+                    if (manualMeasurement.isMeasuring) {
+
+                    } else {
+                        //
+                        stateOneTapVitalsCard.value?.let {
+                            stateOneTapVitalsCard.postValue(it.apply {
+                                this.measureState = TapMeasureState.LAST_MEASURED
+                                this.hrValue = manualMeasurement.value
+                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.measuring = false
+                            })
+                        }
+                        //
+                    }
+                }
             }
         }
     }

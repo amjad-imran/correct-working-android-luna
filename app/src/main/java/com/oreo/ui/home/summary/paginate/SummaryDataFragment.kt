@@ -201,6 +201,7 @@ class SummaryDataFragment :
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsMeasureClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
+                is OSummaryHealthOverviewClickEnum.UpdateOneTapVitalsCardState -> {}
             }
         }
 

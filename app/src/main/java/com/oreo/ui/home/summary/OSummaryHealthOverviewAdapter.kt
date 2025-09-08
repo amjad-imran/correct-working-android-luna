@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.transition.AutoTransition
 import android.transition.Transition
 import android.transition.TransitionManager
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -181,6 +182,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class OnOneTapVitalsMeasureClicked(val type: OHealthOverview.VitalsType) :
         OSummaryHealthOverviewClickEnum()
     object OnOneTapVitalsCollapsed : OSummaryHealthOverviewClickEnum()
+    data class UpdateOneTapVitalsCardState(val measureState: TapMeasureState?) : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -926,15 +928,101 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             expandedTile = tile
 
-            val title = when (data.expandedType) {
-                OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
-                OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
-                OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
-                OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
-                else -> "Measuring..."
+            //
+            val titleTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringTitle)
+            val hintTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringHint)
+
+            val progressBar = measuringRoot.findViewById<ProgressBar>(R.id.pbMeasuring)
+
+            val lytSuccess = measuringRoot.findViewById<LinearLayout>(R.id.lytMeasureSuccess)
+            val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
+
+            val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
+            //
+
+            when(data.measureState){
+                /*TapMeasureState.NO_DEVICE -> {}*/
+                TapMeasureState.LAST_MEASURED -> {
+                    progressBar.gone()
+                    retryBtn.gone()
+                    val title = when (data.expandedType) {
+                        OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
+                        OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
+                        OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
+                        OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
+                        else -> "Measuring..."
+                    }
+                    titleTextViewExp.text = title
+                    hintTextViewExp.text = context.getString(R.string.text_measuring_may_take_30_sec)
+                    when (data.expandedType) {
+                        OHealthOverview.VitalsType.HR -> {
+                            tvSuccessVal.text = data.hrValue.toString()
+                        }
+                        OHealthOverview.VitalsType.STRESS -> {
+                            tvSuccessVal.text = data.stressValue.toString()
+                        }
+                        OHealthOverview.VitalsType.SPO2 -> {
+                            tvSuccessVal.text = data.spo2Value.toString()
+                        }
+                        OHealthOverview.VitalsType.SKIN_TEMP -> {
+                            tvSuccessVal.text = data.skinTempValue.toString()
+                        }
+                        null -> {}
+                        //
+                    }
+                    lytSuccess.visible()
+                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.UpdateOneTapVitalsCardState(null))
+                    /*collapseTiles(data.apply {
+                        this.expandedType = null
+                        this.measuring = false
+                        this.measureState = null
+                    })*/
+                }
+                TapMeasureState.ERROR -> {
+                    progressBar.gone()
+                    lytSuccess.gone()
+                    retryBtn.apply {
+                        setOnClickListener {
+                            data.expandedType?.let { type ->
+                                OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked(type)
+                                data.measureState = null
+                                lytSuccess.gone()
+                                retryBtn.gone()
+                                progressBar.visible()
+                            }
+                        }
+                        visible()
+                    }
+                    val title = when (data.expandedType) {
+                        OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
+                        OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
+                        OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
+                        OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
+                        else -> "Measuring..."
+                    }
+                    titleTextViewExp.text = title
+                    hintTextViewExp.text = context.getString(R.string.text_measuring_may_take_30_sec)
+
+                }
+                /*TapMeasureState.MEASURING -> {}
+                TapMeasureState.DEFAULT -> {}
+                TapMeasureState.ERROR -> {}
+                TapMeasureState.HIDE -> {}*/
+                else -> {
+                    lytSuccess.gone()
+                    retryBtn.gone()
+                    progressBar.visible()
+                    val title = when (data.expandedType) {
+                        OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
+                        OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
+                        OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
+                        OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
+                        else -> "Measuring..."
+                    }
+                    titleTextViewExp.text = title
+                    hintTextViewExp.text = context.getString(R.string.text_measuring_may_take_30_sec)
+                }
             }
-            measuringRoot.findViewById<TextView>(R.id.tvMeasuringTitle).text = title
-            measuringRoot.findViewById<TextView>(R.id.tvMeasuringHint).text = context.getString(R.string.text_measuring_may_take_30_sec)
 
             // HR icon animation only for HR inside overlay
             val ivHeart = measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
