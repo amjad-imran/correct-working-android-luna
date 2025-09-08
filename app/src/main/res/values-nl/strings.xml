@@ -2190,5 +2190,12 @@
     <string name="text_please_select_start_time">Selecteer de starttijd</string>
     <string name="text_please_select_end_time">Selecteer de eindtijd</string>
     <string name="text_please_check_end_time">Controleer de eindtijd</string>
+    <string name="text_one_tap_vitals">Eén-tik vitale functies</string>
+    <string name="text_measuring_may_take_30_sec">Dit kan tot 30 seconden duren</string>
+    <string name="text_measuring_heart_rate">Hartslag wordt gemeten...</string>
+    <string name="text_measuring_stress">Stress wordt gemeten...</string>
+    <string name="text_measuring_skin_temp">Huidtemperatuur wordt gemeten...</string>
+    <string name="text_measure">Meten</string>
+    <string name="text_this_may_take_up_to_30_seconds">Dit kan tot 30 seconden duren</string>
 
 </resources>

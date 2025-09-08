@@ -775,12 +775,6 @@
     <string name="text_hr_variability">HR variability</string>
     <string name="text_body_tempreature">Body temperature</string>
     <string name="text_skin_temperature">Skin temperature</string>
-    <string name="text_one_tap_vitals">One Tap Vitals</string>
-    <string name="text_measuring_may_take_30_sec">This may take up to 30 seconds</string>
-    <string name="text_measuring_heart_rate">Measuring Heart rate...</string>
-    <string name="text_measuring_stress">Measuring Stress...</string>
-    <string name="text_measuring_skin_temp">Measuring Skin temp...</string>
-    <string name="text_measure">Measure</string>
     <string name="text_respiratory_rate">Respiratory rate</string>
     <string name="text_heart_rate_variability">Heart rate variability</string>
     <string name="text_average_hrv">Average HRV</string>
@@ -2167,10 +2161,16 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_you_ve_returned_to_alignment_maintain_the_rhythm_with_regular_sleep_and_morning_light">You’ve returned to alignment — maintain the rhythm with regular sleep and morning light.</string>
     <string name="text_you_ve_returned_to_ideal_alignment_keep_reinforcing_it_with_regular_sleep_and_morning_light">You’ve returned to ideal alignment — keep reinforcing it with regular sleep and morning light.</string>
     <string name="text_you_re_drifting_earlier_try_delaying_your_evening_routine_and_getting_light_later_in_the_day">You’re drifting earlier — try delaying your evening routine and getting light later in the day.</string>
-    <string name="text_this_may_take_up_to_30_seconds">This may take up to 30 seconds</string>
     <string name="text_start_time_should_be_less_than_end_time">Start time should be less than end time</string>
     <string name="text_please_select_start_time">Please select start time</string>
     <string name="text_please_select_end_time">Please select end time</string>
     <string name="text_please_check_end_time">Please check end time</string>
+    <string name="text_one_tap_vitals">One Tap Vitals</string>
+    <string name="text_measuring_may_take_30_sec">This may take up to 30 seconds</string>
+    <string name="text_measuring_heart_rate">Measuring Heart rate...</string>
+    <string name="text_measuring_stress">Measuring Stress...</string>
+    <string name="text_measuring_skin_temp">Measuring Skin temp...</string>
+    <string name="text_measure">Measure</string>
+    <string name="text_this_may_take_up_to_30_seconds">This may take up to 30 seconds</string>
 
 </resources>

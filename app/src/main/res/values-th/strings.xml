@@ -2196,5 +2196,12 @@
     <string name="text_please_select_start_time">โปรดเลือกเวลาเริ่มต้น</string>
     <string name="text_please_select_end_time">โปรดเลือกเวลาสิ้นสุด</string>
     <string name="text_please_check_end_time">โปรดตรวจสอบเวลาสิ้นสุด</string>
+    <string name="text_one_tap_vitals">วัดสัญญาณชีพด้วยการแตะครั้งเดียว</string>
+    <string name="text_measuring_may_take_30_sec">อาจใช้เวลาสูงสุด 30 วินาที</string>
+    <string name="text_measuring_heart_rate">กำลังวัดอัตราการเต้นของหัวใจ...</string>
+    <string name="text_measuring_stress">กำลังวัดความเครียด...</string>
+    <string name="text_measuring_skin_temp">กำลังวัดอุณหภูมิผิว...</string>
+    <string name="text_measure">วัด</string>
+    <string name="text_this_may_take_up_to_30_seconds">อาจใช้เวลาสูงสุด 30 วินาที</string>
 
 </resources>

@@ -2214,5 +2214,12 @@
     <string name="text_please_select_start_time">Por favor, selecione a hora de início</string>
     <string name="text_please_select_end_time">Por favor, selecione a hora de término</string>
     <string name="text_please_check_end_time">Por favor, verifique a hora de término</string>
+    <string name="text_one_tap_vitals">Sinais vitais em um toque</string>
+    <string name="text_measuring_may_take_30_sec">Isso pode levar até 30 segundos</string>
+    <string name="text_measuring_heart_rate">Medindo a frequência cardíaca...</string>
+    <string name="text_measuring_stress">Medindo o estresse...</string>
+    <string name="text_measuring_skin_temp">Medindo a temperatura da pele...</string>
+    <string name="text_measure">Medir</string>
+    <string name="text_this_may_take_up_to_30_seconds">Isso pode levar até 30 segundos</string>
 
 </resources>

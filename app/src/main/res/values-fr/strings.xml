@@ -2310,5 +2310,12 @@ onjour, Luna"</string>
     <string name="text_please_select_start_time">Veuillez sélectionner l\'heure de début</string>
     <string name="text_please_select_end_time">Veuillez sélectionner l\'heure de fin</string>
     <string name="text_please_check_end_time">Veuillez vérifier l\'heure de fin</string>
+    <string name="text_one_tap_vitals">Signes vitaux en un clic</string>
+    <string name="text_measuring_may_take_30_sec">Cela peut prendre jusqu'à 30 secondes</string>
+    <string name="text_measuring_heart_rate">Mesure de la fréquence cardiaque...</string>
+    <string name="text_measuring_stress">Mesure du stress...</string>
+    <string name="text_measuring_skin_temp">Mesure de la température de la peau...</string>
+    <string name="text_measure">Mesurer</string>
+    <string name="text_this_may_take_up_to_30_seconds">Cela peut prendre jusqu'à 30 secondes</string>
 
 </resources>

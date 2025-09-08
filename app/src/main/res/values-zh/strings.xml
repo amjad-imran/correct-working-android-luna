@@ -2184,5 +2184,12 @@
     <string name="text_please_select_start_time">请选择开始时间</string>
     <string name="text_please_select_end_time">请选择结束时间</string>
     <string name="text_please_check_end_time">请检查结束时间</string>
+    <string name="text_one_tap_vitals">一键生命体征</string>
+    <string name="text_measuring_may_take_30_sec">这可能需要长达30秒</string>
+    <string name="text_measuring_heart_rate">正在测量心率...</string>
+    <string name="text_measuring_stress">正在测量压力...</string>
+    <string name="text_measuring_skin_temp">正在测量皮肤温度...</string>
+    <string name="text_measure">测量</string>
+    <string name="text_this_may_take_up_to_30_seconds">这可能需要长达30秒</string>
 
 </resources>

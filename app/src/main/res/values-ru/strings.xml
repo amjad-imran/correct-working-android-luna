@@ -2212,5 +2212,12 @@
     <string name="text_please_select_start_time">Пожалуйста, выберите время начала</string>
     <string name="text_please_select_end_time">Пожалуйста, выберите время окончания</string>
     <string name="text_please_check_end_time">Пожалуйста, проверьте время окончания</string>
+    <string name="text_one_tap_vitals">Жизненные показатели в один клик</string>
+    <string name="text_measuring_may_take_30_sec">Это может занять до 30 секунд</string>
+    <string name="text_measuring_heart_rate">Измерение частоты сердечных сокращений...</string>
+    <string name="text_measuring_stress">Измерение уровня стресса...</string>
+    <string name="text_measuring_skin_temp">Измерение температуры кожи...</string>
+    <string name="text_measure">Измерить</string>
+    <string name="text_this_may_take_up_to_30_seconds">Это может занять до 30 секунд</string>
 
 </resources>

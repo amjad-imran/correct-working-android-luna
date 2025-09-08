@@ -2161,5 +2161,12 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_please_select_start_time">Por favor, seleccione la hora de inicio</string>
     <string name="text_please_select_end_time">Por favor, seleccione la hora de finalización</string>
     <string name="text_please_check_end_time">Por favor, verifique la hora de finalización</string>
+    <string name="text_one_tap_vitals">Signos vitales con un toque</string>
+    <string name="text_measuring_may_take_30_sec">Esto puede tardar hasta 30 segundos</string>
+    <string name="text_measuring_heart_rate">Midiendo la frecuencia cardíaca...</string>
+    <string name="text_measuring_stress">Midiendo el nivel de estrés...</string>
+    <string name="text_measuring_skin_temp">Midiendo la temperatura de la piel...</string>
+    <string name="text_measure">Medir</string>
+    <string name="text_this_may_take_up_to_30_seconds">Esto puede tardar hasta 30 segundos</string>
 
 </resources>
