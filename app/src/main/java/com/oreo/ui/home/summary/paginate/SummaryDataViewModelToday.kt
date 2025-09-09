@@ -1172,6 +1172,13 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
+            val hasCircadianKey = priorityList.find { it.key.equals("circadian_alignment", true) }
+            if (hasCircadianKey == null) {
+                getCircadianAlignmentCardData()?.let {
+                    userActivities.add(it)
+                }
+            }
+
             val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
             if (hasCaffeineKey == null) {
                 getCaffeineCardData()?.let {
