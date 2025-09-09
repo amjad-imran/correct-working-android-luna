@@ -663,7 +663,6 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {
                     viewModel.stateOneTapVitalsCard.value?.let {
-                        it.measureState = null
                         performOneTapVitalsOp(type.type)
                     }
                 }
@@ -695,22 +694,24 @@ class SummaryDataFragmentToday :
         if (viewModel.stateOneTapVitalsCard.value?.measuring == true) {
             return
         }
-        viewModel.stateOneTapVitalsCard.value?.apply {
-            this.expandedType = type
-        }
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             context?.let {
                 val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
                 if (isWorkerRunning) {
-                    viewModel.stateOneTapVitalsCard.postValue(viewModel.stateOneTapVitalsCard.value?.apply {
+                    /*viewModel.stateOneTapVitalsCard.postValue(viewModel.stateOneTapVitalsCard.value?.apply {
                         this.measureState = TapMeasureState.ERROR
-                    })
+                    })*/
                     return@launch
                 }
 
-                viewModel.stateOneTapVitalsCard.value?.apply {
-                    this.measuring = true
-                }
+
+                viewModel.stateOneTapVitalsCard.postValue(
+                    viewModel.stateOneTapVitalsCard.value?.copy(
+                        measuring = true,
+                        expandedType = type,
+                        measureState = TapMeasureState.MEASURING
+                    )
+                )
 
                 when (type) {
                     OHealthOverview.VitalsType.HR -> {
@@ -1086,7 +1087,6 @@ class SummaryDataFragmentToday :
         }
 
         viewModel.stateCircadianCard.observe(this) {
-            LOGS.d("cjkacbaskc : $it")
             healthOverviewAdapter.updateData(it.first)
         }
 
