@@ -4,14 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.User
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -30,12 +34,16 @@ constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager,
     val ringDataSore: RingDataStore,
-    val updateRepository: UpdateRepository
+    val updateRepository: UpdateRepository,
+    private val userRepository: UserRepository,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
 
     var noUpdateAvailable = MutableLiveData<Event<Boolean>>()
     var otaUpdateInfo = MutableLiveData<Event<OtaUpdateModel?>>()
+
+    var userInfoListData = MutableLiveData<ArrayList<AboutDeviceData>>()
     fun checkOtaVersionServer(pair: Pair<Int, Int>) {
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -142,6 +150,31 @@ constructor(
                 sessionManager.needDfuUpdate.value?.peekContent() ?: false
             )
             addProperty("platform", "android")
+        }
+    }
+
+    fun getUserData() {
+        viewModelScope.launch {
+            val user = userRepository.getUser()
+            user?.let { userInfoListData.postValue(generateUserInfoData(it)) }
+        }
+    }
+
+    private fun generateUserInfoData(user: User): ArrayList<AboutDeviceData> {
+        return ArrayList<AboutDeviceData>().apply {
+            this.add(
+                AboutDeviceData(
+                    resourcesProvider.getString(R.string.text_mob_no),
+                    "${user.mobile}"
+                )
+            )
+
+            this.add(
+                AboutDeviceData(
+                    resourcesProvider.getString(R.string.text_email),
+                    "${user.email}"
+                )
+            )
         }
     }
 
