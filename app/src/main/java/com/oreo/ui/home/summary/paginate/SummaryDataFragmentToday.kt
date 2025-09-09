@@ -663,6 +663,7 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}
                 is OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked -> {
                     viewModel.stateOneTapVitalsCard.value?.let {
+                        it.measureState = null
                         performOneTapVitalsOp(type.type)
                     }
                 }
