@@ -67,6 +67,8 @@ sealed class QueryCallback {
     class DeleteStock(val success: Boolean) : QueryCallback()
     class BleCallingSwitchObtained(val success: Boolean) : QueryCallback()
     class SportWidgetSortList(val sportWidgetSortList: ArrayList<Widget>) : QueryCallback()
+
+    class NfcSleepErr() : QueryCallback()
     class WidgetSortListObtained(val widgetList: List<Widget>) : QueryCallback()
     class OpenFindMyPhoneActivity(val isRinging: Boolean) : QueryCallback()
     class OpenCameraActivity(val close: Boolean) : QueryCallback()

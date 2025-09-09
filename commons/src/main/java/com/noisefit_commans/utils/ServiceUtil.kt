@@ -76,6 +76,9 @@ object ServiceUtil {
             QueryAction.GetFirmwareLogs -> {
                 queryAction.getFirmwareLogs()
             }
+            QueryAction.GetSleepException -> {
+                queryAction.getSleepException()
+            }
             QueryAction.GetHandWashData -> {
                 queryAction.getHandwashData()
             }
@@ -369,6 +372,9 @@ object ServiceUtil {
 
             is UpdateDeviceAction.SetRestartDevice -> {
                 updateAction.setRestartDevice()
+            }
+            is UpdateDeviceAction.SetShutDownDevice ->{
+                updateAction.setShutDownDevice()
             }
 
             is UpdateDeviceAction.SetDeviceUnits -> {

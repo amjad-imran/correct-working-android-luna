@@ -124,7 +124,6 @@ class CaffeineGraphView : View {
 
     fun updateData(data: CaffeineWindowData) {
 
-        LOGS.d("caffeine_graph $data")
         graphStart = LocalTime.parse(data.wakeUpTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         graphEnd = LocalTime.parse(data.bedTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
         caffeineStart =

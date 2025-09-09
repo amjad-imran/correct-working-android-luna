@@ -55,6 +55,7 @@ private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 //
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CANNY_STATE = "CANNY_STATE"
+private const val SLEEP_EXCEPTION = "SLEEP_EXCEPTION"
 //
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -65,6 +66,14 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun saveSleepException(state: Boolean) {
+        mPrefs.edit().putBoolean(SLEEP_EXCEPTION, state).commit()
+    }
+
+    override fun getSleepException(): Boolean {
+        return mPrefs.getBoolean(SLEEP_EXCEPTION, false)
+    }
 
     override fun setCannyState(enableCanny: Boolean) {
         mPrefs.edit().putBoolean(CANNY_STATE, enableCanny).commit()
@@ -90,9 +99,9 @@ class RingDataStoreImpl
     //
     override fun getCustomHomeScreenData(): CustomHomeScreenModel? {
         val data = mPrefs.getString(CUSTOMIZE_HOME_SCREEN, null)
-        return if(data.isNullOrEmpty()){
+        return if (data.isNullOrEmpty()) {
             null
-        }else{
+        } else {
             gson.fromJson(data, CustomHomeScreenModel::class.java)
         }
     }

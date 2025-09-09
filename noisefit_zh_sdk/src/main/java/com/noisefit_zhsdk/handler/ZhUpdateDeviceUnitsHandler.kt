@@ -2243,6 +2243,29 @@ constructor(
     override fun setRestartDevice() {
     }
 
+    override fun setShutDownDevice() {
+        ControlBleTools.getInstance().shutdownDevice(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {
+                        LOGS.i("ShutDown Success")
+                        AppLogs.sendAppLogs("ShutDown Success")
+                    }
+
+                    else -> {
+                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.DrinkWaterUpdated(
+                                false
+                            )
+                        )
+                        LOGS.i("ShutDown Failed")
+                        AppLogs.sendAppLogs("ShutDown Failed")
+                    }
+                }
+            }
+        })
+    }
+
     override fun setDrinkWaterReminder(sedentaryData: SedentaryData) {
         LOGS.d(sedentaryData)
 

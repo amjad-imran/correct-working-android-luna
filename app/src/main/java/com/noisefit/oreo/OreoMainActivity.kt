@@ -45,6 +45,7 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
@@ -245,6 +246,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun initListener() {
+
+        binding.shutDownRingDialog.btnShutDownRing.setOnClickListener {
+            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                return@setOnClickListener
+            }
+            viewModel.sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetShutDownDevice())
+            viewModel.sessionManager.resetSleepException()
+
+        }
 
         binding.blurViewSelector.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
@@ -789,6 +799,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sessionManager.nfcSleepErr.observe(this) {
+            if (it) {
+                binding.shutDownRingDialog.root.visible()
+            } else {
+                binding.shutDownRingDialog.root.gone()
+            }
+        }
 
         viewModel.cannyFeedbackUrl.observe(this) {
             it.getContent()?.let {

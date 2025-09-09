@@ -54,6 +54,7 @@ sealed class QueryAction {
     object GetSportWidgetSortList : QueryAction()
     object GetSportModeInfo : QueryAction()
     object GetFirmwareLogs : QueryAction()
+    object GetSleepException : QueryAction()
     class MusicEventChanged(event: String) : QueryAction()
 
     object GetWatchPassword : QueryAction()
