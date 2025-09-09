@@ -1191,7 +1191,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 when (item.key) {
                     "one_tap_vitals" -> {
-                        getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
+                            getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                        }
                     }
                     "sleep" -> {
                         getSleepDataCard(
@@ -1244,8 +1246,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "heart_rate" -> {
-                        getHeartRateCard()?.let {
-                            userActivities.add(it)
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                            getHeartRateCard()?.let {
+                                userActivities.add(it)
+                            }
                         }
                     }
 
@@ -1286,8 +1290,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     }*/
 
                     "stress" -> {
-                        getStressCard(healthData)?.let {
-                            userActivities.add(it)
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                            getStressCard(healthData)?.let {
+                                userActivities.add(it)
+                            }
                         }
                     }
 
@@ -1339,7 +1345,24 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private suspend fun getOneTapVitalsCard(healthData: ServerUserHealthData): OHealthOverview.OneTapVitals? {
         // HR
-        val hrModel = userRepository.getSummaryHRHealthOverview()
+        val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
+            this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                serverUserHealthData,
+                this
+            )
+
+            val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+            this.lastMeasuredValue = lastMeasuredValue
+            this.lastMeasuredIndex = lastMeasuredIndex
+
+            getHrTrend(this.rawData, lastMeasuredIndex)?.let {
+                this.trendPercent = it
+            }
+
+            /*if (device == null) {
+                this.measureState = TapMeasureState.NO_DEVICE
+            }*/
+        }
         val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
         val hrLastTime: String? = try {
             if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
