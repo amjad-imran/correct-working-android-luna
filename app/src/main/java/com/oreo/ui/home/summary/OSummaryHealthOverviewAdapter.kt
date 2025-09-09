@@ -986,6 +986,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             data.expandedType?.let { type ->
                                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsItemClicked(type)
                                 data.measureState = null
+                                data.measuring = true
                                 lytSuccess.gone()
                                 retryBtn.gone()
                                 progressBar.visible()
@@ -1064,10 +1065,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 expandedTile = null
 
                 // restore expansion listeners immediately
-                binding.itemHR.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.HR, data, binding.itemHR) }
-                binding.itemStress.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.STRESS, data, binding.itemStress) }
-                binding.itemSpO2.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SPO2, data, binding.itemSpO2) }
-                binding.itemSkinTemp.setOnClickListener { onItemClicked(OHealthOverview.VitalsType.SKIN_TEMP, data, binding.itemSkinTemp) }
+                binding.itemHR.setOnClickListener { if(data.measureState == TapMeasureState.ERROR) onItemClicked(OHealthOverview.VitalsType.HR, data, binding.itemHR) }
+                binding.itemStress.setOnClickListener { if(data.measureState == TapMeasureState.ERROR) onItemClicked(OHealthOverview.VitalsType.STRESS, data, binding.itemStress) }
+                binding.itemSpO2.setOnClickListener { if(data.measureState == TapMeasureState.ERROR) onItemClicked(OHealthOverview.VitalsType.SPO2, data, binding.itemSpO2) }
+                binding.itemSkinTemp.setOnClickListener { if(data.measureState == TapMeasureState.ERROR) onItemClicked(OHealthOverview.VitalsType.SKIN_TEMP, data, binding.itemSkinTemp) }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
             }
         }
