@@ -2172,5 +2172,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_measuring_skin_temp">Measuring Skin temp...</string>
     <string name="text_measure">Measure</string>
     <string name="text_this_may_take_up_to_30_seconds">This may take up to 30 seconds</string>
+    <string name="text_skin_temp">Skin Temp.</string>
+    <string name="text_measuring_spo2">Measuring SpO2...</string>
 
 </resources>

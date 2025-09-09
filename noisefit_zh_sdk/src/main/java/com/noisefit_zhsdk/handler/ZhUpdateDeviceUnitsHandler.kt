@@ -299,7 +299,7 @@ constructor(
                 status
             ), object : SendCmdStateListener(null) {
                 override fun onState(state: SendCmdState) {
-                    LOGS.d(ZhQueryDeviceUnitsHandler.TAG, "$state")
+                    LOGS.d( "onMeasuring setManualMeasurement $state")
 
                     if (state == SendCmdState.NOT_SUPPORT) {
                         testUpdateDeviceDataCallback?.onUpdateDataReceived(

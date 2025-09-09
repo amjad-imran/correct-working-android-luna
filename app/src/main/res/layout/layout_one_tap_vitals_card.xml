@@ -27,6 +27,8 @@
         android:id="@+id/ivArrow"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
         android:src="@drawable/ic_arrow_right_cal"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +69,7 @@
             <TextView
                 android:id="@+id/tvHrValue"
                 style="@style/S24"
+                android:layout_marginTop="14dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="54" />
@@ -83,7 +86,7 @@
                 android:id="@+id/ivHrIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="14dp"
                 android:src="@drawable/ic_hr_measure"
                 tools:ignore="ContentDescription" />
 
@@ -122,6 +125,7 @@
             <TextView
                 android:id="@+id/tvStressValue"
                 style="@style/S24"
+                android:layout_marginTop="14dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="65" />
@@ -138,7 +142,7 @@
                 android:id="@+id/ivStressIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="14dp"
                 android:src="@drawable/ic_stress_measure"
                 tools:ignore="ContentDescription" />
 
@@ -178,6 +182,7 @@
                 android:id="@+id/tvSpO2Value"
                 style="@style/S24"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="14dp"
                 android:layout_height="wrap_content"
                 tools:text="95%" />
 
@@ -193,7 +198,7 @@
                 android:id="@+id/ivSpO2Icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="14dp"
                 android:src="@drawable/ic_spo2_measure"
                 tools:ignore="ContentDescription" />
 
@@ -227,11 +232,12 @@
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
                 android:singleLine="true"
-                android:text="@string/text_skin_temperature" />
+                android:text="@string/text_skin_temp" />
 
             <TextView
                 android:id="@+id/tvSkinValue"
                 style="@style/S24"
+                android:layout_marginTop="14dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="33.5°C" />
@@ -248,7 +254,7 @@
                 android:id="@+id/ivSkinIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="14dp"
                 android:src="@drawable/ic_temp_measure"
                 tools:ignore="ContentDescription" />
 

@@ -241,10 +241,10 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateCircadianCard = MutableLiveData<Pair<OHealthOverview.CircadianAlignment?, Boolean>>()
 
     var isNudgeCircadianApiCalled: Boolean = false
-    var nudgeCircadianData: NudgeCircadianGraph ?= null
+    var nudgeCircadianData: NudgeCircadianGraph? = null
     var updateNudgeInMainViewModel = MutableLiveData<Event<NudgeCircadianGraph>>()
 
-    var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
+    var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
     var summaryAvailable: Boolean? = false
 
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
@@ -527,6 +527,7 @@ class SummaryDataViewModelToday @Inject constructor(
         stateDashAlerts.postValue(dashAlert)
     }
 
+    @Deprecated("for reference only")
     fun parseHealthData(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
@@ -1186,15 +1187,18 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
+            val generation = 2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+
             priorityList.forEach { item ->
                 if (item.switchState.not()) return@forEach
 
                 when (item.key) {
                     "one_tap_vitals" -> {
-                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
+                        if (generation == 2) {
                             getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
                         }
                     }
+
                     "sleep" -> {
                         getSleepDataCard(
                             healthData,
@@ -1246,10 +1250,8 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "heart_rate" -> {
-                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
-                            getHeartRateCard()?.let {
-                                userActivities.add(it)
-                            }
+                        getHeartRateCard()?.let {
+                            userActivities.add(it)
                         }
                     }
 
@@ -1290,10 +1292,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }*/
 
                     "stress" -> {
-                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
-                            getStressCard(healthData)?.let {
-                                userActivities.add(it)
-                            }
+
+                        getStressCard(healthData)?.let {
+                            userActivities.add(it)
                         }
                     }
 
@@ -1315,7 +1316,7 @@ class SummaryDataViewModelToday @Inject constructor(
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
             getTimelineCard()?.let { userActivities.add(it) }
 
-            if(lunaManaged) {
+            if (lunaManaged) {
                 getLunaAiCard()?.let {
                     if (userActivities.size > 2) {
                         userActivities.add(2, it)
@@ -1376,7 +1377,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     else -> "${diff / (60 * 60_000)} hr ago"
                 }
             } else null
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            null
+        }
 
         // Stress
         val stressValue = healthData.stress?.stressValue?.value
@@ -1405,7 +1408,6 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         val oneTapVitals = OHealthOverview.OneTapVitals(
-            title = resourceProvider.getString(R.string.text_one_tap_vitals),
             hrValue = hrValue,
             hrLastTime = hrLastTime,
             stressValue = stressValue,
@@ -1426,23 +1428,25 @@ class SummaryDataViewModelToday @Inject constructor(
         return oneTapVitals
     }
 
-    private fun getTimelineCard(): OHealthOverview?{
-        val dataList = timeTrackerActivities?: ArrayList()
+    private fun getTimelineCard(): OHealthOverview? {
+        val dataList = timeTrackerActivities ?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
         var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
 
         data?.forEach { data ->
             data.displayTime = convertTimeFormat(data.startTime)
-            when(data.event){
+            when (data.event) {
                 SLEEP_KEY -> {
                     data.titleColor = "#A8A8ED".toColorInt()
-                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                    data.desc =
+                        getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
                 }
 
                 NAP_KEY -> {
                     data.titleColor = "#A8A8ED".toColorInt()
-                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                    data.desc =
+                        getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
                 }
 
                 WORKOUT_KEY -> {
@@ -1457,9 +1461,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     data.titleColor = "#8EF1C3".toColorInt()
                     data.value?.let {
                         try {
-                            val value = formatMlToLitersOrMl(it.toIntOrNull()?:0)
+                            val value = formatMlToLitersOrMl(it.toIntOrNull() ?: 0)
                             data.desc = value
-                        }catch (exp: Exception){
+                        } catch (exp: Exception) {
                             exp.printStackTrace()
                             data.desc = it
                             data.unit?.let { data.desc += " $it" }
@@ -1483,7 +1487,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 LIGHT_EXPOSURE_KEY -> {
                     data.titleColor = "#FFE1CF".toColorInt()
                     data.value?.let {
-                        data.desc = "${it.toInt()/60} minutes"
+                        data.desc = "${it.toInt() / 60} minutes"
                         /*data.unit?.let { data.desc += " $it" }*/
                     }
                 }
@@ -1492,6 +1496,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     data.titleColor = "#F18EBD".toColorInt()
                     data.desc = "Day 1"
                 }
+
                 SYMPTOM_KEY -> {
                     data.titleColor = "#F18EBD".toColorInt()
                     data.desc = data.value
@@ -1544,7 +1549,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
         val nonHydration = eventsWithoutPeriod
             .asSequence()
-            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true)}
+            .filter { !it.event.equals(WATER_CONSUMPTION_KEY, ignoreCase = true) }
             .toList()
 
 
@@ -1590,11 +1595,12 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         merged.addAll(nonHydration)
-        var sortedList = merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }.toMutableList()
+        var sortedList =
+            merged.sortedByDescending { startDateTime(it.startDate, it.startTime) }.toMutableList()
         periodStartedEvent?.let {
-            if(sortedList.isEmpty()){
+            if (sortedList.isEmpty()) {
                 sortedList = arrayListOf(it)
-            }else{
+            } else {
                 sortedList.add(it)
             }
         }
@@ -1604,13 +1610,13 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
     private fun convertTimeFormat(time: String?): String {
-        return try{
+        return try {
             val originalFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val timeObj = LocalTime.parse(time, originalFormatter)
             val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
             timeObj.format(newFormatter).uppercase(Locale.getDefault())
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
             "-"
         }
@@ -1627,8 +1633,14 @@ class SummaryDataViewModelToday @Inject constructor(
             val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
 
             // Parse the start and end dates into LocalDate objects
-            val startDateObj = LocalDateTime.parse("$startDate $startTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val endDateObj = LocalDateTime.parse("$endDate $endTime", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val startDateObj = LocalDateTime.parse(
+                "$startDate $startTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            val endDateObj = LocalDateTime.parse(
+                "$endDate $endTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
 
             // If the end time is before the start time, adjust the end time to the next day
             val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
@@ -1652,7 +1664,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val formattedTime = "$formattedStartTime - $formattedEndTime".uppercase(Locale.getDefault())
             "$hours hr $minutes m; $formattedTime"
             */
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
             "-"
         }
@@ -1663,17 +1675,17 @@ class SummaryDataViewModelToday @Inject constructor(
 //        val isOnboardingDone = localDataStore.isCircadianOnboardShown()
         val graphData = circadianGraphData
         val isOnboard = graphData?.onboarding ?: false
-        return if(isOnboard){
-            val isLocked = graphData?.isLockedCircularView?:false
+        return if (isOnboard) {
+            val isLocked = graphData?.isLockedCircularView ?: false
             if (isLocked) {
                 OHealthOverview.CircadianLockedOrNoSleepCard(
                     isLocked = true
                 )
-            }else{
-                if(
+            } else {
+                if (
                     graphData?.startTime != null && graphData.endTime != null &&
                     graphData.sleepData?.wakeTime != null && graphData.sleepData?.bedTime != null
-                ){
+                ) {
                     var sTime: LocalTime?
                     var eTime: LocalTime?
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1703,7 +1715,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         timeWindow = getCircadianScrollGraphList(graphData),
                         title = nudgeCircadianData?.title,
                         description = nudgeCircadianData?.description,
-                        energyGraph = getEnergyValues(graphData,true)
+                        energyGraph = getEnergyValues(graphData, true)
                     )
                     withContext(Dispatchers.Main) {
                         stateCircadianCard.value = Pair(
@@ -1711,18 +1723,18 @@ class SummaryDataViewModelToday @Inject constructor(
                             false
                         )
                     }
-                    if(isNudgeCircadianApiCalled.not()) {
+                    if (isNudgeCircadianApiCalled.not()) {
                         isNudgeCircadianApiCalled = true
                         getNudgeCircadianData()
                     }
                     circData
-                }else{
+                } else {
                     OHealthOverview.CircadianLockedOrNoSleepCard(
                         isLocked = false
                     )
                 }
             }
-        }else{
+        } else {
             OHealthOverview.CircadianAlignmentOnboarding
         }
     }
@@ -1732,7 +1744,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val reqObj = JsonObject().apply {
                 this.addProperty("type", "circadian")
             }
-            userRepositoryOld.getNudgeCircadianData(reqObj).collect{resource ->
+            userRepositoryOld.getNudgeCircadianData(reqObj).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         isNudgeCircadianApiCalled = false
@@ -1748,10 +1760,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            val data  = stateCircadianCard.value?.copy()?.first
+                            val data = stateCircadianCard.value?.copy()?.first
                             nudgeCircadianData = it
                             updateNudgeInMainViewModel.postValue(Event(it))
-                            if(data!=null){
+                            if (data != null) {
                                 stateCircadianCard.postValue(
                                     Pair(
                                         data.apply {
@@ -1771,15 +1783,15 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    fun getEnergyValues(graphData: CircadianGraphData?,rotate: Boolean): List<Float> {
-        if(graphData?.firstFocusPeakWindowGraph==null && graphData?.secondFocusPeakWindowGraph==null){
+    fun getEnergyValues(graphData: CircadianGraphData?, rotate: Boolean): List<Float> {
+        if (graphData?.firstFocusPeakWindowGraph == null && graphData?.secondFocusPeakWindowGraph == null) {
             return ArrayList()
         }
 
         val graphStart = graphData.startTime
         val graphEnd = graphData.sleepData?.wakeTime
 
-        if(graphStart==null || graphEnd==null) return ArrayList()
+        if (graphStart == null || graphEnd == null) return ArrayList()
 
 
         val totalMinutes = 24 * 60
@@ -1807,10 +1819,10 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         val maxVal = energyValues.maxOrNull() ?: 1f
-        val values =  energyValues.map { it / maxVal }
-        if(rotate){
+        val values = energyValues.map { it / maxVal }
+        if (rotate) {
             return trimArrayByTime(values, graphStart)
-        }else{
+        } else {
             return values
         }
 
@@ -1862,7 +1874,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     label = resourceProvider.getString(R.string.text_caffeine_window_open)
                 )
             )
-            circadianGraphData?.sleepData?.let { sleepTime->
+            circadianGraphData?.sleepData?.let { sleepTime ->
                 if (sleepTime.wakeTime == null || sleepTime.bedTime == null) return@let
 
                 val wakeTime = LocalDateTime.parse(
@@ -1902,8 +1914,6 @@ class SummaryDataViewModelToday @Inject constructor(
                         label = resourceProvider.getString(R.string.text_avoid_caffeine)
                     )
                 )
-
-
 
 
             }
@@ -2007,7 +2017,7 @@ class SummaryDataViewModelToday @Inject constructor(
         return data
     }
 
-    private fun getCircadianTimeFloatValue(time: String?): Float{
+    private fun getCircadianTimeFloatValue(time: String?): Float {
         if (time == null) {
             return -1f
         }
@@ -2349,6 +2359,8 @@ class SummaryDataViewModelToday @Inject constructor(
             if (device == null) {
                 this?.measureState = TapMeasureState.NO_DEVICE
             }
+            this?.ringGeneration = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+
         })
 
         return if (data != null) {
@@ -2480,7 +2492,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         if (
-            /*registerDate == 0 ||*/
+        /*registerDate == 0 ||*/
             (readiness?.readinessScore?.value ?: 0) <= 0 ||
             healthData.readiness == null
         ) {
@@ -2499,8 +2511,8 @@ class SummaryDataViewModelToday @Inject constructor(
             alertCount = alertCount
         )
 
-        return when(daySlot){
-            0,1 -> OHealthOverview.Readiness(readinessModel)
+        return when (daySlot) {
+            0, 1 -> OHealthOverview.Readiness(readinessModel)
             2 -> OHealthOverview.ReadinessMinimal(readinessModel)
             else -> null
         }
@@ -2532,12 +2544,11 @@ class SummaryDataViewModelToday @Inject constructor(
             OHealthOverview.ActivityMinimal(
                 activityModal, caloriesGoal
             )
-        }else if(activeCalories >= 50) {
+        } else if (activeCalories >= 50) {
             OHealthOverview.Activity(
                 activityModal, caloriesGoal
             )
-        }
-        else null
+        } else null
 
     }
 
@@ -2552,7 +2563,7 @@ class SummaryDataViewModelToday @Inject constructor(
             healthData.sleep?.naps?.filter { !it.isNextDayNap }
         )
 
-        when(daySlot){
+        when (daySlot) {
             0 -> {
                 if (healthData.sleep?.sleep_score != null) {
                     if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -2568,6 +2579,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     return OHealthOverview.SleepWaiting
                 }
             }
+
             1 -> {
                 healthData.sleep?.let {
                     if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -2581,6 +2593,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                 }
             }
+
             else -> {
 
                 if (healthData.sleep?.sleep_score != null) {
@@ -2828,8 +2841,8 @@ class SummaryDataViewModelToday @Inject constructor(
         val itemsMap = getItemsMap()
         val daySlot = getDaySlot()
         priorityList.apply {
-            when(daySlot){
-                0 ->{
+            when (daySlot) {
+                0 -> {
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
                     add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
@@ -2844,7 +2857,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
-                1 ->{
+                1 -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
@@ -2859,7 +2872,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
-                else ->{
+                else -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                     add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
@@ -3161,9 +3174,9 @@ class SummaryDataViewModelToday @Inject constructor(
         if (registerDays < 7) {
 
             /*if (registerDays == 0) {*/
-                trendsData?.welcome?.welcome?.let {
-                    userActivities.add(OHealthOverview.InfoRingWelcome(it))
-                }
+            trendsData?.welcome?.welcome?.let {
+                userActivities.add(OHealthOverview.InfoRingWelcome(it))
+            }
             /*}*/
 
             val cardClickState = localDataStore.getDashCardClickState()
@@ -3172,11 +3185,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 /*if (registerDays > 0) {
                     viewedCardsData.add(OHealthOverview.InfoRingCare(it))
                 } else {*/
-                    if (cardClickState[DashInfoCard.CARE] == false) {
-                        userActivities.add(OHealthOverview.InfoRingCare(it))
-                    } else {
-                        viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                    }
+                if (cardClickState[DashInfoCard.CARE] == false) {
+                    userActivities.add(OHealthOverview.InfoRingCare(it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoRingCare(it))
+                }
                 /*}*/
 
             }
@@ -3348,7 +3361,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     }
 
-    fun performOneTapVitalsOp(type: ManualMeasureType, status: Boolean){
+    fun performOneTapVitalsOp(type: ManualMeasureType, status: Boolean) {
         sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.SetManualMeasurement(
                 type, status
@@ -3383,7 +3396,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
                                 this.stressValue = manualMeasurement.value
-                                this.stressLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.stressLastTime =
+                                    resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
                         }
@@ -3418,7 +3432,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
                                 this.hrValue = manualMeasurement.value
-                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.hrLastTime = resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
                         }
@@ -3428,37 +3442,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
                 stateHeartRateCard.postValue(stateHeartRateCard.value)
             }
-        }
-        else if (type == ManualMeasureType.BLOOD_OXYGEN) {
-            val manualMeasurement = ringDataStore.getManualMeasurementValueBodyTemp()
-            if (manualMeasurement != null) {
-
-                if (manualMeasurement.isError) {
-                    stateOneTapVitalsCard.value?.let {
-                        stateOneTapVitalsCard.postValue(it.apply {
-                            this.measureState = TapMeasureState.ERROR
-                            this.measuring = false
-                        })
-                    }
-                } else {
-                    if (manualMeasurement.isMeasuring) {
-
-                    } else {
-                        //
-                        stateOneTapVitalsCard.value?.let {
-                            stateOneTapVitalsCard.postValue(it.apply {
-                                this.measureState = TapMeasureState.LAST_MEASURED
-                                this.hrValue = manualMeasurement.value
-                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
-                                this.measuring = false
-                            })
-                        }
-                        //
-                    }
-                }
-            }
-        }
-        else if (type == ManualMeasureType.BODY_TEMPERATURE) {
+        } else if (type == ManualMeasureType.BLOOD_OXYGEN) {
             val manualMeasurement = ringDataStore.getManualMeasurementValueBloodOxygen()
             if (manualMeasurement != null) {
 
@@ -3477,12 +3461,40 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.hrValue = manualMeasurement.value
-                                this.hrLastTime =  resourceProvider.getString(R.string.text_just_now)
+                                this.spo2Value = manualMeasurement.value
+                                this.spo2LastTime =
+                                    resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
                         }
                         //
+                    }
+                }
+            }
+        } else if (type == ManualMeasureType.BODY_TEMPERATURE) {
+            val manualMeasurement = ringDataStore.getManualMeasurementValueBodyTemp()
+            if (manualMeasurement != null) {
+
+                if (manualMeasurement.isError) {
+                    stateOneTapVitalsCard.value?.let {
+                        stateOneTapVitalsCard.postValue(it.apply {
+                            this.measureState = TapMeasureState.ERROR
+                            this.measuring = false
+                        })
+                    }
+                } else {
+                    if (manualMeasurement.isMeasuring) {
+
+                    } else {
+                        stateOneTapVitalsCard.value?.let {
+                            stateOneTapVitalsCard.postValue(it.apply {
+                                this.measureState = TapMeasureState.LAST_MEASURED
+                                this.skinTempValue = (manualMeasurement.value.toFloat()) / 100
+                                this.skinTempLastTime =
+                                    resourceProvider.getString(R.string.text_just_now)
+                                this.measuring = false
+                            })
+                        }
                     }
                 }
             }
@@ -4503,9 +4515,9 @@ class SummaryDataViewModelToday @Inject constructor(
     fun shouldShowTimezoneChangedAlert(): Boolean {
         val storedTimezone = localDataStore.getLastKnownTimezone()
         val alertDismissed = localDataStore.isTimezoneChangedAlertCardDismissed()
-        return if(storedTimezone==null){
+        return if (storedTimezone == null) {
             return false
-        }else{
+        } else {
             !alertDismissed
         }
     }

@@ -48,7 +48,7 @@ sealed class OHealthOverview {
 
 
     class LunaAiCard(
-        var dailyHealthDigestCardState: SummaryStates ?
+        var dailyHealthDigestCardState: SummaryStates?
     ) : OHealthOverview()
 
     class HealthMonitorCard(
@@ -115,6 +115,7 @@ sealed class OHealthOverview {
         var maxValues: Int,
         var minValues: Int,
         var measureState: TapMeasureState = TapMeasureState.DEFAULT,
+        var ringGeneration: Int?,
         var alertCount: Int = 0,
     ) : OHealthOverview()
 
@@ -190,25 +191,25 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class CaffeineWindowCalibrating(
-        val title: String?=null,
-        val message: String?=null,
+        val title: String? = null,
+        val message: String? = null,
     ) : OHealthOverview()
 
     class CircadianAlignment(
         val startTime: LocalTime?,
         val endTime: LocalTime?,
-        val timeWindow: List<TimeWindow>?=null,
+        val timeWindow: List<TimeWindow>? = null,
         var title: String?,
         var description: String?,
         val energyGraph: List<Float>?,
     ) : OHealthOverview()
 
-    class CircadianLockedOrNoSleepCard(val isLocked:Boolean?=true) : OHealthOverview()
+    class CircadianLockedOrNoSleepCard(val isLocked: Boolean? = true) : OHealthOverview()
     object CircadianAlignmentOnboarding : OHealthOverview()
 
     data class TimelineDash(
         val listData: List<ItemTimelineResponseModel>?
-    ): OHealthOverview()
+    ) : OHealthOverview()
 
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
@@ -216,7 +217,6 @@ sealed class OHealthOverview {
 
     // One Tap Vitals composite card (HR, Stress, SpO2, Skin Temp)
     data class OneTapVitals(
-        var title: String = "One Tap Vitals",
         var hrValue: Int? = null,
         var hrLastTime: String? = null,
         var stressValue: Int? = null,
@@ -228,7 +228,7 @@ sealed class OHealthOverview {
         var featureConfig: OneTapVitalsFeatureConfig = OneTapVitalsFeatureConfig(),
         var expandedType: VitalsType? = null,
         var measuring: Boolean = false,
-        var measureState: TapMeasureState ?= null
+        var measureState: TapMeasureState? = null
     ) : OHealthOverview()
 
     data class OneTapVitalsFeatureConfig(
@@ -267,7 +267,7 @@ data class CaffeineWindowData(
     val caffeineStartTime: String,//HH:mm:ss
     val caffeineEndTime: String,//HH:mm:ss
     val caffeineValues: List<Int>,
-    val title:String?=null,
+    val title: String? = null,
     var message: String? = null,//"sasacas"
     var maxQuantity: Int? = null//mg
 ) : Parcelable

@@ -12,6 +12,7 @@ import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.HrAlert
 import com.noisefit_commans.data.model.HrAlerts
 import com.noisefit_commans.ui.BaseViewModel
@@ -41,6 +42,7 @@ class OHeartRateDataViewModel @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val hrDataConvertor: OreoHRDataConvertor,
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
@@ -194,10 +196,22 @@ class OHeartRateDataViewModel @Inject constructor(
             hrCombineModel = null,
             lastMeasuredValue = 0,
             lastMeasuredIndex = 0,
-            trendPercent = 0
-        )
+            trendPercent = 0,
+            ringGeneration = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw),
+
+            )
     }
 
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
+    }
     var activityData: ArrayList<ODayTimeActivitiesDataModel>? = null
     fun prepareActivityData(dayData: ServerUserHealthData) {
         val workouts = dayData.activity?.workout

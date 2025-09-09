@@ -667,7 +667,6 @@ class SummaryDataFragmentToday :
                         performOneTapVitalsOp(type.type)
                     }
                 }
-                is OSummaryHealthOverviewClickEnum.OnOneTapVitalsMeasureClicked -> {}
 
                 is OSummaryHealthOverviewClickEnum.UpdateOneTapVitalsCardState -> {
                     viewModel.stateOneTapVitalsCard.value?.let {
@@ -676,7 +675,7 @@ class SummaryDataFragmentToday :
                             viewModel.stateOneTapVitalsCard.postValue(
                                 it.apply {
                                     this.measureState = type.measureState
-                                    if(type.measureState == null){
+                                    if (type.measureState == null) {
                                         this.expandedType = null
                                     }
                                 }
@@ -693,7 +692,7 @@ class SummaryDataFragmentToday :
         if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
             return
         }
-        if(viewModel.stateOneTapVitalsCard.value?.measuring==true){
+        if (viewModel.stateOneTapVitalsCard.value?.measuring == true) {
             return
         }
         viewModel.stateOneTapVitalsCard.value?.apply {
@@ -708,6 +707,11 @@ class SummaryDataFragmentToday :
                     })
                     return@launch
                 }
+
+                viewModel.stateOneTapVitalsCard.value?.apply {
+                    this.measuring = true
+                }
+
                 when (type) {
                     OHealthOverview.VitalsType.HR -> {
                         viewModel.performOneTapVitalsOp(ManualMeasureType.HEART_RATE, true)
@@ -726,9 +730,7 @@ class SummaryDataFragmentToday :
                     }
 
                 }
-                viewModel.stateOneTapVitalsCard.value?.apply {
-                    this.measuring = true
-                }
+
             }
         }
     }
@@ -1077,19 +1079,19 @@ class SummaryDataFragmentToday :
                 viewModel.getCircadianAlignmentCardData(nudge?.title, nudge?.description)
             )
         }*/
-        viewModel.updateNudgeInMainViewModel.observe(this){
+        viewModel.updateNudgeInMainViewModel.observe(this) {
             it.getContent()?.let {
                 mainViewModel.nudgeCircadianData = it
             }
         }
 
-        viewModel.stateCircadianCard.observe(this){
+        viewModel.stateCircadianCard.observe(this) {
             LOGS.d("cjkacbaskc : $it")
             healthOverviewAdapter.updateData(it.first)
         }
 
-        mainViewModel.syncTextState.observe(this){
-            if(!it.isNullOrEmpty()) {
+        mainViewModel.syncTextState.observe(this) {
+            if (!it.isNullOrEmpty()) {
                 viewModel.summaryStates.postValue(SummaryStates.GENERATING)
             }
         }
@@ -1679,9 +1681,7 @@ class SummaryDataFragmentToday :
 
         viewModel.stateOneTapVitalsCard.observe(viewLifecycleOwner) {
             if (it != null) {
-                viewModel.viewModelScope.launch {
-                    healthOverviewAdapter.updateData(it)
-                }
+                healthOverviewAdapter.updateData(it)
             }
         }
 

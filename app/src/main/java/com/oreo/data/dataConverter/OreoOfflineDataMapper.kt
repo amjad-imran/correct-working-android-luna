@@ -406,8 +406,19 @@ constructor(
             hrCombineModel = null,
             lastMeasuredValue = 0,
             lastMeasuredIndex = 0,
-            trendPercent = 0
+            trendPercent = 0,
+            ringGeneration = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw),
         )
+    }
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
     }
 
     private fun handleHrFormat(time: Int): String {

@@ -179,8 +179,6 @@ sealed class OSummaryHealthOverviewClickEnum {
     // One Tap Vitals
     data class OnOneTapVitalsItemClicked(val type: OHealthOverview.VitalsType) :
         OSummaryHealthOverviewClickEnum()
-    data class OnOneTapVitalsMeasureClicked(val type: OHealthOverview.VitalsType) :
-        OSummaryHealthOverviewClickEnum()
     object OnOneTapVitalsCollapsed : OSummaryHealthOverviewClickEnum()
     data class UpdateOneTapVitalsCardState(val measureState: TapMeasureState?) : OSummaryHealthOverviewClickEnum()
 
@@ -816,8 +814,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private var expandedTile: ViewGroup? = null
 
         fun bind(data: OHealthOverview.OneTapVitals) {
-            binding.tvTitle.text = data.title
-
             binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
             binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
             binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
@@ -863,7 +859,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
             binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
 
-            // ensure all children of tiles are visible and measuring hidden
             listOf(binding.itemHR, binding.itemStress, binding.itemSpO2, binding.itemSkinTemp).forEach { t ->
                 for (i in 0 until t.childCount) {
                     val child = t.getChildAt(i)
@@ -948,7 +943,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val title = when (data.expandedType) {
                         OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
                         OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
-                        OHealthOverview.VitalsType.SPO2 -> "Measuring SpO2..."
+                        OHealthOverview.VitalsType.SPO2 -> context.getString(R.string.text_measuring_spo2)
                         OHealthOverview.VitalsType.SKIN_TEMP -> context.getString(R.string.text_measuring_skin_temp)
                         else -> "Measuring..."
                     }
@@ -1040,6 +1035,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             // Collapse on tap of expanded tile
             tile.setOnClickListener {
+
+                return@setOnClickListener
+
                 val t = expandedTile ?: tile
                 val parent = binding.lytCollapsed
                 val measuring = t.findViewById<View>(R.id.tileMeasuringRoot)
@@ -1123,7 +1121,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lytStress.root.visible()
             lytStress.graphStress.updateData(data?.data)
 
-            val isGen2 = allData.ringGeneration == 2
+            val isGen2 = false//allData.ringGeneration == 2//will not be visible now
             val context = binding.root.context
 
             if (isGen2) {
@@ -1209,10 +1207,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
 
                     TapMeasureState.HIDE -> {
-                        lytStress.lottieAnimView.invisible()
-                        lytStress.imvHrMeasure.invisible()
+                        lytStress.lottieAnimView.gone()
+                        lytStress.imvHrMeasure.gone()
 
-                        lytStress.groupValue.invisible()
+                        lytStress.groupValue.gone()
                         lytStress.tvEmptyConnect.gone()
                         lytStress.tvHeartValue.gone()
                         lytStress.tvUnableToMeasure.gone()
@@ -1840,141 +1838,152 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 3, data.minValues, data.maxValues
             )
 
-            val lastMeasuredValue = data.lastMeasuredValue
-            val lastMeasuredIndex = data.lastMeasuredIndex
+            val isGen1 = data.ringGeneration == 1
+            val context = binding.root.context
 
-            if (lastMeasuredValue == 0) {
-                lytHeartRate.lytTrend.root.gone()
-                binding.textView.text = heartRateText
-            } else {
-                val lastUpdatedTimestamp =
-                    DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
+            if(isGen1){
+                val lastMeasuredValue = data.lastMeasuredValue
+                val lastMeasuredIndex = data.lastMeasuredIndex
+
+                if (lastMeasuredValue == 0) {
+                    lytHeartRate.lytTrend.root.gone()
+                    binding.textView.text = heartRateText
+                } else {
+                    val lastUpdatedTimestamp =
+                        DateTimeUtil.getTodayMidnightTimestamp() + (lastMeasuredIndex + 1) * 5 * 60 * 1000
 
 
-                val currentTimeStamp = DateFormats.getTimeStamp()
-                val timeDiff = currentTimeStamp - lastUpdatedTimestamp
-                if (timeDiff <= (5 * 60 * 1000)) {
+                    val currentTimeStamp = DateFormats.getTimeStamp()
+                    val timeDiff = currentTimeStamp - lastUpdatedTimestamp
+                    if (timeDiff <= (5 * 60 * 1000)) {
 
-                    val trendPercent = data.trendPercent
+                        val trendPercent = data.trendPercent
 
-                    if (trendPercent != null && trendPercent != 0) {
-                        if (trendPercent > 0) {
-                            lytHeartRate.lytTrend.apply {
-                                ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
-                                backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
-                                tvPercent.text = "$trendPercent%"
-                                tvPercent.setTextColor(Color.parseColor("#FF426F"))
-                                binding.textView.text = heartRateShortText
-                                root.visible()
+                        if (trendPercent != null && trendPercent != 0) {
+                            if (trendPercent > 0) {
+                                lytHeartRate.lytTrend.apply {
+                                    ivTrend.setImageResource(R.drawable.ic_trend_dash_red)
+                                    backLayer.setBackgroundColor(Color.parseColor("#4DFF4365"))
+                                    tvPercent.text = "$trendPercent%"
+                                    tvPercent.setTextColor(Color.parseColor("#FF426F"))
+                                    binding.textView.text = heartRateShortText
+                                    root.visible()
+                                }
+                            } else {
+                                lytHeartRate.lytTrend.apply {
+                                    ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
+                                    backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
+                                    tvPercent.text = "${abs(trendPercent)}%"
+                                    tvPercent.setTextColor(Color.parseColor("#00FF66"))
+                                    binding.textView.text = heartRateShortText
+                                    root.visible()
+                                }
                             }
                         } else {
-                            lytHeartRate.lytTrend.apply {
-                                ivTrend.setImageResource(R.drawable.ic_trend_dash_green)
-                                backLayer.setBackgroundColor(Color.parseColor("#6629CC74"))
-                                tvPercent.text = "${abs(trendPercent)}%"
-                                tvPercent.setTextColor(Color.parseColor("#00FF66"))
-                                binding.textView.text = heartRateShortText
-                                root.visible()
-                            }
+                            lytHeartRate.lytTrend.root.gone()
+                            binding.textView.text = heartRateText
                         }
                     } else {
                         lytHeartRate.lytTrend.root.gone()
                         binding.textView.text = heartRateText
                     }
-                } else {
-                    lytHeartRate.lytTrend.root.gone()
-                    binding.textView.text = heartRateText
                 }
+
+
+
+                when (data.measureState) {
+                    TapMeasureState.NO_DEVICE -> {
+                        lytHeartRate.lottieAnimView.invisible()
+                        lytHeartRate.imvHrMeasure.visible()
+
+                        lytHeartRate.groupValue.gone()
+                        lytHeartRate.tvEmptyConnect.visible()
+                        lytHeartRate.tvEmptyConnect.text =
+                            lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+
+                    }
+
+                    TapMeasureState.LAST_MEASURED -> {
+                        lytHeartRate.lottieAnimView.invisible()
+                        lytHeartRate.imvHrMeasure.visible()
+
+                        lytHeartRate.groupValue.visible()
+                        lytHeartRate.tvEmptyConnect.visible()
+                        lytHeartRate.tvEmptyConnect.apply {
+                            text = context.getString(R.string.text_tap_to_measure)
+                        }
+
+                        lytHeartRate.tvHeartValue.text = data.value
+                        lytHeartRate.tvHeartUnit.text =
+                            binding.root.context.getString(R.string.text_bpm_small)
+
+                        lytHeartRate.tvLastMeasure.apply {
+                            setTextColor(Color.parseColor("#a3ffffff"))
+                            text = data.lastTime
+                        }
+
+                    }
+
+                    TapMeasureState.MEASURING -> {
+                        lytHeartRate.lottieAnimView.visible()
+                        lytHeartRate.imvHrMeasure.invisible()
+
+                        lytHeartRate.groupValue.gone()
+                        lytHeartRate.tvEmptyConnect.visible()
+
+                        lytHeartRate.tvEmptyConnect.apply {
+                            setTextColor(resources.getColor(R.color.white))
+                            text = context.getString(R.string.text_measuring_dots)
+                        }
+                    }
+
+                    TapMeasureState.DEFAULT -> {
+                        lytHeartRate.lottieAnimView.invisible()
+                        lytHeartRate.imvHrMeasure.visible()
+
+                        lytHeartRate.groupValue.gone()
+                        lytHeartRate.tvEmptyConnect.visible()
+                        lytHeartRate.tvEmptyConnect.apply {
+                            /*setTextColor(Color.parseColor("#88b0ff"))*/
+                            text = context.getString(R.string.text_tap_to_measure)
+                        }
+                    }
+
+                    TapMeasureState.ERROR -> {
+                        lytHeartRate.lottieAnimView.invisible()
+                        lytHeartRate.imvHrMeasure.visible()
+
+                        lytHeartRate.groupValue.visible()
+                        lytHeartRate.tvEmptyConnect.gone()
+                        lytHeartRate.tvHeartValue.gone()
+
+                        lytHeartRate.tvLastMeasure.apply {
+                            setTextColor(Color.parseColor("#88b0ff"))
+                            text = context.getString(R.string.text_try_again)
+                        }
+                        lytHeartRate.tvHeartUnit.text =
+                            binding.root.context.getString(R.string.text_unable_to_measure)
+
+                    }
+
+                    TapMeasureState.HIDE -> {
+                        lytHeartRate.lottieAnimView.invisible()
+                        lytHeartRate.imvHrMeasure.invisible()
+
+                        lytHeartRate.groupValue.invisible()
+                        lytHeartRate.tvEmptyConnect.gone()
+                        lytHeartRate.tvHeartValue.gone()
+                    }
+                }
+            }else{
+                lytHeartRate.lottieAnimView.gone()
+                lytHeartRate.imvHrMeasure.gone()
+
+                lytHeartRate.groupValue.gone()
+                lytHeartRate.tvEmptyConnect.gone()
+                lytHeartRate.tvHeartValue.gone()
             }
 
-
-
-            when (data.measureState) {
-                TapMeasureState.NO_DEVICE -> {
-                    lytHeartRate.lottieAnimView.invisible()
-                    lytHeartRate.imvHrMeasure.visible()
-
-                    lytHeartRate.groupValue.gone()
-                    lytHeartRate.tvEmptyConnect.visible()
-                    lytHeartRate.tvEmptyConnect.text =
-                        lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
-
-                }
-
-                TapMeasureState.LAST_MEASURED -> {
-                    lytHeartRate.lottieAnimView.invisible()
-                    lytHeartRate.imvHrMeasure.visible()
-
-                    lytHeartRate.groupValue.visible()
-                    lytHeartRate.tvEmptyConnect.visible()
-                    lytHeartRate.tvEmptyConnect.apply {
-                        text = context.getString(R.string.text_tap_to_measure)
-                    }
-
-                    lytHeartRate.tvHeartValue.text = data.value
-                    lytHeartRate.tvHeartUnit.text =
-                        binding.root.context.getString(R.string.text_bpm_small)
-
-                    lytHeartRate.tvLastMeasure.apply {
-                        setTextColor(Color.parseColor("#a3ffffff"))
-                        text = data.lastTime
-                    }
-
-                }
-
-                TapMeasureState.MEASURING -> {
-                    lytHeartRate.lottieAnimView.visible()
-                    lytHeartRate.imvHrMeasure.invisible()
-
-                    lytHeartRate.groupValue.gone()
-                    lytHeartRate.tvEmptyConnect.visible()
-
-                    lytHeartRate.tvEmptyConnect.apply {
-                        setTextColor(resources.getColor(R.color.white))
-                        text = context.getString(R.string.text_measuring_dots)
-                    }
-                }
-
-                TapMeasureState.DEFAULT -> {
-                    lytHeartRate.lottieAnimView.invisible()
-                    lytHeartRate.imvHrMeasure.visible()
-
-                    lytHeartRate.groupValue.gone()
-                    lytHeartRate.tvEmptyConnect.visible()
-                    lytHeartRate.tvEmptyConnect.apply {
-                        /*setTextColor(Color.parseColor("#88b0ff"))*/
-                        text = context.getString(R.string.text_tap_to_measure)
-                    }
-                }
-
-                TapMeasureState.ERROR -> {
-                    lytHeartRate.lottieAnimView.invisible()
-                    lytHeartRate.imvHrMeasure.visible()
-
-                    lytHeartRate.groupValue.visible()
-                    lytHeartRate.tvEmptyConnect.gone()
-                    lytHeartRate.tvHeartValue.gone()
-
-                    lytHeartRate.tvLastMeasure.apply {
-                        setTextColor(Color.parseColor("#88b0ff"))
-                        text = context.getString(R.string.text_try_again)
-                    }
-                    lytHeartRate.tvHeartUnit.text =
-                        binding.root.context.getString(R.string.text_unable_to_measure)
-
-                }
-
-                TapMeasureState.HIDE -> {
-                    lytHeartRate.lottieAnimView.invisible()
-                    lytHeartRate.imvHrMeasure.invisible()
-
-                    lytHeartRate.groupValue.invisible()
-                    lytHeartRate.tvEmptyConnect.gone()
-                    lytHeartRate.tvHeartValue.gone()
-                }
-            }
-
-            //
             lytHeartRate.root.setOnClickListener {
                 itemClickListener?.invoke(
                     OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked
@@ -1988,7 +1997,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 )
             }
-            //
 
 
             if (data.alertCount == 0) {
