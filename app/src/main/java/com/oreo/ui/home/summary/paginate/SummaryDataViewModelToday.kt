@@ -1184,7 +1184,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 when (item.key) {
                     "one_tap_vitals" -> {
-                        getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
+                            getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                        }
                     }
                     "sleep" -> {
                         getSleepDataCard(
@@ -1237,8 +1239,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "heart_rate" -> {
-                        getHeartRateCard()?.let {
-                            userActivities.add(it)
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                            getHeartRateCard()?.let {
+                                userActivities.add(it)
+                            }
                         }
                     }
 
@@ -1279,8 +1283,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     }*/
 
                     "stress" -> {
-                        getStressCard(healthData)?.let {
-                            userActivities.add(it)
+                        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                            getStressCard(healthData)?.let {
+                                userActivities.add(it)
+                            }
                         }
                     }
 

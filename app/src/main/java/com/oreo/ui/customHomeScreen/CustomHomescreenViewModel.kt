@@ -11,6 +11,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
@@ -28,7 +29,8 @@ class CustomHomescreenViewModel @Inject constructor(
     private val resourceProvider: ResourcesProvider,
     private val userRepository: UserRepository,
     private val localDataSource: DataStoredInterface,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     // Switch state
@@ -269,13 +271,16 @@ class CustomHomescreenViewModel @Inject constructor(
                 true,
                 this.size+1
             )
-            this["heart_rate"] = CustomHomeScreenItem(
-                R.drawable.icon_heart_rate,
-                "heart_rate",
-                resourceProvider.getString(R.string.text_heart_rate),
-                true,
-                this.size+1
-            )
+
+            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                this["heart_rate"] = CustomHomeScreenItem(
+                    R.drawable.icon_heart_rate,
+                    "heart_rate",
+                    resourceProvider.getString(R.string.text_heart_rate),
+                    true,
+                    this.size + 1
+                )
+            }
 
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
@@ -298,13 +303,16 @@ class CustomHomescreenViewModel @Inject constructor(
                 true,
                 this.size+1
             )
-            this["stress"] = CustomHomeScreenItem(
-                R.drawable.icon_stress,
-                "stress",
-                resourceProvider.getString(R.string.text_stress),
-                true,
-                this.size+1
-            )
+
+            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
+                this["stress"] = CustomHomeScreenItem(
+                    R.drawable.icon_stress,
+                    "stress",
+                    resourceProvider.getString(R.string.text_stress),
+                    true,
+                    this.size + 1
+                )
+            }
 
             if (shouldShowFemaleHealth()) {
                 this["cycle_tracker"] = CustomHomeScreenItem(
@@ -335,6 +343,17 @@ class CustomHomescreenViewModel @Inject constructor(
     fun shouldShowFemaleHealth(): Boolean {
         val user = localDataSource.getUser()
         return user?.userInfo?.gender.equals("female", true)
+    }
+
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
     }
 
 }
