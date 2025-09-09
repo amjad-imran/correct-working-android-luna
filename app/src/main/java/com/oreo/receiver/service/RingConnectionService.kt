@@ -1743,6 +1743,10 @@ constructor() : LifecycleService() {
                         queryCallback.batteryLevel
                     )
                 }
+                is QueryCallback.NfcSleepErr->{
+                    ringDataStore.saveSleepException(true)
+                    sessionManager.checkSleepException()
+                }
 
                 is QueryCallback.BatteryDataObtained -> {
                     val percent = queryCallback.batteryData.percentage ?: 0

@@ -113,6 +113,8 @@ interface RingDataStore {
     fun setCustomHomeScreenData(data: CustomHomeScreenModel)
     fun setCannyState(enableCanny: Boolean)
     fun getCannyState(): Boolean
+    fun saveSleepException(state: Boolean)
+    fun getSleepException(): Boolean
     //
 
 }

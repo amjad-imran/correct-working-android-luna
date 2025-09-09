@@ -88,6 +88,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -327,7 +328,6 @@ class OreoUserActivityRepositoryImpl(
                             ldw_readiness = response.comfort_readiness
                             ldw_cycle_tracker = response.comfort_cycle
                             booster_women = response.booster_women
-                            circadianGraphData = response.circadianGraph
                             timeTrackerActivities = response.timeTrackerActivities
 
                             ringDataStore.setFirstStressDay(response.firstStress)
@@ -347,7 +347,11 @@ class OreoUserActivityRepositoryImpl(
                             localDataStore.setLdwReadinessData(ldw_readiness)
                             localDataStore.setLdwCycleTrackerData(ldw_cycle_tracker)
                             localDataStore.setBoosterWomenData(booster_women)
-                            localDataStore.setCircadianGraphData(circadianGraphData)
+                            if(endDate?.equals(java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) == true) {
+                                localDataStore.setCircadianGraphData(response.circadianGraph)
+                                circadianGraphData = response.circadianGraph
+                            }
+
                             localDataStore.setTimelineActivitiesData(timeTrackerActivities)
                         }
                     }

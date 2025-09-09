@@ -10,16 +10,16 @@
         android:layout_height="match_parent"
         android:background="@drawable/oreo_default_bg">
 
-      <!--  <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieBackAnim"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true" />-->
+        <!--  <com.airbnb.lottie.LottieAnimationView
+              android:id="@+id/lottieBackAnim"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:scaleType="fitXY"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:lottie_autoPlay="true" />-->
 
 
         <fragment
@@ -189,6 +189,19 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="314dp"
             tools:text="Frag name here"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/shutDownRingDialog"
+            layout="@layout/temp_ring_shutdown_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
 

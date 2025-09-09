@@ -366,7 +366,6 @@ constructor(
                             ldwReadiness = it.comfort_readiness ?: false
                             ldwCycleTracker = it.comfort_cycle ?: false
                             boosterWomen = it.booster_women ?: false
-                            circadianGraphData = it.circadianGraph
                             timeTrackerActivities = it.timeTrackerActivities
                             //
 
@@ -404,6 +403,8 @@ constructor(
                                 dashTodayReload.postValue(Event(true))
                                 lunaZoneReload.postValue(Event(true))
                                 //sleepDashTodayReload.value = Event(true)
+
+                                circadianGraphData = it.circadianGraph
                             }
 
                             val todayData = userHealthData[getTodayDate()]

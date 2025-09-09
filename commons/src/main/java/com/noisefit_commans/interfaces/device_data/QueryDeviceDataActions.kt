@@ -58,6 +58,7 @@ abstract class QueryDeviceDataActions() :
     open fun getSportModeInfo() {}
     open fun getSportWidgetSortList() {}
     open fun getFirmwareLogs() {}
+    open fun getSleepException() {}
     open fun onMusicEventChanged(event: String) {
         // MusicPlayerControlsHandler.onEvent(event)
     }

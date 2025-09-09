@@ -130,6 +130,7 @@ sealed class UpdateDeviceAction {
     class SetWalkReminderPro3(val walkReminderData: WalkReminderData) : UpdateDeviceAction()
 
     class SetRestartDevice() : UpdateDeviceAction()
+    class SetShutDownDevice() : UpdateDeviceAction()
     class SetCallBacks() : UpdateDeviceAction()
 
     class SetSportModeInfo(val data: SportsModeList) : UpdateDeviceAction()
