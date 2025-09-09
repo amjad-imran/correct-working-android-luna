@@ -1332,7 +1332,24 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private suspend fun getOneTapVitalsCard(healthData: ServerUserHealthData): OHealthOverview.OneTapVitals? {
         // HR
-        val hrModel = userRepository.getSummaryHRHealthOverview()
+        val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
+            this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                serverUserHealthData,
+                this
+            )
+
+            val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+            this.lastMeasuredValue = lastMeasuredValue
+            this.lastMeasuredIndex = lastMeasuredIndex
+
+            getHrTrend(this.rawData, lastMeasuredIndex)?.let {
+                this.trendPercent = it
+            }
+
+            /*if (device == null) {
+                this.measureState = TapMeasureState.NO_DEVICE
+            }*/
+        }
         val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
         val hrLastTime: String? = try {
             if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
