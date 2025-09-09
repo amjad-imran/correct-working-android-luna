@@ -328,6 +328,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
             else
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
+
             viewModel.addWorkoutCtaVisibility.postValue(false)
             viewModel.isActivityWorkAdd = false
             animateFabUp()
@@ -1194,7 +1195,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    if (/*destination.id == R.id.navigation_oreo_home || */destination.id == R.id.navigation_oreo_workouts) {
+                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts) {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
                         viewModel.addWorkoutCtaVisibility.postValue(false)
