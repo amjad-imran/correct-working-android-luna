@@ -20,7 +20,7 @@ class AboutDeviceAdapter : RecyclerView.Adapter<AboutDeviceAdapter.ViewHolder>()
             binding.tvValue.text = data.value
 
             val context = binding.root.context
-            if (data.title.equals(context.getString(R.string.text_serial_number))){
+            if (data.title.equals(context.getString(R.string.text_serial_number)) || data.title.equals(context.getString(R.string.text_mob_no)) || data.title.equals(context.getString(R.string.text_email))){
                 binding.ivCopy.visible()
             }else{
                 binding.ivCopy.gone()
