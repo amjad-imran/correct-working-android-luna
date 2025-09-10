@@ -8,6 +8,13 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+data class Measurements(
+    val hr: Boolean = true,
+    val spo2: Boolean = true,
+    val stress: Boolean = true,
+    val temp: Boolean = true,
+)
+
 data class TimelineScreenResponse(
     val timeTracker: List<ItemTimelineResponseModel>?
 )

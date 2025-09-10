@@ -46,6 +46,7 @@ import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -264,6 +265,7 @@ private const val LDW_READINESS = "LDW_READINESS"
 private const val LDW_CYCLE_TRACKER = "LDW_CYCLE_TRACKER"
 private const val BOOSTER_WOMEN = "BOOSTER_WOMEN"
 
+private const val MEASUREMENTS_DATA = "MEASUREMENTS_DATA"
 private const val TIMELINE_ACTIVITIES_DATA = "TIMELINE_ACTIVITIES_DATA"
 
 private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
@@ -2385,4 +2387,12 @@ class DataStoredImpl
         return mPrefs.getString(TIMELINE_ACTIVITIES_DATA, null)?.let { Gson().fromJson<List<ItemTimelineResponseModel>>(it) }
     }
 
+    override fun setMeasurementsData(data: Measurements?) {
+        mPrefs.edit()?.putString(MEASUREMENTS_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getMeasurementsData(): Measurements? {
+        return mPrefs.getString(MEASUREMENTS_DATA, null)
+            ?.let { Gson().fromJson<Measurements>(it) }
+    }
 }

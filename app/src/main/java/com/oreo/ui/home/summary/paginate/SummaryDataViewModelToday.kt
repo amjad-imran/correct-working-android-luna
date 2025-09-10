@@ -1,7 +1,6 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
-import android.util.Log
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -35,10 +34,10 @@ import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
-import com.noisefit_commans.data.model.circadian.ItemCircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -80,7 +79,6 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
-import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.ODashboardActivityModel
@@ -94,7 +92,6 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
-import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -129,7 +126,6 @@ import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.exp
 import kotlin.math.pow
@@ -1091,7 +1087,8 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        lunaManaged: Boolean
+        lunaManaged: Boolean,
+        measurements: Measurements?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1187,7 +1184,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            val generation = 2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)//TODO - for testing only
+            val generation =
+                2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)//TODO - for testing only
 
             priorityList.forEach { item ->
                 if (item.switchState.not()) return@forEach
@@ -1195,7 +1193,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 when (item.key) {
                     "one_tap_vitals" -> {
                         if (generation == 2) {
-                            getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                            getOneTapVitalsCard(healthData, measurements)?.let {
+                                userActivities.add(
+                                    it
+                                )
+                            }
                         }
                     }
 
@@ -1344,7 +1346,10 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private suspend fun getOneTapVitalsCard(healthData: ServerUserHealthData): OHealthOverview.OneTapVitals? {
+    private suspend fun getOneTapVitalsCard(
+        healthData: ServerUserHealthData,
+        measurements: Measurements?
+    ): OHealthOverview.OneTapVitals? {
         // HR
         val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
             this.hrCombineModel = hrDataConvertor.getHrCombinedData(
@@ -1407,7 +1412,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                         else -> "${diff / (60 * 60_000)} hr ago"
                     }
-                } catch (e: Exception) { null }
+                } catch (e: Exception) {
+                    null
+                }
             }
         }
 
@@ -1425,15 +1432,17 @@ class SummaryDataViewModelToday @Inject constructor(
                         diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                         else -> "${diff / (60 * 60_000)} hr ago"
                     }
-                } catch (e: Exception) { null }
+                } catch (e: Exception) {
+                    null
+                }
             }
         }
 
         val features = OHealthOverview.OneTapVitalsFeatureConfig(
-            showHR = true,
-            showStress = true,
-            showSpO2 = true,
-            showSkinTemp = true
+            showHR = measurements?.hr ?: true,
+            showStress = measurements?.stress ?: true,
+            showSpO2 = measurements?.spo2 ?: true,
+            showSkinTemp = measurements?.temp ?: true
         )
 
         if (!features.showHR && !features.showStress && !features.showSpO2 && !features.showSkinTemp) {
@@ -2392,7 +2401,8 @@ class SummaryDataViewModelToday @Inject constructor(
             if (device == null) {
                 this?.measureState = TapMeasureState.NO_DEVICE
             }
-            this?.ringGeneration = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            this?.ringGeneration =
+                getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
         })
 
