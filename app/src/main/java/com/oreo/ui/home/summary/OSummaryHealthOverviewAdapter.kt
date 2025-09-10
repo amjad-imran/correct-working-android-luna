@@ -818,10 +818,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private var expandedTile: ViewGroup? = null
 
         fun bind(data: OHealthOverview.OneTapVitals) {
-            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
-            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
-            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
-            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR && expandedTile == null)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress && expandedTile == null)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
 
             binding.lytHrValue.apply {
                 tvValue.text = data.hrValue?.let { "$it" } ?: "--"
@@ -852,7 +853,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvSkinAgo.text = data.skinTempLastTime ?: ""
 
             if (data.expandedType != null) {
-                expandTile(data, null)
+                expandTile(data)
             } else {
                 collapseTiles(data)
             }
@@ -927,8 +928,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.lytCollapsed.alpha = 1f
         }
 
-        private fun expandTile(data: OHealthOverview.OneTapVitals, targetTile: ViewGroup?) {
-            val tile = targetTile ?: when (data.expandedType) {
+        private fun expandTile(data: OHealthOverview.OneTapVitals) {
+            val tile = when (data.expandedType) {
                 OHealthOverview.VitalsType.HR -> binding.itemHR
                 OHealthOverview.VitalsType.STRESS -> binding.itemStress
                 OHealthOverview.VitalsType.SPO2 -> binding.itemSpO2
@@ -939,11 +940,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val context = binding.root.context
             val parent = binding.lytCollapsed
-            val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
-            // ensure measuring is hidden during the width expansion
-            measuringRoot.visibility = View.GONE
 
-            // Smooth width expansion using ChangeBounds
 
             for (i in 0 until tile.childCount) {
                 val child = tile.getChildAt(i)
@@ -952,19 +949,21 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val transition = AutoTransition().apply { duration = 200 }
 
-            measuringRoot.alpha = 0f
-            measuringRoot.visibility = View.VISIBLE
-            measuringRoot.animate().alpha(1f).setDuration(600).start()
+            val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
+            if (data.measureState != TapMeasureState.LAST_MEASURED) {
+                measuringRoot.visibility = View.GONE
+                measuringRoot.alpha = 0f
+                measuringRoot.visibility = View.VISIBLE
+                measuringRoot.animate().alpha(1f).setDuration(600).start()
+            } else {
+                measuringRoot.visibility = View.VISIBLE
+                measuringRoot.alpha = 1f
+            }
 
             transition.addListener(object : Transition.TransitionListener {
                 override fun onTransitionStart(transition: Transition) {}
                 override fun onTransitionEnd(transition: Transition) {
                     transition.removeListener(this)
-                    // After tile expanded, swap content to measuring with fade
-
-                    /* measuringRoot.alpha = 0f
-                     measuringRoot.visibility = View.VISIBLE
-                     measuringRoot.animate().alpha(1f).setDuration(60).start()*/
                 }
 
                 override fun onTransitionCancel(transition: Transition) {}
@@ -993,13 +992,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
 
             val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
-            //
 
             when (data.measureState) {
                 TapMeasureState.LAST_MEASURED -> {
                     progressBar.gone()
                     retryBtn.gone()
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
+                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
                     when (data.expandedType) {
@@ -1053,7 +1051,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
+                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
 
@@ -1063,14 +1061,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lytSuccess.gone()
                     retryBtn.gone()
                     progressBar.visible()
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
+                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
                 }
             }
 
-            // HR icon animation only for HR inside overlay
-            val ivHeart = measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
+            val ivHeart =
+                binding.anchorImageView//measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
             if (data.expandedType == OHealthOverview.VitalsType.HR) {
                 ivHeart.visibility = View.VISIBLE
                 startHeartAnimation(ivHeart, data.hrValue ?: 60)
@@ -1079,8 +1077,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 stopHeartAnimation(ivHeart)
             }
 
-            // Animate only the tapped tile for smoother focus
-            animateTileExpand(tile)
+            if (data.measureState != TapMeasureState.LAST_MEASURED) {
+                animateTileExpand(tile)
+            }
 
             // Collapse on tap of expanded tile
             tile.setOnClickListener {
@@ -1148,7 +1147,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
         }
 
-        private fun getMeasuringTextByType(type:VitalsType?,context: Context): String? {
+        private fun getMeasuringTextByType(type: VitalsType?, context: Context): String? {
             return when (type) {
                 OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
                 OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)

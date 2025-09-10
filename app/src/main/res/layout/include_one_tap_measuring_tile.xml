@@ -84,14 +84,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ImageView
-            android:id="@+id/ivHeartAnim"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginEnd="40dp"
-            android:src="@drawable/ic_hr_measure"
-            tools:visibility="visible"
-            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>
