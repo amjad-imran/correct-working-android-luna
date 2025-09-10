@@ -247,15 +247,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
-        binding.shutDownRingDialog.btnShutDownRing.setOnClickListener {
-            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
-                return@setOnClickListener
-            }
-            viewModel.sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetShutDownDevice())
-            viewModel.sessionManager.resetSleepException()
-
-        }
-
         binding.blurViewSelector.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.activity_event_cancelled,
@@ -473,12 +464,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
-        if(navController?.currentDestination?.id == R.id.navigation_oreo_workouts){
+        if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts) {
             binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
             binding.lytAddWorkoutSelector.tvAddWorkout.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        }else{
+        } else {
             binding.lytAddWorkoutSelector.ivAddWorkoutManual.gone()
             binding.lytAddWorkoutSelector.tvAddWorkout.gone()
         }
@@ -803,9 +794,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.sessionManager.nfcSleepErr.observe(this) {
             if (it) {
-                binding.shutDownRingDialog.root.visible()
-            } else {
-                binding.shutDownRingDialog.root.gone()
+                navController?.navigate(R.id.ringExceptionDialogFragment)
             }
         }
 

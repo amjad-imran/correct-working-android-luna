@@ -191,19 +191,6 @@
             tools:text="Frag name here"
             tools:visibility="visible" />
 
-        <include
-            android:id="@+id/shutDownRingDialog"
-            layout="@layout/temp_ring_shutdown_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

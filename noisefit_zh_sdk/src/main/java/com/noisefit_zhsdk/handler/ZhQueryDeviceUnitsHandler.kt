@@ -351,7 +351,7 @@ constructor(
             }
 
 
-            if(p0.nfcSleepErr==1){
+            if (p0.nfcSleepErr == 1) {
                 AppLogs.sendAppLogs("RealTimeBean NFC Sleep Err ${p0.nfcSleepErr}")
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.NfcSleepErr()
