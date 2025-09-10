@@ -97,6 +97,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
@@ -106,6 +108,7 @@ import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
@@ -909,9 +912,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             expandedTile = null
 
             binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.imageBackHr.setVisibilityByCondition(data.featureConfig.showHR)
             binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.imageBackStress.setVisibilityByCondition(data.featureConfig.showStress)
             binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.imageBackSpo2.setVisibilityByCondition(data.featureConfig.showSpO2)
             binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+            binding.imageBackSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
 
             listOf(
                 binding.itemHR,
@@ -994,7 +1001,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             expandedTile = tile
 
-            //
             val titleTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringTitle)
             val hintTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringHint)
 
@@ -1004,9 +1010,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
 
             val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
+            val lottieView = measuringRoot.findViewById<LottieAnimationView>(R.id.lottieView)
 
             when (data.measureState) {
                 TapMeasureState.LAST_MEASURED -> {
+                    lottieView.gone()
+                    lottieView.cancelAnimation()
                     progressBar.gone()
                     retryBtn.gone()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
@@ -1046,12 +1055,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 TapMeasureState.ERROR -> {
                     progressBar.gone()
+                    lottieView.gone()
+                    lottieView.cancelAnimation()
                     lytSuccess.gone()
                     retryBtn.apply {
                         setOnClickListener {
                             data.expandedType?.let { type ->
                                 data.measureState = null
                                 data.measuring = false
+                                data.isRetry = true
                                 lytSuccess.gone()
                                 retryBtn.gone()
                                 progressBar.visible()
@@ -1068,6 +1080,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
 
                 else -> {
+
+                    lottieView.visible()
+                    lottieView.playAnimation(LottieDrawable.INFINITE,R.raw.anim_measure_hr)
+
                     lytSuccess.gone()
                     retryBtn.gone()
                     progressBar.visible()
@@ -1076,9 +1092,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         context.getString(R.string.text_measuring_may_take_30_sec)
                 }
             }
-
-
-
 
             if (data.measureState != TapMeasureState.LAST_MEASURED) {
                 animateTileExpand(tile)
@@ -1096,14 +1109,22 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     null -> binding.ivHrIcon
                 }
                 ivAnchor.setImageResource(getIcon(data.expandedType))
-                animateImageView(ivAnchor, srcView,{
+                if(data.isRetry.not()){
+                    animateImageView(ivAnchor, srcView,{
+                        if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                            startHeartAnimation(ivAnchor, data.hrValue ?: 60)
+                        }else {
+                            stopHeartAnimation(ivAnchor)
+                        }
+                    })
+                }else{
+                    ivAnchor.visible()
                     if (data.expandedType == OHealthOverview.VitalsType.HR) {
                         startHeartAnimation(ivAnchor, data.hrValue ?: 60)
                     }else {
                         stopHeartAnimation(ivAnchor)
                     }
-                })
-
+                }
             } else {
                 ivAnchor.invisible()
                 stopHeartAnimation(ivAnchor)

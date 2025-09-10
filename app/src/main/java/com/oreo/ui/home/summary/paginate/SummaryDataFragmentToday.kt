@@ -670,6 +670,7 @@ class SummaryDataFragmentToday :
                             viewModel.stateOneTapVitalsCard.postValue(
                                 it.apply {
                                     this.measureState = type.measureState
+                                    this.isRetry = false
                                     if (type.measureState == null) {
                                         this.expandedType = null
                                     }
