@@ -689,18 +689,20 @@ class SummaryDataFragmentToday :
 
     private fun performOneTapVitalsOp(type: OHealthOverview.VitalsType) {
         if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
             return
         }
         if (viewModel.stateOneTapVitalsCard.value?.measuring == true) {
+            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
             return
         }
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             context?.let {
                 val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
                 if (isWorkerRunning) {
-                    /*viewModel.stateOneTapVitalsCard.postValue(viewModel.stateOneTapVitalsCard.value?.apply {
-                        this.measureState = TapMeasureState.ERROR
-                    })*/
+                    withContext(Dispatchers.Main){
+                        context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+                    }
                     return@launch
                 }
 

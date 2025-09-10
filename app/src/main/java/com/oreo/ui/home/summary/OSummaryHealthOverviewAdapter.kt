@@ -1040,7 +1040,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         setOnClickListener {
                             data.expandedType?.let { type ->
                                 data.measureState = null
-                                data.measuring = true
+                                data.measuring = false
                                 lytSuccess.gone()
                                 retryBtn.gone()
                                 progressBar.visible()
@@ -1051,10 +1051,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
-                    hintTextViewExp.text =
-                        context.getString(R.string.text_measuring_may_take_30_sec)
-
+                    titleTextViewExp.text = context.getString(R.string.text_something_went_wrong_single)
+                    hintTextViewExp.text = context.getString(R.string.text_unable_to_track)
                 }
 
                 else -> {
@@ -1067,18 +1065,28 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             }
 
-            val ivHeart =
-                binding.anchorImageView//measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
-            if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                ivHeart.visibility = View.VISIBLE
-                startHeartAnimation(ivHeart, data.hrValue ?: 60)
-            } else {
-                ivHeart.visibility = View.GONE
-                stopHeartAnimation(ivHeart)
-            }
+
+
 
             if (data.measureState != TapMeasureState.LAST_MEASURED) {
                 animateTileExpand(tile)
+            }
+
+            val ivAnchor =
+                binding.anchorImageView//measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
+
+            if (data.measureState == TapMeasureState.MEASURING) {
+                if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                    ivAnchor.visible()
+                    startHeartAnimation(ivAnchor, data.hrValue ?: 60)
+                } else {
+                    ivAnchor.visible()
+                    ivAnchor.setImageResource(getIcon(data.expandedType))
+                    stopHeartAnimation(ivAnchor)
+                }
+            } else {
+                ivAnchor.gone()
+                stopHeartAnimation(ivAnchor)
             }
 
             // Collapse on tap of expanded tile
@@ -1144,6 +1152,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
+            }
+        }
+
+        private fun getIcon(type: VitalsType?): Int {
+            return when (type) {
+                VitalsType.HR -> R.drawable.ic_hr_measure
+                VitalsType.STRESS -> R.drawable.ic_stress_measure
+                VitalsType.SPO2 -> R.drawable.ic_spo2_measure
+                VitalsType.SKIN_TEMP -> R.drawable.ic_temp_measure
+                null -> R.drawable.ic_hr_measure
             }
         }
 
