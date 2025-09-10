@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary
 
+import android.animation.Animator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.LinearGradient
@@ -947,15 +948,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
             }
 
-            val transition = AutoTransition().apply { duration = 200 }
+            var transition = AutoTransition().apply { duration = 200 }
 
             val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
             if (data.measureState != TapMeasureState.LAST_MEASURED) {
+                transition = AutoTransition().apply { duration = 200 }
                 measuringRoot.visibility = View.GONE
                 measuringRoot.alpha = 0f
                 measuringRoot.visibility = View.VISIBLE
                 measuringRoot.animate().alpha(1f).setDuration(600).start()
             } else {
+                transition = AutoTransition().apply { duration = 0 }
                 measuringRoot.visibility = View.VISIBLE
                 measuringRoot.alpha = 1f
             }
@@ -1014,11 +1017,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
 
                         OHealthOverview.VitalsType.SKIN_TEMP -> {
-                            tvSuccessVal.text = data.skinTempValue.toString()
+                            tvSuccessVal.text = String.format("%.1f", data.skinTempValue)
                         }
 
                         null -> {}
-                        //
                     }
                     lytSuccess.visible()
                     itemClickListener?.invoke(
@@ -1051,7 +1053,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
-                    titleTextViewExp.text = context.getString(R.string.text_something_went_wrong_single)
+                    titleTextViewExp.text =
+                        context.getString(R.string.text_something_went_wrong_single)
                     hintTextViewExp.text = context.getString(R.string.text_unable_to_track)
                 }
 
@@ -1076,20 +1079,27 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.anchorImageView//measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
 
             if (data.measureState == TapMeasureState.MEASURING) {
-                if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                    ivAnchor.visible()
-                    startHeartAnimation(ivAnchor, data.hrValue ?: 60)
-                } else {
-                    ivAnchor.visible()
-                    ivAnchor.setImageResource(getIcon(data.expandedType))
-                    stopHeartAnimation(ivAnchor)
+                val srcView = when (data.expandedType) {
+                    VitalsType.HR -> binding.ivHrIcon
+                    VitalsType.STRESS -> binding.ivStressIcon
+                    VitalsType.SPO2 -> binding.ivSpO2Icon
+                    VitalsType.SKIN_TEMP -> binding.ivSkinIcon
+                    null -> binding.ivHrIcon
                 }
+                ivAnchor.setImageResource(getIcon(data.expandedType))
+                animateImageView(ivAnchor, srcView,{
+                    if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                        startHeartAnimation(ivAnchor, data.hrValue ?: 60)
+                    }else {
+                        stopHeartAnimation(ivAnchor)
+                    }
+                })
+
             } else {
-                ivAnchor.gone()
+                ivAnchor.invisible()
                 stopHeartAnimation(ivAnchor)
             }
 
-            // Collapse on tap of expanded tile
             tile.setOnClickListener {
 
                 return@setOnClickListener
@@ -1153,6 +1163,66 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
             }
+        }
+
+        private fun animateImageView(
+            ivAnchor: ImageView,
+            ivHrIcon: ImageView,
+            onFinish:()-> Unit,
+        ) {
+            ivAnchor.invisible()
+            ivAnchor.post {
+                val startLocation = IntArray(2)
+                val endLocation = IntArray(2)
+
+                ivHrIcon.getLocationOnScreen(startLocation)
+                ivAnchor.getLocationOnScreen(endLocation)
+
+                val startX = startLocation[0].toFloat()
+                val startY = startLocation[1].toFloat()
+                val endX = endLocation[0].toFloat()
+                val endY = endLocation[1].toFloat()
+
+                // Scale differences
+                val scaleX = ivHrIcon.width.toFloat() / ivAnchor.width.toFloat()
+                val scaleY = ivHrIcon.height.toFloat() / ivAnchor.height.toFloat()
+
+                // Reset ivAnchor to start position & scale
+                ivAnchor.scaleX = scaleX
+                ivAnchor.scaleY = scaleY
+                ivAnchor.translationX = startX - endX
+                ivAnchor.translationY = startY - endY
+
+                ivAnchor.visible()
+
+                ivAnchor.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .translationX(0f)
+                    .translationY(0f)
+                    .setDuration(500)
+                    .setListener(object : Animator.AnimatorListener{
+                        override fun onAnimationStart(animation: Animator) {
+
+                        }
+
+                        override fun onAnimationEnd(animation: Animator) {
+                            onFinish()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {
+
+                        }
+
+                    })
+                    .start()
+
+            }
+
         }
 
         private fun getIcon(type: VitalsType?): Int {
