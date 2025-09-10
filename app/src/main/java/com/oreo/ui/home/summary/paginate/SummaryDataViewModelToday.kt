@@ -111,6 +111,7 @@ import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CO
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -198,6 +199,9 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateStressCard = MutableLiveData<OHealthOverview.StressDashDataModel?>()
 
     val cycleTrackerCardBigData = MutableLiveData<OHealthOverview.CycleTrackerCardBig?>()
+
+    private var hydrationDebounceJob: Job? = null
+
     val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
@@ -240,6 +244,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var isNudgeCircadianApiCalled: Boolean = false
     var nudgeCircadianData: NudgeCircadianGraph? = null
     var updateNudgeInMainViewModel = MutableLiveData<Event<NudgeCircadianGraph>>()
+    var timeTrackerActivitiesUpdated = MutableLiveData<Event<Boolean>>()
 
     var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
     var summaryAvailable: Boolean? = false
@@ -1521,7 +1526,7 @@ class SummaryDataViewModelToday @Inject constructor(
         return oneTapVitals
     }
 
-    private fun getTimelineCard(): OHealthOverview? {
+    fun getTimelineCard(): OHealthOverview? {
         val dataList = timeTrackerActivities ?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
@@ -4421,6 +4426,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         hydration = updatedValue
                                     )
                                 )*/
+                                hydrationDebounceJob?.cancel()
+                                hydrationDebounceJob = viewModelScope.launch {
+                                    delay(500)
+                                    updateTimelineData()
+                                }
                             }
                         }
 
@@ -4433,6 +4443,31 @@ class SummaryDataViewModelToday @Inject constructor(
     fun increaseHydration() {
         updateHydration(true)
     }
+
+
+    private fun updateTimelineData() {
+        getCurrDayActivities(DateFormats.getTodaysDateString(10))
+
+    }
+
+    fun getCurrDayActivities(date: String) {
+        viewModelScope.launch {
+            userRepositoryOld.getCurrDayTimelineActivitiesData(date).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            timeTrackerActivities = it.timeTracker
+                            timeTrackerActivitiesUpdated.postValue(Event(true))
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
 
     private fun getNotificationGoals() {
         viewModelScope.launch {

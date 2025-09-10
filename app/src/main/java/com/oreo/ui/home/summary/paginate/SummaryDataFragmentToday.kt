@@ -265,8 +265,10 @@ class SummaryDataFragmentToday :
 
         val lunaManagedState = lunaManagedData?.manage ?: false
         LOGS.d("FragToday : $lunaManagedState")
-        viewModel.getUserManagedHealthData(data, trendsData, impactData, lunaManagedState,
-            measurements)
+        viewModel.getUserManagedHealthData(
+            data, trendsData, impactData, lunaManagedState,
+            measurements
+        )
     }
 
 
@@ -697,7 +699,7 @@ class SummaryDataFragmentToday :
             context?.let {
                 val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
                 if (isWorkerRunning) {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
                     }
                     return@launch
@@ -1072,6 +1074,12 @@ class SummaryDataFragmentToday :
 
 
     override fun subscribeObservers() {
+
+        viewModel.timeTrackerActivitiesUpdated.observe(this) {
+            it.getContent()?.let {
+                healthOverviewAdapter.updateData(viewModel.getTimelineCard())
+            }
+        }
 
         /*viewModel.nudgeCircadianData.observe(this){
             val nudge = it.first

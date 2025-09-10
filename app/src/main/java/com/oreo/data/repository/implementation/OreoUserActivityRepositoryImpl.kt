@@ -2403,6 +2403,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
+            userHealthDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/goals"
             remoteDataSource.updateHydration(url, request)
         }
