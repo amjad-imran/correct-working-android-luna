@@ -831,22 +831,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.imageBackSpo2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
             binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
             binding.imageBackSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
+            binding.anchorImageView.visibility = View.INVISIBLE
 
             binding.lytHrValue.apply {
-                tvValue.text = data.hrValue?.let { "$it" } ?: "--"
+                tvValue.text = data.hrValue?.let { it } ?: "--"
                 tvUnit.text = "BPM"
                 tvUnit.setTextColor("#FF4E5C".toColorInt())
             }
             binding.tvHrAgo.text = data.hrLastTime ?: ""
 
             binding.lytStressValue.apply {
-                tvValue.text = data.stressValue?.let { "$it" } ?: "--"
+                tvValue.text = data.stressValue?.let { it } ?: "--"
                 tvUnit.gone()
             }
             binding.tvStressAgo.text = data.stressLastTime ?: ""
 
             binding.lytSpO2Value.apply {
-                tvValue.text = data.spo2Value?.let { "$it" } ?: "--"
+                tvValue.text = data.spo2Value?.let { it } ?: "--"
                 tvUnit.text = "%"
                 tvUnit.setTextColor("#7BBCFE".toColorInt())
             }
@@ -854,7 +855,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.lytSkinValue.apply {
                 tvValue.text =
-                    data.skinTempValue?.let { String.format("%.1f", it) } ?: "--"
+                    data.skinTempValue?.let { it } ?: "--"
                 tvUnit.text = "°C"
                 tvUnit.setTextColor("#6AAF93".toColorInt())
             }
@@ -1023,19 +1024,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         context.getString(R.string.text_measuring_may_take_30_sec)
                     when (data.expandedType) {
                         OHealthOverview.VitalsType.HR -> {
-                            tvSuccessVal.text = data.hrValue.toString()
+                            tvSuccessVal.text = data.hrValue
                         }
 
                         OHealthOverview.VitalsType.STRESS -> {
-                            tvSuccessVal.text = data.stressValue.toString()
+                            tvSuccessVal.text = data.stressValue
                         }
 
                         OHealthOverview.VitalsType.SPO2 -> {
-                            tvSuccessVal.text = data.spo2Value.toString()
+                            tvSuccessVal.text = data.spo2Value
                         }
 
                         OHealthOverview.VitalsType.SKIN_TEMP -> {
-                            tvSuccessVal.text = String.format("%.1f", data.skinTempValue)
+                            tvSuccessVal.text = data.skinTempValue
                         }
 
                         null -> {}
@@ -1112,7 +1113,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 if(data.isRetry.not()){
                     animateImageView(ivAnchor, srcView,{
                         if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                            startHeartAnimation(ivAnchor, data.hrValue ?: 60)
+                            val hrVal = data.hrValue?.toIntOrNull()?:60
+                            startHeartAnimation(ivAnchor, hrVal)
                         }else {
                             stopHeartAnimation(ivAnchor)
                         }
@@ -1120,7 +1122,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }else{
                     ivAnchor.visible()
                     if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                        startHeartAnimation(ivAnchor, data.hrValue ?: 60)
+                        val hrVal = data.hrValue?.toIntOrNull()?:60
+                        startHeartAnimation(ivAnchor, hrVal)
                     }else {
                         stopHeartAnimation(ivAnchor)
                     }

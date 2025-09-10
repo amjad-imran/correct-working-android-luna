@@ -70,6 +70,7 @@ import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.PeriodCard1
@@ -1170,6 +1171,19 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
+            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+
+            val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
+            if (hasOneTapVitalsKey == null) {
+                if (generation == 2) {
+                    getOneTapVitalsCard(healthData, measurements)?.let {
+                        userActivities.add(
+                            it
+                        )
+                    }
+                }
+            }
+
             val hasCircadianKey = priorityList.find { it.key.equals("circadian_alignment", true) }
             if (hasCircadianKey == null) {
                 getCircadianAlignmentCardData()?.let {
@@ -1184,8 +1198,6 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            val generation =
-                2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)//TODO - for testing only
 
             priorityList.forEach { item ->
                 if (item.switchState.not()) return@forEach
@@ -1346,97 +1358,136 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    private suspend fun getLastMeasuredValueAndTimeStamp(
+        healthData: ServerUserHealthData,
+        vital: VitalsType
+    ): Pair<String, String>? {
+
+        return when (vital) {
+            VitalsType.HR -> {
+                val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
+                    this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                        serverUserHealthData,
+                        this
+                    )
+
+                    val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+                    this.lastMeasuredValue = lastMeasuredValue
+                    this.lastMeasuredIndex = lastMeasuredIndex
+                }
+                val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
+                val hrLastTime: String? = try {
+                    if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
+                        val lastUpdatedTimestamp =
+                            DateTimeUtil.getTodayMidnightTimestamp() + (hrModel.lastMeasuredIndex + 1) * 5 * 60 * 1000
+                        val currentTimeStamp = DateFormats.getTimeStamp()
+                        val diff = currentTimeStamp - lastUpdatedTimestamp
+                        when {
+                            diff < 60_000 -> "just now"
+                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                            else -> "${diff / (60 * 60_000)} hr ago"
+                        }
+                    } else null
+                } catch (e: Exception) {
+                    null
+                }
+
+                if (hrValue == null || hrLastTime == null) {
+                    null
+                } else {
+                    Pair(hrValue.toString(), hrLastTime)
+                }
+            }
+
+            VitalsType.STRESS -> {
+                val stressValue = healthData.stress?.stressValue?.value
+                val stressLastTime: String? =
+                    healthData.stress?.stressValue?.lastUpdated?.let { ts ->
+                        val diff = DateFormats.getTimeStamp() - ts
+                        when {
+                            diff < 60_000 -> "just now"
+                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                            else -> "${diff / (60 * 60_000)} hr ago"
+                        }
+                    }
+                if (stressValue == null || stressLastTime == null) {
+                    null
+                } else {
+                    Pair(stressValue.toString(), stressLastTime)
+                }
+            }
+
+            VitalsType.SPO2 -> {
+                val lastMeasuredSpo2 = ringDataStore.getManualMeasurementValueBloodOxygen()
+
+                var spo2Value: Int? = null
+                var spo2LastTime: String? = null
+                lastMeasuredSpo2?.let { manual ->
+                    val startOfToday =
+                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
+                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
+                        spo2Value = manual.value
+                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
+                        spo2LastTime = try {
+                            when {
+                                diff < 60_000 -> "just now"
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+
+                    if (spo2Value == null || spo2LastTime == null) {
+                        null
+                    } else {
+                        Pair(spo2Value.toString(), spo2LastTime)
+                    }
+                }
+            }
+
+            VitalsType.SKIN_TEMP -> {
+                val lastMeasuredSkinTemp = ringDataStore.getManualMeasurementValueBodyTemp()
+                var skinTempValue: Float? = null
+                var skinTempLastTime: String? = null
+                lastMeasuredSkinTemp?.let { manual ->
+                    val startOfToday =
+                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
+                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
+                        skinTempValue = (manual.value.toFloat()) / 100f
+                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
+                        skinTempLastTime = try {
+                            when {
+                                diff < 60_000 -> "just now"
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }
+                if (skinTempValue == null || skinTempLastTime == null) {
+                    null
+                } else {
+                    Pair(String.format("%.1f", skinTempValue), skinTempLastTime)
+                }
+            }
+        }
+    }
+
     private suspend fun getOneTapVitalsCard(
         healthData: ServerUserHealthData,
         measurements: Measurements?
     ): OHealthOverview.OneTapVitals? {
-        // HR
-        val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
-            this.hrCombineModel = hrDataConvertor.getHrCombinedData(
-                serverUserHealthData,
-                this
-            )
 
-            val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
-            this.lastMeasuredValue = lastMeasuredValue
-            this.lastMeasuredIndex = lastMeasuredIndex
 
-            getHrTrend(this.rawData, lastMeasuredIndex)?.let {
-                this.trendPercent = it
-            }
+        val hrData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.HR)
+        val stressData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.STRESS)
+        val spo2Data = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.SPO2)
+        val tempData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.SKIN_TEMP)
 
-            /*if (device == null) {
-                this.measureState = TapMeasureState.NO_DEVICE
-            }*/
-        }
-        val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
-        val hrLastTime: String? = try {
-            if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
-                val lastUpdatedTimestamp =
-                    DateTimeUtil.getTodayMidnightTimestamp() + (hrModel.lastMeasuredIndex + 1) * 5 * 60 * 1000
-                val currentTimeStamp = DateFormats.getTimeStamp()
-                val diff = currentTimeStamp - lastUpdatedTimestamp
-                when {
-                    diff < 60_000 -> "just now"
-                    diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                    else -> "${diff / (60 * 60_000)} hr ago"
-                }
-            } else null
-        } catch (e: Exception) {
-            null
-        }
-
-        // Stress
-        val stressValue = healthData.stress?.stressValue?.value
-        val stressLastTime: String? = healthData.stress?.stressValue?.lastUpdated?.let { ts ->
-            val diff = DateFormats.getTimeStamp() - ts
-            when {
-                diff < 60_000 -> "just now"
-                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                else -> "${diff / (60 * 60_000)} hr ago"
-            }
-        }
-
-        val lastMeasuredSpo2 = ringDataStore.getManualMeasurementValueBloodOxygen()
-
-        var spo2Value: Int? = null
-        var spo2LastTime: String? = null
-        lastMeasuredSpo2?.let { manual ->
-            val startOfToday = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-            if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                spo2Value = manual.value
-                val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                spo2LastTime = try {
-                    when {
-                        diff < 60_000 -> "just now"
-                        diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                        else -> "${diff / (60 * 60_000)} hr ago"
-                    }
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        }
-
-        val lastMeasuredSkinTemp = ringDataStore.getManualMeasurementValueBodyTemp()
-        var skinTempValue: Float? = null
-        var skinTempLastTime: String? = null
-        lastMeasuredSkinTemp?.let { manual ->
-            val startOfToday = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-            if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                skinTempValue = (manual.value.toFloat()) / 100f
-                val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                skinTempLastTime = try {
-                    when {
-                        diff < 60_000 -> "just now"
-                        diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                        else -> "${diff / (60 * 60_000)} hr ago"
-                    }
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        }
 
         val features = OHealthOverview.OneTapVitalsFeatureConfig(
             showHR = measurements?.hr ?: true,
@@ -1450,14 +1501,14 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         val oneTapVitals = OHealthOverview.OneTapVitals(
-            hrValue = hrValue,
-            hrLastTime = hrLastTime,
-            stressValue = stressValue,
-            stressLastTime = stressLastTime,
-            spo2Value = spo2Value,
-            spo2LastTime = spo2LastTime,
-            skinTempValue = skinTempValue,
-            skinTempLastTime = skinTempLastTime,
+            hrValue = hrData?.first,
+            hrLastTime = hrData?.second,
+            stressValue = stressData?.first,
+            stressLastTime = stressData?.second,
+            spo2Value = spo2Data?.first,
+            spo2LastTime = spo2Data?.second,
+            skinTempValue = tempData?.first,
+            skinTempLastTime = tempData?.second,
             featureConfig = features,
             expandedType = null,
             measuring = false
@@ -3438,7 +3489,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.stressValue = manualMeasurement.value
+                                this.stressValue =
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.stressLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -3474,7 +3526,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.hrValue = manualMeasurement.value
+                                this.hrValue = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.hrLastTime = resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
@@ -3504,7 +3556,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.spo2Value = manualMeasurement.value
+                                this.spo2Value = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.spo2LastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -3532,7 +3584,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.skinTempValue = (manualMeasurement.value.toFloat()) / 100
+                                val temp = (manualMeasurement.value.toFloat()) / 100
+
+                                this.skinTempValue = if (manualMeasurement.value != 0) String.format("%.1f", temp) else null
                                 this.skinTempLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false

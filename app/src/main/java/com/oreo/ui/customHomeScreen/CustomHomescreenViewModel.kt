@@ -112,7 +112,15 @@ class CustomHomescreenViewModel @Inject constructor(
             }
         }
 
-
+        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==2) {
+            val oneTapCard = card.find { it.key.equals("one_tap_vitals",true) }
+            if(oneTapCard==null){
+                val index = cardsToAdd.indexOfFirst { it.key.equals("one_tap_vitals",true) }
+                if(index!=-1){
+                    cardsToAdd[index].switchState = true
+                }
+            }
+        }
         return cardsToAdd
     }
 
@@ -223,8 +231,20 @@ class CustomHomescreenViewModel @Inject constructor(
         }
     }
 
+
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
+
+            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==2) {
+                this["one_tap_vitals"] = CustomHomeScreenItem(
+                    R.drawable.icon_circadian_alignment,
+                    "one_tap_vitals",
+                    resourceProvider.getString(R.string.text_one_tap_vitals),
+                    true,
+                    this.size+1
+                )
+            }
+
 
             this["circadian_alignment"] = CustomHomeScreenItem(
                 R.drawable.icon_circadian_alignment,
@@ -233,6 +253,7 @@ class CustomHomescreenViewModel @Inject constructor(
                 true,
                 this.size+1
             )
+
 
             this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
