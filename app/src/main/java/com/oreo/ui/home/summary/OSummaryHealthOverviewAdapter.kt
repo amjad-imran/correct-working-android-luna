@@ -821,9 +821,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         fun bind(data: OHealthOverview.OneTapVitals) {
 
             binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR && expandedTile == null)
+            binding.imageBackHr.setVisibilityByCondition(data.featureConfig.showHR && expandedTile == null)
             binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress && expandedTile == null)
+            binding.imageBackStress.setVisibilityByCondition(data.featureConfig.showStress && expandedTile == null)
             binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
+            binding.imageBackSpo2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
             binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
+            binding.imageBackSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
 
             binding.lytHrValue.apply {
                 tvValue.text = data.hrValue?.let { "$it" } ?: "--"
@@ -947,6 +951,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 val child = tile.getChildAt(i)
                 if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
             }
+
+            binding.imageBackHr.gone()
+            binding.imageBackStress.gone()
+            binding.imageBackSpo2.gone()
+            binding.imageBackSkinTemp.gone()
 
             var transition = AutoTransition().apply { duration = 200 }
 
