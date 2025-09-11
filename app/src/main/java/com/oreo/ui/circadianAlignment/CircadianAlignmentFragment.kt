@@ -15,9 +15,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.CircadianMidPointData
 import com.noisefit_commans.ui.BaseFragment
@@ -161,8 +163,8 @@ class CircadianAlignmentFragment :
         } else {
             val fullText = (
                     getString(R.string.text_chronotype) +
-                    viewModel.personChronotype
-            ).uppercase()
+                            viewModel.personChronotype
+                    ).uppercase()
 
             val spannable = SpannableString(fullText)
             spannable.setSpan(
@@ -307,8 +309,8 @@ class CircadianAlignmentFragment :
 
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.redMidPoint("Avg Now")
-                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third ?:
-                            getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
+                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third
+                        ?: getString(R.string.text_your_rhythm_shifted_later_try_dimming_lights_and_reducing_screen_time_before_bed_to_realign)
                 }
 
                 CircadianMidPointStatus.Correcting -> {
@@ -320,8 +322,8 @@ class CircadianAlignmentFragment :
 
                     avgNowMidPoint = CircadianMidPointGraphUtils.greenMidPoint("Avg Now")
 
-                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third ?:
-                        getString(R.string.text_circadian_mid_point_desc_correcting)
+                    binding.lytSleepMidPoint.tvDesc.text = phaseState.third
+                        ?: getString(R.string.text_circadian_mid_point_desc_correcting)
                 }
 
                 CircadianMidPointStatus.SleepMissing -> {
@@ -566,7 +568,7 @@ class CircadianAlignmentFragment :
 
             viewModel.viewModelScope.launch(Dispatchers.IO) {
                 val energyValues = viewModel.getEnergyValues(graphData, true)
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     binding.lytGraphView.graphView.setDataSet(
                         viewModel.getScrollGraphList(graphData),
                         energyValues/*graphData.energyGraph*/
@@ -592,7 +594,8 @@ class CircadianAlignmentFragment :
                 binding.lytSleepMidPoint.root.gone()
                 binding.lytLockedSleepMidPoint.apply {
                     textView178.text = getString(R.string.text_we_need_more_data_to_better_know_you)
-                    textView173.text = getString(R.string.text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights)
+                    textView173.text =
+                        getString(R.string.text_we_haven_t_seen_enough_recent_sleep_data_to_show_your_circadian_rhythm_wearing_your_ring_consistently_will_help_unlock_personalized_insights)
                     root.visible()
                 }
             }
@@ -651,7 +654,7 @@ class CircadianAlignmentFragment :
                 HashMap<String, Any>().apply {
                     this["source"] = "circadian"
                     this["target"] = "sleep"
-                    }
+                }
             )
             navigate(
                 R.id.addActivityTimelineFragment,
@@ -690,20 +693,20 @@ class CircadianAlignmentFragment :
         }
 
         binding.lytFocusWindow.llLunaAi.setOnClickListener {
-           /* if (viewModel.isChatSplashShown()) {*/
+            /* if (viewModel.isChatSplashShown()) {*/
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.aichat_initiated_clicked,
                 HashMap<String, Any>().apply {
                     this["source"] = "circadian"
                 }
             )
-                navigate(
-                    R.id.aiTopQuestionsFragment,
-                    bundleOf("aiTopic" to AITopics.CIRCADIAN)
-                )
-           /* } else {
-                navigate(R.id.aiChatOnboardFragment)
-            }*/
+            navigate(
+                R.id.aiTopQuestionsFragment,
+                bundleOf("aiTopic" to AITopics.CIRCADIAN)
+            )
+            /* } else {
+                 navigate(R.id.aiChatOnboardFragment)
+             }*/
         }
 
         binding.rvHowItWorks.addOnItemTouchListener(object :
@@ -733,7 +736,14 @@ class CircadianAlignmentFragment :
             binding.mainScrollView.visible()
             LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
-            updateGraph(it.isLockedCircularView, it.graphData, it.graphData?.circadianMidPointData)
+
+
+            val string =
+                "{\"start_time\": \"2025-09-02 04:00:00\", \"end_time\": \"2025-09-02 06:00:00\", \"circadian_midpoint\": \"2025-09-02 03:56:00\", \"avg_now\": \"2025-09-02 03:55:30\", \"avg_before\": \"2025-09-02 03:57:48\", \"chronotype\": \"Moderately evening type\" }"
+            val json = Gson().fromJson<CircadianMidPointData>(string)
+
+            updateGraph(it.isLockedCircularView, it.graphData,
+                it.graphData?.circadianMidPointData)
             showCircularScheduler(it.graphData, it.isLockedCircularView)
         }
 

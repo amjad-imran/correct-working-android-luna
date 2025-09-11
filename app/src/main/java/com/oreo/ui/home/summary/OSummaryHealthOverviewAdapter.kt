@@ -1844,10 +1844,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     hydrationText.append(String.format("%.1f", convertedHydrate))
                     hydrationText.append("/")
 
-                    //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
                     val convertedHydrateGoal =
                         notificationGoal.convertedHydrateGoal
-//                        viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
 
                     hydrationText.append("$convertedHydrateGoal")
                     hydrationText.append("oz")
