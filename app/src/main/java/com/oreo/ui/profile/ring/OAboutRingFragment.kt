@@ -2,6 +2,7 @@ package com.oreo.ui.profile.ring
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -21,6 +22,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -61,7 +63,11 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
     private fun setUi() {
         connectedDevice = updateViewModel.ringDataSore.getRingDevice()
         binding.ivDevice.loadImage(
-            requireContext(), connectedDevice?.ringInfo?.image2
+            requireContext(),
+            if(connectedDevice?.ringInfo?.image3.isNullOrEmpty())
+                "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png"
+                else
+                    connectedDevice?.ringInfo?.image3
         )
         binding.tvVersion.text = "MAC ${connectedDevice?.address ?: ""}"
 
@@ -342,24 +348,50 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
 
     private fun setStateConnected(isConnected: Boolean) {
         val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
-
         binding.lytChargeProgress.apply {
             if(isConnected) {
-                tvPercVal.text = "$batteryPercent%"
-                linearProgressIndicator.progress = batteryPercent
-                linearProgressIndicator.setIndicatorColor(
-                    when {
-                        0 < batteryPercent && batteryPercent < 10 -> "#FFFFFF".toColorInt()
-                        10 < batteryPercent && batteryPercent < 20 -> "#FFFFFF".toColorInt()
-                        else -> "#FFFFFF".toColorInt()
-                    }
-                )
-                tvPercVal.visible()
-                linearProgressIndicator.visible()
+                val screenWidthHalf = resources.displayMetrics.widthPixels / 2
+
+                this.root.post {
+                    val params = this.root.layoutParams
+                    params.width = screenWidthHalf
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    this.root.layoutParams = params
+                    //
+                    ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                    tvPercVal.text = "$batteryPercent%"
+                    linearProgressIndicator.setIndicatorColor(
+                        getIndicatorColor(
+                            batteryPercent,
+                            /*mViewModel.sessionManager.isRingCharging.value ?: */false
+                        )
+                    )
+                    linearProgressIndicator.progress = batteryPercent
+
+                    tvPercVal.visible()
+                    lPbContainer.visible()
+//                    ivLightening.setVisibilityByCondition(mViewModel.sessionManager.isRingCharging.value ?: false)
+                }
             }else{
                 tvPercVal.gone()
-                linearProgressIndicator.gone()
+                lPbContainer.gone()
+                this.root.post {
+                    val params = this.root.layoutParams
+                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    this.root.layoutParams = params
+
+                    this.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                }
             }
+        }
+    }
+
+    private fun getIndicatorColor(value: Int, isCharging: Boolean = false): Int {
+        return when (value) {
+            in 0..20 -> "#CC2929".toColorInt()
+            in 21..40 -> if (isCharging) "#29CC74".toColorInt() else "#CC8029".toColorInt()
+            else -> if (isCharging) "#29CC74".toColorInt() else "#FFFFFF".toColorInt()
         }
     }
 

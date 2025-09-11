@@ -567,9 +567,16 @@ data class DeviceDataUpdate(@SerializedName("setter_operation_status") val sette
 data class BatteryData(
     @SerializedName("battery_percentage") var percentage: Int? = 0,
     @SerializedName("fully_charge") var isFullyCharged: Boolean? = false,
-    @SerializedName("is_charging") var isCharging: Boolean = false
+    @SerializedName("is_charging") var isCharging: Boolean = false,
+    var caseInfoData: CaseInfoData ?= null,
 ) :
     ColorfitData()
+
+data class CaseInfoData(
+    var battLevel: Int ?= null,
+    var isOpen: Boolean ?= null,
+    var serialNumber: String ?= null,
+)
 
 data class WorkoutRealTimeData(
     val hrValue: Int? = null,

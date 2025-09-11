@@ -310,6 +310,8 @@ constructor(
                         color = info.color,
                         image = info.imageUrl,
                         image2 = info.imageUrl2,
+                        image3 = info.imageUrl3,
+                        chargerRingUrl = info.chargerRingUrl,
                         serialNoRaw = convertedSerialNo
                     )
                     return@outer

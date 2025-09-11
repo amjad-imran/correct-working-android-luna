@@ -30,6 +30,7 @@ import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.location.LocationUtils
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.ManualMeasureType
@@ -116,6 +117,8 @@ class SessionManager
     var batterPercent = MutableLiveData(0)
     var batteryPercentRing = MutableLiveData(0)
     var isRingCharging = MutableLiveData(false)
+
+    var caseInfoData = MutableLiveData<CaseInfoData>()
 
     var firmwareLogsStatus = MutableLiveData(-1)
 

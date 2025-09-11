@@ -9,8 +9,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -36,15 +38,18 @@ import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.width
 import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
@@ -52,7 +57,6 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
-import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -281,7 +285,8 @@ class OreoMyDeviceFragment :
         mViewModel.deviceConnected.observe(this) { connected ->
             if (connected) {
                 binding.apply {
-                    lytDeviceConnected.root.visible()
+//                    lytDeviceConnected.root.visible()
+                    lytDeviceConnectedNew.root.visible()
                     //btnUnpair.visible()
                     //btnReset.visible()
                     lytPairYourDeviceHeader.root.gone()
@@ -290,7 +295,8 @@ class OreoMyDeviceFragment :
 
             } else {
                 binding.apply {
-                    lytDeviceConnected.root.gone()
+//                    lytDeviceConnected.root.gone()
+                    lytDeviceConnectedNew.root.gone()
                     //btnUnpair.gone()
                     //btnReset.gone()
 
@@ -315,6 +321,7 @@ class OreoMyDeviceFragment :
                     getBatteryInfo()
                     mainViewModel.onRingConnected()
 
+//                    setHeaderUi(connectedState.noiseFitDevice)
                 }
 
                 is ConnectState.UnPaired -> {
@@ -333,6 +340,11 @@ class OreoMyDeviceFragment :
             }
 
         }
+
+        mViewModel.sessionManager.caseInfoData.observe(this) {
+            mViewModel.caseInfoData = it
+        }
+
     }
 
     fun isGpsTurnedOn(): Boolean {
@@ -389,6 +401,7 @@ class OreoMyDeviceFragment :
             }
         }
     }
+
     private fun hasGpsPermission(): Boolean {
         val permissionAccessFineLocationApproved =
             (ActivityCompat.checkSelfPermission(
@@ -510,7 +523,8 @@ class OreoMyDeviceFragment :
 
         uiController.onApiErrorReceived(
             ErrorResponse(
-                UIComponentType.AreYouSureDialog(getString(R.string.text_alert),
+                UIComponentType.AreYouSureDialog(
+                    getString(R.string.text_alert),
                     messageBuilder.toString(),
                     false,
                     getString(R.string.text_unpair),
@@ -543,9 +557,151 @@ class OreoMyDeviceFragment :
         }
     }
 
+    /*enum class RingAndCaseState {
+        ONLY_RING, RING_CHARGER_INACTIVE, RING_CHARGER_ACTIVE
+    }
+
+    private fun setHeaderUi(noiseFitDevice: ColorFitDevice?) {
+        val state = RingAndCaseState.RING_CHARGER_ACTIVE
+
+        val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
+
+        val lastSync =
+            mViewModel.sessionManager.getLastSyncTime()
+                ?.let { DateTimeUtil.getRelativeTime(it, mViewModel.resProvider) }
+        val lastSyncText = getString(
+            R.string.text_synced_space,
+            lastSync ?: getString(R.string.text_not_yet_syncyed)
+        )
+
+        val caseInfoData = CaseInfoData(
+            isOpen = true,
+            battLevel = 50,
+            serialNumber = "49323484843",
+        )
+
+        val caseBatLevel = caseInfoData?.battLevel ?: 0
+
+        when (state) {
+            RingAndCaseState.ONLY_RING -> {
+                binding.lytDeviceConnectedNew.apply {
+                    textView197.text = "Luna Ring"
+                    textView198.text = "Gen 1" // TODO add gen 1/2
+                    val isSynced = true // TODO get sync data and other conditions
+                    if (isSynced) {
+                        textView199.text = lastSyncText
+                        textView199.visible()
+                    } else {
+                        textView199.gone()
+                    }
+
+                    ivImgCenter.visible()
+                    ivImgCenter.loadImage(this.root.context, noiseFitDevice?.ringInfo?.image)
+
+                    lytOnlyRingProgress.apply {
+                        this.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                        this.tvPercVal.text = "$batteryPercent%"
+                        this.linearProgressIndicator.progress = batteryPercent
+                        root.visible()
+                    }
+
+                    lytChargerOffContainer.gone()
+                    lytBothActive.gone()
+
+                    root.visible()
+                }
+            }
+
+            RingAndCaseState.RING_CHARGER_INACTIVE -> {
+                binding.lytDeviceConnectedNew.apply {
+                    textView197.text = "Luna ring w/ Charging Case"
+                    //
+                    ivImgRight.visible()
+                    ivImgRight.loadImage(this.root.context, noiseFitDevice?.ringInfo?.image)
+
+                    ivImgLeft.visible()
+                    ivImgLeft.setImageResource(R.drawable.image_ring_charge)
+                    //
+                    lytRingProgressChargerOff.apply {
+                        this.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                        this.tvPercVal.text = "$batteryPercent%"
+                        this.linearProgressIndicator.progress = batteryPercent
+                    }
+                    lytChargerOffContainer.visible()
+                    lytOnlyRingProgress.root.gone()
+                    lytBothActive.gone()
+
+                    //
+                    root.visible()
+                }
+            }
+
+            RingAndCaseState.RING_CHARGER_ACTIVE -> {
+
+                val padding = 4f.dpToPixel()
+                binding.lytDeviceConnectedNew.apply {
+                    textView197.text = "Luna ring w/ Charging Case"
+                    //
+                    lytRingProgressBoth.apply {
+
+                        this.tvPercVal.gone()
+                        this.linearProgressIndicator.gone()
+
+                        this.root.post {
+                            val width = lytBothActive.width
+                            val params: ViewGroup.LayoutParams = this.root.layoutParams
+                            params.width = ViewGroup.LayoutParams.WRAP_CONTENT//width/2 - padding.toInt()
+                            this.root.layoutParams = params
+                        }
+
+                        this.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                        this.tvPercVal.text = "$batteryPercent%"
+                        this.linearProgressIndicator.progress = batteryPercent
+                        this.linearProgressIndicator.setIndicatorColor(
+                            getIndicatorColor(
+                                batteryPercent
+                            )
+                        )
+                    }
+
+                    lytRingCaseProgressBoth.apply {
+
+                        this.root.post {
+                            val width = lytBothActive.width
+                            val params: ViewGroup.LayoutParams = this.root.layoutParams
+                            params.width = width/2 - padding.toInt()
+                            this.root.layoutParams = params
+                        }
+
+                        this.ivImage.setImageResource(R.drawable.ic_charger_for_perc)
+                        this.tvPercVal.text = "$caseBatLevel%"
+                        this.linearProgressIndicator.progress = caseBatLevel
+                        this.linearProgressIndicator.setIndicatorColor(
+                            getIndicatorColor(
+                                caseBatLevel
+                            )
+                        )
+                    }
+                    lytBothActive.visible()
+                    lytChargerOffContainer.gone()
+                    lytOnlyRingProgress.root.gone()
+
+                    root.visible()
+                }
+            }
+        }
+    }*/
+
+    private fun getIndicatorColor(value: Int, isCharging: Boolean = false): Int {
+        return when (value) {
+            in 0..20 -> "#CC2929".toColorInt()
+            in 21..40 -> if (isCharging) "#29CC74".toColorInt() else "#CC8029".toColorInt()
+            else -> if (isCharging) "#29CC74".toColorInt() else "#FFFFFF".toColorInt()
+        }
+    }
 
     private fun setStateConnecting(noiseFitDevice: ColorFitDevice?) {
-        if (mViewModel.sessionManager.bluetoothStateDash.value == false) {
+        /*if (mViewModel.sessionManager.bluetoothStateDash.value == false) {
             setStateBtOff(noiseFitDevice)
         } else {
             binding.lytDeviceConnected.apply {
@@ -562,7 +718,86 @@ class OreoMyDeviceFragment :
             }
         }
 
-        //binding.lytFeatures.gone()
+        //binding.lytFeatures.gone()*/
+        //---
+        val context = binding.root.context
+        val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+        val isChargerOpen = mViewModel.caseInfoData?.isOpen
+
+        binding.lytDeviceConnectedNew.apply{
+            //
+            tvConnectedTitle.apply {
+                text =
+                    if (mViewModel.sessionManager.bluetoothStateDash.value == false)
+                        getString(R.string.text_make_sure_your_bluetooth_is_on)
+                    else
+                        getString(R.string.text_trying_to_connect_dot)
+                setTextColor("#CB5A5A".toColorInt())
+            }
+
+            genContainer.gone()
+            tvSyncDesc.gone()
+            //
+
+            // Set Charing Progress Layout
+            lytRingProgress.tvPercVal.gone()
+            lytRingProgress.lPbContainer.gone()
+            lytRingProgress.root.post {
+                val params = lytRingProgress.root.layoutParams
+                params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                lytRingProgress.root.layoutParams = params
+            }
+            lytRingProgress.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+
+            if(mViewModel.caseInfoData != null) {
+                lytRingCaseProgress.tvPercVal.gone()
+                lytRingCaseProgress.lPbContainer.gone()
+                lytRingCaseProgress.root.post {
+                    val params = lytRingCaseProgress.root.layoutParams
+                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    lytRingCaseProgress.root.layoutParams = params
+                }
+                lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
+                lytRingCaseProgress.root.visible()
+            }else{
+                lytRingCaseProgress.root.gone()
+            }
+            //
+            setCenterImage(noiseFitDevice)
+
+            when(isChargerOpen) {
+                null -> {
+                    tvRingCaseName.text = "Luna ring"
+                    tvGen.text = "Gen $ringGen.0"
+                    genContainer.visible()
+                }
+
+                true -> {
+                    tvRingCaseName.text = "Luna ring w/ Charging Case"
+                    genContainer.gone()
+                }
+
+                false -> {
+                    tvRingCaseName.text = "Luna ring w/ Charging Case"
+                    genContainer.gone()
+                }
+
+            }
+
+        }
+    }
+
+    private fun getGeneration(serialNoRaw: String?): Int {
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
     }
 
     private fun setStateBtOff(noiseFitDevice: ColorFitDevice?) {
@@ -588,7 +823,7 @@ class OreoMyDeviceFragment :
             R.string.text_synced_space,
             lastSync ?: getString(R.string.text_not_yet_syncyed)
         )
-        binding.lytDeviceConnected.apply {
+        /*binding.lytDeviceConnected.apply {
 
             ivRingImage.loadImage(
                 requireContext(),
@@ -618,10 +853,232 @@ class OreoMyDeviceFragment :
             }
 
 
-        }
+        }*/
 
         binding.apply {
             lytFeatures.visible()
+        }
+
+        // ----
+        val context = binding.root.context
+        val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+        val caseInfoData = mViewModel.caseInfoData
+
+        binding.lytDeviceConnectedNew.apply{
+            //
+            tvConnectedTitle.apply {
+                text = "CONNECTED TO"
+                setTextColor("#83AAC6".toColorInt())
+            }
+
+            tvSyncDesc.text = lastSyncText
+            tvSyncDesc.visible()
+            //
+
+            // Set Charging Progress Layout
+            val chargingContainerWidth = binding.root.width - (48 * resources.displayMetrics.density).toInt()
+            lytRingProgress.apply {
+                lytRingProgress.root.post {
+                    val params = lytRingProgress.root.layoutParams
+                    params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    lytRingProgress.root.layoutParams = params
+                }
+                ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                tvPercVal.text = "$batteryPercent%"
+                linearProgressIndicator.setIndicatorColor(
+                    getIndicatorColor(
+                        batteryPercent,
+                        mViewModel.sessionManager.isRingCharging.value ?: false
+                    )
+                )
+                linearProgressIndicator.progress = batteryPercent
+                tvPercVal.visible()
+                lPbContainer.visible()
+                ivLightening.setVisibilityByCondition(mViewModel.sessionManager.isRingCharging.value ?: false)
+                lytRingProgress.root.visible()
+            }
+
+            LOGS.d("uicnjcamc : $noiseFitDevice")
+            setCenterImage(noiseFitDevice)
+            if(ringGen == 1 || caseInfoData == null){
+                tvRingCaseName.text = "Luna ring"
+                tvGen.text = "Gen $ringGen.0"
+                genContainer.visible()
+
+                lytRingCaseProgress.root.gone()
+
+            }else{
+                genContainer.gone()
+                if(caseInfoData.battLevel == null){
+                    lytRingCaseProgress.tvPercVal.gone()
+                    lytRingCaseProgress.lPbContainer.gone()
+                    lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
+                    lytRingCaseProgress.root.post {
+                        val params = lytRingCaseProgress.root.layoutParams
+                        params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                        params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        lytRingCaseProgress.root.layoutParams = params
+                    }
+                }
+                else{
+                    tvRingCaseName.text = "Luna ring w/ Charging Case"
+
+                    //
+                    val chargerBattery = caseInfoData.battLevel ?: 0
+                    lytRingCaseProgress.apply {
+                        ivImage.setImageResource(R.drawable.ic_charger_for_perc)
+                        tvPercVal.text = "$chargerBattery%"
+                        linearProgressIndicator.progress = chargerBattery
+                        linearProgressIndicator.setIndicatorColor(
+                            getIndicatorColor(
+                                chargerBattery,
+                                false
+                            )
+                        )
+                        tvPercVal.visible()
+                        lPbContainer.visible()
+                        root.post {
+                            val params = root.layoutParams
+                            params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                            params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                            root.layoutParams = params
+                        }
+                    }
+                }
+                lytRingCaseProgress.root.visible()
+            }
+            //
+
+        }
+    }
+
+    private fun setCenterImage(noiseFitDevice: ColorFitDevice?){
+
+        val context = binding.root.context
+        val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+        val caseInfoData = mViewModel.caseInfoData
+        val isRingCharing = mViewModel.sessionManager.isRingCharging.value ?: false
+
+        val displayMetrics = resources.displayMetrics
+        val deviceWidth = displayMetrics.widthPixels
+
+        val ringImage = if(noiseFitDevice?.ringInfo?.image3.isNullOrEmpty()){
+            mViewModel.lunarBlackImagesUrl.first
+        }else{
+            noiseFitDevice.ringInfo?.image3
+        }
+
+        val chargerOpenImage = if(noiseFitDevice?.ringInfo?.chargerRingUrl.isNullOrEmpty()){
+            mViewModel.lunarBlackImagesUrl.second
+        }else{
+            noiseFitDevice.ringInfo?.chargerRingUrl
+        }
+
+        LOGS.d("ckjssjnsc : ringGen : $ringGen")
+        LOGS.d("ckjssjnsc : caseInfoData : $caseInfoData")
+        LOGS.d("ckjssjnsc : isRingCharing : $isRingCharing")
+        LOGS.d("ckjssjnsc : ringImage : $ringImage")
+        LOGS.d("ckjssjnsc : chargerOpenImage : $chargerOpenImage")
+        LOGS.d("ckjssjnsc : -----------------------------")
+
+        when {
+            ringGen == 1 || caseInfoData == null || (!isRingCharing && caseInfoData.isOpen!=true) -> {
+                binding.lytDeviceConnectedNew.apply {
+                    ivImgLeft.gone()
+                    ivImgRight.gone()
+
+                    ivImgCenter.post {
+                        val params = ivImgCenter.layoutParams
+                        params.width = deviceWidth/2
+                        params.height = deviceWidth/2
+
+                        if (params is ViewGroup.MarginLayoutParams) {
+                            val topMarginInPx = (160 * resources.displayMetrics.density).toInt()
+                            val bottomMarginInPx = (64 * resources.displayMetrics.density).toInt()
+                            params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
+                        }
+
+                        ivImgCenter.layoutParams = params
+                        //
+                        ivImgCenter.loadImage(context, ringImage)
+                        ivImgCenter.visible()
+                    }
+                }
+            }
+
+            !isRingCharing -> {
+                binding.lytDeviceConnectedNew.apply {
+                    ivImgCenter.gone()
+                    ivImgLeft.apply {
+                        /*ivImgLeft.post {
+                            val params = ivImgLeft.layoutParams
+                            params.width = (238 * resources.displayMetrics.density).toInt()
+                            params.height = (192 * resources.displayMetrics.density).toInt()
+
+                            if (params is ViewGroup.MarginLayoutParams) {
+                                val topMarginInPx = (140 * resources.displayMetrics.density).toInt()
+                                val bottomMarginInPx = (20 * resources.displayMetrics.density).toInt()
+                                params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
+                            }
+
+                            ivImgLeft.layoutParams = params
+                            //
+                            ivImgLeft.loadImage(context, chargerOpenImage)
+                            ivImgLeft.visible()
+                        }*/
+                        loadImage(context, chargerOpenImage)
+                        visible()
+                    }
+                    ivImgRight.apply {
+                        loadImage(context, ringImage)
+                        visible()
+                    }
+                }
+            }
+
+            isRingCharing -> {
+                binding.lytDeviceConnectedNew.apply {
+                ivImgLeft.gone()
+                ivImgRight.gone()
+                    if(caseInfoData.isOpen==true){
+                        ivImgCenter.post {
+                            val params = ivImgCenter.layoutParams
+                            params.width = (deviceWidth * 0.9).toInt()
+                            params.height = (400 * resources.displayMetrics.density).toInt()
+
+                            if (params is ViewGroup.MarginLayoutParams) {
+                                val topMarginInPx = (12 * resources.displayMetrics.density).toInt()
+                                val bottomMarginInPx = (12 * resources.displayMetrics.density).toInt()
+                                params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
+                            }
+
+                            ivImgCenter.layoutParams = params
+                            //
+                            ivImgCenter.loadImage(context, chargerOpenImage)
+                            ivImgCenter.visible()
+                        }
+                    }else{
+                        ivImgCenter.post {
+                            val params = ivImgCenter.layoutParams
+                            params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                            params.height = (190 * resources.displayMetrics.density).toInt()
+
+                            if (params is ViewGroup.MarginLayoutParams) {
+                                val topMarginInPx = (132 * resources.displayMetrics.density).toInt()
+                                val bottomMarginInPx = (32 * resources.displayMetrics.density).toInt()
+                                params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
+                            }
+
+                            ivImgCenter.layoutParams = params
+                            //
+                            ivImgCenter.setImageResource(R.drawable.ic_portable_charger_closed_main)
+                            ivImgCenter.visible()
+                        }
+                    }
+                }
+            }
+
         }
     }
 

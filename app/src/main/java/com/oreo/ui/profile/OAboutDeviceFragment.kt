@@ -3,49 +3,63 @@ package com.oreo.ui.profile
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAboutDeviceBinding
+import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.setVisibilityByCondition
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 
 @AndroidEntryPoint
 class OAboutDeviceFragment :
     BaseFragment<FragmentOAboutDeviceBinding>(FragmentOAboutDeviceBinding::inflate) {
 
+    private val viewModel: OAboutDeviceViewModel by viewModels()
+
+    private var tabMediator: TabLayoutMediator? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTabLayoutAndVp()
         setUi()
-
+        setTabLayoutAndVp()
     }
 
     private fun setTabLayoutAndVp() {
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
-        // Set up the adapter
-        val adapter = OAboutDeviceVpAdapter(this)
+
+        val generation = getGeneration(viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+        val showCase = generation != 1 && viewModel.sessionManager.caseInfoData.value?.serialNumber != null
+
+        // Set up the adapter with the flag
+        val adapter = OAboutDeviceVpAdapter(this, showCase)
         viewPager.adapter = adapter
 
-        // Link TabLayout with ViewPager2
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = "Ring"  // Tab 1
-                    val tabTextView = tab.view.findViewById<TextView>(com.google.android.material.R.id.text)
-                    tabTextView?.apply {
-                        isAllCaps = false // Disable all caps for this tab
+        tabLayout.setVisibilityByCondition(showCase)
+        viewPager.isUserInputEnabled = showCase
+
+        tabMediator?.detach()
+        tabMediator = if (showCase) {
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                when (position) {
+                    0 -> {
+                        tab.text = "Ring"
+                        val tv = tab.view.findViewById<TextView>(com.google.android.material.R.id.text)
+                        tv?.isAllCaps = false
+                    }
+                    1 -> {
+                        tab.text = "Case"
+                        val tv = tab.view.findViewById<TextView>(com.google.android.material.R.id.text)
+                        tv?.isAllCaps = false
                     }
                 }
-                1 -> {
-                    tab.text = "Case"  // Tab 2
-                    val tabTextView = tab.view.findViewById<TextView>(com.google.android.material.R.id.text)
-                    tabTextView?.apply {
-                        isAllCaps = false // Disable all caps for this tab
-                    }
-                }
-            }
-        }.attach()
+            }.also { it.attach() }
+        } else null
     }
 
     private fun setUi() {
@@ -64,8 +78,9 @@ class OAboutDeviceFragment :
     }
 
     override fun onDestroyView() {
+        tabMediator?.detach()
+        tabMediator = null
         super.onDestroyView()
-
     }
 
     override fun initListener() {
@@ -75,7 +90,9 @@ class OAboutDeviceFragment :
     }
 
     override fun subscribeObservers() {
-
+        viewModel.sessionManager.caseInfoData.observe(this){
+            setTabLayoutAndVp()
+        }
     }
 
 }

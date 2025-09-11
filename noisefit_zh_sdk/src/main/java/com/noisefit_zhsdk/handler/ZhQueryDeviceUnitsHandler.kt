@@ -21,6 +21,7 @@ import com.noisefit_commans.interfaces.IQueryDataCallback
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.models.BatteryData
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.CustomReplyData
 import com.noisefit_commans.models.DeviceFirmware
@@ -304,7 +305,7 @@ constructor(
         LOGS.d(musicInfoBean)
 
         ControlBleTools.getInstance().syncMusicInfo(musicInfoBean, object :
-            ParsingStateManager.SendCmdStateListener() {
+            SendCmdStateListener() {
             override fun onState(state: SendCmdState) {
                 LOGS.d(state)
 
@@ -391,9 +392,16 @@ constructor(
 
 
             if (capacity != null) {
+                val caseInfoData = p0.ringChargingCaseInfoBean?.let {
+                    CaseInfoData(
+                        isOpen = it.isOpen,
+                        battLevel = it.battLevel,
+                        serialNumber = it.serialNums,
+                    )
+                }
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.BatteryDataObtained(
-                        BatteryData(percentage = capacity, isCharging = isCharging)
+                        BatteryData(percentage = capacity, isCharging = isCharging, caseInfoData = caseInfoData)
                     )
                 )
             }

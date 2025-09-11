@@ -15,6 +15,10 @@ data class RingInfoResponse(
     val imageUrl: String? = null,
     @SerializedName("image_url_2")
     val imageUrl2: String? = null,
+    @SerializedName("image_url_3")
+    val imageUrl3: String? = null,
+    @SerializedName("charger_url")
+    val chargerRingUrl: String? = null,
     val mapping: List<RingInfoMappingResponse> = ArrayList()
 )
 

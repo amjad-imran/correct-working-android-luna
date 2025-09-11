@@ -57,9 +57,6 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
 
     private fun setUi() {
         connectedDevice = updateViewModel.ringDataSore.getRingDevice()
-        binding.ivDevice.loadImage(
-            requireContext(), connectedDevice?.ringInfo?.image2
-        )
         binding.tvVersion.text = "MAC ${connectedDevice?.address ?: ""}"
 
         //
@@ -106,12 +103,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
         response.add(
             AboutDeviceData(
                 getString(R.string.text_serial_number),
-                if (connectedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
-                    val sNo = updateViewModel.watchDataStore.getSerialNo()
-                    sNo ?: "-"
-                } else {
-                    connectedDevice.ringInfo?.serialNoRaw ?: "-"
-                }
+                viewModel.sessionManager.caseInfoData.value?.serialNumber ?: "-"
             )
         )
 

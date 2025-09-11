@@ -1767,6 +1767,9 @@ constructor() : LifecycleService() {
                      )
                      */
                     watchDataStore.updateBatteryPercentRing(percent)
+                    queryCallback.batteryData.caseInfoData?.let {
+                        sessionManager.caseInfoData.postValue(it)
+                    }
                 }
 
                 is QueryCallback.FirmwareVersionObtained -> {

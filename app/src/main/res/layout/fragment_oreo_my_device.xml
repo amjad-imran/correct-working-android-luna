@@ -26,10 +26,22 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/lytDeviceConnectedNew"
+                    layout="@layout/layout_connected_device_luna_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageButton
                     android:id="@+id/backBtn"
                     style="@style/ToolbarBackButton"
                     android:layout_margin="@dimen/side_margin"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription" />
@@ -43,6 +55,7 @@
                     android:paddingStart="@dimen/side_margin"
                     android:paddingEnd="@dimen/side_margin"
                     android:text="@string/text_device"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,6 +65,7 @@
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +79,7 @@
                     android:layout_marginStart="@dimen/side_margin"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/side_margin"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +94,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lytDeviceConnected"
+                    app:layout_constraintTop_toBottomOf="@+id/lytDeviceConnectedNew"
                     tools:visibility="visible">
 
                    <!-- <com.noisefit_commans.ui.custom.SettingsRow

@@ -18,6 +18,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppLogs
@@ -51,6 +52,12 @@ class OMyDeviceViewModel @Inject constructor(
     var appLogFile: File? = null
     var firmwareLogFile: File? = null
 
+    var caseInfoData: CaseInfoData ?= null
+
+    val lunarBlackImagesUrl = Pair(
+        "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
+        "https://luna-cdn.gonoise.com/production/ring/set_1/Luna+Gen+2.565+1.png"
+    )
 
     init {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
