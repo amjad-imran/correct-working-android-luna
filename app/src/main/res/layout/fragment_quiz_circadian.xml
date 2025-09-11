@@ -19,11 +19,11 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:clipToPadding="false"
-            android:clipChildren="false"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical" />
 
     </FrameLayout>
 
@@ -37,29 +37,40 @@
     <TextView
         android:id="@+id/tvSkip"
         style="@style/S14"
-        android:alpha="0.72"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:alpha="0.72"
+        android:paddingVertical="8dp"
         android:text="@string/text_skip2"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
-    <Button
-        android:id="@+id/btnGetStarted"
-        style="@style/PrimaryButtonStyle"
-        android:visibility="gone"
-        android:background="@drawable/bg_next_btn_circadian_onboarding"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible"
+        android:src="@drawable/ic_question_back"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnNext"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="164dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="44dp"
-        android:text="@string/text_get_started"
-        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/text_next"
+        android:visibility="gone"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/progressBar"
