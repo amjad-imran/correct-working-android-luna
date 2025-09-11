@@ -10,14 +10,17 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.AiMeal
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiMealDetailBinding
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AiMealDetailFragment :
@@ -31,6 +34,9 @@ class AiMealDetailFragment :
     private val messagesStrings = ArrayList<String>()
     private val displayMessage = MutableLiveData<String>()
     private var currentPos = 0
+
+    @Inject
+    lateinit var ringDataStore: RingDataStore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,6 +55,11 @@ class AiMealDetailFragment :
         }
 
         binding.ivTextChat.setOnClickListener {
+            if (ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
+
             val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
@@ -85,7 +96,7 @@ class AiMealDetailFragment :
         dietState: DietState,
     ) {
 
-        when(dietState){
+        when (dietState) {
             DietState.REGULAR, DietState.NORMAL -> {
 
                 binding.root.setBackgroundResource(R.drawable.back_ai_nutrition)
@@ -104,7 +115,8 @@ class AiMealDetailFragment :
                         tvProtein.text = if (meal.protein.isNullOrEmpty()) "-" else meal.protein
                         tvFibre.text = if (meal.fibre.isNullOrEmpty()) "-" else meal.fibre
                         tvFat.text = if (meal.fat.isNullOrEmpty()) "-" else meal.fat
-                        tvCarbs.text = if (meal.carbohydrate.isNullOrEmpty()) "-" else meal.carbohydrate
+                        tvCarbs.text =
+                            if (meal.carbohydrate.isNullOrEmpty()) "-" else meal.carbohydrate
                     }
 
                     root.visible()

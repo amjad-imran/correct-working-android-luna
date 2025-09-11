@@ -1743,7 +1743,8 @@ constructor() : LifecycleService() {
                         queryCallback.batteryLevel
                     )
                 }
-                is QueryCallback.NfcSleepErr->{
+
+                is QueryCallback.NfcSleepErr -> {
                     ringDataStore.saveSleepException(true)
                     sessionManager.checkSleepException()
                 }
@@ -1865,7 +1866,7 @@ constructor() : LifecycleService() {
                             true,
                             dataCallback.manualMeasurement.manualMeasureType
                         )
-                    } else {
+                    } else if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
                         ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
                             true,

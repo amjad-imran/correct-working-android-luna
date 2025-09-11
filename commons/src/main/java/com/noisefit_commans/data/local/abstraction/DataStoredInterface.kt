@@ -18,6 +18,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 
 
 interface DataStoredInterface {
@@ -573,6 +574,9 @@ interface DataStoredInterface {
 
     fun setTimelineActivitiesData(data: List<ItemTimelineResponseModel>?)
     fun getTimelineActivitiesData(): List<ItemTimelineResponseModel>?
+
+    fun setMeasurementsData(data: Measurements?)
+    fun getMeasurementsData(): Measurements?
 
     fun getLastKnownTimezone(): String?
     fun setLastKnownTimezone(timeZone: String)

@@ -34,7 +34,6 @@
         android:layout_height="56dp"
         android:gravity="center_vertical|end"
         android:text="@string/text_add_sleep"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/ivRecordSleep"
         app:layout_constraintEnd_toStartOf="@+id/ivRecordSleep"
         app:layout_constraintTop_toTopOf="@+id/ivRecordSleep" />
@@ -46,7 +45,6 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="-12dp"
         android:src="@drawable/ic_add_sleep"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/ivAddWorkoutManual"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -57,7 +55,6 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:text="@string/text_add_workout"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/ivAddWorkoutManual"
         app:layout_constraintEnd_toStartOf="@+id/ivAddWorkoutManual"
         app:layout_constraintTop_toTopOf="@+id/ivAddWorkoutManual" />
@@ -69,7 +66,6 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="-12dp"
         android:src="@drawable/ic_add_workout_manual"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/ivRecordWorkout"
         app:layout_constraintEnd_toEndOf="parent" />
 

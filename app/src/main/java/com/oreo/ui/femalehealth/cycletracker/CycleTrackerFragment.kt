@@ -391,6 +391,11 @@ class CycleTrackerFragment :
                 )
 
             } else {
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
+
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,
@@ -415,6 +420,10 @@ class CycleTrackerFragment :
                     )
                 )
             } else {
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,

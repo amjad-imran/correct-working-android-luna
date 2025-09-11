@@ -14,6 +14,7 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.WelcomeData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 import kotlinx.parcelize.Parcelize
 
 
@@ -38,10 +39,10 @@ data class ServerUserHealthResponse(
     val tempBaseLine: Float? = null,
 
     @SerializedName("customScreen")
-    val customScreen: CustomHomeScreenModel ?= null,
+    val customScreen: CustomHomeScreenModel? = null,
 
     @SerializedName("caffeine")
-    val caffeine: CaffeineGraphDataModel ?= null,
+    val caffeine: CaffeineGraphDataModel? = null,
 
     @SerializedName("summary_available")
     val summaryAvailable: Boolean? = false,
@@ -50,11 +51,13 @@ data class ServerUserHealthResponse(
     val booster_women: Boolean? = false,
 
     @SerializedName("circadian_graphs")
-    val circadianGraph: CircadianGraphData?= null,
+    val circadianGraph: CircadianGraphData? = null,
 
     @SerializedName("time_tracker_activities")
-    val timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
-    //
+    val timeTrackerActivities: List<ItemTimelineResponseModel>? = null,
+
+    val measurements: Measurements? = null
+
 ) : ColorfitData()
 
 data class TrendsData(
@@ -68,9 +71,9 @@ data class TrendsData(
 )
 
 data class ImpactData(
-    val activityScore:Int?=null,
-    val sleepScore:Int?=null,
-    val readinessScore:Int?=null,
+    val activityScore: Int? = null,
+    val sleepScore: Int? = null,
+    val readinessScore: Int? = null,
 )
 
 data class ServerUserHealthData(

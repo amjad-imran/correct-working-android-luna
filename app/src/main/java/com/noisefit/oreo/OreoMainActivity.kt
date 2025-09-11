@@ -247,15 +247,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
-        binding.shutDownRingDialog.btnShutDownRing.setOnClickListener {
-            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
-                return@setOnClickListener
-            }
-            viewModel.sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetShutDownDevice())
-            viewModel.sessionManager.resetSleepException()
-
-        }
-
         binding.blurViewSelector.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.activity_event_cancelled,
@@ -473,12 +464,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
-        if(navController?.currentDestination?.id == R.id.navigation_oreo_workouts){
+        if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts) {
             binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
             binding.lytAddWorkoutSelector.tvAddWorkout.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        }else{
+        } else {
             binding.lytAddWorkoutSelector.ivAddWorkoutManual.gone()
             binding.lytAddWorkoutSelector.tvAddWorkout.gone()
         }
@@ -487,7 +478,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val lastDestination = navController?.currentDestination
 
-        /*if (lastDestination?.id == R.id.navigation_oreo_home) {
+        if (lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.tvAddSleep.visible()
             binding.lytAddWorkoutSelector.ivRecordSleep.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
@@ -495,7 +486,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         } else {
             binding.lytAddWorkoutSelector.tvAddSleep.gone()
             binding.lytAddWorkoutSelector.ivRecordSleep.gone()
-        }*/
+        }
 
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
             binding.lytAddWorkoutSelector.ivLogPeriod.visible()
@@ -803,9 +794,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.sessionManager.nfcSleepErr.observe(this) {
             if (it) {
-                binding.shutDownRingDialog.root.visible()
-            } else {
-                binding.shutDownRingDialog.root.gone()
+                navController?.navigate(R.id.ringExceptionDialogFragment)
             }
         }
 
@@ -857,6 +846,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.showChatUi.observe(this) {
             it.getContent()?.let { threadId ->
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    showShortToast(getString(R.string.text_luna_ai_message))
+                    return@observe
+                }
+
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     threadId,
                     null,

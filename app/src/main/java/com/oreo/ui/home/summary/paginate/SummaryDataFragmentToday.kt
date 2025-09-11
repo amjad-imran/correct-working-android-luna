@@ -17,7 +17,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
@@ -44,7 +43,6 @@ import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.RING_DISABLED_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.AppTrackEvent
 import com.noisefit_commans.data.model.NotificationGoals
@@ -56,7 +54,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
@@ -65,7 +62,6 @@ import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
@@ -90,19 +86,16 @@ import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
-import com.oreo.ui.home.summary.OreoRWorkoutAdapter
 import com.oreo.ui.home.summary.update.UpdateLaunchMode
 import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.http2.Http2Reader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -268,9 +261,14 @@ class SummaryDataFragmentToday :
             binding.contentMain.lytCustomHomeScreen.root.gone()
         }
 
+        val measurements = viewModel.localDataStore.getMeasurementsData()
+
         val lunaManagedState = lunaManagedData?.manage ?: false
         LOGS.d("FragToday : $lunaManagedState")
-        viewModel.getUserManagedHealthData(data, trendsData, impactData, lunaManagedState)
+        viewModel.getUserManagedHealthData(
+            data, trendsData, impactData, lunaManagedState,
+            measurements
+        )
     }
 
 
@@ -674,6 +672,7 @@ class SummaryDataFragmentToday :
                             viewModel.stateOneTapVitalsCard.postValue(
                                 it.apply {
                                     this.measureState = type.measureState
+                                    this.isRetry = false
                                     if (type.measureState == null) {
                                         this.expandedType = null
                                     }
@@ -689,18 +688,20 @@ class SummaryDataFragmentToday :
 
     private fun performOneTapVitalsOp(type: OHealthOverview.VitalsType) {
         if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
             return
         }
         if (viewModel.stateOneTapVitalsCard.value?.measuring == true) {
+            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
             return
         }
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             context?.let {
                 val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
                 if (isWorkerRunning) {
-                    /*viewModel.stateOneTapVitalsCard.postValue(viewModel.stateOneTapVitalsCard.value?.apply {
-                        this.measureState = TapMeasureState.ERROR
-                    })*/
+                    withContext(Dispatchers.Main) {
+                        context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+                    }
                     return@launch
                 }
 
@@ -1073,6 +1074,12 @@ class SummaryDataFragmentToday :
 
 
     override fun subscribeObservers() {
+
+        viewModel.timeTrackerActivitiesUpdated.observe(this) {
+            it.getContent()?.let {
+                healthOverviewAdapter.updateData(viewModel.getTimelineCard())
+            }
+        }
 
         /*viewModel.nudgeCircadianData.observe(this){
             val nudge = it.first

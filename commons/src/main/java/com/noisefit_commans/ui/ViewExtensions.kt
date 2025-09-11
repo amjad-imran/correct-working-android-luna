@@ -367,6 +367,14 @@ fun View.setVisibilityByCondition(visible: Boolean) {
     }
 }
 
+fun View.setVisibilityByConditionInv(visible: Boolean) {
+    visibility = if (visible) {
+        View.VISIBLE
+    } else {
+        View.INVISIBLE
+    }
+}
+
 fun CheckBox.checked() {
     this.isChecked = true
 }

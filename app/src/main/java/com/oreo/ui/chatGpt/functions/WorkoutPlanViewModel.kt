@@ -12,6 +12,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -25,6 +26,7 @@ class WorkoutPlanViewModel @Inject constructor(
     val sessionManager: SessionManager,
     val oreoDeviceRepository: OreoDeviceRepository,
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     val workoutData: String? = null

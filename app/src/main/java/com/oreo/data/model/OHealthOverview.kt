@@ -215,20 +215,20 @@ sealed class OHealthOverview {
         val state: FemaleHealthCardState
     ) : OHealthOverview()
 
-    // One Tap Vitals composite card (HR, Stress, SpO2, Skin Temp)
     data class OneTapVitals(
-        var hrValue: Int? = null,
+        var hrValue: String? = null,
         var hrLastTime: String? = null,
-        var stressValue: Int? = null,
+        var stressValue: String? = null,
         var stressLastTime: String? = null,
-        var spo2Value: Int? = null,
+        var spo2Value: String? = null,
         var spo2LastTime: String? = null,
-        var skinTempValue: Float? = null,
+        var skinTempValue: String? = null,
         var skinTempLastTime: String? = null,
         var featureConfig: OneTapVitalsFeatureConfig = OneTapVitalsFeatureConfig(),
         var expandedType: VitalsType? = null,
         var measuring: Boolean = false,
-        var measureState: TapMeasureState? = null
+        var measureState: TapMeasureState? = null,
+        var isRetry: Boolean = false,
     ) : OHealthOverview()
 
     data class OneTapVitalsFeatureConfig(

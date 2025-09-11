@@ -5,6 +5,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModelCompose
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AiTopQuestionsViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
-    private val localDataStore: DataStoredInterface
+    private val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModelCompose() {
 
     val questions = MutableStateFlow<List<TopQuestions>>(arrayListOf())

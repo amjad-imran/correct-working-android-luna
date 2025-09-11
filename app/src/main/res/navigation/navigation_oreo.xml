@@ -448,6 +448,11 @@
         android:id="@+id/restartBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.RestartBottomDialogFragment"
         android:label="RestartBottomDialogFragment" />
+
+    <dialog
+        android:id="@+id/ringExceptionDialogFragment"
+        android:name="com.oreo.ui.RingExceptionDialogFragment"
+        android:label="RingExceptionDialogFragment" />
     <fragment
         android:id="@+id/learnFragment"
         android:name="com.oreo.ui.info.LearnFragment"

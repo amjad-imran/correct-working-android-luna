@@ -640,6 +640,10 @@ class OreoReadinessFragment :
                 )
 
             } else {
+                if (mViewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,
@@ -664,6 +668,10 @@ class OreoReadinessFragment :
                     )
                 )
             } else {
+                if (mViewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,

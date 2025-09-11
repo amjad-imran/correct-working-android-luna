@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytCollapsed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,7 +54,14 @@
             android:layout_weight="1"
             android:background="@drawable/back_modal_v2_10"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/itemStress"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tvHrTitle"
@@ -101,6 +108,16 @@
             <include layout="@layout/include_one_tap_measuring_tile" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imageBackHr"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/itemHR"
+            app:layout_constraintTop_toTopOf="@id/itemHR"
+            app:layout_constraintBottom_toBottomOf="@id/itemHR"
+            app:layout_constraintEnd_toEndOf="@id/itemHR"
+            android:background="@drawable/back_measure_hr" />
+
         <LinearLayout
             android:id="@+id/itemStress"
             android:layout_width="0dp"
@@ -109,7 +126,14 @@
             android:layout_weight="1"
             android:background="@drawable/back_modal_v2_10"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/itemSpO2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/itemHR"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tvStressTitle"
@@ -155,6 +179,15 @@
 
             <include layout="@layout/include_one_tap_measuring_tile" />
         </LinearLayout>
+        <ImageView
+            android:id="@+id/imageBackStress"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/itemStress"
+            app:layout_constraintTop_toTopOf="@id/itemStress"
+            app:layout_constraintBottom_toBottomOf="@id/itemStress"
+            app:layout_constraintEnd_toEndOf="@id/itemStress"
+            android:background="@drawable/back_measure_stress" />
 
         <LinearLayout
             android:id="@+id/itemSpO2"
@@ -164,7 +197,14 @@
             android:layout_weight="1"
             android:background="@drawable/back_modal_v2_10"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/itemSkinTemp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/itemStress"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tvSpO2Title"
@@ -211,6 +251,15 @@
 
             <include layout="@layout/include_one_tap_measuring_tile" />
         </LinearLayout>
+        <ImageView
+            android:id="@+id/imageBackSpo2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/itemSpO2"
+            app:layout_constraintTop_toTopOf="@id/itemSpO2"
+            app:layout_constraintBottom_toBottomOf="@id/itemSpO2"
+            app:layout_constraintEnd_toEndOf="@id/itemSpO2"
+            android:background="@drawable/back_measure_spo2" />
 
         <LinearLayout
             android:id="@+id/itemSkinTemp"
@@ -220,7 +269,14 @@
             android:layout_weight="1"
             android:background="@drawable/back_modal_v2_10"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/itemSpO2"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tvSkinTitle"
@@ -266,8 +322,28 @@
 
             <include layout="@layout/include_one_tap_measuring_tile" />
         </LinearLayout>
+        <ImageView
+            android:id="@+id/imageBackSkinTemp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/itemSkinTemp"
+            app:layout_constraintTop_toTopOf="@id/itemSkinTemp"
+            app:layout_constraintBottom_toBottomOf="@id/itemSkinTemp"
+            app:layout_constraintEnd_toEndOf="@id/itemSkinTemp"
+            android:background="@drawable/back_measure_temp" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/anchorImageView"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="42dp"
+        tools:src="@drawable/ic_hr_measure"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

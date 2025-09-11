@@ -1,7 +1,6 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
-import android.util.Log
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -35,10 +34,10 @@ import com.noisefit_commans.data.model.SleepPlannerDisplayModel
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
-import com.noisefit_commans.data.model.circadian.ItemCircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenNetworkItem
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -71,6 +70,7 @@ import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.PeriodCard1
@@ -80,7 +80,6 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
-import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.ODashboardActivityModel
@@ -94,7 +93,6 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
-import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -113,6 +111,7 @@ import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CO
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -129,7 +128,6 @@ import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.exp
 import kotlin.math.pow
@@ -201,6 +199,9 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateStressCard = MutableLiveData<OHealthOverview.StressDashDataModel?>()
 
     val cycleTrackerCardBigData = MutableLiveData<OHealthOverview.CycleTrackerCardBig?>()
+
+    private var hydrationDebounceJob: Job? = null
+
     val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
     val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
     val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
@@ -243,6 +244,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var isNudgeCircadianApiCalled: Boolean = false
     var nudgeCircadianData: NudgeCircadianGraph? = null
     var updateNudgeInMainViewModel = MutableLiveData<Event<NudgeCircadianGraph>>()
+    var timeTrackerActivitiesUpdated = MutableLiveData<Event<Boolean>>()
 
     var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
     var summaryAvailable: Boolean? = false
@@ -1091,7 +1093,8 @@ class SummaryDataViewModelToday @Inject constructor(
         healthData: ServerUserHealthData,
         trendsData: TrendsData?,
         impactData: ImpactData?,
-        lunaManaged: Boolean
+        lunaManaged: Boolean,
+        measurements: Measurements?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             sessionManager.canLogPeriod = false
@@ -1173,6 +1176,19 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
+            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+
+            val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
+            if (hasOneTapVitalsKey == null) {
+                if (generation == 2) {
+                    getOneTapVitalsCard(healthData, measurements)?.let {
+                        userActivities.add(
+                            it
+                        )
+                    }
+                }
+            }
+
             val hasCircadianKey = priorityList.find { it.key.equals("circadian_alignment", true) }
             if (hasCircadianKey == null) {
                 getCircadianAlignmentCardData()?.let {
@@ -1187,7 +1203,6 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            val generation = 2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)//TODO - for testing only
 
             priorityList.forEach { item ->
                 if (item.switchState.not()) return@forEach
@@ -1195,7 +1210,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 when (item.key) {
                     "one_tap_vitals" -> {
                         if (generation == 2) {
-                            getOneTapVitalsCard(healthData)?.let { userActivities.add(it) }
+                            getOneTapVitalsCard(healthData, measurements)?.let {
+                                userActivities.add(
+                                    it
+                                )
+                            }
                         }
                     }
 
@@ -1344,96 +1363,142 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    private suspend fun getOneTapVitalsCard(healthData: ServerUserHealthData): OHealthOverview.OneTapVitals? {
-        // HR
-        val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
-            this.hrCombineModel = hrDataConvertor.getHrCombinedData(
-                serverUserHealthData,
-                this
-            )
+    private suspend fun getLastMeasuredValueAndTimeStamp(
+        healthData: ServerUserHealthData,
+        vital: VitalsType
+    ): Pair<String, String>? {
 
-            val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
-            this.lastMeasuredValue = lastMeasuredValue
-            this.lastMeasuredIndex = lastMeasuredIndex
+        return when (vital) {
+            VitalsType.HR -> {
+                val hrModel = userRepository.getSummaryHRHealthOverview()?.apply {
+                    this.hrCombineModel = hrDataConvertor.getHrCombinedData(
+                        serverUserHealthData,
+                        this
+                    )
 
-            getHrTrend(this.rawData, lastMeasuredIndex)?.let {
-                this.trendPercent = it
-            }
-
-            /*if (device == null) {
-                this.measureState = TapMeasureState.NO_DEVICE
-            }*/
-        }
-        val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
-        val hrLastTime: String? = try {
-            if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
-                val lastUpdatedTimestamp =
-                    DateTimeUtil.getTodayMidnightTimestamp() + (hrModel.lastMeasuredIndex + 1) * 5 * 60 * 1000
-                val currentTimeStamp = DateFormats.getTimeStamp()
-                val diff = currentTimeStamp - lastUpdatedTimestamp
-                when {
-                    diff < 60_000 -> "just now"
-                    diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                    else -> "${diff / (60 * 60_000)} hr ago"
+                    val (lastMeasuredValue, lastMeasuredIndex) = getLastMeasuredValue(this.rawData)
+                    this.lastMeasuredValue = lastMeasuredValue
+                    this.lastMeasuredIndex = lastMeasuredIndex
                 }
-            } else null
-        } catch (e: Exception) {
-            null
-        }
+                val hrValue = hrModel?.lastMeasuredValue?.takeIf { it > 0 }
+                val hrLastTime: String? = try {
+                    if (hrModel != null && hrModel.lastMeasuredIndex >= 0) {
+                        val lastUpdatedTimestamp =
+                            DateTimeUtil.getTodayMidnightTimestamp() + (hrModel.lastMeasuredIndex + 1) * 5 * 60 * 1000
+                        val currentTimeStamp = DateFormats.getTimeStamp()
+                        val diff = currentTimeStamp - lastUpdatedTimestamp
+                        when {
+                            diff < 60_000 -> "just now"
+                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                            else -> "${diff / (60 * 60_000)} hr ago"
+                        }
+                    } else null
+                } catch (e: Exception) {
+                    null
+                }
 
-        // Stress
-        val stressValue = healthData.stress?.stressValue?.value
-        val stressLastTime: String? = healthData.stress?.stressValue?.lastUpdated?.let { ts ->
-            val diff = DateFormats.getTimeStamp() - ts
-            when {
-                diff < 60_000 -> "just now"
-                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                else -> "${diff / (60 * 60_000)} hr ago"
+                if (hrValue == null || hrLastTime == null) {
+                    null
+                } else {
+                    Pair(hrValue.toString(), hrLastTime)
+                }
             }
-        }
 
-        val lastMeasuredSpo2 = ringDataStore.getManualMeasurementValueBloodOxygen()
-
-        var spo2Value: Int? = null
-        var spo2LastTime: String? = null
-        lastMeasuredSpo2?.let { manual ->
-            val startOfToday = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-            if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                spo2Value = manual.value
-                val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                spo2LastTime = try {
-                    when {
-                        diff < 60_000 -> "just now"
-                        diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                        else -> "${diff / (60 * 60_000)} hr ago"
+            VitalsType.STRESS -> {
+                val stressValue = healthData.stress?.stressValue?.value
+                val stressLastTime: String? =
+                    healthData.stress?.stressValue?.lastUpdated?.let { ts ->
+                        val diff = DateFormats.getTimeStamp() - ts
+                        when {
+                            diff < 60_000 -> "just now"
+                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                            else -> "${diff / (60 * 60_000)} hr ago"
+                        }
                     }
-                } catch (e: Exception) { null }
+                if (stressValue == null || stressLastTime == null) {
+                    null
+                } else {
+                    Pair(stressValue.toString(), stressLastTime)
+                }
             }
-        }
 
-        val lastMeasuredSkinTemp = ringDataStore.getManualMeasurementValueBodyTemp()
-        var skinTempValue: Float? = null
-        var skinTempLastTime: String? = null
-        lastMeasuredSkinTemp?.let { manual ->
-            val startOfToday = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-            if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                skinTempValue = (manual.value.toFloat()) / 100f
-                val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                skinTempLastTime = try {
-                    when {
-                        diff < 60_000 -> "just now"
-                        diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                        else -> "${diff / (60 * 60_000)} hr ago"
+            VitalsType.SPO2 -> {
+                val lastMeasuredSpo2 = ringDataStore.getManualMeasurementValueBloodOxygen()
+
+                var spo2Value: Int? = null
+                var spo2LastTime: String? = null
+                lastMeasuredSpo2?.let { manual ->
+                    val startOfToday =
+                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
+                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
+                        spo2Value = manual.value
+                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
+                        spo2LastTime = try {
+                            when {
+                                diff < 60_000 -> "just now"
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
                     }
-                } catch (e: Exception) { null }
+
+                    if (spo2Value == null || spo2LastTime == null) {
+                        null
+                    } else {
+                        Pair(spo2Value.toString(), spo2LastTime)
+                    }
+                }
+            }
+
+            VitalsType.SKIN_TEMP -> {
+                val lastMeasuredSkinTemp = ringDataStore.getManualMeasurementValueBodyTemp()
+                var skinTempValue: Float? = null
+                var skinTempLastTime: String? = null
+                lastMeasuredSkinTemp?.let { manual ->
+                    val startOfToday =
+                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
+                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
+                        skinTempValue = (manual.value.toFloat()) / 100f
+                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
+                        skinTempLastTime = try {
+                            when {
+                                diff < 60_000 -> "just now"
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }
+                if (skinTempValue == null || skinTempLastTime == null) {
+                    null
+                } else {
+                    Pair(String.format("%.1f", skinTempValue), skinTempLastTime)
+                }
             }
         }
+    }
+
+    private suspend fun getOneTapVitalsCard(
+        healthData: ServerUserHealthData,
+        measurements: Measurements?
+    ): OHealthOverview.OneTapVitals? {
+
+
+        val hrData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.HR)
+        val stressData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.STRESS)
+        val spo2Data = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.SPO2)
+        val tempData = getLastMeasuredValueAndTimeStamp(healthData, VitalsType.SKIN_TEMP)
+
 
         val features = OHealthOverview.OneTapVitalsFeatureConfig(
-            showHR = true,
-            showStress = true,
-            showSpO2 = true,
-            showSkinTemp = true
+            showHR = measurements?.hr ?: true,
+            showStress = measurements?.stress ?: true,
+            showSpO2 = measurements?.spo2 ?: true,
+            showSkinTemp = measurements?.temp ?: true
         )
 
         if (!features.showHR && !features.showStress && !features.showSpO2 && !features.showSkinTemp) {
@@ -1441,14 +1506,14 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         val oneTapVitals = OHealthOverview.OneTapVitals(
-            hrValue = hrValue,
-            hrLastTime = hrLastTime,
-            stressValue = stressValue,
-            stressLastTime = stressLastTime,
-            spo2Value = spo2Value,
-            spo2LastTime = spo2LastTime,
-            skinTempValue = skinTempValue,
-            skinTempLastTime = skinTempLastTime,
+            hrValue = hrData?.first,
+            hrLastTime = hrData?.second,
+            stressValue = stressData?.first,
+            stressLastTime = stressData?.second,
+            spo2Value = spo2Data?.first,
+            spo2LastTime = spo2Data?.second,
+            skinTempValue = tempData?.first,
+            skinTempLastTime = tempData?.second,
             featureConfig = features,
             expandedType = null,
             measuring = false
@@ -1461,7 +1526,7 @@ class SummaryDataViewModelToday @Inject constructor(
         return oneTapVitals
     }
 
-    private fun getTimelineCard(): OHealthOverview? {
+    fun getTimelineCard(): OHealthOverview? {
         val dataList = timeTrackerActivities ?: ArrayList()
         val data = mergeHydrationEvents(dataList)
 
@@ -1494,8 +1559,15 @@ class SummaryDataViewModelToday @Inject constructor(
                     data.titleColor = "#8EF1C3".toColorInt()
                     data.value?.let {
                         try {
-                            val value = formatMlToLitersOrMl(it.toIntOrNull() ?: 0)
-                            data.desc = value
+                            val isMetric = sessionManager.isMetric()
+                            if(isMetric){
+                                val value = formatMlToLitersOrMl(it.toIntOrNull() ?: 0)
+                                data.desc = value
+                            }else{
+                                val value = convertMlToOz(it.toIntOrNull() ?: 0)
+                                data.desc = value
+                            }
+
                         } catch (exp: Exception) {
                             exp.printStackTrace()
                             data.desc = it
@@ -1554,6 +1626,11 @@ class SummaryDataViewModelToday @Inject constructor(
         } else {
             "$ml ml"
         }
+    }
+
+    fun convertMlToOz(ml: Int): String {
+        val oz = ml * 0.033814
+        return "%.1f oz".format(oz)
     }
 
     private val DATE_FMT = DateTimeFormatter.ISO_LOCAL_DATE
@@ -2392,7 +2469,8 @@ class SummaryDataViewModelToday @Inject constructor(
             if (device == null) {
                 this?.measureState = TapMeasureState.NO_DEVICE
             }
-            this?.ringGeneration = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            this?.ringGeneration =
+                getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
         })
 
@@ -2877,12 +2955,12 @@ class SummaryDataViewModelToday @Inject constructor(
             when (daySlot) {
                 0 -> {
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
@@ -2892,9 +2970,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 1 -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
@@ -2908,9 +2986,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 else -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
@@ -3428,7 +3506,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.stressValue = manualMeasurement.value
+                                this.stressValue =
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.stressLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -3464,7 +3543,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.hrValue = manualMeasurement.value
+                                this.hrValue = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.hrLastTime = resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
@@ -3494,7 +3573,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.spo2Value = manualMeasurement.value
+                                this.spo2Value = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.spo2LastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -3522,7 +3601,9 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.skinTempValue = (manualMeasurement.value.toFloat()) / 100
+                                val temp = (manualMeasurement.value.toFloat()) / 100
+
+                                this.skinTempValue = if (manualMeasurement.value != 0) String.format("%.1f", temp) else null
                                 this.skinTempLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -4357,6 +4438,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                         hydration = updatedValue
                                     )
                                 )*/
+                                hydrationDebounceJob?.cancel()
+                                hydrationDebounceJob = viewModelScope.launch {
+                                    delay(500)
+                                    updateTimelineData()
+                                }
                             }
                         }
 
@@ -4369,6 +4455,31 @@ class SummaryDataViewModelToday @Inject constructor(
     fun increaseHydration() {
         updateHydration(true)
     }
+
+
+    private fun updateTimelineData() {
+        getCurrDayActivities(DateFormats.getTodaysDateString(10))
+
+    }
+
+    fun getCurrDayActivities(date: String) {
+        viewModelScope.launch {
+            userRepositoryOld.getCurrDayTimelineActivitiesData(date).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            timeTrackerActivities = it.timeTracker
+                            timeTrackerActivitiesUpdated.postValue(Event(true))
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
 
     private fun getNotificationGoals() {
         viewModelScope.launch {

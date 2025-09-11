@@ -67,13 +67,13 @@ import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.oreo.data.model.ImpactData
-import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.sleep.SleepDataResponse
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.data.model.timeline.Measurements
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -176,7 +176,6 @@ class OreoUserActivityRepositoryImpl(
             var stressBeta: Boolean? = null
             var enableAi: Boolean? = null
             var tempBaseLine: Float? = null
-            //
             var customHomeScreenData: CustomHomeScreenModel? = null
             var caffeineGraphData: CaffeineGraphDataModel? = null
             var summaryAvailable: Boolean?= null
@@ -185,7 +184,7 @@ class OreoUserActivityRepositoryImpl(
             var booster_women: Boolean?= null
             var circadianGraphData: CircadianGraphData?= null
             var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
-            //
+            var measurements: Measurements?= null
 
             var apiStartDate: String? = startDate
             var apiEndDate: String? = endDate
@@ -283,6 +282,7 @@ class OreoUserActivityRepositoryImpl(
                                 booster_women = localDataStore.getBoosterWomenData(),
                                 circadianGraph =localDataStore.getCircadianGraphData(),
                                 timeTrackerActivities =localDataStore.getTimelineActivitiesData(),
+                                measurements =localDataStore.getMeasurementsData(),
                             ),
                             message = "",
                         )
@@ -329,6 +329,7 @@ class OreoUserActivityRepositoryImpl(
                             ldw_cycle_tracker = response.comfort_cycle
                             booster_women = response.booster_women
                             timeTrackerActivities = response.timeTrackerActivities
+                            measurements = response.measurements
 
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setCannyState(response.enableCanny ?: false)
@@ -353,6 +354,7 @@ class OreoUserActivityRepositoryImpl(
                             }
 
                             localDataStore.setTimelineActivitiesData(timeTrackerActivities)
+                            localDataStore.setMeasurementsData(measurements)
                         }
                     }
                 }
@@ -406,6 +408,7 @@ class OreoUserActivityRepositoryImpl(
                                             booster_women = booster_women,
                                             circadianGraph = circadianGraphData,
                                             timeTrackerActivities = timeTrackerActivities,
+                                            measurements = measurements,
                                         ),
                                         message = "",
                                     )
@@ -2400,6 +2403,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun updateHydration(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             keyValueDataSource.removeDataByType(KeyValueDataType.NOTIFICATION_GOAL_DATA)
+            userHealthDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/goals"
             remoteDataSource.updateHydration(url, request)
         }

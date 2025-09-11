@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary
 
+import android.animation.Animator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.LinearGradient
@@ -96,6 +97,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.graphics.toColorInt
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
@@ -105,6 +108,7 @@ import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
@@ -688,6 +692,11 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.TimelineDash) {
+            val index = items.indexOfFirst { it is OHealthOverview.TimelineDash }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -818,26 +827,32 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private var expandedTile: ViewGroup? = null
 
         fun bind(data: OHealthOverview.OneTapVitals) {
-            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
-            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
-            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
-            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+
+            binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR && expandedTile == null)
+            binding.imageBackHr.setVisibilityByCondition(data.featureConfig.showHR && expandedTile == null)
+            binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress && expandedTile == null)
+            binding.imageBackStress.setVisibilityByCondition(data.featureConfig.showStress && expandedTile == null)
+            binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
+            binding.imageBackSpo2.setVisibilityByCondition(data.featureConfig.showSpO2 && expandedTile == null)
+            binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
+            binding.imageBackSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp && expandedTile == null)
+            binding.anchorImageView.visibility = View.INVISIBLE
 
             binding.lytHrValue.apply {
-                tvValue.text = data.hrValue?.let { "$it" } ?: "--"
+                tvValue.text = data.hrValue?.let { it } ?: "--"
                 tvUnit.text = "BPM"
                 tvUnit.setTextColor("#FF4E5C".toColorInt())
             }
             binding.tvHrAgo.text = data.hrLastTime ?: ""
 
             binding.lytStressValue.apply {
-                tvValue.text = data.stressValue?.let { "$it" } ?: "--"
+                tvValue.text = data.stressValue?.let { it } ?: "--"
                 tvUnit.gone()
             }
             binding.tvStressAgo.text = data.stressLastTime ?: ""
 
             binding.lytSpO2Value.apply {
-                tvValue.text = data.spo2Value?.let { "$it" } ?: "--"
+                tvValue.text = data.spo2Value?.let { it } ?: "--"
                 tvUnit.text = "%"
                 tvUnit.setTextColor("#7BBCFE".toColorInt())
             }
@@ -845,14 +860,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.lytSkinValue.apply {
                 tvValue.text =
-                    data.skinTempValue?.let { String.format("%.1f", it) } ?: "--"
+                    data.skinTempValue?.let { it } ?: "--"
                 tvUnit.text = "°C"
                 tvUnit.setTextColor("#6AAF93".toColorInt())
             }
             binding.tvSkinAgo.text = data.skinTempLastTime ?: ""
 
             if (data.expandedType != null) {
-                expandTile(data, null)
+                expandTile(data)
             } else {
                 collapseTiles(data)
             }
@@ -903,9 +918,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             expandedTile = null
 
             binding.itemHR.setVisibilityByCondition(data.featureConfig.showHR)
+            binding.imageBackHr.setVisibilityByCondition(data.featureConfig.showHR)
             binding.itemStress.setVisibilityByCondition(data.featureConfig.showStress)
+            binding.imageBackStress.setVisibilityByCondition(data.featureConfig.showStress)
             binding.itemSpO2.setVisibilityByCondition(data.featureConfig.showSpO2)
+            binding.imageBackSpo2.setVisibilityByCondition(data.featureConfig.showSpO2)
             binding.itemSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
+            binding.imageBackSkinTemp.setVisibilityByCondition(data.featureConfig.showSkinTemp)
 
             listOf(
                 binding.itemHR,
@@ -927,8 +946,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.lytCollapsed.alpha = 1f
         }
 
-        private fun expandTile(data: OHealthOverview.OneTapVitals, targetTile: ViewGroup?) {
-            val tile = targetTile ?: when (data.expandedType) {
+        private fun expandTile(data: OHealthOverview.OneTapVitals) {
+            val tile = when (data.expandedType) {
                 OHealthOverview.VitalsType.HR -> binding.itemHR
                 OHealthOverview.VitalsType.STRESS -> binding.itemStress
                 OHealthOverview.VitalsType.SPO2 -> binding.itemSpO2
@@ -939,32 +958,37 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val context = binding.root.context
             val parent = binding.lytCollapsed
-            val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
-            // ensure measuring is hidden during the width expansion
-            measuringRoot.visibility = View.GONE
 
-            // Smooth width expansion using ChangeBounds
 
             for (i in 0 until tile.childCount) {
                 val child = tile.getChildAt(i)
                 if (child.id != R.id.tileMeasuringRoot) child.visibility = View.GONE
             }
 
-            val transition = AutoTransition().apply { duration = 200 }
+            binding.imageBackHr.gone()
+            binding.imageBackStress.gone()
+            binding.imageBackSpo2.gone()
+            binding.imageBackSkinTemp.gone()
 
-            measuringRoot.alpha = 0f
-            measuringRoot.visibility = View.VISIBLE
-            measuringRoot.animate().alpha(1f).setDuration(600).start()
+            var transition = AutoTransition().apply { duration = 200 }
+
+            val measuringRoot = tile.findViewById<View>(R.id.tileMeasuringRoot)
+            if (data.measureState != TapMeasureState.LAST_MEASURED) {
+                transition = AutoTransition().apply { duration = 200 }
+                measuringRoot.visibility = View.GONE
+                measuringRoot.alpha = 0f
+                measuringRoot.visibility = View.VISIBLE
+                measuringRoot.animate().alpha(1f).setDuration(600).start()
+            } else {
+                transition = AutoTransition().apply { duration = 0 }
+                measuringRoot.visibility = View.VISIBLE
+                measuringRoot.alpha = 1f
+            }
 
             transition.addListener(object : Transition.TransitionListener {
                 override fun onTransitionStart(transition: Transition) {}
                 override fun onTransitionEnd(transition: Transition) {
                     transition.removeListener(this)
-                    // After tile expanded, swap content to measuring with fade
-
-                    /* measuringRoot.alpha = 0f
-                     measuringRoot.visibility = View.VISIBLE
-                     measuringRoot.animate().alpha(1f).setDuration(60).start()*/
                 }
 
                 override fun onTransitionCancel(transition: Transition) {}
@@ -983,7 +1007,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             expandedTile = tile
 
-            //
             val titleTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringTitle)
             val hintTextViewExp = measuringRoot.findViewById<TextView>(R.id.tvMeasuringHint)
 
@@ -993,34 +1016,35 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
 
             val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
-            //
+            val lottieView = measuringRoot.findViewById<LottieAnimationView>(R.id.lottieView)
 
             when (data.measureState) {
                 TapMeasureState.LAST_MEASURED -> {
+                    lottieView.gone()
+                    lottieView.cancelAnimation()
                     progressBar.gone()
                     retryBtn.gone()
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
+                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
                     when (data.expandedType) {
                         OHealthOverview.VitalsType.HR -> {
-                            tvSuccessVal.text = data.hrValue.toString()
+                            tvSuccessVal.text = data.hrValue
                         }
 
                         OHealthOverview.VitalsType.STRESS -> {
-                            tvSuccessVal.text = data.stressValue.toString()
+                            tvSuccessVal.text = data.stressValue
                         }
 
                         OHealthOverview.VitalsType.SPO2 -> {
-                            tvSuccessVal.text = data.spo2Value.toString()
+                            tvSuccessVal.text = data.spo2Value
                         }
 
                         OHealthOverview.VitalsType.SKIN_TEMP -> {
-                            tvSuccessVal.text = data.skinTempValue.toString()
+                            tvSuccessVal.text = data.skinTempValue
                         }
 
                         null -> {}
-                        //
                     }
                     lytSuccess.visible()
                     itemClickListener?.invoke(
@@ -1037,12 +1061,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 TapMeasureState.ERROR -> {
                     progressBar.gone()
+                    lottieView.gone()
+                    lottieView.cancelAnimation()
                     lytSuccess.gone()
                     retryBtn.apply {
                         setOnClickListener {
                             data.expandedType?.let { type ->
                                 data.measureState = null
-                                data.measuring = true
+                                data.measuring = false
+                                data.isRetry = true
                                 lytSuccess.gone()
                                 retryBtn.gone()
                                 progressBar.visible()
@@ -1053,36 +1080,64 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
-                    hintTextViewExp.text =
-                        context.getString(R.string.text_measuring_may_take_30_sec)
-
+                    titleTextViewExp.text =
+                        context.getString(R.string.text_something_went_wrong_single)
+                    hintTextViewExp.text = context.getString(R.string.text_unable_to_track)
                 }
 
                 else -> {
+
+                    lottieView.visible()
+                    lottieView.playAnimation(LottieDrawable.INFINITE,R.raw.anim_measure_hr)
+
                     lytSuccess.gone()
                     retryBtn.gone()
                     progressBar.visible()
-                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType,context)
+                    titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
                 }
             }
 
-            // HR icon animation only for HR inside overlay
-            val ivHeart = measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
-            if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                ivHeart.visibility = View.VISIBLE
-                startHeartAnimation(ivHeart, data.hrValue ?: 60)
-            } else {
-                ivHeart.visibility = View.GONE
-                stopHeartAnimation(ivHeart)
+            if (data.measureState != TapMeasureState.LAST_MEASURED) {
+                animateTileExpand(tile)
             }
 
-            // Animate only the tapped tile for smoother focus
-            animateTileExpand(tile)
+            val ivAnchor =
+                binding.anchorImageView//measuringRoot.findViewById<ImageView>(R.id.ivHeartAnim)
 
-            // Collapse on tap of expanded tile
+            if (data.measureState == TapMeasureState.MEASURING) {
+                val srcView = when (data.expandedType) {
+                    VitalsType.HR -> binding.ivHrIcon
+                    VitalsType.STRESS -> binding.ivStressIcon
+                    VitalsType.SPO2 -> binding.ivSpO2Icon
+                    VitalsType.SKIN_TEMP -> binding.ivSkinIcon
+                    null -> binding.ivHrIcon
+                }
+                ivAnchor.setImageResource(getIcon(data.expandedType))
+                if(data.isRetry.not()){
+                    animateImageView(ivAnchor, srcView,{
+                        if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                            val hrVal = data.hrValue?.toIntOrNull()?:60
+                            startHeartAnimation(ivAnchor, hrVal)
+                        }else {
+                            stopHeartAnimation(ivAnchor)
+                        }
+                    })
+                }else{
+                    ivAnchor.visible()
+                    if (data.expandedType == OHealthOverview.VitalsType.HR) {
+                        val hrVal = data.hrValue?.toIntOrNull()?:60
+                        startHeartAnimation(ivAnchor, hrVal)
+                    }else {
+                        stopHeartAnimation(ivAnchor)
+                    }
+                }
+            } else {
+                ivAnchor.invisible()
+                stopHeartAnimation(ivAnchor)
+            }
+
             tile.setOnClickListener {
 
                 return@setOnClickListener
@@ -1148,7 +1203,77 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
         }
 
-        private fun getMeasuringTextByType(type:VitalsType?,context: Context): String? {
+        private fun animateImageView(
+            ivAnchor: ImageView,
+            ivHrIcon: ImageView,
+            onFinish:()-> Unit,
+        ) {
+            ivAnchor.invisible()
+            ivAnchor.post {
+                val startLocation = IntArray(2)
+                val endLocation = IntArray(2)
+
+                ivHrIcon.getLocationOnScreen(startLocation)
+                ivAnchor.getLocationOnScreen(endLocation)
+
+                val startX = startLocation[0].toFloat()
+                val startY = startLocation[1].toFloat()
+                val endX = endLocation[0].toFloat()
+                val endY = endLocation[1].toFloat()
+
+                // Scale differences
+                val scaleX = ivHrIcon.width.toFloat() / ivAnchor.width.toFloat()
+                val scaleY = ivHrIcon.height.toFloat() / ivAnchor.height.toFloat()
+
+                // Reset ivAnchor to start position & scale
+                ivAnchor.scaleX = scaleX
+                ivAnchor.scaleY = scaleY
+                ivAnchor.translationX = startX - endX
+                ivAnchor.translationY = startY - endY
+
+                ivAnchor.visible()
+
+                ivAnchor.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .translationX(0f)
+                    .translationY(0f)
+                    .setDuration(500)
+                    .setListener(object : Animator.AnimatorListener{
+                        override fun onAnimationStart(animation: Animator) {
+
+                        }
+
+                        override fun onAnimationEnd(animation: Animator) {
+                            onFinish()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {
+
+                        }
+
+                    })
+                    .start()
+
+            }
+
+        }
+
+        private fun getIcon(type: VitalsType?): Int {
+            return when (type) {
+                VitalsType.HR -> R.drawable.ic_hr_measure
+                VitalsType.STRESS -> R.drawable.ic_stress_measure
+                VitalsType.SPO2 -> R.drawable.ic_spo2_measure
+                VitalsType.SKIN_TEMP -> R.drawable.ic_temp_measure
+                null -> R.drawable.ic_hr_measure
+            }
+        }
+
+        private fun getMeasuringTextByType(type: VitalsType?, context: Context): String? {
             return when (type) {
                 OHealthOverview.VitalsType.HR -> context.getString(R.string.text_measuring_heart_rate)
                 OHealthOverview.VitalsType.STRESS -> context.getString(R.string.text_measuring_stress)
@@ -1719,10 +1844,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     hydrationText.append(String.format("%.1f", convertedHydrate))
                     hydrationText.append("/")
 
-                    //val convertedHydrateGoal = hydrateGoal.toFloat() * 0.033814
                     val convertedHydrateGoal =
                         notificationGoal.convertedHydrateGoal
-//                        viewModel.convertMlToOuncesRounded(hydrateGoal.toDouble())
 
                     hydrationText.append("$convertedHydrateGoal")
                     hydrationText.append("oz")

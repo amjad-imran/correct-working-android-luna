@@ -11,6 +11,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class MealPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     val workoutData: String? = null

@@ -15,6 +15,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -38,6 +39,7 @@ import javax.inject.Inject
 class ChatGptViewModel
 @Inject constructor(
     val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository,
     private val syncRepository: OreoSyncRepository,

@@ -53,6 +53,7 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.showShortToast
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
@@ -93,6 +94,11 @@ class AiTopQuestionsFragment :
                         navigate(R.id.chatHistoryFragment)
                         //navigate(AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatHistoryFragment())
                     }, onQuestionSelected = { ques ->
+                        if (viewModel.ringDataStore.getRingDevice() == null) {
+                            context.showShortToast(getString(R.string.text_luna_ai_message))
+                            return@ScreenAiTopQuestion
+                        }
+
                         navigate(
                             AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToChatGptFragment(
                                 "",

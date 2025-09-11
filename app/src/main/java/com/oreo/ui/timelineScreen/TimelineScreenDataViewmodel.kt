@@ -125,8 +125,15 @@ class TimelineScreenDataViewmodel @Inject constructor(
                 data.titleColor = "#8EF1C3".toColorInt()
                 data.value?.let {
                     try {
-                        val value = formatMlToLitersOrMl(it.toIntOrNull()?:0)
-                        data.desc = value
+                        val isMetric = sessionManager.isMetric()
+                        if(isMetric){
+                            val value = formatMlToLitersOrMl(it.toIntOrNull() ?: 0)
+                            data.desc = value
+                        }else{
+                            val value = convertMlToOz(it.toIntOrNull() ?: 0)
+                            data.desc = value
+                        }
+
                     }catch (exp: Exception){
                         exp.printStackTrace()
                         data.desc = it
@@ -179,6 +186,11 @@ class TimelineScreenDataViewmodel @Inject constructor(
         } else {
             "$ml ml"
         }
+    }
+
+    fun convertMlToOz(ml: Int): String {
+        val oz = ml * 0.033814
+        return "%.1f oz".format(oz)
     }
 
     private fun convertTimeFormat(time: String?): String {

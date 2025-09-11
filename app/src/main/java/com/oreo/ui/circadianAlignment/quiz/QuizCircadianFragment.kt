@@ -28,14 +28,36 @@ class QuizCircadianFragment :
 
     var isBlocked = false
 
+    private var questions: List<CircadianQuizResponseModel> = emptyList()
+
+    private fun updateNavForPosition(position: Int) {
+        val adapterCount = binding.viewPager.adapter?.itemCount ?: 0
+        val isFirst = position == 0
+        val isLast = position == adapterCount - 1 && adapterCount > 0
+
+        if (isFirst) binding.ivBack.gone() else binding.ivBack.visible()
+
+        val selected = questions.getOrNull(position)?.selectedOptionId
+        if (selected != null) {
+            if (isLast) {
+                binding.btnNext.text = if (viewModel.localDataStore.isCircadianOnboardShown())
+                    getString(R.string.text_done) else getString(R.string.text_get_started)
+            } else {
+                binding.btnNext.text = getString(R.string.text_next)
+            }
+            binding.btnNext.visible()
+        } else {
+            binding.btnNext.gone()
+        }
+    }
+
     private fun handleQuizOptionClick(pair: Pair<Int, Int>) {
         isBlocked = true
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                viewModel.handleQuizOptionClick(pair)
-                isBlocked = false
-            }, 400
-        )
+        /*Handler(Looper.getMainLooper()).postDelayed({*/
+        viewModel.handleQuizOptionClick(pair)
+        isBlocked = false
+        /*}, 400
+    )*/
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,52 +107,48 @@ class QuizCircadianFragment :
             navigateUpSafe()
         }
 
+
         binding.tvSkip.setOnClickListener {
             viewModel.submitQuizQuesAndAnswers(true)
         }
 
-        binding.btnGetStarted.setOnClickListener {
-            viewModel.submitQuizQuesAndAnswers()
+        binding.ivBack.setOnClickListener {
+            val current = binding.viewPager.currentItem
+            if (current > 0) {
+                binding.viewPager.setCurrentItem(current - 1, true)
+            }
+        }
+
+        binding.btnNext.setOnClickListener {
+            val current = binding.viewPager.currentItem
+            val lastIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
+            if (current < lastIndex) {
+                binding.viewPager.setCurrentItem(current + 1, true)
+            }
+            if(current==lastIndex){
+                viewModel.submitQuizQuesAndAnswers()
+
+            }
         }
     }
 
     override fun subscribeObservers() {
         viewModel.quizData.observe(this) {
             val list: List<CircadianQuizResponseModel> = it
-//            questionAdapter.updateDataSet(list)
+            questions = list
             val adapter = QuizFragmentAdapter(this, list) { pair ->
                 handleQuizOptionClick(pair)
             }
             binding.viewPager.adapter = adapter
 
-            // Enable vertical scrolling
             binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
-            //binding.viewPager.offscreenPageLimit = 2
-
             binding.viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 
             binding.viewPager.isUserInputEnabled = false
 
-
-            // Apply the custom page transformer for positioning and scaling
-            /*binding.viewPager.setPageTransformer { page, position ->
-                val scaleFactor = Math.max(0.85f, 1 - Math.abs(position)) // Scale the page based on its position
-                val maxTranslationY = 100f // Move items up/down based on their position
-
-                // Adjust translation for vertical movement
-                page.translationY = position * maxTranslationY
-
-                // Apply scaling to pages as they move away from the center
-                page.scaleX = scaleFactor
-                page.scaleY = scaleFactor
-
-                // Adjust the opacity (fade out pages that are not centered)
-                page.alpha = 1 - Math.abs(position)
-            }*/
             binding.viewPager.setPageTransformer { page, position ->
                 when {
                     position < -1 -> {
-                        // Page is way off-screen to the top
                         page.alpha = 0f
                         page.scaleX = 0.8f
                         page.scaleY = 0.8f
@@ -170,31 +188,18 @@ class QuizCircadianFragment :
                     }
                 }
             }
+
+            updateNavForPosition(0)
         }
 
         viewModel.optionSelectedLiveData.observe(this) {
-            binding.viewPager.adapter?.let { adapter ->
-                val next = binding.viewPager.currentItem + 1
-                if (next < adapter.itemCount) {
-                    binding.viewPager.setCurrentItem(next, true)
-                }
-            }
+            updateNavForPosition(binding.viewPager.currentItem)
         }
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val lastPageIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
-                if (lastPageIndex >= 0 && position == lastPageIndex) {
-                    binding.btnGetStarted.apply {
-                        text =
-                            if (viewModel.localDataStore.isCircadianOnboardShown()) getString(R.string.text_done)
-                            else getString(R.string.text_get_started)
-                        visible()
-                    }
-                } else {
-                    binding.btnGetStarted.gone()
-                }
+                updateNavForPosition(position)
             }
         })
 
