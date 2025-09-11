@@ -134,6 +134,11 @@ class AiMealPlanFragment :
           }*/
 
         binding.ivEdit.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
+
             navigate(
                 AiMealPlanFragmentDirections.actionAiMealPlanFragmentToChatGptFragment(
                     "",

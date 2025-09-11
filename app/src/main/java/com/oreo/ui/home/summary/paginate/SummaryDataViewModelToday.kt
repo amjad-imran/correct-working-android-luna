@@ -2943,12 +2943,12 @@ class SummaryDataViewModelToday @Inject constructor(
             when (daySlot) {
                 0 -> {
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
@@ -2958,9 +2958,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 1 -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
@@ -2974,9 +2974,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 else -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["readiness"]!!.copy(priority = priorityList.size))

@@ -9,8 +9,10 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiWorkoutDetailBinding
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -19,6 +21,7 @@ import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AiWorkoutDetailFragment :
@@ -34,6 +37,9 @@ class AiWorkoutDetailFragment :
     private val messagesStrings = ArrayList<String>()
     private val displayMessage = MutableLiveData<String>()
     private var currentPos = 0
+
+    @Inject
+    lateinit var ringDataStore: RingDataStore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,12 +65,14 @@ class AiWorkoutDetailFragment :
             getString(
                 R.string.text_find_alternatives_of_value,
                 workout.workout_name
-            ))
+            )
+        )
         messagesStrings.add(
             getString(
                 R.string.text_how_does_help_my_body_value,
                 workout.workout_name
-            ))
+            )
+        )
         messagesStrings.add(getString(R.string.text_how_do_i_do_value, workout.workout_name))
 
         displayMessage.postValue(getWorkoutAiString(currentPos))
@@ -98,6 +106,11 @@ class AiWorkoutDetailFragment :
             navigate(frag, bundle)
         }
         binding.ivTextChat.setOnClickListener {
+            if (ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
+
             val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,

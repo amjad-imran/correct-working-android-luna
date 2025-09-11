@@ -91,6 +91,11 @@ class WorkoutPlansFragment :
         binding.lytWeek.tvSun.setOnClickListener(weekListener)
 
         binding.ivEdit.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.lunaai_edit_clicked,
                 HashMap<String, Any>().apply {

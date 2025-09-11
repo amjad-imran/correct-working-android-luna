@@ -13,6 +13,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.Event
@@ -50,6 +51,7 @@ class CycleTrackerViewModel @Inject constructor(
     val resourcesProvider: ResourcesProvider,
     val vibrationUtils: VibrationUtils,
     val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
     private val deviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 

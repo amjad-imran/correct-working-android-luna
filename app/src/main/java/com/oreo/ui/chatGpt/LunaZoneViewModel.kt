@@ -18,7 +18,7 @@ import javax.inject.Inject
 class LunaZoneViewModel @Inject constructor(
     val sessionManager: SessionManager,
     private val deviceRepository: OreoDeviceRepository,
-    private val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
     val suggestedQuestions = MutableLiveData<List<SuggestedAiQuestions>>()

@@ -846,6 +846,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.showChatUi.observe(this) {
             it.getContent()?.let { threadId ->
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    showShortToast(getString(R.string.text_luna_ai_message))
+                    return@observe
+                }
+
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     threadId,
                     null,

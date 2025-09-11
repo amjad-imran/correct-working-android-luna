@@ -42,6 +42,12 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
     private val suggestionsAdapter: SuggestedQuestionAdapter by lazy {
         SuggestedQuestionAdapter(onQuestionClicked = {
+
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@SuggestedQuestionAdapter
+            }
+
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.Home_lunaai_suggested_question,
                 HashMap<String, Any>().apply {
@@ -185,6 +191,11 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
                 navigate(R.id.workoutPlansFragment)
 
             } else {
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return@setOnClickListener
+                }
+
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,
@@ -203,6 +214,11 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
                 navigate(R.id.aiMealPlanFragment)
             } else {
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return@setOnClickListener
+                }
+
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,
@@ -228,6 +244,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         }
 
         binding.lytPlans.lytMealPlanSetup.root.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,

@@ -8,6 +8,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ai.ChatHistoryItem
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class ChatHistoryViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
     val resourcesProvider: ResourcesProvider,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     private val _chatHistory = MutableLiveData<List<ChatHistoryItem>>()

@@ -34,6 +34,10 @@ class ChatHistoryFragment :
     private val mAdapter: ChatHistoryAdapter by lazy {
         ChatHistoryAdapter(object : ChatHistoryInteraction {
             override fun onThreadClicked(threadId: String, title: String) {
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
 
                 navigate(
                     ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
