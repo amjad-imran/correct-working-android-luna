@@ -873,6 +873,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.itemHR.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.HR,
                     data,
@@ -880,6 +881,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemStress.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.STRESS,
                     data,
@@ -887,6 +889,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSpO2.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SPO2,
                     data,
@@ -894,6 +897,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSkinTemp.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SKIN_TEMP,
                     data,
@@ -1085,6 +1089,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     btnCancel.apply {
                         setOnClickListener {
+                            binding.anchorImageView.invisible()
                             data.expandedType?.let { type ->
                                 data.measureState = null
                                 data.measuring = false
@@ -1139,8 +1144,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             stopHeartAnimation(ivAnchor)
                         }
                     })
-                }else{
-                    ivAnchor.visible()
+                }else{ ivAnchor.visible()
                     if (data.expandedType == OHealthOverview.VitalsType.HR) {
                         val hrVal = data.hrValue?.toIntOrNull()?:60
                         startHeartAnimation(ivAnchor, hrVal)
@@ -1148,6 +1152,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         stopHeartAnimation(ivAnchor)
                     }
                 }
+            }else if(data.measureState== TapMeasureState.ERROR){
+                ivAnchor.visible()
+                stopHeartAnimation(ivAnchor)
             } else {
                 ivAnchor.invisible()
                 stopHeartAnimation(ivAnchor)
