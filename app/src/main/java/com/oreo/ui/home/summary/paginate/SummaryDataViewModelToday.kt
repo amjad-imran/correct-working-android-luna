@@ -60,6 +60,8 @@ import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.db.abstaction.GoogleFitDataSource
+import com.oreo.data.db.abstaction.OreoBloodOxygenDataSource
+import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
@@ -158,6 +160,9 @@ class SummaryDataViewModelToday @Inject constructor(
     val hrDataConvertor: OreoHRDataConvertor,
     val googleFitDataSource: GoogleFitDataSource,
     val googleFitDataObservers: GoogleFitDataObservers,
+    // Local Room data sources
+    private val bloodOxygenDataSource: OreoBloodOxygenDataSource,
+    private val bodyTemperatureDataSource: OreoBodyTemperatureDataSource,
 ) : BaseViewModel() {
 
     var date: String? = null
@@ -1425,68 +1430,141 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             VitalsType.SPO2 -> {
-                val lastMeasuredSpo2 = ringDataStore.getManualMeasurementValueBloodOxygen()
+                val nowTs = DateFormats.getTimeStamp()
+                val startOfToday = DateFormats.convertTimeStampToStartOfDay(nowTs)
+                val todayDate = DateFormats.getTodaysDateString(10)
 
-                var spo2Value: Int? = null
-                var spo2LastTime: String? = null
-                lastMeasuredSpo2?.let { manual ->
-                    val startOfToday =
-                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                        spo2Value = manual.value
-                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                        spo2LastTime = try {
+                var roomPair: Pair<String, String>? = null
+                var roomTs: Long? = null
+                try {
+                    bloodOxygenDataSource.getTodayData(todayDate)?.let { bo ->
+                        val breakup = Gson().fromJson<List<Int>>(bo.breakUp ?: "")
+                        if (!breakup.isNullOrEmpty()) {
+                            val elapsed = DateFormats.getDayElapsedMinutesFromTimeStamp(nowTs) ?: 0
+                            var pos = kotlin.math.floor(elapsed / 15.0f).toInt()
+                            if (pos >= breakup.size) pos = breakup.size - 1
+                            if (pos < 0) pos = 0
+                            for (i in pos downTo 0) {
+                                val v = breakup[i]
+                                if (v > 0) {
+                                    val ts = startOfToday + (i * 15L * 60_000L)
+                                    val diff = nowTs - ts
+                                    val ago = try {
+                                        when {
+                                            diff < 60_000 -> "just now"
+                                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                            else -> "${diff / (60 * 60_000)} hr ago"
+                                        }
+                                    } catch (e: Exception) { null }
+                                    roomTs = ts
+                                    roomPair = Pair(v.toString(), ago ?: "")
+                                    break
+                                }
+                            }
+                        }
+                    }
+                } catch (_: Exception) { }
+
+                val manual = ringDataStore.getManualMeasurementValueBloodOxygen()
+                var manualPair: Pair<String, String>? = null
+                var manualTs: Long? = null
+                manual?.let { m ->
+                    if (!m.isError && !m.isMeasuring && m.timeStamp >= startOfToday) {
+                        val diff = nowTs - m.timeStamp
+                        val ago = try {
                             when {
                                 diff < 60_000 -> "just now"
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
-                        } catch (e: Exception) {
-                            null
-                        }
-                    }
-
-                    if (spo2Value == null || spo2LastTime == null) {
-                        null
-                    } else {
-                        Pair(spo2Value.toString(), spo2LastTime)
+                        } catch (e: Exception) { null }
+                        manualTs = m.timeStamp
+                        manualPair = Pair(m.value.toString(), ago ?: "")
                     }
                 }
+
+                val chosen = when {
+                    manualTs != null && roomTs != null -> if (manualTs!! >= roomTs!!) manualPair else roomPair
+                    manualTs != null -> manualPair
+                    roomTs != null -> roomPair
+                    else -> null
+                }
+                chosen
             }
 
             VitalsType.SKIN_TEMP -> {
-                val lastMeasuredSkinTemp = ringDataStore.getManualMeasurementValueBodyTemp()
-                var skinTempValue: Float? = null
-                var skinTempLastTime: String? = null
-                lastMeasuredSkinTemp?.let { manual ->
-                    val startOfToday =
-                        DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-                    if (!manual.isError && !manual.isMeasuring && manual.timeStamp >= startOfToday) {
-                        skinTempValue = (manual.value.toFloat()) / 100f
-                        val diff = DateFormats.getTimeStamp() - manual.timeStamp
-                        skinTempLastTime = try {
+                val nowTs = DateFormats.getTimeStamp()
+                val startOfToday = DateFormats.convertTimeStampToStartOfDay(nowTs)
+                val todayDate = DateFormats.getTodaysDateString(10)
+
+                var roomPair: Pair<String, String>? = null
+                var roomTs: Long? = null
+                try {
+                    bodyTemperatureDataSource.getTodayData(todayDate)?.let { bt ->
+                        val breakup = Gson().fromJson<List<Float>>(bt.breakUp ?: "")
+                        if (!breakup.isNullOrEmpty()) {
+                            val elapsed = DateFormats.getDayElapsedMinutesFromTimeStamp(nowTs) ?: 0
+                            var pos = kotlin.math.floor(elapsed / 5.0).toInt()
+                            if (pos >= breakup.size) pos = breakup.size - 1
+                            if (pos < 0) pos = 0
+                            for (i in pos downTo 0) {
+                                val v = breakup[i]
+                                if (v > 0f) {
+                                    val ts = startOfToday + (i * 5L * 60_000L)
+                                    val diff = nowTs - ts
+                                    val ago = try {
+                                        when {
+                                            diff < 60_000 -> "just now"
+                                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                            else -> "${diff / (60 * 60_000)} hr ago"
+                                        }
+                                    } catch (e: Exception) { null }
+                                    val valueC = v
+                                    val converted = if (sessionManager.isMetric()) {
+                                        valueC
+                                    } else {
+                                        AppConversionUtils.celsiusToFahrenheit(valueC).upTo1Decimal()
+                                    }
+                                    roomTs = ts
+                                    roomPair = Pair(String.format("%.1f", converted), ago ?: "")
+                                    break
+                                }
+                            }
+                        }
+                    }
+                } catch (_: Exception) { }
+
+                val manual = ringDataStore.getManualMeasurementValueBodyTemp()
+                var manualPair: Pair<String, String>? = null
+                var manualTs: Long? = null
+                manual?.let { m ->
+                    if (!m.isError && !m.isMeasuring && m.timeStamp >= startOfToday) {
+                        val tempC = (m.value.toFloat()) / 100f
+                        val converted = if (sessionManager.isMetric()) {
+                            tempC
+                        } else {
+                            AppConversionUtils.celsiusToFahrenheit(tempC).upTo1Decimal()
+                        }
+                        val diff = nowTs - m.timeStamp
+                        val ago = try {
                             when {
                                 diff < 60_000 -> "just now"
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
-                        } catch (e: Exception) {
-                            null
-                        }
+                        } catch (e: Exception) { null }
+                        manualTs = m.timeStamp
+                        manualPair = Pair(String.format("%.1f", converted), ago ?: "")
                     }
                 }
-                if (skinTempValue == null || skinTempLastTime == null) {
-                    null
-                } else {
-                    val converted = if(sessionManager.isMetric()){
-                        skinTempValue
-                    }else{
-                        AppConversionUtils.celsiusToFahrenheit(
-                            skinTempValue
-                        ).upTo1Decimal()
-                    }
-                    Pair(String.format("%.1f", converted), skinTempLastTime)
+
+                val chosen = when {
+                    manualTs != null && roomTs != null -> if (manualTs!! >= roomTs!!) manualPair else roomPair
+                    manualTs != null -> manualPair
+                    roomTs != null -> roomPair
+                    else -> null
                 }
+                chosen
             }
         }
     }

@@ -12,6 +12,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
+import com.oreo.data.db.abstaction.OreoBloodOxygenDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
@@ -35,6 +36,7 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
 import com.oreo.data.db.implementation.GoogleFitDataSourceImpl
 import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
+import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
@@ -406,6 +408,12 @@ class OreoRoomModule {
     @Provides
     fun provideTemperatureData(tempData: OreoBodyTemperatureDataImpl): OreoBodyTemperatureDataSource {
         return tempData
+    }
+
+    @Singleton
+    @Provides
+    fun provideBloodOxygenData(boData: OreoBloodOxygenDataImpl): OreoBloodOxygenDataSource {
+        return boData
     }
 
     @Singleton
