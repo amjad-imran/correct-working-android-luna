@@ -18,6 +18,7 @@ import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.common.upTo1Decimal
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -47,6 +48,7 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.SleepDataGoogleFit.SleepDataBreakup
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -1476,7 +1478,14 @@ class SummaryDataViewModelToday @Inject constructor(
                 if (skinTempValue == null || skinTempLastTime == null) {
                     null
                 } else {
-                    Pair(String.format("%.1f", skinTempValue), skinTempLastTime)
+                    val converted = if(sessionManager.isMetric()){
+                        skinTempValue
+                    }else{
+                        AppConversionUtils.celsiusToFahrenheit(
+                            skinTempValue
+                        ).upTo1Decimal()
+                    }
+                    Pair(String.format("%.1f", converted), skinTempLastTime)
                 }
             }
         }
@@ -1516,7 +1525,8 @@ class SummaryDataViewModelToday @Inject constructor(
             skinTempLastTime = tempData?.second,
             featureConfig = features,
             expandedType = null,
-            measuring = false
+            measuring = false,
+            isMetric = sessionManager.isMetric()
         )
 
         withContext(Dispatchers.Main) {
@@ -3603,7 +3613,16 @@ class SummaryDataViewModelToday @Inject constructor(
                                 this.measureState = TapMeasureState.LAST_MEASURED
                                 val temp = (manualMeasurement.value.toFloat()) / 100
 
-                                this.skinTempValue = if (manualMeasurement.value != 0) String.format("%.1f", temp) else null
+
+                                val converted = if(sessionManager.isMetric()){
+                                    temp
+                                }else{
+                                    AppConversionUtils.celsiusToFahrenheit(
+                                        temp
+                                    ).upTo1Decimal()
+                                }
+
+                                this.skinTempValue = if (converted != 0f) String.format("%.1f", converted) else null
                                 this.skinTempLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false

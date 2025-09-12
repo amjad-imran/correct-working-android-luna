@@ -229,6 +229,7 @@ sealed class OHealthOverview {
         var measuring: Boolean = false,
         var measureState: TapMeasureState? = null,
         var isRetry: Boolean = false,
+        var isMetric: Boolean = true
     ) : OHealthOverview()
 
     data class OneTapVitalsFeatureConfig(
