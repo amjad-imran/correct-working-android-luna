@@ -45,6 +45,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
 class CircadianAlignmentFragment :
@@ -157,7 +158,7 @@ class CircadianAlignmentFragment :
 
     }
 
-    private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse) {
+    private fun setCircadianMidPointGraph(circadianResponse: CircadianResponse, sidePaddingMinutes: Int) {
         if (viewModel.personChronotype == null) {
             binding.lytSleepMidPoint.tvChorotype.gone()
         } else {
@@ -186,14 +187,17 @@ class CircadianAlignmentFragment :
             val midStartDateTime = LocalDateTime.parse(circadianResponse.startTime, formatter)
             val midEndDateTime = LocalDateTime.parse(circadianResponse.endTime, formatter)
 
-            val newStartDateTime = LocalDateTime
-                .parse(circadianResponse.startTime, formatter)
-                .minusHours(2)
-                .minusMinutes(midStartDateTime.minute.toLong())
-            val newEndDateTime = LocalDateTime
-                .parse(circadianResponse.endTime, formatter)
-                .plusHours(2)
-                .plusMinutes((60 - midEndDateTime.minute.toLong()))
+            val interval = 10
+            val padBars = kotlin.math.ceil(sidePaddingMinutes / 10.0).toLong()
+            val padMinutesAligned = padBars * interval
+
+            val startRemainder = midStartDateTime.minute % interval
+            val startAlignedTo10 = midStartDateTime.minusMinutes(startRemainder.toLong())
+            val endRemainderInt = (interval - (midEndDateTime.minute % interval)).let { if (it == interval) 0 else it }
+            val endAlignedTo10 = midEndDateTime.plusMinutes(endRemainderInt.toLong())
+
+            val newStartDateTime = startAlignedTo10.minusMinutes(padMinutesAligned)
+            val newEndDateTime = endAlignedTo10.plusMinutes(padMinutesAligned)
 
             val circadianMidPointDateTime =
                 LocalDateTime.parse(circadianResponse.avgNow, formatter)
@@ -202,18 +206,12 @@ class CircadianAlignmentFragment :
 
             val isSameDay = newStartDateTime.toLocalDate() == newEndDateTime.toLocalDate()
 
-            val totalHrs = if (!isSameDay) {
+            val totalMinutes = ChronoUnit.MINUTES.between(newStartDateTime, newEndDateTime).toInt()
+            val totalBarsCalculated = (totalMinutes / 10).coerceAtLeast(1)
 
-                val hoursFromStartToMidnight = 24 - newStartDateTime.hour
-                val hoursFromMidnightToEnd = newEndDateTime.hour
-                hoursFromStartToMidnight + hoursFromMidnightToEnd
-            } else {
-                newEndDateTime.hour - newStartDateTime.hour
-            }
+            LOGS.d("sdfjhsdkfj bars:$totalBarsCalculated - $newStartDateTime - $newEndDateTime - $isSameDay")
 
-            LOGS.d("sdfjhsdkfj $totalHrs - $newStartDateTime - $newEndDateTime - $isSameDay")
-
-            binding.lytSleepMidPoint.circadianGraph.updateTotalHours(totalHrs)
+            binding.lytSleepMidPoint.circadianGraph.updateTotalBars(totalBarsCalculated)
             val totalBars = binding.lytSleepMidPoint.circadianGraph.totalBars()
             val graphView = binding.lytSleepMidPoint.circadianGraph
             val avgNowIndex = CircadianMidPointGraphUtils.getMidPointIndex(
@@ -224,6 +222,8 @@ class CircadianAlignmentFragment :
                 newStartDateTime,
                 avgBeforeMidPointDateTime
             )
+            val avgNowOffsetMin = ChronoUnit.MINUTES.between(newStartDateTime, circadianMidPointDateTime).toInt()
+            val avgBeforeOffsetMin = ChronoUnit.MINUTES.between(newStartDateTime, avgBeforeMidPointDateTime).toInt()
 
 
             LOGS.d(
@@ -352,6 +352,12 @@ class CircadianAlignmentFragment :
                         getString(R.string.text_circadian_mid_point_desc_awaiting_sync)
                 }
             }
+
+            // Record bar indices so the view can order overlapping labels chronologically
+            avgNowMidPoint?.index = avgNowIndex
+            avgBeforeMidPoint?.index = avgBeforeIndex
+            avgNowMidPoint?.minutesFromStart = avgNowOffsetMin
+            avgBeforeMidPoint?.minutesFromStart = avgBeforeOffsetMin
 
             //-4 -2
 
@@ -621,7 +627,7 @@ class CircadianAlignmentFragment :
                     circadianMidPoint.avgNow ?: "",
                     /*null,*/
                 )
-                setCircadianMidPointGraph(circadianMidPointResponse)
+                setCircadianMidPointGraph(circadianMidPointResponse, sidePaddingMinutes = 120)
             }
         }
     }

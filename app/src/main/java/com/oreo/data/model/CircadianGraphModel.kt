@@ -21,7 +21,8 @@ data class CircadianMidPointModel(
     var title: String? = null,
     var color: Int? = null,
     var bgColor: Int? = null,
-    var index: Int? = null
+    var index: Int? = null,
+    var minutesFromStart: Int? = null
 
 )
 

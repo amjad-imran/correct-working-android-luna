@@ -840,31 +840,31 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.lytHrValue.apply {
                 tvValue.text = data.hrValue?.let { it } ?: "--"
-                tvUnit.text = "BPM"
+                tvUnit.text = data.hrValue?.let {"BPM"}?:""
                 tvUnit.setTextColor("#FF4E5C".toColorInt())
             }
-            binding.tvHrAgo.text = data.hrLastTime ?: ""
+            binding.tvHrAgo.text = data.hrLastTime ?: "-"
 
             binding.lytStressValue.apply {
                 tvValue.text = data.stressValue?.let { it } ?: "--"
                 tvUnit.gone()
             }
-            binding.tvStressAgo.text = data.stressLastTime ?: ""
+            binding.tvStressAgo.text = data.stressLastTime ?: "-"
 
             binding.lytSpO2Value.apply {
                 tvValue.text = data.spo2Value?.let { it } ?: "--"
-                tvUnit.text = "%"
+                tvUnit.text = data.spo2Value?.let { "%" } ?: ""
                 tvUnit.setTextColor("#7BBCFE".toColorInt())
             }
-            binding.tvSpO2Ago.text = data.spo2LastTime ?: ""
+            binding.tvSpO2Ago.text = data.spo2LastTime ?: "-"
 
             binding.lytSkinValue.apply {
                 tvValue.text =
                     data.skinTempValue?.let { it } ?: "--"
-                tvUnit.text = "°C"
+                tvUnit.text = data.skinTempValue?.let { if(data.isMetric) "°C" else "°F" } ?: ""
                 tvUnit.setTextColor("#6AAF93".toColorInt())
             }
-            binding.tvSkinAgo.text = data.skinTempLastTime ?: ""
+            binding.tvSkinAgo.text = data.skinTempLastTime ?: "-"
 
             if (data.expandedType != null) {
                 expandTile(data)
@@ -873,6 +873,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.itemHR.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.HR,
                     data,
@@ -880,6 +881,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemStress.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.STRESS,
                     data,
@@ -887,6 +889,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSpO2.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SPO2,
                     data,
@@ -894,6 +897,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSkinTemp.setOnClickListener {
+                if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SKIN_TEMP,
                     data,
@@ -1016,6 +1020,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
 
             val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
+            val btnCancel = measuringRoot.findViewById<ImageView>(R.id.ivCancel)
             val lottieView = measuringRoot.findViewById<LottieAnimationView>(R.id.lottieView)
 
             when (data.measureState) {
@@ -1024,6 +1029,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lottieView.cancelAnimation()
                     progressBar.gone()
                     retryBtn.gone()
+                    btnCancel.gone()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
@@ -1080,6 +1086,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
+
+                    btnCancel.apply {
+                        setOnClickListener {
+                            binding.anchorImageView.invisible()
+                            data.expandedType?.let { type ->
+                                data.measureState = null
+                                data.measuring = false
+                                data.isRetry = false
+                                collapseTiles(data)
+                            }
+                        }
+                        visible()
+                    }
                     titleTextViewExp.text =
                         context.getString(R.string.text_something_went_wrong_single)
                     hintTextViewExp.text = context.getString(R.string.text_unable_to_track)
@@ -1092,6 +1111,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     lytSuccess.gone()
                     retryBtn.gone()
+                    btnCancel.gone()
                     progressBar.visible()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
@@ -1124,8 +1144,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                             stopHeartAnimation(ivAnchor)
                         }
                     })
-                }else{
-                    ivAnchor.visible()
+                }else{ ivAnchor.visible()
                     if (data.expandedType == OHealthOverview.VitalsType.HR) {
                         val hrVal = data.hrValue?.toIntOrNull()?:60
                         startHeartAnimation(ivAnchor, hrVal)
@@ -1133,6 +1152,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         stopHeartAnimation(ivAnchor)
                     }
                 }
+            }else if(data.measureState== TapMeasureState.ERROR){
+                ivAnchor.visible()
+                stopHeartAnimation(ivAnchor)
             } else {
                 ivAnchor.invisible()
                 stopHeartAnimation(ivAnchor)

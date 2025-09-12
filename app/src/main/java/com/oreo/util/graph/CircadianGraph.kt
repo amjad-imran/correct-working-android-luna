@@ -24,6 +24,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     private var totalHours = 6
     private val perHourInterval = 6 ///60/10 = 6 (10 minutes right now)
+    // Track total bars directly so we can render arbitrary minute spans (10-min units)
+    private var totalBarsCount: Int = totalHours * perHourInterval
 
     var drawOnSameIndex = false
 
@@ -60,11 +62,17 @@ class CircadianGraph @JvmOverloads constructor(
     private val iconBitmapEnd = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise_grey)
 
     fun totalBars(): Int {
-        return totalHours * perHourInterval
+        return totalBarsCount
     }
 
     fun updateTotalHours(hour: Int) {
         totalHours = hour
+        totalBarsCount = (totalHours * perHourInterval)
+    }
+
+    // New: explicitly set number of bars (10‑minute units)
+    fun updateTotalBars(bars: Int) {
+        totalBarsCount = bars.coerceAtLeast(1)
 
     }
 
@@ -107,13 +115,24 @@ class CircadianGraph @JvmOverloads constructor(
 
             if (drawOnSameIndex) {
                 if (value.bothMidPoint != null) {
-                    firstCircadianMidPointModel = value.bothMidPoint?.first
+                    val modelA = value.bothMidPoint?.first
+                    val modelB = value.bothMidPoint?.second
+                    // Order chronologically: prefer minutesFromStart, then index; fallback to original order
+                    val aMin = modelA?.minutesFromStart
+                    val bMin = modelB?.minutesFromStart
+                    val useAFirst = when {
+                        aMin != null && bMin != null -> (aMin <= bMin)
+                        modelA?.index != null && modelB?.index != null -> (modelA.index!! <= modelB.index!!)
+                        else -> true
+                    }
+                    val firstModel = if (useAFirst) modelA else modelB
+                    val secondModel = if (useAFirst) modelB else modelA
+
+                    firstCircadianMidPointModel = firstModel
                     firstMidPointLeftStart = left
                     val top = centerY - avgBarHeightHalf
                     val bottom = centerY + avgBarHeightHalf
-                    value.bothMidPoint?.first?.color?.let {
-                        firstPaint.color = it
-                    }
+                    firstModel?.color?.let { firstPaint.color = it }
                     canvas.drawRoundRect(
                         left,
                         top,
@@ -124,13 +143,11 @@ class CircadianGraph @JvmOverloads constructor(
                         firstPaint
                     )
 
-                    secondCircadianMidPointModel = value.bothMidPoint?.second
+                    secondCircadianMidPointModel = secondModel
                     secondMidPointLeftStart = left
                     val top2 = centerY - avgBarHeightHalf
                     val bottom2 = centerY + avgBarHeightHalf
-                    value.bothMidPoint?.second?.color?.let {
-                        secondPaint.color = it
-                    }
+                    secondModel?.color?.let { secondPaint.color = it }
                     canvas.drawRoundRect(
                         left,
                         top2 + 10f,
