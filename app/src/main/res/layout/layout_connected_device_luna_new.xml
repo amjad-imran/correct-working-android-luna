@@ -80,7 +80,7 @@
             android:id="@+id/ivImgCenter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +91,7 @@
             android:layout_width="0dp"
             android:layout_height="340dp"
             android:layout_marginTop="12dp"
-            android:scaleType="fitXY"
-            android:layout_marginStart="-16dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivImgRight"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -104,7 +103,7 @@
             android:layout_width="126dp"
             android:layout_height="137dp"
             android:layout_marginStart="30dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:paddingEnd="-16dp"
             app:layout_constraintBottom_toBottomOf="@id/ivImgLeft"
             app:layout_constraintEnd_toEndOf="parent"
@@ -143,22 +142,14 @@
             android:id="@+id/lytRingCaseProgress"
             layout="@layout/layout_charging_icon_perc_progress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lytRingProgressBoth"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/lytRingProgress"
             layout="@layout/layout_charging_icon_perc_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lytRingCaseProgressBoth"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="12dp" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.noisefit_commans.data.local.abstraction
 
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
 import com.noisefit_commans.models.HandWashing
@@ -31,6 +32,10 @@ interface WatchDataStore {
 
     fun getBatteryPercentRing(): Int
     fun updateBatteryPercentRing(percent: Int?)
+
+    fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?)
+
+    fun getRingCaseData(): CaseInfoData?
 
     fun getHeartRateStatus(): Boolean
     fun updateHeartRateStatus(status: Boolean)

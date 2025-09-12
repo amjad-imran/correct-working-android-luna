@@ -392,13 +392,14 @@ constructor(
 
 
             if (capacity != null) {
-                val caseInfoData = p0.ringChargingCaseInfoBean?.let {
+                val caseInfoData = if((p0.ringChargingCaseInfoBean?.battLevel ?: -1) > 0){
                     CaseInfoData(
-                        isOpen = it.isOpen,
-                        battLevel = it.battLevel,
-                        serialNumber = it.serialNums,
+                        isOpen = p0.ringChargingCaseInfoBean.isOpen,
+                        battLevel = p0.ringChargingCaseInfoBean.battLevel,
+                        serialNumber = p0.ringChargingCaseInfoBean.serialNums,
                     )
-                }
+                }else null
+
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.BatteryDataObtained(
                         BatteryData(percentage = capacity, isCharging = isCharging, caseInfoData = caseInfoData)

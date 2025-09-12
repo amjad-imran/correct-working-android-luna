@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -41,6 +42,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.doOnNextLayoutOnce
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
@@ -342,7 +344,7 @@ class OreoMyDeviceFragment :
         }
 
         mViewModel.sessionManager.caseInfoData.observe(this) {
-            mViewModel.caseInfoData = it
+
         }
 
     }
@@ -722,7 +724,8 @@ class OreoMyDeviceFragment :
         //---
         val context = binding.root.context
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
-        val isChargerOpen = mViewModel.caseInfoData?.isOpen
+        val rinCaseData = mViewModel.watchDataStore.getRingCaseData()
+        val isChargerOpen = rinCaseData?.isOpen
 
         binding.lytDeviceConnectedNew.apply{
             //
@@ -750,7 +753,7 @@ class OreoMyDeviceFragment :
             }
             lytRingProgress.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
 
-            if(mViewModel.caseInfoData != null) {
+            if(rinCaseData != null) {
                 lytRingCaseProgress.tvPercVal.gone()
                 lytRingCaseProgress.lPbContainer.gone()
                 lytRingCaseProgress.root.post {
@@ -862,7 +865,7 @@ class OreoMyDeviceFragment :
         // ----
         val context = binding.root.context
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
-        val caseInfoData = mViewModel.caseInfoData
+        val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
 
         binding.lytDeviceConnectedNew.apply{
             //
@@ -876,30 +879,31 @@ class OreoMyDeviceFragment :
             //
 
             // Set Charging Progress Layout
-            val chargingContainerWidth = binding.root.width - (48 * resources.displayMetrics.density).toInt()
-            lytRingProgress.apply {
-                lytRingProgress.root.post {
-                    val params = lytRingProgress.root.layoutParams
-                    params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
-                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    lytRingProgress.root.layoutParams = params
-                }
-                ivImage.setImageResource(R.drawable.ic_ring_for_perc)
-                tvPercVal.text = "$batteryPercent%"
-                linearProgressIndicator.setIndicatorColor(
-                    getIndicatorColor(
-                        batteryPercent,
-                        mViewModel.sessionManager.isRingCharging.value ?: false
+            lytRingProgress.root.doOnLayout {
+                val chargingContainerWidth =
+                    resources.displayMetrics.widthPixels - (48 * resources.displayMetrics.density).toInt()
+                val params = lytRingProgress.root.layoutParams
+                params.width  = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                lytRingProgress.root.layoutParams = params
+
+                lytRingProgress.apply {
+                    ivImage.setImageResource(R.drawable.ic_ring_for_perc)
+                    tvPercVal.text = "$batteryPercent%"
+                    linearProgressIndicator.setIndicatorColor(
+                        getIndicatorColor(
+                            batteryPercent,
+                            mViewModel.sessionManager.isRingCharging.value == true
+                        )
                     )
-                )
-                linearProgressIndicator.progress = batteryPercent
-                tvPercVal.visible()
-                lPbContainer.visible()
-                ivLightening.setVisibilityByCondition(mViewModel.sessionManager.isRingCharging.value ?: false)
-                lytRingProgress.root.visible()
+                    linearProgressIndicator.progress = batteryPercent
+                    tvPercVal.visible()
+                    lPbContainer.visible()
+                    ivLightening.setVisibilityByCondition(mViewModel.sessionManager.isRingCharging.value == true)
+                    root.requestLayout()
+                }
             }
 
-            LOGS.d("uicnjcamc : $noiseFitDevice")
             setCenterImage(noiseFitDevice)
             if(ringGen == 1 || caseInfoData == null){
                 tvRingCaseName.text = "Luna ring"
@@ -910,15 +914,18 @@ class OreoMyDeviceFragment :
 
             }else{
                 genContainer.gone()
+                lytRingCaseProgress.root.visible()
                 if(caseInfoData.battLevel == null){
-                    lytRingCaseProgress.tvPercVal.gone()
-                    lytRingCaseProgress.lPbContainer.gone()
-                    lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
-                    lytRingCaseProgress.root.post {
+                    lytRingCaseProgress.root.doOnNextLayoutOnce {
                         val params = lytRingCaseProgress.root.layoutParams
                         params.width = ViewGroup.LayoutParams.WRAP_CONTENT
                         params.height = ViewGroup.LayoutParams.WRAP_CONTENT
                         lytRingCaseProgress.root.layoutParams = params
+                        //
+                        lytRingCaseProgress.tvPercVal.gone()
+                        lytRingCaseProgress.lPbContainer.gone()
+                        lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
+                        lytRingCaseProgress.root.requestLayout()
                     }
                 }
                 else{
@@ -926,27 +933,30 @@ class OreoMyDeviceFragment :
 
                     //
                     val chargerBattery = caseInfoData.battLevel ?: 0
-                    lytRingCaseProgress.apply {
-                        ivImage.setImageResource(R.drawable.ic_charger_for_perc)
-                        tvPercVal.text = "$chargerBattery%"
-                        linearProgressIndicator.progress = chargerBattery
-                        linearProgressIndicator.setIndicatorColor(
-                            getIndicatorColor(
-                                chargerBattery,
-                                false
+                    lytRingCaseProgress.root.doOnNextLayoutOnce {
+                        val chargingContainerWidth =
+                            resources.displayMetrics.widthPixels - (48 * resources.displayMetrics.density).toInt()
+                        val params = lytRingCaseProgress.root.layoutParams
+                        params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                        params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        lytRingCaseProgress.root.layoutParams = params
+                        //
+                        lytRingCaseProgress.apply {
+                            ivImage.setImageResource(R.drawable.ic_charger_for_perc)
+                            tvPercVal.text = "$chargerBattery%"
+                            linearProgressIndicator.progress = chargerBattery
+                            linearProgressIndicator.setIndicatorColor(
+                                getIndicatorColor(
+                                    chargerBattery,
+                                    false
+                                )
                             )
-                        )
-                        tvPercVal.visible()
-                        lPbContainer.visible()
-                        root.post {
-                            val params = root.layoutParams
-                            params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
-                            params.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                            root.layoutParams = params
+                            tvPercVal.visible()
+                            lPbContainer.visible()
+                            lytRingCaseProgress.root.requestLayout()
                         }
                     }
                 }
-                lytRingCaseProgress.root.visible()
             }
             //
 
@@ -957,7 +967,7 @@ class OreoMyDeviceFragment :
 
         val context = binding.root.context
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
-        val caseInfoData = mViewModel.caseInfoData
+        val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
         val isRingCharing = mViewModel.sessionManager.isRingCharging.value ?: false
 
         val displayMetrics = resources.displayMetrics
@@ -975,15 +985,8 @@ class OreoMyDeviceFragment :
             noiseFitDevice.ringInfo?.chargerRingUrl
         }
 
-        LOGS.d("ckjssjnsc : ringGen : $ringGen")
-        LOGS.d("ckjssjnsc : caseInfoData : $caseInfoData")
-        LOGS.d("ckjssjnsc : isRingCharing : $isRingCharing")
-        LOGS.d("ckjssjnsc : ringImage : $ringImage")
-        LOGS.d("ckjssjnsc : chargerOpenImage : $chargerOpenImage")
-        LOGS.d("ckjssjnsc : -----------------------------")
-
         when {
-            ringGen == 1 || caseInfoData == null || (!isRingCharing && caseInfoData.isOpen!=true) -> {
+            ringGen == 1 || caseInfoData == null/* || (!isRingCharing && caseInfoData.isOpen!=true)*/ -> {
                 binding.lytDeviceConnectedNew.apply {
                     ivImgLeft.gone()
                     ivImgRight.gone()
@@ -1027,7 +1030,8 @@ class OreoMyDeviceFragment :
                             ivImgLeft.loadImage(context, chargerOpenImage)
                             ivImgLeft.visible()
                         }*/
-                        loadImage(context, chargerOpenImage)
+                        /*loadImage(context, chargerOpenImage)*/
+                        setImageResource(R.drawable.ic_portable_charger_open_main)
                         visible()
                     }
                     ivImgRight.apply {

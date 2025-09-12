@@ -52,8 +52,6 @@ class OMyDeviceViewModel @Inject constructor(
     var appLogFile: File? = null
     var firmwareLogFile: File? = null
 
-    var caseInfoData: CaseInfoData ?= null
-
     val lunarBlackImagesUrl = Pair(
         "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
         "https://luna-cdn.gonoise.com/production/ring/set_1/Luna+Gen+2.565+1.png"

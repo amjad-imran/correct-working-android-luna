@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.ChargingNotificationLevel
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
 import com.noisefit_commans.models.HandWashing
@@ -54,6 +55,8 @@ private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
 private const val TEST_BODY_BATTERY = "TEST_BODY_BATTERY"
 private const val TEST_STRESS_DATA = "TEST_STRESS_DATA"
+
+private const val RING_CASE_DATA = "RING_CASE_DATA"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -390,6 +393,19 @@ constructor(
             mPrefs.edit()?.putInt(BATTERY_PERCENT_RING, it)
                 ?.commit()
         }
+    }
+
+    override fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?) {
+        mPrefs.edit()
+            ?.putString(RING_CASE_DATA, gson.toJson(caseInfoData))
+            ?.commit()
+    }
+
+    override fun getRingCaseData(): CaseInfoData? {
+        return gson.fromJson(
+            mPrefs.getString(RING_CASE_DATA, null),
+            CaseInfoData::class.java
+        )
     }
 
     override fun getHeartRateStatus(): Boolean {

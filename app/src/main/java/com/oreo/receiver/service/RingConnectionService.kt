@@ -1768,6 +1768,7 @@ constructor() : LifecycleService() {
                      )
                      */
                     watchDataStore.updateBatteryPercentRing(percent)
+                    watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
                     queryCallback.batteryData.caseInfoData?.let {
                         sessionManager.caseInfoData.postValue(it)
                     }

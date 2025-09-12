@@ -30,6 +30,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
@@ -876,5 +877,12 @@ fun getCircleProgressDrawable(context: Context): CircularProgressDrawable {
 
 fun delay(duration: Long, `do`: () -> Unit) {
     Handler(Looper.getMainLooper()).postDelayed(`do`, duration)
+}
+
+inline fun View.doOnNextLayoutOnce(crossinline block: () -> Unit) {
+    doOnLayout {
+        block()
+        viewTreeObserver?.removeOnGlobalLayoutListener(null) // one-shot
+    }
 }
 
