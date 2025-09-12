@@ -1016,6 +1016,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val tvSuccessVal = measuringRoot.findViewById<TextView>(R.id.tvMeasurementVal)
 
             val retryBtn = measuringRoot.findViewById<ImageView>(R.id.ivRetry)
+            val btnCancel = measuringRoot.findViewById<ImageView>(R.id.ivCancel)
             val lottieView = measuringRoot.findViewById<LottieAnimationView>(R.id.lottieView)
 
             when (data.measureState) {
@@ -1024,6 +1025,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     lottieView.cancelAnimation()
                     progressBar.gone()
                     retryBtn.gone()
+                    btnCancel.gone()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
                         context.getString(R.string.text_measuring_may_take_30_sec)
@@ -1080,6 +1082,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }
                         visible()
                     }
+
+                    btnCancel.apply {
+                        setOnClickListener {
+                            data.expandedType?.let { type ->
+                                data.measureState = null
+                                data.measuring = false
+                                data.isRetry = false
+                                collapseTiles(data)
+                            }
+                        }
+                        visible()
+                    }
                     titleTextViewExp.text =
                         context.getString(R.string.text_something_went_wrong_single)
                     hintTextViewExp.text = context.getString(R.string.text_unable_to_track)
@@ -1092,6 +1106,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     lytSuccess.gone()
                     retryBtn.gone()
+                    btnCancel.gone()
                     progressBar.visible()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
