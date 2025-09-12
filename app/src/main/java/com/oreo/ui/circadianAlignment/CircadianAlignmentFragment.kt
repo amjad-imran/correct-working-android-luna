@@ -222,6 +222,8 @@ class CircadianAlignmentFragment :
                 newStartDateTime,
                 avgBeforeMidPointDateTime
             )
+            val avgNowOffsetMin = ChronoUnit.MINUTES.between(newStartDateTime, circadianMidPointDateTime).toInt()
+            val avgBeforeOffsetMin = ChronoUnit.MINUTES.between(newStartDateTime, avgBeforeMidPointDateTime).toInt()
 
 
             LOGS.d(
@@ -350,6 +352,12 @@ class CircadianAlignmentFragment :
                         getString(R.string.text_circadian_mid_point_desc_awaiting_sync)
                 }
             }
+
+            // Record bar indices so the view can order overlapping labels chronologically
+            avgNowMidPoint?.index = avgNowIndex
+            avgBeforeMidPoint?.index = avgBeforeIndex
+            avgNowMidPoint?.minutesFromStart = avgNowOffsetMin
+            avgBeforeMidPoint?.minutesFromStart = avgBeforeOffsetMin
 
             //-4 -2
 
