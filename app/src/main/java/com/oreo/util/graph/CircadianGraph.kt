@@ -24,6 +24,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     private var totalHours = 6
     private val perHourInterval = 6 ///60/10 = 6 (10 minutes right now)
+    // Track total bars directly so we can render arbitrary minute spans (10-min units)
+    private var totalBarsCount: Int = totalHours * perHourInterval
 
     var drawOnSameIndex = false
 
@@ -60,11 +62,17 @@ class CircadianGraph @JvmOverloads constructor(
     private val iconBitmapEnd = BitmapFactory.decodeResource(resources, R.drawable.ic_sunrise_grey)
 
     fun totalBars(): Int {
-        return totalHours * perHourInterval
+        return totalBarsCount
     }
 
     fun updateTotalHours(hour: Int) {
         totalHours = hour
+        totalBarsCount = (totalHours * perHourInterval)
+    }
+
+    // New: explicitly set number of bars (10‑minute units)
+    fun updateTotalBars(bars: Int) {
+        totalBarsCount = bars.coerceAtLeast(1)
 
     }
 

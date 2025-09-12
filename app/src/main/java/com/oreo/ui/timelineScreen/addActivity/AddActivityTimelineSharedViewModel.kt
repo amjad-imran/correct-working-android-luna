@@ -31,6 +31,7 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var sourceKey: String ?= null
+    var showTimeline = false
 
     val loadFragment = MutableLiveData<Event<AddActivityItemsEnum>>()
     val navigateUp = MutableLiveData<Event<Boolean>>()

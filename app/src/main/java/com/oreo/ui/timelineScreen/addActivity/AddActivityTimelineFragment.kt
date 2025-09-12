@@ -30,6 +30,7 @@ class AddActivityTimelineFragment :
 
         val key = arguments?.getString("key")
         arguments?.getString("srcKey")?.let { sharedViewModel.sourceKey= it }
+        sharedViewModel.showTimeline = args.showTimeline
         when(key){
             CircadianAlignmentViewModel.light_exposure_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE)
@@ -103,7 +104,7 @@ class AddActivityTimelineFragment :
         }
         sharedViewModel.navigateUp.observe(this){
             it.getContent()?.let {
-                if(args.showTimeline){
+                if(sharedViewModel.showTimeline){
                     navigateUpSafe()
                     navigate(R.id.timelineScreenFragment)
                 }else{
