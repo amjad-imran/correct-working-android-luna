@@ -572,11 +572,12 @@ data class BatteryData(
 ) :
     ColorfitData()
 
+@Parcelize
 data class CaseInfoData(
     var battLevel: Int ?= null,
     var isOpen: Boolean ?= null,
     var serialNumber: String ?= null,
-)
+) : Parcelable
 
 data class WorkoutRealTimeData(
     val hrValue: Int? = null,
