@@ -2182,5 +2182,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_nfc_error_message">To avoid unnecessary battery drain, shut down your ring and place it on a charger. To turn on the ring and use it seamlesly, follow the instructions.</string>
     <string name="text_shutting_down">Shutting down</string>
     <string name="text_luna_ai_message">Connect your ring to experience the power of LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Please make sure the Bluetooth is turned on.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">Device is trying to connect, please wait.</string>
 
 </resources>
