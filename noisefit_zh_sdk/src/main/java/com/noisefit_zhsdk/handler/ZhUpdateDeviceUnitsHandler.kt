@@ -182,6 +182,7 @@ constructor(
 
         override fun onMeasureResult(p0: ActiveMeasureResultBean?) {
             LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
+            AppLogs.sendAppLogs("onMeasuring onMeasureResult ${Gson().toJson(p0)}")
 
             if (p0 == null) {
                 return
@@ -293,6 +294,10 @@ constructor(
                 )
             }"
         )
+        AppLogs.sendAppLogs("onMeasuring setManualMeasurement ${oreoDataConverter.getManualMeasurement(
+            manualMeasureType,
+            status
+        )}")
         ControlBleTools.getInstance().activeMeasurementStart(
             oreoDataConverter.getManualMeasurement(
                 manualMeasureType,
@@ -300,6 +305,7 @@ constructor(
             ), object : SendCmdStateListener(null) {
                 override fun onState(state: SendCmdState) {
                     LOGS.d( "onMeasuring setManualMeasurement $state")
+                    AppLogs.sendAppLogs( "onMeasuring setManualMeasurement $state")
 
                     if (state == SendCmdState.NOT_SUPPORT) {
                         testUpdateDeviceDataCallback?.onUpdateDataReceived(
