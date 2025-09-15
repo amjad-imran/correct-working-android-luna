@@ -748,7 +748,7 @@
     <string name="text_low">Faible</string>
     <string name="text_inactive">Inactif</string>
     <string name="text_activity_contributors">Facteurs d\'activité</string>
-    <string name="text_add_a_workout">Ajouter un entraînement</string>
+    <string name="text_add_a_workout">Ajouter une séance</string>
     <string name="text_you_haven_t_added_any_workouts_for_today">Vous n\'avez ajouté aucun entraînement aujourd\'hui</string>
     <string name="text_you_haven_t_added_any_workouts_for_this_day">Vous n\'avez ajouté aucun entraînement pour ce jour</string>
     <string name="text_workout_page_title">Activité</string>

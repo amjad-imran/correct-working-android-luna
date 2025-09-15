@@ -2165,7 +2165,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_please_select_start_time">Please select start time</string>
     <string name="text_please_select_end_time">Please select end time</string>
     <string name="text_please_check_end_time">Please check end time</string>
-    <string name="text_one_tap_vitals">One Tap Vitals</string>
+    <string name="text_one_tap_vitals">One-Tap Vitals</string>
     <string name="text_measuring_may_take_30_sec">This may take up to 30 seconds</string>
     <string name="text_measuring_heart_rate">Measuring Heart rate...</string>
     <string name="text_measuring_stress">Measuring Stress...</string>
@@ -2177,10 +2177,12 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_unable_to_track">Unable to track at this movement, please retry.</string>
     <string name="text_something_went_wrong_single">Something went wrong</string>
     <string name="text_mob_no">Mob no.</string>
-    <string name="text_we_found_anomaly_in_your_ring">We found anomaly in your ring</string>
+    <string name="text_we_found_anomaly_in_your_ring">Ring software anomaly detected</string>
     <string name="text_shut_down">Shut down</string>
-    <string name="text_nfc_error_message">To avoid unnecessary battery drain, shut down your ring and place it on a charger. To turn on the ring and use it seamlesly, follow the instructions.</string>
+    <string name="text_nfc_error_message">We have detected an software anomaly in your ring. This might result in high battery drain. Please shutdown your the ring to fix it.After shutting down you need to place the ring on charger to connect again.</string>
     <string name="text_shutting_down">Shutting down</string>
     <string name="text_luna_ai_message">Connect your ring to experience the power of LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Please make sure the Bluetooth is turned on.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">Device is trying to connect, please wait.</string>
 
 </resources>

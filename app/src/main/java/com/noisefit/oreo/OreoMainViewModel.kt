@@ -3,17 +3,20 @@ package com.noisefit.oreo
 import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
@@ -42,6 +45,7 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
+import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -139,17 +143,18 @@ constructor(
 
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
-    var caffeineGraphData: CaffeineGraphDataModel ?= null
-    var summaryAvailable: Boolean ?= null
-    var ldwReadiness: Boolean ?= null
-    var ldwCycleTracker: Boolean ?= null
-    var boosterWomen: Boolean ?= null
+    var caffeineGraphData: CaffeineGraphDataModel? = null
+    var summaryAvailable: Boolean? = null
+    var ldwReadiness: Boolean? = null
+    var ldwCycleTracker: Boolean? = null
+    var boosterWomen: Boolean? = null
 
-    var circadianGraphData: CircadianGraphData ?= null
-    var nudgeCircadianData: NudgeCircadianGraph?= null
+    var circadianGraphData: CircadianGraphData? = null
+    var nudgeCircadianData: NudgeCircadianGraph? = null
 
-    var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
+    var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
     var errorCode: String = ""
+
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -501,7 +506,7 @@ constructor(
 
         if (selectedDate.isNullOrEmpty()) return false
 
-        if((sleepHistoryResponse.value!![1]).date.isNullOrEmpty()) return false
+        if ((sleepHistoryResponse.value!![1]).date.isNullOrEmpty()) return false
 
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
                 selectedDate
@@ -1159,7 +1164,7 @@ constructor(
                     } ?: ""
 
                 val generation = getGeneration(pairedDevice)
-                if(generation!=null){
+                if (generation != null) {
                     userMeta["cf_generation"] = "Gen$generation"
                 }
             }
@@ -1241,10 +1246,9 @@ constructor(
         }
     }
 
-    fun getCaffeineWindowData(data:(d:CaffeineGraphDataModel)->Unit){
+    fun getCaffeineWindowData(data: (d: CaffeineGraphDataModel) -> Unit) {
         viewModelScope.launch {
-            userActivityRepository.getCaffeineWindowData().collect{
-                    resource ->
+            userActivityRepository.getCaffeineWindowData().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -1342,7 +1346,7 @@ constructor(
             val todayDate = java.time.LocalDate.now()
             dates.add(todayDate.format(formatter))
             (6 downTo 1).forEach {
-                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
+                val newDate = todayDate.minusDays(it.toLong()).format(formatter)
                 dates.add(newDate)
             }
             userHealthDataDataSource.clearDataByDates(dates)
@@ -1440,13 +1444,13 @@ constructor(
     }
 
     fun getApiErrorCode(message: String?): String? {
-        if(message==null) return null
+        if (message == null) return null
 
-        if(message.equals(NETWORK_ERROR,true)){ //no internet,500 until 599
+        if (message.equals(NETWORK_ERROR, true)) { //no internet,500 until 599
             return "000001"
-        }else if(message.equals(NETWORK_ERROR_UNKNOWN,true)){
+        } else if (message.equals(NETWORK_ERROR_UNKNOWN, true)) {
             return "000002"
-        }else if(message.equals(NETWORK_ERROR_TIMEOUT,true)){ // timeout case
+        } else if (message.equals(NETWORK_ERROR_TIMEOUT, true)) { // timeout case
             return "000003"
         }
 
@@ -1549,6 +1553,16 @@ constructor(
         val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
 
         return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
+    }
+
+    fun checkExceptionCancelState(): Boolean {
+        val lastCancelled = localDataStore.getExceptionCancelTime()
+        if (lastCancelled == 0L) return true
+
+        val current = System.currentTimeMillis()
+
+        return current - lastCancelled > 30 * 60 * 1000L
+
     }
 
     fun getPortableChargerAndRingImage(device: ColorFitDevice) {

@@ -687,12 +687,16 @@ class SummaryDataFragmentToday :
     }
 
     private fun performOneTapVitalsOp(type: OHealthOverview.VitalsType) {
+        if(viewModel.sessionManager.bluetoothState.value==false){
+            context.showShortToast(getString(R.string.text_please_make_sure_the_bluetooth_is_turned_on))
+            return
+        }
         if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+            context.showShortToast(getString(R.string.text_device_is_trying_to_connect_please_wait))
             return
         }
         if (viewModel.stateOneTapVitalsCard.value?.measuring == true) {
-            context.showShortToast(getString(R.string.text_please_wait_for_sync_to_complete_before_starting_your_activity))
+            context.showShortToast(getString(R.string.text_please_wait))
             return
         }
         viewModel.viewModelScope.launch(Dispatchers.IO) {

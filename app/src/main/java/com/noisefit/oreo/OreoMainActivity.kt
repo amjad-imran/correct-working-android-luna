@@ -792,7 +792,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.sessionManager.nfcSleepErr.observe(this) {
             if (it) {
-                navController?.navigate(R.id.ringExceptionDialogFragment)
+                if(viewModel.checkExceptionCancelState()){
+                    navController?.navigate(R.id.ringExceptionDialogFragment)
+                }
+
             }
         }
 

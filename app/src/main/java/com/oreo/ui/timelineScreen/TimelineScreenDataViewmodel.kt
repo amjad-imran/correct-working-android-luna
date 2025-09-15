@@ -182,7 +182,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
     fun formatMlToLitersOrMl(ml: Int): String {
         return if (ml >= 1000) {
-            String.format("%.1f liter", ml.toFloat() / 1000)
+            String.format("%.2f liter", ml.toFloat() / 1000)
         } else {
             "$ml ml"
         }
