@@ -3,25 +3,23 @@ package com.noisefit.oreo
 import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.freshchat.consumer.sdk.FreshchatUser
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.repository.abstraction.ReferralRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.BuildConfig
@@ -44,7 +42,6 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
-import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -112,7 +109,8 @@ constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
     val referralRepository: ReferralRepository,
     val alarmRepository: AlarmRepository,
-    val femaleHealthRepository: FemaleHealthRepository
+    val femaleHealthRepository: FemaleHealthRepository,
+    private val deviceRepository: DeviceRepository,
 ) : BaseViewModel() {
 
 
@@ -1551,6 +1549,61 @@ constructor(
         val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
 
         return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
+    }
+
+    fun getPortableChargerAndRingImage(device: ColorFitDevice) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val code = try {
+                device.ringInfo?.serialNoRaw?.substring(7, 9)?.toInt()
+            } catch (_: Exception) {
+                0
+            }
+
+            if (code == 0) {
+                return@launch
+            }
+
+            deviceRepository.getDeviceList("ring").collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            var isDataChanged = false
+
+                            it.ringInfo?.forEach { info ->
+                                info.mapping.forEach { mapping ->
+                                    if(mapping.code == code){
+                                        isDataChanged = true
+                                        device.apply {
+                                            this.ringInfo?.image3 = info.imageUrl3
+                                            this.ringInfo?.chargerRingUrl = info.chargerRingUrl
+                                        }
+                                        return@forEach
+                                    }
+                                }
+                            }
+
+                            if(isDataChanged){
+                                ringDataStore.saveRingDevice(device)
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

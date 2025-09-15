@@ -59,9 +59,9 @@ data class RingInfo(
     @SerializedName("image_url_2")
     val image2: String? = null,
     @SerializedName("image_url_3")
-    val image3: String? = null,
+    var image3: String? = null,
     @SerializedName("charger_url")
-    val chargerRingUrl: String? = null,
+    var chargerRingUrl: String? = null,
     @SerializedName("versionNumber")
     val versionNumber: Int? = null,
     @SerializedName("serialNoRaw")

@@ -1751,6 +1751,14 @@ constructor() : LifecycleService() {
 
                 is QueryCallback.BatteryDataObtained -> {
                     val percent = queryCallback.batteryData.percentage ?: 0
+
+                    watchDataStore.updateBatteryPercentRing(percent)
+                    watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
+
+                    queryCallback.batteryData.caseInfoData?.let {
+                        sessionManager.caseInfoData.postValue(it)
+                    }
+
                     LOGS.d("sdfkjhsdkjfhksdjf BatteryDataObtained ${percent} - ${queryCallback.batteryData.isCharging}")
                     sessionManager.batteryPercentRing.postValue(percent)
                     sessionManager.isRingCharging.postValue(queryCallback.batteryData.isCharging)
@@ -1767,11 +1775,6 @@ constructor() : LifecycleService() {
                          queryCallback.batteryData.isCharging
                      )
                      */
-                    watchDataStore.updateBatteryPercentRing(percent)
-                    watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
-                    queryCallback.batteryData.caseInfoData?.let {
-                        sessionManager.caseInfoData.postValue(it)
-                    }
                 }
 
                 is QueryCallback.FirmwareVersionObtained -> {

@@ -45,10 +45,8 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
@@ -1236,6 +1234,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))
                 ApplicationUtils.setRescueWorkManager(this)
+            }
+
+            if(it.ringInfo?.image3 == null || it.ringInfo?.chargerRingUrl == null){
+                viewModel.getPortableChargerAndRingImage(it)
             }
 
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
