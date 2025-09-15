@@ -1467,11 +1467,13 @@
         <argument
             android:name="key"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="srcKey"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="showTimeline"
             app:argType="boolean"
