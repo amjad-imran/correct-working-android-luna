@@ -223,6 +223,13 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
     }
 
     override fun subscribeObservers() {
+
+        mViewModel.sessionManager.isRingCharging.observe(this) {
+            if (mViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                updateChargingProgressColor()
+            }
+        }
+
         viewModel.sessionManager.checkForVersionUpdateAbout.observe(this) {
             it.getContent()?.let {
                 viewModel.setLoading(false)
@@ -346,6 +353,20 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
 
     }
 
+    private fun updateChargingProgressColor(){
+        val isCharging = mViewModel.sessionManager.isRingCharging.value ?: false
+        val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
+        binding.lytChargeProgress.linearProgressIndicator.setIndicatorColor(
+            getIndicatorColor(batteryPercent, isCharging)
+        )
+        binding.lytChargeProgress.apply {
+            linearProgressIndicator.setIndicatorColor(
+                getIndicatorColor(batteryPercent, isCharging)
+            )
+            ivLightening.setVisibilityByCondition(isCharging)
+        }
+    }
+
     private fun setStateConnected(isConnected: Boolean) {
         val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
         binding.lytChargeProgress.apply {
@@ -363,7 +384,7 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
                     linearProgressIndicator.setIndicatorColor(
                         getIndicatorColor(
                             batteryPercent,
-                            /*mViewModel.sessionManager.isRingCharging.value ?: */false
+                            mViewModel.sessionManager.isRingCharging.value ?: false
                         )
                     )
                     linearProgressIndicator.progress = batteryPercent
