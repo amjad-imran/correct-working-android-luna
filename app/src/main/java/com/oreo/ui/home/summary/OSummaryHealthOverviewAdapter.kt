@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -88,7 +87,6 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
-import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.home.summary.paginate.NotificationGoal
 import com.oreo.util.DateTimeUtil
 import java.time.Duration
@@ -106,19 +104,14 @@ import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
-import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.Calendar
-import kotlin.math.exp
-import kotlin.math.pow
 
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -1107,7 +1100,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 else -> {
 
                     lottieView.visible()
-                    lottieView.playAnimation(LottieDrawable.INFINITE,R.raw.anim_measure_hr)
+                    lottieView.playAnimation(LottieDrawable.INFINITE,getBackAnim(data.expandedType))
 
                     lytSuccess.gone()
                     retryBtn.gone()
@@ -1222,6 +1215,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
+            }
+        }
+
+        private fun getBackAnim(expandedType: VitalsType?): Int {
+            return when(expandedType){
+                VitalsType.HR -> R.raw.anim_measure_hr
+                VitalsType.STRESS -> R.raw.anim_measure_stress
+                VitalsType.SPO2 -> R.raw.anim_measure_spo2
+                VitalsType.SKIN_TEMP -> R.raw.anim_measure_skin_temp
+                null -> R.raw.anim_measure_hr
             }
         }
 

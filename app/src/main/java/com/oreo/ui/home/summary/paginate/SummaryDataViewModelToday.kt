@@ -1183,7 +1183,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
-            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            val generation = 2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
             val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
             if (hasOneTapVitalsKey == null) {

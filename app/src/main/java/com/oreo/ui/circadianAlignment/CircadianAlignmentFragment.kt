@@ -70,6 +70,7 @@ class CircadianAlignmentFragment :
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
+                    "showTimeline" to false,
                     "key" to it.key,
                     "srcKey" to "circadian",
                 )
@@ -665,6 +666,7 @@ class CircadianAlignmentFragment :
             navigate(
                 R.id.addActivityTimelineFragment,
                 bundleOf(
+                    "showTimeline" to false,
                     "key" to "sleep",
                 )
             )

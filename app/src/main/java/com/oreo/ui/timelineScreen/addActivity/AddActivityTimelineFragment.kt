@@ -29,9 +29,13 @@ class AddActivityTimelineFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val key = arguments?.getString("key")
-        arguments?.getString("srcKey")?.let { sharedViewModel.sourceKey= it }
-        sharedViewModel.showTimeline = args.showTimeline
-        when(key){
+        arguments?.getString("srcKey")?.let { sharedViewModel.sourceKey = it }
+        sharedViewModel.showTimeline = try {
+            args.showTimeline
+        } catch (exp: Exception) {
+            false
+        }
+        when (key) {
             CircadianAlignmentViewModel.light_exposure_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE)
 
@@ -90,6 +94,7 @@ class AddActivityTimelineFragment :
                     AddActivityItemsEnum.NAP -> {
                         AddSleepFragment()
                     }
+
                     AddActivityItemsEnum.SLEEP -> {
                         AddSleepFragment()
                     }
@@ -102,12 +107,12 @@ class AddActivityTimelineFragment :
 
             }
         }
-        sharedViewModel.navigateUp.observe(this){
+        sharedViewModel.navigateUp.observe(this) {
             it.getContent()?.let {
-                if(sharedViewModel.showTimeline){
+                if (sharedViewModel.showTimeline) {
                     navigateUpSafe()
                     navigate(R.id.timelineScreenFragment)
-                }else{
+                } else {
                     navigateUpSafe()
                 }
             }
