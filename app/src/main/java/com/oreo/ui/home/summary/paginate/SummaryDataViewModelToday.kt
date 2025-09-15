@@ -1519,11 +1519,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                             else -> "${diff / (60 * 60_000)} hr ago"
                                         }
                                     } catch (e: Exception) { null }
-                                    val valueC = v
+                                    val valueF = v
                                     val converted = if (sessionManager.isMetric()) {
-                                        valueC
+                                        AppConversionUtils.fahrenheitToCelsius(valueF)
                                     } else {
-                                        AppConversionUtils.celsiusToFahrenheit(valueC).upTo1Decimal()
+                                        valueF
                                     }
                                     roomTs = ts
                                     roomPair = Pair(String.format("%.1f", converted), ago ?: "")
