@@ -2165,7 +2165,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_please_select_start_time">Please select start time</string>
     <string name="text_please_select_end_time">Please select end time</string>
     <string name="text_please_check_end_time">Please check end time</string>
-    <string name="text_one_tap_vitals">One Tap Vitals</string>
+    <string name="text_one_tap_vitals">One-Tap Vitals</string>
     <string name="text_measuring_may_take_30_sec">This may take up to 30 seconds</string>
     <string name="text_measuring_heart_rate">Measuring Heart rate...</string>
     <string name="text_measuring_stress">Measuring Stress...</string>

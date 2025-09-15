@@ -1209,6 +1209,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     userActivities.add(it)
                 }
             }
+            val hasTimelineKey = priorityList.find { it.key.equals("timeline", true) }
+            if (hasTimelineKey == null) {
+                getTimelineCard()?.let { userActivities.add(it) }
+            }
 
 
             priorityList.forEach { item ->
@@ -1223,6 +1227,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                    }
+                    "timeline" -> {
+                        getTimelineCard()?.let { userActivities.add(it) }
                     }
 
                     "sleep" -> {
@@ -1340,7 +1347,6 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
-            getTimelineCard()?.let { userActivities.add(it) }
 
             if (lunaManaged) {
                 getLunaAiCard()?.let {
@@ -3054,6 +3060,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
 
                 1 -> {
@@ -3069,6 +3076,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
 
                 else -> {
@@ -3084,6 +3092,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
             }
 
@@ -3201,6 +3210,13 @@ class SummaryDataViewModelToday @Inject constructor(
                 R.drawable.icon_heart_monitor,
                 "circadian_alignment",
                 resourceProvider.getString(R.string.text_circadian_alignment),
+                true,
+                14
+            )
+            this["timeline"] = CustomHomeScreenItem(
+                R.drawable.icon_time_line,
+                "timeline",
+                resourceProvider.getString(R.string.text_timeline),
                 true,
                 14
             )

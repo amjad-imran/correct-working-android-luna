@@ -88,37 +88,43 @@ class CustomHomescreenViewModel @Inject constructor(
 
         val cardsToAdd = ArrayList<CustomHomeScreenItem>()
         cardsToAdd.addAll(card)
-        remainingCards.forEachIndexed { index,item ->
+        remainingCards.forEachIndexed { index, item ->
             cardsToAdd.add(item.apply {
                 this.priority = card.size + (index + 1)
             })
         }
 
         //handle new cards
-        // caffeine_intake
-        val caffeineCard = card.find { it.key.equals("caffeine_intake",true) }
-        if(caffeineCard==null){
-            val index = cardsToAdd.indexOfFirst { it.key.equals("caffeine_intake",true) }
-            if(index!=-1){
+        val caffeineCard = card.find { it.key.equals("caffeine_intake", true) }
+        if (caffeineCard == null) {
+            val index = cardsToAdd.indexOfFirst { it.key.equals("caffeine_intake", true) }
+            if (index != -1) {
                 cardsToAdd[index].switchState = true
             }
         }
 
-        val circadianCard = card.find { it.key.equals("circadian_alignment",true) }
-        if(circadianCard==null){
-            val index = cardsToAdd.indexOfFirst { it.key.equals("circadian_alignment",true) }
-            if(index!=-1){
+        val circadianCard = card.find { it.key.equals("circadian_alignment", true) }
+        if (circadianCard == null) {
+            val index = cardsToAdd.indexOfFirst { it.key.equals("circadian_alignment", true) }
+            if (index != -1) {
                 cardsToAdd[index].switchState = true
             }
         }
 
-        if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==2) {
-            val oneTapCard = card.find { it.key.equals("one_tap_vitals",true) }
-            if(oneTapCard==null){
-                val index = cardsToAdd.indexOfFirst { it.key.equals("one_tap_vitals",true) }
-                if(index!=-1){
+        if (getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
+            val oneTapCard = card.find { it.key.equals("one_tap_vitals", true) }
+            if (oneTapCard == null) {
+                val index = cardsToAdd.indexOfFirst { it.key.equals("one_tap_vitals", true) }
+                if (index != -1) {
                     cardsToAdd[index].switchState = true
                 }
+            }
+        }
+        val timelineCard = card.find { it.key.equals("timeline", true) }
+        if (timelineCard == null) {
+            val index = cardsToAdd.indexOfFirst { it.key.equals("timeline", true) }
+            if (index != -1) {
+                cardsToAdd[index].switchState = true
             }
         }
         return cardsToAdd
@@ -157,9 +163,9 @@ class CustomHomescreenViewModel @Inject constructor(
                             sendMessage(resource.message)
                         }
 
-                     is Resource.Loading -> {
-                         setLoading(resource.loading)
-                     }
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
                         is Resource.NetworkError -> {
                             setApiErrors(resource.response.apply {
@@ -235,23 +241,31 @@ class CustomHomescreenViewModel @Inject constructor(
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
 
-            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==2) {
+            if (getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
                 this["one_tap_vitals"] = CustomHomeScreenItem(
-                    R.drawable.icon_circadian_alignment,
+                    R.drawable.icon_on_tap,
                     "one_tap_vitals",
                     resourceProvider.getString(R.string.text_one_tap_vitals),
                     true,
-                    this.size+1
+                    this.size + 1
                 )
             }
 
+
+            this["timeline"] = CustomHomeScreenItem(
+                R.drawable.icon_time_line,
+                "timeline",
+                resourceProvider.getString(R.string.text_timeline),
+                true,
+                this.size + 1
+            )
 
             this["circadian_alignment"] = CustomHomeScreenItem(
                 R.drawable.icon_circadian_alignment,
                 "circadian_alignment",
                 resourceProvider.getString(R.string.text_circadian_alignment),
                 true,
-                this.size+1
+                this.size + 1
             )
 
 
@@ -260,7 +274,7 @@ class CustomHomescreenViewModel @Inject constructor(
                 "caffeine_intake",
                 resourceProvider.getString(R.string.text_caffeine_window),
                 true,
-                this.size+1
+                this.size + 1
             )
 
             this["sleep"] = CustomHomeScreenItem(
@@ -268,7 +282,7 @@ class CustomHomescreenViewModel @Inject constructor(
                 "sleep",
                 resourceProvider.getString(R.string.text_sleep),
                 true,
-                this.size+1
+                this.size + 1
             )
 
             this["activity"] = CustomHomeScreenItem(
@@ -276,32 +290,30 @@ class CustomHomescreenViewModel @Inject constructor(
                 "activity",
                 resourceProvider.getString(R.string.text_activity_o),
                 true,
-                this.size+1
+                this.size + 1
             )
             this["readiness"] = CustomHomeScreenItem(
                 R.drawable.icon_readiness,
                 "readiness",
                 resourceProvider.getString(R.string.text_readiness),
                 true,
-                this.size+1
+                this.size + 1
             )
             this["sleep_planner"] = CustomHomeScreenItem(
                 R.drawable.icon_sleep_planner,
                 "sleep_planner",
                 resourceProvider.getString(R.string.text_sleep_planner),
                 true,
-                this.size+1
+                this.size + 1
             )
 
-            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
-                this["heart_rate"] = CustomHomeScreenItem(
-                    R.drawable.icon_heart_rate,
-                    "heart_rate",
-                    resourceProvider.getString(R.string.text_heart_rate),
-                    true,
-                    this.size + 1
-                )
-            }
+            this["heart_rate"] = CustomHomeScreenItem(
+                R.drawable.icon_heart_rate,
+                "heart_rate",
+                resourceProvider.getString(R.string.text_heart_rate),
+                true,
+                this.size + 1
+            )
 
 //        this["health_monitor"] = CustomHomeScreenItem(
 //            R.drawable.icon_heart_monitor,
@@ -315,25 +327,23 @@ class CustomHomescreenViewModel @Inject constructor(
                 "daily_goals",
                 resourceProvider.getString(R.string.text_daily_goals),
                 true,
-                this.size+1
+                this.size + 1
             )
             this["luna_ai"] = CustomHomeScreenItem(
                 R.drawable.icon_luna_ai,
                 "luna_ai",
                 resourceProvider.getString(R.string.text_luna_ai),
                 true,
-                this.size+1
+                this.size + 1
             )
 
-            if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==1) {
-                this["stress"] = CustomHomeScreenItem(
-                    R.drawable.icon_stress,
-                    "stress",
-                    resourceProvider.getString(R.string.text_stress),
-                    true,
-                    this.size + 1
-                )
-            }
+            this["stress"] = CustomHomeScreenItem(
+                R.drawable.icon_stress,
+                "stress",
+                resourceProvider.getString(R.string.text_stress),
+                true,
+                this.size + 1
+            )
 
             if (shouldShowFemaleHealth()) {
                 this["cycle_tracker"] = CustomHomeScreenItem(
@@ -341,7 +351,7 @@ class CustomHomescreenViewModel @Inject constructor(
                     "cycle_tracker",
                     resourceProvider.getString(R.string.text_cycle_tracker),
                     true,
-                    this.size+1
+                    this.size + 1
                 )
             }
             this["7_day_trends_card"] = CustomHomeScreenItem(
@@ -349,7 +359,7 @@ class CustomHomescreenViewModel @Inject constructor(
                 "7_day_trends_card",
                 resourceProvider.getString(R.string.text_7_day_trends_cards),
                 true,
-                this.size+1
+                this.size + 1
             )
             /*this["workout_history"] = CustomHomeScreenItem(
                 R.drawable.icon_flexibility_training,
