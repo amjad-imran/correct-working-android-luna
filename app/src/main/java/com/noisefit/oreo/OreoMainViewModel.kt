@@ -141,17 +141,18 @@ constructor(
 
     //
 //    var lunaManagedData: CustomHomeScreenModel? = null
-    var caffeineGraphData: CaffeineGraphDataModel ?= null
-    var summaryAvailable: Boolean ?= null
-    var ldwReadiness: Boolean ?= null
-    var ldwCycleTracker: Boolean ?= null
-    var boosterWomen: Boolean ?= null
+    var caffeineGraphData: CaffeineGraphDataModel? = null
+    var summaryAvailable: Boolean? = null
+    var ldwReadiness: Boolean? = null
+    var ldwCycleTracker: Boolean? = null
+    var boosterWomen: Boolean? = null
 
-    var circadianGraphData: CircadianGraphData ?= null
-    var nudgeCircadianData: NudgeCircadianGraph?= null
+    var circadianGraphData: CircadianGraphData? = null
+    var nudgeCircadianData: NudgeCircadianGraph? = null
 
-    var timeTrackerActivities: List<ItemTimelineResponseModel> ?= null
+    var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
     var errorCode: String = ""
+
     //
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
@@ -503,7 +504,7 @@ constructor(
 
         if (selectedDate.isNullOrEmpty()) return false
 
-        if((sleepHistoryResponse.value!![1]).date.isNullOrEmpty()) return false
+        if ((sleepHistoryResponse.value!![1]).date.isNullOrEmpty()) return false
 
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
                 selectedDate
@@ -1161,7 +1162,7 @@ constructor(
                     } ?: ""
 
                 val generation = getGeneration(pairedDevice)
-                if(generation!=null){
+                if (generation != null) {
                     userMeta["cf_generation"] = "Gen$generation"
                 }
             }
@@ -1243,10 +1244,9 @@ constructor(
         }
     }
 
-    fun getCaffeineWindowData(data:(d:CaffeineGraphDataModel)->Unit){
+    fun getCaffeineWindowData(data: (d: CaffeineGraphDataModel) -> Unit) {
         viewModelScope.launch {
-            userActivityRepository.getCaffeineWindowData().collect{
-                    resource ->
+            userActivityRepository.getCaffeineWindowData().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -1344,7 +1344,7 @@ constructor(
             val todayDate = java.time.LocalDate.now()
             dates.add(todayDate.format(formatter))
             (6 downTo 1).forEach {
-                val newDate =todayDate.minusDays(it.toLong()).format(formatter)
+                val newDate = todayDate.minusDays(it.toLong()).format(formatter)
                 dates.add(newDate)
             }
             userHealthDataDataSource.clearDataByDates(dates)
@@ -1442,13 +1442,13 @@ constructor(
     }
 
     fun getApiErrorCode(message: String?): String? {
-        if(message==null) return null
+        if (message == null) return null
 
-        if(message.equals(NETWORK_ERROR,true)){ //no internet,500 until 599
+        if (message.equals(NETWORK_ERROR, true)) { //no internet,500 until 599
             return "000001"
-        }else if(message.equals(NETWORK_ERROR_UNKNOWN,true)){
+        } else if (message.equals(NETWORK_ERROR_UNKNOWN, true)) {
             return "000002"
-        }else if(message.equals(NETWORK_ERROR_TIMEOUT,true)){ // timeout case
+        } else if (message.equals(NETWORK_ERROR_TIMEOUT, true)) { // timeout case
             return "000003"
         }
 
@@ -1551,6 +1551,16 @@ constructor(
         val minutesSinceStart = Duration.between(startTime, currentTime).toMinutes()
 
         return (minutesSinceStart / interval).toInt().coerceAtMost(parts - 1)
+    }
+
+    fun checkExceptionCancelState(): Boolean {
+        val lastCancelled = localDataStore.getExceptionCancelTime()
+        if (lastCancelled == 0L) return true
+
+        val current = System.currentTimeMillis()
+
+        return current - lastCancelled > 30 * 60 * 1000L
+
     }
 
 

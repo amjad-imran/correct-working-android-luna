@@ -58,12 +58,18 @@ class RingExceptionDialogFragment :
             }
             restartDevice()
         }
+
+        binding.btnCancel.setOnClickListener {
+            localDataStore.setExceptionCancelTime()
+            navigateUpSafe()
+        }
     }
 
     private fun restartDevice() {
         binding.btnShutDown.text = getString(R.string.text_shutting_down)
         sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetShutDownDevice())
         sessionManager.resetSleepException()
+        localDataStore.clearExceptionCancelTime()
 
         Handler(Looper.getMainLooper()).postDelayed({
             navigateUpSafe()

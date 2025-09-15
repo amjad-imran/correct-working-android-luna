@@ -584,6 +584,9 @@ interface DataStoredInterface {
 
     fun saveUserCopyTodayData(data: OreoStepsData?)
     fun getUserCopyTodayData():OreoStepsData?
+    fun getExceptionCancelTime(): Long
+    fun setExceptionCancelTime()
+    fun clearExceptionCancelTime()
 }
 
 enum class AppTrackEvent {

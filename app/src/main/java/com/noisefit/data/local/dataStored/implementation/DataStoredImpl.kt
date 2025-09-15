@@ -270,6 +270,7 @@ private const val TIMELINE_ACTIVITIES_DATA = "TIMELINE_ACTIVITIES_DATA"
 
 private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
 private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
+private const val SLEEP_EXCEPTION_CANCEL_TIME = "SLEEP_EXCEPTION_CANCEL_TIME"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -278,6 +279,18 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getExceptionCancelTime(): Long {
+        return mPrefs.getLong(SLEEP_EXCEPTION_CANCEL_TIME, 0)
+    }
+
+    override fun setExceptionCancelTime() {
+        mPrefs.edit()?.putLong(SLEEP_EXCEPTION_CANCEL_TIME, System.currentTimeMillis())?.commit()
+    }
+
+    override fun clearExceptionCancelTime() {
+        mPrefs.edit()?.remove(SLEEP_EXCEPTION_CANCEL_TIME)?.commit()
+    }
 
     override fun saveHrvAlert(
         prevMeasuredValue: Int,
