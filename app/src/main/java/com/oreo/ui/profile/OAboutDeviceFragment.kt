@@ -53,7 +53,7 @@ class OAboutDeviceFragment :
                         tv?.isAllCaps = false
                     }
                     1 -> {
-                        tab.text = "Case"
+                        tab.text = "Surge Case"
                         val tv = tab.view.findViewById<TextView>(com.google.android.material.R.id.text)
                         tv?.isAllCaps = false
                     }
