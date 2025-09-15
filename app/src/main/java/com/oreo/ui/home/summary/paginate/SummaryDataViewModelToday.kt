@@ -3095,7 +3095,7 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
             this["one_tap_vitals"] = CustomHomeScreenItem(
-                R.drawable.icon_heart_monitor,
+                R.drawable.icon_one_tap_vitals,
                 "one_tap_vitals",
                 resourceProvider.getString(R.string.text_one_tap_vitals),
                 true,

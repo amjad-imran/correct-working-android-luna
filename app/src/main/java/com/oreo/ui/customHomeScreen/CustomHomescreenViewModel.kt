@@ -237,7 +237,7 @@ class CustomHomescreenViewModel @Inject constructor(
 
             if(getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)==2) {
                 this["one_tap_vitals"] = CustomHomeScreenItem(
-                    R.drawable.icon_circadian_alignment,
+                    R.drawable.icon_one_tap_vitals,
                     "one_tap_vitals",
                     resourceProvider.getString(R.string.text_one_tap_vitals),
                     true,
