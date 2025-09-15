@@ -123,6 +123,7 @@ class SessionManager
     var firmwareLogsStatus = MutableLiveData(-1)
 
     var reloadTodayData = MutableLiveData<Event<Boolean>>()
+    var reloadOnResume = false
 
 
     var forceOtaFlowRunning: Boolean = false

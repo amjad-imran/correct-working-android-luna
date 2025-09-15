@@ -1183,7 +1183,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
-            val generation = 2//getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
             val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
             if (hasOneTapVitalsKey == null) {
@@ -1710,7 +1710,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     fun formatMlToLitersOrMl(ml: Int): String {
         return if (ml >= 1000) {
-            String.format("%.1f liter", ml.toFloat() / 1000)
+            String.format("%.2f liter", ml.toFloat() / 1000)
         } else {
             "$ml ml"
         }
@@ -4556,7 +4556,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun updateTimelineData() {
         getCurrDayActivities(DateFormats.getTodaysDateString(10))
-
     }
 
     fun getCurrDayActivities(date: String) {
@@ -4568,6 +4567,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         resource.data?.data?.let {
                             timeTrackerActivities = it.timeTracker
                             timeTrackerActivitiesUpdated.postValue(Event(true))
+                            sessionManager.reloadOnResume = true
                         }
                     }
 

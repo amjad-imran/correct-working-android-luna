@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -88,6 +89,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+
+        binding.lytHeader.profileView1.setOnLongClickListener {
+            if (BuildConfig.DEBUG) {
+                viewModel.ringDataStore.saveSleepException(true)
+                viewModel.sessionManager.checkSleepException()
+                return@setOnLongClickListener true
+            }
+            return@setOnLongClickListener false
+        }
 
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
@@ -524,6 +534,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             } else {
                 View.GONE
             }
+
+        if (viewModel.sessionManager.reloadOnResume) {
+            viewModel.sessionManager.reloadOnResume = false
+            viewModel.sessionManager.reloadTodayData.postValue(Event(true))
+        }
 
 //        viewModel.getRecentWorkoutList()
     }
