@@ -65,7 +65,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
 
         binding.rvUserData.layoutManager = LinearLayoutManager(requireContext())
         binding.rvUserData.adapter = userInfoAdapter
-        viewModel.getUserData()
+//        viewModel.getUserData()
         //
 
         connectedDevice?.let {
@@ -93,12 +93,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
         } else {
             "-"
         }
-        response.add(
-            AboutDeviceData(
-                getString(R.string.text_colour),
-                connectedDevice.ringInfo?.color ?: "-"
-            )
-        )
+
         response.add(AboutDeviceData(getString(R.string.text_size), size))
         response.add(
             AboutDeviceData(
@@ -107,7 +102,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
             )
         )
 
-        response.add(
+        /*response.add(
             AboutDeviceData(
                 getString(R.string.text_mac_address),
                 connectedDevice.address ?: ""
@@ -119,6 +114,13 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
                 "${if (WatchInfoGlobals.firmwareVersionRing != null) "${WatchInfoGlobals.firmwareVersionRing}" else ""}"
             )
         )
+
+        response.add(
+            AboutDeviceData(
+                getString(R.string.text_colour),
+                connectedDevice.ringInfo?.color ?: "-"
+            )
+        )*/
 
         return response
 

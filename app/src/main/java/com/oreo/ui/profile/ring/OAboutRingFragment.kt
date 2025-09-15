@@ -78,7 +78,7 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
 
         binding.rvUserData.layoutManager = LinearLayoutManager(requireContext())
         binding.rvUserData.adapter = userInfoAdapter
-        viewModel.getUserData()
+//        viewModel.getUserData()
         //
 
         connectedDevice?.let {
