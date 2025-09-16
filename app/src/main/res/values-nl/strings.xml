@@ -2209,5 +2209,17 @@
     <string name="text_luna_ai_message">Verbind je ring om de kracht van LUNA AI te ervaren</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">Zorg ervoor dat Bluetooth is ingeschakeld.</string>
     <string name="text_device_is_trying_to_connect_please_wait">Apparaat probeert verbinding te maken, even geduld.</string>
+    <string name="text_meet">Ontmoeten</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">Over je oplader</string>
+    <string name="text_about_surge_case_title_3">Oplaadindicator</string>
+    <string name="text_about_surge_case_title_1">Het lezen van het ringlicht</string>
+    <string name="text_about_surge_case_title_2">Je Luna Ring opladen</string>
+    <string name="text_about_surge_case_desc_1">Wanneer de ring op de oplader wordt geplaatst, toont het binnenste ringlicht het batterijpercentage van de ring. Wanneer de ring niet op de oplader staat, toont het binnenste ringlicht het batterijpercentage van de Surge Charger.</string>
+    <string name="text_about_surge_case_desc_2">Open de Surge Charger en plaats je Luna Ring erin, zodat deze goed in de groef ligt voor juiste uitlijning. Het binnenste licht bevestigt dat het opladen is gestart.</string>
+    <string name="text_about_surge_case_desc_3">Het buitenste LED-knipperlicht geeft aan dat je Luna Ring binnen het hoesje wordt opgeladen. Zodra het licht constant wordt, betekent dit dat de ring volledig is opgeladen.</string>
+    <string name="text_last_synced_message">Laatste gesynchroniseerd %1$s</string>
+    <string name="text_connected_to">AANGESLOTEN OP</string>
+    <string name="text_firmware_version">Firmware Versie</string>
 
 </resources>

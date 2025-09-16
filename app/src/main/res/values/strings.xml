@@ -2193,5 +2193,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_about_surge_case_desc_1">When the ring is placed on the charger, the inner ring light shows the ring’s battery level. When the ring is not on the charger, the inner ring light shows the Surge Charger’s battery level.</string>
     <string name="text_about_surge_case_desc_2">Open the Surge Charger and place your Luna Ring inside, ensuring it rests flush in the groove for proper alignment. The inner light will confirm charging has started.</string>
     <string name="text_about_surge_case_desc_3">The outer LED breathing light indicates that your Luna Ring is charging inside the case. Once the light becomes steady, it means the ring has reached a full charge.</string>
+    <string name="text_last_synced_message">Synced %1$s</string>
+    <string name="text_connected_to">CONNECTED TO</string>
+    <string name="text_firmware_version">Firmware Version</string>
 
 </resources>

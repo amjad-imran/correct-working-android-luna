@@ -2233,5 +2233,17 @@
     <string name="text_luna_ai_message">Conecte seu anel para experimentar o poder do LUNA AI</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">Certifique-se de que o Bluetooth está ligado.</string>
     <string name="text_device_is_trying_to_connect_please_wait">O dispositivo está tentando conectar, aguarde.</string>
+    <string name="text_meet">Encontrar</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">Sobre seu carregador</string>
+    <string name="text_about_surge_case_title_3">Indicador de carga</string>
+    <string name="text_about_surge_case_title_1">Lendo a luz do anel</string>
+    <string name="text_about_surge_case_title_2">Carregando seu Luna Ring</string>
+    <string name="text_about_surge_case_desc_1">Quando o anel está colocado no carregador, a luz interna do anel mostra o nível de bateria do anel. Quando o anel não está no carregador, a luz interna do anel mostra o nível de bateria do Surge Charger.</string>
+    <string name="text_about_surge_case_desc_2">Abra o Surge Charger e coloque seu Luna Ring dentro, certificando-se de que ele esteja bem alinhado na ranhura. A luz interna confirmará que o carregamento foi iniciado.</string>
+    <string name="text_about_surge_case_desc_3">A luz LED externa piscante indica que seu Luna Ring está sendo carregado dentro do estojo. Quando a luz ficar constante, significa que o anel foi completamente carregado.</string>
+    <string name="text_last_synced_message">Última sincronização %1$s</string>
+    <string name="text_connected_to">CONEXÃO COM</string>
+    <string name="text_firmware_version">Versão do Firmware</string>
 
 </resources>

@@ -98,7 +98,12 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
         response.add(
             AboutDeviceData(
                 getString(R.string.text_serial_number),
-                viewModel.sessionManager.caseInfoData.value?.serialNumber ?: "-"
+                if (connectedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
+                    val sNo = updateViewModel.watchDataStore.getSerialNo()
+                    sNo ?: "-"
+                } else {
+                    connectedDevice.ringInfo?.serialNoRaw ?: "-"
+                }
             )
         )
 

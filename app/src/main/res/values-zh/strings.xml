@@ -2203,5 +2203,17 @@
     <string name="text_luna_ai_message">连接您的戒指，体验 LUNA AI 的强大功能</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">请确保蓝牙已开启。</string>
     <string name="text_device_is_trying_to_connect_please_wait">设备正在尝试连接，请稍候。</string>
+    <string name="text_meet">见面</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">关于你的充电器</string>
+    <string name="text_about_surge_case_title_3">充电指示器</string>
+    <string name="text_about_surge_case_title_1">读取环形灯光</string>
+    <string name="text_about_surge_case_title_2">为你的Luna Ring充电</string>
+    <string name="text_about_surge_case_desc_1">当环形被放置在充电器上时，内圈灯显示环形的电池电量。当环形不在充电器上时，内圈灯显示Surge Charger的电池电量。</string>
+    <string name="text_about_surge_case_desc_2">打开Surge Charger并将你的Luna Ring放入其中，确保其正确对准。内圈灯将确认充电已开始。</string>
+    <string name="text_about_surge_case_desc_3">外部LED呼吸灯指示你的Luna Ring正在充电。一旦灯光稳定，表示环形已经充满电。</string>
+    <string name="text_last_synced_message">上次同步 %1$s</string>
+    <string name="text_connected_to">连接到</string>
+    <string name="text_firmware_version">固件版本</string>
 
 </resources>

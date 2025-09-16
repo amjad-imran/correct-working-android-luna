@@ -20,7 +20,7 @@
 
             <ImageView
                 android:id="@+id/ivDevice"
-                android:layout_width="wrap_content"
+                android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_portable_charger_closed_main"
                 android:layout_marginTop="40dp"

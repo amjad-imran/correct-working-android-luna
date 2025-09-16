@@ -131,16 +131,16 @@ class OAboutRingFragment : BaseFragment<FragmentOAboutRingBinding>(FragmentOAbou
             )
         )
 
-        response.add(
+        /*response.add(
             AboutDeviceData(
                 getString(R.string.text_mac_address),
                 connectedDevice.address ?: ""
             )
-        )
+        )*/
         response.add(
             AboutDeviceData(
-                getString(R.string.text_version),
-                "${if (WatchInfoGlobals.firmwareVersionRing != null) "${WatchInfoGlobals.firmwareVersionRing}" else ""}"
+                getString(R.string.text_firmware_version),
+                WatchInfoGlobals.firmwareVersionRing ?: ""
             )
         )
 

@@ -2209,5 +2209,17 @@
     <string name="text_luna_ai_message">Verbinden Sie Ihren Ring, um die Leistung von LUNA AI zu erleben</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">Bitte stellen Sie sicher, dass Bluetooth eingeschaltet ist.</string>
     <string name="text_device_is_trying_to_connect_please_wait">Gerät versucht, eine Verbindung herzustellen, bitte warten.</string>
+    <string name="text_meet">Treffen</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">Über deinen Ladegerät</string>
+    <string name="text_about_surge_case_title_3">Ladeanzeige</string>
+    <string name="text_about_surge_case_title_1">Lesen des Ring-Lichts</string>
+    <string name="text_about_surge_case_title_2">Laden deines Luna Rings</string>
+    <string name="text_about_surge_case_desc_1">Wenn der Ring auf dem Ladegerät platziert wird, zeigt das innere Ring-Licht den Akkustand des Rings an. Wenn der Ring nicht auf dem Ladegerät ist, zeigt das innere Ring-Licht den Akkustand des Surge Ladegeräts an.</string>
+    <string name="text_about_surge_case_desc_2">Öffne das Surge Ladegerät und lege deinen Luna Ring hinein, sodass er richtig in der Nut liegt. Das innere Licht zeigt an, dass das Laden begonnen hat.</string>
+    <string name="text_about_surge_case_desc_3">Das äußere LED-Atemlicht zeigt an, dass dein Luna Ring im Ladecase aufgeladen wird. Wenn das Licht konstant wird, bedeutet es, dass der Ring vollständig geladen ist.</string>
+    <string name="text_last_synced_message">Letztes Sync %1$s</string>
+    <string name="text_connected_to">VERBUNDEN MIT</string>
+    <string name="text_firmware_version">Firmware-Version</string>
 
 </resources>

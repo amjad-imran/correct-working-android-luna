@@ -2215,5 +2215,17 @@
     <string name="text_luna_ai_message">เชื่อมต่อแหวนของคุณเพื่อสัมผัสพลังของ LUNA AI</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">กรุณาตรวจสอบให้แน่ใจว่าเปิดบลูทูธแล้ว</string>
     <string name="text_device_is_trying_to_connect_please_wait">อุปกรณ์กำลังพยายามเชื่อมต่อ กรุณารอสักครู่</string>
+    <string name="text_meet">พบ</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">เกี่ยวกับที่ชาร์จของคุณ</string>
+    <string name="text_about_surge_case_title_3">ตัวบ่งชี้การชาร์จ</string>
+    <string name="text_about_surge_case_title_1">การอ่านแสงวงแหวน</string>
+    <string name="text_about_surge_case_title_2">การชาร์จ Luna Ring ของคุณ</string>
+    <string name="text_about_surge_case_desc_1">เมื่อวงแหวนถูกวางบนที่ชาร์จ แสงวงแหวนภายในจะแสดงระดับแบตเตอรี่ของวงแหวน เมื่อวงแหวนไม่ได้อยู่บนที่ชาร์จ แสงวงแหวนภายในจะแสดงระดับแบตเตอรี่ของ Surge Charger.</string>
+    <string name="text_about_surge_case_desc_2">เปิด Surge Charger และวาง Luna Ring ของคุณเข้าไปโดยให้มันอยู่ในร่องอย่างถูกต้องเพื่อการจัดแนวที่เหมาะสม แสงภายในจะยืนยันว่าการชาร์จเริ่มต้นแล้ว.</string>
+    <string name="text_about_surge_case_desc_3">แสง LED ด้านนอกที่กะพริบแสดงว่าผลิตภัณฑ์ Luna Ring ของคุณกำลังชาร์จภายในเคส เมื่อแสงคงที่ หมายความว่าแหวนได้รับการชาร์จเต็มแล้ว.</string>
+    <string name="text_last_synced_message">ซิงค์ล่าสุด %1$s</string>
+    <string name="text_connected_to">เชื่อมต่อกับ</string>
+    <string name="text_firmware_version">เวอร์ชันเฟิร์มแวร์</string>
 
 </resources>

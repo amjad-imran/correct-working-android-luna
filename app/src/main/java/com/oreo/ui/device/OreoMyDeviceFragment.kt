@@ -773,7 +773,7 @@ class OreoMyDeviceFragment :
             when(isChargerOpen) {
                 null -> {
                     tvRingCaseName.text = "Luna ring"
-                    tvGen.text = "Gen $ringGen.0"
+                    tvGen.text = "$ringGen.0"
                     genContainer.visible()
                 }
 
@@ -822,10 +822,14 @@ class OreoMyDeviceFragment :
 
         val lastSync =
             mViewModel.sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,mViewModel.resProvider) }
-        val lastSyncText = getString(
-            R.string.text_synced_space,
-            lastSync ?: getString(R.string.text_not_yet_syncyed)
-        )
+        val lastSyncText = if(lastSync != null) {
+            getString(
+                R.string.text_last_synced_message,
+                lastSync
+            )
+        }else {
+            getString(R.string.text_not_yet_syncyed)
+        }
         /*binding.lytDeviceConnected.apply {
 
             ivRingImage.loadImage(
@@ -874,7 +878,7 @@ class OreoMyDeviceFragment :
         binding.lytDeviceConnectedNew.apply{
             //
             tvConnectedTitle.apply {
-                text = "CONNECTED TO"
+                text = getString(R.string.text_connected_to)
                 setTextColor("#83AAC6".toColorInt())
             }
 
@@ -911,7 +915,7 @@ class OreoMyDeviceFragment :
             setCenterImage(noiseFitDevice)
             if(ringGen == 1 || caseInfoData == null){
                 tvRingCaseName.text = "Luna ring"
-                tvGen.text = "Gen $ringGen.0"
+                tvGen.text = "$ringGen.0"
                 genContainer.visible()
 
                 lytRingCaseProgress.root.gone()

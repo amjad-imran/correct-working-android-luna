@@ -2231,5 +2231,17 @@
     <string name="text_luna_ai_message">Подключите кольцо, чтобы испытать возможности LUNA AI</string>
     <string name="text_please_make_sure_the_bluetooth_is_turned_on">Убедитесь, что Bluetooth включен.</string>
     <string name="text_device_is_trying_to_connect_please_wait">Устройство пытается подключиться, пожалуйста, подождите.</string>
+    <string name="text_meet">Встреча</string>
+    <string name="text_surge_case">Surge Case</string>
+    <string name="text_about_your_charger">О вашем зарядном устройстве</string>
+    <string name="text_about_surge_case_title_3">Индикатор зарядки</string>
+    <string name="text_about_surge_case_title_1">Чтение светодиода кольца</string>
+    <string name="text_about_surge_case_title_2">Зарядка вашего Luna Ring</string>
+    <string name="text_about_surge_case_desc_1">Когда кольцо помещается на зарядное устройство, внутренний светодиод кольца показывает уровень заряда кольца. Когда кольцо не на зарядном устройстве, внутренний светодиод кольца показывает уровень заряда Surge Charger.</string>
+    <string name="text_about_surge_case_desc_2">Откройте Surge Charger и поместите ваш Luna Ring внутрь, убедившись, что он правильно расположен в прорези для правильного выравнивания. Внутренний светодиод подтвердит начало зарядки.</string>
+    <string name="text_about_surge_case_desc_3">Внешний мигающий светодиод указывает на то, что ваш Luna Ring заряжается внутри зарядного устройства. Как только свет станет стабильным, это означает, что кольцо полностью заряжено.</string>
+    <string name="text_last_synced_message">Последняя синхронизация %1$s</string>
+    <string name="text_connected_to">ПОДКЛЮЧЕНО К</string>
+    <string name="text_firmware_version">Версия прошивки</string>
 
 </resources>
