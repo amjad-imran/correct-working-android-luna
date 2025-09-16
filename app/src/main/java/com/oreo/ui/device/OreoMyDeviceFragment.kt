@@ -1095,3 +1095,10 @@ class OreoMyDeviceFragment :
     }
 
 }
+
+/*
+https://gonoisefit.atlassian.net/browse/OS-6038
+https://gonoisefit.atlassian.net/browse/OS-6049
+https://gonoisefit.atlassian.net/browse/OS-6068
+
+*/

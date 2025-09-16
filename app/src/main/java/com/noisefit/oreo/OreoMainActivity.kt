@@ -791,11 +791,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun observeSubscriber() {
 
         viewModel.sessionManager.nfcSleepErr.observe(this) {
-            if (it) {
-                if(viewModel.checkExceptionCancelState()){
-                    navController?.navigate(R.id.ringExceptionDialogFragment)
+            it?.getContent()?.let {
+                if (it) {
+                    if(viewModel.checkExceptionCancelState()){
+                        navController?.navigate(R.id.ringExceptionDialogFragment)
+                    }
                 }
-
             }
         }
 
