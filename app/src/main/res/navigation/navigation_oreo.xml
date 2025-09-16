@@ -1497,9 +1497,14 @@
         tools:layout="@layout/fragment_surge_case_onboarding" >
 
         <action
-            android:id="@+id/action_surgeCaseOnboardingFragment_pop"
+            android:id="@+id/action_surgeCaseOnboardingFragment_to_oreo_my_device"
             app:destination="@id/oreo_my_device"
             app:popUpTo="@id/surgeCaseOnboardingFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="srcKey"
+            app:argType="string"
+            app:nullable="true" />
+
     </fragment>
 </navigation>

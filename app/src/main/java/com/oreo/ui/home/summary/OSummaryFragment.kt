@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -103,19 +104,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.oreoStatus.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || !viewModel.localDataStore.getPortableChargerOnboarding()) {
+            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
-                navigate(R.id.surgeCaseOnboardingFragment)
+                navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
             }
         }
 
         binding.lytHeader.lottieAnimView.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || !viewModel.localDataStore.getPortableChargerOnboarding()) {
+            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
-                navigate(R.id.surgeCaseOnboardingFragment)
+                navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
             }
         }
 
@@ -123,10 +124,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.batteryStatus.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || !viewModel.localDataStore.getPortableChargerOnboarding()) {
+            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
-                navigate(R.id.surgeCaseOnboardingFragment)
+                navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
             }
         }
 

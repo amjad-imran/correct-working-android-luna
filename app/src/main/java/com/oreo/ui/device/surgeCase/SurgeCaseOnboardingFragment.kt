@@ -14,6 +14,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.surgeCase.AboutSurgeCaseModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        LOGS.d("ahcvacjakc : ${arguments?.getString("srcKey")}")
         setUi()
         setAdapterAndTabLayout()
     }
@@ -105,18 +107,26 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
 
     override fun initListener() {
         binding.tvSkip.setOnClickListener {
-            localDataStore.setPortableChargerOnboarding(true)
-            navigate(R.id.action_surgeCaseOnboardingFragment_pop)
+            performDoneBtnOrSkipFun()
         }
 
         binding.btnDone.setOnClickListener {
-            localDataStore.setPortableChargerOnboarding(true)
-            navigate(R.id.action_surgeCaseOnboardingFragment_pop)
+            performDoneBtnOrSkipFun()
         }
     }
 
     override fun subscribeObservers() {
 
+    }
+
+    private fun performDoneBtnOrSkipFun(){
+        localDataStore.setPortableChargerOnboarding(true)
+        val srcKey = arguments?.getString("srcKey")
+        if(srcKey.equals("dashboard")){
+            navigate(R.id.action_surgeCaseOnboardingFragment_to_oreo_my_device)
+        }else{
+            navigateUpSafe()
+        }
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
+import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -39,18 +40,15 @@ import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.doOnNextLayoutOnce
-import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.ui.width
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
@@ -344,7 +342,10 @@ class OreoMyDeviceFragment :
         }
 
         mViewModel.sessionManager.caseInfoData.observe(this) {
-
+            if(!mViewModel.localDataStore.getPortableChargerOnboarding()){
+                navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "oreo_my_device"))
+            }
+            setStateConnected(mViewModel.ringDataStore.getRingDevice())
         }
 
     }
@@ -817,7 +818,7 @@ class OreoMyDeviceFragment :
         }
     }
 
-    private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
+    private fun setStateConnected(noiseFitDevice: ColorFitDevice?) {
         val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
 
         val lastSync =
@@ -870,10 +871,6 @@ class OreoMyDeviceFragment :
         val context = binding.root.context
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
-
-        if(caseInfoData != null && !mViewModel.localDataStore.getPortableChargerOnboarding()){
-            navigate(R.id.surgeCaseOnboardingFragment)
-        }
 
         binding.lytDeviceConnectedNew.apply{
             //
@@ -1095,10 +1092,3 @@ class OreoMyDeviceFragment :
     }
 
 }
-
-/*
-https://gonoisefit.atlassian.net/browse/OS-6038
-https://gonoisefit.atlassian.net/browse/OS-6049
-https://gonoisefit.atlassian.net/browse/OS-6068
-
-*/
