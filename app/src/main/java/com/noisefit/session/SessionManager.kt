@@ -71,7 +71,7 @@ class SessionManager
         val TAG = "SessionManager"
 
     }
-    val nfcSleepErr = MutableLiveData<Boolean>()
+    val nfcSleepErr = MutableLiveData<Event<Boolean>>()
     val updateRingLocation = MutableLiveData<Event<Boolean>>()
     val forceUpdateApp = MutableLiveData<Event<Boolean>>()
 
@@ -119,6 +119,8 @@ class SessionManager
     var isRingCharging = MutableLiveData(false)
 
     var caseInfoData = MutableLiveData<CaseInfoData>()
+
+    var isCaseCurrentlyConnected = MutableLiveData<Event<Boolean>>()
 
     var firmwareLogsStatus = MutableLiveData(-1)
 
@@ -774,14 +776,14 @@ class SessionManager
 
     fun checkSleepException(){
         GlobalScope.launch(Dispatchers.IO) {
-            nfcSleepErr.postValue(ringDataStore.getSleepException())
+            nfcSleepErr.postValue(Event(ringDataStore.getSleepException()))
         }
     }
 
     fun resetSleepException() {
         GlobalScope.launch(Dispatchers.IO) {
             ringDataStore.saveSleepException(false)
-            nfcSleepErr.postValue(false)
+            nfcSleepErr.postValue(Event(false))
         }
     }
 }

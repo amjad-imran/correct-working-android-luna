@@ -15,9 +15,9 @@ import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -36,9 +36,11 @@ constructor(
     val ringDataSore: RingDataStore,
     val updateRepository: UpdateRepository,
     private val userRepository: UserRepository,
-    private val resourcesProvider: ResourcesProvider
+    private val resourcesProvider: ResourcesProvider,
+    private val watchDataStore: WatchDataStore,
 ) : BaseViewModel() {
 
+    var isCaseConnected = false
 
     var noUpdateAvailable = MutableLiveData<Event<Boolean>>()
     var otaUpdateInfo = MutableLiveData<Event<OtaUpdateModel?>>()
@@ -176,6 +178,24 @@ constructor(
                 )
             )
         }
+    }
+
+    fun getGeneration(): Int {
+        val serialNoRaw = ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw
+        if (serialNoRaw == null) return 1
+
+        return try {
+            serialNoRaw.substring(1, 2).toInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            1
+        }
+    }
+
+
+    fun shouldShowCase(): Boolean {
+        return getGeneration() != 1 &&
+                watchDataStore.getRingCaseData() != null
     }
 
 }

@@ -25,6 +25,7 @@ class OAboutDeviceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isCaseConnected = viewModel.shouldShowCase()
         setUi()
         setTabLayoutAndVp()
     }
@@ -33,8 +34,7 @@ class OAboutDeviceFragment :
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 
-        val generation = getGeneration(viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
-        val showCase = generation != 1 && viewModel.sessionManager.caseInfoData.value?.serialNumber != null
+        val showCase = viewModel.isCaseConnected
 
         // Set up the adapter with the flag
         val adapter = OAboutDeviceVpAdapter(this, showCase)
@@ -66,17 +66,6 @@ class OAboutDeviceFragment :
         binding.toolbar.tvTitle.text = getString(R.string.text_about_device)
     }
 
-    private fun getGeneration(serialNoRaw: String?): Int {
-        if (serialNoRaw == null) return 1
-
-        return try {
-            serialNoRaw.substring(1, 2).toInt()
-        } catch (exp: Exception) {
-            exp.printStackTrace()
-            1
-        }
-    }
-
     override fun onDestroyView() {
         tabMediator?.detach()
         tabMediator = null
@@ -90,8 +79,13 @@ class OAboutDeviceFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.sessionManager.caseInfoData.observe(this){
-            setTabLayoutAndVp()
+        viewModel.sessionManager.isCaseCurrentlyConnected.observe(this){
+            it?.getContent()?.let { res ->
+                if(viewModel.isCaseConnected != res){
+                    viewModel.isCaseConnected = res
+                    setTabLayoutAndVp()
+                }
+            }
         }
     }
 
