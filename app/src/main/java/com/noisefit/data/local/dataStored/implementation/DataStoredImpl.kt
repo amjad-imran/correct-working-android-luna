@@ -880,6 +880,8 @@ class DataStoredImpl
         mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()
         mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
 
+        mPrefs.edit()?.remove(PORTABLE_CHARGER_ONBOARDING)?.apply()
+
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_SYNC_CROSSED)?.apply()
