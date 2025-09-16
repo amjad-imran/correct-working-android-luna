@@ -1490,4 +1490,16 @@
             app:argType="integer" />
 
     </fragment>
+    <fragment
+        android:id="@+id/surgeCaseOnboardingFragment"
+        android:name="com.oreo.ui.device.surgeCase.SurgeCaseOnboardingFragment"
+        android:label="fragment_surge_case_onboarding"
+        tools:layout="@layout/fragment_surge_case_onboarding" >
+
+        <action
+            android:id="@+id/action_surgeCaseOnboardingFragment_pop"
+            app:destination="@id/oreo_my_device"
+            app:popUpTo="@id/surgeCaseOnboardingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -587,6 +587,9 @@ interface DataStoredInterface {
     fun getExceptionCancelTime(): Long
     fun setExceptionCancelTime()
     fun clearExceptionCancelTime()
+
+    fun setPortableChargerOnboarding(isDone: Boolean?)
+    fun getPortableChargerOnboarding(): Boolean
 }
 
 enum class AppTrackEvent {

@@ -272,6 +272,9 @@ private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
 private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
 private const val SLEEP_EXCEPTION_CANCEL_TIME = "SLEEP_EXCEPTION_CANCEL_TIME"
 
+
+private const val PORTABLE_CHARGER_ONBOARDING = "PORTABLE_CHARGER_ONBOARDING"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -2407,5 +2410,15 @@ class DataStoredImpl
     override fun getMeasurementsData(): Measurements? {
         return mPrefs.getString(MEASUREMENTS_DATA, null)
             ?.let { Gson().fromJson<Measurements>(it) }
+    }
+
+    override fun setPortableChargerOnboarding(isDone: Boolean?) {
+        if(isDone != null){
+            mPrefs.edit().putBoolean(PORTABLE_CHARGER_ONBOARDING, isDone).commit()
+        }
+    }
+
+    override fun getPortableChargerOnboarding(): Boolean {
+        return mPrefs.getBoolean(PORTABLE_CHARGER_ONBOARDING, false)
     }
 }

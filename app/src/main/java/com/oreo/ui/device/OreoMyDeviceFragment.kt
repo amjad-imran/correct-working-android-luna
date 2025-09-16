@@ -867,6 +867,10 @@ class OreoMyDeviceFragment :
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
 
+        if(caseInfoData != null && !mViewModel.localDataStore.getPortableChargerOnboarding()){
+            navigate(R.id.surgeCaseOnboardingFragment)
+        }
+
         binding.lytDeviceConnectedNew.apply{
             //
             tvConnectedTitle.apply {
