@@ -105,12 +105,12 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
 
     override fun initListener() {
         binding.tvSkip.setOnClickListener {
-//            localDataStore.setPortableChargerOnboarding(true)
+            localDataStore.setPortableChargerOnboarding(true)
             navigate(R.id.action_surgeCaseOnboardingFragment_pop)
         }
 
         binding.btnDone.setOnClickListener {
-//            localDataStore.setPortableChargerOnboarding(true)
+            localDataStore.setPortableChargerOnboarding(true)
             navigate(R.id.action_surgeCaseOnboardingFragment_pop)
         }
     }
