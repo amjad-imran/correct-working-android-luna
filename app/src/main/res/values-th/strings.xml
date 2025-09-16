@@ -2203,5 +2203,17 @@
     <string name="text_measuring_skin_temp">กำลังวัดอุณหภูมิผิว...</string>
     <string name="text_measure">วัด</string>
     <string name="text_this_may_take_up_to_30_seconds">อาจใช้เวลาสูงสุด 30 วินาที</string>
+    <string name="text_skin_temp">อุณหภูมิผิว</string>
+    <string name="text_measuring_spo2">กำลังวัด SpO2...</string>
+    <string name="text_unable_to_track">ไม่สามารถติดตามได้ในขณะนี้ โปรดลองอีกครั้ง</string>
+    <string name="text_something_went_wrong_single">เกิดข้อผิดพลาด</string>
+    <string name="text_mob_no">เบอร์มือถือ</string>
+    <string name="text_we_found_anomaly_in_your_ring">ตรวจพบความผิดปกติของซอฟต์แวร์แหวน</string>
+    <string name="text_shut_down">ปิดเครื่อง</string>
+    <string name="text_nfc_error_message">เราตรวจพบความผิดปกติของซอฟต์แวร์ในแหวนของคุณ ซึ่งอาจทำให้แบตเตอรี่หมดเร็ว กรุณาปิดแหวนเพื่อแก้ไข หลังจากปิดแล้วคุณต้องวางแหวนบนที่ชาร์จเพื่อเชื่อมต่ออีกครั้ง</string>
+    <string name="text_shutting_down">กำลังปิดเครื่อง</string>
+    <string name="text_luna_ai_message">เชื่อมต่อแหวนของคุณเพื่อสัมผัสพลังของ LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">กรุณาตรวจสอบให้แน่ใจว่าเปิดบลูทูธแล้ว</string>
+    <string name="text_device_is_trying_to_connect_please_wait">อุปกรณ์กำลังพยายามเชื่อมต่อ กรุณารอสักครู่</string>
 
 </resources>

@@ -2168,5 +2168,17 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_measuring_skin_temp">Midiendo la temperatura de la piel...</string>
     <string name="text_measure">Medir</string>
     <string name="text_this_may_take_up_to_30_seconds">Esto puede tardar hasta 30 segundos</string>
+    <string name="text_skin_temp">Temp. de piel</string>
+    <string name="text_measuring_spo2">Midiendo SpO2...</string>
+    <string name="text_unable_to_track">No se puede rastrear en este momento, inténtalo de nuevo.</string>
+    <string name="text_something_went_wrong_single">Algo salió mal</string>
+    <string name="text_mob_no">Núm. móvil</string>
+    <string name="text_we_found_anomaly_in_your_ring">Se detectó una anomalía en el software del anillo</string>
+    <string name="text_shut_down">Apagar</string>
+    <string name="text_nfc_error_message">Hemos detectado una anomalía en el software de tu anillo. Esto podría provocar un alto consumo de batería. Apaga el anillo para solucionarlo. Después de apagarlo, deberás colocarlo en el cargador para volver a conectarlo.</string>
+    <string name="text_shutting_down">Apagando</string>
+    <string name="text_luna_ai_message">Conecta tu anillo para experimentar el poder de LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Por favor, asegúrate de que el Bluetooth esté activado.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">El dispositivo está intentando conectarse, espera por favor.</string>
 
 </resources>

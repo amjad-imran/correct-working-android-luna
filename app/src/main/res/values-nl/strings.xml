@@ -2197,5 +2197,17 @@
     <string name="text_measuring_skin_temp">Huidtemperatuur wordt gemeten...</string>
     <string name="text_measure">Meten</string>
     <string name="text_this_may_take_up_to_30_seconds">Dit kan tot 30 seconden duren</string>
+    <string name="text_skin_temp">Huidtemp.</string>
+    <string name="text_measuring_spo2">SpO2 wordt gemeten...</string>
+    <string name="text_unable_to_track">Kan nu niet worden gevolgd, probeer het opnieuw.</string>
+    <string name="text_something_went_wrong_single">Er is iets misgegaan</string>
+    <string name="text_mob_no">Mob. nr.</string>
+    <string name="text_we_found_anomaly_in_your_ring">Software-anomalie in ring gedetecteerd</string>
+    <string name="text_shut_down">Uitschakelen</string>
+    <string name="text_nfc_error_message">We hebben een software-anomalie in je ring gedetecteerd. Dit kan leiden tot hoog batterijverbruik. Schakel de ring uit om dit op te lossen. Na het uitschakelen moet je de ring op de oplader plaatsen om opnieuw te verbinden.</string>
+    <string name="text_shutting_down">Wordt uitgeschakeld</string>
+    <string name="text_luna_ai_message">Verbind je ring om de kracht van LUNA AI te ervaren</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Zorg ervoor dat Bluetooth is ingeschakeld.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">Apparaat probeert verbinding te maken, even geduld.</string>
 
 </resources>

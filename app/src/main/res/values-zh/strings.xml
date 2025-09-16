@@ -2191,5 +2191,17 @@
     <string name="text_measuring_skin_temp">正在测量皮肤温度...</string>
     <string name="text_measure">测量</string>
     <string name="text_this_may_take_up_to_30_seconds">这可能需要长达30秒</string>
+    <string name="text_skin_temp">皮肤温度</string>
+    <string name="text_measuring_spo2">正在测量 SpO2...</string>
+    <string name="text_unable_to_track">当前无法跟踪，请重试。</string>
+    <string name="text_something_went_wrong_single">出现错误</string>
+    <string name="text_mob_no">手机号</string>
+    <string name="text_we_found_anomaly_in_your_ring">检测到戒指软件异常</string>
+    <string name="text_shut_down">关机</string>
+    <string name="text_nfc_error_message">我们检测到您的戒指软件异常，这可能导致电池消耗过快。请关闭戒指以解决问题。关闭后需要将戒指放在充电器上以重新连接。</string>
+    <string name="text_shutting_down">正在关机</string>
+    <string name="text_luna_ai_message">连接您的戒指，体验 LUNA AI 的强大功能</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">请确保蓝牙已开启。</string>
+    <string name="text_device_is_trying_to_connect_please_wait">设备正在尝试连接，请稍候。</string>
 
 </resources>

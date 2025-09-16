@@ -2221,5 +2221,17 @@
     <string name="text_measuring_skin_temp">Medindo a temperatura da pele...</string>
     <string name="text_measure">Medir</string>
     <string name="text_this_may_take_up_to_30_seconds">Isso pode levar até 30 segundos</string>
+    <string name="text_skin_temp">Temp. da pele</string>
+    <string name="text_measuring_spo2">Medindo SpO2...</string>
+    <string name="text_unable_to_track">Não é possível rastrear no momento, tente novamente.</string>
+    <string name="text_something_went_wrong_single">Algo deu errado</string>
+    <string name="text_mob_no">Nº de celular</string>
+    <string name="text_we_found_anomaly_in_your_ring">Anomalia no software do anel detectada</string>
+    <string name="text_shut_down">Desligar</string>
+    <string name="text_nfc_error_message">Detectamos uma anomalia no software do seu anel. Isso pode causar alto consumo de bateria. Desligue o anel para corrigir o problema. Após desligar, coloque o anel no carregador para reconectá-lo.</string>
+    <string name="text_shutting_down">Desligando</string>
+    <string name="text_luna_ai_message">Conecte seu anel para experimentar o poder do LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Certifique-se de que o Bluetooth está ligado.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">O dispositivo está tentando conectar, aguarde.</string>
 
 </resources>

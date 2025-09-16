@@ -2219,5 +2219,17 @@
     <string name="text_measuring_skin_temp">Измерение температуры кожи...</string>
     <string name="text_measure">Измерить</string>
     <string name="text_this_may_take_up_to_30_seconds">Это может занять до 30 секунд</string>
+    <string name="text_skin_temp">Темп. кожи</string>
+    <string name="text_measuring_spo2">Измерение SpO2...</string>
+    <string name="text_unable_to_track">Отслеживание невозможно, попробуйте снова.</string>
+    <string name="text_something_went_wrong_single">Что-то пошло не так</string>
+    <string name="text_mob_no">Моб. №</string>
+    <string name="text_we_found_anomaly_in_your_ring">Обнаружена ошибка ПО кольца</string>
+    <string name="text_shut_down">Выключить</string>
+    <string name="text_nfc_error_message">Мы обнаружили ошибку программного обеспечения в вашем кольце. Это может привести к быстрому разряду батареи. Выключите кольцо, чтобы устранить проблему. После выключения поместите его на зарядное устройство для повторного подключения.</string>
+    <string name="text_shutting_down">Выключение</string>
+    <string name="text_luna_ai_message">Подключите кольцо, чтобы испытать возможности LUNA AI</string>
+    <string name="text_please_make_sure_the_bluetooth_is_turned_on">Убедитесь, что Bluetooth включен.</string>
+    <string name="text_device_is_trying_to_connect_please_wait">Устройство пытается подключиться, пожалуйста, подождите.</string>
 
 </resources>

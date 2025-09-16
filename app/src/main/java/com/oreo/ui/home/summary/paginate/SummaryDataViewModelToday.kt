@@ -1401,7 +1401,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         val currentTimeStamp = DateFormats.getTimeStamp()
                         val diff = currentTimeStamp - lastUpdatedTimestamp
                         when {
-                            diff < 60_000 -> "just now"
+                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                             else -> "${diff / (60 * 60_000)} hr ago"
                         }
@@ -1423,7 +1423,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     healthData.stress?.stressValue?.lastUpdated?.let { ts ->
                         val diff = DateFormats.getTimeStamp() - ts
                         when {
-                            diff < 60_000 -> "just now"
+                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                             else -> "${diff / (60 * 60_000)} hr ago"
                         }
@@ -1457,7 +1457,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     val diff = nowTs - ts
                                     val ago = try {
                                         when {
-                                            diff < 60_000 -> "just now"
+                                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                             else -> "${diff / (60 * 60_000)} hr ago"
                                         }
@@ -1479,7 +1479,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         val diff = nowTs - m.timeStamp
                         val ago = try {
                             when {
-                                diff < 60_000 -> "just now"
+                                diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
@@ -1520,7 +1520,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     val diff = nowTs - ts
                                     val ago = try {
                                         when {
-                                            diff < 60_000 -> "just now"
+                                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                             else -> "${diff / (60 * 60_000)} hr ago"
                                         }
@@ -1554,7 +1554,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         val diff = nowTs - m.timeStamp
                         val ago = try {
                             when {
-                                diff < 60_000 -> "just now"
+                                diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
