@@ -5,10 +5,12 @@ import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentActivityListingBinding
 import com.noisefit.ui.myDevice.DashboardWfFragment
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.timeline.addActivityTimelineModels.AddActivityListTimelineModel
 import com.oreo.ui.timelineScreen.addActivity.ActivitiesListAdapter
@@ -35,7 +37,25 @@ class ActivityListingFragment :
 
     private val activitiesListAdapter by lazy {
         ActivitiesListAdapter() {
-            sharedViewModel.loadFragmentByType(it.type)
+            when(it.type){
+                AddActivityItemsEnum.SLEEP -> {
+                    if(sharedViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess){
+                        sharedViewModel.loadFragmentByType(it.type)
+                    }else{
+                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                    }
+                }
+
+                AddActivityItemsEnum.WORKOUT -> {
+                    if(sharedViewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess){
+                        sharedViewModel.loadFragmentByType(it.type)
+                    }else{
+                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+                    }
+                }
+
+                else -> sharedViewModel.loadFragmentByType(it.type)
+            }
         }
     }
 

@@ -33,6 +33,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
@@ -652,10 +653,14 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
-                    navigate(
-                        R.id.addActivityTimelineFragment,
-                        bundleOf("showTimeline" to true, "key" to type.key)
-                    )
+                    if(viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess){
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf("showTimeline" to true, "key" to type.key)
+                        )
+                    }else{
+                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                    }
                 }
 
                 OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed -> {}

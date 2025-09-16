@@ -16,12 +16,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentCircadianAlignmentBinding
 import com.noisefit.util.CircadianMidPointGraphUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
 import com.noisefit_commans.data.model.circadian.CircadianMidPointData
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
@@ -656,6 +658,10 @@ class CircadianAlignmentFragment :
     override fun initListener() {
 
         binding.lytCircularView.lytUnlockedState.lytNoSleepData.setOnClickListener {
+            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                return@setOnClickListener
+            }
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.insight_log,
                 HashMap<String, Any>().apply {
