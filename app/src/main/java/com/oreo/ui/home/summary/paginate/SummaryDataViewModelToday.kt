@@ -1185,23 +1185,28 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
-            val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
-            if (hasOneTapVitalsKey == null) {
-                if (generation == 2) {
-                    getOneTapVitalsCard(healthData, measurements)?.let {
-                        userActivities.add(
-                            it
-                        )
-                    }
-                }
-            }
+
+            var isTapVitalAdded = false
 
             val hasCircadianKey = priorityList.find { it.key.equals("circadian_alignment", true) }
             if (hasCircadianKey == null) {
                 getCircadianAlignmentCardData()?.let {
                     userActivities.add(it)
                 }
+
+                val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
+                if (hasOneTapVitalsKey == null) {
+                    if (generation == 2) {
+                        getOneTapVitalsCard(healthData, measurements)?.let {
+                            userActivities.add(
+                                it
+                            )
+                        }
+                    }
+                    isTapVitalAdded = true
+                }
             }
+
 
             val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
             if (hasCaffeineKey == null) {
@@ -1227,6 +1232,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                        isTapVitalAdded = true
                     }
                     "timeline" -> {
                         getTimelineCard()?.let { userActivities.add(it) }
@@ -1340,6 +1346,17 @@ class SummaryDataViewModelToday @Inject constructor(
                     "circadian_alignment" -> {
                         getCircadianAlignmentCardData()?.let {
                             userActivities.add(it)
+                        }
+                        val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
+                        if (hasOneTapVitalsKey == null && isTapVitalAdded.not()) {
+                            if (generation == 2) {
+                                getOneTapVitalsCard(healthData, measurements)?.let {
+                                    userActivities.add(
+                                        it
+                                    )
+                                }
+                            }
+                            isTapVitalAdded = true
                         }
                     }
 
