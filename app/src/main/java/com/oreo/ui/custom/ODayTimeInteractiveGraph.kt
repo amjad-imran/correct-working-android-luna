@@ -661,19 +661,40 @@ class ODayTimeInteractiveGraph : View {
 
 
             if (section.type.equals("combined", true)) {
-
                 val text = "${section.count}"
                 topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
+
+                // Center horizontally within section, then clamp to view bounds to avoid cropping
+                val textWidth = xTextBounds!!.width().toFloat()
+                val centerX = (rectF!!.left + rectF!!.right) / 2f
+                var textX = centerX - textWidth / 2f
+
+                if (textX < 0f) {
+                    textX = 0f
+                } else if (textX + textWidth > mWith) {
+                    textX = mWith - textWidth
+                }
+
                 canvas.drawText(
                     text,
-                    (rectF!!.left + rectF!!.right) / 2 - xTextBounds!!.width() / 2f,
+                    textX,
                     rectF!!.top - xTextBounds!!.height(),
                     topCombinedPaint
                 )
-
             } else {
-                rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
-                rectF!!.top = topWith - imageSize - dip2px(10f)
+                // Compute centered image rect, then clamp horizontally to avoid cropping
+                val centerX = (rectF!!.right + rectF!!.left) / 2f
+                var left = centerX - imageSize / 2f
+                val top = topWith - imageSize - dip2px(10f)
+
+                if (left < 0f) {
+                    left = 0f
+                } else if (left + imageSize > mWith) {
+                    left = (mWith - imageSize).toFloat()
+                }
+
+                rectF!!.left = left
+                rectF!!.top = top
                 rectF!!.right = rectF!!.left + imageSize
                 rectF!!.bottom = rectF!!.top + imageSize
 

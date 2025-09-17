@@ -116,11 +116,19 @@
             style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView187"
+            app:layout_constraintEnd_toStartOf="@id/icArrow"
+            app:layout_constraintTop_toTopOf="@+id/textView187"
+            tools:text="Today >" />
+        <ImageView
+            android:id="@+id/icArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/textView187"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView187"
-            tools:text="Today >" />
+            android:src="@drawable/ic_arrow_right_dir"/>
 
         <TextView
             android:id="@+id/textView188"

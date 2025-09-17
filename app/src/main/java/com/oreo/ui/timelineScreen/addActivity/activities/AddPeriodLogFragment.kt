@@ -127,7 +127,7 @@ class AddPeriodLogFragment :
 
         logViewModel.serverSuccess.observe(this) {
             it?.getContent()?.let {
-                mainViewModel.reloadTodaysData()
+                mainViewModel.sessionManager.reloadOnResume = true
                 sharedViewModel.navigateUp()
             }
         }

@@ -98,15 +98,17 @@
     <TextView
         android:id="@+id/tvDaysAvg"
         style="@style/H6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_4dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="@dimen/dimen_16dp"
         android:text="@string/text_avg_this_week"
         android:textColor="@color/white_50"
         android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sleepTrendImv"
         app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
         app:layout_constraintTop_toBottomOf="@+id/tvSleepScore"
         tools:visibility="visible" />

@@ -140,7 +140,7 @@ class AddLightExposureFragment :
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
-                mainViewModel.reloadTodaysData()
+                mainViewModel.sessionManager.reloadOnResume = true
                 sharedViewModel.navigateUp()
             }
         }
