@@ -165,6 +165,10 @@ class AiMealPlanFragment :
         }
 
         binding.lytCreateComfortFood.btnCreate.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             viewModel.getComfortMealPlans()
         }
 
@@ -217,7 +221,12 @@ class AiMealPlanFragment :
         viewModel.dayMealList.observe(this) {
             if(viewModel.femaleBoosterMeals.value.isNullOrEmpty()){
                 binding.lytBoosterFoods.root.gone()
-            }else{
+            }
+            else if(viewModel.ringDataStore.getRingDevice() == null){
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                binding.lytBoosterFoods.root.gone()
+            }
+            else{
                 viewModel.femaleBoosterMeals.value?.let { handleBoosterFoods(it) }
             }
             aisehi(it.second)
