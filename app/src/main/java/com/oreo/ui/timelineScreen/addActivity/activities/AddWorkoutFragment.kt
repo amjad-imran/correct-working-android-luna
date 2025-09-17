@@ -146,37 +146,14 @@ class AddWorkoutFragment :
 
 
         binding.lytCard.tvDate.setOnClickListener {
-            parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
-                val selectedValue = bundle.getString("selectedValue")
-                selectedValue?.let { it1 ->
-                    val parsedDate =
-                        LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
-                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
-                    viewModel.addWorkout.date = parsedDate
+            onDateClicked()
 
 
-                    val todayDate = LocalDate.now().toString()
-                    if (parsedDate.equals(todayDate)) {
-                        resetData()
-                    }
-                    setDate()
-                }
-            }
-            val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-            val navController =
-                NavHostFragment.Companion.findNavController(this@AddWorkoutFragment)
+        }
 
-            navController.navigate(
-                R.id.valueSelectorBottomSheet,
-                bundleOf(
-                    "selectedValue" to if (viewModel.addWorkout.date == null) null else LocalDate.parse(viewModel.addWorkout.date)
-                        .format(format),
-                    "selectionList" to viewModel.getWorkoutDates(),
-                    "title" to  getString(R.string.text_date)
-                )
-            )
-
+        binding.lytCard.icArrow.setOnClickListener {
+            onDateClicked()
         }
 
 
@@ -425,6 +402,40 @@ class AddWorkoutFragment :
         binding.lytSelected.setOnClickListener {
             sharedViewModel.showDropdownDialog(binding.lytSelected, AddActivityItemsEnum.WORKOUT)
         }
+
+    }
+
+    private fun onDateClicked() {
+        parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
+            val selectedValue = bundle.getString("selectedValue")
+            selectedValue?.let { it1 ->
+                val parsedDate =
+                    LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                viewModel.addWorkout.date = parsedDate
+
+
+                val todayDate = LocalDate.now().toString()
+                if (parsedDate.equals(todayDate)) {
+                    resetData()
+                }
+                setDate()
+            }
+        }
+        val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
+
+        val navController =
+            NavHostFragment.Companion.findNavController(this@AddWorkoutFragment)
+
+        navController.navigate(
+            R.id.valueSelectorBottomSheet,
+            bundleOf(
+                "selectedValue" to if (viewModel.addWorkout.date == null) null else LocalDate.parse(viewModel.addWorkout.date)
+                    .format(format),
+                "selectionList" to viewModel.getWorkoutDates(),
+                "title" to  getString(R.string.text_date)
+            )
+        )
 
     }
 
