@@ -288,8 +288,8 @@ class AddSleepFragment :
         viewModel.addSleepResponse.observe(this) { it1 ->
             it1?.getContent().let {
                 if (it == true) {
+                    mainViewModel.sessionManager.reloadOnResume = true
                     sharedViewModel.navigateUp()
-                    mainViewModel.sessionManager.reloadTodayData.value = Event(true)
                     mainViewModel.sleepDashTodayReload.value = Event(true)
                 }
             }

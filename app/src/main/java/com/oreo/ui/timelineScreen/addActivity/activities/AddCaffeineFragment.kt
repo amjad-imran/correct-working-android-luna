@@ -70,7 +70,6 @@ class AddCaffeineFragment :
         }
         binding.btnSave.setOnClickListener {
             if(viewModel.caffeineTime.value != null && viewModel.caffeineValue.value != null){
-                //
                 sharedViewModel.sourceKey?.let { sourceKey ->
                     sharedViewModel.sessionManager.logMoEngageAppEvent(
                         MoEngageLunaAppEvents.insight_logged,
@@ -85,7 +84,6 @@ class AddCaffeineFragment :
                         }
                     )
                 }
-                //
                 viewModel.logCaffeineValue(
                     viewModel.caffeineTime.value!!,
                     viewModel.caffeineValue.value!!
@@ -158,7 +156,8 @@ class AddCaffeineFragment :
         }
         viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
-                mainViewModel.reloadTodaysData()
+                mainViewModel.sessionManager.reloadOnResume = true
+                //mainViewModel.reloadTodaysData()
                 sharedViewModel.navigateUp()
             }
         }
