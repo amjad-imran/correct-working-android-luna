@@ -151,6 +151,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
 
     override fun initListener() {
         binding.ivMic.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.Home_lunaai_mic_button)
 
             val (frag, bundle) = AudioAiFragment.getStartData(
