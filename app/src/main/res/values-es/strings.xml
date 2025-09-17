@@ -2108,6 +2108,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_guidance_resumes_soon">La orientación se reanudará pronto</string>
     <string name="text_take_quiz">¡Haz el cuestionario!</string>
     <string name="text_no_sleep_data">Sin datos de sueño</string>
+    <string name="text_no_sleep_data_2">Sin datos\nde sueño</string>
     <string name="text_chronotype_type_val">CRONOTIPO: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Estás en sintonía — mantén los buenos hábitos de sueño para seguir alineado.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Registrar tu sueño de manera consistente ayuda a Luna a afinar tu ritmo circadiano. Usa tu anillo durante la noche para ver mejoras significativas con el tiempo.</string>

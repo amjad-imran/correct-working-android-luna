@@ -2112,6 +2112,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_guidance_resumes_soon">Guidance Resumes Soon</string>
     <string name="text_take_quiz">Take quiz!</string>
     <string name="text_no_sleep_data">No Sleep Data</string>
+    <string name="text_no_sleep_data_2">No Sleep Data</string>
     <string name="text_chronotype_type_val">CHRONOTYPE: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">You\'re in sync — keep up the good sleep habits to stay aligned.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Tracking your sleep consistently helps Luna fine-tune your circadian rhythm. Wear your ring through the night to see meaningful improvements over time.</string>

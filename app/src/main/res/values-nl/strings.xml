@@ -2137,6 +2137,7 @@
     <string name="text_guidance_resumes_soon">Begeleiding hervat binnenkort</string>
     <string name="text_take_quiz">Doe de quiz!</string>
     <string name="text_no_sleep_data">Geen slaapgegevens</string>
+    <string name="text_no_sleep_data_2">Geen\nslaapgegevens</string>
     <string name="text_chronotype_type_val">CHRONOTYPE: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Je bent in sync — houd je goede slaapgewoonten vol om afgestemd te blijven.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Door je slaap consequent bij te houden, helpt Luna je circadiane ritme te verfijnen. Draag je ring ’s nachts om na verloop van tijd betekenisvolle verbeteringen te zien.</string>

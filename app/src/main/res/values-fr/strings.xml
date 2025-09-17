@@ -2257,6 +2257,7 @@ onjour, Luna"</string>
     <string name="text_guidance_resumes_soon">Les conseils reprennent bientôt</string>
     <string name="text_take_quiz">Faites le quiz !</string>
     <string name="text_no_sleep_data">Pas de données de sommeil</string>
+    <string name="text_no_sleep_data_2">Pas de données\nde sommeil</string>
     <string name="text_chronotype_type_val">CHRONOTYPE : %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Vous êtes en phase — maintenez de bonnes habitudes de sommeil pour rester aligné.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Suivre votre sommeil régulièrement aide Luna à affiner votre rythme circadien. Portez votre bague pendant la nuit pour constater des améliorations significatives au fil du temps.</string>

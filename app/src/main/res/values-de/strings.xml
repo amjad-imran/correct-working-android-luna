@@ -2137,6 +2137,7 @@
     <string name="text_guidance_resumes_soon">Anleitung wird bald fortgesetzt</string>
     <string name="text_take_quiz">Quiz machen!</string>
     <string name="text_no_sleep_data">Keine Schlafdaten</string>
+    <string name="text_no_sleep_data_2">Keine\nSchlafdaten</string>
     <string name="text_chronotype_type_val">CHRONOTYP: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Sie sind im Einklang — behalten Sie gute Schlafgewohnheiten bei, um ausgerichtet zu bleiben.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Das konsequente Verfolgen Ihres Schlafs hilft Luna, Ihren zirkadianen Rhythmus zu verfeinern. Tragen Sie Ihren Ring über Nacht, um im Laufe der Zeit bedeutende Verbesserungen zu sehen.</string>

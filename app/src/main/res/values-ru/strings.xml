@@ -2159,6 +2159,7 @@
     <string name="text_guidance_resumes_soon">Руководство скоро возобновится</string>
     <string name="text_take_quiz">Пройдите тест!</string>
     <string name="text_no_sleep_data">Нет данных о сне</string>
+    <string name="text_no_sleep_data_2">Нет данных\nо сне</string>
     <string name="text_chronotype_type_val">ХРОНОТИП: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Вы в ритме — сохраняйте хорошие привычки сна, чтобы оставаться в гармонии.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Последовательное отслеживание сна помогает Luna настраивать ваш циркадный ритм. Носите кольцо ночью, чтобы со временем увидеть значительные улучшения.</string>

@@ -748,7 +748,6 @@ class CircadianAlignmentFragment :
         //showCircularScheduler(null)
         viewModel.circadianResponseData.observe(viewLifecycleOwner) {
             binding.mainScrollView.visible()
-            LOGS.d("abcjacjcab Observing data: $it")
             setData(it)
 
 

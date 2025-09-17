@@ -135,7 +135,6 @@ class CircadianAlignmentViewModel
                             //delay(5000,{
                             getNudgeCircadianData(it)
                             /*})*/
-                            LOGS.d("abcjacjcab Posting data: $it")
                         }
                     }
                 }

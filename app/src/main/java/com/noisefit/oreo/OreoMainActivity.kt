@@ -793,6 +793,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.sessionManager.nfcSleepErr.observe(this) {
             it?.getContent()?.let {
                 if (it) {
+                    if (navController?.currentDestination?.id == R.id.ringExceptionDialogFragment) {
+                        return@let
+                    }
+
                     if(viewModel.checkExceptionCancelState()){
                         navController?.navigate(R.id.ringExceptionDialogFragment)
                     }

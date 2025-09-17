@@ -2143,6 +2143,7 @@
     <string name="text_guidance_resumes_soon">คำแนะนำจะกลับมาเร็ว ๆ นี้</string>
     <string name="text_take_quiz">ทำแบบทดสอบ!</string>
     <string name="text_no_sleep_data">ไม่มีข้อมูลการนอน</string>
+    <string name="text_no_sleep_data_2">ไม่มีข้อมูลการนอน</string>
     <string name="text_chronotype_type_val">โครโนไทป์: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">คุณอยู่ในจังหวะที่ถูกต้อง — รักษานิสัยการนอนที่ดีเพื่อให้สอดคล้องกันต่อไป</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">การติดตามการนอนอย่างสม่ำเสมอช่วยให้ Luna ปรับจังหวะชีวภาพของคุณได้ดีขึ้น สวมแหวนของคุณในตอนกลางคืนเพื่อเห็นการพัฒนาอย่างมีนัยสำคัญเมื่อเวลาผ่านไป</string>

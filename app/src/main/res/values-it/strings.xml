@@ -2138,6 +2138,7 @@
     <string name="text_guidance_resumes_soon">La guida riprenderà presto</string>
     <string name="text_take_quiz">Fai il quiz!</string>
     <string name="text_no_sleep_data">Nessun dato sul sonno</string>
+    <string name="text_no_sleep_data_2">Nessun dato\nsul sonno</string>
     <string name="text_chronotype_type_val">CRONOTIPO: %1$s</string>
     <string name="text_you_re_in_sync_keep_up_the_good_sleep_habits_to_stay_aligned">Sei in sintonia — mantieni buone abitudini di sonno per rimanere allineato.</string>
     <string name="text_circadian_mid_point_desc_missing_sleep">Monitorare costantemente il tuo sonno aiuta Luna a perfezionare il tuo ritmo circadiano. Indossa l’anello durante la notte per vedere miglioramenti significativi nel tempo.</string>
