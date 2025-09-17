@@ -168,6 +168,11 @@ class SleepDashFragment :
 
         binding.lytAINudge.root.setOnClickListener {
 
+            if (mainViewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
+
             uiController.logAppEvent(
                 MoEngageLunaAppEvents.aichat_initiated_clicked,
                 hashMapOf("source" to "sleep")

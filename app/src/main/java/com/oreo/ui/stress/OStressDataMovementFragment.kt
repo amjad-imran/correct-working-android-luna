@@ -29,6 +29,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -634,6 +635,10 @@ class OStressDataMovementFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
+                            if (mainViewModel.ringDataStore.getRingDevice() == null) {
+                                context.showShortToast(getString(R.string.text_luna_ai_message))
+                                return
+                            }
                             mainViewModel.sessionManager.logMoEngageAppEvent(
                                 MoEngageLunaAppEvents.ai_widget_clicked,
                                 HashMap<String, Any>().apply {

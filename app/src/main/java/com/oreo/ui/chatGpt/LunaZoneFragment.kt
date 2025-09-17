@@ -180,6 +180,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         }
 
         binding.lytDailySummaryAvailable.root.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_lunaai_daily_digest_plan)
             navigate(R.id.aiSummaryFragment)
         }

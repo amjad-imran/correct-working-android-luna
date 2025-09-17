@@ -316,7 +316,11 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnDailyDigestMainCardClicked -> {
-                    navigate(R.id.aiSummaryFragment)
+                    if (viewModel.ringDataStore.getRingDevice() == null) {
+                        context.showShortToast(getString(R.string.text_luna_ai_message))
+                    }else {
+                        navigate(R.id.aiSummaryFragment)
+                    }
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnCaffeineDashCardClicked -> {
@@ -438,23 +442,27 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
-                    mainViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.aichat_initiated_clicked,
-                        HashMap<String, Any>().apply {
-                            this["source"] = "activity"
-                            this["value"] = "homepage"
-                        }
-                    )
-
-                    if (viewModel.isChatSplashShown()) {
-                        navigate(
-                            R.id.aiTopQuestionsFragment,
-                            bundleOf("aiTopic" to AITopics.GENERAL)
+                    if (viewModel.ringDataStore.getRingDevice() == null) {
+                        context.showShortToast(getString(R.string.text_luna_ai_message))
+                    }else {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.aichat_initiated_clicked,
+                            HashMap<String, Any>().apply {
+                                this["source"] = "activity"
+                                this["value"] = "homepage"
+                            }
                         )
-                        //mainViewModel.getChatHistoryToday()
-                    } else {
-                        navigate(R.id.aiChatOnboardFragment)
-                        //navigate(R.id.chatSplashFragment)
+
+                        if (viewModel.isChatSplashShown()) {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.GENERAL)
+                            )
+                            //mainViewModel.getChatHistoryToday()
+                        } else {
+                            navigate(R.id.aiChatOnboardFragment)
+                            //navigate(R.id.chatSplashFragment)
+                        }
                     }
                 }
 
