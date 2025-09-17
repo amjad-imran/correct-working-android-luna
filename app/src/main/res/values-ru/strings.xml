@@ -2244,5 +2244,6 @@
     <string name="text_last_synced_message">Последняя синхронизация %1$s</string>
     <string name="text_connected_to">ПОДКЛЮЧЕНО К</string>
     <string name="text_firmware_version">Версия прошивки</string>
+    <string name="text_restarting">Перезагрузка</string>
 
 </resources>

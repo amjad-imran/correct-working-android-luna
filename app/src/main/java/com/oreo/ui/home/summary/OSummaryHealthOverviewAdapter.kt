@@ -859,12 +859,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
             binding.tvSkinAgo.text = data.skinTempLastTime ?: "-"
 
-            if (data.expandedType != null) {
-                expandTile(data)
-            } else {
-                collapseTiles(data)
-            }
-
             binding.itemHR.setOnClickListener {
                 if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
@@ -873,6 +867,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     binding.itemHR
                 )
             }
+
             binding.itemStress.setOnClickListener {
                 if(expandedTile!=null) return@setOnClickListener
                 onItemClicked(
@@ -896,6 +891,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     data,
                     binding.itemSkinTemp
                 )
+            }
+            binding.itemHR.isSoundEffectsEnabled = true
+            binding.itemStress.isSoundEffectsEnabled = true
+            binding.itemSpO2.isSoundEffectsEnabled = true
+            binding.itemSkinTemp.isSoundEffectsEnabled = true
+
+
+            if (data.expandedType != null) {
+                expandTile(data)
+            } else {
+                collapseTiles(data)
             }
         }
 
@@ -1216,6 +1222,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
             }
+            tile.isSoundEffectsEnabled = false
         }
 
         private fun getBackAnim(expandedType: VitalsType?): Int {

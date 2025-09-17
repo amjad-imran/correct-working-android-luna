@@ -2222,5 +2222,6 @@
     <string name="text_last_synced_message">Laatste gesynchroniseerd %1$s</string>
     <string name="text_connected_to">AANGESLOTEN OP</string>
     <string name="text_firmware_version">Firmware Versie</string>
+    <string name="text_restarting">Herstarten</string>
 
 </resources>

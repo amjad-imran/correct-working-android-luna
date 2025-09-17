@@ -2342,5 +2342,6 @@ onjour, Luna"</string>
     <string name="text_last_synced_message">Dernière synchronisation %1$s</string>
     <string name="text_connected_to">CONNECTÉ À</string>
     <string name="text_firmware_version">Versión de Firmware</string>
+    <string name="text_restarting">Redémarrage</string>
 
 </resources>

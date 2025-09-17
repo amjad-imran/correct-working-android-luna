@@ -2228,5 +2228,6 @@
     <string name="text_last_synced_message">ซิงค์ล่าสุด %1$s</string>
     <string name="text_connected_to">เชื่อมต่อกับ</string>
     <string name="text_firmware_version">เวอร์ชันเฟิร์มแวร์</string>
+    <string name="text_restarting">กำลังรีสตาร์ท</string>
 
 </resources>

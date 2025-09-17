@@ -2216,5 +2216,6 @@
     <string name="text_last_synced_message">上次同步 %1$s</string>
     <string name="text_connected_to">连接到</string>
     <string name="text_firmware_version">固件版本</string>
+    <string name="text_restarting">正在重启</string>
 
 </resources>

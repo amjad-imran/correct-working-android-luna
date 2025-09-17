@@ -2246,5 +2246,6 @@
     <string name="text_last_synced_message">Última sincronização %1$s</string>
     <string name="text_connected_to">CONEXÃO COM</string>
     <string name="text_firmware_version">Versão do Firmware</string>
+    <string name="text_restarting">Reiniciando</string>
 
 </resources>

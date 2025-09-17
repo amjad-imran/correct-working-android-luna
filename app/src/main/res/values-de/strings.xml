@@ -2222,5 +2222,6 @@
     <string name="text_last_synced_message">Letztes Sync %1$s</string>
     <string name="text_connected_to">VERBUNDEN MIT</string>
     <string name="text_firmware_version">Firmware-Version</string>
+    <string name="text_restarting">Neustart</string>
 
 </resources>

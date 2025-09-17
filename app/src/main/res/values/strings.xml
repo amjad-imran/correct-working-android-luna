@@ -2197,5 +2197,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_last_synced_message">Synced %1$s</string>
     <string name="text_connected_to">CONNECTED TO</string>
     <string name="text_firmware_version">Firmware Version</string>
+    <string name="text_restarting">Restarting</string>
 
 </resources>
