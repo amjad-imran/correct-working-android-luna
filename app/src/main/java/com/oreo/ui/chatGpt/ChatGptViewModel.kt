@@ -16,6 +16,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -31,7 +32,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Request
 import okhttp3.Response
+import java.util.Calendar
+import java.util.TimeZone
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -245,8 +249,7 @@ class ChatGptViewModel
                             PlanType.NONE, null -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream?message=$prompt&thread_id=$threadId")
                         }
                         userToken?.let {
-                            this.addHeader("access-token", "Bearer ${userToken.access_token}")
-                            this.addHeader("wearable-type", "ring")
+                            addHeaders(this,it)
                         }
                     }.build()
 
@@ -338,6 +341,17 @@ class ChatGptViewModel
 
         }
 
+
+    }
+
+    private fun addHeaders(builder: Request.Builder, token: Token) {
+        builder.addHeader("access-token", "Bearer ${token.access_token}")
+        builder.addHeader("wearable-type", "ring")
+        val timeZone = localDataStore.getLastKnownTimezone() ?: TimeZone.getDefault().id
+        builder.addHeader("timezone", timeZone)
+        builder.addHeader("offset", TimeUnit.MILLISECONDS.toMinutes(
+            Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
+        ).toString())
 
     }
 
