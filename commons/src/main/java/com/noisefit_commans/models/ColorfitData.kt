@@ -569,6 +569,7 @@ data class BatteryData(
     @SerializedName("fully_charge") var isFullyCharged: Boolean? = false,
     @SerializedName("is_charging") var isCharging: Boolean = false,
     var caseInfoData: CaseInfoData ?= null,
+    var isCaseDataAvailable: Boolean = true,
 ) :
     ColorfitData()
 
@@ -577,6 +578,8 @@ data class CaseInfoData(
     var battLevel: Int ?= null,
     var isOpen: Boolean ?= null,
     var serialNumber: String ?= null,
+
+    var isRingCharging: Boolean = false
 ) : Parcelable
 
 data class WorkoutRealTimeData(

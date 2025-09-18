@@ -1754,16 +1754,16 @@ constructor() : LifecycleService() {
                     LOGS.d("sjbskbajsv : ring_case_data : ${queryCallback.batteryData.caseInfoData}")
 
                     watchDataStore.updateBatteryPercentRing(percent)
-                    watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
-
-                    sessionManager.isCaseCurrentlyConnected.postValue(
-                        Event(
-                            queryCallback.batteryData.caseInfoData != null
+                    if(queryCallback.batteryData.isCaseDataAvailable){
+                        watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
+                        sessionManager.isCaseCurrentlyConnected.postValue(
+                            Event(
+                                queryCallback.batteryData.caseInfoData != null
+                            )
                         )
-                    )
-
-                    queryCallback.batteryData.caseInfoData?.let {
-                        sessionManager.caseInfoData.postValue(it)
+                        queryCallback.batteryData.caseInfoData?.let {
+                            sessionManager.caseInfoData.postValue(it)
+                        }
                     }
 
                     LOGS.d("sdfkjhsdkjfhksdjf BatteryDataObtained ${percent} - ${queryCallback.batteryData.isCharging}")

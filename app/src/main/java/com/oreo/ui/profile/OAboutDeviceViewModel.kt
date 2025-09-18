@@ -14,6 +14,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.User
@@ -33,7 +34,7 @@ class OAboutDeviceViewModel
 constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager,
-    val ringDataSore: RingDataStore,
+    val localDataStore: DataStoredInterface,
     val updateRepository: UpdateRepository,
     private val userRepository: UserRepository,
     private val resourcesProvider: ResourcesProvider,
