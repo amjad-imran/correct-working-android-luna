@@ -150,7 +150,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
 
     override fun initListener() {
 
-        binding.btnCheckForUpdates.text = if (viewModel.ringDataSore.isNewOtaAvailable()) {
+        binding.btnCheckForUpdates.text = if (viewModel.ringDataStore.isNewOtaAvailable()) {
             getString(R.string.text_update_available)
         } else {
             getString(R.string.text_check_for_an_update)
@@ -170,7 +170,7 @@ class OAboutRingCaseFragment : BaseFragment<FragmentOAboutRingCaseBinding>(Fragm
                     }
                 }
 
-                if (viewModel.ringDataSore.isNewOtaAvailable()) {
+                if (viewModel.ringDataStore.isNewOtaAvailable()) {
                     updateViewModel.setUpdateAvailable(true)
                 } else {
                     checkCurrentFirmwareVersion()

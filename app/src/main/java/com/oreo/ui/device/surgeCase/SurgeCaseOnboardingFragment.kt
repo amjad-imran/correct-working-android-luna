@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSurgeCaseOnboardingBinding
@@ -18,6 +19,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.surgeCase.AboutSurgeCaseModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBinding>(FragmentSurgeCaseOnboardingBinding::inflate) {
@@ -29,10 +31,11 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
         super.onViewCreated(view, savedInstanceState)
         LOGS.d("ahcvacjakc : ${arguments?.getString("srcKey")}")
         setUi()
-        setAdapterAndTabLayout()
+//        setAdapterAndTabLayout()
+        setViewpager()
     }
 
-    private fun setAdapterAndTabLayout() {
+    /*private fun setAdapterAndTabLayout() {
 
         val aboutChargerItemsList = ArrayList<AboutSurgeCaseModel>().apply { 
             add(
@@ -64,7 +67,7 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
         viewPager.adapter = adapter
 
         TabLayoutMediator(binding.pagerIndicator, binding.viewPager) { _, _ -> }.attach()
-    }
+    }*/
 
     private fun setUi() {
         val videoUri = Uri.parse("android.resource://" + requireActivity().packageName + "/" + R.raw.portable_charger_onboarding)
@@ -126,6 +129,69 @@ class SurgeCaseOnboardingFragment : BaseFragment<FragmentSurgeCaseOnboardingBind
             navigate(R.id.action_surgeCaseOnboardingFragment_to_oreo_my_device)
         }else{
             navigateUpSafe()
+        }
+    }
+
+    private fun setViewpager() {
+        val aboutChargerItemsList = ArrayList<AboutSurgeCaseModel>().apply {
+            add(
+                AboutSurgeCaseModel(
+                    title = getString(R.string.text_about_surge_case_title_1),
+                    description = getString(R.string.text_about_surge_case_desc_1),
+                    imageCenter = R.drawable.image_about_surge_case_1,
+                )
+            )
+
+            add(
+                AboutSurgeCaseModel(
+                    title = getString(R.string.text_about_surge_case_title_2),
+                    description = getString(R.string.text_about_surge_case_desc_2),
+                    imageTopSticked = R.drawable.image_about_surge_case_2,
+                )
+            )
+
+            add(
+                AboutSurgeCaseModel(
+                    title = getString(R.string.text_about_surge_case_title_3),
+                    description = getString(R.string.text_about_surge_case_desc_3),
+                    imageClosedCharger = R.drawable.image_about_surge_case_3,
+                )
+            )
+        }
+        val aboutChargerAdapter = AboutChargerAdapter(this, aboutChargerItemsList)
+        binding.viewPager.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            adapter = aboutChargerAdapter
+            setOnTouchListener(null)
+        }
+
+        binding.viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                setProgress(position, aboutChargerItemsList)
+
+
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
+
+        binding.viewPager.setCurrentItem(0, false)
+
+    }
+
+    private fun setProgress(position: Int, aboutChargerItemsList: ArrayList<AboutSurgeCaseModel>) {
+        val max = aboutChargerItemsList.size
+
+        binding.pgBr.apply {
+            progress = (((position + 1).toFloat() / max) * 100).roundToInt()
         }
     }
 

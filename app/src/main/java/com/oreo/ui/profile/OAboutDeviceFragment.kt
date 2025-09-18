@@ -3,6 +3,7 @@ package com.oreo.ui.profile
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
@@ -31,6 +32,12 @@ class OAboutDeviceFragment :
     }
 
     private fun setTabLayoutAndVp() {
+        if(!viewModel.localDataStore.getPortableChargerOnboarding() && viewModel.isCaseConnected){
+            navigate(
+                R.id.surgeCaseOnboardingFragment,
+                bundleOf("srcKey" to "o_about_device")
+            )
+        }
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 

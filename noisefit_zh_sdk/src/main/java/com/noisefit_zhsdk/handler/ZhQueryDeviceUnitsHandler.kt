@@ -397,6 +397,7 @@ constructor(
                         isOpen = p0.ringChargingCaseInfoBean.isOpen,
                         battLevel = p0.ringChargingCaseInfoBean.battLevel,
                         serialNumber = p0.ringChargingCaseInfoBean.serialNums,
+                        isRingCharging = isCharging
                     )
                 }else null
 
@@ -487,7 +488,7 @@ constructor(
 
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.BatteryDataObtained(
-                        BatteryData(percentage = capacity, isCharging = isCharging)
+                        BatteryData(percentage = capacity, isCharging = isCharging, isCaseDataAvailable = false)
                     )
                 )
                 //AppLogs.sendAppLogs("Battery info get")

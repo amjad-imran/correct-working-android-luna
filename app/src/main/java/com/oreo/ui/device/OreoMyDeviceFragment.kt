@@ -341,11 +341,16 @@ class OreoMyDeviceFragment :
 
         }
 
-        mViewModel.sessionManager.caseInfoData.observe(this) {
-            if(!mViewModel.localDataStore.getPortableChargerOnboarding()){
-                navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "oreo_my_device"))
+        mViewModel.sessionManager.isCaseCurrentlyConnected.observe(this) {
+            it?.getContent()?.let { res ->
+                if (res && !mViewModel.localDataStore.getPortableChargerOnboarding()) {
+                    navigate(
+                        R.id.surgeCaseOnboardingFragment,
+                        bundleOf("srcKey" to "oreo_my_device")
+                    )
+                }
+                setStateConnected(mViewModel.ringDataStore.getRingDevice())
             }
-            setStateConnected(mViewModel.ringDataStore.getRingDevice())
         }
 
     }
@@ -728,7 +733,7 @@ class OreoMyDeviceFragment :
         val rinCaseData = mViewModel.watchDataStore.getRingCaseData()
         val isChargerOpen = rinCaseData?.isOpen
 
-        binding.lytDeviceConnectedNew.apply{
+        binding.lytDeviceConnectedNew.apply {
             //
             tvConnectedTitle.apply {
                 text =
@@ -754,7 +759,7 @@ class OreoMyDeviceFragment :
             }
             lytRingProgress.ivImage.setImageResource(R.drawable.ic_ring_for_perc)
 
-            if(rinCaseData != null) {
+            if (rinCaseData != null) {
                 lytRingCaseProgress.tvPercVal.gone()
                 lytRingCaseProgress.lPbContainer.gone()
                 lytRingCaseProgress.root.post {
@@ -765,13 +770,13 @@ class OreoMyDeviceFragment :
                 }
                 lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
                 lytRingCaseProgress.root.visible()
-            }else{
+            } else {
                 lytRingCaseProgress.root.gone()
             }
             //
             setCenterImage(noiseFitDevice)
 
-            when(isChargerOpen) {
+            when (isChargerOpen) {
                 null -> {
                     tvRingCaseName.text = "Luna ring"
                     tvGen.text = "$ringGen.0"
@@ -822,13 +827,14 @@ class OreoMyDeviceFragment :
         val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
 
         val lastSync =
-            mViewModel.sessionManager.getLastSyncTime()?.let { DateTimeUtil.getRelativeTime(it,mViewModel.resProvider) }
-        val lastSyncText = if(lastSync != null) {
+            mViewModel.sessionManager.getLastSyncTime()
+                ?.let { DateTimeUtil.getRelativeTime(it, mViewModel.resProvider) }
+        val lastSyncText = if (lastSync != null) {
             getString(
                 R.string.text_last_synced_message,
                 lastSync
             )
-        }else {
+        } else {
             getString(R.string.text_not_yet_syncyed)
         }
         /*binding.lytDeviceConnected.apply {
@@ -872,13 +878,12 @@ class OreoMyDeviceFragment :
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
 
-        binding.lytDeviceConnectedNew.apply{
+        binding.lytDeviceConnectedNew.apply {
             //
             tvConnectedTitle.apply {
                 text = getString(R.string.text_connected_to)
                 setTextColor("#83AAC6".toColorInt())
             }
-
             tvSyncDesc.text = lastSyncText
             tvSyncDesc.visible()
             //
@@ -888,7 +893,8 @@ class OreoMyDeviceFragment :
                 val chargingContainerWidth =
                     resources.displayMetrics.widthPixels - (48 * resources.displayMetrics.density).toInt()
                 val params = lytRingProgress.root.layoutParams
-                params.width  = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                params.width =
+                    (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT
                 lytRingProgress.root.layoutParams = params
 
@@ -910,18 +916,18 @@ class OreoMyDeviceFragment :
             }
 
             setCenterImage(noiseFitDevice)
-            if(ringGen == 1 || caseInfoData == null){
+            if (ringGen == 1 || caseInfoData == null) {
                 tvRingCaseName.text = "Luna ring"
                 tvGen.text = "$ringGen.0"
                 genContainer.visible()
 
                 lytRingCaseProgress.root.gone()
 
-            }else{
+            } else {
                 genContainer.gone()
                 lytRingCaseProgress.root.visible()
-                if(caseInfoData.battLevel == null){
-                    lytRingCaseProgress.root.doOnNextLayoutOnce {
+                if (caseInfoData.battLevel == null/*mViewModel.sessionManager.isRingCharging.value != true*/) {
+                    lytRingCaseProgress.root.doOnLayout {
                         val params = lytRingCaseProgress.root.layoutParams
                         params.width = ViewGroup.LayoutParams.WRAP_CONTENT
                         params.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -932,17 +938,17 @@ class OreoMyDeviceFragment :
                         lytRingCaseProgress.ivImage.setImageResource(R.drawable.ic_portable_charger_closed)
                         lytRingCaseProgress.root.requestLayout()
                     }
-                }
-                else{
+                } else {
                     tvRingCaseName.text = "Luna ring w/ Charging Case"
 
                     //
                     val chargerBattery = caseInfoData.battLevel ?: 0
-                    lytRingCaseProgress.root.doOnNextLayoutOnce {
+                    lytRingCaseProgress.root.doOnLayout {
                         val chargingContainerWidth =
                             resources.displayMetrics.widthPixels - (48 * resources.displayMetrics.density).toInt()
                         val params = lytRingCaseProgress.root.layoutParams
-                        params.width = (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
+                        params.width =
+                            (chargingContainerWidth * 0.5).toInt() - (16 * resources.displayMetrics.density).toInt()
                         params.height = ViewGroup.LayoutParams.WRAP_CONTENT
                         lytRingCaseProgress.root.layoutParams = params
                         //
@@ -968,28 +974,29 @@ class OreoMyDeviceFragment :
         }
     }
 
-    private fun setCenterImage(noiseFitDevice: ColorFitDevice?){
+    private fun setCenterImage(noiseFitDevice: ColorFitDevice?) {
 
         val context = binding.root.context
         val ringGen = getGeneration(mViewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
         val caseInfoData = mViewModel.watchDataStore.getRingCaseData()
-        val isRingCharing = mViewModel.sessionManager.isRingCharging.value ?: false
 
         val displayMetrics = resources.displayMetrics
         val deviceWidth = displayMetrics.widthPixels
 
-        val ringImage = if(noiseFitDevice?.ringInfo?.image3.isNullOrEmpty()){
+        val ringImage = if (noiseFitDevice?.ringInfo?.image3.isNullOrEmpty()) {
             mViewModel.lunarBlackImagesUrl.first
-        }else{
+        } else {
             noiseFitDevice.ringInfo?.image3
         }
 
-        val chargerOpenImage = if(noiseFitDevice?.ringInfo?.chargerRingUrl.isNullOrEmpty()){
+        val chargerOpenImage = if (noiseFitDevice?.ringInfo?.chargerRingUrl.isNullOrEmpty()) {
             mViewModel.lunarBlackImagesUrl.second
-        }else{
+        } else {
             noiseFitDevice.ringInfo?.chargerRingUrl
         }
 
+        val isRingCharing = caseInfoData?.isRingCharging?:false//mViewModel.sessionManager.isRingCharging.value ?: false
+        LOGS.d("sjkvbsvsvsj  state $isRingCharing")
         when {
             ringGen == 1 || caseInfoData == null/* || (!isRingCharing && caseInfoData.isOpen!=true)*/ -> {
                 binding.lytDeviceConnectedNew.apply {
@@ -998,8 +1005,8 @@ class OreoMyDeviceFragment :
 
                     ivImgCenter.post {
                         val params = ivImgCenter.layoutParams
-                        params.width = deviceWidth/2
-                        params.height = deviceWidth/2
+                        params.width = deviceWidth / 2
+                        params.height = deviceWidth / 2
 
                         if (params is ViewGroup.MarginLayoutParams) {
                             val topMarginInPx = (160 * resources.displayMetrics.density).toInt()
@@ -1014,6 +1021,7 @@ class OreoMyDeviceFragment :
                     }
                 }
             }
+
 
             !isRingCharing -> {
                 binding.lytDeviceConnectedNew.apply {
@@ -1043,14 +1051,15 @@ class OreoMyDeviceFragment :
                         loadImage(context, ringImage)
                         visible()
                     }
+                    ivImgCenter.gone()
                 }
             }
 
             isRingCharing -> {
                 binding.lytDeviceConnectedNew.apply {
-                ivImgLeft.gone()
-                ivImgRight.gone()
-                    if(caseInfoData.isOpen==true){
+                    ivImgLeft.gone()
+                    ivImgRight.gone()
+                    if (caseInfoData.isOpen == true) {
                         ivImgCenter.post {
                             val params = ivImgCenter.layoutParams
                             params.width = (deviceWidth * 0.9).toInt()
@@ -1058,7 +1067,8 @@ class OreoMyDeviceFragment :
 
                             if (params is ViewGroup.MarginLayoutParams) {
                                 val topMarginInPx = (12 * resources.displayMetrics.density).toInt()
-                                val bottomMarginInPx = (12 * resources.displayMetrics.density).toInt()
+                                val bottomMarginInPx =
+                                    (12 * resources.displayMetrics.density).toInt()
                                 params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
                             }
 
@@ -1067,7 +1077,7 @@ class OreoMyDeviceFragment :
                             ivImgCenter.loadImage(context, chargerOpenImage)
                             ivImgCenter.visible()
                         }
-                    }else{
+                    } else {
                         ivImgCenter.post {
                             val params = ivImgCenter.layoutParams
                             params.width = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -1075,7 +1085,8 @@ class OreoMyDeviceFragment :
 
                             if (params is ViewGroup.MarginLayoutParams) {
                                 val topMarginInPx = (132 * resources.displayMetrics.density).toInt()
-                                val bottomMarginInPx = (32 * resources.displayMetrics.density).toInt()
+                                val bottomMarginInPx =
+                                    (32 * resources.displayMetrics.density).toInt()
                                 params.setMargins(0, topMarginInPx, 0, bottomMarginInPx)
                             }
 
