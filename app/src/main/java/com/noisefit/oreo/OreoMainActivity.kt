@@ -462,17 +462,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
-       /* if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts) {*/
-            binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
-            binding.lytAddWorkoutSelector.tvAddWorkout.visible()
-            animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
-            animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
-        /*} else {
-            binding.lytAddWorkoutSelector.ivAddWorkoutManual.gone()
-            binding.lytAddWorkoutSelector.tvAddWorkout.gone()
-        }*/
-        /*animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
-        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)*/
+        binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
+        binding.lytAddWorkoutSelector.tvAddWorkout.visible()
+        animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
 
         val lastDestination = navController?.currentDestination
 
@@ -797,7 +790,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         return@let
                     }
 
-                    if(viewModel.checkExceptionCancelState()){
+                    if (viewModel.checkExceptionCancelState()) {
                         navController?.navigate(R.id.ringExceptionDialogFragment)
                     }
                 }
@@ -1244,7 +1237,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 ApplicationUtils.setRescueWorkManager(this)
             }
 
-            if(it.ringInfo?.image3 == null || it.ringInfo?.chargerRingUrl == null){
+            if (it.ringInfo?.image3 == null || it.ringInfo?.chargerRingUrl == null) {
                 viewModel.getPortableChargerAndRingImage(it)
             }
 
