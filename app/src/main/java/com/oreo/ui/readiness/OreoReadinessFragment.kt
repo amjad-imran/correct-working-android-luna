@@ -191,6 +191,10 @@ class OreoReadinessFragment :
                 setClickListener(
                     object : NudgeBannerListener {
                         override fun onAiClicked() {
+                            if (mainViewModel.ringDataStore.getRingDevice() == null) {
+                                context.showShortToast(getString(R.string.text_luna_ai_message))
+                                return
+                            }
 
                             uiController.logAppEvent(
                                 MoEngageLunaAppEvents.aichat_initiated_clicked,

@@ -72,6 +72,10 @@ class AiMealDetailFragment :
         }
 
         binding.ivMic.setOnClickListener {
+            if (ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = AudioAiFragment.getStartData(
                 PlanType.DIET,

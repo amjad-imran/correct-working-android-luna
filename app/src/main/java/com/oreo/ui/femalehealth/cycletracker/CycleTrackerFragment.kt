@@ -904,6 +904,10 @@ class CycleTrackerFragment :
                     object :
                         NudgeBannerListener {
                         override fun onAiClicked() {
+                            if (viewModel.ringDataStore.getRingDevice() == null) {
+                                context.showShortToast(getString(R.string.text_luna_ai_message))
+                                return
+                            }
                             viewModel.sessionManager.logMoEngageAppEvent(
                                 MoEngageLunaAppEvents.ai_widget_clicked,
                                 HashMap<String, Any>().apply {

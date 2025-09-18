@@ -97,6 +97,10 @@ class AiWorkoutDetailFragment :
     override fun initListener() {
 
         binding.ivMic.setOnClickListener {
+            if (ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             //val workout = dataList.first()
             val ques = getWorkoutAiString(currentPos)
             val (frag, bundle) = AudioAiFragment.getStartData(
