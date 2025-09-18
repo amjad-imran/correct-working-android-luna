@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
@@ -51,6 +52,14 @@ constructor(
 
     fun getWorkoutList() {
         viewModelScope.launch(Dispatchers.IO) {
+            val workoutList = keyValueDataSource.getData("" , KeyValueDataType.RECORD_WORKOUT)
+            if(workoutList?.value != null){
+                val type = object : TypeToken<List<OWorkoutListModal>>() {}.type
+                _oWorkoutListModalResponse.postValue(
+                    Gson().fromJson(workoutList.value, type)
+                )
+                return@launch
+            }
 
             userActivityRepository.getWorkoutListRecord().collect { resource ->
                 when (resource) {
