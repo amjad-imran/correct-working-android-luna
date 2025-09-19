@@ -2201,7 +2201,7 @@
     <string name="text_this_may_take_up_to_30_seconds">Questo potrebbe richiedere fino a 30 secondi</string>
     <string name="text_skin_temp">Temp. pelle</string>
     <string name="text_measuring_spo2">Misurazione SpO2...</string>
-    <string name="text_unable_to_track">Impossibile tracciare in questo momento, riprova.</string>
+    <string name="text_unable_to_track">Impossibile tracciare al momento, riprova.</string>
     <string name="text_something_went_wrong_single">Qualcosa è andato storto</string>
     <string name="text_mob_no">N. cell.</string>
     <string name="text_we_found_anomaly_in_your_ring">Rilevata anomalia software dell\'anello</string>

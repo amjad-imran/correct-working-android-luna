@@ -2171,8 +2171,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_this_may_take_up_to_30_seconds">Esto puede tardar hasta 30 segundos</string>
     <string name="text_skin_temp">Temp. de piel</string>
     <string name="text_measuring_spo2">Midiendo SpO2...</string>
-    <string name="text_unable_to_track">No se puede rastrear en este momento, por favor inténtalo de nuevo.</string>
-    <string name="text_something_went_wrong_single">Algo salió mal</string>
+    <string name="text_unable_to_track">No se puede rastrear en este momento, por favor intente de nuevo.</string>    <string name="text_something_went_wrong_single">Algo salió mal</string>
     <string name="text_mob_no">Núm. móvil</string>
     <string name="text_we_found_anomaly_in_your_ring">Se detectó una anomalía en el software del anillo</string>
     <string name="text_shut_down">Apagar</string>

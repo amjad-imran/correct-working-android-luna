@@ -2194,7 +2194,7 @@
     <string name="text_this_may_take_up_to_30_seconds">这可能需要长达30秒</string>
     <string name="text_skin_temp">皮肤温度</string>
     <string name="text_measuring_spo2">正在测量 SpO2...</string>
-    <string name="text_unable_to_track">当前无法跟踪，请重试。</string>
+    <string name="text_unable_to_track">无法跟踪此时，请重试。</string>
     <string name="text_something_went_wrong_single">出现错误</string>
     <string name="text_mob_no">手机号</string>
     <string name="text_we_found_anomaly_in_your_ring">检测到戒指软件异常</string>

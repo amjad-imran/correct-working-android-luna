@@ -2224,7 +2224,7 @@
     <string name="text_this_may_take_up_to_30_seconds">Isso pode levar até 30 segundos</string>
     <string name="text_skin_temp">Temp. da pele</string>
     <string name="text_measuring_spo2">Medindo SpO2...</string>
-    <string name="text_unable_to_track">Não é possível rastrear no momento, tente novamente.</string>
+    <string name="text_unable_to_track">Não é possível rastrear neste momento, por favor tente novamente.</string>
     <string name="text_something_went_wrong_single">Algo deu errado</string>
     <string name="text_mob_no">Nº de celular</string>
     <string name="text_we_found_anomaly_in_your_ring">Anomalia no software do anel detectada</string>

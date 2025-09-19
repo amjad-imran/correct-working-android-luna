@@ -2206,7 +2206,7 @@
     <string name="text_this_may_take_up_to_30_seconds">อาจใช้เวลาสูงสุด 30 วินาที</string>
     <string name="text_skin_temp">อุณหภูมิผิว</string>
     <string name="text_measuring_spo2">กำลังวัด SpO2...</string>
-    <string name="text_unable_to_track">ไม่สามารถติดตามได้ในขณะนี้ กรุณาลองอีกครั้ง</string>
+    <string name="text_unable_to_track">ไม่สามารถติดตามได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
     <string name="text_something_went_wrong_single">เกิดข้อผิดพลาด</string>
     <string name="text_mob_no">เบอร์มือถือ</string>
     <string name="text_we_found_anomaly_in_your_ring">ตรวจพบความผิดปกติของซอฟต์แวร์แหวน</string>

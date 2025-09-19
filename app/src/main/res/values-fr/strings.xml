@@ -2320,8 +2320,7 @@ onjour, Luna"</string>
     <string name="text_this_may_take_up_to_30_seconds">Cela peut prendre jusqu\'à 30 secondes</string>
     <string name="text_skin_temp">Temp. de la peau</string>
     <string name="text_measuring_spo2">Mesure de la SpO2...</string>
-    <string name="text_unable_to_track">Impossible de suivre pour le moment, veuillez réessayer.</string>
-    <string name="text_something_went_wrong_single">Un problème est survenu</string>
+    <string name="text_unable_to_track">Impossible de suivre pour le moment, veuillez réessayer.</string>    <string name="text_something_went_wrong_single">Un problème est survenu</string>
     <string name="text_mob_no">N° de mobile</string>
     <string name="text_we_found_anomaly_in_your_ring">Anomalie du logiciel de l\'anneau détectée</string>
     <string name="text_shut_down">Éteindre</string>
