@@ -240,6 +240,10 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         }
 
         binding.lytPlans.lytWorkoutPlanSetup.root.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
                 null,
