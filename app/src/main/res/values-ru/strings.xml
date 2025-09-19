@@ -2222,7 +2222,7 @@
     <string name="text_this_may_take_up_to_30_seconds">Это может занять до 30 секунд</string>
     <string name="text_skin_temp">Темп. кожи</string>
     <string name="text_measuring_spo2">Измерение SpO2...</string>
-    <string name="text_unable_to_track">Отслеживание невозможно, попробуйте снова.</string>
+    <string name="text_unable_to_track">Невозможно отследить в данный момент, попробуйте снова.</string>
     <string name="text_something_went_wrong_single">Что-то пошло не так</string>
     <string name="text_mob_no">Моб. №</string>
     <string name="text_we_found_anomaly_in_your_ring">Обнаружена ошибка ПО кольца</string>
