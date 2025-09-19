@@ -1214,10 +1214,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     userActivities.add(it)
                 }
             }
-            val hasTimelineKey = priorityList.find { it.key.equals("timeline", true) }
-            if (hasTimelineKey == null) {
-                getTimelineCard()?.let { userActivities.add(it) }
-            }
 
 
             priorityList.forEach { item ->
@@ -1361,6 +1357,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                 }
+            }
+
+            val hasTimelineKey = priorityList.find { it.key.equals("timeline", true) }
+            if (hasTimelineKey == null) {
+                getTimelineCard()?.let { userActivities.add(it) }
             }
 
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
