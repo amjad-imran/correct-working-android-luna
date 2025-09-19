@@ -68,7 +68,8 @@ class AiMealPlanFragment :
 
         if(
             viewModel.localDataStore.getBoosterWomenData() &&
-            viewModel.femaleBoosterMeals.value.isNullOrEmpty()
+            viewModel.femaleBoosterMeals.value.isNullOrEmpty() &&
+            viewModel.ringDataStore.getRingDevice() != null
         ){
             viewModel.getBoosterMealPlans()
         }
@@ -219,10 +220,6 @@ class AiMealPlanFragment :
         }
 
         viewModel.dayMealList.observe(this) {
-            if(viewModel.ringDataStore.getRingDevice() == null){
-                binding.lytBoosterFoods.root.gone()
-                return@observe
-            }
 
             if(viewModel.femaleBoosterMeals.value.isNullOrEmpty()){
                 binding.lytBoosterFoods.root.gone()
