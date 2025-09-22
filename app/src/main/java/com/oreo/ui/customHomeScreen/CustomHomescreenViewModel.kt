@@ -165,7 +165,7 @@ class CustomHomescreenViewModel @Inject constructor(
         // Add timeline card if not already present → always at the END
         val timelineCard = card.find { it.key.equals("timeline", true) }
         if (timelineCard == null) {
-            itemsMap["circadian_alignment"]?.let { cardsToAdd.add(it) }
+            itemsMap["timeline"]?.let { cardsToAdd.add(it) }
         }
 
         cardsToAdd.forEachIndexed { index, item ->
