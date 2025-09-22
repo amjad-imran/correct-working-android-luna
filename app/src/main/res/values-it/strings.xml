@@ -2224,5 +2224,6 @@
     <string name="text_connected_to">CONNESSO A</string>
     <string name="text_firmware_version">Versione del Firmware</string>
     <string name="text_restarting">Riavvio</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">L\'orario di sveglia di oggi era al di fuori del tuo ritmo abituale, quindi la Guida al Ritmo Circadiano è temporaneamente non disponibile.</string>
 
 </resources>

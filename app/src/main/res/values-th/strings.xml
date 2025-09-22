@@ -2229,5 +2229,6 @@
     <string name="text_connected_to">เชื่อมต่อกับ</string>
     <string name="text_firmware_version">เวอร์ชันเฟิร์มแวร์</string>
     <string name="text_restarting">กำลังรีสตาร์ท</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">เวลาตื่นของคุณวันนี้อยู่นอกจังหวะปกติของคุณ ดังนั้นคู่มือจังหวะวงจรชีวิตจึงไม่สามารถใช้งานได้ชั่วคราว</string>
 
 </resources>

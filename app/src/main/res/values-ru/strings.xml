@@ -2245,5 +2245,6 @@
     <string name="text_connected_to">ПОДКЛЮЧЕНО К</string>
     <string name="text_firmware_version">Версия прошивки</string>
     <string name="text_restarting">Перезагрузка</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Ваше время пробуждения сегодня было вне привычного ритма, поэтому руководство по циркадианному ритму временно недоступно.</string>
 
 </resources>
