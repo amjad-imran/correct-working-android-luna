@@ -2194,5 +2194,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_connected_to">CONEXIÓN A</string>
     <string name="text_firmware_version">Versión de Firmware</string>
     <string name="text_restarting">Reiniciando</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Tu hora de despertar hoy estuvo fuera de tu ritmo habitual, por lo que la Guía de Ritmo Circadiano está temporalmente no disponible.</string>
 
 </resources>

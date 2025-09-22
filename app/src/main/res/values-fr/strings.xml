@@ -2343,5 +2343,6 @@ onjour, Luna"</string>
     <string name="text_connected_to">CONNECTÉ À</string>
     <string name="text_firmware_version">Versión de Firmware</string>
     <string name="text_restarting">Redémarrage</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Votre heure de réveil aujourd\'hui était en dehors de votre rythme habituel, donc le guide du rythme circadien est temporairement indisponible.</string>
 
 </resources>

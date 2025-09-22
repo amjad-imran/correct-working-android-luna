@@ -2217,5 +2217,6 @@
     <string name="text_connected_to">连接到</string>
     <string name="text_firmware_version">固件版本</string>
     <string name="text_restarting">正在重启</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">今天的起床时间超出了您平常的生物钟节奏，因此生物钟指南暂时不可用。</string>
 
 </resources>

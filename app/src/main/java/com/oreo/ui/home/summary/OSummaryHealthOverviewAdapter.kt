@@ -3721,7 +3721,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.lytNoSleepData.gone()
                 binding.lytLockedState.visible()
                 binding.textView182.text =
-                    context.getString(R.string.text_your_sleep_for_yesterday_has_not_been_recorded_please_log_your_sleep_data_to_see_this_card_active)
+                    context.getString(R.string.text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable)
             }
 
             binding.root.setOnClickListener {

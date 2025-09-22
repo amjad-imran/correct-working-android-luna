@@ -2223,5 +2223,6 @@
     <string name="text_connected_to">VERBUNDEN MIT</string>
     <string name="text_firmware_version">Firmware-Version</string>
     <string name="text_restarting">Neustart</string>
+    <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Ihre Aufwachzeit lag heute außerhalb Ihres gewohnten Rhythmus, daher ist der Leitfaden für den zirkadianen Rhythmus vorübergehend nicht verfügbar.</string>
 
 </resources>
