@@ -8,6 +8,7 @@ import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
@@ -590,6 +591,16 @@ interface DataStoredInterface {
 
     fun setPortableChargerOnboarding(isDone: Boolean?)
     fun getPortableChargerOnboarding(): Boolean
+
+    fun setNudgeReadinessData(data: NudgeCircadianGraph?)
+    fun getNudgeReadinessData(): NudgeCircadianGraph?
+
+    fun setNudgeActivityData(data: NudgeCircadianGraph?)
+    fun getNudgeActivityData(): NudgeCircadianGraph?
+
+    fun setNudgeCycleTrackerData(data: NudgeCircadianGraph?)
+    fun getNudgeCycleTrackerData(): NudgeCircadianGraph?
+
 }
 
 enum class AppTrackEvent {

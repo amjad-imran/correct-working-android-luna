@@ -44,6 +44,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
 import com.noisefit_commans.data.model.circadian.CircadianGraphData
+import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.data.model.timeline.Measurements
@@ -274,6 +275,10 @@ private const val SLEEP_EXCEPTION_CANCEL_TIME = "SLEEP_EXCEPTION_CANCEL_TIME"
 
 
 private const val PORTABLE_CHARGER_ONBOARDING = "PORTABLE_CHARGER_ONBOARDING"
+
+private const val NUDGE_READINESS_DATA = "NUDGE_READINESS_DATA"
+private const val NUDGE_ACTIVITY_DATA = "NUDGE_ACTIVITY_DATA"
+private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -881,6 +886,10 @@ class DataStoredImpl
         mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
 
         mPrefs.edit()?.remove(PORTABLE_CHARGER_ONBOARDING)?.apply()
+
+        mPrefs.edit()?.remove(NUDGE_READINESS_DATA)?.apply()
+        mPrefs.edit()?.remove(NUDGE_ACTIVITY_DATA)?.apply()
+        mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2423,4 +2432,32 @@ class DataStoredImpl
     override fun getPortableChargerOnboarding(): Boolean {
         return mPrefs.getBoolean(PORTABLE_CHARGER_ONBOARDING, false)
     }
+
+    override fun setNudgeReadinessData(data: NudgeCircadianGraph?) {
+        mPrefs.edit()?.putString(NUDGE_READINESS_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getNudgeReadinessData(): NudgeCircadianGraph? {
+        return mPrefs.getString(NUDGE_READINESS_DATA, null)
+            ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
+    }
+
+    override fun setNudgeActivityData(data: NudgeCircadianGraph?) {
+        mPrefs.edit()?.putString(NUDGE_ACTIVITY_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getNudgeActivityData(): NudgeCircadianGraph? {
+        return mPrefs.getString(NUDGE_ACTIVITY_DATA, null)
+            ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
+    }
+
+    override fun setNudgeCycleTrackerData(data: NudgeCircadianGraph?) {
+        mPrefs.edit()?.putString(NUDGE_CYCLE_TRACKER_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getNudgeCycleTrackerData(): NudgeCircadianGraph? {
+        return mPrefs.getString(NUDGE_CYCLE_TRACKER_DATA, null)
+            ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
+    }
+
 }

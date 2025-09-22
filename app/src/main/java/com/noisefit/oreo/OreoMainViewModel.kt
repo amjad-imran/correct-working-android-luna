@@ -1620,5 +1620,46 @@ constructor(
         }
     }
 
+    fun getNudgeData(type: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val reqObj = JsonObject().apply {
+                this.addProperty("type", type)
+            }
+            userRepository.getNudgeCircadianData(reqObj).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            when(type){
+                                "readiness" -> {
+                                    localDataStore.setNudgeReadinessData(it)
+                                }
+                                "activity" -> {
+                                    localDataStore.setNudgeActivityData(it)
+                                }
+                                "cycle_tracker" -> {
+                                    localDataStore.setNudgeCycleTrackerData(it)
+                                }
+                                else -> {}
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

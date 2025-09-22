@@ -104,6 +104,8 @@ data class CircadianMidPointData(
 )
 
 data class NudgeCircadianGraph(
-    val title: String?,
-    val description: String?,
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("description") val description: String? = null,
+    @SerializedName("cue_1") val cue1: String? = null,
+    @SerializedName("cue_2") val cue2: String? = null,
 )
