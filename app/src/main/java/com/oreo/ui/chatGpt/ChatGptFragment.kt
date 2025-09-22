@@ -468,8 +468,10 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             it?.let {
                 //mAdapter.items = it
                 mAdapter.setDataSet(it)
-                binding.rvChats.post {
-                    checkScrollState(binding.rvChats)
+                nullableBinding?.rvChats?.post {
+                    nullableBinding?.rvChats?.let {
+                        checkScrollState(it)
+                    }
                 }
             }
         }

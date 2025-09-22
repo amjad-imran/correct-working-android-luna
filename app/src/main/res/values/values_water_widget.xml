@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_text_primary">#FFFFFFFF</color>
+    <color name="cta_bg">#8032CFE0</color>
+    <color name="water_bg_base">#402BD3E6</color>
+    <color name="water_bg_fill">#AA2BD3E6</color>
+
+    <string name="water_widget_label">Water Intake</string>
+</resources>
+
