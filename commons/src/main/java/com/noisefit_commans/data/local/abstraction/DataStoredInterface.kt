@@ -594,12 +594,18 @@ interface DataStoredInterface {
 
     fun setNudgeReadinessData(data: NudgeCircadianGraph?)
     fun getNudgeReadinessData(): NudgeCircadianGraph?
+    fun setNudgeReadinessLastApiTimestamp(timestamp: Long)
+    fun getNudgeReadinessLastApiTimestamp() : Long
 
     fun setNudgeActivityData(data: NudgeCircadianGraph?)
     fun getNudgeActivityData(): NudgeCircadianGraph?
+    fun setNudgeActivityLastApiTimestamp(timestamp: Long)
+    fun getNudgeActivityLastApiTimestamp() : Long
 
     fun setNudgeCycleTrackerData(data: NudgeCircadianGraph?)
     fun getNudgeCycleTrackerData(): NudgeCircadianGraph?
+    fun setNudgeCycleTrackerLastApiTimestamp(timestamp: Long)
+    fun getNudgeCycleTrackerLastApiTimestamp() : Long
 
 }
 

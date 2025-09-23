@@ -277,8 +277,13 @@ private const val SLEEP_EXCEPTION_CANCEL_TIME = "SLEEP_EXCEPTION_CANCEL_TIME"
 private const val PORTABLE_CHARGER_ONBOARDING = "PORTABLE_CHARGER_ONBOARDING"
 
 private const val NUDGE_READINESS_DATA = "NUDGE_READINESS_DATA"
+private const val NUDGE_READINESS_API_TIMESTAMP = "NUDGE_READINESS_API_TIMESTAMP"
+
 private const val NUDGE_ACTIVITY_DATA = "NUDGE_ACTIVITY_DATA"
+private const val NUDGE_ACTIVITY_API_TIMESTAMP = "NUDGE_ACTIVITY_API_TIMESTAMP"
+
 private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
+private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_TIMESTAMP"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -888,8 +893,11 @@ class DataStoredImpl
         mPrefs.edit()?.remove(PORTABLE_CHARGER_ONBOARDING)?.apply()
 
         mPrefs.edit()?.remove(NUDGE_READINESS_DATA)?.apply()
+        mPrefs.edit()?.remove(NUDGE_READINESS_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(NUDGE_ACTIVITY_DATA)?.apply()
+        mPrefs.edit()?.remove(NUDGE_ACTIVITY_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
+        mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2442,6 +2450,14 @@ class DataStoredImpl
             ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
     }
 
+    override fun setNudgeReadinessLastApiTimestamp(timestamp: Long) {
+        mPrefs.edit()?.putLong(NUDGE_READINESS_API_TIMESTAMP, timestamp)?.apply()
+    }
+
+    override fun getNudgeReadinessLastApiTimestamp(): Long {
+        return mPrefs.getLong(NUDGE_READINESS_API_TIMESTAMP, 0)
+    }
+
     override fun setNudgeActivityData(data: NudgeCircadianGraph?) {
         mPrefs.edit()?.putString(NUDGE_ACTIVITY_DATA, gson.toJson(data))?.apply()
     }
@@ -2451,6 +2467,14 @@ class DataStoredImpl
             ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
     }
 
+    override fun setNudgeActivityLastApiTimestamp(timestamp: Long) {
+        mPrefs.edit()?.putLong(NUDGE_ACTIVITY_API_TIMESTAMP, timestamp)?.apply()
+    }
+
+    override fun getNudgeActivityLastApiTimestamp(): Long {
+        return mPrefs.getLong(NUDGE_ACTIVITY_API_TIMESTAMP, 0)
+    }
+
     override fun setNudgeCycleTrackerData(data: NudgeCircadianGraph?) {
         mPrefs.edit()?.putString(NUDGE_CYCLE_TRACKER_DATA, gson.toJson(data))?.apply()
     }
@@ -2458,6 +2482,14 @@ class DataStoredImpl
     override fun getNudgeCycleTrackerData(): NudgeCircadianGraph? {
         return mPrefs.getString(NUDGE_CYCLE_TRACKER_DATA, null)
             ?.let { Gson().fromJson<NudgeCircadianGraph>(it) }
+    }
+
+    override fun setNudgeCycleTrackerLastApiTimestamp(timestamp: Long) {
+        mPrefs.edit()?.putLong(NUDGE_CYCLE_TRACKER_API_TIMESTAMP, timestamp)?.apply()
+    }
+
+    override fun getNudgeCycleTrackerLastApiTimestamp(): Long {
+        return mPrefs.getLong(NUDGE_CYCLE_TRACKER_API_TIMESTAMP, 0)
     }
 
 }

@@ -1620,41 +1620,71 @@ constructor(
         }
     }
 
-    fun getNudgeData(type: String) {
+    fun getNudgeData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val reqObj = JsonObject().apply {
-                this.addProperty("type", type)
+
+            val readinessApiTimestamp = localDataStore.getNudgeReadinessLastApiTimestamp()
+            val activityApiTimestamp = localDataStore.getNudgeActivityLastApiTimestamp()
+
+            val nudgesList = ArrayList<String>()
+            val currentTime = System.currentTimeMillis()
+
+            if (readinessApiTimestamp == 0L || currentTime - readinessApiTimestamp >= 30 * 60 * 1000) {
+                nudgesList.add("readiness")
             }
-            userRepository.getNudgeCircadianData(reqObj).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
 
-                    }
+            if (activityApiTimestamp == 0L || currentTime - activityApiTimestamp >= 30 * 60 * 1000) {
+                nudgesList.add("activity")
+            }
 
-                    is Resource.Loading -> {
+            val user = localDataStore.getUser()
+            if (user?.userInfo?.gender.equals("female", true)) {
+                val cycleTrackerApiTimestamp = localDataStore.getNudgeCycleTrackerLastApiTimestamp()
+                if (cycleTrackerApiTimestamp == 0L ||
+                    currentTime - cycleTrackerApiTimestamp >= 30 * 60 * 1000
+                ) {
+                    nudgesList.add("cycle_tracker")
+                }
+            }
 
-                    }
+            nudgesList.forEach { type ->
+                val reqObj = JsonObject().apply {
+                    this.addProperty("type", type)
+                }
+                userRepository.getNudgeCircadianData(reqObj).collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
 
-                    is Resource.NetworkError -> {
+                        }
 
-                    }
+                        is Resource.Loading -> {
 
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
+                        }
 
-                            when(type){
-                                "readiness" -> {
-                                    localDataStore.setNudgeReadinessData(it)
+                        is Resource.NetworkError -> {
+
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+
+                                when (type) {
+                                    "readiness" -> {
+                                        localDataStore.setNudgeReadinessData(it)
+                                    }
+
+                                    "activity" -> {
+                                        localDataStore.setNudgeActivityData(it)
+                                    }
+
+                                    "cycle_tracker" -> {
+                                        localDataStore.setNudgeCycleTrackerData(it)
+                                    }
+
+                                    else -> {}
                                 }
-                                "activity" -> {
-                                    localDataStore.setNudgeActivityData(it)
-                                }
-                                "cycle_tracker" -> {
-                                    localDataStore.setNudgeCycleTrackerData(it)
-                                }
-                                else -> {}
+
                             }
-
                         }
                     }
                 }

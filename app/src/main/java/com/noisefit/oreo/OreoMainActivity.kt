@@ -1247,7 +1247,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.syncRecordedWorkoutData()
         }
 
-        handleNudges()
+        viewModel.getNudgeData()
 
 
         viewModel.checkForForceUpdate()
@@ -1263,21 +1263,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         //For in app popup
         MoEInAppHelper.getInstance().showInApp(this)
     }
-
-    private fun handleNudges(){
-        val nudgeTypeList = ArrayList<String>().apply {
-            add("readiness")
-            add("activity")
-            if(false){
-                add("cycle_tracker")
-            }
-        }
-
-        nudgeTypeList.forEach {
-            viewModel.getNudgeData(it)
-        }
-    }
-
 
     private fun handleIntent(intent: Intent?) {
         intent?.extras?.let { intentExtra ->
