@@ -2,6 +2,7 @@ package com.noisefit.di
 
 import android.content.Context
 import android.location.Geocoder
+import android.net.ConnectivityManager
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
@@ -507,6 +508,14 @@ object AppModule {
         resourcesProvider: ResourcesProvider,
     ): AlarmUtil {
         return AlarmUtil(context = appContext, resourcesProvider)
+    }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityManager(
+        @ApplicationContext appContext: Context
+    ): ConnectivityManager {
+        return appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
 

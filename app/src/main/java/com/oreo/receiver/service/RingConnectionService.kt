@@ -14,6 +14,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -199,6 +201,9 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var watchesSDK: WatchesSDK
+
+    @Inject
+    lateinit var connectivityManager: ConnectivityManager
 
     private var isStopServiceCalled = false
     // private var isDateSynced = false
@@ -1407,6 +1412,11 @@ constructor() : LifecycleService() {
                 return@launch
             }
 
+            if (!isInternetAvailable()) {
+                postWorkout("no_internet")
+                return@launch
+            }
+
             val reqObj = JsonObject()
             reqObj.add("workouts", workoutsArray)
 
@@ -1995,6 +2005,13 @@ constructor() : LifecycleService() {
                 }
             }
         }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val network = connectivityManager.activeNetwork
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
 }

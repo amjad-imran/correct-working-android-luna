@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutV2Binding
 import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
@@ -559,6 +560,11 @@ class RecordWorkoutFragmentV2 :
                 if (workoutId != null) {
                     if (viewModel.currentWorkoutState == 4) {
                         if (workoutId.equals("none")) {
+                            navigateUpSafe()
+                            return@observe
+                        }
+                        if(workoutId.equals("no_internet")){
+                            showToast(requireContext(), "Workout Recorded but it will be processed when the internet is available")
                             navigateUpSafe()
                             return@observe
                         }
