@@ -107,6 +107,30 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
                 titleColor = "#C5A8ED".toColorInt()
             )
         )
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_supplements),
+                type = AddActivityItemsEnum.SUPPLEMENTS,
+                titleColor = "#A8EDE6".toColorInt()
+            )
+        )
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_alcohol),
+                type = AddActivityItemsEnum.ALCOHOL,
+                titleColor = "#BE7A64".toColorInt()
+            )
+        )
+
+        list.add(
+            AddActivityListTimelineModel(
+                name = resourcesProvider.getString(R.string.text_recovery),
+                type = AddActivityItemsEnum.RECOVERY,
+                titleColor = "#95DCFF".toColorInt()
+            )
+        )
+
         return list
 
     }
@@ -140,4 +164,7 @@ enum class AddActivityItemsEnum {
     CYCLE_LOG,
     NAP,
     SLEEP,
+    SUPPLEMENTS,
+    ALCOHOL,
+    RECOVERY
 }
