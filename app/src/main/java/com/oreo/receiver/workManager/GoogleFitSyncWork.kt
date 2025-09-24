@@ -12,6 +12,7 @@ import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.GoogleFitDataSource
@@ -271,13 +272,15 @@ constructor(
 
                                 LOGS.d(TAG, "workout import data - ${Gson().toJson(workoutList)}")
 
+                                AppLogs.sendAppLogs("google workout import data - ${Gson().toJson(workoutList)}")
+
                                 syncDataScope.launch(Dispatchers.IO) {
                                     googleFitDataSource.saveWorkouts(workoutList)
                                     LOGS.d(TAG, "workout saved")
                                 }
                             },
                             failed = {
-                                LOGS.d("$TAG GET Sleep failed")
+                                LOGS.d("$TAG GET Workout failed")
                             }
                         )
                     }

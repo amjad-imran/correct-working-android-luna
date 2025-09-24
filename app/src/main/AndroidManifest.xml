@@ -470,7 +470,7 @@
             tools:replace="android:theme" />
 
         <receiver
-            android:name="com.noisefit.luna.widget.water.WaterIntakeWidgetReceiver"
+            android:name="com.oreo.widget.water.WaterIntakeWidgetReceiver"
             android:exported="true"
             android:label="@string/water_widget_label">
             <intent-filter>
