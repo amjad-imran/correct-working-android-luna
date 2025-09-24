@@ -74,6 +74,7 @@ import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
@@ -1091,6 +1092,32 @@ class SummaryDataFragmentToday :
 
 
     override fun subscribeObservers() {
+
+        mainViewModel.nudgeActivityData.observe(this){
+            it.getContent()?.let { nudge ->
+                viewModel.activityCardData?.let {
+                    val activityData = it.copy(
+                        nudges = listOf(nudge)
+                    )
+                    viewModel.updateActivityDataCard(activityData)?.let { card ->
+                        healthOverviewAdapter.updateData(card)
+                    }
+                }
+            }
+        }
+
+        mainViewModel.nudgeReadinessData.observe(this){
+            it.getContent()?.let { nudge ->
+                viewModel.readinessCardData?.let {
+                    val readinessData = it.copy(
+                        nudges = listOf(nudge)
+                    )
+                    viewModel.updateReadinessDataCard(readinessData)?.let { card ->
+                        healthOverviewAdapter.updateData(card)
+                    }
+                }
+            }
+        }
 
         viewModel.timeTrackerActivitiesUpdated.observe(this) {
             it.getContent()?.let {

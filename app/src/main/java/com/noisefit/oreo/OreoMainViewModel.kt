@@ -62,6 +62,7 @@ import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ImpactData
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
@@ -213,6 +214,11 @@ constructor(
 
     private val _dayActivityData = MutableLiveData<OreoActivityModel>()
     val dayActivityData: LiveData<OreoActivityModel> = _dayActivityData
+
+
+    val nudgeActivityData = MutableLiveData<Event<Nudges>>()
+    val nudgeReadinessData = MutableLiveData<Event<Nudges>>()
+    val nudgeCycleTrackerData = MutableLiveData<Event<Nudges>>()
 
 
     init {
@@ -1627,22 +1633,25 @@ constructor(
             val activityApiTimestamp = localDataStore.getNudgeActivityLastApiTimestamp()
 
             val nudgesList = ArrayList<String>()
-            val currentTime = System.currentTimeMillis()
+            var currentTime = System.currentTimeMillis()
 
-            if (readinessApiTimestamp == 0L || currentTime - readinessApiTimestamp >= 30 * 60 * 1000) {
+            if (localDataStore.getNudgeReadinessData()==null || readinessApiTimestamp == 0L || currentTime - readinessApiTimestamp >= 30 * 60 * 1000) {
+                localDataStore.setNudgeReadinessData(null)
                 nudgesList.add("readiness")
             }
 
-            if (activityApiTimestamp == 0L || currentTime - activityApiTimestamp >= 30 * 60 * 1000) {
+            if (localDataStore.getNudgeActivityData()==null || activityApiTimestamp == 0L || currentTime - activityApiTimestamp >= 30 * 60 * 1000) {
+                localDataStore.setNudgeReadinessData(null)
                 nudgesList.add("activity")
             }
 
             val user = localDataStore.getUser()
             if (user?.userInfo?.gender.equals("female", true)) {
                 val cycleTrackerApiTimestamp = localDataStore.getNudgeCycleTrackerLastApiTimestamp()
-                if (cycleTrackerApiTimestamp == 0L ||
+                if (localDataStore.getNudgeCycleTrackerData()==null || cycleTrackerApiTimestamp == 0L ||
                     currentTime - cycleTrackerApiTimestamp >= 30 * 60 * 1000
                 ) {
+                    localDataStore.setNudgeReadinessData(null)
                     nudgesList.add("cycle_tracker")
                 }
             }
@@ -1667,18 +1676,33 @@ constructor(
 
                         is Resource.Success -> {
                             resource.data?.data?.let {
-
+                                currentTime = System.currentTimeMillis()
                                 when (type) {
                                     "readiness" -> {
+                                        nudgeReadinessData.postValue(Event(
+                                            Nudges(it.title ?: "",
+                                                it.description ?: ""
+                                        )))
                                         localDataStore.setNudgeReadinessData(it)
+                                        localDataStore.setNudgeReadinessLastApiTimestamp(currentTime)
                                     }
 
                                     "activity" -> {
+                                        nudgeActivityData.postValue(Event(
+                                            Nudges(it.title ?: "",
+                                                it.description ?: ""
+                                            )))
                                         localDataStore.setNudgeActivityData(it)
+                                        localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                     }
 
                                     "cycle_tracker" -> {
+                                        nudgeCycleTrackerData.postValue(Event(
+                                            Nudges(it.title ?: "",
+                                                it.description ?: ""
+                                            )))
                                         localDataStore.setNudgeCycleTrackerData(it)
+                                        localDataStore.setNudgeCycleTrackerLastApiTimestamp(currentTime)
                                     }
 
                                     else -> {}

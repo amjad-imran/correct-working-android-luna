@@ -690,6 +690,21 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.Activity) {
+            val index = items.indexOfFirst { it is OHealthOverview.Activity }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.Readiness) {
+            val index = items.indexOfFirst { it is OHealthOverview.Readiness }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.ReadinessMinimal) {
+            val index = items.indexOfFirst { it is OHealthOverview.ReadinessMinimal }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -3444,7 +3459,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvTodayDesc.gone()
+                binding.tvShimmer.visible()
             } else {
+                binding.tvShimmer.gone()
                 binding.tvTodayDesc.visible()
                 binding.tvTodayDesc.text = data.data.nudges.firstOrNull()?.message ?: ""
             }

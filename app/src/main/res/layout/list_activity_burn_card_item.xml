@@ -77,24 +77,46 @@
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toBottomOf="@+id/tvValue" />
 
-    <TextView
-        android:id="@+id/tvTodayDesc"
-        style="@style/Small"
+    <FrameLayout
+        android:id="@+id/lytDesc"
         android:layout_width="0dp"
-        android:fontFamily="@font/gilroy_medium"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_24dp"
         android:layout_marginTop="@dimen/_24sdp"
         android:layout_marginEnd="@dimen/_24sdp"
-        android:gravity="center_horizontal"
-        android:lineSpacingExtra="8sp"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/tvStatus">
 
+        <com.app.shimmertextview.ShimmerTextView
+            android:id="@+id/tvShimmer"
+            style="@style/S16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:text_shimmer_base_color="#7095AF"
+            app:text_shimmer_colored="true"
+            app:text_shimmer_duration="3000"
+            app:text_shimmer_highlight_color="#C2D9E6"
+            app:text_shimmer_repeat_mode="restart"
+            tools:text="Getting More Insights" />
+
+        <TextView
+            android:id="@+id/tvTodayDesc"
+            style="@style/Small"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/gilroy_medium"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="8sp"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
     <include
         android:id="@+id/line"
@@ -104,7 +126,7 @@
         android:layout_marginTop="@dimen/dimen_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTodayDesc" />
+        app:layout_constraintTop_toBottomOf="@+id/lytDesc" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/pbSteps"

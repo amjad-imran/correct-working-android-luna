@@ -86,6 +86,7 @@ import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
+import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -257,6 +258,10 @@ class SummaryDataViewModelToday @Inject constructor(
     var summaryAvailable: Boolean? = false
 
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
+
+
+    var activityCardData: ODashboardActivityModel ?= null
+    var readinessCardData: ODashboardReadinessModel ?= null
     //
 
     fun getStressWalkthroughShownStatus(): Boolean {
@@ -2725,7 +2730,9 @@ class SummaryDataViewModelToday @Inject constructor(
             readinessScore = readiness?.readinessScore?.value,
             status = readiness?.readinessScore?.text?.capitalizeWords(),
             statusCode = readiness?.readinessScore?.status,
-            nudges = readiness?.dashNudges,
+            nudges = localDataStore.getNudgeReadinessData()?.let {
+                listOf(Nudges(it.title?:"", it.description?:""))
+            },
             totalScoreImpact = readiness?.totalScoreImpact ?: 0,
             noOfNaps = sleep?.naps?.size ?: 0,
             noOfSleeps = sleep?.sleeps?.size ?: 0,
@@ -2733,6 +2740,21 @@ class SummaryDataViewModelToday @Inject constructor(
             alertCount = alertCount
         )
 
+        readinessCardData = readinessModel
+
+        return when (daySlot) {
+            0, 1 -> OHealthOverview.Readiness(readinessModel)
+            2 -> OHealthOverview.ReadinessMinimal(readinessModel)
+            else -> null
+        }
+    }
+
+    fun updateReadinessDataCard(
+        readinessModel: ODashboardReadinessModel?
+    ): OHealthOverview? {
+        if(readinessModel==null) return null
+
+        val daySlot = getDaySlot()
         return when (daySlot) {
             0, 1 -> OHealthOverview.Readiness(readinessModel)
             2 -> OHealthOverview.ReadinessMinimal(readinessModel)
@@ -2749,16 +2771,22 @@ class SummaryDataViewModelToday @Inject constructor(
             return null
         }
 
+        var nudge = localDataStore.getNudgeActivityData()?.description?.let {
+            listOf(Nudges("", it))
+        }
+
         val activityModal = ODashboardActivityModel(
             activityScore = healthData.activity?.activityScore?.value,
             activeCalories = healthData.activity?.activeCalories ?: 0,
             inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
             status = healthData.activity?.activityScore?.level?.capitalizeWords(),
             statusCode = healthData.activity?.activityScore?.status,
-            nudges = healthData.activity?.dash_nudges,
+            nudges = nudge,
             steps = healthData.activity?.steps ?: 0,
             impact = impactData?.activityScore
         )
+
+        activityCardData = activityModal
 
         val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
         val activeCalories = healthData.activity?.activeCalories ?: 0
@@ -2772,6 +2800,24 @@ class SummaryDataViewModelToday @Inject constructor(
             )
         } else null
 
+    }
+
+    fun updateActivityDataCard(
+        activityModal: ODashboardActivityModel?
+    ): OHealthOverview? {
+        if(activityModal==null) return null
+
+        val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+        val activeCalories = activityModal.activeCalories ?: 0
+        return if (activeCalories in 1..49) {
+            OHealthOverview.ActivityMinimal(
+                activityModal, caloriesGoal
+            )
+        } else if (activeCalories >= 50) {
+            OHealthOverview.Activity(
+                activityModal, caloriesGoal
+            )
+        } else null
     }
 
     private fun getSleepDataCard(
