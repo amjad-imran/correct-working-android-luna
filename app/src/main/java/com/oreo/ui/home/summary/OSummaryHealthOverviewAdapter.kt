@@ -2720,7 +2720,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
+                binding.tvShimmer.visible()
             } else {
+                binding.tvShimmer.gone()
                 val nudge = data.data.nudges.firstOrNull()
                 binding.tvDayStatus.text = nudge?.label ?: ""
                 binding.tvNudge.text = nudge?.message ?: ""
@@ -2853,7 +2855,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0
                 }
+                binding.tvShimmer.visible()
             } else {
+                binding.tvShimmer.gone()
                 binding.tvTitle.visible()
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = binding.tvTodayDesc.context.dpToPx(8)

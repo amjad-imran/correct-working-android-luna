@@ -123,6 +123,26 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDayStatus"
         tools:text="Your sleep index was excellent yesterday and your readiness score is in great shape. You might want to push a little more today." />
 
+    <com.app.shimmertextview.ShimmerTextView
+        android:id="@+id/tvShimmer"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNudge"
+        app:layout_constraintTop_toTopOf="@+id/tvNudge"
+        app:layout_constraintStart_toStartOf="@+id/tvNudge"
+        app:layout_constraintEnd_toEndOf="@+id/tvNudge"
+        app:text_shimmer_base_color="#7095AF"
+        app:text_shimmer_colored="true"
+        app:text_shimmer_duration="3000"
+        app:text_shimmer_highlight_color="#C2D9E6"
+        app:text_shimmer_repeat_mode="restart"
+        tools:text="Getting More Insights..."
+        tools:visibility="visible" />
+
     <include
         android:id="@+id/lytNapLabel"
         layout="@layout/layout_nap_dash_label"
