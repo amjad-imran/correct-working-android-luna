@@ -1,5 +1,7 @@
 package com.noisefit_commans.ui
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -884,5 +886,33 @@ inline fun View.doOnNextLayoutOnce(crossinline block: () -> Unit) {
         block()
         viewTreeObserver?.removeOnGlobalLayoutListener(null) // one-shot
     }
+}
+
+fun View.fadeIn(duration: Long = 2000, onEnd: () -> Unit = {}) {
+    val fadeIn = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
+    fadeIn.duration = duration
+    fadeIn.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator) {}
+        override fun onAnimationEnd(animation: Animator) {
+            onEnd() // This will be executed when the fade-in finishes
+        }
+        override fun onAnimationCancel(animation: Animator) {}
+        override fun onAnimationRepeat(animation: Animator) {}
+    })
+    fadeIn.start()
+}
+
+fun View.fadeOut(duration: Long = 2000, onEnd: () -> Unit = {}) {
+    val fadeOut = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f)
+    fadeOut.duration = duration
+    fadeOut.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator) {}
+        override fun onAnimationEnd(animation: Animator) {
+            onEnd() // This will be executed when the fade-in finishes
+        }
+        override fun onAnimationCancel(animation: Animator) {}
+        override fun onAnimationRepeat(animation: Animator) {}
+    })
+    fadeOut.start()
 }
 

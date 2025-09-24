@@ -1641,7 +1641,7 @@ constructor(
             }
 
             if (localDataStore.getNudgeActivityData()==null || activityApiTimestamp == 0L || currentTime - activityApiTimestamp >= 30 * 60 * 1000) {
-                localDataStore.setNudgeReadinessData(null)
+                localDataStore.setNudgeActivityData(null)
                 nudgesList.add("activity")
             }
 
@@ -1651,7 +1651,7 @@ constructor(
                 if (localDataStore.getNudgeCycleTrackerData()==null || cycleTrackerApiTimestamp == 0L ||
                     currentTime - cycleTrackerApiTimestamp >= 30 * 60 * 1000
                 ) {
-                    localDataStore.setNudgeReadinessData(null)
+                    localDataStore.setNudgeCycleTrackerData(null)
                     nudgesList.add("cycle_tracker")
                 }
             }

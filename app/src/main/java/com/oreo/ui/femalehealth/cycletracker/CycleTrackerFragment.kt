@@ -673,7 +673,7 @@ class CycleTrackerFragment :
             }
         }
 
-        mainViewModel.nudgeActivityData.observe(this){
+        mainViewModel.nudgeCycleTrackerData.observe(this){
             it.getContent()?.let {
                 viewModel.femaleHealthData.value?.let { femaleData ->
                     handleNudges(femaleData)

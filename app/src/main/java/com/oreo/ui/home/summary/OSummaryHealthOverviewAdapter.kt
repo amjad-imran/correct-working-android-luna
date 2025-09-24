@@ -105,6 +105,8 @@ import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
+import com.noisefit_commans.ui.fadeIn
+import com.noisefit_commans.ui.fadeOut
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
@@ -3666,8 +3668,31 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvOvlInDays.text = data.data.subTitle
             binding.tvCurrentDay.text = "Day ${data.data.days}"
             binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
-            binding.tvDesc.text = data.data.nudge
-            binding.tvShimmer.setVisibilityByCondition(data.data.nudge.isEmpty())
+//            binding.tvDesc.text = data.data.nudge
+            if(data.data.nudge.isEmpty()){
+                binding.tvDesc.invisible()
+                binding.tvShimmer.visible()
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeIn {  }
+                }
+            }else{
+                binding.tvDesc.invisible()
+                binding.tvShimmer.visible()
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeOut {
+                        binding.tvShimmer.gone()
+                        binding.tvDesc.apply {
+                            visible()
+                            text = data.data.nudge
+                            fadeIn { }
+                        }
+                    }
+                }
+            }
+
+            /*LOGS.d("salmkavasvmk : ${data.data.nudge}")*/
             binding.tvValue.text = if (data.data.temperatureVariation == null) {
                 "-"
             } else {
