@@ -17,6 +17,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.upTo1Decimal
 import com.noisefit_commans.data.BinaryActionCallback
@@ -121,6 +122,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.oreo.util.DateTimeUtil
+import com.oreo.widget.water.WaterWidgetUpdater
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -1219,10 +1221,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     userActivities.add(it)
                 }
             }
-            val hasTimelineKey = priorityList.find { it.key.equals("timeline", true) }
-            if (hasTimelineKey == null) {
-                getTimelineCard()?.let { userActivities.add(it) }
-            }
 
 
             priorityList.forEach { item ->
@@ -1239,6 +1237,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         }
                         isTapVitalAdded = true
                     }
+
                     "timeline" -> {
                         getTimelineCard()?.let { userActivities.add(it) }
                     }
@@ -1352,7 +1351,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         getCircadianAlignmentCardData()?.let {
                             userActivities.add(it)
                         }
-                        val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
+                        val hasOneTapVitalsKey =
+                            priorityList.find { it.key.equals("one_tap_vitals", true) }
                         if (hasOneTapVitalsKey == null && isTapVitalAdded.not()) {
                             if (generation == 2) {
                                 getOneTapVitalsCard(healthData, measurements)?.let {
@@ -1366,6 +1366,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                 }
+            }
+
+            val hasTimelineKey = priorityList.find { it.key.equals("timeline", true) }
+            if (hasTimelineKey == null) {
+                getTimelineCard()?.let { userActivities.add(it) }
             }
 
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
@@ -1483,7 +1488,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                             else -> "${diff / (60 * 60_000)} hr ago"
                                         }
-                                    } catch (e: Exception) { null }
+                                    } catch (e: Exception) {
+                                        null
+                                    }
                                     roomTs = ts
                                     roomPair = Pair(v.toString(), ago ?: "")
                                     break
@@ -1491,7 +1498,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                     }
-                } catch (_: Exception) { }
+                } catch (_: Exception) {
+                }
 
                 val manual = ringDataStore.getManualMeasurementValueBloodOxygen()
                 var manualPair: Pair<String, String>? = null
@@ -1505,7 +1513,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
-                        } catch (e: Exception) { null }
+                        } catch (e: Exception) {
+                            null
+                        }
                         manualTs = m.timeStamp
                         manualPair = Pair(m.value.toString(), ago ?: "")
                     }
@@ -1546,7 +1556,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                             diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                             else -> "${diff / (60 * 60_000)} hr ago"
                                         }
-                                    } catch (e: Exception) { null }
+                                    } catch (e: Exception) {
+                                        null
+                                    }
                                     val valueF = v
                                     val converted = if (sessionManager.isMetric()) {
                                         AppConversionUtils.fahrenheitToCelsius(valueF)
@@ -1560,7 +1572,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                     }
-                } catch (_: Exception) { }
+                } catch (_: Exception) {
+                }
 
                 val manual = ringDataStore.getManualMeasurementValueBodyTemp()
                 var manualPair: Pair<String, String>? = null
@@ -1580,7 +1593,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 diff < 60 * 60_000 -> "${diff / 60_000} min ago"
                                 else -> "${diff / (60 * 60_000)} hr ago"
                             }
-                        } catch (e: Exception) { null }
+                        } catch (e: Exception) {
+                            null
+                        }
                         manualTs = m.timeStamp
                         manualPair = Pair(String.format("%.1f", converted), ago ?: "")
                     }
@@ -1676,10 +1691,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     data.value?.let {
                         try {
                             val isMetric = sessionManager.isMetric()
-                            if(isMetric){
+                            if (isMetric) {
                                 val value = formatMlToLitersOrMl(it.toIntOrNull() ?: 0)
                                 data.desc = value
-                            }else{
+                            } else {
                                 val value = convertMlToOz(it.toIntOrNull() ?: 0)
                                 data.desc = value
                             }
@@ -2564,6 +2579,11 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 hydratePercent = (convertedHydrate.toFloat() / convertedHydrateGoal.toFloat()) * 100
             }
+
+            viewModelScope.launch {
+                WaterWidgetUpdater.updateAll(NoisefitApplication.context!!, hydrate, hydrateGoal)
+            }
+
 
             val data = com.oreo.data.model.NotificationGoals(
                 hydration = hydrate,
@@ -3724,7 +3744,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.hrValue = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
+                                this.hrValue =
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.hrLastTime = resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
                             })
@@ -3754,7 +3775,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
-                                this.spo2Value = if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
+                                this.spo2Value =
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
                                 this.spo2LastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false
@@ -3785,15 +3807,16 @@ class SummaryDataViewModelToday @Inject constructor(
                                 val temp = (manualMeasurement.value.toFloat()) / 100
 
 
-                                val converted = if(sessionManager.isMetric()){
+                                val converted = if (sessionManager.isMetric()) {
                                     temp
-                                }else{
+                                } else {
                                     AppConversionUtils.celsiusToFahrenheit(
                                         temp
                                     ).upTo1Decimal()
                                 }
 
-                                this.skinTempValue = if (converted != 0f) String.format("%.1f", converted) else null
+                                this.skinTempValue =
+                                    if (converted != 0f) String.format("%.1f", converted) else null
                                 this.skinTempLastTime =
                                     resourceProvider.getString(R.string.text_just_now)
                                 this.measuring = false

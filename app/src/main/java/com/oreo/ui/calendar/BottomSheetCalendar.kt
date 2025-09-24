@@ -27,6 +27,7 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -162,7 +163,9 @@ class BottomSheetCalendar :
                 if (day.position == DayPosition.MonthDate) {
                     dayLayoutMain.visible()
 
-                    when (day.date) {
+                    container.binding.dayBack.setVisibilityByCondition(day.date.toString() == selectedDate)
+
+                    /*when (day.date) {
                         todayDate -> {
                             container.binding.dayBack.visible()
                         }
@@ -170,7 +173,7 @@ class BottomSheetCalendar :
                         else -> {
                             container.binding.dayBack.invisible()
                         }
-                    }
+                    }*/
 
                     if (isSunday(day.date)) {
                         container.binding.tvDay.setTextColor(Color.parseColor("#CCff2c52"))

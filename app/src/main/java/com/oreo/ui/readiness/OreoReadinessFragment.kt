@@ -891,10 +891,18 @@ class OreoReadinessFragment :
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
+            if (mViewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             mViewModel.getComfortDietFoodData(true)
         }
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
+            if (mViewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             mViewModel.getComfortDietFoodData(false)
         }
 

@@ -1,4 +1,4 @@
-package com.noisefit.luna.widget.water
+package com.oreo.widget.water
 
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager

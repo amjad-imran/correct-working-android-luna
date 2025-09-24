@@ -104,31 +104,34 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.oreoStatus.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
+            navigate(R.id.oreo_my_device)
+            /*if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
                 navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
-            }
+            }*/
         }
 
         binding.lytHeader.lottieAnimView.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
+            navigate(R.id.oreo_my_device)
+            /*if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
                 navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
-            }
+            }*/
         }
 
 
 
         binding.lytHeader.batteryStatus.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
-            if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
+            navigate(R.id.oreo_my_device)
+            /*if(viewModel.watchDataStore.getRingCaseData()==null || viewModel.localDataStore.getPortableChargerOnboarding()) {
                 navigate(R.id.oreo_my_device)
             }else{
                 navigate(R.id.surgeCaseOnboardingFragment, bundleOf("srcKey" to "dashboard"))
-            }
+            }*/
         }
 
 

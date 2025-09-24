@@ -32,12 +32,12 @@ class OAboutDeviceFragment :
     }
 
     private fun setTabLayoutAndVp() {
-        if(!viewModel.localDataStore.getPortableChargerOnboarding() && viewModel.isCaseConnected){
+        /*if(!viewModel.localDataStore.getPortableChargerOnboarding() && viewModel.isCaseConnected){
             navigate(
                 R.id.surgeCaseOnboardingFragment,
                 bundleOf("srcKey" to "o_about_device")
             )
-        }
+        }*/
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 

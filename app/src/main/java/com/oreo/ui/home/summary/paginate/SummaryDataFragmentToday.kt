@@ -93,6 +93,7 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.widget.water.WaterWidgetUpdater
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -1186,7 +1187,8 @@ class SummaryDataFragmentToday :
 
         viewModel.notificationGoalsCardDataUpdated.observe(this) {
             it.getContent()?.let {
-                healthOverviewAdapter.updateData(viewModel.getDailyGoalsCard())
+                val data = viewModel.getDailyGoalsCard()
+                healthOverviewAdapter.updateData(data)
             }
         }
 

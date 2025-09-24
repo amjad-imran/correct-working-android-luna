@@ -99,7 +99,9 @@ class AddActivityTimelineFragment :
                         AddSleepFragment()
                     }
 
-                    else -> {AddSleepFragment()}
+                    AddActivityItemsEnum.SUPPLEMENTS -> {null}
+                    AddActivityItemsEnum.ALCOHOL -> {null}
+                    AddActivityItemsEnum.RECOVERY -> {null}
                 }
                 fragment?.let {
                     childFragmentManager.beginTransaction()
