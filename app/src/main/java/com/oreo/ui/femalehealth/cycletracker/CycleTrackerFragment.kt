@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -25,6 +26,7 @@ import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -54,12 +56,14 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.getValue
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class CycleTrackerFragment :
     BaseFragment<FragmentCycleTrackerBinding>(FragmentCycleTrackerBinding::inflate) {
     private val viewModel: CycleTrackerViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val cycleHistoryAdapter by lazy {
         FMHCycleHistoryAdapter(object : OnHistoryItemClickListener {
@@ -651,7 +655,8 @@ class CycleTrackerFragment :
 
 
                 setTopData(it)
-                setNudgesViewPager(it.nudges, it)
+                handleNudges(it)
+//                setNudgesViewPager(it.nudges, it)
 
                 if (viewModel.cycleHistoryData.value?.cycleHistory.isNullOrEmpty()) {
                     binding.lytCycleHistory.root.gone()
@@ -665,6 +670,14 @@ class CycleTrackerFragment :
             }
             viewModel.notificationToggleModel.value?.let {
                 viewModel.notificationToggleModel.postValue(it)
+            }
+        }
+
+        mainViewModel.nudgeActivityData.observe(this){
+            it.getContent()?.let {
+                viewModel.femaleHealthData.value?.let { femaleData ->
+                    handleNudges(femaleData)
+                }
             }
         }
 
@@ -871,6 +884,16 @@ class CycleTrackerFragment :
     private fun showPastCycleUI(currentDay: Int) {
         binding.lytTrackerTop.tvCurrentState.text = getString(R.string.text_past_cycle)
         binding.lytTrackerTop.tvStateDay.text = getString(R.string.text_day_value, currentDay)
+    }
+
+    private fun handleNudges(
+        femaleHealthUserInfoModel: FemaleHealthUserInfoModel
+    ){
+        val data = viewModel.localDataStore.getNudgeCycleTrackerData()
+        val list = ArrayList<Nudges>()
+        data?.cue1?.let { list.add(Nudges("", it)) }
+        data?.cue2?.let { list.add(Nudges("", it)) }
+        setNudgesViewPager(list, femaleHealthUserInfoModel)
     }
 
     private fun setNudgesViewPager(
