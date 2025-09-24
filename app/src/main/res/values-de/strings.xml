@@ -2200,7 +2200,7 @@
     <string name="text_this_may_take_up_to_30_seconds">Dies kann bis zu 30 Sekunden dauern</string>
     <string name="text_skin_temp">Hauttemperatur</string>
     <string name="text_measuring_spo2">SpO2 wird gemessen...</string>
-    <string name="text_unable_to_track">Tracking momentan nicht möglich, bitte erneut versuchen.</string>
+    <string name="text_unable_to_track">Es ist im Moment nicht möglich zu verfolgen, bitte versuchen Sie es erneut.</string>
     <string name="text_something_went_wrong_single">Etwas ist schiefgelaufen</string>
     <string name="text_mob_no">Handynr.</string>
     <string name="text_we_found_anomaly_in_your_ring">Ring-Softwareanomalie erkannt</string>

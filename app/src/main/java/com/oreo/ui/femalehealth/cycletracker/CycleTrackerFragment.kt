@@ -368,10 +368,18 @@ class CycleTrackerFragment :
         }
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             viewModel.getComfortDietWorkoutData(true)
         }
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.root.setOnClickListener {
+            if (viewModel.ringDataStore.getRingDevice() == null) {
+                context.showShortToast(getString(R.string.text_luna_ai_message))
+                return@setOnClickListener
+            }
             viewModel.getComfortDietWorkoutData(false)
         }
     }

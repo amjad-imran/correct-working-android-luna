@@ -68,7 +68,8 @@ class AiMealPlanFragment :
 
         if(
             viewModel.localDataStore.getBoosterWomenData() &&
-            viewModel.femaleBoosterMeals.value.isNullOrEmpty()
+            viewModel.femaleBoosterMeals.value.isNullOrEmpty() &&
+            viewModel.ringDataStore.getRingDevice() != null
         ){
             viewModel.getBoosterMealPlans()
         }
@@ -219,11 +220,8 @@ class AiMealPlanFragment :
         }
 
         viewModel.dayMealList.observe(this) {
+
             if(viewModel.femaleBoosterMeals.value.isNullOrEmpty()){
-                binding.lytBoosterFoods.root.gone()
-            }
-            else if(viewModel.ringDataStore.getRingDevice() == null){
-                context.showShortToast(getString(R.string.text_luna_ai_message))
                 binding.lytBoosterFoods.root.gone()
             }
             else{
@@ -309,6 +307,11 @@ class AiMealPlanFragment :
     }
 
     private fun handleBoosterFoods(aiMeals: ArrayList<AiMeal>) {
+        if(viewModel.ringDataStore.getRingDevice() == null){
+            binding.lytBoosterFoods.root.gone()
+            return
+        }
+
         if(
             currentDay != viewModel.selectedPosition.value ||
             !viewModel.localDataStore.getBoosterWomenData() ||

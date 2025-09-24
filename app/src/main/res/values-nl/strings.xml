@@ -2200,7 +2200,7 @@
     <string name="text_this_may_take_up_to_30_seconds">Dit kan tot 30 seconden duren</string>
     <string name="text_skin_temp">Huidtemp.</string>
     <string name="text_measuring_spo2">SpO2 wordt gemeten...</string>
-    <string name="text_unable_to_track">Kan nu niet worden gevolgd, probeer het opnieuw.</string>
+    <string name="text_unable_to_track">Kan op dit moment niet volgen, probeer het opnieuw.</string>
     <string name="text_something_went_wrong_single">Er is iets misgegaan</string>
     <string name="text_mob_no">Mob. nr.</string>
     <string name="text_we_found_anomaly_in_your_ring">Software-anomalie in ring gedetecteerd</string>

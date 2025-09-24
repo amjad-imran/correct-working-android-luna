@@ -71,7 +71,7 @@ class CustomHomescreenViewModel @Inject constructor(
 
 
                 }
-                val newList = addOtherCards(tempList)
+                val newList = addOtherCards2(tempList)
                 _items.postValue(newList)
             } else {
                 val initialItems = itemsMap.values.toList().sortedBy { it.priority }
@@ -127,6 +127,51 @@ class CustomHomescreenViewModel @Inject constructor(
                 cardsToAdd[index].switchState = true
             }
         }
+        return cardsToAdd
+    }
+
+    fun addOtherCards2(card: List<CustomHomeScreenItem>): List<CustomHomeScreenItem> {
+        val itemsMap = getItemsMap()
+        val existingIds = card.map { it.key }.toSet()
+
+        val remainingCards = itemsMap.values.filter { it.key !in existingIds }
+
+        val cardsToAdd = ArrayList<CustomHomeScreenItem>()
+        cardsToAdd.addAll(card)
+
+        remainingCards.forEach { it.apply { switchState = true } }
+
+        //handle new cards
+        val caffeineCard = card.find { it.key.equals("caffeine_intake", true) }
+        if (caffeineCard == null) {
+            itemsMap["caffeine_intake"]?.let { cardsToAdd.add(0, it) }
+        }
+
+        val circadianCard = card.find { it.key.equals("circadian_alignment", true) }
+        if (circadianCard == null) {
+            itemsMap["circadian_alignment"]?.let { cardsToAdd.add(0, it) }
+        }
+
+        if (getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
+            val oneTapCard = card.find { it.key.equals("one_tap_vitals", true) }
+            if (oneTapCard == null) {
+                val circadianIdx = cardsToAdd.indexOfFirst { it.key.equals("circadian_alignment") }
+                if(circadianIdx != -1){
+                    itemsMap["one_tap_vitals"]?.let { cardsToAdd.add(circadianIdx+1, it) }
+                }
+            }
+        }
+
+        // Add timeline card if not already present → always at the END
+        val timelineCard = card.find { it.key.equals("timeline", true) }
+        if (timelineCard == null) {
+            itemsMap["timeline"]?.let { cardsToAdd.add(it) }
+        }
+
+        cardsToAdd.forEachIndexed { index, item ->
+            item.priority = index + 1
+        }
+
         return cardsToAdd
     }
 
@@ -241,6 +286,14 @@ class CustomHomescreenViewModel @Inject constructor(
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
 
+            this["circadian_alignment"] = CustomHomeScreenItem(
+                R.drawable.icon_circadian_alignment,
+                "circadian_alignment",
+                resourceProvider.getString(R.string.text_circadian_alignment),
+                true,
+                this.size + 1
+            )
+
             if (getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw) == 2) {
                 this["one_tap_vitals"] = CustomHomeScreenItem(
                     R.drawable.icon_on_tap,
@@ -250,24 +303,6 @@ class CustomHomescreenViewModel @Inject constructor(
                     this.size + 1
                 )
             }
-
-
-            this["timeline"] = CustomHomeScreenItem(
-                R.drawable.icon_time_line,
-                "timeline",
-                resourceProvider.getString(R.string.text_timeline),
-                true,
-                this.size + 1
-            )
-
-            this["circadian_alignment"] = CustomHomeScreenItem(
-                R.drawable.icon_circadian_alignment,
-                "circadian_alignment",
-                resourceProvider.getString(R.string.text_circadian_alignment),
-                true,
-                this.size + 1
-            )
-
 
             this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
@@ -368,6 +403,14 @@ class CustomHomescreenViewModel @Inject constructor(
                 true,
                 this.size+1
             )*/
+
+            this["timeline"] = CustomHomeScreenItem(
+                R.drawable.icon_time_line,
+                "timeline",
+                resourceProvider.getString(R.string.text_timeline),
+                true,
+                this.size + 1
+            )
 
         }
 

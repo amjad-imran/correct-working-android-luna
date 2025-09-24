@@ -343,12 +343,12 @@ class OreoMyDeviceFragment :
 
         mViewModel.sessionManager.isCaseCurrentlyConnected.observe(this) {
             it?.getContent()?.let { res ->
-                if (res && !mViewModel.localDataStore.getPortableChargerOnboarding()) {
+                /*if (res && !mViewModel.localDataStore.getPortableChargerOnboarding()) {
                     navigate(
                         R.id.surgeCaseOnboardingFragment,
                         bundleOf("srcKey" to "oreo_my_device")
                     )
-                }
+                }*/
                 setStateConnected(mViewModel.ringDataStore.getRingDevice())
             }
         }
