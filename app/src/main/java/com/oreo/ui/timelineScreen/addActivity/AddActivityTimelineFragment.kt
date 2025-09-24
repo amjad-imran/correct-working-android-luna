@@ -98,6 +98,8 @@ class AddActivityTimelineFragment :
                     AddActivityItemsEnum.SLEEP -> {
                         AddSleepFragment()
                     }
+
+                    else -> {AddSleepFragment()}
                 }
                 fragment?.let {
                     childFragmentManager.beginTransaction()
