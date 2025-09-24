@@ -1,6 +1,7 @@
 package com.oreo.widget.water
 
 import android.content.Context
+import com.google.gson.JsonObject
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.layout.*
@@ -32,6 +34,14 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.noisefit.luna.R
+import com.noisefit.data.remote.base.Resource
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.collect
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 class WaterIntakeWidget : GlanceAppWidget() {
@@ -197,24 +207,53 @@ class AdjustWaterCallback : ActionCallback {
     ) {
         val incrementKey = parameters[IncrementKey] ?: return
 
+        var current = 0
+        var goal = WaterIntakeWidget.DEFAULT_GOAL_ML
+        val prefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId)
+        current = prefs[PrefKeys.CurrentMl] ?: 0
+        goal = (prefs[PrefKeys.GoalMl] ?: WaterIntakeWidget.DEFAULT_GOAL_ML)
+
+        if (!incrementKey && current == 0) {
+            return
+        }
+
+        val updated = (current + if (incrementKey) WaterIntakeWidget.STEP_ML else -WaterIntakeWidget.STEP_ML)
+
         updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
-            val current = prefs[PrefKeys.CurrentMl] ?: 0
-            val goal = (prefs[PrefKeys.GoalMl] ?: WaterIntakeWidget.DEFAULT_GOAL_ML)
-
-            // TODO: Replace with your API call and assign the returned values.
-            // Example: val result = repository.updateWater(delta)
-            val newCurrent = (current + if(incrementKey) 250 else -250).coerceIn(0, goal)
-
             prefs.toMutablePreferences().apply {
-                this[PrefKeys.CurrentMl] = newCurrent
+                this[PrefKeys.CurrentMl] = updated
                 this[PrefKeys.GoalMl] = goal
             }
         }
 
         WaterIntakeWidget().update(context, glanceId)
+
+        val appContext = context.applicationContext
+        val entryPoint = EntryPointAccessors.fromApplication(appContext, WaterWidgetEntryPoint::class.java)
+        val repository: OreoUserActivityRepository = entryPoint.userActivityRepository()
+
+        val reqObj = JsonObject().apply {
+            addProperty("hydration_amount", updated)
+            addProperty("date", LocalDate.now().toString())
+        }
+
+        repository.updateHydration(reqObj).collect { resource ->
+            when (resource) {
+                is Resource.Success -> {
+
+                }
+                else -> { }
+            }
+        }
     }
 
     companion object {
         val IncrementKey: ActionParameters.Key<Boolean> = ActionParameters.Key("increment")
     }
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface WaterWidgetEntryPoint {
+    fun userActivityRepository(): OreoUserActivityRepository
 }
